@@ -212,4 +212,11 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'oauth' => [
+        'domain' => env('OAUTH_DOMAIN'),
+        'clientId' => env('OAUTH_CLIENT_ID', ""),
+        'clientSecret' => env('OAUTH_CLIENT_SECRET', ""),
+        'redirectUri' => env('OAUTH_REDIRECT_URI', ""),
+    ],
+
 ];
