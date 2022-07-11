@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SigTag extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
 }

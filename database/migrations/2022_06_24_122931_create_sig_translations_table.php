@@ -14,17 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sig_translations', function (Blueprint $table) {
-            $table->foreignId("sig_event")->constrained()->cascadeOnDelete();
+            $table->foreignId("sig_event_id")->constrained()->cascadeOnDelete();
             $table->string("language")->comment("Language for this particular translation entry");
             $table->string("name");
             $table->text("description");
 
             $table->primary([
-                'sig_event',
+                'sig_event_id',
                 'language'
             ]);
             $table->unique([
-                'sig_event',
+                'sig_event_id',
                 'language'
             ]);
         });

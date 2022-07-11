@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('time_table_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("sig_event")->constrained()->cascadeOnDelete();
-            $table->foreignId("sig_location")->nullable()->constrained()->nullOnDelete();
-            $table->string("name")->default("");
+            $table->foreignId("sig_event_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("sig_location_id")->nullable()->constrained()->nullOnDelete();
             $table->dateTime("start");
             $table->dateTime("end");
             $table->boolean("cancelled")->default(false);
-            $table->foreignId("replaced_by")->nullable()->constrained($table->getTable(), "id")->nullOnDelete();
+            $table->foreignId("replaced_by_id")->nullable()->constrained($table->getTable(), "id")->nullOnDelete();
+            $table->boolean("hide")->default(false);
             $table->timestamps();
         });
     }

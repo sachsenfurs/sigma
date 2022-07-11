@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('sig_locations', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("render_id")->nullable()
+            $table->string("description")->default("");
+            $table->json("render_ids")->nullable()
                 ->comment("layer id for displaying as interactive SVG or whatever");
             $table->string("floor")->nullable();
             $table->string("room")->nullable();

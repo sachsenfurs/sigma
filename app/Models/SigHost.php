@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SigHost extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    public function sigEvents() {
+        return $this->hasMany(SigEvent::class);
+    }
+
 }
