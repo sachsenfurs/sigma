@@ -13,6 +13,8 @@ class SigEvent extends Model
         'languages' => 'array',
     ];
 
+    protected $guarded = [];
+
     public function sigHost() {
         return $this->belongsTo(SigHost::class);
     }

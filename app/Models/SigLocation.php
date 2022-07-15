@@ -10,6 +10,8 @@ class SigLocation extends Model
     use HasFactory;
     public $timestamps = false;
 
+    protected $guarded = [];
+
     protected $casts = [
         'render_ids' => "array",
     ];

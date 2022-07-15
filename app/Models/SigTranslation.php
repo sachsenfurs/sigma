@@ -9,6 +9,11 @@ class SigTranslation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     public $timestamps = false;
+
+    public function sigEvent() {
+        return $this->belongsTo(SigEvent::class);
+    }
 
 }
