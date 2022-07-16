@@ -5,9 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TimeTableEntry extends Model
+class TimetableEntry extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'hide' => "boolean",
+        'cancelled' => "boolean",
+        'start' => 'datetime',
+        'end' => "datetime",
+    ];
 
     public function scopePublic($query) {
         return $query->where('hide', false);
@@ -24,11 +33,11 @@ class TimeTableEntry extends Model
     }
 
     public function replacedBy() {
-        return $this->belongsTo(TimeTableEntry::class);
+        return $this->belongsTo(TimetableEntry::class);
     }
 
     public function parentEntry() {
-        return $this->hasOne(TimeTableEntry::class, "replaced_by_id");
+        return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
 }

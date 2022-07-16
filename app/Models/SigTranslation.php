@@ -12,6 +12,8 @@ class SigTranslation extends Model
     protected $guarded = [];
     public $timestamps = false;
 
+    protected $primaryKey = "sig_event_id";
+
     public function sigEvent() {
         return $this->belongsTo(SigEvent::class);
     }

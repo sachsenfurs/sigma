@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('time_table_entries', function (Blueprint $table) {
+        Schema::create('timetable_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId("sig_event_id")->constrained()->cascadeOnDelete();
             $table->foreignId("sig_location_id")->nullable()->constrained()->nullOnDelete();
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('time_tables');
+        Schema::dropIfExists('timetable_entries');
     }
 };

@@ -13,4 +13,10 @@ class SigLocationController extends Controller
 
         return view("locations.index", compact("locations"));
     }
+
+    public function show(SigLocation $location) {
+        return view("locations.show", [
+            'location' => $location,
+        ]);
+    }
 }

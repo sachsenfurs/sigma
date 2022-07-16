@@ -19,7 +19,7 @@ class TimeTableEntryFactory extends Factory
      */
     public function definition()
     {
-        $start = $this->faker->dateTimeBetween("2022-07-20 00:00:00", "2022-07-24 13:00:00");
+        $start = $this->faker->dateTimeBetween("2022-07-15 00:00:00", "2022-07-24 13:00:00");
         return [
             'sig_event_id' => SigEvent::all()->random(),
             'sig_location_id' => SigLocation::all()->random(),

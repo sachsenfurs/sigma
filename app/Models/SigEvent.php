@@ -24,14 +24,31 @@ class SigEvent extends Model
     }
 
     public function sigTranslation() {
-        return $this->belongsTo(SigTranslation::class);
+        return $this->hasOne(SigTranslation::class, "sig_event_id");
     }
 
-    public function timeTableEntries() {
-        return $this->hasMany(TimeTableEntry::class);
+    public function timetableEntries() {
+        return $this->hasMany(TimetableEntry::class)->orderBy("start", "ASC");
     }
-    public function getTimeTableCountAttribute() {
+    public function getTimetableCountAttribute() {
         return $this->timeTableEntries->count();
+    }
+
+    public function getNameEnAttribute() {
+        return $this->sigTranslation->name ?? $this->name;
+    }
+    public function setNameEnAttribute($name_en) {
+        $this->sigTranslation->name = $name_en;
+        $this->sigTranslation->save();
+    }
+
+    public function getDescriptionEnAttribute() {
+        return $this->sigTranslation->description ?? $this->description;
+    }
+
+    public function setDescriptionEnAttribute($description_en) {
+        $this->sigTranslation->description = $description_en;
+        $this->sigTranslation->save();
     }
 
 }

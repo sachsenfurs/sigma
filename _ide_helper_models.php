@@ -27,7 +27,7 @@ namespace App\Models{
  * @property-read \App\Models\SigHost|null $sigHost
  * @property-read \App\Models\SigLocation $sigLocation
  * @property-read \App\Models\SigTranslation|null $sigTranslation
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeTableEntry[] $timeTableEntries
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimetableEntry[] $timeTableEntries
  * @property-read int|null $time_table_entries_count
  * @method static \Database\Factories\SigEventFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newModelQuery()
@@ -166,22 +166,22 @@ namespace App\Models{
  * @property int|null $replaced_by_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read TimeTableEntry|null $parentEntry
- * @property-read TimeTableEntry|null $replacedBy
+ * @property-read TimetableEntry|null $parentEntry
+ * @property-read TimetableEntry|null $replacedBy
  * @property-read \App\Models\SigEvent $sigEvent
  * @method static \Database\Factories\TimeTableEntryFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry query()
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereCancelled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereReplacedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereSigEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereSigLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TimeTableEntry whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereCancelled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereReplacedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereSigEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereSigLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereUpdatedAt($value)
  */
 	class TimeTableEntry extends \Eloquent {}
 }

@@ -13,4 +13,11 @@ class SigHostController extends Controller
 
         return view("hosts.index", compact("hosts"));
     }
+
+    public function show(SigHost $host) {
+        return view("hosts.show", [
+            'host' => $host,
+            'sigs' => $host->sigEvents,
+        ]);
+    }
 }

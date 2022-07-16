@@ -7,7 +7,7 @@ use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigLocation;
 use App\Models\SigTranslation;
-use App\Models\TimeTableEntry;
+use App\Models\TimetableEntry;
 use App\Models\User;
 use Database\Factories\TimeTableEntryFactory;
 use Database\Factories\SigTranslationFactory;
@@ -48,6 +48,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        TimeTableEntry::factory()->count(50)->create();
+        TimetableEntry::factory()->count(50)->create();
     }
 }

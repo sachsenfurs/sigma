@@ -10,7 +10,9 @@
             </tr>
             @forelse($locations AS $location)
                 <tr>
-                    <td>{{ $location->name }}</td>
+                    <td>
+                        <a href="{{ route("locations.show", $location) }}">{{ $location->name }}</a>
+                    </td>
                     <td>{{ $location->description }}</td>
                     <td class="col-1">{{ $location->sig_events_count }}</td>
                 </tr>

@@ -23,4 +23,12 @@ class SigLocation extends Model
     public function translation() {
         return $this->hasMany(SigLocationTranslation::class);
     }
+
+    public function timetableEntries() {
+        return $this->hasMany(TimetableEntry::class)->orderBy("start");
+    }
+
+    //public function locationUsage() {
+    //    return SigLocation::with("timetableEntries")->with("sigEvents")->where("name", "Brandenburg")->get();
+    //}
 }

@@ -11,10 +11,11 @@
                         <div class="row m-5">
                             <div class="col-12 text-center">
                                 <a class="btn btn-success" href="{{ route('oauthlogin') }}">
-                                    {{ __('SF Account Login') }}
+                                    {{ __('SF Account Staff-Login') }}
                                 </a>
                             </div>
                         </div>
+                        {{--
                         <hr>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
@@ -67,6 +68,8 @@
                                 </div>
                             </div>
                         </form>
+                        --}}
+
                     </div>
                 </div>
             </div>
