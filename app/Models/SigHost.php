@@ -13,6 +13,10 @@ class SigHost extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'hide' => "boolean",
+    ];
+
     public function sigEvents() {
         return $this->hasMany(SigEvent::class);
     }

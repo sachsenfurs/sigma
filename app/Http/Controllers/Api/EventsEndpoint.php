@@ -19,7 +19,7 @@ class EventsEndpoint extends Controller
             $event = [
                 'name'                  => $entry->sigEvent->name,
                 'name_en'               => $entry->sigEvent->name_en,
-                'host'                  => $entry->sigEvent->sigHost->name,
+                'host'                  => $entry->sigEvent->sigHost->hide ? false : $entry->sigEvent->sigHost->name,
                 'start'                 => Carbon::parse($entry->start)->toW3cString(),
                 'end'                   => Carbon::parse($entry->end)->toW3cString(),
                 'description'           => $entry->sigEvent->description,

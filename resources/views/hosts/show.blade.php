@@ -5,6 +5,7 @@
         <div class="card">
             <div class="card-header">
                 {{ $host->name }}
+                <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i></a>
             </div>
             <div class="card-body">
                 <table class="table">

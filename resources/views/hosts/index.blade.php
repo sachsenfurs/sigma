@@ -7,6 +7,7 @@
                 <th>Name</th>
                 <th>Beschreibung</th>
                 <th>Anzahl SIGs</th>
+                <th class="text-end">Aktionen</th>
             </tr>
             @forelse($hosts AS $host)
                 <tr>
@@ -15,6 +16,11 @@
                     </td>
                     <td>{{ $host->description }}</td>
                     <td class="col-1">{{ $host->sig_events_count }}</td>
+                    <td class="text-end">
+                        <a href="{{ route("hosts.edit", $host) }}">
+                            <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
+                        </a>
+                    </td>
                 </tr>
             @empty
                 <tr>

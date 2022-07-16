@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "SIG Anlegen")
+@section('title', "SIG " . (isset($sig) ? "Bearbeiten" : "Anlegen" ))
 @section('content')
     <div class="container" style="margin-bottom: 600px">
         <div class="row justify-content-center">

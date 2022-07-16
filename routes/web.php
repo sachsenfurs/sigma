@@ -45,13 +45,16 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/sigs/{sig}", [\App\Http\Controllers\Sig\SigEventController::class, 'destroy'])->name("sigs.destroy");
 
     // SIG Hosts
-    Route::get("/hosts", [\App\Http\Controllers\Sig\SigHostController::class, 'index'])->name("hosts.index");
-    Route::get("/hosts/{host}", [\App\Http\Controllers\Sig\SigHostController::class, 'show'])->name("hosts.show");
+//    Route::get("/hosts", [\App\Http\Controllers\Sig\SigHostController::class, 'index'])->name("hosts.index");
+//    Route::get("/hosts/{host}", [\App\Http\Controllers\Sig\SigHostController::class, 'show'])->name("hosts.show");
+//    Route::get("/hosts/{host}/edit", [\App\Http\Controllers\Sig\SigHostController::class, 'edit'])->name("hosts.edit");
+//    Route::get("/hosts/{host}", [\App\Http\Controllers\Sig\SigHostController::class, 'update'])->name("hosts.update");
+    Route::resource("/hosts", \App\Http\Controllers\Sig\SigHostController::class);
 
     // SIG Locations
-    Route::get("/locations", [\App\Http\Controllers\Sig\SigLocationController::class, 'index'])->name("locations.index");
-    Route::get("/locations/{location}", [\App\Http\Controllers\Sig\SigLocationController::class, 'show'])->name("locations.show");
-
+//    Route::get("/locations", [\App\Http\Controllers\Sig\SigLocationController::class, 'index'])->name("locations.index");
+//    Route::get("/locations/{location}", [\App\Http\Controllers\Sig\SigLocationController::class, 'show'])->name("locations.show");
+    Route::resource("/locations", \App\Http\Controllers\Sig\SigLocationController::class);
     // Timetable
     Route::get("/timetable", [\App\Http\Controllers\TimetableController::class, 'index'])->name("timetable.index");
     Route::post("/timetable", [\App\Http\Controllers\TimetableController::class, 'store'])->name("timetable.store");
