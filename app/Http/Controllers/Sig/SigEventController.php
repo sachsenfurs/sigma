@@ -19,7 +19,7 @@ class SigEventController extends Controller
 
     public function show(SigEvent $sig) {
         $hosts      = SigHost::pluck("name")->all();
-        $locations  = SigLocation::all();
+        $locations  = SigLocation::orderBy("name")->get();
         return view("sigs.createEdit", compact([
             'sig',
             'hosts',
@@ -29,7 +29,7 @@ class SigEventController extends Controller
 
     public function create() {
         $hosts = SigHost::pluck("name")->all();
-        $locations = SigLocation::all();
+        $locations = SigLocation::orderBy("name")->get();
 
         return view("sigs.createEdit", compact([
             'hosts',
