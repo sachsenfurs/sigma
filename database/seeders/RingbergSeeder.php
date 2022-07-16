@@ -195,6 +195,17 @@ class RingbergSeeder extends Seeder
                 'name' => "Rezeption",
                 'render_ids' => json_encode(["counterArea"]),
                 'floor' => "0",
+            ],
+            [
+                'name' => "Kulisse",
+                'render_ids' => json_encode([]),
+                'floor' => "-2",
+            ],
+            [
+                'name' => "Außenbereich",
+                'description' => "Hinder der Bar",
+                'render_ids' => json_encode(["outdoorArea3"]),
+                'floor' => "0",
             ]
         ];
 
