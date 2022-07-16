@@ -38,8 +38,16 @@ class SigEvent extends Model
         return $this->sigTranslation->name ?? $this->name;
     }
     public function setNameEnAttribute($name_en) {
-        $this->sigTranslation->name = $name_en;
-        $this->sigTranslation->save();
+        if(!$this->sigTranslation) {
+            $translate = $this->sigTranslation()->create([
+                'language' => "en",
+                'description' => $this->description,
+                'name' => $name_en,
+            ]);
+        } else {
+            $this->sigTranslation->name = $name_en;
+            $this->sigTranslation->save();
+        }
     }
 
     public function getDescriptionEnAttribute() {
@@ -47,8 +55,17 @@ class SigEvent extends Model
     }
 
     public function setDescriptionEnAttribute($description_en) {
-        $this->sigTranslation->description = $description_en;
-        $this->sigTranslation->save();
+        if(!$this->sigTranslation) {
+            $translate = $this->sigTranslation()->create([
+                'language' => "en",
+                'description' => $description_en,
+                'name' => $this->name,
+            ]);
+
+        } else {
+            $this->sigTranslation->description = $description_en;
+            $this->sigTranslation->save();
+        }
     }
 
 }

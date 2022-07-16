@@ -77,7 +77,7 @@ class SigEventController extends Controller
         $sig->save();
 
         // Insert translation
-        if(in_array("en", $languages)){
+        //if(in_array("en", $languages)){
             $translate = new SigTranslation([
                 'language' => "en",
                 'name' => $validated['name_en'],
@@ -85,7 +85,7 @@ class SigEventController extends Controller
             ]);
             $translate->sigEvent()->associate($sig);
             $translate->save();
-        }
+        //}
 
         // insert in timetable (if set)
         if(is_array($request->get("date-start"))) {
