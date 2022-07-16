@@ -52,6 +52,12 @@
                                         Änderung nicht kommunizieren
                                     </label>
                                 </div>
+                                <div class="form-check">
+                                    <label>
+                                        <input class="form-check-input" type="checkbox" name="reset_update">
+                                        Reset Update-Timestamp
+                                    </label>
+                                </div>
                             </div>
                             <div class="mt-4 text-center">
                                 <input type="submit" class="btn btn-success" value="Speichern">

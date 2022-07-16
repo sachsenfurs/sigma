@@ -62,6 +62,10 @@ class TimetableController extends Controller
         if($request->has("ignore_update"))
             $entry->timestamps = false;
 
+        if($request->has("reset_update"))
+            $entry->updated_at = $entry->created_at;
+
+
         $entry->update($validated);
 
         return back()->withSuccess("Änderungen gespeichert!");
