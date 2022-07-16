@@ -75,10 +75,10 @@
                                 <div id="timeslots-parent" style="display: none">
                                     <div class="mt-1 row timeslot" id="timeslot">
                                         <div class="col-5">
-                                            <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->format("Y-m-d\TH:i") }}">
+                                            <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
                                         </div>
                                         <div class="col-5">
-                                            <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->addMinutes(90)->format("Y-m-d\TH:i") }}">
+                                            <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
                                         </div>
                                         <div class="col-2 row">
                                             <button type="button" class="btn btn-danger text-white" onclick="if($('.timeslot').length > 1) $(this).parent().parent().remove()">
