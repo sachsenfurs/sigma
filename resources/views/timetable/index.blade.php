@@ -28,10 +28,10 @@
                             <label for="email">Zeiten</label>
                             <div class="mt-1 row">
                                 <div class="col-6">
-                                    <input type="datetime-local" class="form-control" name="start" value="{{ \Carbon\Carbon::now()->format("Y-m-d\TH:i:s") }}">
+                                    <input type="datetime-local" class="form-control" name="start" value="{{ \Carbon\Carbon::now()->format("Y-m-d\TH:i") }}">
                                 </div>
                                 <div class="col-6">
-                                    <input type="datetime-local" class="form-control" name="end" value="{{ \Carbon\Carbon::now()->format("Y-m-d\TH:i:s") }}">
+                                    <input type="datetime-local" class="form-control" name="end" value="{{ \Carbon\Carbon::now()->format("Y-m-d\TH:i") }}">
                                 </div>
                             </div>
                         </div>

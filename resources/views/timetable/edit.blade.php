@@ -15,11 +15,11 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label>Start</label>
-                                    <input type="datetime-local" class="form-control" name="start" value="{{ $entry->start->format("Y-m-d\TH:i:s") }}">
+                                    <input type="datetime-local" class="form-control" name="start" value="{{ $entry->start->format("Y-m-d\TH:i") }}">
                                 </div>
                                 <div class="col-6">
                                     <label>Ende</label>
-                                    <input type="datetime-local" class="form-control" name="end" value="{{ $entry->end->format("Y-m-d\TH:i:s") }}">
+                                    <input type="datetime-local" class="form-control" name="end" value="{{ $entry->end->format("Y-m-d\TH:i") }}">
                                 </div>
                             </div>
 
