@@ -14,7 +14,6 @@ class SigEventController extends Controller
 {
     public function index() {
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
-
         return view("sigs.index", compact("sigs"));
     }
 
