@@ -23,13 +23,14 @@ Route::post("/logout", [\App\Http\Controllers\Auth\LoginController::class, 'logo
 Route::get("/oauthlogin", [\App\Http\Controllers\Auth\OAuthLoginController::class, 'index'])->name("oauthlogin");
 Route::get("/oauth", [\App\Http\Controllers\Auth\OAuthLoginController::class, 'redirect']);
 
-Route::get("/secretlogin", function() {
-    if(config("app.debug")) {
-        $u = \App\Models\User::find(1);
-        auth()->guard()->login($u);
-        return redirect("/");
-    }
+Route::get("/table", function() {
+    return view("tableview",[
+        'entries' => \App\Models\TimetableEntry::all(),
+        'locations' => \App\Models\SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->groupBy("name")->get(),
+
+    ]);
 });
+
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/users', [\App\Http\Controllers\User\UserController::class, 'index'])->name("users.index");
@@ -62,3 +63,4 @@ Route::group(['middleware' => "auth"], function() {
     Route::put("/timetable/{entry}", [\App\Http\Controllers\TimetableController::class, 'update'])->name("timetable.update");
     Route::delete("/timetable/{entry}", [\App\Http\Controllers\TimetableController::class, 'destroy'])->name("timetable.destroy");
 });
+

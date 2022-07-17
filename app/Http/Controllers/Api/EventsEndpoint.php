@@ -29,8 +29,8 @@ class EventsEndpoint extends Controller
                 'languages'             => $entry->sigEvent->languages,
                 'location'              => $entry->sigLocation->name ?? "Null",
                 'location_ids'          => $entry->sigLocation->render_ids ?? [],
-                'time_changed'          => ($entry->parentEntry && $entry->parentEntry->start != $entry->start) || $entry->updated_at > $entry->created_at,
-                'location_changed'      => $entry->parentEntry && $entry->parentEntry->sigLocaton != $entry->sigLocation,
+                'time_changed'          => $entry->hasTimeChanged(),
+                'location_changed'      => $entry->hasLocationChanged(),
                 'cancelled'             => $entry->cancelled,
             ];
 

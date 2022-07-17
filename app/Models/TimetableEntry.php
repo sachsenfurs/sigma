@@ -40,4 +40,12 @@ class TimetableEntry extends Model
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
+    public function hasTimeChanged() {
+        return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
+    }
+
+    public function hasLocationChanged() {
+        return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
+    }
+
 }

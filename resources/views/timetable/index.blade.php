@@ -68,9 +68,14 @@
                     <th colspan="4" class="text-capitalize">{{ Str::upper(\Carbon\Carbon::parse($day)->dayName) }}, {{ \Carbon\Carbon::parse($day)->format("d.m.Y") }}</th>
                 </tr>
                 @foreach($entries AS $entry)
-                    <tr class="{{ $entry->start < now() ? ($entry->end > now() ? "table-primary" : "table-secondary dosab") : ""}}">
+                    <tr class="{{ $entry->start < now() ? ($entry->end > now() ? "table-primary" : "table-secondary") : ""}}">
                         <td>
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                            @if($entry->cancelled)
+                                <span class="badge bg-danger">Abgesagt</span>
+                            @elseif($entry->hasTimeChanged())
+                                <span class="badge bg-info">Geändert</span>
+                            @endif
                         </td>
                         <td>
                             <a href="{{ route("sigs.edit", $entry->sigEvent) }}">{{ $entry->sigEvent->name }}</a></td>
