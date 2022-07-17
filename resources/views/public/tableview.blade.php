@@ -73,12 +73,13 @@
 
                         $events = $entries->filter(function($value, $key) use ($locations, $currentTime, $x, $y) {
                             return ($value->start <= $currentTime)
-                            && ($value->end >= $currentTime)
+                            && ($value->end > $currentTime)
                             && (($value->sigLocation->name ?? "") == $locations[$x]->name);
                         });
                         if($events->first() && $events->first()->sigEvent) {
                             $sig = $events->first()->sigEvent;
-                            $rows = ($events->first()->duration / 30)+1;
+                            $rows = ($events->first()->duration / 30);
+
                             if($rows + $y > 32) {
                                 $rows = 34-$y;
                             }
