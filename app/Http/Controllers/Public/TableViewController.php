@@ -14,7 +14,7 @@ class TableViewController extends Controller
         })->keys();
         return view("public.tableview",[
             'days' => $days,
-            'entries' => \App\Models\TimetableEntry::all(),
+            'entries' => $entries,
             'locations' => \App\Models\SigLocation::withCount("sigEvents")
                                                   ->having("sig_events_count", ">", 0)
                                                   ->groupBy("name")
