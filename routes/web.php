@@ -23,13 +23,7 @@ Route::post("/logout", [\App\Http\Controllers\Auth\LoginController::class, 'logo
 Route::get("/oauthlogin", [\App\Http\Controllers\Auth\OAuthLoginController::class, 'index'])->name("oauthlogin");
 Route::get("/oauth", [\App\Http\Controllers\Auth\OAuthLoginController::class, 'redirect']);
 
-Route::get("/table", function() {
-    return view("tableview",[
-        'entries' => \App\Models\TimetableEntry::all(),
-        'locations' => \App\Models\SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->groupBy("name")->get(),
-
-    ]);
-});
+Route::get("/table", [\App\Http\Controllers\Public\TableViewController::class, 'index'])->name("public.tableview");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

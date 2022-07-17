@@ -137,7 +137,7 @@ class RingbergSeeder extends Seeder
                 'floor' => "0",
             ],
             [
-                'name' => "Parkplatz",
+                'name' => "Außenbereich",
                 'description' => "Hinterer Parkplatz (Motorfurs)",
                 'render_ids' => json_encode(["parkplatzArea1", "parkplatzArea2"]),
                 'floor' => "0",

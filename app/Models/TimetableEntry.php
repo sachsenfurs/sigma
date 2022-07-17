@@ -48,4 +48,8 @@ class TimetableEntry extends Model
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
+    public function getDurationAttribute() {
+        return $this->end->diffInMinutes($this->start);
+    }
+
 }
