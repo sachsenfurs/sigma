@@ -203,7 +203,7 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "Außenbereich",
-                'description' => "Hinder der Bar",
+                'description' => "Hinter der Bar",
                 'render_ids' => json_encode(["outdoorArea3"]),
                 'floor' => "0",
             ]

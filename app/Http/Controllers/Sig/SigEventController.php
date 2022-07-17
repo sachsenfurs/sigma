@@ -81,7 +81,7 @@ class SigEventController extends Controller
             $translate = new SigTranslation([
                 'language' => "en",
                 'name' => $validated['name_en'],
-                'description' => $validated['description_en'],
+                'description' => $validated['description_en'] ?? "",
             ]);
             $translate->sigEvent()->associate($sig);
             $translate->save();
