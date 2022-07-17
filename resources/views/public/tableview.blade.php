@@ -2,12 +2,9 @@
 @section('title', "Program")
 <body>
 <style>
-    body,table {
+    table {
         margin: 0;
         padding: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
         width: calc(100% - 2px);
     }
     table, tr,td {
@@ -19,9 +16,26 @@
         vertical-align: middle;
         font-size: 1.4em;
         color: #fff;
-        background: #dad55e;
+        background: #b78d2b;
+        cursor: pointer;
+    }
+    td a {
+        text-decoration: underline;
+        box-sizing: content-box;
+        display: block;
+        color: #fff;
+    }
+    td a:hover {
+        text-decoration: none;
+        color: #cccccc;
+    }
+    tr.active {
+        background: #dbe8cf;
     }
 </style>
+    <!-- -->
+    <!-- Looking for an API? Ask @Kidran! -->
+    <!-- -->
 <table class="table">
     @foreach($days AS $day)
         <tr></tr>
@@ -42,11 +56,10 @@
             $rowspan = []
         @endphp
         @for($y=0; $y<=32; $y++)
-            <tr>
-                @php
-                    $currentTime = \Illuminate\Support\Carbon::parse($day)->setHours(8)->setMinutes(0)->addMinutes(30 * $y);
-                @endphp
-
+            @php
+                $currentTime = \Illuminate\Support\Carbon::parse($day)->setHours(8)->setMinutes(0)->addMinutes(30 * $y);
+            @endphp
+            <tr class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? "active" : "" }}">
                 <td>{{ $currentTime->format("H:i") }}</td>
 
                 @php
@@ -66,7 +79,9 @@
                                 $rows = 34-$y;
                             }
                             echo '<td rowspan="'.$rows.'" class="event">';
+                            echo '<a href="'. route("public.timeslot-show", $events->first()) .'">';
                             echo $sig->name;
+                            echo '</a>';
                             echo '</td>';
                             for($i=0; $i<$rows; $i++) {
                                 $rowspan[$x][$y+$i] = true;

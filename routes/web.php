@@ -24,7 +24,7 @@ Route::get("/oauthlogin", [\App\Http\Controllers\Auth\OAuthLoginController::clas
 Route::get("/oauth", [\App\Http\Controllers\Auth\OAuthLoginController::class, 'redirect']);
 
 Route::get("/table", [\App\Http\Controllers\Public\TableViewController::class, 'index'])->name("public.tableview");
-
+Route::get("/show/{entry}", [\App\Http\Controllers\Public\TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/users', [\App\Http\Controllers\User\UserController::class, 'index'])->name("users.index");

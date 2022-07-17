@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class TableViewController extends Controller
 {
     public function index() {
-        $entries = \App\Models\TimetableEntry::all();
+        $entries = \App\Models\TimetableEntry::public()->orderBy("start")->get();
         $days = $entries->pluck("start")->groupBy(function($item) {
             return $item->format("d.m.Y");
         })->keys();
