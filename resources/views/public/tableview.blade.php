@@ -32,6 +32,10 @@
     tr.active {
         background: #dbe8cf;
     }
+    tr.weekday {
+        background: #cccccc;
+        font-size: 22px;
+    }
 </style>
     <!-- -->
     <!-- Looking for an API? Ask @Kidran! -->
@@ -39,9 +43,9 @@
 <table class="table">
     @foreach($days AS $day)
         <tr></tr>
-        <tr>
+        <tr class="weekday">
             <td colspan="{{ count($locations)+1 }}">
-                {{ $day }}
+                <strong>{{ $day }} - {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->dayName) . " | " . Str::upper(\Illuminate\Support\Carbon::parse($day)->locale("en")->dayName) }}</strong>
             </td>
         </tr>
         <tr>
