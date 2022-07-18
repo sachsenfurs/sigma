@@ -1,5 +1,5 @@
-@include('layouts.head')
 @section('title', "Program")
+@include('layouts.head')
 <body>
 <style>
     table {
