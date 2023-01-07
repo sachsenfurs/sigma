@@ -21,7 +21,8 @@ return new class extends Migration
                 ->comment("layer id for displaying as interactive SVG or whatever");
             $table->string("floor")->nullable();
             $table->string("room")->nullable();
-
+            $table->boolean("infodisplay")->default(false)
+                ->comment("Is there a digital display in front of the door? (Signage)");
             // just an idea
             $table->string("roomsize")->nullable();
             $table->string("seats")->nullable();

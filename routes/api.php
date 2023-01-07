@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
 });
 
 Route::get("/events", [\App\Http\Controllers\Api\EventsEndpoint::class, "index"])->name("events");
+Route::get("/locations", [\App\Http\Controllers\Api\LocationsEndpoint::class, "index"])->name("api.locations");

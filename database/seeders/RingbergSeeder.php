@@ -24,6 +24,7 @@ class RingbergSeeder extends Seeder
                 'room' => "KE 003",
                 'roomsize' => "572",
                 'seats' => 850,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Foyer",
@@ -41,6 +42,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 031",
                 'roomsize' => "35",
                 'seats' => 80,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Sachsen 1+2",
@@ -50,6 +52,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 028/029",
                 'roomsize' => "200",
                 'seats' => 200,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Hessen",
@@ -58,6 +61,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 025",
                 'roomsize' => "102",
                 'seats' => 100,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Niedersachsen",
@@ -66,6 +70,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 024",
                 'roomsize' => "50",
                 'seats' => 50,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Saarland",
@@ -74,6 +79,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 023",
                 'roomsize' => "51",
                 'seats' => 50,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Thüringen",
@@ -82,6 +88,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 022",
                 'roomsize' => "52",
                 'seats' => 50,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Bayern",
@@ -90,6 +97,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 021",
                 'roomsize' => "52",
                 'seats' => 50,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Berlin",
@@ -99,6 +107,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 052",
                 'roomsize' => "68",
                 'seats' => 50,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Suhl",
@@ -107,6 +116,7 @@ class RingbergSeeder extends Seeder
                 'room' => "K 1.U 030",
                 'roomsize' => "96",
                 'seats' => 0,
+                'infodisplay' => true,
             ],
             [
                 'name' => "WC",
