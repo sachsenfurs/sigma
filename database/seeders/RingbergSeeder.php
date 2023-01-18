@@ -17,7 +17,7 @@ class RingbergSeeder extends Seeder
     {
         $locations = [
             [
-                'name' => "Herbert Roth",
+                'name' => "Herbert Roth Saal",
                 'description' => "Mainstage",
                 'render_ids' => json_encode(["mainstageArea1", "mainstageArea2"]),
                 'floor' => "0",
