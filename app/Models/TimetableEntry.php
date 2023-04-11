@@ -52,4 +52,8 @@ class TimetableEntry extends Model
         return $this->end->diffInMinutes($this->start);
     }
 
+    public function sigTimeslots() {
+        return $this->hasMany(SigTimeslots::class);
+    }
+
 }
