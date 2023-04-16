@@ -78,7 +78,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}">{{ $entry->sigEvent->name }}</a></td>
+                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}"><button type="button" class="btn btn-secondary">{{ $entry->sigEvent->name }}</button></a>
                         </td>
                         <td>
                             <a href="{{ route("locations.show", $entry->sigLocation) }}">
