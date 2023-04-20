@@ -110,101 +110,44 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#home">{{ $days[0] }}</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#profile">{{ $days[1] }}</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#messages">{{ $days[2] }}</a></li>
+            @foreach ($days as $index => $day)
+                <li class="nav-item">
+                    <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                        href="#con_day_{{ $index + 1 }}">
+                        {{ $day }}
+                    </a>
+                </li>
+            @endforeach
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane active" id="home">
-                <strong class="weekday">
-                    {{ Str::upper(\Illuminate\Support\Carbon::parse($days[0])->dayName) . ' | ' . Str::upper(\Illuminate\Support\Carbon::parse($days[0])->locale('en')->dayName) }}
-                </strong>
-
-                <table class="table">
-                    <tr>
-                        <th></th>
+            @foreach ($days as $index => $day)
+                <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="con_day_{{ $index + 1 }}">
+                    <strong class="weekday">
+                        {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
+                    </strong>
+                    <ul class="nav nav-tabs">
                         @foreach ($locations as $location)
-                            <th>
-                                {{ $location->name }}
-                            </th>
+                            <li class="nav-item">
+                                <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab" href="#{{ $location->name }}">
+                                    {{ $location->name }}
+                                </a>
+                            </li>
                         @endforeach
-                    </tr>
-                    @php
-                        $rowspan = [];
-                    @endphp
-                    @for ($y = 0; $y <= 32; $y++)
-                        @php
-                            $currentTime = \Illuminate\Support\Carbon::parse($days[0])
-                                ->setHours(8)
-                                ->setMinutes(0)
-                                ->addMinutes(30 * $y);
-                        @endphp
-                        <tr
-                            class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? 'active' : '' }}">
-                            <td>{{ $currentTime->format('H:i') }}</td>
-
-                            @php
-                                for ($x = 0; $x < count($locations); $x++) {
-                                    if (isset($rowspan[$x][$y])) {
-                                        continue;
-                                    }
-                                
-                                    $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
-                                        return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
-                                    });
-                                    if ($events->first() && $events->first()->sigEvent) {
-                                        $sig = $events->first()->sigEvent;
-                                        $rows = $events->first()->duration / 30;
-                                
-                                        if ($rows + $y > 32) {
-                                            $rows = 34 - $y;
-                                        }
-                                        if ($sig->sig_location_id == '1' || $sig->sig_location_id == '8' || $sig->sig_location_id == '15' || $sig->sig_location_id == '22') {
-                                            echo '<td rowspan="' . $rows . '" class="event oee">';
-                                        } elseif ($sig->sig_location_id == '2' || $sig->sig_location_id == '9' || $sig->sig_location_id == '16' || $sig->sig_location_id == '23') {
-                                            echo '<td rowspan="' . $rows . '" class="event fe">';
-                                        } elseif ($sig->sig_location_id == '3' || $sig->sig_location_id == '10' || $sig->sig_location_id == '17' || $sig->sig_location_id == '24') {
-                                            echo '<td rowspan="' . $rows . '" class="event grsswk">';
-                                        } elseif ($sig->sig_location_id == '4' || $sig->sig_location_id == '11' || $sig->sig_location_id == '18' || $sig->sig_location_id == '25') {
-                                            echo '<td rowspan="' . $rows . '" class="event gswssa">';
-                                        } elseif ($sig->sig_location_id == '5' || $sig->sig_location_id == '12' || $sig->sig_location_id == '19' || $sig->sig_location_id == '26') {
-                                            echo '<td rowspan="' . $rows . '" class="event as">';
-                                        } elseif ($sig->sig_location_id == '6' || $sig->sig_location_id == '13' || $sig->sig_location_id == '20' || $sig->sig_location_id == '27') {
-                                            echo '<td rowspan="' . $rows . '" class="event lsco">';
-                                        } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21') {
-                                            echo '<td rowspan="' . $rows . '" class="event reg">';
-                                        } else {
-                                            echo '<td rowspan="' . $rows . '" class="event">';
-                                        }
-                                        echo '<a href="' . route('public.timeslot-show', $events->first()) . '">';
-                                        echo $sig->name;
-                                        echo '</a>';
-                                        echo '</td>';
-                                        for ($i = 0; $i < $rows; $i++) {
-                                            $rowspan[$x][$y + $i] = true;
-                                        }
-                                    } else {
-                                        echo '<td></td>';
-                                    }
-                                }
-                            @endphp
-                        </tr>
-                    @endfor
-                </table>
-            </div>
-            <div class="tab-pane" id="profile">
-                <strong>
-                    {{ Str::upper(\Illuminate\Support\Carbon::parse($days[1])->dayName) . ' | ' . Str::upper(\Illuminate\Support\Carbon::parse($days[1])->locale('en')->dayName) }}
-                </strong>
-            </div>
-            <div class="tab-pane" id="messages">
-                <strong>
-                    {{ Str::upper(\Illuminate\Support\Carbon::parse($days[2])->dayName) . ' | ' . Str::upper(\Illuminate\Support\Carbon::parse($days[2])->locale('en')->dayName) }}
-                </strong>
-            </div>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        @foreach ($locations as $location)
+                            <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="{{ $location->name }}">
+                                {{ $location->id }}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
         </div>
+
     </div>
     <table class="table">
         @foreach ($days as $day)
@@ -265,7 +208,7 @@
                                     echo '<td rowspan="' . $rows . '" class="event as">';
                                 } elseif ($sig->sig_location_id == '6' || $sig->sig_location_id == '13' || $sig->sig_location_id == '20' || $sig->sig_location_id == '27') {
                                     echo '<td rowspan="' . $rows . '" class="event lsco">';
-                                } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21') {
+                                } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21' || $sig->sig_location_id == '28') {
                                     echo '<td rowspan="' . $rows . '" class="event reg">';
                                 } else {
                                     echo '<td rowspan="' . $rows . '" class="event">';
@@ -287,3 +230,108 @@
         @endforeach
     </table>
 </body>
+
+
+{{-- <ul class="nav nav-tabs">
+    @foreach ($locations as $location)
+        <li class="nav-item">
+            <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab" href="#{{ $location->name }}">
+                {{ $location->name }}
+            </a>
+        </li>
+    @endforeach
+</ul>
+
+<div class="tab-content">
+    @foreach ($locations as $location)
+        <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="{{ $location->id }}">
+            {{ $location->id }}
+        </div>
+    @endforeach
+</div>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
+            href="#hrs">{{ $locations[0]->name }}</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
+            href="#niedersachsen">{{ $locations[1]->name }}</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
+            href="#saarland">{{ $locations[2]->name }}</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="hrs">1</div>
+    <div class="tab-pane" id="niedersachsen">2</div>
+    <div class="tab-pane" id="saarland">3</div>
+</div> --}}
+{{-- <table class="table">
+    <tr>
+        <th></th>
+        @foreach ($locations as $location)
+            <th>
+                {{ $location->name }}
+            </th>
+        @endforeach
+    </tr>
+    @php
+        $rowspan = [];
+    @endphp
+    @for ($y = 0; $y <= 32; $y++)
+        @php
+            $currentTime = \Illuminate\Support\Carbon::parse($days[0])
+                ->setHours(8)
+                ->setMinutes(0)
+                ->addMinutes(30 * $y);
+        @endphp
+        <tr
+            class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? 'active' : '' }}">
+            <td>{{ $currentTime->format('H:i') }}</td>
+
+            @php
+                for ($x = 0; $x < count($locations); $x++) {
+                    if (isset($rowspan[$x][$y])) {
+                        continue;
+                    }
+                
+                    $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
+                        return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
+                    });
+                    if ($events->first() && $events->first()->sigEvent) {
+                        $sig = $events->first()->sigEvent;
+                        $rows = $events->first()->duration / 30;
+                
+                        if ($rows + $y > 32) {
+                            $rows = 34 - $y;
+                        }
+                        if ($sig->sig_location_id == '1' || $sig->sig_location_id == '8' || $sig->sig_location_id == '15' || $sig->sig_location_id == '22') {
+                            echo '<td rowspan="' . $rows . '" class="event oee">';
+                        } elseif ($sig->sig_location_id == '2' || $sig->sig_location_id == '9' || $sig->sig_location_id == '16' || $sig->sig_location_id == '23') {
+                            echo '<td rowspan="' . $rows . '" class="event fe">';
+                        } elseif ($sig->sig_location_id == '3' || $sig->sig_location_id == '10' || $sig->sig_location_id == '17' || $sig->sig_location_id == '24') {
+                            echo '<td rowspan="' . $rows . '" class="event grsswk">';
+                        } elseif ($sig->sig_location_id == '4' || $sig->sig_location_id == '11' || $sig->sig_location_id == '18' || $sig->sig_location_id == '25') {
+                            echo '<td rowspan="' . $rows . '" class="event gswssa">';
+                        } elseif ($sig->sig_location_id == '5' || $sig->sig_location_id == '12' || $sig->sig_location_id == '19' || $sig->sig_location_id == '26') {
+                            echo '<td rowspan="' . $rows . '" class="event as">';
+                        } elseif ($sig->sig_location_id == '6' || $sig->sig_location_id == '13' || $sig->sig_location_id == '20' || $sig->sig_location_id == '27') {
+                            echo '<td rowspan="' . $rows . '" class="event lsco">';
+                        } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21') {
+                            echo '<td rowspan="' . $rows . '" class="event reg">';
+                        } else {
+                            echo '<td rowspan="' . $rows . '" class="event">';
+                        }
+                        echo '<a href="' . route('public.timeslot-show', $events->first()) . '">';
+                        echo $sig->name;
+                        echo '</a>';
+                        echo '</td>';
+                        for ($i = 0; $i < $rows; $i++) {
+                            $rowspan[$x][$y + $i] = true;
+                        }
+                    } else {
+                        echo '<td></td>';
+                    }
+                }
+            @endphp
+        </tr>
+    @endfor
+</table> --}}
