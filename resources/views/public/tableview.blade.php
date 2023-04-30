@@ -113,7 +113,7 @@
             @foreach ($days as $index => $day)
                 <li class="nav-item">
                     <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                        href="#con_day_{{ $index + 1 }}">
+                        href="#ConDay{{ $index + 1 }}">
                         {{ $day }}
                     </a>
                 </li>
@@ -123,30 +123,45 @@
         <!-- Tab panes -->
         <div class="tab-content">
             @foreach ($days as $index => $day)
-                <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="con_day_{{ $index + 1 }}">
+                <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
                     <strong class="weekday">
                         {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
                     </strong>
                     <ul class="nav nav-tabs">
                         @foreach ($locations as $location)
                             <li class="nav-item">
-                                <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab" href="#{{ $location->name }}">
+                                <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                                    href="#{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) }}">
                                     {{ $location->name }}
                                 </a>
                             </li>
                         @endforeach
                     </ul>
-                    
+
                     <div class="tab-content">
                         @foreach ($locations as $location)
-                            <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="{{ $location->name }}">
-                                {{ $location->id }}
+                            <div class="tab-pane{{ $loop->first ? ' active' : '' }}"
+                                id="{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) }}">
+                                {{-- <b>{{ $days }}</b> --}}
+                                @foreach ($entries as $event)
+                                    @if ($event->start->format('d.m.Y') == $day)
+                                        @if ($event->sig_location_id == $location->id)
+                                            <p>{{ $event->start->format('d.m.Y') }}</p>
+                                            <b>{{ $day }}</b>
+                                            <p>{{ $event->sigEvent->sigHost->name }}</p>
+                                            <p>{{ $event->sigEvent->name }}</p>
+                                            <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
+                                            </p>
+                                        @endif
+                                    @endif
+                                @endforeach
                             </div>
                         @endforeach
                     </div>
                 </div>
             @endforeach
         </div>
+
 
     </div>
     <table class="table">
