@@ -145,9 +145,11 @@
                                 {{-- <b>{{ $days }}</b> --}}
                                 @foreach ($entries as $event)
                                     @if ($event->start->format('d.m.Y') == $day)
-                                        @if ($event->sig_location_id == $location->id)
+                                        @if ($event->sigLocation->name == $location->name)
                                             <p>{{ $event->start->format('d.m.Y') }}</p>
                                             <b>{{ $day }}</b>
+                                            <b> {{ $location->name}}</b>
+                                            <p>{{ $event->sigLocation->name }} </p>
                                             <p>{{ $event->sigEvent->sigHost->name }}</p>
                                             <p>{{ $event->sigEvent->name }}</p>
                                             <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
