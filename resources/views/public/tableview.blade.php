@@ -131,25 +131,24 @@
                         @foreach ($locations as $location)
                             <li class="nav-item">
                                 <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                                    href="#{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) }}">
+                                    href="#{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) . $index + 1 }}">
                                     {{ $location->name }}
                                 </a>
                             </li>
+                            
                         @endforeach
                     </ul>
 
                     <div class="tab-content">
                         @foreach ($locations as $location)
                             <div class="tab-pane{{ $loop->first ? ' active' : '' }}"
-                                id="{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) }}">
-                                {{-- <b>{{ $days }}</b> --}}
+                                id="{{ str_replace(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], '', $location->name) . $index + 1 }}">
                                 @foreach ($entries as $event)
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigLocation->name == $location->name)
-                                            <p>{{ $event->start->format('d.m.Y') }}</p>
-                                            <b>{{ $day }}</b>
-                                            <b> {{ $location->name}}</b>
-                                            <p>{{ $event->sigLocation->name }} </p>
+                                            <p>
+                                                <b>{{ $day }} - {{ $location->name }}</b>
+                                            </p>
                                             <p>{{ $event->sigEvent->sigHost->name }}</p>
                                             <p>{{ $event->sigEvent->name }}</p>
                                             <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
