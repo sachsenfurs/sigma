@@ -13,18 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sig_timeslots', function (Blueprint $table) {
+        Schema::create('sig_attendees', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedInteger('max_users')->default(1);
-
-            $table->dateTime('slot_start');
-            $table->dateTime('slot_end');
-            $table->dateTime('reg_start')->nullable();
-            $table->dateTime('reg_end')->nullable();
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('sig_timeslot_id');
 
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('sig_timeslot_id')->references('id')->on('sig_timeslots');
         });
     }
 
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sig_timeslots');
+        Schema::dropIfExists('sig_attendees');
     }
 };
