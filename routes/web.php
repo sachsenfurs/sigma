@@ -70,4 +70,3 @@ Route::group(['middleware' => "auth"], function() {
     Route::put("/timetable/{entry}", [TimetableController::class, 'update'])->name("timetable.update");
     Route::delete("/timetable/{entry}", [TimetableController::class, 'destroy'])->name("timetable.destroy");
 });
-
