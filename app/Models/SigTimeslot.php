@@ -14,4 +14,8 @@ class SigTimeslot extends Model
     public function timetableEntry() {
         return $this->belongesTo(TimetableEntry::class);
     }
+
+    public function sigAttendees() {
+        return $this->hasMany(SigAttendee::class);
+    }
 }
