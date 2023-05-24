@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use App\Models\SigTimeslot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
