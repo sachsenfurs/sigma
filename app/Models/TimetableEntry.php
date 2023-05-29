@@ -55,5 +55,4 @@ class TimetableEntry extends Model
     public function getDurationAttribute() {
         return $this->end->diffInMinutes($this->start);
     }
-
 }
