@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('sig_timeslots', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('timetable_entry_id');
             $table->unsignedInteger('max_users')->default(1);
-
-            $table->dateTime('slot_start');
-            $table->dateTime('slot_end');
+            $table->time('slot_start');
+            $table->time('slot_end');
             $table->dateTime('reg_start')->nullable();
             $table->dateTime('reg_end')->nullable();
             $table->text('description')->nullable();
