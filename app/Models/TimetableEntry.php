@@ -33,7 +33,7 @@ class TimetableEntry extends Model
     }
 
     public function sigTimeslots() {
-        return $this->hasMany(SigTimeslots::class);
+        return $this->hasMany(SigTimeslot::class);
     }
 
     public function replacedBy() {
