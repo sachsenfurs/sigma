@@ -38,7 +38,6 @@ class SigEventController extends Controller
     }
 
     public function store(Request $request) {
-
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
             'name_en' => "required|string",
@@ -46,6 +45,7 @@ class SigEventController extends Controller
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
+            'reg_possible' => 'bool',
             'date-start' => "array",
             'date-end' => "array",
             'date-start.*' => 'date',
@@ -74,6 +74,11 @@ class SigEventController extends Controller
         $sig->sigLocation()->associate($validated['location']);
         $sig->description = $validated['description'];
         $sig->languages = $languages;
+        if ($request->has('reg_possible')) {
+			$sig->reg_possible = true;
+		} else {
+            $sig->reg_possible = false;
+        }
         $sig->save();
 
         // Insert translation
@@ -119,7 +124,6 @@ class SigEventController extends Controller
         if($request->has("lang_en")) {
             $languages[] = "en";
         }
-
         if(SigHost::where("name", $validated['host'])->exists()) {
             $host_id = SigHost::where("name", $validated['host'])->first();
         } else {
@@ -135,6 +139,11 @@ class SigEventController extends Controller
         $sig->update($validated);
         $sig->languages = $languages;
         $sig->sigHost()->associate($host_id);
+        if ($request->has('reg_possible')) {
+			$sig->reg_possible = true;
+		} else {
+            $sig->reg_possible = false;
+        }
         $sig->save();
         return back()->withSuccess("Änderungen gespeichert");
     }
