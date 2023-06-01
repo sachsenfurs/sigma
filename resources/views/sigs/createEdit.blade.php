@@ -59,7 +59,15 @@
                                     @endforeach
                                 </select>
                             </div>
-
+                            <div class="mt-3">
+                                <label>Timeslots für Teilnahme</label>
+								<div class="form-check">
+									<label>
+										<input class="form-check-input" type="checkbox" name="reg_possible" @isset($sig)
+                                            @if ($sig->reg_possible) checked @endif @endisset>Registrierungen für dieses Event erlauben 
+									</label>
+								</div>
+                            </div>
 
                             @if(!isset($sig))
                                 <hr>
@@ -72,8 +80,8 @@
                                     <div class="col-5"><strong>Start</strong></div>
                                     <div class="col-5"><strong>Ende</strong></div>
                                 </div>
-                                <div id="timeslots-parent" style="display: none">
-                                    <div class="mt-1 row timeslot" id="timeslot">
+                                <div id="timetableEntries-parent" style="display: none">
+                                    <div class="mt-1 row timetableEntry" id="timetableEntry">
                                         <div class="col-5">
                                             <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
                                         </div>
@@ -81,17 +89,17 @@
                                             <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
                                         </div>
                                         <div class="col-2 row">
-                                            <button type="button" class="btn btn-danger text-white" onclick="if($('.timeslot').length > 1) $(this).parent().parent().remove()">
+                                            <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
                                                 <span class="bi bi-trash"></span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div id="timeslots">
+                                <div id="timetableEntries">
                                     @if(old("date-start") AND is_array(old("date-start")))
                                         @foreach(old("date-start") AS $dateStart)
-                                            <div class="mt-1 row timeslot" id="timeslot">
+                                            <div class="mt-1 row timetableEntry" id="timetableEntry">
                                                 <div class="col-5">
                                                     <input type="datetime-local" class="form-control" name="date-start[]" value="{{ $dateStart }}">
                                                 </div>
@@ -99,7 +107,7 @@
                                                     <input type="datetime-local" class="form-control" name="date-end[]" value="{{ old("date-end")[$loop->index] }}">
                                                 </div>
                                                 <div class="col-2 row">
-                                                    <button type="button" class="btn btn-danger text-white" onclick="if($('.timeslot').length > 1) $(this).parent().parent().remove()">
+                                                    <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
                                                         <span class="bi bi-trash"></span>
                                                     </button>
                                                 </div>
@@ -109,7 +117,7 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-secondary" id="addTimeslot"><i class="bi bi-plus"></i></button>
+                                    <button type="button" class="btn btn-secondary" id="addTimetableEntry"><i class="bi bi-plus"></i></button>
                                 </div>
 
                                 <div class="mt-3">
@@ -151,6 +159,7 @@
             </div>
         </div>
     </div>
+    
     <script>
         $(document).ready(function(){
             var availableTags = @json($hosts);
@@ -160,9 +169,9 @@
                 delay: 0,
             });
 
-            $('#addTimeslot').click(function() {
-                $('#timeslots').append($('#timeslot').parent().html());
-                $('#timeslots').parent().find('input[type="datetime-local"]').each(function(i,e) {
+            $('#addTimetableEntry').click(function() {
+                $('#timetableEntries').append($('#timetableEntry').parent().html());
+                $('#timetableEntries').parent().find('input[type="datetime-local"]').each(function(i,e) {
                     if(i > 1)
                         $(e).attr('name', $(e).data("name")).show();
                 });
