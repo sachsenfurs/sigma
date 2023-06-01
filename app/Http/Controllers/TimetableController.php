@@ -38,7 +38,7 @@ class TimetableController extends Controller
 
         TimetableEntry::create($validated);
 
-        return redirect(route("timetable.index"))->withSuccess("Timeslot eingetragen!");
+        return redirect(route("timetable.index"))->withSuccess("Eintrag erstellt!");
     }
 
     public function edit(TimetableEntry $entry) {
@@ -52,9 +52,9 @@ class TimetableController extends Controller
 
     public function update(Request $request, TimetableEntry $entry) {
         $validated = $request->validate([
-            'start' => "required|date",
-            'end' => "required|date",
-            'sig_location_id' => "nullable|exists:" . SigLocation::class . ",id",
+            'start' => 'required|date',
+            'end' => 'required|date',
+            'sig_location_id' => 'nullable|exists:' . SigLocation::class . ',id',
         ]);
 
         $validated['hide'] = $request->has("hide");
@@ -69,12 +69,33 @@ class TimetableController extends Controller
 
         $entry->update($validated);
 
+        //dd($request);
+
+        if(is_array($request->get("time-start"))) {
+
+            foreach($request->get("time-start") AS $i=>$dateStart) {
+                $timeStart = Carbon::parse($dateStart);
+                $timeEnd = Carbon::parse($request->get("time-end")[$i]);
+                $maxUsers = $request->get('max-users')[$i];
+                $regStart = Carbon::parse($request->get('reg-start')[$i]);
+                $regEnd = Carbon::parse($request->get('reg-end')[$i]);
+
+                $entry->sigTimeslots()->create([
+                    'slot_start' => $timeStart,
+                    'slot_end' => $timeEnd,
+                    'max_users' => $maxUsers,
+                    'reg_start' => $regStart,
+                    'reg_end' => $regEnd,
+                ]);
+            }
+        }
+
         return back()->withSuccess("Änderungen gespeichert!");
     }
 
     public function destroy(TimetableEntry $entry) {
         $entry->delete();
 
-        return redirect(route("timetable.index"))->withSuccess("Timeslot gelöscht");
+        return redirect(route("timetable.index"))->withSuccess("Eintrag gelöscht");
     }
 }
