@@ -20,5 +20,5 @@ Event Management System für die EAST Convention
 6. Test connection with `php artisan db`, when successful, exit with typing `exit`
 7. Migrate Database `php artisan migrate`
 8. Open mysql console with `php artisan db`
-9. Create new user in db with `INSERT INTO users (name, email, is_admin) VALUES ("NICNAME", "YOUREMAIL@sachsenfurs.de", true);` This is required because the app is connected to authentication is passed to an external provider 
+9. Create new user in db with `INSERT INTO users (name, email, is_admin) VALUES ("NICKNAME", "YOUREMAIL@sachsenfurs.de", true);` This is required because the app is connected to authentication is passed to an external provider 
 10. php artisan serve
