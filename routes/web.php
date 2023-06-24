@@ -10,6 +10,7 @@ use \App\Http\Controllers\User\UserController;
 use \App\Http\Controllers\Sig\SigEventController;
 use \App\Http\Controllers\Sig\SigHostController;
 use \App\Http\Controllers\Sig\SigLocationController;
+use App\Http\Controllers\Sig\SigTimeslotController;
 use \App\Http\Controllers\TimetableController;
 
 
@@ -69,5 +70,10 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/timetable/{entry}/edit", [TimetableController::class, "edit"])->name("timetable.edit");
     Route::put("/timetable/{entry}", [TimetableController::class, 'update'])->name("timetable.update");
     Route::delete("/timetable/{entry}", [TimetableController::class, 'destroy'])->name("timetable.destroy");
+
+    // SIG Timeslots
+    Route::get('/timeslots/{timeslot}/edit', [SigTimeslotController::class, 'edit'])->name("timeslot.edit");
+    Route::patch('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name("timeslot.update");
+    Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name("timeslot.destroy");
 });
 
