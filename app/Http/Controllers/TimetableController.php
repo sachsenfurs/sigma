@@ -37,6 +37,30 @@ class TimetableController extends Controller
         ]);
 
         TimetableEntry::create($validated);
+        
+        if(is_array($request->get("time-start")) and is_array($request->get("reg-start"))) {
+
+            foreach($request->get("time-start") AS $i=>$dateStart) {
+                $timeStart = Carbon::parse($dateStart);
+                $timeEnd = Carbon::parse($request->get("time-end")[$i]);
+                $maxUsers = $request->get('max-users')[$i];
+                $regStart = Carbon::parse($request->get('reg-start')[$i]);
+                $regEnd = Carbon::parse($request->get('reg-end')[$i]);
+
+                if($regStart === $regEnd) {
+                    $regStart = Carbon::createFromDate($entry->start)->subDays(5);
+                    $regEnd = $entry->start;
+                }
+
+                $entry->sigTimeslots()->create([
+                    'slot_start' => $timeStart,
+                    'slot_end' => $timeEnd,
+                    'max_users' => $maxUsers,
+                    'reg_start' => $regStart,
+                    'reg_end' => $regEnd,
+                ]);
+            }
+        }
 
         return redirect(route("timetable.index"))->withSuccess("Eintrag erstellt!");
     }
@@ -71,7 +95,7 @@ class TimetableController extends Controller
 
         //dd($request);
 
-        if(is_array($request->get("time-start"))) {
+        if(is_array($request->get("time-start")) and is_array($request->get("reg-start"))) {
 
             foreach($request->get("time-start") AS $i=>$dateStart) {
                 $timeStart = Carbon::parse($dateStart);
@@ -79,6 +103,11 @@ class TimetableController extends Controller
                 $maxUsers = $request->get('max-users')[$i];
                 $regStart = Carbon::parse($request->get('reg-start')[$i]);
                 $regEnd = Carbon::parse($request->get('reg-end')[$i]);
+
+                if($regStart === $regEnd) {
+                    $regStart = Carbon::createFromDate($entry->start)->subDays(5);
+                    $regEnd = $entry->start;
+                }
 
                 $entry->sigTimeslots()->create([
                     'slot_start' => $timeStart,
