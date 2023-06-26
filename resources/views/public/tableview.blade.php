@@ -3,6 +3,11 @@
 
 <body>
     <style>
+
+        ul.nav {
+        display: inline-block;
+        white-space: nowrap;
+        }
         table {
             margin: 0;
             padding: 0;
@@ -101,43 +106,62 @@
         div.time {
             width: calc(50% - 1px);
         }
+
+        div.scrollmenu {
+            background-color: #333;
+            overflow: auto;
+        }
+
+        div.scrollmenu li {
+            display: inline-flex;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        div.scrollmenu a:hover {
+            background-color: #777;
+        }
     </style>
     <!-- -->
     <!-- Looking for an API? Ask @Kidran! -->
     <!-- -->
 
-    <div class="container mt-4">
+    <div class="mt-4">
 
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs">
-            @foreach ($days as $index => $day)
-                <li class="nav-item">
-                    <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                        href="#ConDay{{ $index + 1 }}">
-                        {{ $day }}
-                    </a>
-                </li>
-            @endforeach
-        </ul>
+        <!-- Day Nav Tabs -->
+        <div class="scrollmenu">
+            <ul class="nav nav-tabs">
+                @foreach ($days as $index => $day)
+                    <li class="nav-item">
+                        <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                            href="#ConDay{{ $index + 1 }}">
+                            {{ $day }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-        <!-- Tab panes -->
+        <!-- Tab panes /Content -->
         <div class="tab-content">
             @foreach ($days as $index => $day)
                 <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
                     <strong class="weekday">
                         {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
                     </strong>
-                    <ul class="nav nav-tabs">
-                        @foreach ($locations as $location)
-                            <li class="nav-item">
-                                <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                                    href="#{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
-                                    {{ $location->name }}
-                                </a>
-                            </li>
-                            
-                        @endforeach
-                    </ul>
+                    <div class="scrollmenu">
+                        <ul class="nav nav-tabs">
+                            @foreach ($locations as $location)
+                                <li class="nav-item">
+                                    <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                                        href="#{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
+                                        {{ $location->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
                     <div class="tab-content">
                         @foreach ($locations as $location)
@@ -165,9 +189,9 @@
 
 
     </div>
-    <table class="table">
+    <!--    <table class="table">
         @foreach ($days as $day)
-            <tr></tr>
+<tr></tr>
             <tr class="weekday">
                 <td colspan="{{ count($locations) + 1 }}">
                     <strong>{{ $day }} -
@@ -177,21 +201,21 @@
             <tr>
                 <th></th>
                 @foreach ($locations as $location)
-                    <th>
+<th>
                         {{ $location->name }}
                     </th>
-                @endforeach
+@endforeach
             </tr>
             @php
                 $rowspan = [];
             @endphp
             @for ($y = 0; $y <= 32; $y++)
-                @php
-                    $currentTime = \Illuminate\Support\Carbon::parse($day)
-                        ->setHours(8)
-                        ->setMinutes(0)
-                        ->addMinutes(30 * $y);
-                @endphp
+@php
+    $currentTime = \Illuminate\Support\Carbon::parse($day)
+        ->setHours(8)
+        ->setMinutes(0)
+        ->addMinutes(30 * $y);
+@endphp
                 <tr
                     class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? 'active' : '' }}">
                     <td>{{ $currentTime->format('H:i') }}</td>
@@ -242,9 +266,9 @@
                         }
                     @endphp
                 </tr>
-            @endfor
-        @endforeach
-    </table>
+@endfor
+@endforeach
+    </table>-->
 </body>
 
 
