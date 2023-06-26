@@ -105,7 +105,7 @@ class TimetableController extends Controller
                 $regEnd = Carbon::parse($request->get('reg-end')[$i]);
 
                 if($regStart === $regEnd) {
-                    $regStart = Carbon::createFromDate($entry->start)->subDays(5);
+                    $regStart = Carbon::createFromDate($entry->start)->subDays(7);
                     $regEnd = $entry->start;
                 }
 

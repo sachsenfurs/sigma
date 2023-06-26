@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\TimetableController;
 use App\Models\TimeTableEntry;
 use App\Models\SigTimeslot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class SigTimeslotController extends Controller
 {
@@ -14,17 +16,36 @@ class SigTimeslotController extends Controller
     }
 
     public function store(Request $request) {
+        //dd($request);
+        $validated = $request->validate([
+            'slot_start' => 'required',
+            'slot_end' => 'required',
+            'reg_start' => 'required|date',
+            'reg_end' => 'required|date',
+            'max_users' => 'integer',
+            'timetable_entry_id' => 'integer',
+        ]);
+        
+        if($validated['max_users'] <= 0) {
+            $validated['max_users'] = 1;
+        }
 
+        $validated['slot_start'] = Carbon::parse($request->get('slot_start'));
+        $validated['slot_end'] = Carbon::parse($request->get('slot_end'));
+
+        SigTimeslot::create($validated);
+        
+        return back()->withSuccess("Timeslot erstellt!");
     }
 
     public function edit(SigTimeslot $timeslot) {
-        return view("timeslots.edit", compact('timelot'));
+        return view("timeslots.edit", compact('timeslot'));
     }
 
     public function update(Request $request, SigTimeslot $timeslot) {
         $validated = $request->validate([
-            'slot_start' => 'required|date',
-            'slot_end' => 'required|date',
+            'slot_start' => 'required',
+            'slot_end' => 'required',
             'reg_start' => 'required|date',
             'reg_end' => 'required|date',
             'max_users' => 'integer',
@@ -34,7 +55,11 @@ class SigTimeslotController extends Controller
             $validated['max_users'] = 1;
         }
 
+        $validated['slot_start'] = Carbon::parse($request->get('slot_start'));
+        $validated['slot_end'] = Carbon::parse($request->get('slot_end'));
+
         $timeslot->update($validated);
+        return redirect()->action([TimetableController::class, 'edit'], ['entry' => $timeslot->timetableEntry->id])->withSuccess("Änderungen gespeichert!");
     }
 
     public function destroy(SigTimeslot $timeslot) {
