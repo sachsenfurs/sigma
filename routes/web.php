@@ -72,8 +72,9 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/timetable/{entry}", [TimetableController::class, 'destroy'])->name("timetable.destroy");
 
     // SIG Timeslots
-    Route::get('/timeslots/{timeslot}/edit', [SigTimeslotController::class, 'edit'])->name("timeslot.edit");
-    Route::patch('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name("timeslot.update");
-    Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name("timeslot.destroy");
+    Route::get('/timeslots/{timeslot}/edit', [SigTimeslotController::class, 'edit'])->name("timeslots.edit");
+    Route::post("/timeslots", [SigTimeslotController::class, 'store'])->name("timeslots.store");
+    Route::post('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name("timeslots.update");
+    Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name("timeslots.destroy");
 });
 
