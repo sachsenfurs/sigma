@@ -35,6 +35,12 @@ class DatabaseSeeder extends Seeder
             'is_admin' => true,
         ]);
 
+        User::factory()->create([
+            'name' => "Kenthanar",
+            'email' => "kenthanar@sachsenfurs.de",
+            'is_admin' => true,
+        ]);
+
         //SigLocation::factory()->count(12)->create();
         (new RingbergSeeder())->run();
 
