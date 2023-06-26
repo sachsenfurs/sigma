@@ -12,7 +12,7 @@ class SigTimeslot extends Model
     protected $guarded = [];
 
     public function timetableEntry() {
-        return $this->belongesTo(TimetableEntry::class);
+        return $this->belongsTo(TimetableEntry::class);
     }
 
     public function sigAttendees() {
