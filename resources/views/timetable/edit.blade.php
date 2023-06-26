@@ -62,7 +62,7 @@
 
                             <hr>
 							<div class="mt-3 row">
-								<label>Timeslots festlegen</label>
+								<label>Timeslots verwalten</label>
 							</div>
 	
                             <table class="table">
@@ -88,7 +88,7 @@
                                                 {{ $timeslot->sigAttendees->count() }} / {{ $timeslot->max_users }}
                                             </td>
 											<td>
-                                                <a type="button" class="btn btn-info text-white" href="/timeslot/{{ $timeslot->id }}/edit">
+                                                <a type="button" class="btn btn-info text-white" href="/timeslots/{{ $timeslot->id }}/edit">
 													<span class="bi bi-pencil"></span>
                                                 </a>
                                                 <a type="button" class="btn btn-success text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
@@ -128,9 +128,8 @@
 							</div>
 
 							<div class="mt-3">
-								<button type="button" class="btn btn-secondary" id="addTimeslot"><i class="bi bi-plus"></i></button>
                                 <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                    +
+                                    <i class="bi bi-plus"></i>
                                 </button>
 							</div>
                             
@@ -165,24 +164,49 @@
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="createModalLabel">Neuen Timeslot erstellen</h5>
-            </div>
-            <div class="modal-body">
-                Slot Start: <input type="time" data-name="time_start" value="">
-                Slot End: <input type="time" data-name="time_start" value="">
-                Reg Start: <input type="datetime-local" name="reg_start" value="">
-                Reg Start: <input type="datetime-local" name="reg_end" value="">
-                Max Users: <input type="number" data-name="max-users" value="1">
-            </div>
-            <div class="modal-footer">
-                <form id="createForm" action="" method="POST">
-                    @method('CREATE')
+            <form id="createForm" action="/timeslots" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Neuen Timeslot erstellen</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="d-none" name="timetable_entry_id" id="timetable_entry_id" value="{{ $entry->id }}">
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Slot Start</label>
+                        <div class="col-sm-8">
+                            <input type="time" class="form-control" name="slot_start" id="slot_start" value="{{ date('H:i', strtotime($entry->start)) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Slot Ende</label>
+                        <div class="col-sm-8">
+                            <input type="time" class="form-control" name="slot_end" id="slot_end" value="{{ date('H:i', strtotime("+15 minutes", strtotime($entry->start))) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Registrierung Start</label>
+                        <div class="col-sm-8">
+                            <input type="datetime-local" class="form-control" name="reg_start" id="reg_start" value="{{ date('Y-m-d H:i', strtotime("-24 hours", strtotime($entry->start))) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Registrierung Ende</label>
+                        <div class="col-sm-8">
+                            <input type="datetime-local" class="form-control" name="reg_end" id="reg_end" value="{{ date('Y-m-d H:i', strtotime("-60 minutes", strtotime($entry->start))) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Max Teilnehmer</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="max_users" id="max_users" value="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
                     @csrf
                     <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
                     <button type="submit" class="btn btn-primary">Timeslot erstellen</button>
-                </form>
-            </div>
+                </div>
+            </form>
           </div>
         </div>
     </div>
