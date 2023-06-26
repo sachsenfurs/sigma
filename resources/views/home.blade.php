@@ -43,10 +43,10 @@
                             <div class="col-3 col-md-3">
                                 <strong>Event</strong>
                             </div>
-                            <div class="col-2 col-md-3">
+                            <div class="col-2 col-md-2">
                                 <strong>Datum</strong>
                             </div>
-                            <div class="col-3 col-md-2">
+                            <div class="col-3 col-md-3">
                                 <strong>Zeitraum</strong>
                             </div>
                             <div class="col-2 col-md-2">
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="col-6 col-md-12">
                                     <div class="d-none d-lg-block d-xl-block">
-                                        <a type="button" class="btn btn-secondary text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                        <a type="button" class="btn btn-info text-black" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
                                             <span class="bi bi-people-fill"></span>
                                         </a>
                                         <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
@@ -113,7 +113,7 @@
                                         </button>
                                     </div>
                                     <div class="d-block d-sm-none">
-                                        <a type="button" class="btn btn-secondary text-white btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                        <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
                                             <span class="bi bi-people-fill"></span>
                                         </a>
                                         <button type="button" class="btn btn-danger text-white btn-lg" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="col-6 col-md-12">
                                     <div class="d-none d-lg-block d-xl-block">
-                                        <a type="button" class="btn btn-secondary text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                        <a type="button" class="btn btn-info text-black" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
                                             <span class="bi bi-people-fill"></span>
                                         </a>
                                         <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
@@ -183,7 +183,7 @@
                                         </button>
                                     </div>
                                     <div class="d-block d-sm-none">
-                                        <a type="button" class="btn btn-secondary text-white btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                        <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
                                             <span class="bi bi-people-fill"></span>
                                         </a>
                                         <button type="button" class="btn btn-danger text-white btn-lg" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
@@ -248,7 +248,7 @@
                 @method('DELETE')
                 @csrf
                 <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                <button type="submit" class="btn btn-danger">LÖSCHEN</button>
+                <button type="submit" class="btn btn-danger">Stornieren</button>
             </form>
         </div>
       </div>
