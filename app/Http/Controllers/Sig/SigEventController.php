@@ -13,11 +13,15 @@ use Illuminate\Support\Carbon;
 class SigEventController extends Controller
 {
     public function index() {
+        $this->authorize('viewAny', SigEvent::class);
+
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
         return view("sigs.index", compact("sigs"));
     }
 
     public function show(SigEvent $sig) {
+        $this->authorize('view', $sig);
+
         $hosts      = SigHost::pluck("name")->all();
         $locations  = SigLocation::orderBy("name")->get();
         return view("sigs.createEdit", compact([
@@ -28,6 +32,8 @@ class SigEventController extends Controller
     }
 
     public function create() {
+        $this->authorize('create', SigEvent::class);
+
         $hosts = SigHost::pluck("name")->all();
         $locations = SigLocation::orderBy("name")->get();
 
@@ -38,6 +44,8 @@ class SigEventController extends Controller
     }
 
     public function store(Request $request) {
+        $this->authorize('create', SigEvent::class);
+
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
             'name_en' => "required|string",
@@ -110,6 +118,8 @@ class SigEventController extends Controller
     }
 
     public function update(Request $request, SigEvent $sig) {
+        $this->authorize('update', $sig);
+
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
@@ -149,6 +159,8 @@ class SigEventController extends Controller
     }
 
     public function destroy(SigEvent $sig) {
+        $this->authorize('delete', $sig);
+
         $sig->delete();
         return redirect(route("sigs.index"))->withSuccess("SIG gelöscht");
     }

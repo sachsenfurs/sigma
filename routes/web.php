@@ -77,4 +77,3 @@ Route::group(['middleware' => "auth"], function() {
     Route::post('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name("timeslots.update");
     Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name("timeslots.destroy");
 });
-
