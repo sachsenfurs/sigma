@@ -3,11 +3,11 @@
 
 <body>
     <style>
-
         ul.nav {
-        display: inline-block;
-        white-space: nowrap;
+            display: inline-block;
+            white-space: nowrap;
         }
+
         table {
             margin: 0;
             padding: 0;
@@ -108,8 +108,9 @@
         }
 
         div.scrollmenu {
-            background-color: #333;
-            overflow: auto;
+            background-color: #eee;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
 
         div.scrollmenu li {
@@ -121,6 +122,14 @@
 
         div.scrollmenu a:hover {
             background-color: #777;
+        }
+
+        div.border {
+            border-radius: 1rem;
+            width: 20rem;
+            padding-left: 1rem;
+            border-width: 5px;
+            margin: 1.5rem;
         }
     </style>
     <!-- -->
@@ -152,6 +161,11 @@
                     </strong>
                     <div class="scrollmenu">
                         <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
+                                    All
+                                </a>
+                            </li>
                             @foreach ($locations as $location)
                                 <li class="nav-item">
                                     <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
@@ -164,6 +178,21 @@
                     </div>
 
                     <div class="tab-content">
+                        <div class="tab-pane" id="All{{ $index + 1 }}">
+                            @foreach ($entries as $event)
+                                @if ($event->start->format('d.m.Y') == $day)
+                                    <div class="border">
+                                        <p>
+                                            <b>{{ $day }} - {{ $event->sigEvent->sigLocation->name }}</b>
+                                        </p>
+                                        <p>{{ $event->sigEvent->sigHost->name }}</p>
+                                        <p>{{ $event->sigEvent->name }}</p>
+                                        <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
+                                        </p>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
                         @foreach ($locations as $location)
                             <div class="tab-pane{{ $loop->first ? ' active' : '' }}"
                                 id="{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
