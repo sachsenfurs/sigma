@@ -23,15 +23,145 @@
                     <hr>
                 </div>
                 <div class="col-12 col-md-12 text-center">
-                    <p>Du hast aktuell noch keine Registrierungen</p>
-                    <div class="d-none d-xl-block">
-                        <a class="btn btn-primary" href="/table" role="button">Events entdecken</a>
-                    </div>
-                    <div class="d-block d-sm-none">
-                        <a class="btn btn-primary btn-lg" href="/table" role="button">Events entdecken</a>
-                    </div>
+                    @if (auth()->user()->attendeeEvents()->count() == 0)
+                        <p>Du hast aktuell noch keine Registrierungen</p>
+                        <div class="d-none d-xl-block">
+                            <a class="btn btn-primary" href="/table" role="button">Events entdecken</a>
+                        </div>
+                        <div class="d-block d-sm-none">
+                            <a class="btn btn-primary btn-lg" href="/table" role="button">Events entdecken</a>
+                        </div>
+                    @else
+                        <!-- Table head start -->
+                        <div class="d-none d-xl-block">
+                            <div class="row border-bottom border-dark mb-2">
+                                <div class="col-3 col-md-3">
+                                    <strong>Event</strong>
+                                </div>
+                                <div class="col-2 col-md-2">
+                                    <strong>Datum</strong>
+                                </div>
+                                <div class="col-3 col-md-3">
+                                    <strong>Zeitraum</strong>
+                                </div>
+                                <div class="col-2 col-md-2">
+                                    <strong>Raum</strong>
+                                </div>
+                                <div class="col-2 col-md-2">
+                                    <strong>Aktionen</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Table head end -->
+
+                        <!-- Table body start -->
+                        @foreach (auth()->user()->attendeeEvents as $registration)
+                            <div class="row mb-2">
+                                <div class="col-12 col-md-3 mt-1 mb-1">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
+                                            <strong>Event</strong>
+                                        </div>
+                                        <div class="col-6 col-md-12">
+                                            {{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-2 mt-1 mb-1">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
+                                            <strong>Datum</strong>
+                                        </div>
+                                        <div class="col-6 col-md-12">
+                                            {{ date('d.m.Y', strtotime($registration->sigTimeslot->timetableEntry->start)) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3 mt-1 mb-1">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
+                                            <strong>Zeitraum</strong>
+                                        </div>
+                                        <div class="col-6 col-md-12">
+                                            {{ date('H:i', strtotime($registration->sigTimeslot->slot_start)) }} - {{ date('H:i', strtotime($registration->sigTimeslot->slot_end)) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-2 mt-1 mb-1">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
+                                            <strong>Raum</strong>
+                                        </div>
+                                        <div class="col-6 col-md-12">
+                                            {{ $registration->sigTimeslot->timetableEntry->sigLocation->name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-2 mt-1 mb-1 p-0">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
+                                            <strong>Aktionen</strong>
+                                        </div>
+                                        <div class="col-6 col-md-12">
+                                            <div class="d-none d-lg-block d-xl-block">
+                                                <a type="button" class="btn btn-info text-black" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                                    <span class="bi bi-people-fill"></span>
+                                                </a>
+                                                <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                                    <span class="bi bi-x"></span>
+                                                </button>
+                                            </div>
+                                            <div class="d-block d-sm-none">
+                                                <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                                    <span class="bi bi-people-fill"></span>
+                                                </a>
+                                                <button type="button" class="btn btn-danger text-white btn-lg" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="--">
+                                                    <span class="bi bi-x"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-6 d-block d-sm-none mx-auto">
+                                    <hr>
+                                </div>
+                            </div>
+                        @endforeach
+                        <div class="col-12 col-md-12">
+                            <div class="d-none d-xl-block">
+                                <a class="btn btn-primary" href="/table" role="button">Weitere Events entdecken</a>
+                            </div>
+                            <div class="d-block d-sm-none">
+                                <a class="btn btn-primary btn-lg" href="/table" role="button">Weitere Events entdecken</a>
+                            </div>
+                        </div>
+                    @endif 
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--
             <div class="row m-3">
                 <div class="col-12 col-md-12 text-center">
                     <h2>Registrierungen</h2>
@@ -206,7 +336,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
