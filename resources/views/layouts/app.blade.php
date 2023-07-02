@@ -40,6 +40,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
+                                    <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -65,6 +66,14 @@
                         </div>
                     </div>
                 @endforeach
+            @endif
+            @if(session('error'))
+                <div class="container">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-title">{{session()->get("error")}}</h4>
+                    </div>
+                </div>
+
             @endif
             @if(session('success'))
                 <div class="container">
