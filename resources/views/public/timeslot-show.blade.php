@@ -56,6 +56,9 @@
                 </div>
             </div>
             <hr>
+            @php
+                
+            @endphp
                 <div class="row">
                     @if ($entry->sigEvent->reg_possible)
                         <div class="col-12 col-md-12 text-center mb-2 mt-1">
@@ -85,53 +88,65 @@
                                 <div class="accordion">
                                 <div class="accordion-item mt-1 mb-1">
                                     <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                        {{ $e->start->format("d.m.Y") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
-                                    </button>
+                                    @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            {{ $e->start->format("d.m.Y") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
+                                        </button>
+                                    @else
+                                        <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            {{ $e->start->format("d.m.Y") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
+                                        </button>
+                                    @endif
                                     </h2>
+                                    @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
                                     <div id="panelsStayOpen-collapse-ts_{{ $e->id }}" class="accordion-collapse collapse show">
-                                        @if ($counter != 0)
-                                            <div class="accordion-body container text-center">
-                                                @forelse ($e->sigTimeslots as $timeslot)
-                                                    @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                                        <div class="row mb-3 mb-md-0">
+                                    @else
+                                    <div id="panelsStayOpen-collapse-ts_{{ $e->id }}" class="accordion-collapse collapse">
+                                    @endif
+                                        <div class="accordion-body container text-center">
+                                            @forelse ($e->sigTimeslots as $timeslot)
+                                                @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                                                    <div class="row mb-3 mb-md-0">
+                                                @else
+                                                    <div class="row mb-3 mb-md-0 bg-secondary text-white">
+                                                @endif
+                                                    <!-- TODO Change text style into class with mobile view -->
+                                                    <div class="col-lg-4 col-6 border" style="padding: 6px;">
+                                                        <span class="text-center">{{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end))  }}</span>
+                                                    </div>
+                                                    <div class="col-lg-4 col-6 border" style="padding: 6px;">
+                                                        <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span><br class="d-lg-none">
+                                                        <span>Plätze belegt</span>
+                                                    </div>
+                                                    @php
+                                                        $currentTime = strtotime(Carbon\Carbon::now()->toDateTimeString());
+                                                        $regStart = strtotime($timeslot->reg_start);
+                                                        $regEnd = strtotime($timeslot->reg_end);
+                                                    @endphp
+                                                    @if ($regStart > $currentTime)
+                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
+                                                            Registrierung öffnet bald
+                                                        </a>
+                                                    @elseif ($regEnd < $currentTime)
+                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                            Ausgelaufen
+                                                        </a>
                                                     @else
-                                                        <div class="row mb-3 mb-md-0 disabled">
-                                                    @endif
-                                                        <!-- TODO Change text style into class with mobile view -->
-                                                        <div class="col-lg-4 col-6 border" style="padding: 6px;">
-                                                            <span class="text-center">{{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end))  }}</span>
-                                                        </div>
-                                                        <div class="col-lg-4 col-6 border" style="padding: 6px;">
-                                                            <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span><br class="d-lg-none">
-                                                            <span>Slots taken</span>
-                                                        </div>
-                                                        @php
-                                                            $currentTime = strtotime(Carbon\Carbon::now()->toDateTimeString());
-                                                            $regStart = strtotime($timeslot->reg_start);
-                                                            $regEnd = strtotime($timeslot->reg_end);
-                                                        @endphp
-                                                        @if ($regStart > $currentTime)
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
-                                                                Registeration opens soon
-                                                            </a>
-                                                        @elseif ($regEnd < $currentTime)
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                Expired
+                                                        @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
+                                                                Registrieren
                                                             </a>
                                                         @else
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/timeslots/--')">
-                                                                Register
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                Ausgebucht
                                                             </a>
                                                         @endif
-                                                    </div>
-                                                @empty
-                                                    <p>All Slots are currently booked</p>
-                                                @endforelse
-                                            </div>
-                                        @else
-                                            <p>No more slots available.</p>
-                                        @endif
+                                                    @endif
+                                                </div>
+                                            @empty
+                                                <p>All Slots are currently booked</p>
+                                            @endforelse
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -157,18 +172,18 @@
     </div>
     <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="registerModalLabel">Registrieren</h5>
+          <div class="modal-content text-center">
+            <div class="modal-header text-center">
+              <h5 class="modal-title w-100" id="registerModalLabel">Registrieren</h5>
             </div>
             <div class="modal-body">
                 <p>Möchtest du dich für dieses Event registrieren?</p>
             </div>
             <div class="modal-footer">
-                <form id="registerForm" action="" method="POST">
-                    @method('CREATE')
+                <form class="text-center w-100" id="registerForm" action="" method="POST">
                     @csrf
                     <a class="btn btn-secondary" onclick="$('#registerModal').modal('hide');" data-dismiss="modal">Schließen</a>
+                    <button type="submit" class="btn btn-primary m-1">Registrieren</button>
                 </form>
             </div>
           </div>
