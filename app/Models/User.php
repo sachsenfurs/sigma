@@ -42,4 +42,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserRole::class, 'user_role_id');
     }
+
+    /**
+     * Define the relationship between users and their attended events.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attendeeEvents()
+    {
+        return $this->hasMany(SigAttendee::class);
+    }
 }

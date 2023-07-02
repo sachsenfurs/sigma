@@ -9,6 +9,13 @@ class SigAttendee extends Model
 {
     use HasFactory;
 
+    /**
+     * Protected fields in this model.
+     * 
+     * @var array
+     */
+    protected $guarded = [];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -16,5 +23,4 @@ class SigAttendee extends Model
     public function sigTimeslot() {
         return $this->belongsTo(SigTimeslot::class);
     }
-    
 }
