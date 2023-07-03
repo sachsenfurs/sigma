@@ -128,11 +128,50 @@
                                         </label>
                                     </div>
                                 </div>
+                            @else
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th><strong>Tag</strong></th>
+                                            <th><strong>Zeitraum</strong></th>
+                                            <th><strong>Timeslots</strong></th>
+                                            <th><strong>Aktionen</strong></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        @foreach($sig->timetableEntries AS $timetableEntry)
+                                            <tr id="{{ $timetableEntry->id }}">
+                                                <td>
+                                                    {{ date('d.m.Y', strtotime($timetableEntry->start)) }} 
+                                                    @if (date('d.m.Y', strtotime($timetableEntry->start)) != date('d.m.Y', strtotime($timetableEntry->end)))
+                                                    - {{ date('d.m.Y', strtotime($timetableEntry->end)) }}
+                                                    @endif 
+                                                </td>
+                                                <td >
+                                                    {{ date('H:i', strtotime($timetableEntry->start)) }} - {{ date('H:i', strtotime($timetableEntry->end)) }}
+                                                </td>
+                                                <td>
+                                                    {{ $timetableEntry->sigTimeslots->count() }}
+                                                </td>
+                                                <td>
+                                                    <a type="button" class="btn btn-info text-white" href="/timetable/{{ $timetableEntry->id }}/edit">
+                                                        <span class="bi bi-pencil"></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             @endif
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+							</div>
                             <div class="mt-3">
                                 <input type="submit" value="Speichern" class="btn btn-primary">
                             </div>
-
                         </div>
                     </div>
                 </form>
@@ -159,7 +198,39 @@
             </div>
         </div>
     </div>
-    
+    <!-- Modals -->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form id="createForm" action="/timetable" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="d-none" name="sig_event_id" id="sig_host_id" value="{{ $sig->id }}">
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Start</label>
+                        <div class="col-sm-8">
+                            <input type="datetime-local" class="form-control" required="true" name="start" id="start" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Ende</label>
+                        <div class="col-sm-8">
+                            <input type="datetime-local" class="form-control" required="true" name="end" id="end" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @csrf
+                    <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
+                    <button type="submit" class="btn btn-primary">Kalendereintrag erstellen</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <!-- Modals End -->
     <script>
         $(document).ready(function(){
             var availableTags = @json($hosts);
