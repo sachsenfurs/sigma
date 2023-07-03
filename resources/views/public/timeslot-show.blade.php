@@ -133,9 +133,15 @@
                                                         </a>
                                                     @else
                                                         @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
-                                                                Registrieren
-                                                            </a>
+                                                            @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
+                                                                    Bereits registriert
+                                                                </a>
+                                                            @else
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
+                                                                    Registrieren
+                                                                </a>
+                                                            @endif
                                                         @else
                                                             <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
                                                                 Ausgebucht
