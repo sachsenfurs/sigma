@@ -36,7 +36,7 @@
                             <strong>Titel</strong>
                         </div>
                         <div class="col-6 col-md-12">
-                            {{ $role->title }}
+                            <strong>{{ $role->title }}</strong>
                         </div>
                     </div>
                 </div>
