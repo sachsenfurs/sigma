@@ -10,11 +10,11 @@ use \App\Http\Controllers\User\UserController;
 use \App\Http\Controllers\Sig\SigEventController;
 use \App\Http\Controllers\Sig\SigHostController;
 use \App\Http\Controllers\Sig\SigLocationController;
+use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use \App\Http\Controllers\TimetableController;
-
-
-
+use App\Http\Controllers\UserRoleController;
+use Database\Seeders\RingbergSeeder;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,8 +72,19 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/timetable/{entry}", [TimetableController::class, 'destroy'])->name("timetable.destroy");
 
     // SIG Timeslots
-    Route::get('/timeslots/{timeslot}/edit', [SigTimeslotController::class, 'edit'])->name("timeslots.edit");
-    Route::post("/timeslots", [SigTimeslotController::class, 'store'])->name("timeslots.store");
-    Route::post('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name("timeslots.update");
-    Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name("timeslots.destroy");
+    Route::get('/timeslots/{timeslot}/edit', [SigTimeslotController::class, 'edit'])->name('timeslots.edit');
+    Route::post('/timeslots', [SigTimeslotController::class, 'store'])->name('timeslots.store');
+    Route::post('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name('timeslots.update');
+    Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name('timeslots.destroy');
+
+    // Registraton
+    Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
+    Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
+
+    // User-Roles
+    Route::get("/user-roles", [UserRoleController::class, 'index'])->name("user-roles.index");
+    Route::post("/user-roles", [UserRoleController::class, 'store'])->name("user-roles.store");
+    Route::get("/user-roles/{entry}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
+    Route::put("/user-roles/{entry}", [UserRoleController::class, 'update'])->name("user-roles.update");
+    Route::delete("/user-roles/{entry}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 });
