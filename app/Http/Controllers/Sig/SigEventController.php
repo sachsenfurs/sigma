@@ -53,7 +53,7 @@ class SigEventController extends Controller
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
-            'reg_possible' => 'bool',
+            'reg_possible' => '',
             'date-start' => "array",
             'date-end' => "array",
             'date-start.*' => 'date',
@@ -114,7 +114,7 @@ class SigEventController extends Controller
                 ]);
             }
         }
-        return redirect(route("sigs.create"))->withSuccess("SIG erstellt");
+        return redirect(route("sigs.index"))->withSuccess("SIG erstellt");
     }
 
     public function update(Request $request, SigEvent $sig) {
