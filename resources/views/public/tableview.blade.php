@@ -1,3 +1,4 @@
+@extends('layouts.app')
 @section('title', 'Program')
 @include('layouts.head')
 
@@ -123,14 +124,6 @@
         div.scrollmenu a:hover {
             background-color: #777;
         }
-
-        div.border {
-            border-radius: 1rem;
-            width: 20rem;
-            padding-left: 1rem;
-            border-width: 5px;
-            margin: 1.5rem;
-        }
     </style>
     <!-- -->
     <!-- Looking for an API? Ask @Kidran! -->
@@ -162,13 +155,13 @@
                     <div class="scrollmenu">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
                                     All
                                 </a>
                             </li>
                             @foreach ($locations as $location)
                                 <li class="nav-item">
-                                    <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                                    <a class="nav-link" data-bs-toggle="tab"
                                         href="#{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
                                         {{ $location->name }}
                                     </a>
@@ -178,14 +171,15 @@
                     </div>
 
                     <div class="tab-content">
-                        <div class="tab-pane" id="All{{ $index + 1 }}">
+                        <div class="tab-pane active" id="All{{ $index + 1 }}">
                             @foreach ($entries as $event)
                                 @if ($event->start->format('d.m.Y') == $day)
-                                    <div class="border">
+                                    <div class="card m-2 p-3 rounded flex">
                                         <p>
                                             <b>{{ $day }} - {{ $event->sigEvent->sigLocation->name }}</b>
                                         </p>
-                                        <p>{{ $event->sigEvent->sigHost->name }}</p>
+                                        <p><a href="#"
+                                            class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a></p>
                                         <p>{{ $event->sigEvent->name }}</p>
                                         <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
                                         </p>
@@ -194,18 +188,23 @@
                             @endforeach
                         </div>
                         @foreach ($locations as $location)
-                            <div class="tab-pane{{ $loop->first ? ' active' : '' }}"
+                            <div class="tab-pane"
                                 id="{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
-                                @foreach ($entries as $event)
+                                @foreach ($entries as $event) 
                                     @if ($event->start->format('d.m.Y') == $day)
-                                        @if ($event->sigLocation->name == $location->name)
-                                            <p>
-                                                <b>{{ $day }} - {{ $location->name }}</b>
-                                            </p>
-                                            <p>{{ $event->sigEvent->sigHost->name }}</p>
-                                            <p>{{ $event->sigEvent->name }}</p>
-                                            <p>{{ $event->start->format('H:i') }} - {{ $event->end->format('H:i') }}
-                                            </p>
+                                        @if ($event->sigEvent->sigLocation->id == $location->id)
+                                            <div class="card m-2 p-3 rounded flex">
+                                                <p>
+                                                    <b>{{ $day }} - {{ $event->sigEvent->sigLocation->name }}</b>
+                                                </p>
+                                                <p><a href="#"
+                                                        class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
+                                                </p>
+                                                <p>{{ $event->sigEvent->name }}</p>
+                                                <p>{{ $event->start->format('H:i') }} -
+                                                    {{ $event->end->format('H:i') }}
+                                                </p>
+                                            </div>
                                         @endif
                                     @endif
                                 @endforeach
