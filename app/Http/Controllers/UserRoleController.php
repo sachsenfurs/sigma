@@ -16,6 +16,9 @@ class UserRoleController extends Controller
     public function index()
     {
         Gate::authorize('manage_users');
+        $roles = UserRole::all();
+
+        return view('user-roles.index', compact('roles'));
     }
 
     /**
@@ -26,6 +29,8 @@ class UserRoleController extends Controller
     public function create()
     {
         Gate::authorize('manage_users');
+
+        return view('user-roles.create');
     }
 
     /**
@@ -37,6 +42,19 @@ class UserRoleController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('manage_users');
+
+        $attributes = $request->validate([
+            'title'                     => 'required|min:2|max:20',
+            'perm_manage_settings'      => '',
+            'perm_manage_users'         => '',
+            'perm_manage_events'        => '',
+            'perm_manage_locations'     => '',
+            'perm_manage_hosts'         => ''
+        ]);
+
+        UserRole::create($attributes);
+
+        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich erstellt');
     }
 
     /**
@@ -48,6 +66,8 @@ class UserRoleController extends Controller
     public function show(UserRole $userRole)
     {
         Gate::authorize('manage_users');
+
+        return view('user-roles.create', compact('userRole'));
     }
 
     /**
@@ -59,6 +79,8 @@ class UserRoleController extends Controller
     public function edit(UserRole $userRole)
     {
         Gate::authorize('manage_users');
+
+        return view('user-roles.edit', compact('userRole'));
     }
 
     /**
@@ -71,6 +93,23 @@ class UserRoleController extends Controller
     public function update(Request $request, UserRole $userRole)
     {
         Gate::authorize('manage_users');
+
+        if($userRole->id == 1) {
+            return redirect('/user-roles')->with('error', 'Benutzerrolle "Administrator" kann nicht bearbeitet werden!');
+        }
+
+        $attributes = $request->validate([
+            'title'                     => 'required|min:2|max:20',
+            'perm_manage_settings'      => '',
+            'perm_manage_users'         => '',
+            'perm_manage_events'        => '',
+            'perm_manage_locations'     => '',
+            'perm_manage_hosts'         => ''
+        ]);
+
+        $userRole->update($attributes);
+
+        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich aktualisiert');
     }
 
     /**
@@ -82,5 +121,13 @@ class UserRoleController extends Controller
     public function destroy(UserRole $userRole)
     {
         Gate::authorize('manage_users');
+
+        if($userRole->id == 1) {
+            return redirect('/user-roles')->with('error', 'Benutzerrolle "Administrator" kann nicht glöscht werden!');
+        }
+
+        $userRole->delete();
+
+        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich gelöscht');
     }
 }
