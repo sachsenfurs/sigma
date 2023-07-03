@@ -29,7 +29,7 @@
                 </div>
             </div>
             @foreach ($roles as $role)
-            <div class="row mb-2">
+            <div class="row mb-2" style="min-height: 50px;">
                 <div class="col-12 col-md-4 mt-1 mb-1">
                     <div class="row">
                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
@@ -112,17 +112,19 @@
                 </div>
                 <div class="col-12 col-md-3 mt-1 mb-1 p-0">
                     <div class="row">
-                        <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
-                            <strong>Aktionen</strong>
-                        </div>
-                        <div class="col-6 col-md-12">
-                            <a type="button" class="btn btn-info text-white" href="/user-roles/{{ $role->id }}/edit">
-                                <span class="bi bi-pencil"></span>
-                            </a>
-                            <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/user-roles/{{ $role->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $role->id }}">
-                                <span class="bi bi-trash"></span>
-                            </button>
-                        </div>
+                        @if ($role->id != 1)
+                            <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
+                                <strong>Aktionen</strong>
+                            </div>
+                            <div class="col-6 col-md-12">
+                                <a type="button" class="btn btn-info text-white" href="/user-roles/{{ $role->id }}/edit">
+                                    <span class="bi bi-pencil"></span>
+                                </a>
+                                <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/user-roles/{{ $role->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $role->id }}">
+                                    <span class="bi bi-trash"></span>
+                                </button>
+                            </div>    
+                        @endif
                     </div>
                 </div>
             </div>
