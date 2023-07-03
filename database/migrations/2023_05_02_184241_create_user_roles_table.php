@@ -29,14 +29,6 @@ return new class extends Migration
 
             $table->timestamps();
         });
-        DB::table('user_roles')->insert([
-            'title' => 'Administrator',
-            'perm_manage_settings' => true,
-            'perm_manage_users' => true,
-            'perm_manage_events' => true,
-            'perm_manage_locations' => true,
-            'perm_manage_hosts' => true,
-        ]);
     }
 
     /**
