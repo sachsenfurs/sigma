@@ -251,7 +251,7 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
     <script>
 		$('#addTimeslot').click(function() {
             $('#timeslots').append($('#timeslot').parent().html());
