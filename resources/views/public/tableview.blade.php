@@ -202,7 +202,7 @@
                                 @foreach ($entries as $event)
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigEvent->sigLocation->id == $location->id)
-                                            <div class="card m-2 p-3 text-center d-print-block">
+                                            <div class="card m-2 p-3 text-center align-self-center">
                                                 <div class="card-head">
                                                     <h4 class="card-titel mb-1">
                                                         {{ $day }} -
