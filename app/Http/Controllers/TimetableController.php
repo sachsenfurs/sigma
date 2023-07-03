@@ -36,7 +36,7 @@ class TimetableController extends Controller
             'end' => "required|date",
         ]);
 
-        TimetableEntry::create($validated);
+        $entry = TimetableEntry::create($validated);
         
         if(is_array($request->get("time-start")) and is_array($request->get("reg-start"))) {
 
@@ -62,7 +62,9 @@ class TimetableController extends Controller
             }
         }
 
-        return redirect(route("timetable.index"))->withSuccess("Eintrag erstellt!");
+        //return redirect(route("timetable.index"))->withSuccess("Eintrag erstellt!");
+        return redirect()->action([TimetableController::class, 'edit'], ['entry' => $entry->id])->withSuccess("Eintrag erstellt!");
+
     }
 
     public function edit(TimetableEntry $entry) {
