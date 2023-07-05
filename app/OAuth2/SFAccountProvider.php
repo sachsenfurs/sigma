@@ -9,7 +9,7 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 
-class OAuth2Provider extends AbstractProvider
+class SFAccountProvider extends AbstractProvider
 {
     public function getBaseAuthorizationUrl()
     {
@@ -34,11 +34,11 @@ class OAuth2Provider extends AbstractProvider
     /**
      * @param array $response
      * @param AccessToken $token
-     * @return OAuth2ResourceOwner
+     * @return SFAccountResourceOwner
      */
-    protected function createResourceOwner(array $response, AccessToken $token): OAuth2ResourceOwner
+    protected function createResourceOwner(array $response, AccessToken $token): SFAccountResourceOwner
     {
-        return new OAuth2ResourceOwner($response);
+        return new SFAccountResourceOwner($response);
     }
 
     protected function checkResponse(ResponseInterface $response, $data)
