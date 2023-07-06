@@ -10,12 +10,12 @@ use League\OAuth2\Client\Token\AccessToken;
 
 class OAuthLoginController extends Controller
 {
-    public \App\OAuth2\OAuth2Provider $provider;
+    public \App\OAuth2\SFAccountProvider $provider;
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
 
-        $this->provider = new \App\OAuth2\OAuth2Provider([
+        $this->provider = new \App\OAuth2\SFAccountProvider([
             'clientId' => config("app.oauth.clientId"),
             'clientSecret' => config("app.oauth.clientSecret"),
             'redirectUri' => config("app.oauth.redirectUri"),

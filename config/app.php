@@ -218,5 +218,11 @@ return [
         'clientSecret' => env('OAUTH_CLIENT_SECRET', ""),
         'redirectUri' => env('OAUTH_REDIRECT_URI', ""),
     ],
+    'regsys_oauth' => [
+        'domain' => env('REGSYS_OAUTH_DOMAIN'),
+        'clientId' => env('REGSYS_OAUTH_CLIENT_ID', ""),
+        'clientSecret' => env('REGSYS_OAUTH_CLIENT_SECRET', ""),
+        'redirectUri' => env('REGSYS_OAUTH_REDIRECT_URI', ""),
+    ],
 
 ];

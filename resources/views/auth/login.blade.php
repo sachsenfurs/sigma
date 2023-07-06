@@ -13,6 +13,9 @@
                                 <a class="btn btn-success" href="{{ route('oauthlogin') }}">
                                     {{ __('SF Account Staff-Login') }}
                                 </a>
+                                <a class="btn btn-success" href="{{ route('oauthlogin_regsys') }}">
+                                    {{ __('RegSys Login') }}
+                                </a>
                             </div>
                         </div>
                         {{--

@@ -4,14 +4,14 @@ namespace App\OAuth2;
 
 use League\OAuth2\Client\Tool\ArrayAccessorTrait;
 
-class OAuth2ResourceOwner implements \League\OAuth2\Client\Provider\ResourceOwnerInterface
+class SFAccountResourceOwner implements \League\OAuth2\Client\Provider\ResourceOwnerInterface
 {
     use ArrayAccessorTrait;
 
     protected array $response;
 
-    public function __construct(array $reponse = []) {
-        $this->response = $reponse;
+    public function __construct(array $response = []) {
+        $this->response = $response;
     }
     /**
      * @inheritDoc

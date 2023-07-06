@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegSysLoginController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Auth\LoginController;
 use \App\Http\Controllers\Auth\OAuthLoginController;
@@ -35,6 +36,9 @@ Route::post("/logout", [LoginController::class, 'logout'])->name("logout");
 
 Route::get("/oauthlogin", [OAuthLoginController::class, 'index'])->name("oauthlogin");
 Route::get("/oauth", [OAuthLoginController::class, 'redirect']);
+
+Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name("oauthlogin_regsys");
+Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
 Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
