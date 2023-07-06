@@ -174,23 +174,31 @@
                         <div class="tab-pane active" id="All{{ $index + 1 }}">
                             @foreach ($entries as $event)
                                 @if ($event->start->format('d.m.Y') == $day)
-                                    <div class="card m-2 p-3 text-center d-print-block">
-                                        <div class="card-head">
-                                            <h4 class="card-titel mb-1">
-                                                {{ $day }} - {{ $event->sigEvent->sigLocation->name }}
-                                            </h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="card-text"><a
-                                                    href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
-                                                    class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
-                                            </p>
-                                            <p class="card-text"><a
-                                                    href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
-                                                    class="btn btn-primary">{{ $event->sigEvent->name }}</a></p>
-                                            <p class="card-text">{{ $event->start->format('H:i') }} -
-                                                {{ $event->end->format('H:i') }}
-                                            </p>
+                                    <div class="d-flex justify-content-center pt-2">
+                                        <div class="card" style="width: 50rem;">
+                                            <div class="row g-0">
+                                                <div class="col-md-3 text-center pt-2 border-light bg-light">
+                                                    <h5>
+                                                        {{ $event->start->format('H:i') }} -
+                                                        {{ $event->end->format('H:i') }}
+                                                    </h5>
+                                                </div>
+                                                <div class="col-md-8 border-light">
+                                                    <div class="card-body">
+                                                        <h5 class="card-titel">
+                                                            <b>{{ $event->sigEvent->sigLocation->name }}</b>
+                                                        </h5>
+                                                        <p class="card-text"><a
+                                                                href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
+                                                                class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
+                                                        </p>
+                                                        <p class="card-text"><a
+                                                                href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
+                                                                class="btn btn-primary">{{ $event->sigEvent->name }}</a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 @endif
@@ -202,27 +210,33 @@
                                 @foreach ($entries as $event)
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigEvent->sigLocation->id == $location->id)
-                                            <div class="card m-2 p-3 text-center align-self-center">
-                                                <div class="card-head">
-                                                    <h4 class="card-titel mb-1">
-                                                        {{ $day }} -
-                                                        {{ $event->sigEvent->sigLocation->name }}
-                                                    </h4>
-                                                </div>
-                                                <div class="card-body">
-                                                    <p class="card-text"><a
-                                                            href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
-                                                            class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
-                                                    </p>
-                                                    <p class="card-text"><a
-                                                            href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
-                                                            class="btn btn-primary">{{ $event->sigEvent->name }}</a>
-                                                    </p>
-                                                    <p class="card-text">{{ $event->start->format('H:i') }} -
-                                                        {{ $event->end->format('H:i') }}
-                                                    </p>
+                                        <div class="d-flex justify-content-center pt-2">
+                                            <div class="card" style="width: 50rem;">
+                                                <div class="row g-0">
+                                                    <div class="col-md-3 text-center pt-2 border-light bg-light">
+                                                        <h5>
+                                                            {{ $event->start->format('H:i') }} -
+                                                            {{ $event->end->format('H:i') }}
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-md-8 border-light">
+                                                        <div class="card-body">
+                                                            <h5 class="card-titel">
+                                                                <b>{{ $event->sigEvent->sigLocation->name }}</b>
+                                                            </h5>
+                                                            <p class="card-text"><a
+                                                                    href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
+                                                                    class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
+                                                            </p>
+                                                            <p class="card-text"><a
+                                                                    href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
+                                                                    class="btn btn-primary">{{ $event->sigEvent->name }}</a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </div>
                                         @endif
                                     @endif
                                 @endforeach
