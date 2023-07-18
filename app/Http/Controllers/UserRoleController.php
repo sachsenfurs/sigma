@@ -52,7 +52,37 @@ class UserRoleController extends Controller
             'perm_manage_hosts'         => ''
         ]);
 
-        UserRole::create($attributes);
+        if ($request->has('perm_manage_settings')) {
+			$attributes['perm_manage_settings'] = true;
+		} else {
+            $attributes['perm_manage_settings'] = false;
+        }
+
+        if ($request->has('perm_manage_users')) {
+			$attributes['perm_manage_users'] = true;
+		} else {
+            $attributes['perm_manage_users'] = false;
+        }
+
+        if ($request->has('perm_manage_events')) {
+			$attributes['perm_manage_events'] = true;
+		} else {
+            $attributes['perm_manage_events'] = false;
+        }
+
+        if ($request->has('perm_manage_locations')) {
+			$attributes['perm_manage_locations'] = true;
+		} else {
+            $attributes['perm_manage_locations'] = false;
+        }
+
+        if ($request->has('perm_manage_hosts')) {
+			$attributes['perm_manage_hosts'] = true;
+		} else {
+            $attributes['perm_manage_hosts'] = false;
+        }
+
+        $userRole = UserRole::create($attributes);
 
         return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich erstellt');
     }
@@ -106,6 +136,36 @@ class UserRoleController extends Controller
             'perm_manage_locations'     => '',
             'perm_manage_hosts'         => ''
         ]);
+
+        if ($request->has('perm_manage_settings')) {
+			$attributes['perm_manage_settings'] = true;
+		} else {
+            $attributes['perm_manage_settings'] = false;
+        }
+
+        if ($request->has('perm_manage_users')) {
+			$attributes['perm_manage_users'] = true;
+		} else {
+            $attributes['perm_manage_users'] = false;
+        }
+
+        if ($request->has('perm_manage_events')) {
+			$attributes['perm_manage_events'] = true;
+		} else {
+            $attributes['perm_manage_events'] = false;
+        }
+
+        if ($request->has('perm_manage_locations')) {
+			$attributes['perm_manage_locations'] = true;
+		} else {
+            $attributes['perm_manage_locations'] = false;
+        }
+
+        if ($request->has('perm_manage_hosts')) {
+			$attributes['perm_manage_hosts'] = true;
+		} else {
+            $attributes['perm_manage_hosts'] = false;
+        }
 
         $userRole->update($attributes);
 

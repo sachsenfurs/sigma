@@ -20,8 +20,8 @@ class SigTimeslotController extends Controller
         $validated = $request->validate([
             'slot_start' => 'required',
             'slot_end' => 'required',
-            'reg_start' => 'required|date',
-            'reg_end' => 'required|date',
+            'reg_start' => '',
+            'reg_end' => '',
             'max_users' => 'integer',
             'timetable_entry_id' => 'integer',
         ]);
