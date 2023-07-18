@@ -60,11 +60,23 @@
                                 </select>
                             </div>
                             <div class="mt-3">
+                                <div class="form-check">
+                                    <label>
+                                        <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
+                                        Nicht auf Programmplan zeigen (Internes Event)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mt-3">
                                 <label>Timeslots für Teilnahme</label>
 								<div class="form-check">
 									<label>
-										<input class="form-check-input" type="checkbox" name="reg_possible" @isset($sig)
-                                            @if ($sig->reg_possible) checked @endif @endisset>Registrierungen für dieses Event erlauben 
+										<input class="form-check-input" type="checkbox" name="reg_possible" 
+                                            @isset($sig)
+                                                @if ($sig->reg_possible)
+                                                     checked 
+                                                @endif 
+                                            @endisset>Registrierungen für dieses Event erlauben 
 									</label>
 								</div>
                             </div>
@@ -119,15 +131,6 @@
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-secondary" id="addTimetableEntry"><i class="bi bi-plus"></i></button>
                                 </div>
-
-                                <div class="mt-3">
-                                    <div class="form-check">
-                                        <label>
-                                            <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
-                                            Nicht auf Programmplan zeigen (Internes Event)
-                                        </label>
-                                    </div>
-                                </div>
                             @else
                                 <table class="table">
                                     <thead>
@@ -163,12 +166,12 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
                             @endif
-                            <div class="mt-3">
-                                <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-							</div>
                             <div class="mt-3">
                                 <input type="submit" value="Speichern" class="btn btn-primary">
                             </div>
@@ -207,7 +210,6 @@
                     <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="d-none" name="sig_event_id" id="sig_host_id" value="{{ $sig->id }}">
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">Start</label>
                         <div class="col-sm-8">

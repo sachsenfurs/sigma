@@ -7,11 +7,17 @@
                     {{ $entry->sigEvent->name }}<br>
                     <small class="text-muted">{{ $entry->sigEvent->name != $entry->sigEvent->name_en ? $entry->sigEvent->name_en : "" }}</small>
                 </h1>
+                @if (in_array('de' ,$entry->sigEvent->languages))
+                    <img src="{{ asset('icons/de-flag.svg') }}" alt="Event in german">
+                @endif
+                @if (in_array('en' ,$entry->sigEvent->languages))
+                    <img src="{{ asset('icons/us-flag.svg') }}" alt="Event in english">
+                @endif
             </div>
             <div class="row text-center">
                 <div class="col-6 col-md-6">
                     <div class="col-12 text-center col-md-12">
-                        <h3>Room</h3>
+                        <i class="bi bi-geo-fill"></i>
                     </div>
                     <div class="col-12 text-center col-md-12">
                         <p>{{ $entry->sigEvent->sigLocation->name }}</p>
@@ -19,7 +25,7 @@
                 </div>
                 <div class="col-6 col-md-6">
                     <div class="col-12 text-center col-md-12">
-                        <h3>Host</h3>
+                        <i class="bi bi-person-fill"></i>
                     </div>
                     <div class="col-12 text-center col-md-12">
                         <p>{{ $entry->sigEvent->sigHost->name }}</p>
@@ -88,14 +94,28 @@
                                 <div class="accordion">
                                 <div class="accordion-item mt-1 mb-1">
                                     <h2 class="accordion-header">
-                                    @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                            {{ $e->start->format("d.m.Y") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
-                                        </button>
+                                    @if ($e->sigLocation->id != $e->sigEvent->sigLocation->id)
+                                        @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze | 
+                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i>{{ $e->sigLocation->name }}</strong>
+                                            </button>
+                                        @else
+                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden | 
+                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
+                                            </button>
+                                        @endif
                                     @else
-                                        <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                            {{ $e->start->format("d.m.Y") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
-                                        </button>
+                                        @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
+                                            </button>
+                                        @else
+                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
+                                            </button>
+                                        @endif
                                     @endif
                                     </h2>
                                     @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
@@ -104,7 +124,7 @@
                                     <div id="panelsStayOpen-collapse-ts_{{ $e->id }}" class="accordion-collapse collapse">
                                     @endif
                                         <div class="accordion-body container text-center">
-                                            @forelse ($e->sigTimeslots as $timeslot)
+                                            @foreach ($e->sigTimeslots as $timeslot)
                                                 @if ($timeslot->max_users > $timeslot->sigAttendees->count())
                                                     <div class="row mb-3 mb-md-0">
                                                 @else
@@ -123,14 +143,32 @@
                                                         $regStart = strtotime($timeslot->reg_start);
                                                         $regEnd = strtotime($timeslot->reg_end);
                                                     @endphp
-                                                    @if ($regStart > $currentTime)
-                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
-                                                            Registrierung öffnet bald
-                                                        </a>
-                                                    @elseif ($regEnd < $currentTime)
-                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                            Ausgelaufen
-                                                        </a>
+                                                    @if ($timeslot->reg_start)
+                                                        @if ($regStart > $currentTime)
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
+                                                                Registrierung öffnet bald
+                                                            </a>
+                                                        @elseif ($regEnd < $currentTime)
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                Ausgelaufen
+                                                            </a>
+                                                        @else
+                                                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                                                                @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
+                                                                        Bereits registriert
+                                                                    </a>
+                                                                @else
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
+                                                                        Registrieren
+                                                                    </a>
+                                                                @endif
+                                                            @else
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                    Ausgebucht
+                                                                </a>
+                                                            @endif
+                                                        @endif
                                                     @else
                                                         @if ($timeslot->max_users > $timeslot->sigAttendees->count())
                                                             @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
@@ -149,9 +187,7 @@
                                                         @endif
                                                     @endif
                                                 </div>
-                                            @empty
-                                                <p>All Slots are currently booked</p>
-                                            @endforelse
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +197,7 @@
                         <div class="col-5 col-md-4 m-1 mx-auto">
                             <div class="card text-center">
                                 <div class="card-header">
-                                    {{ $e->start->format("d.m.Y") }}
+                                    {{ $e->start->format("l") }}
                                 </div>
                                 <div class="card-body">
                                     {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}

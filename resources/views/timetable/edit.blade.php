@@ -59,79 +59,63 @@
                                     </label>
                                 </div>
                             </div>
-
                             <hr>
-							<div class="mt-3 row">
-								<label>Timeslots verwalten</label>
-							</div>
-	
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th><strong>Slot Zeitraum</strong></th>
-                                        <th><strong>Reg Zeitraum</strong></th>
-                                        <th><strong>Teilnehmer</strong></th>
-                                        <th><strong>Aktionen</strong></th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody>
-                                    @foreach($entry->sigTimeslots AS $timeslot)
-										<tr id="{{ $timeslot->id }}">
-											<td>
-                                                {{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end)) }}
-											</td>
-                                            <td >
-                                                {{ date('d.m. H:i', strtotime($timeslot->reg_start)) }} - {{ date('d.m. H:i', strtotime($timeslot->reg_end)) }}
-											</td>
-                                            <td>
-                                                {{ $timeslot->sigAttendees->count() }} / {{ $timeslot->max_users }}
-                                            </td>
-											<td>
-                                                <a type="button" class="btn btn-info text-white" href="/timeslots/{{ $timeslot->id }}/edit">
-													<span class="bi bi-pencil"></span>
-                                                </a>
-                                                <a type="button" class="btn btn-success text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
-													<span class="bi bi-people-fill"></span>
-                                                </a>
-												<button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
-													<span class="bi bi-trash"></span>
-												</button>
-											</td>
-										</tr>
-									@endforeach
-                                </tbody>
-                              </table> 
-							<div id="timeslots-parent" style="display: none">
-								<div class="mt-1 row timeslot" id="timeslot">
-									<div class="col-2">
-										<input type="time" class="form-control" data-name="time-start[]" name="tester" value="{{ date('H:i') }}">
-									</div>
-									<div class="col-2">
-										<input type="time" class="form-control" data-name="time-end[]" name="tester2" value="{{ date('H:i', strtotime("+15 Minutes")) }}">
-									</div>
-                                    <div class="col-3">
-                                        <input type="datetime-local" class="form-control" name="reg-start[]" value="">
-                                    </div>
-                                    <div class="col-3">
-                                        <input type="datetime-local" class="form-control" name="reg-end[]" value="">
-                                    </div>
-                                    <div class="col-1">
-                                        <input type="number" class="form-control" name="max-users[]" value="1">
-                                    </div>
-									<div class="col-1 row">
-										<button type="button" class="btn btn-danger text-white" onclick="if($('.timeslot').length > 1) $(this).parent().parent().remove()">
-											<span class="bi bi-trash"></span>
-										</button>
-									</div>
-								</div>
-							</div>
-
-							<div class="mt-3">
-                                <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-							</div>
+                            @if ($entry->sigEvent->reg_possible)
+                                <div class="mt-3 row">
+                                    <label>
+                                        <h3>Timeslots verwalten</h3>
+                                    </label>
+                                </div>
+        
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th><strong>Slot Zeitraum</strong></th>
+                                            <th><strong>Reg Zeitraum</strong></th>
+                                            <th><strong>Teilnehmer</strong></th>
+                                            <th><strong>Aktionen</strong></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        @foreach($entry->sigTimeslots AS $timeslot)
+                                            <tr id="{{ $timeslot->id }}">
+                                                <td>
+                                                    {{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end)) }}
+                                                </td>
+                                                <td>
+                                                    @if ($timeslot->reg_start)
+                                                        {{ date('d.m. H:i', strtotime($timeslot->reg_start)) }} - {{ date('d.m. H:i', strtotime($timeslot->reg_end)) }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{ $timeslot->sigAttendees->count() }} / {{ $timeslot->max_users }}
+                                                </td>
+                                                <td>
+                                                    <a type="button" class="btn btn-info text-white" href="/timeslots/{{ $timeslot->id }}/edit">
+                                                        <span class="bi bi-pencil"></span>
+                                                    </a>
+                                                    <a type="button" class="btn btn-success text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
+                                                        <span class="bi bi-people-fill"></span>
+                                                    </a>
+                                                    <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
+                                                        <span class="bi bi-trash"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            @else
+                                <div class="mt-3 row">
+                                    <label>Registrierung für dieses Event sind deaktiviert</label>
+                                </div>
+                            @endif
                             
                             <div class="mt-4 text-center">
                                 <input type="submit" class="btn btn-success" value="Speichern">

@@ -2,6 +2,11 @@
 @section('title', "User Roles Übersicht")
 @section('content')
     <div class="container">
+        <div class="mt-4 mb-4 text-center">
+            <button type="button" class="btn btn-primary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
+                <i class="bi bi-plus"></i>Benutzerrolle erstellen
+            </button>
+        </div>
         <div class="col-12 col-md-12 text-center">
             <div class="d-none d-xl-block">
                 <div class="row border-bottom border-secondary mb-2">
@@ -150,5 +155,59 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="createForm" action="/user-roles" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Neue Benutzerrolle erstellen</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Titel</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="title" id="title" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Settings</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perm_manage_settings" id="perm_manage_settings" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Users</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perm_manage_users" id="perm_manage_users" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Events</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perm_manage_events" id="perm_manage_events" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Locations</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perm_manage_locations" id="perm_manage_locations" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Hosts</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perm_manage_hosts" id="perm_manage_hosts" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @csrf
+                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
+                        <button type="submit" class="btn btn-primary">Benutzerrolle erstellen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
