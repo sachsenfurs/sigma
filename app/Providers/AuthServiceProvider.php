@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\SigEvent' => 'App\Policies\SigEventPolicy',
     ];
 
     /**
@@ -25,6 +25,24 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('manage_settings', function ($user) {
+            return $user->role->perm_manage_settings;
+        });
+
+        Gate::define('manage_users', function ($user) {
+            return $user->role->perm_manage_users;
+        });
+
+        Gate::define('manage_events', function ($user) {
+            return $user->role->perm_manage_events;
+        });
+
+        Gate::define('manage_locations', function ($user) {
+            return $user->role->perm_manage_locations;
+        });
+
+        Gate::define('manage_hosts', function ($user) {
+            return $user->role->perm_manage_hosts;
+        });
     }
 }

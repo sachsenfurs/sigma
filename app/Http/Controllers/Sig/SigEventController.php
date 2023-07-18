@@ -13,11 +13,15 @@ use Illuminate\Support\Carbon;
 class SigEventController extends Controller
 {
     public function index() {
+        $this->authorize('viewAny', SigEvent::class);
+
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
         return view("sigs.index", compact("sigs"));
     }
 
     public function show(SigEvent $sig) {
+        $this->authorize('view', $sig);
+
         $hosts      = SigHost::pluck("name")->all();
         $locations  = SigLocation::orderBy("name")->get();
         return view("sigs.createEdit", compact([
@@ -28,6 +32,8 @@ class SigEventController extends Controller
     }
 
     public function create() {
+        $this->authorize('create', SigEvent::class);
+
         $hosts = SigHost::pluck("name")->all();
         $locations = SigLocation::orderBy("name")->get();
 
@@ -38,6 +44,7 @@ class SigEventController extends Controller
     }
 
     public function store(Request $request) {
+        $this->authorize('create', SigEvent::class);
 
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
@@ -46,6 +53,7 @@ class SigEventController extends Controller
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
+            'reg_possible' => '',
             'date-start' => "array",
             'date-end' => "array",
             'date-start.*' => 'date',
@@ -74,6 +82,11 @@ class SigEventController extends Controller
         $sig->sigLocation()->associate($validated['location']);
         $sig->description = $validated['description'];
         $sig->languages = $languages;
+        if ($request->has('reg_possible')) {
+			$sig->reg_possible = true;
+		} else {
+            $sig->reg_possible = false;
+        }
         $sig->save();
 
         // Insert translation
@@ -101,10 +114,12 @@ class SigEventController extends Controller
                 ]);
             }
         }
-        return redirect(route("sigs.create"))->withSuccess("SIG erstellt");
+        return redirect(route("sigs.index"))->withSuccess("SIG erstellt");
     }
 
     public function update(Request $request, SigEvent $sig) {
+        $this->authorize('update', $sig);
+
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
@@ -119,7 +134,6 @@ class SigEventController extends Controller
         if($request->has("lang_en")) {
             $languages[] = "en";
         }
-
         if(SigHost::where("name", $validated['host'])->exists()) {
             $host_id = SigHost::where("name", $validated['host'])->first();
         } else {
@@ -135,11 +149,18 @@ class SigEventController extends Controller
         $sig->update($validated);
         $sig->languages = $languages;
         $sig->sigHost()->associate($host_id);
+        if ($request->has('reg_possible')) {
+			$sig->reg_possible = true;
+		} else {
+            $sig->reg_possible = false;
+        }
         $sig->save();
         return back()->withSuccess("Änderungen gespeichert");
     }
 
     public function destroy(SigEvent $sig) {
+        $this->authorize('delete', $sig);
+
         $sig->delete();
         return redirect(route("sigs.index"))->withSuccess("SIG gelöscht");
     }

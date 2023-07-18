@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sig_attendees', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            //$table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->default("");
-            $table->unsignedBigInteger('user_role_id')->default(2);
-            $table->rememberToken();
+
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('sig_timeslot_id');
+
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('sig_timeslot_id')->references('id')->on('sig_timeslots');
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sig_attendees');
     }
 };

@@ -32,6 +32,10 @@ class TimetableEntry extends Model
         });
     }
 
+    public function sigTimeslots() {
+        return $this->hasMany(SigTimeslot::class);
+    }
+
     public function replacedBy() {
         return $this->belongsTo(TimetableEntry::class);
     }
@@ -51,5 +55,4 @@ class TimetableEntry extends Model
     public function getDurationAttribute() {
         return $this->end->diffInMinutes($this->start);
     }
-
 }

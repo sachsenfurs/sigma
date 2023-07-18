@@ -24,6 +24,7 @@ return new class extends Migration
             $table->json("languages")->comment("two letter language code as JSON array")->default(json_encode([]));
             $table->text("description")->default("");
             $table->foreignId("sig_location_id")->constrained("sig_locations", "id")->cascadeOnDelete();
+            $table->boolean("reg_possible")->default(false);
             $table->timestamps();
         });
     }
