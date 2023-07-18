@@ -8,10 +8,10 @@
                     <small class="text-muted">{{ $entry->sigEvent->name != $entry->sigEvent->name_en ? $entry->sigEvent->name_en : "" }}</small>
                 </h1>
                 @if (in_array('de' ,$entry->sigEvent->languages))
-                    <img src="{{ asset('icons/de-flag.svg') }}" alt="Event in german">
+                    <img height="19px" src="{{ asset('icons/de-flag.svg') }}" alt="Event in german">
                 @endif
                 @if (in_array('en' ,$entry->sigEvent->languages))
-                    <img src="{{ asset('icons/us-flag.svg') }}" alt="Event in english">
+                    <img height="19px" src="{{ asset('icons/us-flag.svg') }}" alt="Event in english">
                 @endif
             </div>
             <div class="row text-center">
