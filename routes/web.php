@@ -83,8 +83,9 @@ Route::group(['middleware' => "auth"], function() {
 
     // User-Roles
     Route::get("/user-roles", [UserRoleController::class, 'index'])->name("user-roles.index");
+    Route::get("/user-roles/create", [UserRoleController::class, 'create'])->name("user-roles.create");
     Route::post("/user-roles", [UserRoleController::class, 'store'])->name("user-roles.store");
-    Route::get("/user-roles/{entry}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
-    Route::put("/user-roles/{entry}", [UserRoleController::class, 'update'])->name("user-roles.update");
-    Route::delete("/user-roles/{entry}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
+    Route::get("/user-roles/{userRole}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
+    Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
+    Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 });
