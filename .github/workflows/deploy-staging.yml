@@ -24,4 +24,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: "cd ~/staging/sigma && ./.scripts/deploy-staging.sh"
+          script: "cd ~/staging/sigma && chmod +x ./.scripts/deploy-staging.sh && ./.scripts/deploy-staging.sh"
