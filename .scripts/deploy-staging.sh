@@ -14,6 +14,7 @@ git reset --hard
 git pull origin main
 
 # Install composer dependencies
+composer update
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Clear the old cache
