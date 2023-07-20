@@ -52,7 +52,7 @@
                             <td class="align-middle">{{ $user->name }}</td>
                             <td class="align-middle">{{ $user->role->title }}</td>
                             <td class="align-middle">{{ $user->email }}</td>
-                            <td class="align-middle">{{ date('Y-m-d H:i', $user->created_at) }}</td>
+                            <td class="align-middle">{{ $user->created_at ?? "unknown" }}</td>
                             <td class="align-middle">
                                 <form method="POST" action="{{ route("users.destroy", $user) }}">
                                     @method("DELETE")
