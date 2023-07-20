@@ -54,7 +54,7 @@
         <div class="card-footer">
             @csrf
             <div class="d-flex flex-row-reverse">
-                <a class="btn btn-secondary m-1" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
+                <a href="{{url()->previous()}}" class="btn btn-secondary m-1">Abbrechen</a>
                 <button type="submit" class="btn btn-primary m-1">Benutzerrolle aktualisieren</button>
             </div>
         </div>

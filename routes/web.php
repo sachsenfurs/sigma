@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Auth\LoginController;
@@ -47,6 +48,8 @@ Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users', [UserController::class, 'index'])->name("users.index");
     Route::post('/users', [UserController::class, 'store'])->name("users.store");
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put("/users/{user}", [UserController::class, 'update'])->name("users.update");
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name("users.destroy");
 
     // SIG Events
@@ -92,4 +95,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/user-roles/{userRole}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
     Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
+
+    //Ajax-Controller
+    Route::post("/set-favorite", [AjaxController::class, 'setFavorite']);
 });
