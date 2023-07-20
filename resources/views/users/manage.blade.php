@@ -54,11 +54,12 @@
                             <td class="align-middle">{{ $user->email }}</td>
                             <td class="align-middle">{{ $user->created_at ?? "unknown" }}</td>
                             <td class="align-middle">
-                                <form method="POST" action="{{ route("users.destroy", $user) }}">
-                                    @method("DELETE")
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
+                                <a type="button" class="btn btn-info text-white" href="/users/{{ $user->id }}/edit">
+                                    <span class="bi bi-pencil"></span>
+                                </a>
+                                <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/users/{{ $user->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $user->id }}">
+                                    <span class="bi bi-trash"></span>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -66,6 +67,25 @@
                 </table>
             </div>
         </div>
-
+    </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel">Benutzer löschen?</h5>
+            </div>
+            <div class="modal-body">
+                Benutzer wirklich löschen?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" action="" method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
+                    <button type="submit" class="btn btn-danger">LÖSCHEN</button>
+                </form>
+            </div>
+          </div>
+        </div>
     </div>
 @endsection
