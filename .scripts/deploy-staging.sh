@@ -7,6 +7,9 @@ echo "Deployment started ..."
 # if already is in maintenance mode
 (php artisan down) || true
 
+# reset local changes (if any)
+git reset --hard
+
 # Pull the latest version of the app
 git pull origin main
 
