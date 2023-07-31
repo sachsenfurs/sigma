@@ -59,6 +59,8 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/sigs/{sig}/edit", [SigEventController::class, 'show'])->name("sigs.edit");
     Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
     Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
+    // TEMP DEACTIVATED - Route::get("/events", [SigEventController::class, 'index'])->name("sig.indexHosts");
+    // TEMP DEACTIVATED -  Route::get("/events/{event}", [SigEventController::class, 'show'])->name("sig.showHosts");
 
     // SIG Hosts
 //    Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");

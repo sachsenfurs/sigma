@@ -9,6 +9,9 @@ use App\Models\SigLocation;
 use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isNull;
 
 class SigEventController extends Controller
 {
@@ -16,17 +19,24 @@ class SigEventController extends Controller
         $this->authorize('viewAny', SigEvent::class);
 
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
-        return view("sigs.index", compact("sigs"));
+        if (auth()->user()->role->perm_manage_events) {
+            return view("sigs.index", compact("sigs"));
+        } else {
+            return view("sigs.indexHosts", compact("sigs"));
+        }
+        
     }
 
     public function show(SigEvent $sig) {
         $this->authorize('view', $sig);
 
-        $hosts      = SigHost::pluck("name")->all();
+        $host_names      = SigHost::pluck("name")->all();
         $locations  = SigLocation::orderBy("name")->get();
+        $hosts = SigHost::all();
         return view("sigs.createEdit", compact([
             'sig',
             'hosts',
+            'host_names',
             'locations'
         ]));
     }
@@ -34,10 +44,12 @@ class SigEventController extends Controller
     public function create() {
         $this->authorize('create', SigEvent::class);
 
-        $hosts = SigHost::pluck("name")->all();
+        $host_names = SigHost::pluck("name")->all();
         $locations = SigLocation::orderBy("name")->get();
+        $hosts = SigHost::all();
 
         return view("sigs.createEdit", compact([
+            'host_names',
             'hosts',
             'locations'
         ]));
@@ -49,7 +61,9 @@ class SigEventController extends Controller
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
             'name_en' => "required|string",
+            'host_id' => '',
             'host' => "required|string",
+            'reg_id' => '',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
@@ -59,14 +73,16 @@ class SigEventController extends Controller
             'date-start.*' => 'date',
             'date-end.*' => 'date',
         ]);
-
-
-        if(SigHost::where("name", $validated['host'])->exists()) {
-            $host_id = SigHost::where("name", $validated['host'])->first();
-        } else {
+        $host_id = $request->input('host_id');
+        if($host_id == 'NEW') {
+            // Does not exist
             $host_id = SigHost::create([
                 'name' => $validated['host'],
+                'reg_id' => $validated['reg_id'],
             ]);
+        } else {
+            // Does exist
+            $host_id = DB::table('sig_hosts')->where('id', $host_id)->first()->id;
         }
 
         $languages = [];
@@ -123,7 +139,9 @@ class SigEventController extends Controller
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
+            'host_id' => '',
             'host' => "string",
+            'reg_id' => 'integer|nullable',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
@@ -134,14 +152,21 @@ class SigEventController extends Controller
         if($request->has("lang_en")) {
             $languages[] = "en";
         }
-        if(SigHost::where("name", $validated['host'])->exists()) {
-            $host_id = SigHost::where("name", $validated['host'])->first();
-        } else {
+        $host_id = $request->input('host_id');
+        if($host_id == 'NEW') {
+            // Does not exist
             $host_id = SigHost::create([
                 'name' => $validated['host'],
+                'reg_id' => $validated['reg_id'],
             ]);
+        } else {
+            // Does exist
+            $host_id = DB::table('sig_hosts')->where('id', $host_id)->first()->id;
         }
+
         unset($validated['host']);
+        unset($validated['host_id']);
+        unset($validated['reg_id']);
 
         $sig->sigLocation()->associate($validated['location']);
         unset($validated['location']);
@@ -154,6 +179,7 @@ class SigEventController extends Controller
 		} else {
             $sig->reg_possible = false;
         }
+
         $sig->save();
         return back()->withSuccess("Änderungen gespeichert");
     }
