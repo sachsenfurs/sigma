@@ -40,11 +40,13 @@ class SigHostController extends Controller
         $validated = $request->validate([
             'name' => "required|string",
             'description' => "nullable|string",
+            'reg_id' => '',
         ]);
 
         $host->name = $validated['name'];
         $host->hide = $request->has("hide");
         $host->description = $validated['description'] ?? "";
+        $host->reg_id = $validated['reg_id'];
         $host->save();
 
         return back()->withSuccess("Angabgen gespeichert!");

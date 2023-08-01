@@ -12,168 +12,245 @@
                     @endisset
                     <div class="card">
                         <div class="card-header">
-                            SIG {{ isset($sig) ? "Bearbeiten" : "Anlegen" }}
+                            SIG {{ isset($sig) ? "bearbeiten" : "anlegen" }}
                         </div>
                         <div class="card-body">
-
-                            <div class="mb-3">
-                                <label for="name" class="form-label">SIG Name</label>
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old("name", $sig->name ?? "") }}" autofocus>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="name" class="form-label">SIG Name Englisch</label>
-                                <input type="text" class="form-control" id="name" name="name_en" value="{{ old("name_en", $sig->name_en ?? "") }}" autofocus>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="host" class="form-label">SIG Host</label>
-                                <input type="text" class="form-control" id="host" name="host" value="{{ old("host", $sig->sigHost->name ?? "") }}">
-                            </div>
-
-                            <label>Sprache</label>
-                            <div class="form-check">
-                                <label>
-                                    <input class="form-check-input" type="checkbox" name="lang_de" {{ !empty(old("lang_de", in_array("de", $sig->languages ?? []))) ? "checked" : "" }}> Deutsch
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label>
-                                    <input class="form-check-input" type="checkbox" name="lang_en" {{ !empty(old("lang_en", in_array("en", $sig->languages ?? []))) ? "checked" : "" }}> Englisch
-                                </label>
-                            </div>
-
-                            <div class="mt-3">Beschreibung Deutsch</div>
-                            <textarea class="form-control" name="description" style="min-height: 180px">{{ old("description", $sig->description ?? "") }}</textarea>
-                            <div class="mt-3">Beschreibung Englisch</div>
-                            <textarea class="form-control" name="description_en" style="min-height: 180px">{{ old("description_en", $sig->description_en ?? "") }}</textarea>
-
-
-                            <div class="mt-3">
-                                <label>Location</label>
-                                <select name="location" class="form-control">
-                                    @foreach($locations AS $location)
-                                        <option value="{{ $location->id }}" {{ old("location", $sig->sigLocation->id ?? null) == $location->id ? "selected" : "" }}>
-                                            {{ $location->name . ($location->description ? " - " . $location->description : "")}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mt-3">
-                                <div class="form-check">
-                                    <label>
-                                        <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
-                                        Nicht auf Programmplan zeigen (Internes Event)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mt-3">
-                                <label>Timeslots für Teilnahme</label>
-								<div class="form-check">
-									<label>
-										<input class="form-check-input" type="checkbox" name="reg_possible" 
-                                            @isset($sig)
-                                                @if ($sig->reg_possible)
-                                                     checked 
-                                                @endif 
-                                            @endisset>Registrierungen für dieses Event erlauben 
-									</label>
-								</div>
-                            </div>
-
-                            @if(!isset($sig))
-                                <hr>
-                                <div class="mt-3 row">
-                                    <label>Zeit festlegen</label>
-                                    <span class="small">(Optional, kann auch später erfolgen)</span>
-                                </div>
-
-                                <div class="row mt-3">
-                                    <div class="col-5"><strong>Start</strong></div>
-                                    <div class="col-5"><strong>Ende</strong></div>
-                                </div>
-                                <div id="timetableEntries-parent" style="display: none">
-                                    <div class="mt-1 row timetableEntry" id="timetableEntry">
-                                        <div class="col-5">
-                                            <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
+                            <div class="col-12 col-md-12 p-2">
+                                <div class="row">
+                                    <div class="col-8 col-md-8 p-2">
+                                        <h2>Sig Name</h2>
+                                        <div class="form-group row m-1">
+                                            <label for="name" class="col-sm-3 col-form-label text-end">Deutsch</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="name" id="name" value="{{ old("name", $sig->name ?? "") }}" required>
+                                            </div>
                                         </div>
-                                        <div class="col-5">
-                                            <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
+                                        <div class="form-group row m-1">
+                                            <label for="name_en" class="col-sm-3 col-form-label text-end">Englisch</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="name_en" id="name_en" value="{{ old("name_en", $sig->name_en ?? "") }}" required>
+                                            </div>
                                         </div>
-                                        <div class="col-2 row">
-                                            <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
-                                                <span class="bi bi-trash"></span>
-                                            </button>
+                                    </div>
+                                    <div class="col-4 col-md-4 p-2 rounded-top" style="background-color: rgb(215 215 215);">
+                                        <h2>Sprachen</h2>
+                                        <div class="form-group row m-1">
+                                            <label>
+                                                <input class="form-check-input" type="checkbox" name="lang_de" {{ !empty(old("lang_de", in_array("de", $sig->languages ?? []))) ? "checked" : "" }}> Deutsch
+                                            </label>
+                                        </div>
+                                        <div class="form-group row m-1">
+                                            <label>
+                                                <input class="form-check-input" type="checkbox" name="lang_en" {{ !empty(old("lang_en", in_array("en", $sig->languages ?? []))) ? "checked" : "" }}> Englisch
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div id="timetableEntries">
-                                    @if(old("date-start") AND is_array(old("date-start")))
-                                        @foreach(old("date-start") AS $dateStart)
-                                            <div class="mt-1 row timetableEntry" id="timetableEntry">
-                                                <div class="col-5">
-                                                    <input type="datetime-local" class="form-control" name="date-start[]" value="{{ $dateStart }}">
-                                                </div>
-                                                <div class="col-5">
-                                                    <input type="datetime-local" class="form-control" name="date-end[]" value="{{ old("date-end")[$loop->index] }}">
-                                                </div>
-                                                <div class="col-2 row">
-                                                    <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
-                                                        <span class="bi bi-trash"></span>
-                                                    </button>
+                                <div class="row">
+                                    <div class="col-8 col-md-8 p-2">
+                                        <h2>Sig Host</h2>
+                                        <!--<input type="hidden" name="host_id" id="host_id" value="{{ old("host_id", $sig->sigHost->id ?? "") }}">-->
+                                        <div class="form-group row m-1">
+                                            <label for="location" class="col-sm-3 col-form-label text-end">Host</label>
+                                            <div class="col-sm-9">
+                                                <select name="host_id" id="host_id" class="form-control">
+                                                    <option value='NEW'>-- Neuen Host erstellen --</option>
+                                                    @foreach($hosts AS $host)
+                                                        <option value="{{ $host->id }}" {{ old("host_id", $sig->sigHost->id ?? null) == $host->id ? "selected" : "" }}>
+                                                            {{ $host->name }}@if ($host->reg_id != '') - {{ $host->reg_id }}@endif
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @if (!isset($sig))
+                                            <div id="host_row" class="form-group row m-1">
+                                                <label for="host" class="col-sm-3 col-form-label text-end">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="host" id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @endif
+                                            <div id="reg_id_row" class="form-group row m-1">
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg ID</label>
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="reg_id" id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div id="host_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
+                                                <label for="host" class="col-sm-3 col-form-label text-end">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="host" id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
+                                                </div>
+                                            </div>
+                                            <div id="reg_id_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg ID</label>
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="reg_id" id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        <h2 class="mt-3">Location</h2>
+                                        <div class="form-group row m-1">
+                                            <label for="location" class="col-sm-3 col-form-label text-end">Ort</label>
+                                            <div class="col-sm-9">
+                                                <select name="location" class="form-control">
+                                                    @foreach($locations AS $location)
+                                                        <option value="{{ $location->id }}" {{ old("location", $sig->sigLocation->id ?? null) == $location->id ? "selected" : "" }}>
+                                                            {{ $location->name . ($location->description ? " - " . $location->description : "")}}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 p-2 rounded-bottom" style="background-color: rgb(215 215 215);">
+                                        <h2>Sonstiges</h2>
+                                        <div class="form-group row m-1">
+                                            <div class="col-sm-12">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
+                                                     Nicht auf Programmplan zeigen (Internes Event)
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-1">
+                                            <div class="col-sm-12">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" name="reg_possible" 
+                                                        @isset($sig)
+                                                            @if ($sig->reg_possible)
+                                                                 checked 
+                                                            @endif 
+                                                        @endisset> Registrierungen für dieses Event erlauben 
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="mt-3">
-                                    <button type="button" class="btn btn-secondary" id="addTimetableEntry"><i class="bi bi-plus"></i></button>
+                                <div class="row">
+                                    <div class="col-12 col-md-12 p-2">
+                                        <h2 class="mb-2">Beschreibung</h2>
+                                        <div class="row">
+                                            <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
+                                                <h3 class="align-middle">Deutsch</h3>
+                                            </div>
+                                            <div class="col-10 col-md-10">
+                                                <textarea class="form-control mb-1" name="description" style="min-height: 180px" required>{{ old("description", $sig->description ?? "") }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
+                                                <h3 class="align-middle">Englisch</h3>
+                                            </div>
+                                            <div class="col-10 col-md-10">
+                                                <textarea class="form-control mb-1" name="description_en" style="min-height: 180px;">{{ old("description_en", $sig->description_en ?? "") }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            @else
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th><strong>Tag</strong></th>
-                                            <th><strong>Zeitraum</strong></th>
-                                            <th><strong>Timeslots</strong></th>
-                                            <th><strong>Aktionen</strong></th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    <tbody>
-                                        @foreach($sig->timetableEntries AS $timetableEntry)
-                                            <tr id="{{ $timetableEntry->id }}">
-                                                <td>
-                                                    {{ date('d.m.Y', strtotime($timetableEntry->start)) }} 
-                                                    @if (date('d.m.Y', strtotime($timetableEntry->start)) != date('d.m.Y', strtotime($timetableEntry->end)))
-                                                    - {{ date('d.m.Y', strtotime($timetableEntry->end)) }}
-                                                    @endif 
-                                                </td>
-                                                <td >
-                                                    {{ date('H:i', strtotime($timetableEntry->start)) }} - {{ date('H:i', strtotime($timetableEntry->end)) }}
-                                                </td>
-                                                <td>
-                                                    {{ $timetableEntry->sigTimeslots->count() }}
-                                                </td>
-                                                <td>
-                                                    <a type="button" class="btn btn-info text-white" href="/timetable/{{ $timetableEntry->id }}/edit">
-                                                        <span class="bi bi-pencil"></span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <div class="mt-3">
-                                    <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
+                                <div class="row">
+                                    <div class="col-12 col-md-12 p-2">
+                                        @if(!isset($sig))
+                                            <div class="mt-3 row">
+                                                <h2>Zeiten festlegen</h2>
+                                                <span class="small">(Optional, kann auch später erfolgen)</span>
+                                            </div>
+            
+                                            <div class="row mt-3">
+                                                <div class="col-5"><strong>Start</strong></div>
+                                                <div class="col-5"><strong>Ende</strong></div>
+                                            </div>
+                                            <div id="timetableEntries-parent" style="display: none">
+                                                <div class="mt-1 row timetableEntry" id="timetableEntry">
+                                                    <div class="col-5">
+                                                        <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
+                                                    </div>
+                                                    <div class="col-2 row">
+                                                        <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
+                                                            <span class="bi bi-trash"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                            <div id="timetableEntries">
+                                                @if(old("date-start") AND is_array(old("date-start")))
+                                                    @foreach(old("date-start") AS $dateStart)
+                                                        <div class="mt-1 row timetableEntry" id="timetableEntry">
+                                                            <div class="col-5">
+                                                                <input type="datetime-local" class="form-control" name="date-start[]" value="{{ $dateStart }}">
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <input type="datetime-local" class="form-control" name="date-end[]" value="{{ old("date-end")[$loop->index] }}">
+                                                            </div>
+                                                            <div class="col-2 row">
+                                                                <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
+                                                                    <span class="bi bi-trash"></span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+            
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-secondary" id="addTimetableEntry"><i class="bi bi-plus"></i></button>
+                                            </div>
+                                        @else
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th><strong>Tag</strong></th>
+                                                        <th><strong>Zeitraum</strong></th>
+                                                        <th><strong>Timeslots</strong></th>
+                                                        <th><strong>Aktionen</strong></th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                                    @foreach($sig->timetableEntries AS $timetableEntry)
+                                                        <tr id="{{ $timetableEntry->id }}">
+                                                            <td>
+                                                                {{ date('d.m.Y', strtotime($timetableEntry->start)) }} 
+                                                                @if (date('d.m.Y', strtotime($timetableEntry->start)) != date('d.m.Y', strtotime($timetableEntry->end)))
+                                                                - {{ date('d.m.Y', strtotime($timetableEntry->end)) }}
+                                                                @endif 
+                                                            </td>
+                                                            <td >
+                                                                {{ date('H:i', strtotime($timetableEntry->start)) }} - {{ date('H:i', strtotime($timetableEntry->end)) }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $timetableEntry->sigTimeslots->count() }}
+                                                            </td>
+                                                            <td>
+                                                                <a type="button" class="btn btn-info text-white" href="/timetable/{{ $timetableEntry->id }}/edit">
+                                                                    <span class="bi bi-pencil"></span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            @endif
-                            <div class="mt-3">
-                                <input type="submit" value="Speichern" class="btn btn-primary">
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            @csrf
+                            <div class="d-flex flex-row-reverse">
+                                <a href="{{url()->previous()}}" class="btn btn-secondary m-1">Abbrechen</a>
+                                <button class="btn btn-primary m-1" type="submit">Speichern</button>
                             </div>
                         </div>
                     </div>
@@ -210,6 +287,7 @@
                     <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
                 </div>
                 <div class="modal-body">
+                    <input type="number" class="form-control" name="sig_event_id" id="sig_event_id" value="{{ $sig->id }}" style="display: none;">
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">Start</label>
                         <div class="col-sm-8">
@@ -235,7 +313,7 @@
     <!-- Modals End -->
     <script>
         $(document).ready(function(){
-            var availableTags = @json($hosts);
+            var availableTags = @json($host_names);
             $( "#host" ).autocomplete({
                 source: availableTags,
                 minLength: 0,
@@ -250,5 +328,39 @@
                 });
             });
         });
+    </script>
+    <script>
+        document.getElementById('host_id').onchange = function () {
+            if(this.value != 'NEW') {
+                document.getElementById("reg_id").disabled = true;
+                document.getElementById("reg_id_row").style.display="none";
+                document.getElementById("host").disabled = true;
+                document.getElementById("host_row").style.display="none";
+            } else {
+                document.getElementById("reg_id").disabled = false;
+                document.getElementById("reg_id_row").style.display="flex";
+                document.getElementById("host").disabled = false;
+                document.getElementById("host_row").style.display="flex";
+            }
+        }
+        document.getElementById('start').onchange = function () {
+            var start = $('#start').val();
+            start = new Date(start);
+            var month = ('0' + (start.getMonth()+1)).slice(-2);
+            var year = start.getFullYear();
+            var day = ('0'+start.getDate()).slice(-2);
+
+            var hour = start.getHours()+1;
+            var min = ('0'+start.getMinutes()).slice(-2);
+            var sec = ('0'+start.getMilliseconds()).slice(-2);
+
+            end = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
+            $('#end').val(end)
+        }
+        function addHours(date, hours) {
+            date.setHours(date.getHours() + hours);
+
+            return date;
+        }
     </script>
 @endsection

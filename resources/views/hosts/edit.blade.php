@@ -16,6 +16,9 @@
                             <label>Name ändern:</label>
                             <input type="text" class="form-control" name="name" value="{{ old("name", $host->name) }}">
 
+                            <label>Reg Nummer:</label>
+                            <input type="number" class="form-control" name="reg_id" value="{{ old("reg_id", $host->reg_id) }}">
+
                             <div class="mt-3">
                                 <label>Beschreibung:</label>
                                 <textarea class="form-control" name="description">{{ old("description", $host->description) }}</textarea>

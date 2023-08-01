@@ -11,24 +11,16 @@
                     <img height="19px" src="{{ asset('icons/de-flag.svg') }}" alt="Event in german">
                 @endif
                 @if (in_array('en' ,$entry->sigEvent->languages))
-                    <img height="19px" src="{{ asset('icons/us-flag.svg') }}" alt="Event in english">
+                    <img height="19px" src="{{ asset('icons/uk-flag.svg') }}" alt="Event in english">
                 @endif
             </div>
-            <div class="row text-center">
-                <div class="col-6 col-md-6">
+            <div class="row text-center" style="margin-top: 0.5rem;">
+                <div class="col-12 col-md-12">
                     <div class="col-12 text-center col-md-12">
-                        <i class="bi bi-geo-fill"></i>
+                        <i class="bi bi-geo-fill"></i> {{ $entry->sigEvent->sigLocation->name }}
                     </div>
                     <div class="col-12 text-center col-md-12">
-                        <p>{{ $entry->sigEvent->sigLocation->name }}</p>
-                    </div>
-                </div>
-                <div class="col-6 col-md-6">
-                    <div class="col-12 text-center col-md-12">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                    <div class="col-12 text-center col-md-12">
-                        <p>{{ $entry->sigEvent->sigHost->name }}</p>
+                        <i class="bi bi-person-fill"></i> {{ $entry->sigEvent->sigHost->name }}
                     </div>
                 </div>
             </div>
@@ -100,6 +92,11 @@
                                                 {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze | 
                                                 <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i>{{ $e->sigLocation->name }}</strong>
                                             </button>
+                                        @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden | 
+                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
+                                            </button>
                                         @else
                                             <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                                                 {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden | 
@@ -110,6 +107,10 @@
                                         @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                                                 {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
+                                            </button>
+                                        @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
                                             </button>
                                         @else
                                             <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -170,20 +171,26 @@
                                                             @endif
                                                         @endif
                                                     @else
-                                                        @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                                            @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
-                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
-                                                                    Bereits registriert
-                                                                </a>
+                                                        @if ($regEnd < $currentTime)
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                Ausgelaufen
+                                                            </a>
+                                                        @else
+                                                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                                                                @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
+                                                                        Bereits registriert
+                                                                    </a>
+                                                                @else
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
+                                                                        Registrieren
+                                                                    </a>
+                                                                @endif
                                                             @else
-                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
-                                                                    Registrieren
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                    Ausgebucht
                                                                 </a>
                                                             @endif
-                                                        @else
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                Ausgebucht
-                                                            </a>
                                                         @endif
                                                     @endif
                                                 </div>
