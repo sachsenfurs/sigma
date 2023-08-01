@@ -279,37 +279,39 @@
         </div>
     </div>
     <!-- Modals -->
-    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <form id="createForm" action="/timetable" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
-                </div>
-                <div class="modal-body">
-                    <input type="number" class="form-control" name="sig_event_id" id="sig_event_id" value="{{ $sig->id }}" style="display: none;">
-                    <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Start</label>
-                        <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" required="true" name="start" id="start" value="">
+    @if(isset($sig))
+        <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="createForm" action="{{ route("timetable.store") }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" class="form-control" name="sig_event_id" id="sig_event_id" value="{{ $sig->id }}">
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Start</label>
+                            <div class="col-sm-8">
+                                <input type="datetime-local" class="form-control" required="true" name="start" id="start" value="">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Ende</label>
+                            <div class="col-sm-8">
+                                <input type="datetime-local" class="form-control" required="true" name="end" id="end" value="">
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Ende</label>
-                        <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" required="true" name="end" id="end" value="">
-                        </div>
+                    <div class="modal-footer">
+                        @csrf
+                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
+                        <button type="submit" class="btn btn-primary">Kalendereintrag erstellen</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    @csrf
-                    <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                    <button type="submit" class="btn btn-primary">Kalendereintrag erstellen</button>
-                </div>
-            </form>
-          </div>
+                </form>
+            </div>
+            </div>
         </div>
-    </div>
+    @endif
     <!-- Modals End -->
     <script>
         $(document).ready(function(){
