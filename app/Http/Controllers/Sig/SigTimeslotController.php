@@ -25,7 +25,7 @@ class SigTimeslotController extends Controller
             'max_users' => 'integer',
             'timetable_entry_id' => 'integer',
         ]);
-        
+
         if($validated['max_users'] <= 0) {
             $validated['max_users'] = 1;
         }
@@ -34,7 +34,7 @@ class SigTimeslotController extends Controller
         $validated['slot_end'] = Carbon::parse($request->get('slot_end'));
 
         SigTimeslot::create($validated);
-        
+
         return back()->withSuccess("Timeslot erstellt!");
     }
 
@@ -50,7 +50,7 @@ class SigTimeslotController extends Controller
             'reg_end' => 'required|date',
             'max_users' => 'integer',
         ]);
-        
+
         if($validated['max_users'] <= 0) {
             $validated['max_users'] = 1;
         }

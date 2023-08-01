@@ -24,7 +24,7 @@ class SigEventController extends Controller
         } else {
             return view("sigs.indexHosts", compact("sigs"));
         }
-        
+
     }
 
     public function show(SigEvent $sig) {
@@ -61,9 +61,9 @@ class SigEventController extends Controller
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
             'name_en' => "required|string",
-            'host_id' => '',
-            'host' => "required|string",
-            'reg_id' => '',
+            'host_id' => 'required',
+            'host' => "required_if:host_id,NEW|string",
+            'reg_id' => 'nullable|int',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
@@ -73,6 +73,7 @@ class SigEventController extends Controller
             'date-start.*' => 'date',
             'date-end.*' => 'date',
         ]);
+
         $host_id = $request->input('host_id');
         if($host_id == 'NEW') {
             // Does not exist
@@ -82,7 +83,7 @@ class SigEventController extends Controller
             ]);
         } else {
             // Does exist
-            $host_id = DB::table('sig_hosts')->where('id', $host_id)->first()->id;
+            $host_id = SigHost::whereId($host_id)->first()->id;
         }
 
         $languages = [];
@@ -135,12 +136,11 @@ class SigEventController extends Controller
 
     public function update(Request $request, SigEvent $sig) {
         $this->authorize('update', $sig);
-
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
-            'host_id' => '',
-            'host' => "string",
+            'host_id' => 'required',
+            'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
@@ -152,7 +152,7 @@ class SigEventController extends Controller
         if($request->has("lang_en")) {
             $languages[] = "en";
         }
-        $host_id = $request->input('host_id');
+        $host_id = $request->get('host_id');
         if($host_id == 'NEW') {
             // Does not exist
             $host_id = SigHost::create([
@@ -161,7 +161,7 @@ class SigEventController extends Controller
             ]);
         } else {
             // Does exist
-            $host_id = DB::table('sig_hosts')->where('id', $host_id)->first()->id;
+            $host_id = SigHost::whereId($host_id)->first()->id;
         }
 
         unset($validated['host']);
@@ -174,6 +174,7 @@ class SigEventController extends Controller
         $sig->update($validated);
         $sig->languages = $languages;
         $sig->sigHost()->associate($host_id);
+
         if ($request->has('reg_possible')) {
 			$sig->reg_possible = true;
 		} else {

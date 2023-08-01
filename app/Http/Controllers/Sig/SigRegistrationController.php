@@ -30,7 +30,7 @@ class SigRegistrationController extends Controller
             return redirect()->back()->with('error', 'Die Registrierung für dieses Event ist nicht mehr verfügbar!');
         } else {
             $timeslot->sigAttendees()->create(['user_id' => auth()->user()->id]);
-            return redirect()->back()->with('success', 'Erfolreich für den Timeslot registriert!');
+            return redirect()->back()->with('success', 'Erfolgreich für den Timeslot registriert!');
         }
     }
 
