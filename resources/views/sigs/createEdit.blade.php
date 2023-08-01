@@ -287,6 +287,7 @@
                     <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
                 </div>
                 <div class="modal-body">
+                    <input type="number" class="form-control" name="sig_event_id" id="sig_event_id" value="{{ $sig->id }}" style="display: none;">
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">Start</label>
                         <div class="col-sm-8">
@@ -341,6 +342,25 @@
                 document.getElementById("host").disabled = false;
                 document.getElementById("host_row").style.display="flex";
             }
+        }
+        document.getElementById('start').onchange = function () {
+            var start = $('#start').val();
+            start = new Date(start);
+            var month = ('0' + (start.getMonth()+1)).slice(-2);
+            var year = start.getFullYear();
+            var day = ('0'+start.getDate()).slice(-2);
+
+            var hour = start.getHours()+1;
+            var min = ('0'+start.getMinutes()).slice(-2);
+            var sec = ('0'+start.getMilliseconds()).slice(-2);
+
+            end = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
+            $('#end').val(end)
+        }
+        function addHours(date, hours) {
+            date.setHours(date.getHours() + hours);
+
+            return date;
         }
     </script>
 @endsection
