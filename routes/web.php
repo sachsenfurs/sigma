@@ -1,22 +1,22 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
-use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Auth\LoginController;
-use \App\Http\Controllers\Auth\OAuthLoginController;
-use \App\Http\Controllers\Public\TableViewController;
-use \App\Http\Controllers\Public\TimeslotShowController;
-use \App\Http\Controllers\HomeController;
-use \App\Http\Controllers\User\UserController;
-use \App\Http\Controllers\Sig\SigEventController;
-use \App\Http\Controllers\Sig\SigHostController;
-use \App\Http\Controllers\Sig\SigLocationController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Public\ConbookExportController;
+use App\Http\Controllers\Public\TableViewController;
+use App\Http\Controllers\Public\TimeslotShowController;
+use App\Http\Controllers\Sig\SigEventController;
+use App\Http\Controllers\Sig\SigHostController;
+use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
-use \App\Http\Controllers\TimetableController;
+use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
-use Database\Seeders\RingbergSeeder;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +98,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 
+    Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
     //Ajax-Controller
     Route::post("/set-favorite", [AjaxController::class, 'setFavorite']);
 });

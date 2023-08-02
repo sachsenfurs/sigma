@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class TimetableEntry extends Model
 {
@@ -20,6 +21,10 @@ class TimetableEntry extends Model
 
     public function scopePublic($query) {
         return $query->where('hide', false);
+    }
+
+    public function scopeNoAnnouncements($query) {
+        return $query->where(DB::raw("TIMESTAMPDIFF(SECOND, start, end)"), "!=", "0");
     }
 
     public function sigEvent() {

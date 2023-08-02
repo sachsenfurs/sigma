@@ -65,7 +65,7 @@ class SigEventController extends Controller
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'nullable|int',
             'location' => 'required|exists:' . SigLocation::class . ",id",
-            'description' => "string",
+            'description' => "nullable|string",
             'description_en' => "nullable|string",
             'reg_possible' => '',
             'date-start' => "array",
@@ -143,7 +143,7 @@ class SigEventController extends Controller
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'location' => 'required|exists:' . SigLocation::class . ",id",
-            'description' => "string",
+            'description' => "nullable|string",
             'description_en' => "nullable|string",
         ]);
         $languages = [];
