@@ -16,7 +16,12 @@
             </tr>
             @forelse($sigs AS $sig)
                 <tr class="@if($sig->timeTableCount == 0) alert-danger @endif">
-                    <td>{{ $sig->name }}</td>
+                    <td>
+                        @if($sig->description == "")
+                            <div class="badge bg-danger">Text fehlt!</div>
+                        @endif
+                        {{ $sig->name }}
+                    </td>
                     <td>
                         <a href="{{ route("hosts.show", $sig->sigHost) }}">
                             <span class="badge bg-light text-dark">
