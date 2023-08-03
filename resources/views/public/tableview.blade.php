@@ -180,25 +180,27 @@
                                                     </h5>
                                                 </div>
                                                 <div class="col-md-8 border-light">
-                                                    <div class="card-body">
-                                                        <div class="row text-start" style="margin-top: 0.5rem;">
-                                                            <div class="col-12 col-md-12">
-                                                                <div class="col-12 text-start col-md-12">
-                                                                    <h5><b><i class="bi bi-geo-fill"></i>
-                                                                            {{ $event->sigEvent->sigLocation->name }}</b>
-                                                                    </h5>
-                                                                </div>
-                                                                <div class="col-12 text-start col-md-12"><i
-                                                                        class="bi bi-person-fill"></i>
-                                                                    {{ $event->sigEvent->sigHost->name }}</a>
-                                                                </div>
-                                                                <div class="col-12 text-start col-md-12">
-                                                                    <i class="bi bi-ticket-fill"></i>
-                                                                    {{ $event->sigEvent->name }}
+                                                    <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
+                                                        <div class="card-body">
+                                                            <div class="row text-start" style="margin-top: 0.5rem;">
+                                                                <div class="col-12 col-md-12">
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <h5><b><i class="bi bi-ticket-fill"></i>
+                                                                            {{ $event->sigEvent->name }}</b>
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <i class="bi bi-person-fill"></i>
+                                                                        {{ $event->sigEvent->sigHost->name }}
+                                                                    </div>
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <i class="bi bi-geo-fill"></i>
+                                                                        {{ $event->sigEvent->sigLocation->name }}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -221,26 +223,26 @@
                                                             </h5>
                                                         </div>
                                                         <div class="col-md-8 border-light">
-                                                            <div class="card-body">
-                                                                <div class="row text-start" style="margin-top: 0.5rem;">
-                                                                    <div class="col-12 col-md-12">
-                                                                        <div class="col-12 text-start col-md-12">
-                                                                            <h5><b><i class="bi bi-geo-fill"></i>
-                                                                                    {{ $event->sigEvent->sigLocation->name }}</b>
-                                                                            </h5>
-                                                                        </div>
-                                                                        <div class="col-12 text-start col-md-12">
-                                                                            <i class="bi bi-person-fill"></i>
-                                                                            {{ $event->sigEvent->sigHost->name }}</a>
-                                                                        </div>
-                                                                        <div class="col-12 text-start col-md-12">
-                                                                            <a href="{{ route('public.timeslot-show', $event->id) }}"
-                                                                                class="nav nav-link"><i
-                                                                                    class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}</a>
+                                                            <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
+                                                                <div class="card-body">
+                                                                    <div class="row text-start" style="margin-top: 0.5rem;">
+                                                                        <div class="col-12 col-md-12">
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <h5><b><i class="bi bi-geo-fill"></i>
+                                                                                        {{ $event->sigEvent->sigLocation->name }}</b>
+                                                                                </h5>
+                                                                            </div>
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <i class="bi bi-person-fill"></i>
+                                                                                {{ $event->sigEvent->sigHost->name }}
+                                                                            </div>
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
