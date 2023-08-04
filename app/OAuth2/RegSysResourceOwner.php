@@ -15,17 +15,34 @@ class RegSysResourceOwner implements ResourceOwnerInterface
     public function __construct(array $response = []) {
         $this->response = $response;
     }
-    /**
-     * @inheritDoc
-     */
-    public function getId()
-    {
+
+
+    public function getId() {
         return $this->getValueByKey($this->response, "id");
     }
 
-    /**
-     * @inheritDoc
-     */
+    public function getNickname() {
+        return $this->getValueByKey($this->response, "nickname");
+    }
+
+    public function getLanguage() {
+        return $this->getValueByKey($this->response, "language", "en");
+    }
+
+    public function getTelegramId() {
+        return $this->getValueByKey($this->response, "telegram_id");
+    }
+
+    public function getGroups() {
+        return $this->getValueByKey($this->response, "groups", []);
+    }
+    public function getAvatar() {
+        return $this->getValueByKey($this->response, "avatar");
+    }
+    public function getAvatarThumb() {
+        return $this->getValueByKey($this->response, "avatar_thumb");
+    }
+
     public function toArray(): array
     {
         return $this->response;

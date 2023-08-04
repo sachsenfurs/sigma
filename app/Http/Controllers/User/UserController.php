@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index() {
         Gate::authorize('manage_users');
 
-        return view("users.manage")->with("users", User::all());
+        return view("users.index")->with("users", User::all());
     }
 
     public function store(Request $request) {
@@ -21,7 +21,7 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => "required|string",
-            'email' => "required|email|unique:users,email",
+            'email' => "email|unique:users,email|nullable",
         ]);
         if(User::create($validated))
             return back()->withSuccess("User created");
@@ -44,12 +44,12 @@ class UserController extends Controller
     public function update(Request $request, User $user) {
         $validated = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string',
+            'email' => 'email|string|nullable',
+            'reg_id' => 'int|nullable|unique:users,reg_id',
             'user_role_id' => 'required|exists:' . UserRole::class . ',id',
         ]);
 
-        $user->user_role_id = $validated['user_role_id'];
-
+        $user->role()->associate($validated['user_role_id']);
         $user->update($validated);
 
         return redirect(route("users.index"))->withSuccess("Änderungen gespeichert!");

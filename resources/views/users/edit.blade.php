@@ -5,7 +5,7 @@
     @method("PUT")
     <div class="card">
         <div class="card-header text-center">
-            <strong>    
+            <strong>
                 Benutzer "{{ $user->name }}" bearbeiten
             </strong>
         </div>
@@ -22,6 +22,12 @@
                         <label for="" class="col-sm-4 col-form-label text-end">E-Mail</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" name="email" id="email" value="{{ $user->email }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">RegNr</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="reg_id" id="reg_id" value="{{ old("reg_id") ?? $user->reg_id }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">

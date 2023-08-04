@@ -12,15 +12,12 @@ class User extends Authenticatable
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    protected $guarded = [
+        'user_role_id',
+    ];
+
+    protected $casts = [
+        'groups' => 'array',
     ];
 
     /**
@@ -35,7 +32,7 @@ class User extends Authenticatable
 
     /**
      * Define the relationship between users and their role.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function role()
@@ -45,7 +42,7 @@ class User extends Authenticatable
 
     /**
      * Define the relationship between users and their attended events.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function attendeeEvents()
