@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
+use App\Models\SigFavorite;
 
 class AjaxController extends Controller
 {
@@ -24,9 +25,10 @@ class AjaxController extends Controller
         ]);
 
         $result = 'error';
-
-        if (auth()->user()->favorites()->create($attributes)) {
-            $result = 'success';
+        if (!SigFavorite::select('*')->where('user_id', auth()->user()->id)->where('timetable_entry_id', $attributes['timetable_entry_id'])->exists()) {
+            if (auth()->user()->favorites()->create($attributes)) {
+                $result = 'success';
+            }
         }
 
         $response = [
