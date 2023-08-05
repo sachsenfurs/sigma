@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->after("user_role_id", function(Blueprint $table) {
-                $table->unsignedBigInteger("reg_id")->unique()->nullable();
+                $table->unsignedBigInteger("reg_id")->unique()->nullable()->change();
                 $table->string("language", 4)->nullable();
                 $table->unsignedBigInteger("telegram_id")->nullable();
                 $table->json("groups")->default(json_encode([]));
