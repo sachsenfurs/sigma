@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use \Gate;
 use App\Models\UserRole;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class UserRoleController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function index()
     {
@@ -25,6 +29,7 @@ class UserRoleController extends Controller
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function create()
     {
@@ -36,8 +41,9 @@ class UserRoleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
@@ -45,53 +51,24 @@ class UserRoleController extends Controller
 
         $attributes = $request->validate([
             'title'                     => 'required|min:2|max:20',
-            'perm_manage_settings'      => '',
-            'perm_manage_users'         => '',
-            'perm_manage_events'        => '',
-            'perm_manage_locations'     => '',
-            'perm_manage_hosts'         => ''
+            'perms'                     => 'array',
         ]);
 
-        if ($request->has('perm_manage_settings')) {
-			$attributes['perm_manage_settings'] = true;
-		} else {
-            $attributes['perm_manage_settings'] = false;
-        }
+        $role = new UserRole();
+        $role->title = $attributes['title'];
+        $role->save();
 
-        if ($request->has('perm_manage_users')) {
-			$attributes['perm_manage_users'] = true;
-		} else {
-            $attributes['perm_manage_users'] = false;
-        }
+        $role->setPerms($attributes['perms'] ?? []);
 
-        if ($request->has('perm_manage_events')) {
-			$attributes['perm_manage_events'] = true;
-		} else {
-            $attributes['perm_manage_events'] = false;
-        }
-
-        if ($request->has('perm_manage_locations')) {
-			$attributes['perm_manage_locations'] = true;
-		} else {
-            $attributes['perm_manage_locations'] = false;
-        }
-
-        if ($request->has('perm_manage_hosts')) {
-			$attributes['perm_manage_hosts'] = true;
-		} else {
-            $attributes['perm_manage_hosts'] = false;
-        }
-
-        $userRole = UserRole::create($attributes);
-
-        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich erstellt');
+        return back()->with('success', 'Benutzerrolle erfolgreich erstellt');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserRole  $userRole
+     * @param \App\Models\UserRole $userRole
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function show(UserRole $userRole)
     {
@@ -103,8 +80,9 @@ class UserRoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\UserRole  $userRole
+     * @param \App\Models\UserRole $userRole
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function edit(UserRole $userRole)
     {
@@ -116,78 +94,38 @@ class UserRoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserRole  $userRole
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\UserRole $userRole
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function update(Request $request, UserRole $userRole)
     {
         Gate::authorize('manage_users');
 
-        if($userRole->id == 1) {
-            return redirect('/user-roles')->with('error', 'Benutzerrolle "Administrator" kann nicht bearbeitet werden!');
-        }
-
         $attributes = $request->validate([
-            'title'                     => 'required|min:2|max:20',
-            'perm_manage_settings'      => '',
-            'perm_manage_users'         => '',
-            'perm_manage_events'        => '',
-            'perm_manage_locations'     => '',
-            'perm_manage_hosts'         => ''
+            'title' => 'required|min:2|max:20',
+            'perms' => 'array',
         ]);
 
-        if ($request->has('perm_manage_settings')) {
-			$attributes['perm_manage_settings'] = true;
-		} else {
-            $attributes['perm_manage_settings'] = false;
-        }
+        $userRole->setPerms($attributes['perms'] ?? []);
 
-        if ($request->has('perm_manage_users')) {
-			$attributes['perm_manage_users'] = true;
-		} else {
-            $attributes['perm_manage_users'] = false;
-        }
-
-        if ($request->has('perm_manage_events')) {
-			$attributes['perm_manage_events'] = true;
-		} else {
-            $attributes['perm_manage_events'] = false;
-        }
-
-        if ($request->has('perm_manage_locations')) {
-			$attributes['perm_manage_locations'] = true;
-		} else {
-            $attributes['perm_manage_locations'] = false;
-        }
-
-        if ($request->has('perm_manage_hosts')) {
-			$attributes['perm_manage_hosts'] = true;
-		} else {
-            $attributes['perm_manage_hosts'] = false;
-        }
-
-        $userRole->update($attributes);
-
-        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich aktualisiert');
+        return back()->with('success', 'Benutzerrolle erfolgreich aktualisiert');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserRole  $userRole
+     * @param \App\Models\UserRole $userRole
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function destroy(UserRole $userRole)
     {
         Gate::authorize('manage_users');
 
-        if($userRole->id == 1) {
-            return redirect('/user-roles')->with('error', 'Benutzerrolle "Administrator" kann nicht glöscht werden!');
-        }
-
         $userRole->delete();
 
-        return redirect('/user-roles')->with('success', 'Benutzerrolle erfolgreich gelöscht');
+        return back()->with('success', 'Benutzerrolle erfolgreich gelöscht');
     }
 }

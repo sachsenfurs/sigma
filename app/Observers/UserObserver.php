@@ -17,7 +17,6 @@ class UserObserver
         $this->createUpdate($user);
     }
 
-
     public function updated(User $user)
     {
         $this->createUpdate($user);

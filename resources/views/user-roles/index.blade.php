@@ -128,7 +128,7 @@
                                 <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/user-roles/{{ $role->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $role->id }}">
                                     <span class="bi bi-trash"></span>
                                 </button>
-                            </div>    
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -173,31 +173,31 @@
                         <div class="form-group row m-1">
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Settings</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-check-input" name="perm_manage_settings" id="perm_manage_settings" value="">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_settings">
                             </div>
                         </div>
                         <div class="form-group row m-1">
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Users</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-check-input" name="perm_manage_users" id="perm_manage_users" value="">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_users">
                             </div>
                         </div>
                         <div class="form-group row m-1">
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Events</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-check-input" name="perm_manage_events" id="perm_manage_events" value="">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_events">
                             </div>
                         </div>
                         <div class="form-group row m-1">
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Locations</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-check-input" name="perm_manage_locations" id="perm_manage_locations" value="">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_locations">
                             </div>
                         </div>
                         <div class="form-group row m-1">
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Hosts</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-check-input" name="perm_manage_hosts" id="perm_manage_hosts" value="">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_hosts">
                             </div>
                         </div>
                     </div>
