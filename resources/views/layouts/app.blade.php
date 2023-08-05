@@ -4,7 +4,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name' ) }}
+                    <img src="/images/logo.png" alt="{{ config('app.name' ) }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -52,7 +52,7 @@
                                     @can('manage_users')
                                          <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
                                     @endcan
-                                    @can('manage_settings')                                
+                                    @can('manage_settings')
                                         <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
                                     @endcan
 

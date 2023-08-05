@@ -138,6 +138,18 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="form-group row m-1">
+                                            <div class="col-sm-12">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" name="reg_possible"
+                                                        @isset($sig)
+                                                            @if ($sig->reg_possible)
+                                                                 checked
+                                                            @endif
+                                                        @endisset> Registrierungen für dieses Event erlauben
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -148,7 +160,7 @@
                                                 <h3 class="align-middle">Deutsch</h3>
                                             </div>
                                             <div class="col-10 col-md-10">
-                                                <textarea class="form-control mb-1" name="description" style="min-height: 180px" required>{{ old("description", $sig->description ?? "") }}</textarea>
+                                                <textarea class="form-control mb-1" name="description" style="min-height: 180px">{{ old("description", $sig->description ?? "") }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -168,7 +180,7 @@
                                                 <h2>Zeiten festlegen</h2>
                                                 <span class="small">(Optional, kann auch später erfolgen)</span>
                                             </div>
-            
+
                                             <div class="row mt-3">
                                                 <div class="col-5"><strong>Start</strong></div>
                                                 <div class="col-5"><strong>Ende</strong></div>
@@ -188,7 +200,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-            
+
                                             <div id="timetableEntries">
                                                 @if(old("date-start") AND is_array(old("date-start")))
                                                     @foreach(old("date-start") AS $dateStart)
@@ -208,7 +220,7 @@
                                                     @endforeach
                                                 @endif
                                             </div>
-            
+
                                             <div class="mt-3">
                                                 <button type="button" class="btn btn-secondary" id="addTimetableEntry"><i class="bi bi-plus"></i></button>
                                             </div>
@@ -222,15 +234,15 @@
                                                         <th><strong>Aktionen</strong></th>
                                                     </tr>
                                                 </thead>
-                                                
+
                                                 <tbody>
                                                     @foreach($sig->timetableEntries AS $timetableEntry)
                                                         <tr id="{{ $timetableEntry->id }}">
                                                             <td>
-                                                                {{ date('d.m.Y', strtotime($timetableEntry->start)) }} 
+                                                                {{ date('d.m.Y', strtotime($timetableEntry->start)) }}
                                                                 @if (date('d.m.Y', strtotime($timetableEntry->start)) != date('d.m.Y', strtotime($timetableEntry->end)))
                                                                 - {{ date('d.m.Y', strtotime($timetableEntry->end)) }}
-                                                                @endif 
+                                                                @endif
                                                             </td>
                                                             <td >
                                                                 {{ date('H:i', strtotime($timetableEntry->start)) }} - {{ date('H:i', strtotime($timetableEntry->end)) }}
