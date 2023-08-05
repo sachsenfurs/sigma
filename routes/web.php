@@ -101,4 +101,5 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
     //Ajax-Controller
     Route::post("/set-favorite", [AjaxController::class, 'setFavorite']);
+    Route::post("/remove-favorite", [AjaxController::class, 'removeFavorite']);
 });
