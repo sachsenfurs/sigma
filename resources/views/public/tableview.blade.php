@@ -197,17 +197,23 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        @if (!is_null(auth()->user()))
-                                                            <a type="button" class="btn btn-info text-black btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                @if ($event->getFavStatus())
-                                                                    <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
-                                                                @else
-                                                                    <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
-                                                                @endif 
-                                                            </a>
-                                                        @endif
                                                         </div>
                                                     </a>
+                                                </div>
+                                                <div class="col-md-1 border-light">
+                                                    <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                        @if (!is_null(auth()->user()))
+                                                        @if ($event->getFavStatus())
+                                                            <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
+                                                            </a>
+                                                        @else
+                                                            <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -250,6 +256,21 @@
                                                                     </div>
                                                                 </div>
                                                             </a>
+                                                        </div>
+                                                        <div class="col-md-1 border-light">
+                                                            <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                                @if (!is_null(auth()->user()))
+                                                                @if ($event->getFavStatus())
+                                                                    <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
+                                                                    </a>
+                                                                @else
+                                                                    <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
+                                                                    </a>
+                                                                @endif
+                                                            @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
