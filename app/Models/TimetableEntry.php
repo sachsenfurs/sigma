@@ -75,7 +75,7 @@ class TimetableEntry extends Model
 
     public function getFavStatus()
     {
-        if (auth()->user()->favorites->where('timetable_entry_id', $this->id)) {
+        if (auth()->user()->favorites->where('timetable_entry_id', $this->id)->first()) {
             return true;
         }
 
