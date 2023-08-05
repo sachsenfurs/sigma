@@ -89,7 +89,7 @@
                                     @if ($e->sigLocation->id != $e->sigEvent->sigLocation->id)
                                         @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze | 
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze<br>@if($e->sigEvent->max_regs_per_day)Max. {{ $e->sigEvent->max_regs_per_day }} Registrierungen pro Tag @endif
                                                 <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i>{{ $e->sigLocation->name }}</strong>
                                             </button>
                                         @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
@@ -106,7 +106,7 @@
                                     @else
                                         @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze<br>@if($e->sigEvent->max_regs_per_day)Max. {{ $e->sigEvent->max_regs_per_day }} Registrierungen pro Tag @endif
                                             </button>
                                         @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -159,6 +159,10 @@
                                                                     <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
                                                                         Bereits registriert
                                                                     </a>
+                                                                @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                        Tageslimit erreicht
+                                                                    </a>
                                                                 @else
                                                                     <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
                                                                         Registrieren
@@ -180,6 +184,10 @@
                                                                 @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
                                                                     <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
                                                                         Bereits registriert
+                                                                    </a>
+                                                                @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
+                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                        Tageslimit erreicht
                                                                     </a>
                                                                 @else
                                                                     <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isNull;
+
 class TimetableEntry extends Model
 {
     use HasFactory;
@@ -18,6 +20,16 @@ class TimetableEntry extends Model
         'start' => 'datetime',
         'end' => "datetime",
     ];
+
+    /**
+     * Define the relationship between timetable-entries and their favorites.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favorites()
+    {
+        return $this->hasMany(SigFavorite::class);
+    }
 
     public function scopePublic($query) {
         return $query->where('hide', false);
@@ -59,5 +71,35 @@ class TimetableEntry extends Model
 
     public function getDurationAttribute() {
         return $this->end->diffInMinutes($this->start);
+    }
+
+    public function getFavStatus()
+    {
+        if (auth()->user()->favorites->where('timetable_entry_id', $this->id)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function maxUserRegsExeeded()
+    {
+        if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
+            return false;
+        }
+
+        $i = 0;
+
+        foreach ($this->sigTimeslots as $timeslot) {
+            if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id)) {
+                $i++;
+            }
+        }
+
+        if ($this->sigEvent->max_regs_per_day <= $i) {
+            return true;
+        }
+
+        return false;
     }
 }

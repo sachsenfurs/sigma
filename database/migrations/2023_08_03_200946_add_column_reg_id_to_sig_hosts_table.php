@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sig_hosts', function (Blueprint $table) {
-            $table->id();
-            $table->string("name");
-            $table->text("description")->default("");
+        Schema::table('sig_hosts', function (Blueprint $table) {
+            $table->unsignedBigInteger('reg_id')->nullable();
         });
     }
 
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sig_hosts');
+        Schema::table('sig_hosts', function (Blueprint $table) {
+            //
+        });
     }
 };

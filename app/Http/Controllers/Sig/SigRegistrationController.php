@@ -20,7 +20,10 @@ class SigRegistrationController extends Controller
         $currentTime = strtotime(Carbon::now()->toDateTimeString());
         $regStart = strtotime($timeslot->reg_start);
         $regEnd = strtotime($timeslot->reg_end);
-        if($timeslot->max_users <= $timeslot->sigAttendees->count()) {
+        if ($timeslot->timetableEntry->maxUserRegsExeeded()) {
+            return redirect()->back()->with('error', 'Maximale Anzahl an Registrierungen für diesen Tag für dieses Event erreicht!');
+        }
+        if ($timeslot->max_users <= $timeslot->sigAttendees->count()) {
             return redirect()->back()->with('error', 'Dieser Timeslot ist bereits voll!');
         } elseif($timeslot->sigAttendees->contains('user_id', auth()->user()->id)) {
             return redirect()->back()->with('error', 'Du nimmst bereits an diesem Timeslot teil!');
