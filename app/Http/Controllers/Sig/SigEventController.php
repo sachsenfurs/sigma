@@ -62,12 +62,13 @@ class SigEventController extends Controller
             'name' => "required|string|unique:" . SigEvent::class . ",name",
             'name_en' => "required|string",
             'host_id' => '',
-            'host' => "required|string",
+            'host' => "string",
             'reg_id' => '',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
             'reg_possible' => '',
+            'max_regs_per_day' => 'nullable|integer',
             'date-start' => "array",
             'date-end' => "array",
             'date-start.*' => 'date',
@@ -102,6 +103,9 @@ class SigEventController extends Controller
 			$sig->reg_possible = true;
 		} else {
             $sig->reg_possible = false;
+        }
+        if ($validated['max_regs_per_day']) {
+            $sig->max_regs_per_day = $validated['max_regs_per_day'];
         }
         $sig->save();
 
@@ -142,6 +146,7 @@ class SigEventController extends Controller
             'host_id' => '',
             'host' => "string",
             'reg_id' => 'integer|nullable',
+            'max_regs_per_day' => 'nullable|integer',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "string",
             'description_en' => "nullable|string",
@@ -179,7 +184,9 @@ class SigEventController extends Controller
 		} else {
             $sig->reg_possible = false;
         }
-
+        if ($validated['max_regs_per_day']) {
+            $sig->max_regs_per_day = $validated['max_regs_per_day'];
+        }
         $sig->save();
         return back()->withSuccess("Änderungen gespeichert");
     }

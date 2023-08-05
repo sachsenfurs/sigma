@@ -52,4 +52,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(SigAttendee::class);
     }
+
+    /**
+     * Define the relationship between users and their favorites.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favorites()
+    {
+        return $this->hasMany(SigFavorite::class);
+    }
 }
