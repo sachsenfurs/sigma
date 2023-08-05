@@ -4,7 +4,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name' ) }}
+                    <img src="/images/logo.png" alt="{{ config('app.name' ) }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -26,11 +26,11 @@
                             @endif
                             @if (auth()->user()->role->perm_manage_locations)
                                 <li><a class="nav-link {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                            @endif   
-                            
+                            @endif
+
                             @if (auth()->user()->id)
-                                
-                            @endif                        
+
+                            @endif
                         @else
                             <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
                         @endauth
@@ -55,7 +55,7 @@
                                     @if (auth()->user()->role->perm_manage_users)
                                         <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
                                     @endif
-                                    @if (auth()->user()->role->perm_manage_settings)                                
+                                    @if (auth()->user()->role->perm_manage_settings)
                                         <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
                                     @endif
 
