@@ -24,7 +24,7 @@ class UserObserver
 
     private function createUpdate(User $user) {
         // assign user role to specific groups
-        if(in_array("leitstelle", $user->groups)) {
+        if(in_array("leitstelle", $user->groups ?? [])) {
             $user->role()->associate(3);
             $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
         }
