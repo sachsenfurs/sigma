@@ -17,20 +17,17 @@
                             <!-- Visible in any case -->
                             <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
                             <!-- End visible in any case -->
-                            @if (auth()->user()->role->perm_manage_events)
+                            @can('manage_events')
                                 <li><a class="nav-link {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">Manage Timetable</a></li>
                                 <li><a class="nav-link {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">SIGs</a></li>
-                            @endif
-                            @if (auth()->user()->role->perm_manage_hosts)
+                            @endcan
+                            @can('manage_hosts')
                                 <li><a class="nav-link {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">Hosts</a></li>
-                            @endif
-                            @if (auth()->user()->role->perm_manage_locations)
+                            @endcan
+                            @can('manage_locations')
                                 <li><a class="nav-link {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                            @endif
-
-                            @if (auth()->user()->id)
-
-                            @endif
+                            @endcan   
+                                               
                         @else
                             <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
                         @endauth
@@ -52,12 +49,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    @if (auth()->user()->role->perm_manage_users)
-                                        <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
-                                    @endif
-                                    @if (auth()->user()->role->perm_manage_settings)
+                                    @can('manage_users')
+                                         <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
+                                    @endcan
+                                    @can('manage_settings')
                                         <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
-                                    @endif
+                                    @endcan
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

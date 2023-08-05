@@ -90,8 +90,8 @@
                                                 </div>
                                             </div>
                                         @endif
-
-                                        <h2 class="mt-3">Location</h2>
+                                        
+                                        <h2 class="mt-3">Sig Location</h2>
                                         <div class="form-group row m-1">
                                             <label for="location" class="col-sm-3 col-form-label text-end">Ort</label>
                                             <div class="col-sm-9">
@@ -102,6 +102,29 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+
+                                        <h2 class="mt-3">Registrierung</h2>
+                                        <div class="form-group row m-1">
+                                            <div class="form-group row m-1">
+                                                <div class="col-sm-3"></div>
+                                                <div class="col-sm-9">
+                                                    <label>
+                                                        <input class="form-check-input" type="checkbox" name="reg_possible" 
+                                                            @isset($sig)
+                                                                @if ($sig->reg_possible)
+                                                                     checked 
+                                                                @endif 
+                                                            @endisset> Registrierungen für dieses Event erlauben 
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div id="max_regs_per_day_row" class="form-group row m-1">
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg's / Tag</label>
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="max_regs_per_day" id="max_regs_per_day" value="{{ old("max_regs_per_day", $sig->max_regs_per_day ?? "1") }}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
