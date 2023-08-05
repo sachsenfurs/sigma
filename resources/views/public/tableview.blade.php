@@ -138,7 +138,7 @@
                     <li class="nav-item">
                         <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
                             href="#ConDay{{ $index + 1 }}">
-                            {{ $day }}
+                            {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
                         </a>
                     </li>
                 @endforeach
@@ -149,9 +149,6 @@
         <div class="tab-content">
             @foreach ($days as $index => $day)
                 <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
-                    <strong class="weekday">
-                        {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
-                    </strong>
                     <div class="scrollmenu">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -179,24 +176,31 @@
                                             <div class="row g-0">
                                                 <div class="col-md-3 text-center pt-2 border-light bg-light">
                                                     <h5>
-                                                        {{ $event->start->format('H:i') }} -
-                                                        {{ $event->end->format('H:i') }}
+                                                        {{ $event->start->format('H:i') }}
                                                     </h5>
                                                 </div>
                                                 <div class="col-md-8 border-light">
-                                                    <div class="card-body">
-                                                        <h5 class="card-titel">
-                                                            <b>{{ $event->sigEvent->sigLocation->name }}</b>
-                                                        </h5>
-                                                        <p class="card-text"><a
-                                                                href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
-                                                                class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
-                                                        </p>
-                                                        <p class="card-text"><a
-                                                                href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
-                                                                class="btn btn-primary">{{ $event->sigEvent->name }}</a>
-                                                        </p>
-                                                    </div>
+                                                    <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
+                                                        <div class="card-body">
+                                                            <div class="row text-start" style="margin-top: 0.5rem;">
+                                                                <div class="col-12 col-md-12">
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <h5><b><i class="bi bi-ticket-fill"></i>
+                                                                            {{ $event->sigEvent->name }}</b>
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <i class="bi bi-person-fill"></i>
+                                                                        {{ $event->sigEvent->sigHost->name }}
+                                                                    </div>
+                                                                    <div class="col-12 text-start col-md-12">
+                                                                        <i class="bi bi-geo-fill"></i>
+                                                                        {{ $event->sigEvent->sigLocation->name }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,33 +214,39 @@
                                 @foreach ($entries as $event)
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigEvent->sigLocation->id == $location->id)
-                                        <div class="d-flex justify-content-center pt-2">
-                                            <div class="card" style="width: 50rem;">
-                                                <div class="row g-0">
-                                                    <div class="col-md-3 text-center pt-2 border-light bg-light">
-                                                        <h5>
-                                                            {{ $event->start->format('H:i') }} -
-                                                            {{ $event->end->format('H:i') }}
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-md-8 border-light">
-                                                        <div class="card-body">
-                                                            <h5 class="card-titel">
-                                                                <b>{{ $event->sigEvent->sigLocation->name }}</b>
+                                            <div class="d-flex justify-content-center pt-2">
+                                                <div class="card" style="width: 50rem;">
+                                                    <div class="row g-0">
+                                                        <div class="col-md-3 text-center pt-2 border-light bg-light">
+                                                            <h5>
+                                                                {{ $event->start->format('H:i') }}
                                                             </h5>
-                                                            <p class="card-text"><a
-                                                                    href="{{ route('hosts.show', $event->sigEvent->sigHost->id) }}"
-                                                                    class="btn btn-success">{{ $event->sigEvent->sigHost->name }}</a>
-                                                            </p>
-                                                            <p class="card-text"><a
-                                                                    href="{{ route('public.timeslot-show', $event->sigEvent->id) }}"
-                                                                    class="btn btn-primary">{{ $event->sigEvent->name }}</a>
-                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-8 border-light">
+                                                            <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
+                                                                <div class="card-body">
+                                                                    <div class="row text-start" style="margin-top: 0.5rem;">
+                                                                        <div class="col-12 col-md-12">
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <h5><b><i class="bi bi-geo-fill"></i>
+                                                                                        {{ $event->sigEvent->sigLocation->name }}</b>
+                                                                                </h5>
+                                                                            </div>
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <i class="bi bi-person-fill"></i>
+                                                                                {{ $event->sigEvent->sigHost->name }}
+                                                                            </div>
+                                                                            <div class="col-12 text-start col-md-12">
+                                                                                <i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         @endif
                                     @endif
                                 @endforeach
