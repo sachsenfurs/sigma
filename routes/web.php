@@ -44,6 +44,10 @@ Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
 Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
+
+
+Route::resource("/hosts", SigHostController::class);
+
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users', [UserController::class, 'index'])->name("users.index");
@@ -67,7 +71,7 @@ Route::group(['middleware' => "auth"], function() {
 //    Route::get("/hosts/{host}", [SigHostController::class, 'show'])->name("hosts.show");
 //    Route::get("/hosts/{host}/edit", [SigHostController::class, 'edit'])->name("hosts.edit");
 //    Route::get("/hosts/{host}", [SigHostController::class, 'update'])->name("hosts.update");
-    Route::resource("/hosts", SigHostController::class);
+
 
     // SIG Locations
 //    Route::get("/locations", [SigLocationController::class, 'index'])->name("locations.index");
