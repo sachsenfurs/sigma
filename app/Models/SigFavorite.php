@@ -33,6 +33,6 @@ class SigFavorite extends Model
      */
     public function timetableEntry()
     {
-        return $this->belongsTo(timetableEntry::class);
+        return $this->belongsTo(TimetableEntry::class);
     }
 }
