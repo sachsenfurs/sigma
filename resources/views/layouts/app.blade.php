@@ -13,26 +13,22 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        @auth
-                            <!-- Visible in any case -->
-                            <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
-                            <!-- End visible in any case -->
-                            @can('manage_events')
-                                <li><a class="nav-link {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">Manage Timetable</a></li>
-                                <li><a class="nav-link {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">SIGs</a></li>
-                            @endcan
-                            @can('manage_hosts')
-                                <li><a class="nav-link {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">Hosts</a></li>
-                            @endcan
-                            @can('manage_locations')
-                                <li><a class="nav-link {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                            @endcan
-                            @if (auth()->user()->isSigHost())
-                                <li><a class="nav-link {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">My Events</a></li>
-                            @endif
-                        @else
-                            <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
-                        @endauth
+                        <!-- Visible in any case -->
+                        <li><a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
+                        <!-- End visible in any case -->
+                        @can('manage_events')
+                            <li><a class="nav-link px-3 {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">Manage Timetable</a></li>
+                            <li><a class="nav-link px-3 {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">SIGs</a></li>
+                        @endcan
+
+                        <li><a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">Hosts</a></li>
+
+                        @can('manage_locations')
+                            <li><a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
+                        @endcan
+                        @if (auth()?->user()?->isSigHost())
+                            <li><a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">My Events</a></li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

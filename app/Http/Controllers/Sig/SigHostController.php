@@ -10,16 +10,12 @@ use Illuminate\Http\Request;
 class SigHostController extends Controller
 {
     public function index() {
-        Gate::authorize('manage_hosts');
-
         $hosts = SigHost::withCount("sigEvents")->get();
 
         return view("hosts.index", compact("hosts"));
     }
 
     public function show(SigHost $host) {
-        Gate::authorize('manage_hosts');
-
         return view("hosts.show", [
             'host' => $host,
             'sigs' => $host->sigEvents,
