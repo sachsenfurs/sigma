@@ -26,8 +26,8 @@
                             @endcan
                             @can('manage_locations')
                                 <li><a class="nav-link {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                            @endcan   
-                                               
+                            @endcan
+
                         @else
                             <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
                         @endauth

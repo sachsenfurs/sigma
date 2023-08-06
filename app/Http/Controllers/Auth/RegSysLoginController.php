@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\OAuth2\RegSysProvider;
+use App\OAuth2\RegSysResourceOwner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
@@ -44,9 +45,29 @@ class RegSysLoginController extends Controller
                 'code' => $request->get("code"),
             ]);
 
+            /**
+             * @var $resourceOwner RegSysResourceOwner
+             */
             $resourceOwner = $this->provider->getResourceOwner($accessToken);
 
-            dd($resourceOwner);
+            $userData = [
+                'name' => $resourceOwner->getNickname(),
+                'reg_id' => $resourceOwner->getId(),
+                'language' => $resourceOwner->getLanguage(),
+                'telegram_id' => $resourceOwner->getTelegramId(),
+                'groups' => $resourceOwner->getGroups(),
+                'avatar' => $resourceOwner->getAvatar(),
+                'avatar_thumb' => $resourceOwner->getAvatarThumb(),
+            ];
+
+            $userToLogin = User::where("reg_id", $resourceOwner->getId())->first();
+
+            if($userToLogin)
+                $userToLogin->update($userData);
+            else
+                $userToLogin = User::create($userData);
+
+            auth()->login($userToLogin);
 
             /**
               ["response":protected]=>
@@ -76,10 +97,7 @@ class RegSysLoginController extends Controller
                 string(59) "https://regtest.kidran.de/uploads/e62135ecc114efb8a3440.jpg"
               }
              */
-
-            // TODO: .... User erstellen usw.
-
-
+            return redirect(route("home"));
         } catch (IdentityProviderException $e) {
             return redirect("/login")->withErrors(['email' => "Token ungültig"]);
         }
