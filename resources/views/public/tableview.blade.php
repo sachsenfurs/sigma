@@ -76,7 +76,11 @@
     }
 
     tr.active {
-        background: #dbe8cf;
+        background: #061557;
+    }
+
+    div.activ {
+        background: #b35050;
     }
 
     tr.weekday {
@@ -188,8 +192,10 @@
                                                                         </h5>
                                                                     </div>
                                                                     <div class="col-12 text-start col-md-12">
+                                                                        @if ($event->sigEvent->sigHost->hide == 0)
                                                                         <i class="bi bi-person-fill"></i>
                                                                         {{ $event->sigEvent->sigHost->name }}
+                                                                        @endif
                                                                     </div>
                                                                     <div class="col-12 text-start col-md-12">
                                                                         <i class="bi bi-geo-fill"></i>
@@ -241,16 +247,14 @@
                                                                     <div class="row text-start" style="margin-top: 0.5rem;">
                                                                         <div class="col-12 col-md-12">
                                                                             <div class="col-12 text-start col-md-12">
-                                                                                <h5><b><i class="bi bi-geo-fill"></i>
-                                                                                        {{ $event->sigEvent->sigLocation->name }}</b>
+                                                                                <h5><b><i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}</b>
                                                                                 </h5>
                                                                             </div>
                                                                             <div class="col-12 text-start col-md-12">
-                                                                                <i class="bi bi-person-fill"></i>
-                                                                                {{ $event->sigEvent->sigHost->name }}
-                                                                            </div>
-                                                                            <div class="col-12 text-start col-md-12">
-                                                                                <i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}
+                                                                                @if ($event->sigEvent->sigHost->hide == 0)
+                                                                                    <i class="bi bi-person-fill"></i>
+                                                                                    {{ $event->sigEvent->sigHost->name }}
+                                                                                @endif
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -284,12 +288,10 @@
                 </div>
             @endforeach
         </div>
-
-
     </div>
-    <!--    <table class="table">
+        {{-- <table class="table">
         @foreach ($days as $day)
-<tr></tr>
+        <tr></tr>
             <tr class="weekday">
                 <td colspan="{{ count($locations) + 1 }}">
                     <strong>{{ $day }} -
@@ -299,7 +301,7 @@
             <tr>
                 <th></th>
                 @foreach ($locations as $location)
-<th>
+                <th>
                         {{ $location->name }}
                     </th>
 @endforeach
@@ -366,8 +368,8 @@
                 </tr>
 @endfor
 @endforeach
-    </table>-->
-</body>
+    </table>
+</body> --}}
 
 {{-- <ul class="nav nav-tabs">
     @foreach ($locations as $location)

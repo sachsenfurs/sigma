@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
@@ -23,12 +23,12 @@
                 </div>
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->attendeeEvents()->count() == 0)
-                        <p>Du hast aktuell noch keine Registrierungen</p>
+                        <p>You currently don't have any registrations</p>
                         <div class="d-none d-xl-block">
-                            <a class="btn btn-primary" href="/table" role="button">Events entdecken</a>
+                            <a class="btn btn-primary" href="/table" role="button">Explore Events</a>
                         </div>
                         <div class="d-block d-sm-none">
-                            <a class="btn btn-primary btn-lg" href="/table" role="button">Events entdecken</a>
+                            <a class="btn btn-primary btn-lg" href="/table" role="button">Explore Events</a>
                         </div>
                     @else
                         <!-- Table head start -->
@@ -103,17 +103,21 @@
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
+                                                <!-- Until it can be specified if attendees should be visible or not
                                                 <a type="button" class="btn btn-info text-black" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
+                                                -->
                                                 <button type="button" class="btn btn-danger text-white" onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal">
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
                                             <div class="d-block d-sm-none">
+                                                <!-- Until it can be specified if attendees should be visible or not
                                                 <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
+                                                -->
                                                 <button type="button" class="btn btn-danger text-white btn-lg" onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal">
                                                     <span class="bi bi-x"></span>
                                                 </button>
@@ -141,14 +145,8 @@
                     <h2>Favorite Events</h2>
                 </div>
                 <div class="col-12 col-md-12 text-center">
-                    @if (auth()->user()->attendeeEvents()->count() == 0)
+                    @if (auth()->user()->favorites->count() == 0)
                         <p>You currently don't have any favorite events</p>
-                        <div class="d-none d-xl-block">
-                            <a class="btn btn-primary" href="/table" role="button">Explore Events</a>
-                        </div>
-                        <div class="d-block d-sm-none">
-                            <a class="btn btn-primary btn-lg" href="/table" role="button">Explore Events</a>
-                        </div>
                     @else
                         <!-- Table head start -->
                         <div class="d-none d-xl-block">
