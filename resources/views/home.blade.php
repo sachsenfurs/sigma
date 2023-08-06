@@ -145,7 +145,7 @@
                     <h2>Favorite Events</h2>
                 </div>
                 <div class="col-12 col-md-12 text-center">
-                    @if (auth()->user()->attendeeEvents()->count() == 0)
+                    @if (auth()->user()->favorites->count() == 0)
                         <p>You currently don't have any favorite events</p>
                     @else
                         <!-- Table head start -->
