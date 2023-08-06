@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\TimetableController;
+use App\Models\SigAttendee;
 use App\Models\TimeTableEntry;
 use App\Models\SigTimeslot;
 use Illuminate\Http\Request;
@@ -70,5 +71,24 @@ class SigTimeslotController extends Controller
             return redirect()->back()->withSuccess("Timeslot gelöscht");
         }
         return redirect()->back()->withErrors("Timeslot konnte nicht gelöscht werden, da noch user dem Timeslot zugewiesen sind!");
+    }
+
+    public function editNotes(SigTimeslot $timeslot) {
+        $attendees = SigAttendee::where('sig_timeslot_id', $timeslot->id)->get();
+
+        return view("timeslots.editNotes", compact([
+            'timeslot',
+            'attendees',
+        ]));
+    }
+
+    public function updateNotes(Request $request, SigTimeslot $timeslot) {
+        $validated = $request->validate([
+            'notes' => 'nullable|string',
+        ]);
+
+        $timeslot->update($validated);
+        
+        return redirect(route("sigs.show", $timeslot->timetableEntry->sigEvent->id))->withSuccess("Notiz aktualisiert!");
     }
 }
