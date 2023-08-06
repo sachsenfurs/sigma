@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -45,7 +46,11 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'email|string|nullable',
-            'reg_id' => 'int|nullable|unique:users,reg_id',
+            'reg_id' => [
+                'int',
+                'nullable',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'user_role_id' => 'required|exists:' . UserRole::class . ',id',
         ]);
 
