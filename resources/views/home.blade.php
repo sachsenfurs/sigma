@@ -23,12 +23,12 @@
                 </div>
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->attendeeEvents()->count() == 0)
-                        <p>Du hast aktuell noch keine Registrierungen</p>
+                        <p>You currently don't have any registrations</p>
                         <div class="d-none d-xl-block">
-                            <a class="btn btn-primary" href="/table" role="button">Events entdecken</a>
+                            <a class="btn btn-primary" href="/table" role="button">Explore Events</a>
                         </div>
                         <div class="d-block d-sm-none">
-                            <a class="btn btn-primary btn-lg" href="/table" role="button">Events entdecken</a>
+                            <a class="btn btn-primary btn-lg" href="/table" role="button">Explore Events</a>
                         </div>
                     @else
                         <!-- Table head start -->
@@ -143,12 +143,6 @@
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->attendeeEvents()->count() == 0)
                         <p>You currently don't have any favorite events</p>
-                        <div class="d-none d-xl-block">
-                            <a class="btn btn-primary" href="/table" role="button">Explore Events</a>
-                        </div>
-                        <div class="d-block d-sm-none">
-                            <a class="btn btn-primary btn-lg" href="/table" role="button">Explore Events</a>
-                        </div>
                     @else
                         <!-- Table head start -->
                         <div class="d-none d-xl-block">
