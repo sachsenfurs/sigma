@@ -19,12 +19,7 @@ class SigEventController extends Controller
         $this->authorize('viewAny', SigEvent::class);
 
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
-        if (auth()->user()->role->perm_manage_events) {
-            return view("sigs.index", compact("sigs"));
-        } else {
-            return view("sigs.indexHosts", compact("sigs"));
-        }
-
+        return view("sigs.index", compact("sigs"));
     }
 
     public function show(SigEvent $sig) {

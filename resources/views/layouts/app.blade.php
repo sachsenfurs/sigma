@@ -27,7 +27,9 @@
                             @can('manage_locations')
                                 <li><a class="nav-link {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
                             @endcan
-
+                            @if (auth()->user()->isSigHost())
+                                <li><a class="nav-link {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">My Events</a></li>
+                            @endif
                         @else
                             <li><a class="nav-link {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
                         @endauth
