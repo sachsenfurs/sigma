@@ -1,134 +1,132 @@
-{{-- @extends('layouts.app') --}}
+@extends('layouts.app')
 @section('title', 'Program')
 @include('layouts.head')
+<style>
+    ul.nav {
+        display: inline-block;
+        white-space: nowrap;
+    }y
 
-<body>
-    <style>
-        ul.nav {
-            display: inline-block;
-            white-space: nowrap;
-        }
+    table {
+        margin: 0;
+        padding: 0;
+        width: calc(100% - 2px);
+    }
 
-        table {
-            margin: 0;
-            padding: 0;
-            width: calc(100% - 2px);
-        }
+    table,
+    tr,
+    td {
+        box-sizing: border-box;
+    }
 
-        table,
-        tr,
-        td {
-            box-sizing: border-box;
-        }
+    td.event {
+        border: 2px solid #000;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1.4em;
+        color: #eee;
+        cursor: pointer;
+    }
 
-        td.event {
-            border: 2px solid #000;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 1.4em;
-            color: #eee;
-            cursor: pointer;
-        }
+    /* Color Official East Event */
+    td.oee {
+        background: #ffbf90;
+    }
 
-        /* Color Official East Event */
-        td.oee {
-            background: #ffbf90;
-        }
+    /* Color Fursuitevents/Fursuitrelevantes */
+    td.fe {
+        background: #ffc133;
+    }
 
-        /* Color Fursuitevents/Fursuitrelevantes */
-        td.fe {
-            background: #ffc133;
-        }
+    /* Color Gamingevents/GameShow/Compatition */
+    td.grsswk {
+        background: #fee744;
+    }
 
-        /* Color Gamingevents/GameShow/Compatition */
-        td.grsswk {
-            background: #fee744;
-        }
+    /* Color GuestSigs/Workshops */
+    td.gswssa {
+        background: #fd92c0;
+    }
 
-        /* Color GuestSigs/Workshops */
-        td.gswssa {
-            background: #fd92c0;
-        }
+    /* Color Artshow */
+    td.as {
+        background: #30c1b6;
+    }
 
-        /* Color Artshow */
-        td.as {
-            background: #30c1b6;
-        }
+    /* Color Con-Ops */
+    td.lsco {
+        background: #ff441c;
+    }
 
-        /* Color Con-Ops */
-        td.lsco {
-            background: #ff441c;
-        }
+    /* Color Registration */
+    td.reg {
+        background: #1c2694;
+    }
 
-        /* Color Registration */
-        td.reg {
-            background: #1c2694;
-        }
+    td a {
+        text-decoration: underline;
+        box-sizing: content-box;
+        display: block;
+        color: #fff;
+    }
 
-        td a {
-            text-decoration: underline;
-            box-sizing: content-box;
-            display: block;
-            color: #fff;
-        }
+    td a:hover {
+        text-decoration: none;
+        color: #cccccc;
+    }
 
-        td a:hover {
-            text-decoration: none;
-            color: #cccccc;
-        }
+    tr.active {
+        background: #dbe8cf;
+    }
 
-        tr.active {
-            background: #dbe8cf;
-        }
+    tr.weekday {
+        background: #cccccc;
+        font-size: 22px;
+    }
 
-        tr.weekday {
-            background: #cccccc;
-            font-size: 22px;
-        }
+    strong.weekday {
+        background: #cccccc;
+        font-size: 22px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 
-        strong.weekday {
-            background: #cccccc;
-            font-size: 22px;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
+    div.test {
+        display: flex;
+        color: #0b7437;
+        font-size: 15px;
+        font-weight: 800;
+    }
 
-        div.test {
-            display: flex;
-            color: #0b7437;
-            font-size: 15px;
-            font-weight: 800;
-        }
+    div.location {
+        width: calc(100% - 2px);
+    }
 
-        div.location {
-            width: calc(100% - 2px);
-        }
+    div.time {
+        width: calc(50% - 1px);
+    }
 
-        div.time {
-            width: calc(50% - 1px);
-        }
+    div.scrollmenu {
+        background-color: #eee;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
 
-        div.scrollmenu {
-            background-color: #eee;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
+    div.scrollmenu li {
+        display: inline-flex;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+    }
 
-        div.scrollmenu li {
-            display: inline-flex;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        div.scrollmenu a:hover {
-            background-color: #777;
-        }
-    </style>
-    <!-- -->
-    <!-- Looking for an API? Ask @Kidran! -->
-    <!-- -->
-
+    div.scrollmenu a:hover {
+        background-color: #777;
+    }
+</style>
+<!-- -->
+<!-- Looking for an API? Ask @Kidran! -->
+<!-- -->
+@section('content')
     <div class="mt-4">
 
         <!-- Day Nav Tabs -->
@@ -202,6 +200,21 @@
                                                         </div>
                                                     </a>
                                                 </div>
+                                                <div class="col-md-1 border-light">
+                                                    <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                        @if (!is_null(auth()->user()))
+                                                        @if ($event->getFavStatus())
+                                                            <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
+                                                            </a>
+                                                        @else
+                                                            <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -243,6 +256,21 @@
                                                                     </div>
                                                                 </div>
                                                             </a>
+                                                        </div>
+                                                        <div class="col-md-1 border-light">
+                                                            <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                                @if (!is_null(auth()->user()))
+                                                                @if ($event->getFavStatus())
+                                                                    <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
+                                                                    </a>
+                                                                @else
+                                                                    <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
+                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
+                                                                    </a>
+                                                                @endif
+                                                            @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -340,7 +368,6 @@
 @endforeach
     </table>-->
 </body>
-
 
 {{-- <ul class="nav nav-tabs">
     @foreach ($locations as $location)
@@ -445,3 +472,24 @@
         </tr>
     @endfor
 </table> --}}
+
+<script>
+    $('.fav-btn').click(function () {
+        let eventID = $(this).data('event');
+
+        $.ajax({
+            url: '/set-favorite',
+            method: 'POST',
+            data: {
+                _token:'<?php echo csrf_token(); ?>',
+                timetable_entry_id:eventID
+            },
+            dataType: 'JSON',
+            success: function(data) {
+               //Modal
+               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');
+            }
+        });
+    });
+</script>
+@endsection

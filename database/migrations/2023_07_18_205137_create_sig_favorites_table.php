@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sig_hosts', function (Blueprint $table) {
+        Schema::create('sig_favorites', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->text("description")->default("");
+
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('timetable_entry_id');
+
+            $table->timestamps();
         });
     }
 
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sig_hosts');
+        Schema::dropIfExists('sig_favorites');
     }
 };

@@ -23,22 +23,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        (new UserRoleSeeder())->run();
         User::factory()->create([
             'name' => "Kidran",
             'email' => "mail@kidran.de",
-            'is_admin' => true,
+            'user_role_id' => 1,
         ]);
 
         User::factory()->create([
             'name' => "Kenthanar",
             'email' => "kenthanar@sachsenfurs.de",
-            'is_admin' => true,
+            'user_role_id' => 1,
         ]);
 
         //SigLocation::factory()->count(12)->create();
