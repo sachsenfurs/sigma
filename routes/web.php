@@ -61,16 +61,13 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/sigs", [SigEventController::class, 'index'])->name("sigs.index");
     Route::get("/sigs/create", [SigEventController::class, 'create'])->name("sigs.create");
     Route::post("/sigs", [SigEventController::class, 'store'])->name("sigs.store");
-    Route::get("/sigs/{sig}/edit", [SigEventController::class, 'show'])->name("sigs.edit");
+    Route::get("/sigs/{sig}/edit", [SigEventController::class, 'edit'])->name("sigs.edit");
+    Route::get("/sigs/{sig}", [SigEventController::class, 'show'])->name("sigs.show");
     Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
     Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
     
     // Sig My Events
     Route::get("/my-events", [SigMyEventController::class, 'index'])->name("mysigs.index");
-    Route::get("/my-events/{sig}", [SigMyEventController::class, 'show'])->name("mysigs.show");
-    Route::get("/my-timeslots/{timeslot}", [SigMyEventController::class, 'details'])->name("mysigs.details");
-    Route::POST("/my-timeslots/{timeslot}", [SigMyEventController::class, 'updateDetails'])->name("mysigs.updateDetails");
-
 
     // SIG Hosts
 //    Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");
@@ -95,6 +92,8 @@ Route::group(['middleware' => "auth"], function() {
     Route::post('/timeslots', [SigTimeslotController::class, 'store'])->name('timeslots.store');
     Route::post('/timeslots/{timeslot}', [SigTimeslotController::class, 'update'])->name('timeslots.update');
     Route::delete('/timeslots/{timeslot}', [SigTimeslotController::class, 'destroy'])->name('timeslots.destroy');
+    Route::get("/timeslots/{timeslot}/editNotes", [SigTimeslotController::class, 'editNotes'])->name("timeslots.editNotes");
+    Route::POST("/timeslots/{timeslot}/updateNotes", [SigTimeslotController::class, 'updateNotes'])->name("timeslots.updateNotes");
 
     // Registraton
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
@@ -111,5 +110,5 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
     //Ajax-Controller
     Route::post("/set-favorite", [AjaxController::class, 'setFavorite']);
-    Route::post("/remove-favorite", [AjaxController::class, 'removeFavorite']);
+    Route::post("/remove-favorite", [AjaxController::class, 'removeFavorite'])->name('remove-favorite');
 });

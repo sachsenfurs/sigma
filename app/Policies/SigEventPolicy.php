@@ -36,7 +36,7 @@ class SigEventPolicy
             return true;
         }
 
-        if ($sigEvent->host_id === auth()->user()->id) {
+        if ($sigEvent->sigHost->reg_id === $user->reg_id) {
             return true;
         }
     }

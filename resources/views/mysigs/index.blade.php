@@ -28,7 +28,7 @@
                                     <strong>Title</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
-                                    <a href="{{ route('mysigs.show', $event->id) }}">
+                                    <a href="{{ route('sigs.show', $event->id) }}">
                                         <strong>{{ $event->name }}</strong>
                                     </a>
                                 </div>

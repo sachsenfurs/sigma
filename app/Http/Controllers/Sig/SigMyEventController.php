@@ -37,35 +37,11 @@ class SigMyEventController extends Controller
                 'favorites' => $favs,
                 'attendees' => $attendees,
             ];
-            
         }
         
         return view("mysigs.index", compact([
             'sigs',
             'additionalInformations'
-        ]));
-    }
-
-    public function show(SigEvent $sig) {
-        $this->authorize('view', $sig);
-
-        $additionalInformations = [];
-        $favs = 0;
-        foreach($sig->timetableEntries as $entry) {
-            $favs = $favs + SigFavorite::where('timetable_entry_id', $entry->id)->count();
-            $timeslots = [];
-            foreach($entry->sigTimeslots as $timeslot) {
-                $timeslots[$timeslot->id] = SigAttendee::where('sig_timeslot_id', $timeslot->id)->get();
-            }
-            $additionalInformations[$entry->id] = [
-                'favorites' => $favs,
-                'timeslots' => $timeslots
-            ];
-        }
-
-        return view("mysigs.show", compact([
-            'sig',
-            'additionalInformations',
         ]));
     }
 
@@ -82,24 +58,5 @@ class SigMyEventController extends Controller
             $sig->attendees_public = true;
             return back()->withSuccess("Die Teilnehmerliste ist nun nicht mehr Öffentlich");
         }
-    }
-
-    public function details(SigTimeslot $timeslot) {
-        $attendees = SigAttendee::where('sig_timeslot_id', $timeslot->id)->get();
-
-        return view("mysigs.details", compact([
-            'timeslot',
-            'attendees',
-        ]));
-    }
-
-    public function updateDetails(Request $request, SigTimeslot $timeslot) {
-        $validated = $request->validate([
-            'notes' => 'nullable|string',
-        ]);
-
-        $timeslot->update($validated);
-        
-        return redirect(route("mysigs.show", $timeslot->timetableEntry->sigEvent->id))->withSuccess("Notiz aktualisiert!");
     }
 }
