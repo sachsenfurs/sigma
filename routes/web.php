@@ -9,6 +9,7 @@ use App\Http\Controllers\Public\ConbookExportController;
 use App\Http\Controllers\Public\TableViewController;
 use App\Http\Controllers\Public\TimeslotShowController;
 use App\Http\Controllers\Sig\SigEventController;
+use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
@@ -59,8 +60,13 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/sigs/{sig}/edit", [SigEventController::class, 'show'])->name("sigs.edit");
     Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
     Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
-    // TEMP DEACTIVATED - Route::get("/events", [SigEventController::class, 'index'])->name("sig.indexHosts");
-    // TEMP DEACTIVATED -  Route::get("/events/{event}", [SigEventController::class, 'show'])->name("sig.showHosts");
+    
+    // Sig My Events
+    Route::get("/my-events", [SigMyEventController::class, 'index'])->name("mysigs.index");
+    Route::get("/my-events/{sig}", [SigMyEventController::class, 'show'])->name("mysigs.show");
+    Route::get("/my-timeslots/{timeslot}", [SigMyEventController::class, 'details'])->name("mysigs.details");
+    Route::POST("/my-timeslots/{timeslot}", [SigMyEventController::class, 'updateDetails'])->name("mysigs.updateDetails");
+
 
     // SIG Hosts
 //    Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");
