@@ -20,7 +20,7 @@ class SigLocationController extends Controller
                        ->with("timeTableEntries")
                        ->get()
                        ->sortBy(function($event, $key) {
-                           return ($event->timeTableEntries->first()->start);
+                           return ($event->timeTableEntries->first()?->start);
                        });
         return view("locations.show", [
             'location' => $location,
