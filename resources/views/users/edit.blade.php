@@ -41,6 +41,18 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Erstellt</label>
+                        <div class="col-sm-8">
+                            <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ $user->created_at }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Zuletzt geändert</label>
+                        <div class="col-sm-8">
+                            <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ $user->updated_at }}">
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>

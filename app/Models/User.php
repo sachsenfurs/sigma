@@ -56,4 +56,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(SigFavorite::class);
     }
+
+    /**
+     * Define the relationship between users and their favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function isSigHost()
+    {
+        if(SigHost::where('reg_id', $this->reg_id)->first()) {
+            return true;
+        } else {
+            return false;   
+        }
+    }
+
+    /**
+     * Define the relationship between users and their favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function hasGroup(string $name)
+    {
+        return in_array($name, $this->groups);
+    }
 }

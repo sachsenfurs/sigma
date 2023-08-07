@@ -43,16 +43,16 @@
                     <tr>
                         <th>Username</th>
                         <th>Role</th>
-                        <th>E-Mail / RegNr</th>
-                        <th>Created</th>
+                        <th>E-Mail</th>
+                        <th>Reg Nr</th>
                         <th>Actions</th>
                     </tr>
                     @foreach($users AS $user)
                         <tr>
                             <td class="align-middle">{{ $user->name }}</td>
                             <td class="align-middle">{{ $user->role->title }}</td>
-                            <td class="align-middle">{{ $user->email ?? $user->reg_id }}</td>
-                            <td class="align-middle">{{ $user->created_at ?? "unknown" }}</td>
+                            <td class="align-middle">{{ $user->email }}</td>
+                            <td class="align-middle">{{ $user->reg_id }}</td>
                             <td class="align-middle">
                                 <a type="button" class="btn btn-info text-white" href="/users/{{ $user->id }}/edit">
                                     <span class="bi bi-pencil"></span>
