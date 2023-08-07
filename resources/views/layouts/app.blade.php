@@ -38,13 +38,6 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @can('manage_locations')
-                                        <li>
-                                            <a class="dropdown-item {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">
-                                                <i class="bi bi-geo-alt"></i> Locations
-                                            </a>
-                                        </li>
-                                    @endcan
                                 </ul>
                             </li>
                         @endcan
@@ -52,6 +45,12 @@
                         <li>
                             <a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">
                                 <i class="bi bi-person-circle"></i> Hosts
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">
+                                <i class="bi bi-geo-alt"></i> Locations
                             </a>
                         </li>
 

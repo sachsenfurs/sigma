@@ -68,4 +68,8 @@ class SigEvent extends Model
         }
     }
 
+    public function isCompletePrivate() {
+        $entries = $this->timetableEntries;
+        return ($entries->count() == $entries->where("hide", 1)->count());
+    }
 }

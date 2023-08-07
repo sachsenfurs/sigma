@@ -6,6 +6,7 @@ use \Gate;
 use App\Http\Controllers\Controller;
 use App\Models\SigHost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SigHostController extends Controller
 {
@@ -16,9 +17,16 @@ class SigHostController extends Controller
     }
 
     public function show(SigHost $host) {
+        $events = $host->sigEvents()
+            ->with("timeTableEntries")
+            ->get()
+            ->sortBy(function($event, $key) {
+                return ($event->timeTableEntries->first()->start);
+            });
+
         return view("hosts.show", [
             'host' => $host,
-            'sigs' => $host->sigEvents,
+            'sigs' => $events,
         ]);
     }
 

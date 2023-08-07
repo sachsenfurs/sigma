@@ -1,42 +1,29 @@
 @extends('layouts.app')
-@section('title', "Locations - {$location->name}")
+@section('title', "{$location->name}")
 @section('content')
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                {{ $location->name }}
-            </div>
-            <div class="card-body">
 
-                    @forelse($location->sigEvents AS $sigEvent)
-                        <div class="row mb-3">
-                            {{--
-                            // FIXME
-                            Events, die ne abweichende Location haben, werden hier nicht angezeigt
-                            --}}
-                            <div class="col-3">
-                                <strong>
-                                    <a href="{{ route("sigs.edit", $sigEvent) }}">{{ $sigEvent->name }}</a>
-                                </strong>
-                            </div>
-                            <div class="col-2">
-                                @foreach($sigEvent->timetableEntries AS $entry)
-                                    <p>
-                                        <b>{{ $entry->start->format("d.m.Y") }}</b><br>
-                                        {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
-                                    </p>
-                                @endforeach
-                            </div>
-                            <div class="col-7">
-                                <td>{{ $sigEvent->description }}</td>
-                            </div>
-                        </div>
-                        {!! $loop->remaining > 0 ? "<hr>" : "" !!}
-                    @empty
-                        Keine SIGs zugeordnet
-                    @endforelse
-
+        <div class="row justify-content-md-center">
+            <div class="col-xl-12 mb-3">
+                <div class="d-flex align-items-start p-2">
+                    <div class="w-100 ms-3 align-self-center">
+                        <h2>{{ $location->name }}</h2>
+                        <p class="text-muted">{{ $location->description }}</p>
+                        @can("manage_locations")
+                            <a href="{{ route("locations.edit", $location) }}"><i class="bi bi-pen"></i> Edit</a>
+                        @endcan
+                    </div>
+                </div>
             </div>
+
         </div>
+        @forelse($events AS $sig)
+            <x-list-sig :sig="$sig" />
+        @empty
+            <div class="alert alert-info">
+                Keine SIGs zugeordnet
+            </div>
+        @endforelse
+
     </div>
 @endsection

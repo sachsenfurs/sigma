@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NameIdAsSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class SigLocation extends Model
 {
-    use HasFactory;
+    use HasFactory, NameIdAsSlug;
+
     public $timestamps = false;
 
     protected $guarded = [];
@@ -29,7 +32,5 @@ class SigLocation extends Model
         return $this->hasMany(TimetableEntry::class)->orderBy("start");
     }
 
-    //public function locationUsage() {
-    //    return SigLocation::with("timetableEntries")->with("sigEvents")->where("name", "Brandenburg")->get();
-    //}
+
 }
