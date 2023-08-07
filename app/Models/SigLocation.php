@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\NameIdAsSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Str;
 
 class SigLocation extends Model
 {
-    use HasFactory, NameIdAsSlug;
+    use HasFactory, HasSigEvents, NameIdAsSlug;
 
     public $timestamps = false;
 
@@ -20,9 +21,6 @@ class SigLocation extends Model
         'infodisplay' => "boolean",
     ];
 
-    public function sigEvents() {
-        return $this->hasMany(SigEvent::class);
-    }
 
     public function translation() {
         return $this->hasMany(SigLocationTranslation::class);

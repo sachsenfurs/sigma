@@ -11,7 +11,10 @@ use Illuminate\Support\Collection;
 class SigHostController extends Controller
 {
     public function index() {
-        $hosts = SigHost::withCount("sigEvents")->get();
+        if(auth()->user()?->can("manage_hosts"))
+            $hosts = SigHost::all();
+        else
+            $hosts = SigHost::public()->get();
 
         return view("hosts.index", compact("hosts"));
     }
@@ -21,7 +24,7 @@ class SigHostController extends Controller
             ->with("timeTableEntries")
             ->get()
             ->sortBy(function($event, $key) {
-                return ($event->timeTableEntries->first()->start);
+                return ($event->timeTableEntries->first()?->start);
             });
 
         return view("hosts.show", [

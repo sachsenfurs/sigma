@@ -36,8 +36,8 @@
             <div class="col-md-2 align-middle">
                 <div class="container d-flex h-100 w-100">
                     <div class="align-self-center w-100 m-3" style="text-align: right">
-                        <div class="display-6">{{ $instance?->sig_events_count }}</div>
-                        {{ Str::plural("Event", $instance?->sig_events_count) }}
+                        <div class="display-6">{{ $instance?->getPublicSigEventCount() }}</div>
+                        {{ Str::plural("Event", $instance?->getPublicSigEventCount()) }}
                     </div>
                 </div>
             </div>

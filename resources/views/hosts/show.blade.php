@@ -21,9 +21,11 @@
 
         </div>
         @forelse($sigs AS $sig)
-            @if(!$sig->isCompletePrivate())
-                <x-list-sig :sig="$sig" />
+            @if($sig->isCompletelyPrivate())
+                @continue
             @endif
+
+                <x-list-sig :sig="$sig" />
         @empty
             <div class="alert alert-info">
                 Keine SIGs zugeordnet
