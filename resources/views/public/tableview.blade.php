@@ -76,11 +76,11 @@
     }
 
     tr.active {
-        background: #061557;
+        background: #e09592;
     }
 
-    div.activ {
-        background: #b35050;
+    div.time {
+        background: #d8f7f6;
     }
 
     tr.weekday {
@@ -135,7 +135,7 @@
 
         <!-- Day Nav Tabs -->
         <div class="scrollmenu">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs p-2 pb-1">
                 @foreach ($days as $index => $day)
                     <li class="nav-item">
                         <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
@@ -152,7 +152,7 @@
             @foreach ($days as $index => $day)
                 <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
                     <div class="scrollmenu">
-                        <ul class="nav nav-tabs">
+                        <ul class="nav nav-tabs p-2 pt-1">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
                                     All
@@ -169,17 +169,22 @@
                         </ul>
                     </div>
 
+                    @php
+                        $currentTime = \Illuminate\Support\Carbon::parse()
+                    @endphp
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="All{{ $index + 1 }}">
                             @foreach ($entries as $event)
                                 @if ($event->start->format('d.m.Y') == $day)
                                     <div class="d-flex justify-content-center pt-2">
-                                        <div class="card" style="width: 50rem;">
+                                        <div class="card {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
                                             <div class="row g-0">
                                                 <div class="col-md-3 text-center pt-2 border-light bg-light">
                                                     <h5>
                                                         {{ $event->start->format('H:i') }}
                                                     </h5>
+                                                    <p>{{ $event->duration }} Min </p>
                                                 </div>
                                                 <div class="col-md-8 border-light">
                                                     <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
@@ -234,9 +239,9 @@
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigEvent->sigLocation->id == $location->id)
                                             <div class="d-flex justify-content-center pt-2">
-                                                <div class="card" style="width: 50rem;">
+                                                <div class="card text-center {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
                                                     <div class="row g-0">
-                                                        <div class="col-md-3 text-center pt-2 border-light bg-light">
+                                                        <div class="col-md-3 pt-2 border-light bg-light">
                                                             <h5>
                                                                 {{ $event->start->format('H:i') }}
                                                             </h5>
@@ -289,191 +294,7 @@
             @endforeach
         </div>
     </div>
-        {{-- <table class="table">
-        @foreach ($days as $day)
-        <tr></tr>
-            <tr class="weekday">
-                <td colspan="{{ count($locations) + 1 }}">
-                    <strong>{{ $day }} -
-                        {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->dayName) . ' | ' . Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}</strong>
-                </td>
-            </tr>
-            <tr>
-                <th></th>
-                @foreach ($locations as $location)
-                <th>
-                        {{ $location->name }}
-                    </th>
-@endforeach
-            </tr>
-            @php
-                $rowspan = [];
-            @endphp
-            @for ($y = 0; $y <= 32; $y++)
-@php
-    $currentTime = \Illuminate\Support\Carbon::parse($day)
-        ->setHours(8)
-        ->setMinutes(0)
-        ->addMinutes(30 * $y);
-@endphp
-                <tr
-                    class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? 'active' : '' }}">
-                    <td>{{ $currentTime->format('H:i') }}</td>
-
-                    @php
-                        for ($x = 0; $x < count($locations); $x++) {
-                            if (isset($rowspan[$x][$y])) {
-                                continue;
-                            }
-                        
-                            $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
-                                return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
-                            });
-                            if ($events->first() && $events->first()->sigEvent) {
-                                $sig = $events->first()->sigEvent;
-                                $rows = $events->first()->duration / 30;
-                        
-                                if ($rows + $y > 32) {
-                                    $rows = 34 - $y;
-                                }
-                                if ($sig->sig_location_id == '1' || $sig->sig_location_id == '8' || $sig->sig_location_id == '15' || $sig->sig_location_id == '22') {
-                                    echo '<td rowspan="' . $rows . '" class="event oee">';
-                                } elseif ($sig->sig_location_id == '2' || $sig->sig_location_id == '9' || $sig->sig_location_id == '16' || $sig->sig_location_id == '23') {
-                                    echo '<td rowspan="' . $rows . '" class="event fe">';
-                                } elseif ($sig->sig_location_id == '3' || $sig->sig_location_id == '10' || $sig->sig_location_id == '17' || $sig->sig_location_id == '24') {
-                                    echo '<td rowspan="' . $rows . '" class="event grsswk">';
-                                } elseif ($sig->sig_location_id == '4' || $sig->sig_location_id == '11' || $sig->sig_location_id == '18' || $sig->sig_location_id == '25') {
-                                    echo '<td rowspan="' . $rows . '" class="event gswssa">';
-                                } elseif ($sig->sig_location_id == '5' || $sig->sig_location_id == '12' || $sig->sig_location_id == '19' || $sig->sig_location_id == '26') {
-                                    echo '<td rowspan="' . $rows . '" class="event as">';
-                                } elseif ($sig->sig_location_id == '6' || $sig->sig_location_id == '13' || $sig->sig_location_id == '20' || $sig->sig_location_id == '27') {
-                                    echo '<td rowspan="' . $rows . '" class="event lsco">';
-                                } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21' || $sig->sig_location_id == '28') {
-                                    echo '<td rowspan="' . $rows . '" class="event reg">';
-                                } else {
-                                    echo '<td rowspan="' . $rows . '" class="event">';
-                                }
-                                echo '<a href="' . route('public.timeslot-show', $events->first()) . '">';
-                                echo $sig->name;
-                                echo '</a>';
-                                echo '</td>';
-                                for ($i = 0; $i < $rows; $i++) {
-                                    $rowspan[$x][$y + $i] = true;
-                                }
-                            } else {
-                                echo '<td></td>';
-                            }
-                        }
-                    @endphp
-                </tr>
-@endfor
-@endforeach
-    </table>
-</body> --}}
-
-{{-- <ul class="nav nav-tabs">
-    @foreach ($locations as $location)
-        <li class="nav-item">
-            <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab" href="#{{ $location->name }}">
-                {{ $location->name }}
-            </a>
-        </li>
-    @endforeach
-</ul>
-
-<div class="tab-content">
-    @foreach ($locations as $location)
-        <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="{{ $location->id }}">
-            {{ $location->id }}
-        </div>
-    @endforeach
-</div>
-
-<ul class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
-            href="#hrs">{{ $locations[0]->name }}</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-            href="#niedersachsen">{{ $locations[1]->name }}</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-            href="#saarland">{{ $locations[2]->name }}</a></li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane active" id="hrs">1</div>
-    <div class="tab-pane" id="niedersachsen">2</div>
-    <div class="tab-pane" id="saarland">3</div>
-</div> --}}
-{{-- <table class="table">
-    <tr>
-        <th></th>
-        @foreach ($locations as $location)
-            <th>
-                {{ $location->name }}
-            </th>
-        @endforeach
-    </tr>
-    @php
-        $rowspan = [];
-    @endphp
-    @for ($y = 0; $y <= 32; $y++)
-        @php
-            $currentTime = \Illuminate\Support\Carbon::parse($days[0])
-                ->setHours(8)
-                ->setMinutes(0)
-                ->addMinutes(30 * $y);
-        @endphp
-        <tr
-            class="{{ $currentTime > \Illuminate\Support\Carbon::now() && $currentTime < \Illuminate\Support\Carbon::now()->addMinutes(30) ? 'active' : '' }}">
-            <td>{{ $currentTime->format('H:i') }}</td>
-
-            @php
-                for ($x = 0; $x < count($locations); $x++) {
-                    if (isset($rowspan[$x][$y])) {
-                        continue;
-                    }
-                
-                    $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
-                        return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
-                    });
-                    if ($events->first() && $events->first()->sigEvent) {
-                        $sig = $events->first()->sigEvent;
-                        $rows = $events->first()->duration / 30;
-                
-                        if ($rows + $y > 32) {
-                            $rows = 34 - $y;
-                        }
-                        if ($sig->sig_location_id == '1' || $sig->sig_location_id == '8' || $sig->sig_location_id == '15' || $sig->sig_location_id == '22') {
-                            echo '<td rowspan="' . $rows . '" class="event oee">';
-                        } elseif ($sig->sig_location_id == '2' || $sig->sig_location_id == '9' || $sig->sig_location_id == '16' || $sig->sig_location_id == '23') {
-                            echo '<td rowspan="' . $rows . '" class="event fe">';
-                        } elseif ($sig->sig_location_id == '3' || $sig->sig_location_id == '10' || $sig->sig_location_id == '17' || $sig->sig_location_id == '24') {
-                            echo '<td rowspan="' . $rows . '" class="event grsswk">';
-                        } elseif ($sig->sig_location_id == '4' || $sig->sig_location_id == '11' || $sig->sig_location_id == '18' || $sig->sig_location_id == '25') {
-                            echo '<td rowspan="' . $rows . '" class="event gswssa">';
-                        } elseif ($sig->sig_location_id == '5' || $sig->sig_location_id == '12' || $sig->sig_location_id == '19' || $sig->sig_location_id == '26') {
-                            echo '<td rowspan="' . $rows . '" class="event as">';
-                        } elseif ($sig->sig_location_id == '6' || $sig->sig_location_id == '13' || $sig->sig_location_id == '20' || $sig->sig_location_id == '27') {
-                            echo '<td rowspan="' . $rows . '" class="event lsco">';
-                        } elseif ($sig->sig_location_id == '7' || $sig->sig_location_id == '14' || $sig->sig_location_id == '21') {
-                            echo '<td rowspan="' . $rows . '" class="event reg">';
-                        } else {
-                            echo '<td rowspan="' . $rows . '" class="event">';
-                        }
-                        echo '<a href="' . route('public.timeslot-show', $events->first()) . '">';
-                        echo $sig->name;
-                        echo '</a>';
-                        echo '</td>';
-                        for ($i = 0; $i < $rows; $i++) {
-                            $rowspan[$x][$y + $i] = true;
-                        }
-                    } else {
-                        echo '<td></td>';
-                    }
-                }
-            @endphp
-        </tr>
-    @endfor
-</table> --}}
+</body>
 
 <script>
     $('.fav-btn').click(function () {
@@ -493,5 +314,25 @@
             }
         });
     });
+
+    function refreshPage() {
+        // Versuche, eine Anfrage an einen bekannten Server durchzuführen
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/favicon.ico', true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                location.reload();
+            }
+        };
+
+        xhr.onerror = function () {
+            // Es konnte keine Verbindung zum Server hergestellt werden
+            console.log('Keine Verbindung zum Server');
+        };
+
+        xhr.send();
+    }
+        setInterval(refreshPage, 30000);
 </script>
 @endsection
