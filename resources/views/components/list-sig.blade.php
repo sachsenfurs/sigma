@@ -47,12 +47,28 @@
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-auto d-flex">
-                        <i class="bi bi-geo-alt align-self-center"></i>
-                    </div>
-                    <div class="col-auto">
-                        <b>{{ $entry->sigLocation->name }}</b>
-                    </div>
+                    @if(Route::is("locations.*") AND !$entry->sigEvent->sigHost->hide)
+                        <div class="col-auto d-flex">
+                            <i class="bi bi-person-circle align-self-center"></i>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("hosts.show", $entry->sigEvent->sigHost) }}" class="text-decoration-none">
+                                <b>{{ $entry->sigEvent->sigHost->name }}</b>
+                            </a>
+                        </div>
+                    @endif
+                    @if(Route::is("hosts.*"))
+                        <div class="col-auto d-flex">
+                            <i class="bi bi-geo-alt align-self-center"></i>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
+                                <b>{{ $entry->sigLocation->name }}</b>
+                            </a>
+                        </div>
+                    @endif
+
+
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->hasLocationChanged())
