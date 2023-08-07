@@ -19,7 +19,9 @@
                     </div>
 
                     <div class="mt-2">
-                        {{ $entry->sigEvent->description }}
+                        <x-markdown>
+                            {{ $entry->sigEvent->description }}
+                        </x-markdown>
                     </div>
                 </div>
             </div>

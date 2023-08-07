@@ -11,7 +11,9 @@
     </div>
 
     <div class="card-body">
-        {{ $sig->description }}
+        <x-markdown>
+            {{ $sig->description }}
+        </x-markdown>
     </div>
 
     @forelse($sig->timetableEntries AS $entry)

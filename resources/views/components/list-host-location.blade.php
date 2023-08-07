@@ -27,7 +27,9 @@
                         {{ $title }}
                     </h2>
                     <p class="card-text">
-                        {{ $slot }}
+                        <x-markdown>
+                            {{ $slot }}
+                        </x-markdown>
                     </p>
                     <a href="{{ $link }}" class="stretched-link"> </a>
                 </div>

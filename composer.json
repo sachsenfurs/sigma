@@ -12,7 +12,8 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
-        "league/oauth2-client": "^2.6"
+        "league/oauth2-client": "^2.6",
+        "spatie/laravel-markdown": "^2.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
