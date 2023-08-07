@@ -14,20 +14,54 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <!-- Visible in any case -->
-                        <li><a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">
+                                <i class="bi bi-calendar-week"></i> Timetable
+                            </a>
+                        </li>
                         <!-- End visible in any case -->
-                        @can('manage_events')
-                            <li><a class="nav-link px-3 {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">Manage Timetable</a></li>
-                            <li><a class="nav-link px-3 {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">SIGs</a></li>
+                        @canany(["manage_events", "manage_locations"])
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-3" href="#" id="adminDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> Administration
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdownMenu">
+                                    @can("manage_events")
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">
+                                                <i class="bi bi-list"></i> Manage Timetable
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">
+                                                <i class="bi bi-easel"></i> SIGs
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('manage_locations')
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">
+                                                <i class="bi bi-geo-alt"></i> Locations
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
                         @endcan
 
-                        <li><a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">Hosts</a></li>
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">
+                                <i class="bi bi-person-circle"></i> Hosts
+                            </a>
+                        </li>
 
-                        @can('manage_locations')
-                            <li><a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                        @endcan
+
                         @if (auth()?->user()?->isSigHost())
-                            <li><a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">My Events</a></li>
+                            <li>
+                                <a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">
+                                    <i class="bi bi-view-list"></i> My Events
+                                </a>
+                            </li>
                         @endif
                     </ul>
 
