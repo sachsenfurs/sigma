@@ -10,7 +10,10 @@
                         <img src="{{ $host->avatar }}" alt="" class="rounded-circle img-thumbnail" style="width: 10em">
                     @endif
                     <div class="w-100 ms-3 align-self-center">
-                        <h2>{{ $host->name }}</h2>
+                        <h2>
+                            <i class="bi bi-person-circle"></i>
+                            {{ $host->name }}
+                        </h2>
                         <p class="text-muted">{{ $host->description }}</p>
                         @can("manage_hosts")
                             <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i> Edit</a>
