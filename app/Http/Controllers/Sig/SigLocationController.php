@@ -10,18 +10,18 @@ use Illuminate\Http\Request;
 class SigLocationController extends Controller
 {
     public function index() {
-        Gate::authorize('manage_locations');
-
-        $locations = SigLocation::withCount("sigEvents")->get();
+        $locations = SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->get();
 
         return view("locations.index", compact("locations"));
     }
 
     public function show(SigLocation $location) {
-        Gate::authorize('manage_locations');
-
+        $events = $location->sigEvents()
+                       ->with("timeTableEntries")
+                       ->get();
         return view("locations.show", [
             'location' => $location,
+            'events' => $events,
         ]);
     }
 
@@ -76,7 +76,7 @@ class SigLocationController extends Controller
 
         // TODO:
         // FIXME
-        
+
         if(!$validated['description'])
             $validated['description'] = "";
 
