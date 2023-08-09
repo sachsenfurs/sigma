@@ -3,7 +3,7 @@
 @section('content')
     <div class="mt-4 mb-4 text-center">
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> Eintrag hinzufügen</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> {{ __("Add Entry") }}</button>
 
     </div>
     <div class="modal fade" id="createEntryModal" tabindex="-1">
@@ -12,12 +12,12 @@
                 <form method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Timeslot hinzufügen</h5>
+                        <h5 class="modal-title">{{ __("Add Time Slot") }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name">SIG</label>
+                            <label for="name">{{ __("SIG") }}</label>
                             <select name="sig_event_id" class="form-control">
                                 @foreach($sigEvents AS $sig)
                                     <option value="{{ $sig->id }}">{{ $sig->name }} - {{ $sig->sigLocation->name . " " . $sig->sigLocation->description }}</option>
@@ -25,7 +25,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="email">Zeiten</label>
+                            <label>{{ __("Time spans") }}</label>
                             <div class="mt-1 row">
                                 <div class="col-6">
                                     <input type="datetime-local" class="form-control" name="start" value="{{ \Carbon\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="mb-5">
-                            <label for="name">Abweichende Location (optional)</label>
+                            <label for="name">{{ __("Different Location") }}</label>
                             <select name="sig_location_id" class="form-control">
                                 <option value="">-</option>
                                 @foreach($sigLocations AS $location)
@@ -47,8 +47,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary">Eintragen</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Cancel") }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __("Save") }}</button>
                     </div>
                 </form>
             </div>
@@ -61,7 +61,7 @@
                 <th>Zeit</th>
                 <th>Event</th>
                 <th>Location</th>
-                <th class="text-end">Aktionen</th>
+                <th class="text-end">{{ __("Actions") }}</th>
             </tr>
             @foreach($entriesPerDay AS $day=>$entries)
                 <tr>
@@ -72,9 +72,9 @@
                         <td>
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                             @if($entry->cancelled)
-                                <span class="badge bg-danger">Abgesagt</span>
+                                <span class="badge bg-danger">{{ __("Cancelled") }}</span>
                             @elseif($entry->hasTimeChanged())
-                                <span class="badge bg-info">Geändert</span>
+                                <span class="badge bg-info">{{ __("Changed") }}</span>
                             @endif
                         </td>
                         <td>
@@ -87,7 +87,7 @@
                         </td>
                         <td class="text-end">
                             <a href="{{ route("timetable.edit", $entry) }}">
-                                <button type="button" class="btn btn-secondary">Bearbeiten</button>
+                                <button type="button" class="btn btn-secondary">{{ __("Edit") }}</button>
                             </a>
                         </td>
                     </tr>

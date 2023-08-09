@@ -4,50 +4,48 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card text-center">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+{{--            <div class="card text-center">--}}
+{{--                <div class="card-header">{{ __('Dashboard') }}</div>--}}
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+{{--                <div class="card-body">--}}
+{{--                    @if (session('status'))--}}
+{{--                        <div class="alert alert-success" role="alert">--}}
+{{--                            {{ session('status') }}--}}
+{{--                        </div>--}}
+{{--                    @endif--}}
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
+{{--                    {{ __('You are logged in!') }}--}}
+{{--                </div>--}}
+{{--            </div>--}}
+
             <div class="row m-3">
                 <div class="col-12 col-md-12 text-center">
-                    <h2>Registrations</h2>
+                    <h2>{{ __("Events you've signed up for:") }}</h2>
                 </div>
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->attendeeEvents()->count() == 0)
-                        <p>You currently don't have any registrations</p>
-                        <div class="d-none d-xl-block">
-                            <a class="btn btn-primary" href="/table" role="button">Explore Events</a>
-                        </div>
-                        <div class="d-block d-sm-none">
-                            <a class="btn btn-primary btn-lg" href="/table" role="button">Explore Events</a>
-                        </div>
+                        <p>{{ __("You haven't signed up for any event yet!") }}</p>
+                        <a class="btn btn-primary btn-lg" href="{{ route("public.tableview") }}" role="button">
+                            {{ __("Explore Events") }}
+                        </a>
                     @else
                         <!-- Table head start -->
                         <div class="d-none d-xl-block">
                             <div class="row border-bottom border-dark mb-2">
                                 <div class="col-3 col-md-3">
-                                    <strong>Event</strong>
+                                    <strong>{{ __("Event") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Date</strong>
+                                    <strong>{{ __("Date") }}</strong>
                                 </div>
                                 <div class="col-3 col-md-3">
-                                    <strong>Time Period</strong>
+                                    <strong>{{ __("Time span") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Room</strong>
+                                    <strong>{{ __("Location") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Actions</strong>
+                                    <strong>{{ __("Actions") }}</strong>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +57,7 @@
                                 <div class="col-12 col-md-3 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Event</strong>
+                                            <strong>{{ __("Event") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}
@@ -69,7 +67,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Date</strong>
+                                            <strong>{{ __("Date") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ date('l', strtotime($registration->sigTimeslot->timetableEntry->start)) }} ({{ date('d.m', strtotime($registration->sigTimeslot->timetableEntry->start)) }})
@@ -79,7 +77,7 @@
                                 <div class="col-12 col-md-3 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Time Period</strong>
+                                            <strong>{{ __("Time span") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ date('H:i', strtotime($registration->sigTimeslot->slot_start)) }} - {{ date('H:i', strtotime($registration->sigTimeslot->slot_end)) }}
@@ -89,7 +87,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Room</strong>
+                                            <strong>{{ __("Location") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ $registration->sigTimeslot->timetableEntry->sigLocation->name }}
@@ -99,7 +97,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1 p-0">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
-                                            <strong>Actions</strong>
+                                            <strong>{{ __("Actions") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
@@ -130,41 +128,33 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="col-12 col-md-12 mt-1">
-                            <div class="d-none d-xl-block">
-                                <a class="btn btn-primary" href="/table" role="button">Explore more events</a>
-                            </div>
-                            <div class="d-block d-sm-none">
-                                <a class="btn btn-primary btn-lg" href="/table" role="button">Explore more events</a>
-                            </div>
-                        </div>
-                    @endif 
+                    @endif
                 </div>
                 <hr class="mt-5 mb-5">
                 <div class="col-12 col-md-12 text-center mt-2">
-                    <h2>Favorite Events</h2>
+                    <h2>{{ __("Favorite Events") }}</h2>
                 </div>
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->favorites->count() == 0)
-                        <p>You currently don't have any favorite events</p>
+                        <p>{{ __("You currently don't have any favorite events") }}</p>
                     @else
                         <!-- Table head start -->
                         <div class="d-none d-xl-block">
                             <div class="row border-bottom border-dark mb-2">
                                 <div class="col-3 col-md-3">
-                                    <strong>Event</strong>
+                                    <strong>{{ __("Event") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Date</strong>
+                                    <strong>{{ __("Date") }}</strong>
                                 </div>
                                 <div class="col-3 col-md-3">
-                                    <strong>Time Period</strong>
+                                    <strong>{{ __("Time span") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Room</strong>
+                                    <strong>{{ __("Location") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
-                                    <strong>Actions</strong>
+                                    <strong>{{ __("Actions") }}</strong>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +166,7 @@
                                 <div class="col-12 col-md-3 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Event</strong>
+                                            <strong>{{ __("Event") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ $fav->timetableEntry->sigEvent->name }}
@@ -186,7 +176,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Date</strong>
+                                            <strong>{{ __("Date") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ date('l', strtotime($fav->timetableEntry->start)) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})
@@ -196,7 +186,7 @@
                                 <div class="col-12 col-md-3 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Time Period</strong>
+                                            <strong>{{ __("Time span") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ date('H:i', strtotime($fav->timetableEntry->start)) }} - {{ date('H:i', strtotime($fav->timetableEntry->end)) }}
@@ -206,7 +196,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>Room</strong>
+                                            <strong>{{ __("Location") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             {{ $fav->timetableEntry->sigLocation->name }}
@@ -216,7 +206,7 @@
                                 <div class="col-12 col-md-2 mt-1 mb-1 p-0">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
-                                            <strong>Actions</strong>
+                                            <strong>{{ __("Actions") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
@@ -237,7 +227,7 @@
                                 </div>
                             </div>
                         @endforeach
-                    @endif 
+                    @endif
                 </div>
             </div>
         </div>
@@ -247,7 +237,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="userModalLabel">Teilnehmerliste</h5>
+          <h5 class="modal-title" id="userModalLabel">{{ __("Attendee List") }}</h5>
         </div>
         <div class="modal-body">
             <ul>
@@ -259,7 +249,7 @@
             <form id="userForm" action="" method="POST">
                 @method('CREATE')
                 @csrf
-                <a class="btn btn-secondary" onclick="$('#userModal').modal('hide');" data-dismiss="modal">Schließen</a>
+                <a class="btn btn-secondary" onclick="$('#userModal').modal('hide');" data-dismiss="modal">{{ __("Close") }}</a>
             </form>
         </div>
       </div>
@@ -269,18 +259,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content text-center">
             <div class="modal-header text-center">
-            <h5 class="modal-title w-100" id="deleteModalLabel">Cancel registration?</h5>
+            <h5 class="modal-title w-100" id="deleteModalLabel">{{ __("Cancel Registration?") }}</h5>
             </div>
             <div class="modal-body">
-                Do you really want to cancel your registration for<br>
+                {{ __("Do you really want to cancel the following registration?") }}<br>
                 <strong><p class="m-0" id="deleteModalEventName"></p></strong>
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" action="" method="POST">
                     @method('DELETE')
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">Abort</a>
-                    <button type="submit" class="btn btn-danger">Cancel</button>
+                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">{{ __("Abort") }}</a>
+                    <button type="submit" class="btn btn-danger">{{ __("Yes") }}</button>
                 </form>
             </div>
         </div>
@@ -293,16 +283,15 @@
           <h5 class="modal-title w-100" id="deleteFavModalLabel">Remove favorite?</h5>
         </div>
         <div class="modal-body">
-            Do you really want to remove the event<br>
+            {{ __("Do you really want to remove the following event from your favorites?") }}<br>
             <strong><p class="m-0" id="deleteFavModalEventName"></p></strong>
-            from your favorites?
         </div>
         <div class="modal-footer">
             <form id="deleteFavForm" action="{{ route('remove-favorite') }}" method="POST">
                 @csrf
                 <input type="hidden" id="deleteFavForm_timetable_entry_id" name="timetable_entry_id" />
-                <a class="btn btn-secondary" onclick="$('#deleteFavModal').modal('hide');" data-dismiss="modal">Abort</a>
-                <button type="submit" class="btn btn-danger">Remove</button>
+                <a class="btn btn-secondary" onclick="$('#deleteFavModal').modal('hide');" data-dismiss="modal">{{ __("Abort") }}</a>
+                <button type="submit" class="btn btn-danger">{{ __("Yes")  }}</button>
             </form>
         </div>
       </div>

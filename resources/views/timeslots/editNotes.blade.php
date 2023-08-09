@@ -10,7 +10,7 @@
             </div>
             <div class="row">
                 <div class="col-6 col-md-3 text-end">
-                    Timeframe
+                    {{ __("Time span") }}
                 </div>
                 <div class="col-6 col-md-9 text-start">
                     {{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end)) }}
@@ -18,7 +18,7 @@
             </div>
             <div class="row">
                 <div class="col-6 col-md-3 text-end">
-                    Attendees
+                    {{ __("Attendees") }}
                 </div>
                 <div class="col-6 col-md-9 text-start">
                     @foreach ($attendees as $attendee)
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-12 col-md-3 text-center text-sm-end">
                         <label for="notes">
-                            <strong>Notes</strong>
+                            <strong>{{ __("Notes") }}</strong>
                         </label>
                     </div>
                     <div class="col-10 col-md-9 text-start mx-auto">
@@ -39,8 +39,8 @@
                 </div>
                 @csrf
                 <div class="d-flex flex-row-reverse" style="justify-content: center;">
-                    <a href="{{url()->previous()}}" class="btn btn-secondary m-1">Abbrechen</a>
-                    <button type="submit" class="btn btn-primary m-1">Speichern</button>
+                    <a href="{{url()->previous()}}" class="btn btn-secondary m-1">{{ __("Cancel") }}</a>
+                    <button type="submit" class="btn btn-primary m-1">{{ __("Save") }}</button>
                 </div>
             </form>
         </div>

@@ -16,20 +16,20 @@
                         <!-- Visible in any case -->
                         <li>
                             <a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">
-                                <i class="bi bi-calendar-week"></i> Timetable
+                                <i class="bi bi-calendar-week"></i> {{ __("Event Schedule") }}
                             </a>
                         </li>
                         <!-- End visible in any case -->
                         @canany(["manage_events", "manage_locations"])
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle px-3" href="#" id="adminDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-gear"></i> Administration
+                                    <i class="bi bi-gear"></i> {{ __("Administration") }}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="adminDropdownMenu">
                                     @can("manage_events")
                                         <li>
                                             <a class="dropdown-item {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">
-                                                <i class="bi bi-list"></i> Manage Timetable
+                                                <i class="bi bi-list"></i> {{ __("Manage Event Schedule") }}
                                             </a>
                                         </li>
                                         <li>
@@ -44,13 +44,13 @@
 
                         <li>
                             <a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">
-                                <i class="bi bi-person-circle"></i> Hosts
+                                <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
                             </a>
                         </li>
 
                         <li>
                             <a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">
-                                <i class="bi bi-geo-alt"></i> Locations
+                                <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
                             </a>
                         </li>
 
@@ -91,14 +91,19 @@
                                     @canany(['manage_users', 'manage_settings'])
                                         @can('manage_users')
                                              <li>
-                                                 <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
+                                                 <a class="dropdown-item" href="{{ route('users.index') }}">
+                                                     {{ __("Manage Users") }}
+                                                 </a>
                                              </li>
                                         @endcan
                                         @can('manage_settings')
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
+                                                <a class="dropdown-item" href="{{ route('user-roles.index') }}">
+                                                    {{ __("Manage Roles") }}
+                                                </a>
                                             </li>
                                         @endcan
+                                        
                                         <li><hr class="dropdown-divider"></li>
 
                                     @endcanany

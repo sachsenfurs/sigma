@@ -35,13 +35,13 @@
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->cancelled)
-                                <span class="badge bg-danger">Cancelled</span>
+                                <span class="badge bg-danger">{{ __("Cancelled") }}</span>
                             @else
                                 @if($entry->sigEvent->reg_possible)
-                                    <a href="{{ route("public.timeslot-show", $entry) }}" class="btn btn-success">Click here to sign up</a>
+                                    <a href="{{ route("public.timeslot-show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged())
-                                    <span class="badge bg-warning">Changed</span>
+                                    <span class="badge bg-warning">{{ __("Changed") }}</span>
                                 @endif
                             @endif
                         </div>
@@ -74,7 +74,7 @@
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->hasLocationChanged())
-                                <span class="badge bg-warning">Changed</span>
+                                <span class="badge bg-warning">{{ __("Changed") }}</span>
                             @endif
                         </div>
                     </div>
@@ -85,7 +85,7 @@
 
     @empty
         <div class="card-footer">
-            Nicht im Programmplan
+            {{ __("Not listed in schedule") }}
         </div>
     @endforelse
 </div>

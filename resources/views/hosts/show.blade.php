@@ -16,7 +16,7 @@
                         </h2>
                         <p class="text-muted">{{ $host->description }}</p>
                         @can("manage_hosts")
-                            <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i> Edit</a>
+                            <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                 <x-list-sig :sig="$sig" />
         @empty
             <div class="alert alert-info">
-                Keine SIGs zugeordnet
+                {{ __("No SIGs assigned") }}
             </div>
         @endforelse
 

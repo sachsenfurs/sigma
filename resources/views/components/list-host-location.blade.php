@@ -49,7 +49,7 @@
         <div class="card-footer">
             <div class="w-100 container p-2">
                 <a href="{{ $edit_link }}" class="">
-                    <i class="bi bi-pen"></i> Edit
+                    <i class="bi bi-pen"></i> {{ __("Edit") }}
                 </a>
             </div>
         </div>

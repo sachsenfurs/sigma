@@ -4,33 +4,33 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mt-2">
-                <h3>Herzlich Willkommen beim SIG-Manager, hier kannst du:</h3>
+                <h3>{{ __("Welcome to the SIG-Manager, here you can:") }}</h3>
 
                 <div class="list-group mt-4">
                     <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-calendar-week"></i> Den Programmplan abrufen</h5>
-                        <small><a href="{{ route("public.tableview") }}">Zum Programmplan</a></small>
+                        <h5 class="mb-1"><i class="bi bi-calendar-week"></i> {{ __("Access the event schedule") }}</h5>
+                        <small><a href="{{ route("public.tableview") }}">{{ __("View Schedule") }}</a></small>
                     </li>
                     <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-list-check"></i> Dich für SIGs anmelden</h5>
+                        <h5 class="mb-1"><i class="bi bi-list-check"></i> {{ __("Signup for specific SIGs") }}</h5>
                     </li>
                     <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-gear"></i> Deine eigenen SIGs verwalten</h5>
+                        <h5 class="mb-1"><i class="bi bi-gear"></i> {{ __("Manage your own SIGs") }}</h5>
                     </li>
                     <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-alarm"></i> Erinnerungen für SIGs einrichten</h5>
+                        <h5 class="mb-1"><i class="bi bi-alarm"></i> {{ __("Set up reminder Notifications") }}</h5>
                     </li>
                 </div>
 
                 <div class="card mt-4">
                     <div class="card-header">
-                        Login
+                        {{ __("Login") }}
                     </div>
                     <div class="card-body">
                         <div class="row mt-3">
                             <div class="col-12 text-center">
                                 <a class="btn btn-success" href="{{ route('oauthlogin_regsys') }}">
-                                    {{ __('Melde dich mit deinem Account aus dem Regsystem an') }}
+                                    {{ __('Login with your existing con-registration') }}
                                 </a>
                                 <small class="d-flex w-100 justify-content-end mt-4">
                                     <a class="justify-content-end text-decoration-none"  href="{{ route('oauthlogin') }}">

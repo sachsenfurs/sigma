@@ -11,15 +11,15 @@
                     @endisset
                     <div class="card">
                         <div class="card-header">
-                            <strong>{{ $location->name ?? "Location hinzufügen" }}</strong>
+                            <strong>{{ $location->name ?? __("Add Location") }}</strong>
                         </div>
                         <div class="card-body">
 
-                            <label>Name:</label>
+                            <label>{{ __("Name") }}:</label>
                             <input type="text" class="form-control" name="name" value="{{ old("name", $location->name ?? "") }}">
 
                             <div class="mt-3">
-                                <label>Beschreibung:</label>
+                                <label>{{ __("Description") }}:</label>
                                 <input type="text" class="form-control" name="description" value="{{ old("description", $location->description ?? "") }}">
                             </div>
 
@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="mt-4">
-                                <input type="submit" class="btn btn-success" value="Speichern">
+                                <input type="submit" class="btn btn-success" value="{{ __("Save") }}">
 
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    Location löschen
+                                    {{ __("Delete Location") }}
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#options">
@@ -48,7 +48,7 @@
                                     <form method="POST" action="{{ route("locations.destroy", $location) }}">
                                         @csrf
                                         @method("DELETE")
-                                        <input type="submit" class="btn btn-danger" name="delete" value="Wirklich löschen?">
+                                        <input type="submit" class="btn btn-danger" name="delete" value="{{ __("Really delete it?") }}">
                                     </form>
                                 </div>
                             </div>
