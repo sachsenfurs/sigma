@@ -4,14 +4,15 @@
     <div class="container">
         <div class="mt-4 mb-4 text-center">
             <button type="button" class="btn btn-primary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                <i class="bi bi-plus"></i>Benutzerrolle erstellen
+                <i class="bi bi-plus"></i>
+                {{ __("Create Role") }}
             </button>
         </div>
         <div class="col-12 col-md-12 text-center">
             <div class="d-none d-xl-block">
                 <div class="row border-bottom border-secondary mb-2">
                     <div class="col-4 col-md-4">
-                        <strong>Titel</strong>
+                        <strong>{{ __("Title") }}</strong>
                     </div>
                     <div class="col-1 col-md-1">
                         <strong>Manage Settings</strong>
@@ -29,7 +30,7 @@
                         <strong>Manage Hosts</strong>
                     </div>
                     <div class="col-3 col-md-3">
-                        <strong>Aktionen</strong>
+                        <strong>{{ __("Actions") }}</strong>
                     </div>
                 </div>
             </div>
@@ -38,7 +39,7 @@
                 <div class="col-12 col-md-4 mt-1 mb-1">
                     <div class="row">
                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                            <strong>Titel</strong>
+                            <strong>{{ __("Title") }}</strong>
                         </div>
                         <div class="col-6 col-md-12">
                             <strong>{{ $role->title }}</strong>
@@ -119,10 +120,10 @@
                     <div class="row">
                         @if ($role->id != 1)
                             <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
-                                <strong>Aktionen</strong>
+                                <strong>{{ __("Actions") }}</strong>
                             </div>
                             <div class="col-6 col-md-12">
-                                <a type="button" class="btn btn-info text-white" href="/user-roles/{{ $role->id }}/edit">
+                                <a type="button" class="btn btn-info text-white" href="{{ route("user-roles.edit", $role) }}">
                                     <span class="bi bi-pencil"></span>
                                 </a>
                                 <button type="button" class="btn btn-danger text-white" onclick="$('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/user-roles/{{ $role->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $role->id }}">
@@ -140,17 +141,17 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="deleteModalLabel">Benutzer Rolle löschen?</h5>
+              <h5 class="modal-title" id="deleteModalLabel">{{ __("Delete User Role?") }}</h5>
             </div>
             <div class="modal-body">
-                Benutzer Rolle wirklich löschen?
+                {{ __("Really delete it?") }}
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" action="" method="POST">
                     @method('DELETE')
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                    <button type="submit" class="btn btn-danger">LÖSCHEN</button>
+                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">{{ __("Cancel") }}</a>
+                    <button type="submit" class="btn btn-danger">{{ __("Delete") }}</button>
                 </form>
             </div>
           </div>
@@ -161,11 +162,11 @@
             <div class="modal-content">
                 <form id="createForm" action="/user-roles" method="POST">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createModalLabel">Neue Benutzerrolle erstellen</h5>
+                        <h5 class="modal-title" id="createModalLabel">{{ __("Create Role") }}</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group row m-1">
-                            <label for="" class="col-sm-4 col-form-label text-end">Titel</label>
+                            <label for="" class="col-sm-4 col-form-label text-end">{{ __("Title") }}</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="title" id="title" value="">
                             </div>
@@ -203,8 +204,8 @@
                     </div>
                     <div class="modal-footer">
                         @csrf
-                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                        <button type="submit" class="btn btn-primary">Benutzerrolle erstellen</button>
+                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">{{ __("Cancel") }}</a>
+                        <button type="submit" class="btn btn-primary">{{ __("Create Role") }}</button>
                     </div>
                 </form>
             </div>

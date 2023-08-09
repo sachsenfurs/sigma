@@ -14,17 +14,17 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
-                                    <label>Start</label>
+                                    <label>{{ __("Beginning") }}</label>
                                     <input type="datetime-local" class="form-control" name="start" value="{{ $entry->start->format("Y-m-d\TH:i") }}">
                                 </div>
                                 <div class="col-6">
-                                    <label>Ende</label>
+                                    <label>{{ __("End") }}</label>
                                     <input type="datetime-local" class="form-control" name="end" value="{{ $entry->end->format("Y-m-d\TH:i") }}">
                                 </div>
                             </div>
 
                             <div class="mt-3">
-                                <label>Abweichende Location</label>
+                                <label>{{ __("Different Location") }}</label>
                                 <select name="sig_location_id" class="form-control">
                                     <option value="">-</option>
                                     @foreach($locations AS $location)
@@ -37,25 +37,25 @@
                                 <div class="form-check">
                                     <label>
                                         <input class="form-check-input" type="checkbox" name="cancelled" {{ $entry->cancelled ? "checked" : ""}}>
-                                        Event Abgesagt
+                                        {{ __("Event Cancelled") }}
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label>
                                         <input class="form-check-input" type="checkbox" name="hide" {{ $entry->hide ? "checked" : ""}}>
-                                        Internes Event
+                                        {{ __("Internal Event") }}
                                     </label>
                                 </div>
                                 <div class="form-check mt-3">
                                     <label>
                                         <input class="form-check-input" type="checkbox" name="ignore_update">
-                                        Änderung nicht kommunizieren
+                                        {{ __("Don't publish changes") }}
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label>
                                         <input class="form-check-input" type="checkbox" name="reset_update">
-                                        Reset Update-Timestamp
+                                        {{ __("Reset 'Changed'-flag") }}
                                     </label>
                                 </div>
                             </div>
@@ -63,20 +63,20 @@
                             @if ($entry->sigEvent->reg_possible)
                                 <div class="mt-3 row">
                                     <label>
-                                        <h3>Timeslots verwalten</h3>
+                                        <h3>{{ __("Manage Time Slots") }}</h3>
                                     </label>
                                 </div>
-        
+
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th><strong>Slot Zeitraum</strong></th>
-                                            <th><strong>Reg Zeitraum</strong></th>
-                                            <th><strong>Teilnehmer</strong></th>
-                                            <th><strong>Aktionen</strong></th>
+                                            <th><strong>{{ _("Slot Time span") }}</strong></th>
+                                            <th><strong>{{ __("Reg Time span") }}</strong></th>
+                                            <th><strong>{{ __("Attendees") }}</strong></th>
+                                            <th><strong>{{ __("Actions") }}</strong></th>
                                         </tr>
                                     </thead>
-                                    
+
                                     <tbody>
                                         @foreach($entry->sigTimeslots AS $timeslot)
                                             <tr id="{{ $timeslot->id }}">
@@ -92,7 +92,7 @@
                                                     {{ $timeslot->sigAttendees->count() }} / {{ $timeslot->max_users }}
                                                 </td>
                                                 <td>
-                                                    <a type="button" class="btn btn-info text-white" href="/timeslots/{{ $timeslot->id }}/edit">
+                                                    <a type="button" class="btn btn-info text-white" href="{{ route("timeslots.edit", $timeslot) }}">
                                                         <span class="bi bi-pencil"></span>
                                                     </a>
                                                     <a type="button" class="btn btn-success text-white" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/{{ $timeslot->id }}')" data-toggle="modal" data-target="#deleteModal" data-timeslot="{{ $timeslot->id }}">
@@ -113,12 +113,12 @@
                                 </div>
                             @else
                                 <div class="mt-3 row">
-                                    <label>Registrierung für dieses Event sind deaktiviert</label>
+                                    <label>{{ __("Registrations for this event are disabled") }}</label>
                                 </div>
                             @endif
-                            
+
                             <div class="mt-4 text-center">
-                                <input type="submit" class="btn btn-success" value="Speichern">
+                                <input type="submit" class="btn btn-success" value="{{ __("Save") }}">
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Kalendereintrag löschen
+                                {{ __("Delete Entry") }}
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#options">
@@ -136,7 +136,7 @@
                                 <form method="POST" action="{{ route("timetable.destroy", $entry) }}">
                                     @csrf
                                     @method("DELETE")
-                                    <input type="submit" class="btn btn-danger" name="delete" value="Wirklich löschen?">
+                                    <input type="submit" class="btn btn-danger" name="delete" value="{{ __("Really delete it?") }}">
                                 </form>
                             </div>
                         </div>
@@ -150,36 +150,36 @@
           <div class="modal-content">
             <form id="createForm" action="/timeslots" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Neuen Timeslot erstellen</h5>
+                    <h5 class="modal-title" id="createModalLabel">{{ __("Create new time slot") }}</h5>
                 </div>
                 <div class="modal-body">
                     <input type="number" class="d-none" name="timetable_entry_id" id="timetable_entry_id" value="{{ $entry->id }}">
                     <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Slot Start</label>
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Slot Start") }}</label>
                         <div class="col-sm-8">
                             <input type="time" class="form-control" name="slot_start" id="slot_start" value="{{ date('H:i', strtotime($entry->start)) }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Slot Ende</label>
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Slot End") }}</label>
                         <div class="col-sm-8">
                             <input type="time" class="form-control" name="slot_end" id="slot_end" value="{{ date('H:i', strtotime("+15 minutes", strtotime($entry->start))) }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Registrierung Start</label>
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Registration Start") }}</label>
                         <div class="col-sm-8">
                             <input type="datetime-local" class="form-control" name="reg_start" id="reg_start" value="{{ date('Y-m-d H:i', strtotime("-24 hours", strtotime($entry->start))) }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Registrierung Ende</label>
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Registration End") }}</label>
                         <div class="col-sm-8">
                             <input type="datetime-local" class="form-control" name="reg_end" id="reg_end" value="{{ date('Y-m-d H:i', strtotime("-60 minutes", strtotime($entry->start))) }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
-                        <label for="" class="col-sm-4 col-form-label text-end">Max Teilnehmer</label>
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Max. Attendees") }}</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" name="max_users" id="max_users" value="1">
                         </div>
@@ -187,8 +187,8 @@
                 </div>
                 <div class="modal-footer">
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                    <button type="submit" class="btn btn-primary">Timeslot erstellen</button>
+                    <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">{{ __("Cancel") }}</a>
+                    <button type="submit" class="btn btn-primary">{{ __("Create Time Slot") }}</button>
                 </div>
             </form>
           </div>
@@ -198,7 +198,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="userModalLabel">Teilnehmerliste</h5>
+              <h5 class="modal-title" id="userModalLabel">{{ __("Attendee List") }}</h5>
             </div>
             <div class="modal-body">
                 <ul>
@@ -210,7 +210,7 @@
                 <form id="userForm" action="" method="POST">
                     @method('CREATE')
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#userModal').modal('hide');" data-dismiss="modal">Schließen</a>
+                    <a class="btn btn-secondary" onclick="$('#userModal').modal('hide');" data-dismiss="modal">{{ __("Close") }}</a>
                 </form>
             </div>
           </div>
@@ -220,17 +220,17 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="deleteModalLabel">Timeslot löschen?</h5>
+              <h5 class="modal-title" id="deleteModalLabel">{{ __("Delete Timeslot?") }}</h5>
             </div>
             <div class="modal-body">
-                Timeslot wirklich löschen?
+                {{ __("Really delete it?") }}
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" action="" method="POST">
                     @method('DELETE')
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                    <button type="submit" class="btn btn-danger">LÖSCHEN</button>
+                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">{{ __("Cancel") }}</a>
+                    <button type="submit" class="btn btn-danger">{{ __("Delete") }}</button>
                 </form>
             </div>
           </div>

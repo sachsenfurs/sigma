@@ -46,9 +46,10 @@ class AjaxController extends Controller
      */
     public function removeFavorite(Request $request)
     {
-        if (!$request->ajax()) {
-            throw new UnauthorizedException();
-        }
+        // Needs to be fixed, maybe function needs to be moved
+        //if (!$request->ajax()) {
+        //    throw new UnauthorizedException();
+        //}
 
         $attributes = $request->validate([
             'timetable_entry_id' => 'required|exists:timetable_entries,id'

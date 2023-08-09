@@ -70,4 +70,14 @@ class User extends Authenticatable
             return false;   
         }
     }
+
+    /**
+     * Define the relationship between users and their favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function hasGroup(string $name)
+    {
+        return in_array($name, $this->groups);
+    }
 }

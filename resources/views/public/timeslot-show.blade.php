@@ -33,21 +33,25 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active border border-top-0 p-1 text-center" id="description-german" role="tabpanel" aria-labelledby="desc-nav-ger-tab">
-                        {!! nl2br($entry->sigEvent->description) !!}
+                        <x-markdown>
+                            {{ $entry->sigEvent->description }}
+                        </x-markdown>
                     </div>
                     <div class="tab-pane fade border border-top-0 p-1 text-center" id="description-english" role="tabpanel" aria-labelledby="desc-nav-en-tab">
-                        {!! nl2br($entry->sigEvent->description_en) !!}
+                        <x-markdown>
+                            {{ $entry->sigEvent->description_en }}
+                        </x-markdown>
                     </div>
                 </div>
                 <div id="event-description">
                     <div class="row">
                         <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-center">
-                            
+
                             <span class="readmore-link"></span>
                         </div>
                         <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-center">
                             <i class="flag flag-us"></i>
-                            
+
                             <span class="readmore-link"></span>
                         </div>
                     </div>
@@ -55,7 +59,7 @@
             </div>
             <hr>
             @php
-                
+
             @endphp
                 <div class="row">
                     @if ($entry->sigEvent->reg_possible)
@@ -67,10 +71,10 @@
                             <h2>Zeitslots</h2>
                         </div>
                     @endif
-                    @forelse($entry->sigEvent->timetableEntries AS $e)  
+                    @forelse($entry->sigEvent->timetableEntries AS $e)
                         @php
                             $counter = 0;
-                        @endphp                               
+                        @endphp
                         @if ($e->sigTimeslots->isEmpty() == false)
                             @forelse ($e->sigTimeslots as $timeslot)
                                 @if ($timeslot->max_users > $timeslot->sigAttendees->count())
@@ -82,7 +86,7 @@
                             @endforelse
                         @endif
                         @if ($e->sigTimeslots->isEmpty() == false)
-                            <div class="col-12 col-md-6">                                
+                            <div class="col-12 col-md-6">
                                 <div class="accordion">
                                 <div class="accordion-item mt-1 mb-1">
                                     <h2 class="accordion-header">
@@ -94,12 +98,12 @@
                                             </button>
                                         @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden | 
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden |
                                                 <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
                                             </button>
                                         @else
                                             <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden | 
+                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden |
                                                 <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
                                             </button>
                                         @endif
@@ -222,7 +226,7 @@
                     @endif
                 @empty
                     Nicht im Programmplan
-                @endforelse                        
+                @endforelse
                 </div>
             </div>
         </div>

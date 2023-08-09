@@ -1,7 +1,7 @@
 @include("layouts/head")
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/images/logo.png" alt="{{ config('app.name' ) }}">
@@ -14,20 +14,53 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <!-- Visible in any case -->
-                        <li><a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">Timetable</a></li>
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">
+                                <i class="bi bi-calendar-week"></i> {{ __("Event Schedule") }}
+                            </a>
+                        </li>
                         <!-- End visible in any case -->
-                        @can('manage_events')
-                            <li><a class="nav-link px-3 {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">Manage Timetable</a></li>
-                            <li><a class="nav-link px-3 {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">SIGs</a></li>
+                        @canany(["manage_events", "manage_locations"])
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-3" href="#" id="adminDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> {{ __("Administration") }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdownMenu">
+                                    @can("manage_events")
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("timetable.index") ? "active" : "" }}" href="{{ route("timetable.index") }}">
+                                                <i class="bi bi-list"></i> {{ __("Manage Event Schedule") }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("sigs.index") ? "active" : "" }}" href="{{ route("sigs.index") }}">
+                                                <i class="bi bi-easel"></i> SIGs
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
                         @endcan
 
-                        <li><a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">Hosts</a></li>
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("hosts.index") ? "active" : "" }}" href="{{ route("hosts.index") }}">
+                                <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
+                            </a>
+                        </li>
 
-                        @can('manage_locations')
-                            <li><a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">Locations</a></li>
-                        @endcan
+                        <li>
+                            <a class="nav-link px-3 {{ Route::is("locations.index") ? "active" : "" }}" href="{{ route("locations.index") }}">
+                                <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
+                            </a>
+                        </li>
+
+
                         @if (auth()?->user()?->isSigHost())
-                            <li><a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">My Events</a></li>
+                            <li>
+                                <a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">
+                                    <i class="bi bi-view-list"></i> {{ __("My Events") }}
+                                </a>
+                            </li>
                         @endif
                     </ul>
 
@@ -35,33 +68,66 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                            @foreach(config("app.locales") AS $locale=>$name)
+                                @if(App::getLocale() != $locale)
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route("lang.set", $locale) }}">
+                                            <img class="" src="/icons/{{ $locale }}-flag.svg" style="height: 1em; margin-top: -2px" alt="[{{ $locale }}]">
+                                            <span class="">{{ $name }}</span>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    @can('manage_users')
-                                         <a class="dropdown-item" href="{{ route('users.index') }}">Manage Users</a>
-                                    @endcan
-                                    @can('manage_settings')
-                                        <a class="dropdown-item" href="{{ route('user-roles.index') }}">Manage Roles</a>
-                                    @endcan
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    @canany(['manage_users', 'manage_settings'])
+                                        @can('manage_users')
+                                             <li>
+                                                 <a class="dropdown-item" href="{{ route('users.index') }}">
+                                                     {{ __("Manage Users") }}
+                                                 </a>
+                                             </li>
+                                        @endcan
+                                        @can('manage_settings')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('user-roles.index') }}">
+                                                    {{ __("Manage Roles") }}
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        
+                                        <li><hr class="dropdown-divider"></li>
 
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+                                    @endcanany
+                                    <li>
+                                        @foreach(config("app.locales") AS $locale=>$name)
+                                            @if(App::getLocale() != $locale)
+                                                <a class="dropdown-item" href="{{ route("lang.set", $locale) }}">
+                                                    <img class="align-middle" src="/icons/{{ $locale }}-flag.svg" style="max-height: 1em" alt="[{{ $locale }}]">
+                                                    <span class="align-middle">{{ $name }}</span>
+                                                </a>
+                                            @endif
+                                        @endforeach
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         @endguest
                     </ul>

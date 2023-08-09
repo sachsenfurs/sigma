@@ -7,16 +7,16 @@
             <div class="d-none d-xl-block">
                 <div class="row border-bottom border-secondary mb-2">
                     <div class="col-3 col-md-3">
-                        <strong>Title</strong>
+                        <strong>{{ __("Name") }}</strong>
                     </div>
                     <div class="col-3 col-md-3">
-                        <strong>Location</strong>
+                        <strong>{{ __("Location") }}</strong>
                     </div>
                     <div class="col-3 col-md-3">
-                        <strong>Attendees</strong>
+                        <strong>{{ __("Attendees") }}</strong>
                     </div>
                     <div class="col-3 col-md-3">
-                        <strong>Favorites</strong>
+                        <strong>{{ __("Favorites") }}</strong>
                     </div>
                 </div>
             </div>
@@ -25,10 +25,10 @@
                         <div class="col-12 col-md-3 mt-1 mb-1">
                             <div class="row">
                                 <div class="col-6 col-md-6 d-block d-sm-none align-right">
-                                    <strong>Title</strong>
+                                    <strong>{{ __("Name") }}</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
-                                    <a href="{{ route('mysigs.show', $event->id) }}">
+                                    <a href="{{ route('sigs.show', $event->id) }}">
                                         <strong>{{ $event->name }}</strong>
                                     </a>
                                 </div>
@@ -37,7 +37,7 @@
                         <div class="col-12 col-md-3 mt-1 mb-1">
                             <div class="row">
                                 <div class="col-6 col-md-6 d-block d-sm-none align-right">
-                                    <strong>Location</strong>
+                                    <strong>{{ __("Location") }}</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
                                     {{ $event->sigLocation->name }}
@@ -47,7 +47,7 @@
                         <div class="col-12 col-md-3 mt-1 mb-1">
                             <div class="row">
                                 <div class="col-6 col-md-6 d-block d-sm-none align-right">
-                                    <strong>Attendees</strong>
+                                    <strong>{{ __("Attendees") }}</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
                                     <i class="bi bi-people-fill"></i> {{ $additionalInformations[$event->id]['attendees']}}
@@ -57,7 +57,7 @@
                         <div class="col-12 col-md-3 mt-1 mb-1">
                             <div class="row">
                                 <div class="col-6 col-md-6 d-block d-sm-none align-right">
-                                    <strong>Favorites</strong>
+                                    <strong>{{ __("Favorites") }}</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
                                     <i class="bi bi-heart-fill"></i> {{ $additionalInformations[$event->id]['favorites']}}
