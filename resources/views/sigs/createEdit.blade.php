@@ -12,7 +12,7 @@
                     @endisset
                     <div class="card">
                         <div class="card-header">
-                            SIG {{ isset($sig) ? "bearbeiten" : "anlegen" }}
+                            {{ isset($sig) ? __("Edit SIG") : __("Create SIG") }}
                         </div>
                         <div class="card-body">
                             <div class="col-12 col-md-12 p-2">
@@ -20,28 +20,36 @@
                                     <div class="col-8 col-md-8 p-2">
                                         <h2>Sig Name</h2>
                                         <div class="form-group row m-1">
-                                            <label for="name" class="col-sm-3 col-form-label text-end">Deutsch</label>
+                                            <label for="name" class="col-sm-3 col-form-label text-end">
+                                                {{ __("German") }}
+                                            </label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="name" id="name" value="{{ old("name", $sig->name ?? "") }}" required>
+                                                <input type="text" class="form-control" name="name"
+                                                       id="name" value="{{ old("name", $sig->name ?? "") }}" required>
                                             </div>
                                         </div>
                                         <div class="form-group row m-1">
-                                            <label for="name_en" class="col-sm-3 col-form-label text-end">Englisch</label>
+                                            <label for="name_en" class="col-sm-3 col-form-label text-end">{{ __("English") }}</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="name_en" id="name_en" value="{{ old("name_en", $sig->name_en ?? "") }}" required>
+                                                <input type="text" class="form-control" name="name_en"
+                                                       id="name_en" value="{{ old("name_en", $sig->name_en ?? "") }}" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-4 col-md-4 p-2 rounded-top" style="background-color: rgb(215 215 215);">
-                                        <h2>Sprachen</h2>
+                                        <h2>{{ __("Languages") }}</h2>
                                         <div class="form-group row m-1">
                                             <label>
-                                                <input class="form-check-input" type="checkbox" name="lang_de" {{ !empty(old("lang_de", in_array("de", $sig->languages ?? []))) ? "checked" : "" }}> Deutsch
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="lang_de" {{ !empty(old("lang_de", in_array("de", $sig->languages ?? []))) ? "checked" : "" }}>
+                                                {{ __("German") }}
                                             </label>
                                         </div>
                                         <div class="form-group row m-1">
                                             <label>
-                                                <input class="form-check-input" type="checkbox" name="lang_en" {{ !empty(old("lang_en", in_array("en", $sig->languages ?? []))) ? "checked" : "" }}> Englisch
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="lang_en" {{ !empty(old("lang_en", in_array("en", $sig->languages ?? []))) ? "checked" : "" }}>
+                                                {{ __("English") }}
                                             </label>
                                         </div>
                                     </div>
@@ -49,12 +57,14 @@
                                 <div class="row">
                                     <div class="col-8 col-md-8 p-2">
                                         <h2>Sig Host</h2>
-                                        <!--<input type="hidden" name="host_id" id="host_id" value="{{ old("host_id", $sig->sigHost->id ?? "") }}">-->
+                                        {{-- <!--<input type="hidden" name="host_id" id="host_id" value="{{ old("host_id", $sig->sigHost->id ?? "") }}">-->--}}
                                         <div class="form-group row m-1">
-                                            <label for="location" class="col-sm-3 col-form-label text-end">Host</label>
+                                            <label for="location" class="col-sm-3 col-form-label text-end">
+                                                {{ __("Host") }}
+                                            </label>
                                             <div class="col-sm-9">
                                                 <select name="host_id" id="host_id" class="form-control">
-                                                    <option value='NEW'>-- Neuen Host erstellen --</option>
+                                                    <option value="NEW">-- {{ __("Create New Host") }} --</option>
                                                     @foreach($hosts AS $host)
                                                         <option value="{{ $host->id }}" {{ old("host_id", $sig->sigHost->id ?? null) == $host->id ? "selected" : "" }}>
                                                             {{ $host->name }}@if ($host->reg_id != '') - {{ $host->reg_id }}@endif
@@ -65,33 +75,45 @@
                                         </div>
                                         @if (!isset($sig))
                                             <div id="host_row" class="form-group row m-1">
-                                                <label for="host" class="col-sm-3 col-form-label text-end">Name</label>
+                                                <label for="host" class="col-sm-3 col-form-label text-end">
+                                                    {{ __("Name") }}
+                                                </label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="host" id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
+                                                    <input type="text" class="form-control" name="host"
+                                                           id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
                                                 </div>
                                             </div>
                                             <div id="reg_id_row" class="form-group row m-1">
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg ID</label>
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">
+                                                    {{ __("Reg Number") }}
+                                                </label>
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="reg_id" id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                    <input type="number" class="form-control" name="reg_id"
+                                                           id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
                                                 </div>
                                             </div>
                                         @else
                                             <div id="host_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
-                                                <label for="host" class="col-sm-3 col-form-label text-end">Name</label>
+                                                <label for="host" class="col-sm-3 col-form-label text-end">
+                                                    {{ __("Name") }}
+                                                </label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="host" id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
+                                                    <input type="text" class="form-control" name="host" id="host"
+                                                           value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
                                                 </div>
                                             </div>
                                             <div id="reg_id_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg ID</label>
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">
+                                                    {{ __("Reg Number") }}
+                                                </label>
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="reg_id" id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                    <input type="number" class="form-control" name="reg_id"
+                                                           id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
                                                 </div>
                                             </div>
                                         @endif
-                                        
-                                        <h2 class="mt-3">Sig Location</h2>
+
+                                        <h2 class="mt-3">{{ __("SIG Location") }}</h2>
                                         <div class="form-group row m-1">
                                             <label for="location" class="col-sm-3 col-form-label text-end">Ort</label>
                                             <div class="col-sm-9">
@@ -105,36 +127,38 @@
                                             </div>
                                         </div>
 
-                                        <h2 class="mt-3">Registrierung</h2>
+                                        <h2 class="mt-3">{{ __("Registration") }}</h2>
                                         <div class="form-group row m-1">
                                             <div class="form-group row m-1">
                                                 <div class="col-sm-3"></div>
                                                 <div class="col-sm-9">
                                                     <label>
-                                                        <input class="form-check-input" type="checkbox" name="reg_possible" 
+                                                        <input class="form-check-input" type="checkbox" name="reg_possible"
                                                             @isset($sig)
                                                                 @if ($sig->reg_possible)
-                                                                     checked 
-                                                                @endif 
-                                                            @endisset> Registrierungen für dieses Event erlauben 
+                                                                     checked
+                                                                @endif
+                                                            @endisset>
+                                                        {{ __("Allow Registrations for this Event") }}
                                                     </label>
                                                 </div>
                                             </div>
                                             <div id="max_regs_per_day_row" class="form-group row m-1">
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">Reg's / Tag</label>
+                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">{{ __("Registrations per day") }}</label>
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="max_regs_per_day" id="max_regs_per_day" value="{{ old("max_regs_per_day", $sig->max_regs_per_day ?? "1") }}">
+                                                    <input type="number" class="form-control" name="max_regs_per_day"
+                                                           id="max_regs_per_day" value="{{ old("max_regs_per_day", $sig->max_regs_per_day ?? "1") }}">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-4 col-md-4 p-2 rounded-bottom" style="background-color: rgb(215 215 215);">
-                                        <h2>Sonstiges</h2>
+                                        <h2>{{ __("Other") }}</h2>
                                         <div class="form-group row m-1">
                                             <div class="col-sm-12">
                                                 <label>
                                                     <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
-                                                     Nicht auf Programmplan zeigen (Internes Event)
+                                                    {{ __("Hide Event on Schedule") }}
                                                 </label>
                                             </div>
                                         </div>
@@ -146,7 +170,7 @@
                                                             @if ($sig->reg_possible)
                                                                  checked
                                                             @endif
-                                                        @endisset> Registrierungen für dieses Event erlauben
+                                                        @endisset> {{ __("Allow Registrations for this Event") }}
                                                 </label>
                                             </div>
                                         </div>
@@ -154,10 +178,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-md-12 p-2">
-                                        <h2 class="mb-2">Beschreibung</h2>
+                                        <h2 class="mb-2">{{ __("Description") }}</h2>
                                         <div class="row">
                                             <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
-                                                <h3 class="align-middle">Deutsch</h3>
+                                                <h3 class="align-middle">{{ __("German") }}</h3>
                                             </div>
                                             <div class="col-10 col-md-10">
                                                 <textarea class="form-control mb-1" name="description" style="min-height: 180px">{{ old("description", $sig->description ?? "") }}</textarea>
@@ -165,7 +189,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
-                                                <h3 class="align-middle">Englisch</h3>
+                                                <h3 class="align-middle">{{ __("English") }}</h3>
                                             </div>
                                             <div class="col-10 col-md-10">
                                                 <textarea class="form-control mb-1" name="description_en" style="min-height: 180px;">{{ old("description_en", $sig->description_en ?? "") }}</textarea>
@@ -177,13 +201,13 @@
                                     <div class="col-12 col-md-12 p-2">
                                         @if(!isset($sig))
                                             <div class="mt-3 row">
-                                                <h2>Zeiten festlegen</h2>
-                                                <span class="small">(Optional, kann auch später erfolgen)</span>
+                                                <h2>{{ __("Define time spans") }}</h2>
+                                                <span class="small">({{ __("Optional, can be changed later") }})</span>
                                             </div>
 
                                             <div class="row mt-3">
-                                                <div class="col-5"><strong>Start</strong></div>
-                                                <div class="col-5"><strong>Ende</strong></div>
+                                                <div class="col-5"><strong>{{ __("Beginning") }}</strong></div>
+                                                <div class="col-5"><strong>{{ __("End") }}</strong></div>
                                             </div>
                                             <div id="timetableEntries-parent" style="display: none">
                                                 <div class="mt-1 row timetableEntry" id="timetableEntry">
@@ -228,10 +252,10 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th><strong>Tag</strong></th>
-                                                        <th><strong>Zeitraum</strong></th>
-                                                        <th><strong>Timeslots</strong></th>
-                                                        <th><strong>Aktionen</strong></th>
+                                                        <th><strong>{{ __("Day") }}</strong></th>
+                                                        <th><strong>{{ __("Time span") }}</strong></th>
+                                                        <th><strong>{{ __("Time slots") }}</strong></th>
+                                                        <th><strong>{{ __("Actions") }}</strong></th>
                                                     </tr>
                                                 </thead>
 
@@ -251,7 +275,7 @@
                                                                 {{ $timetableEntry->sigTimeslots->count() }}
                                                             </td>
                                                             <td>
-                                                                <a type="button" class="btn btn-info text-white" href="/timetable/{{ $timetableEntry->id }}/edit">
+                                                                <a type="button" class="btn btn-info text-white" href="{{ route("timetable.edit", $timetableEntry) }}">
                                                                     <span class="bi bi-pencil"></span>
                                                                 </a>
                                                             </td>
@@ -272,8 +296,8 @@
                         <div class="card-footer">
                             @csrf
                             <div class="d-flex flex-row-reverse">
-                                <a href="{{url()->previous()}}" class="btn btn-secondary m-1">Abbrechen</a>
-                                <button class="btn btn-primary m-1" type="submit">Speichern</button>
+                                <a href="{{url()->previous()}}" class="btn btn-secondary m-1">{{ __("Cancel") }}</a>
+                                <button class="btn btn-primary m-1" type="submit">{{ __("Save") }}</button>
                             </div>
                         </div>
                     </div>
@@ -283,7 +307,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    SIG löschen
+                                    {{ __("Delete SIG") }}
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#options">
@@ -291,7 +315,7 @@
                                     <form method="POST" action="{{ route("sigs.destroy", $sig) }}">
                                         @csrf
                                         @method("DELETE")
-                                        <input type="submit" class="btn btn-danger" name="delete" value="Wirklich löschen?">
+                                        <input type="submit" class="btn btn-danger" name="delete" value="{{ __("Really delete it?") }}">
                                     </form>
                                 </div>
                             </div>
@@ -308,18 +332,22 @@
             <div class="modal-content">
                 <form id="createForm" action="{{ route("timetable.store") }}" method="POST">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createModalLabel">Neuen Kalendereintrag erstellen</h5>
+                        <h5 class="modal-title" id="createModalLabel">{{ __("Create Schedule Entry") }}</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" class="form-control" name="sig_event_id" id="sig_event_id" value="{{ $sig->id }}">
                         <div class="form-group row m-1">
-                            <label for="" class="col-sm-4 col-form-label text-end">Start</label>
+                            <label for="" class="col-sm-4 col-form-label text-end">
+                                {{ __("Start") }}
+                            </label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" required="true" name="start" id="start" value="">
                             </div>
                         </div>
                         <div class="form-group row m-1">
-                            <label for="" class="col-sm-4 col-form-label text-end">Ende</label>
+                            <label for="" class="col-sm-4 col-form-label text-end">
+                                {{ __("End") }}
+                            </label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" required="true" name="end" id="end" value="">
                             </div>
@@ -327,8 +355,10 @@
                     </div>
                     <div class="modal-footer">
                         @csrf
-                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">Abbrechen</a>
-                        <button type="submit" class="btn btn-primary">Kalendereintrag erstellen</button>
+                        <a class="btn btn-secondary" onclick="$('#createModal').modal('hide');" data-dismiss="modal">
+                            {{ __("Cancel") }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">{{ __("Create Entry") }}</button>
                     </div>
                 </form>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasSigEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +11,7 @@ use function PHPUnit\Framework\isNull;
 
 class TimetableEntry extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSigEvents;
 
     protected $guarded = [];
 
@@ -23,7 +24,7 @@ class TimetableEntry extends Model
 
     /**
      * Define the relationship between timetable-entries and their favorites.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function favorites()

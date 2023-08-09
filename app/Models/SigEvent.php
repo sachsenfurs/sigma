@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTimetableEntries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SigEvent extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTimetableEntries;
 
     protected $casts = [
         'languages' => 'array',
@@ -27,9 +28,6 @@ class SigEvent extends Model
         return $this->hasOne(SigTranslation::class, "sig_event_id");
     }
 
-    public function timetableEntries() {
-        return $this->hasMany(TimetableEntry::class)->orderBy("start", "ASC");
-    }
     public function getTimetableCountAttribute() {
         return $this->timeTableEntries->count();
     }
@@ -68,4 +66,8 @@ class SigEvent extends Model
         }
     }
 
+    public function isCompletelyPrivate() {
+        $entries = $this->timetableEntries;
+        return ($entries->count() == $entries->where("hide", 1)->count());
+    }
 }

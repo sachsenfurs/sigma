@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Public\ConbookExportController;
 use App\Http\Controllers\Public\TableViewController;
 use App\Http\Controllers\Public\TimeslotShowController;
+use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\Sig\SigEventController;
 use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
@@ -47,7 +48,13 @@ Route::get("/table", [TableViewController::class, 'index'])->name("public.tablev
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
 
-Route::resource("/hosts", SigHostController::class);
+Route::resource("/hosts", SigHostController::class)->except('show');
+Route::get("/hosts/{host:slug}", [SigHostController::class, 'show'])->name("hosts.show");
+
+Route::resource("/locations", SigLocationController::class)->except('show');
+Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])->name("locations.show");
+
+Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -65,7 +72,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/sigs/{sig}", [SigEventController::class, 'show'])->name("sigs.show");
     Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
     Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
-    
+
     // Sig My Events
     Route::get("/my-events", [SigMyEventController::class, 'index'])->name("mysigs.index");
 
@@ -79,7 +86,7 @@ Route::group(['middleware' => "auth"], function() {
     // SIG Locations
 //    Route::get("/locations", [SigLocationController::class, 'index'])->name("locations.index");
 //    Route::get("/locations/{location}", [SigLocationController::class, 'show'])->name("locations.show");
-    Route::resource("/locations", SigLocationController::class);
+
     // Timetable
     Route::get("/timetable", [TimetableController::class, 'index'])->name("timetable.index");
     Route::post("/timetable", [TimetableController::class, 'store'])->name("timetable.store");

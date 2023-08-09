@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasSigEvents;
+use App\Models\Traits\HasTimetableEntries;
+use App\Models\Traits\NameIdAsSlug;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SigLocation extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSigEvents, HasTimetableEntries, NameIdAsSlug;
+
     public $timestamps = false;
 
     protected $guarded = [];
@@ -17,19 +24,8 @@ class SigLocation extends Model
         'infodisplay' => "boolean",
     ];
 
-    public function sigEvents() {
-        return $this->hasMany(SigEvent::class);
-    }
-
     public function translation() {
         return $this->hasMany(SigLocationTranslation::class);
     }
 
-    public function timetableEntries() {
-        return $this->hasMany(TimetableEntry::class)->orderBy("start");
-    }
-
-    //public function locationUsage() {
-    //    return SigLocation::with("timetableEntries")->with("sigEvents")->where("name", "Brandenburg")->get();
-    //}
 }
