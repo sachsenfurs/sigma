@@ -111,7 +111,6 @@
     }
 
     div.scrollmenu {
-        background-color: #eee;
         overflow-x: auto;
         overflow-y: hidden;
     }
@@ -131,11 +130,11 @@
 <!-- Looking for an API? Ask @Kidran! -->
 <!-- -->
 @section('content')
-    <div class="mt-4">
+    <div class="m-2">
 
         <!-- Day Nav Tabs -->
         <div class="scrollmenu">
-            <ul class="nav nav-tabs p-2 pb-1">
+            <ul class="nav nav-tabs border-bottom-0">
                 @foreach ($days as $index => $day)
                     <li class="nav-item">
                         <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
@@ -152,7 +151,7 @@
             @foreach ($days as $index => $day)
                 <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
                     <div class="scrollmenu">
-                        <ul class="nav nav-tabs p-2 pt-1">
+                        <ul class="nav nav-tabs border-bottom-0">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
                                     All
@@ -172,7 +171,6 @@
                     @php
                         $currentTime = \Illuminate\Support\Carbon::parse()
                     @endphp
-
                     <div class="tab-content">
                         <div class="tab-pane active" id="All{{ $index + 1 }}">
                             @foreach ($entries as $event)
@@ -180,7 +178,7 @@
                                     <div class="d-flex justify-content-center pt-2">
                                         <div class="card {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
                                             <div class="row g-0">
-                                                <div class="col-md-3 text-center pt-2 border-light bg-light">
+                                                <div class="col-md-3 text-center pt-2 border-end">
                                                     <h5>
                                                         {{ $event->start->format('H:i') }}
                                                     </h5>
@@ -192,18 +190,18 @@
                                                             <div class="row text-start" style="margin-top: 0.5rem;">
                                                                 <div class="col-12 col-md-12">
                                                                     <div class="col-12 text-start col-md-12">
-                                                                        <h5><b><i class="bi bi-ticket-fill"></i>
+                                                                        <h5><b><i class="bi bi-calendar-week"></i>
                                                                             {{ $event->sigEvent->name }}</b>
                                                                         </h5>
                                                                     </div>
                                                                     <div class="col-12 text-start col-md-12">
                                                                         @if ($event->sigEvent->sigHost->hide == 0)
-                                                                        <i class="bi bi-person-fill"></i>
+                                                                        <i class="bi bi-person-circle"></i>
                                                                         {{ $event->sigEvent->sigHost->name }}
                                                                         @endif
                                                                     </div>
                                                                     <div class="col-12 text-start col-md-12">
-                                                                        <i class="bi bi-geo-fill"></i>
+                                                                        <i class="bi bi-geo-alt"></i>
                                                                         {{ $event->sigEvent->sigLocation->name }}
                                                                     </div>
                                                                 </div>
@@ -241,10 +239,11 @@
                                             <div class="d-flex justify-content-center pt-2">
                                                 <div class="card text-center {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
                                                     <div class="row g-0">
-                                                        <div class="col-md-3 pt-2 border-light bg-light">
+                                                        <div class="col-md-3 text-center pt-2 border-end">
                                                             <h5>
                                                                 {{ $event->start->format('H:i') }}
                                                             </h5>
+                                                            <p>{{ $event->duration }} Min </p>
                                                         </div>
                                                         <div class="col-md-8 border-light">
                                                             <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
@@ -252,12 +251,12 @@
                                                                     <div class="row text-start" style="margin-top: 0.5rem;">
                                                                         <div class="col-12 col-md-12">
                                                                             <div class="col-12 text-start col-md-12">
-                                                                                <h5><b><i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}</b>
+                                                                                <h5><b><i class="bi bi-calendar-week"></i>{{ $event->sigEvent->name }}</b>
                                                                                 </h5>
                                                                             </div>
                                                                             <div class="col-12 text-start col-md-12">
                                                                                 @if ($event->sigEvent->sigHost->hide == 0)
-                                                                                    <i class="bi bi-person-fill"></i>
+                                                                                    <i class="bi bi-person-circle"></i>
                                                                                     {{ $event->sigEvent->sigHost->name }}
                                                                                 @endif
                                                                             </div>
@@ -314,25 +313,5 @@
             }
         });
     });
-
-    function refreshPage() {
-        // Versuche, eine Anfrage an einen bekannten Server durchzuführen
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/favicon.ico', true);
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                location.reload();
-            }
-        };
-
-        xhr.onerror = function () {
-            // Es konnte keine Verbindung zum Server hergestellt werden
-            console.log('Keine Verbindung zum Server');
-        };
-
-        xhr.send();
-    }
-        setInterval(refreshPage, 30000);
 </script>
-@endsection
+@endsectionä
