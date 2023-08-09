@@ -26,7 +26,7 @@
                     @endforeach
                 </div>
             </div>
-            <form method="POST" action="{{ route('mysigs.updateDetails', $timeslot->id) }}">
+            <form method="POST" action="{{ route('timeslots.updateNotes', $timeslot->id) }}">
                 <div class="row">
                     <div class="col-12 col-md-3 text-center text-sm-end">
                         <label for="notes">

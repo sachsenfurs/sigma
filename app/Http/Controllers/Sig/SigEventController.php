@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
+use App\Models\SigAttendee;
 use App\Models\SigEvent;
+use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigLocation;
 use App\Models\SigTranslation;
@@ -24,6 +26,29 @@ class SigEventController extends Controller
 
     public function show(SigEvent $sig) {
         $this->authorize('view', $sig);
+
+        $additionalInformations = [];
+        $favs = 0;
+        foreach($sig->timetableEntries as $entry) {
+            $favs = $favs + SigFavorite::where('timetable_entry_id', $entry->id)->count();
+            $timeslots = [];
+            foreach($entry->sigTimeslots as $timeslot) {
+                $timeslots[$timeslot->id] = SigAttendee::where('sig_timeslot_id', $timeslot->id)->get();
+            }
+            $additionalInformations[$entry->id] = [
+                'favorites' => $favs,
+                'timeslots' => $timeslots
+            ];
+        }
+
+        return view("sigs.show", compact([
+            'sig',
+            'additionalInformations',
+        ]));
+    }
+
+    public function edit(SigEvent $sig) {
+        $this->authorize('update', $sig);
 
         $host_names      = SigHost::pluck("name")->all();
         $locations  = SigLocation::orderBy("name")->get();

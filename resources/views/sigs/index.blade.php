@@ -20,7 +20,9 @@
                         @if($sig->description == "")
                             <div class="badge bg-danger">Text fehlt!</div>
                         @endif
-                        {{ $sig->name }}
+                        <a href="{{ route("sigs.show", $sig) }}">
+                            {{ $sig->name }}
+                        </a>
                     </td>
                     <td>
                         <a href="{{ route("hosts.show", $sig->sigHost) }}">

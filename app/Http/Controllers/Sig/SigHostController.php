@@ -6,19 +6,30 @@ use \Gate;
 use App\Http\Controllers\Controller;
 use App\Models\SigHost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SigHostController extends Controller
 {
     public function index() {
-        $hosts = SigHost::withCount("sigEvents")->get();
+        if(auth()->user()?->can("manage_hosts"))
+            $hosts = SigHost::all();
+        else
+            $hosts = SigHost::public()->get();
 
         return view("hosts.index", compact("hosts"));
     }
 
     public function show(SigHost $host) {
+        $events = $host->sigEvents()
+            ->with("timeTableEntries")
+            ->get()
+            ->sortBy(function($event, $key) {
+                return ($event->timeTableEntries->first()?->start);
+            });
+
         return view("hosts.show", [
             'host' => $host,
-            'sigs' => $host->sigEvents,
+            'sigs' => $events,
         ]);
     }
 
