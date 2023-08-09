@@ -5,6 +5,7 @@
     "Locations": "Räumlichkeiten",
     "Location": "Location",
     "Attendees": "Teilnehmer",
+    "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
 
     "Administration": "Administration",
@@ -32,7 +33,7 @@
     "Delete Location": "Location löschen",
 
     "Welcome to the SIG-Manager, here you can:": "Herzlich Willkommen beim SIG-Manager, hier kannst du:",
-    "Access the Event Schedule": "Den Programmplan abrufen",
+    "Access the event schedule": "Den Programmplan abrufen",
     "View Schedule": "Zum Programmplan",
     "Signup for specific SIGs": "Dich für bestimmte SIGs anmelden",
     "Manage Your Own SIGs": "Deine eigenen SIGs verwalten",
