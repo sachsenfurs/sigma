@@ -103,7 +103,7 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                        
+
                                         <li><hr class="dropdown-divider"></li>
 
                                     @endcanany

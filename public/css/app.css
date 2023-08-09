@@ -13524,3 +13524,13 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+@media (prefers-color-scheme: light) {
+  .card {
+    --bs-card-bg: var(--bs-white);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .card {
+    --bs-card-bg: var(--bs-dark-bg-subtle);
+  }
+}
