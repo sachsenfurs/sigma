@@ -480,7 +480,7 @@
         let eventID = $(this).data('event');
 
         $.ajax({
-            url: '/set-favorite',
+            url: {{ route('favorites.store') }},
             method: 'POST',
             data: {
                 _token:'<?php echo csrf_token(); ?>',
@@ -488,9 +488,9 @@
             },
             dataType: 'JSON',
             success: function(data) {
-               //Modal
                $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');
             }
+            // Eine schöne Vue bauen ;D
         });
     });
 </script>

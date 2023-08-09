@@ -33,7 +33,7 @@
                                                         <h3>{{ date('H:i', strtotime($ts->slot_start)) }} - {{ date('H:i', strtotime($ts->slot_end)) }}</h3>
                                                     </div>
                                                     <div class="col-12 col-md-9 p-2">
-                                                        <h3>Attendees:</h3>
+                                                        <h3>{{ __('Attendees') }}</h3>
                                                         <div class="row">
                                                             @foreach ($additionalInformations[$tte->id]['timeslots'][$ts->id] as $attendee)
                                                                 <div class="col-12 col-md-6">
