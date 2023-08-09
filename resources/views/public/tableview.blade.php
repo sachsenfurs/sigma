@@ -227,7 +227,7 @@
                                                                         class="bi bi-heart-fill"></span>
                                                                 </a>
                                                             @else
-                                                                <a type="button" class="btn text-black btn-lg fav-btn"
+                                                                <a type="button" class="btn btn-lg fav-btn"
                                                                     data-event="{{ $event->id }}">
                                                                     <span id="fav-{{ $event->id }}"
                                                                         class="bi bi-heart"></span>
