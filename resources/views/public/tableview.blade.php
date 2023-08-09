@@ -5,7 +5,7 @@
     ul.nav {
         display: inline-block;
         white-space: nowrap;
-    }y
+    }
 
     table {
         margin: 0;
@@ -169,14 +169,15 @@
                     </div>
 
                     @php
-                        $currentTime = \Illuminate\Support\Carbon::parse()
+                        $currentTime = \Illuminate\Support\Carbon::parse();
                     @endphp
                     <div class="tab-content">
                         <div class="tab-pane active" id="All{{ $index + 1 }}">
                             @foreach ($entries as $event)
                                 @if ($event->start->format('d.m.Y') == $day)
                                     <div class="d-flex justify-content-center pt-2">
-                                        <div class="card {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
+                                        <div class="card {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}"
+                                            style="width: 50rem;">
                                             <div class="row g-0">
                                                 <div class="col-md-3 text-center pt-2 border-end">
                                                     <h5>
@@ -185,43 +186,54 @@
                                                     <p>{{ $event->duration }} Min </p>
                                                 </div>
                                                 <div class="col-md-8 border-light">
-                                                    <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
-                                                        <div class="card-body">
-                                                            <div class="row text-start" style="margin-top: 0.5rem;">
-                                                                <div class="col-12 col-md-12">
-                                                                    <div class="col-12 text-start col-md-12">
+
+                                                    <div class="card-body">
+                                                        <div class="row text-start" style="margin-top: 0.5rem;">
+                                                            <div class="col-12 col-md-12">
+                                                                <div class="col-12 text-start col-md-12">
+                                                                    <a
+                                                                        href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
                                                                         <h5><b><i class="bi bi-calendar-week"></i>
-                                                                            {{ $event->sigEvent->name }}</b>
+                                                                                {{ $event->sigEvent->name }}</b>
                                                                         </h5>
-                                                                    </div>
-                                                                    <div class="col-12 text-start col-md-12">
-                                                                        @if ($event->sigEvent->sigHost->hide == 0)
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-12 text-start col-md-12">
+                                                                    <a href="{{ route('hosts.show', $event->sigEvent->sighost->id) }}"class="nav nav-link">
+                                                                    @if ($event->sigEvent->sigHost->hide == 0)
                                                                         <i class="bi bi-person-circle"></i>
                                                                         {{ $event->sigEvent->sigHost->name }}
-                                                                        @endif
-                                                                    </div>
-                                                                    <div class="col-12 text-start col-md-12">
-                                                                        <i class="bi bi-geo-alt"></i>
-                                                                        {{ $event->sigEvent->sigLocation->name }}
-                                                                    </div>
+                                                                    @endif
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-12 text-start col-md-12">
+                                                                    <a href="{{ route('locations.show', $event->sigLocation->id)}}" class="nav nav-link">
+                                                                    <i class="bi bi-geo-alt"></i>
+                                                                    {{ $event->sigEvent->sigLocation->name }}
+                                                                </a>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-1 border-light">
-                                                    <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                    <div class="mt-1"
+                                                        style="display: flex; align-items: center; justify-content: center;">
                                                         @if (!is_null(auth()->user()))
-                                                        @if ($event->getFavStatus())
-                                                            <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
-                                                            </a>
-                                                        @else
-                                                            <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
-                                                            </a>
+                                                            @if ($event->getFavStatus())
+                                                                <a type="button" class="btn text-danger btn-lg fav-btn"
+                                                                    data-event="{{ $event->id }}">
+                                                                    <span id="fav-{{ $event->id }}"
+                                                                        class="bi bi-heart-fill"></span>
+                                                                </a>
+                                                            @else
+                                                                <a type="button" class="btn text-black btn-lg fav-btn"
+                                                                    data-event="{{ $event->id }}">
+                                                                    <span id="fav-{{ $event->id }}"
+                                                                        class="bi bi-heart"></span>
+                                                                </a>
+                                                            @endif
                                                         @endif
-                                                    @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -237,7 +249,8 @@
                                     @if ($event->start->format('d.m.Y') == $day)
                                         @if ($event->sigEvent->sigLocation->id == $location->id)
                                             <div class="d-flex justify-content-center pt-2">
-                                                <div class="card text-center {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}" style="width: 50rem;">
+                                                <div class="card text-center {{ $currentTime > $event->start && $currentTime < $event->end ? 'time' : '' }}"
+                                                    style="width: 50rem;">
                                                     <div class="row g-0">
                                                         <div class="col-md-3 text-center pt-2 border-end">
                                                             <h5>
@@ -246,38 +259,51 @@
                                                             <p>{{ $event->duration }} Min </p>
                                                         </div>
                                                         <div class="col-md-8 border-light">
-                                                            <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
-                                                                <div class="card-body">
-                                                                    <div class="row text-start" style="margin-top: 0.5rem;">
-                                                                        <div class="col-12 col-md-12">
-                                                                            <div class="col-12 text-start col-md-12">
-                                                                                <h5><b><i class="bi bi-calendar-week"></i>{{ $event->sigEvent->name }}</b>
+
+                                                            <div class="card-body">
+                                                                <div class="row text-start" style="margin-top: 0.5rem;">
+                                                                    <div class="col-12 col-md-12">
+                                                                        <div class="col-12 text-start col-md-12">
+                                                                            <a
+                                                                                href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
+                                                                                <h5><b><i
+                                                                                            class="bi bi-calendar-week"></i>{{ $event->sigEvent->name }}</b>
                                                                                 </h5>
-                                                                            </div>
-                                                                            <div class="col-12 text-start col-md-12">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="col-12 text-start col-md-12">
+                                                                            <a
+                                                                                href="{{ route('hosts.show', $event->sigEvent->sighost->id) }}"class="nav nav-link">
                                                                                 @if ($event->sigEvent->sigHost->hide == 0)
                                                                                     <i class="bi bi-person-circle"></i>
                                                                                     {{ $event->sigEvent->sigHost->name }}
                                                                                 @endif
-                                                                            </div>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </a>
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-1 border-light">
-                                                            <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                                            <div class="mt-1"
+                                                                style="display: flex; align-items: center; justify-content: center;">
                                                                 @if (!is_null(auth()->user()))
-                                                                @if ($event->getFavStatus())
-                                                                    <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
-                                                                    </a>
-                                                                @else
-                                                                    <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
-                                                                    </a>
+                                                                    @if ($event->getFavStatus())
+                                                                        <a type="button"
+                                                                            class="btn text-danger btn-lg fav-btn"
+                                                                            data-event="{{ $event->id }}">
+                                                                            <span id="fav-{{ $event->id }}"
+                                                                                class="bi bi-heart-fill"></span>
+                                                                        </a>
+                                                                    @else
+                                                                        <a type="button"
+                                                                            class="btn text-black btn-lg fav-btn"
+                                                                            data-event="{{ $event->id }}">
+                                                                            <span id="fav-{{ $event->id }}"
+                                                                                class="bi bi-heart"></span>
+                                                                        </a>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -293,25 +319,25 @@
             @endforeach
         </div>
     </div>
-</body>
+    </body>
 
-<script>
-    $('.fav-btn').click(function () {
-        let eventID = $(this).data('event');
+    <script>
+        $('.fav-btn').click(function() {
+            let eventID = $(this).data('event');
 
-        $.ajax({
-            url: '/set-favorite',
-            method: 'POST',
-            data: {
-                _token:'<?php echo csrf_token(); ?>',
-                timetable_entry_id:eventID
-            },
-            dataType: 'JSON',
-            success: function(data) {
-               //Modal
-               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');
-            }
+            $.ajax({
+                url: '/set-favorite',
+                method: 'POST',
+                data: {
+                    _token: '<?php echo csrf_token(); ?>',
+                    timetable_entry_id: eventID
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    //Modal
+                    $('#fav-'.eventID).removeClass('bi-heart').addClass('bi-heart-fill');
+                }
+            });
         });
-    });
-</script>
-@endsectionä
+    </script>
+    @endsectionä
