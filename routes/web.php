@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Public\ConbookExportController;
 use App\Http\Controllers\Public\TableViewController;
 use App\Http\Controllers\Public\TimeslotShowController;
+use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\Sig\SigEventController;
 use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
@@ -52,6 +53,8 @@ Route::get("/hosts/{host:slug}", [SigHostController::class, 'show'])->name("host
 
 Route::resource("/locations", SigLocationController::class)->except('show');
 Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])->name("locations.show");
+
+Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
