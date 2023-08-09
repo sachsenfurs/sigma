@@ -54,7 +54,7 @@ class SigHostController extends Controller
 
         $host->update($validated);
 
-        return back()->withSuccess("Angabgen gespeichert!");
+        return back()->withSuccess("Angaben gespeichert!");
     }
 
     public function destroy(SigHost $host) {
