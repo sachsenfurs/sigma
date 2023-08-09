@@ -210,12 +210,12 @@
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
-                                                <button type="button" class="btn btn-danger text-white" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal">
+                                                <button type="button" class="btn btn-danger text-white" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal">
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
                                             <div class="d-block d-sm-none">
-                                                <button type="button" class="btn btn-danger text-white btn-lg" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal" data-eventname="{{ $fav->timetableEntry->sigEvent->name }}">
+                                                <button type="button" class="btn btn-danger text-white btn-lg" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal" data-eventname="{{ $fav->timetableEntry->sigEvent->name }}">
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
@@ -287,7 +287,8 @@
             <strong><p class="m-0" id="deleteFavModalEventName"></p></strong>
         </div>
         <div class="modal-footer">
-            <form id="deleteFavForm" action="{{ route('remove-favorite') }}" method="POST">
+            <form id="deleteFavForm" action="{{ route('favorites.delete') }}" method="POST">
+                @method('DELETE')
                 @csrf
                 <input type="hidden" id="deleteFavForm_timetable_entry_id" name="timetable_entry_id" />
                 <a class="btn btn-secondary" onclick="$('#deleteFavModal').modal('hide');" data-dismiss="modal">{{ __("Abort") }}</a>
