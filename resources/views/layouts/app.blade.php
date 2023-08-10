@@ -66,6 +66,24 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown mx-3 d-flex">
+                            <a class="nav-link dropdown-toggle align-self-center" href="#" role="button" data-bs-toggle="dropdown" >
+                                <img class="align-middle mx-2" style="height: 1em; margin-top: -4px" src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                @foreach(config("app.locales") AS $locale=>$name)
+                                    @if(App::getLocale() != $locale)
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route("lang.set", $locale) }}">
+                                                <img class="align-middle" src="/icons/{{ $locale }}-flag.svg" style="max-height: 1em" alt="[{{ $locale }}]">
+                                                <span class="align-middle mx-1">{{ $name }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             @foreach(config("app.locales") AS $locale=>$name)
@@ -82,8 +100,8 @@
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <li class="nav-item dropdown d-flex">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-self-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->name }}
                                 </a>
 
@@ -107,17 +125,6 @@
                                         <li><hr class="dropdown-divider"></li>
 
                                     @endcanany
-                                    <li>
-                                        @foreach(config("app.locales") AS $locale=>$name)
-                                            @if(App::getLocale() != $locale)
-                                                <a class="dropdown-item" href="{{ route("lang.set", $locale) }}">
-                                                    <img class="align-middle" src="/icons/{{ $locale }}-flag.svg" style="max-height: 1em" alt="[{{ $locale }}]">
-                                                    <span class="align-middle">{{ $name }}</span>
-                                                </a>
-                                            @endif
-                                        @endforeach
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
