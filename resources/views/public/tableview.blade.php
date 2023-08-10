@@ -340,4 +340,4 @@
             });
         });
     </script>
-    @endsectionä
+    @endsection
