@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
 use App\Models\SigFavorite;
+use Redirect;
 
 class AjaxController extends Controller
 {
@@ -29,35 +30,6 @@ class AjaxController extends Controller
             if (auth()->user()->favorites()->create($attributes)) {
                 $result = 'success';
             }
-        }
-
-        $response = [
-            'status' => $result
-        ];
-
-        return response()->json($response);
-    }
-
-    /**
-     * Removes a favorite on an event.
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function removeFavorite(Request $request)
-    {
-        // Needs to be fixed, maybe function needs to be moved
-        //if (!$request->ajax()) {
-        //    throw new UnauthorizedException();
-        //}
-
-        $attributes = $request->validate([
-            'timetable_entry_id' => 'required|exists:timetable_entries,id'
-        ]);
-
-        $result = 'error';
-        if (auth()->user()->favorites()->remove($attributes)) {
-            $result = 'success';
         }
 
         $response = [

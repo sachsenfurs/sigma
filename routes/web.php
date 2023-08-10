@@ -15,6 +15,7 @@ use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
+use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
@@ -115,7 +116,10 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 
     Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
+
+    // Favorites
+    Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
+
     //Ajax-Controller
-    Route::post("/set-favorite", [AjaxController::class, 'setFavorite']);
-    Route::post("/remove-favorite", [AjaxController::class, 'removeFavorite'])->name('remove-favorite');
+    Route::post("/favorites", [AjaxController::class, 'setFavorite'])->name('favorites.store');
 });
