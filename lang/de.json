@@ -127,5 +127,6 @@
     "Do you really want to remove the following event from your favorites?": "Möchtest du wirklich das folgende Event von deinen Favoriten entfernen?",
     "Cancel registration?": "Anmeldung zurückziehen?",
     "Events you've signed up for:": "Events, für die du dich angemeldet hast:",
-    "Favorite Events": "Favorisierte Events"
+    "Favorite Events": "Favorisierte Events",
+    "Favorite successfully removed!": "Favorisiertes Event erfolgreich entfernt"
 }
