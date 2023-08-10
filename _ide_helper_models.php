@@ -12,6 +12,29 @@
 
 namespace App\Models{
 /**
+ * App\Models\SigAttendee
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $sig_timeslot_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigTimeslot $sigTimeslot
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee whereSigTimeslotId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigAttendee whereUserId($value)
+ */
+	class SigAttendee extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\SigEvent
  *
  * @property int $id
@@ -19,17 +42,21 @@ namespace App\Models{
  * @property int|null $sig_host_id
  * @property string $default_language defines the language for name & description, Other languages will be translated using sig_translations
  * @property array $languages two letter language code as JSON array
- * @property string $description
+ * @property string|null $description
  * @property int $sig_location_id
+ * @property int $reg_possible
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $time_table_count
+ * @property int|null $max_regs_per_day
+ * @property-read mixed $description_en
+ * @property-read mixed $name_en
+ * @property-read mixed $timetable_count
  * @property-read \App\Models\SigHost|null $sigHost
  * @property-read \App\Models\SigLocation $sigLocation
  * @property-read \App\Models\SigTranslation|null $sigTranslation
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimetableEntry[] $timeTableEntries
- * @property-read int|null $time_table_entries_count
- * @method static \Database\Factories\SigEventFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
+ * @property-read int|null $timetable_entries_count
+ * @method static \Database\Factories\SigEventFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent query()
@@ -38,7 +65,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereLanguages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigHostId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereUpdatedAt($value)
@@ -48,20 +77,51 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\SigFavorite
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $timetable_entry_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\TimetableEntry $timetableEntry
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereTimetableEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereUserId($value)
+ */
+	class SigFavorite extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\SigHost
  *
  * @property int $id
  * @property string $name
  * @property string $description
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SigEvent[] $sigEvents
+ * @property bool $hide
+ * @property int|null $reg_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
- * @method static \Database\Factories\SigHostFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
+ * @property-read int|null $timetable_entries_count
+ * @property-read \App\Models\User|null $user
+ * @method static \Database\Factories\SigHostFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigHost public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost query()
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereHide($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereRegId($value)
  */
 	class SigHost extends \Eloquent {}
 }
@@ -76,19 +136,23 @@ namespace App\Models{
  * @property array|null $render_ids layer id for displaying as interactive SVG or whatever
  * @property string|null $floor
  * @property string|null $room
+ * @property bool $infodisplay Is there a digital display in front of the door? (Signage)
  * @property string|null $roomsize
  * @property string|null $seats
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SigEvent[] $sigEvents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SigLocationTranslation[] $translation
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
+ * @property-read int|null $timetable_entries_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigLocationTranslation> $translation
  * @property-read int|null $translation_count
- * @method static \Database\Factories\SigLocationFactory factory(...$parameters)
+ * @method static \Database\Factories\SigLocationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation query()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereFloor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereInfodisplay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereRenderIds($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereRoom($value)
@@ -120,6 +184,33 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\SigReminder
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $timetable_entry_id
+ * @property int $send_at
+ * @property int|null $executed_at
+ * @property string|null $result
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereExecutedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereResult($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereSendAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereTimetableEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereUserId($value)
+ */
+	class SigReminder extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\SigTag
  *
  * @property int $id
@@ -135,13 +226,50 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\SigTimeslot
+ *
+ * @property int $id
+ * @property int $timetable_entry_id
+ * @property int $max_users
+ * @property string $slot_start
+ * @property string $slot_end
+ * @property string|null $reg_start
+ * @property string|null $reg_end
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $notes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $sigAttendees
+ * @property-read int|null $sig_attendees_count
+ * @property-read \App\Models\TimetableEntry $timetableEntry
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereMaxUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereTimetableEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereUpdatedAt($value)
+ */
+	class SigTimeslot extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\SigTranslation
  *
  * @property int $sig_event_id
  * @property string $language Language for this particular translation entry
  * @property string $name
  * @property string $description
- * @method static \Database\Factories\SigTranslationFactory factory(...$parameters)
+ * @property-read \App\Models\SigEvent $sigEvent
+ * @method static \Database\Factories\SigTranslationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation query()
@@ -155,27 +283,38 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TimeTableEntry
+ * App\Models\TimetableEntry
  *
  * @property int $id
  * @property int $sig_event_id
  * @property int|null $sig_location_id
- * @property string $start
- * @property string $end
- * @property int $cancelled
+ * @property \Illuminate\Support\Carbon $start
+ * @property \Illuminate\Support\Carbon $end
+ * @property bool $cancelled
  * @property int|null $replaced_by_id
+ * @property bool $hide
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
+ * @property-read int|null $favorites_count
+ * @property-read mixed $duration
  * @property-read TimetableEntry|null $parentEntry
  * @property-read TimetableEntry|null $replacedBy
  * @property-read \App\Models\SigEvent $sigEvent
- * @method static \Database\Factories\TimeTableEntryFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
+ * @property-read int|null $sig_timeslots_count
+ * @method static \Database\Factories\TimetableEntryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry noAnnouncements()
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry public()
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry query()
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereCancelled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereHide($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereReplacedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereSigEventId($value)
@@ -183,7 +322,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TimetableEntry whereUpdatedAt($value)
  */
-	class TimeTableEntry extends \Eloquent {}
+	class TimetableEntry extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -192,25 +331,79 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string $email
+ * @property string|null $email
  * @property string $password
- * @property int $is_admin
+ * @property int $user_role_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @property int|null $reg_id
+ * @property string|null $language
+ * @property int|null $telegram_id
+ * @property array $groups
+ * @property string|null $avatar
+ * @property string|null $avatar_thumb
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $attendeeEvents
+ * @property-read int|null $attendee_events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
+ * @property-read int|null $favorites_count
+ * @property-read \App\Models\UserRole $role
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatarThumb($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGroups($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRegId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTelegramId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUserRoleId($value)
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\UserRole
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $fore_color
+ * @property string $border_color
+ * @property string $background_color
+ * @property int $perm_manage_settings
+ * @property int $perm_manage_users
+ * @property int $perm_manage_events
+ * @property int $perm_manage_locations
+ * @property int $perm_manage_hosts
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
+ * @property-read int|null $members_count
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereBackgroundColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereBorderColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereForeColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageEvents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageHosts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageLocations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageSettings($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereUpdatedAt($value)
+ */
+	class UserRole extends \Eloquent {}
 }
 
