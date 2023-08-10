@@ -4,7 +4,7 @@
 
 <div class="card mb-4">
     <div class="card-header">
-        <h4 class="d-inline">{{ $sig->name }}</h4>
+        <h4 class="d-inline">{{ $sig->name_localized }}</h4>
         @can("manage_events")
             <a href="{{ route("sigs.edit", $sig) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
@@ -12,7 +12,7 @@
 
     <div class="card-body">
         <x-markdown>
-            {{ $sig->description }}
+            {{ $sig->description_localized }}
         </x-markdown>
     </div>
 

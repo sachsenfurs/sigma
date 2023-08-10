@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasTimetableEntries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
 {
@@ -39,6 +40,14 @@ class SigEvent extends Model
 
     public function getDescriptionEnAttribute() {
         return $this->sigTranslation->description ?? $this->description;
+    }
+
+    public function getNameLocalizedAttribute() {
+        return App::getLocale() == "en" ? $this->name_en : $this->name;
+    }
+
+    public function getDescriptionLocalizedAttribute() {
+        return App::getLocale() == "en" ? $this->description_en : $this->description;
     }
 
     public function isCompletelyPrivate() {

@@ -14,7 +14,7 @@
                             <i class="bi bi-person-circle"></i>
                             {{ $host->name }}
                         </h2>
-                        <p class="text-muted">{{ $host->description }}</p>
+                        <p class="text-muted">{{ $host->description_localized }}</p>
                         @can("manage_hosts")
                             <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan
