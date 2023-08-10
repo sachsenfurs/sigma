@@ -207,6 +207,7 @@ class SigEventController extends Controller
         } else {
             $sig->sigTranslation->name = $validated['name_en'];
             $sig->sigTranslation->description = $validated['description_en'];
+            $sig->sigTranslation->save();
         }
 
         $sig->save();
