@@ -133,45 +133,51 @@
     <div class="container">
 
 
-    <div class="mt-4">
-        <!-- Day Nav Tabs -->
-        <div class="scrollmenu">
-            <ul class="nav nav-tabs">
-                @foreach ($days as $index => $day)
-                    <li class="nav-item">
-                        <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                            href="#ConDay{{ $index + 1 }}">
-                            {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-
-        <!-- Tab panes /Content -->
-        <div class="card mt-3">
-            <div class="row g-0 flex-nowrap d-flex">
-                <div class="col-lg-2 col-4 d-flex">
-                    <div class="card-body align-self-center text-center">
-                        <h2>12:00</h2>
-                        <h5 class="text-muted">90min</h5>
-                    </div>
-                </div>
-                <div class="col-lg-10 col-8 d-flex">
-
-                    <div class="card-body align-self-center">
-                        <h1>Lorem ipsum.</h1>
-                        <p class="card-text">
-                            <i class="bi bi-person-circle"></i> Test 123
-                        </p>
-                        <p>
-                            <i class="bi bi-geo-alt"></i> Irgendwo
-                        </p>
-                    </div>
-                </div>
+        <div class="mt-4">
+            <!-- Day Nav Tabs -->
+            <div class="scrollmenu">
+                <ul class="nav nav-tabs">
+                    @foreach ($days as $index => $day)
+                        <li class="nav-item">
+                            <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
+                                href="#ConDay{{ $index + 1 }}">
+                                {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
+
+            <!-- Tab panes /Content -->
+            @foreach($entries AS $entry)
+                <div class="card mt-3">
+                    <div class="row g-0 flex-nowrap d-flex">
+                        <div class="col-lg-2 col-4 d-flex">
+                            <div class="card-body align-self-center text-center">
+                                <h2>{{ $entry->start->format("H:i") }}</h2>
+                                <h5 class="text-muted">{{ $entry->start->diffInMinutes($entry->end) }} min</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-6 d-flex">
+                            <div class="card-body align-self-center">
+                                <h1><a href="" class="text-decoration-none">{{ $entry->sigEvent->name }}</a></h1>
+                                <p class="card-text">
+                                    <i class="bi bi-person-circle"></i> {{ $entry->sigEvent->sigHost->name }}
+                                </p>
+                                <p>
+                                    <i class="bi bi-geo-alt"></i> {{ $entry->sigLocation->name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-body col-lg-1 col-2 d-flex">
+                            <a type="button" class="fav-btn text-secondary align-self-center w-100 text-end" data-event="{{ $entry->id }}">
+                                <i class="bi bi-heart" style="font-size: 2em"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
-    </div>
     </div>
         {{-- <table class="table">
         @foreach ($days as $day)
