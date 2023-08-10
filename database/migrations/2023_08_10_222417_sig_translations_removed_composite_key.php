@@ -17,6 +17,11 @@ return new class extends Migration
             $table->dropPrimary('language');
             $table->primary("sig_event_id");
         });
+
+        Schema::table("sig_location_translations", function(Blueprint $table) {
+            $table->dropPrimary('language');
+            $table->primary("sig_location_id");
+        });
     }
 
     /**
