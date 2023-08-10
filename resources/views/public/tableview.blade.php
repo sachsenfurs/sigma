@@ -1,138 +1,139 @@
 @extends('layouts.app')
 @section('title', 'Program')
-@include('layouts.head')
-<style>
-    ul.nav {
-        display: inline-block;
-        white-space: nowrap;
-    }y
+{{--<style>--}}
+{{--    ul.nav {--}}
+{{--        display: inline-block;--}}
+{{--        white-space: nowrap;--}}
+{{--    }--}}
 
-    table {
-        margin: 0;
-        padding: 0;
-        width: calc(100% - 2px);
-    }
+{{--    table {--}}
+{{--        margin: 0;--}}
+{{--        padding: 0;--}}
+{{--        width: calc(100% - 2px);--}}
+{{--    }--}}
 
-    table,
-    tr,
-    td {
-        box-sizing: border-box;
-    }
+{{--    table,--}}
+{{--    tr,--}}
+{{--    td {--}}
+{{--        box-sizing: border-box;--}}
+{{--    }--}}
 
-    td.event {
-        border: 2px solid #000;
-        text-align: center;
-        vertical-align: middle;
-        font-size: 1.4em;
-        color: #eee;
-        cursor: pointer;
-    }
+{{--    td.event {--}}
+{{--        border: 2px solid #000;--}}
+{{--        text-align: center;--}}
+{{--        vertical-align: middle;--}}
+{{--        font-size: 1.4em;--}}
+{{--        color: #eee;--}}
+{{--        cursor: pointer;--}}
+{{--    }--}}
 
-    /* Color Official East Event */
-    td.oee {
-        background: #ffbf90;
-    }
+{{--    /* Color Official East Event */--}}
+{{--    td.oee {--}}
+{{--        background: #ffbf90;--}}
+{{--    }--}}
 
-    /* Color Fursuitevents/Fursuitrelevantes */
-    td.fe {
-        background: #ffc133;
-    }
+{{--    /* Color Fursuitevents/Fursuitrelevantes */--}}
+{{--    td.fe {--}}
+{{--        background: #ffc133;--}}
+{{--    }--}}
 
-    /* Color Gamingevents/GameShow/Compatition */
-    td.grsswk {
-        background: #fee744;
-    }
+{{--    /* Color Gamingevents/GameShow/Compatition */--}}
+{{--    td.grsswk {--}}
+{{--        background: #fee744;--}}
+{{--    }--}}
 
-    /* Color GuestSigs/Workshops */
-    td.gswssa {
-        background: #fd92c0;
-    }
+{{--    /* Color GuestSigs/Workshops */--}}
+{{--    td.gswssa {--}}
+{{--        background: #fd92c0;--}}
+{{--    }--}}
 
-    /* Color Artshow */
-    td.as {
-        background: #30c1b6;
-    }
+{{--    /* Color Artshow */--}}
+{{--    td.as {--}}
+{{--        background: #30c1b6;--}}
+{{--    }--}}
 
-    /* Color Con-Ops */
-    td.lsco {
-        background: #ff441c;
-    }
+{{--    /* Color Con-Ops */--}}
+{{--    td.lsco {--}}
+{{--        background: #ff441c;--}}
+{{--    }--}}
 
-    /* Color Registration */
-    td.reg {
-        background: #1c2694;
-    }
+{{--    /* Color Registration */--}}
+{{--    td.reg {--}}
+{{--        background: #1c2694;--}}
+{{--    }--}}
 
-    td a {
-        text-decoration: underline;
-        box-sizing: content-box;
-        display: block;
-        color: #fff;
-    }
+{{--    td a {--}}
+{{--        text-decoration: underline;--}}
+{{--        box-sizing: content-box;--}}
+{{--        display: block;--}}
+{{--        color: #fff;--}}
+{{--    }--}}
 
-    td a:hover {
-        text-decoration: none;
-        color: #cccccc;
-    }
+{{--    td a:hover {--}}
+{{--        text-decoration: none;--}}
+{{--        color: #cccccc;--}}
+{{--    }--}}
 
-    tr.active {
-        background: #061557;
-    }
+{{--    tr.active {--}}
+{{--        background: #061557;--}}
+{{--    }--}}
 
-    div.activ {
-        background: #b35050;
-    }
+{{--    div.activ {--}}
+{{--        background: #b35050;--}}
+{{--    }--}}
 
-    tr.weekday {
-        background: #cccccc;
-        font-size: 22px;
-    }
+{{--    tr.weekday {--}}
+{{--        background: #cccccc;--}}
+{{--        font-size: 22px;--}}
+{{--    }--}}
 
-    strong.weekday {
-        background: #cccccc;
-        font-size: 22px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
+{{--    strong.weekday {--}}
+{{--        background: #cccccc;--}}
+{{--        font-size: 22px;--}}
+{{--        padding-left: 1rem;--}}
+{{--        padding-right: 1rem;--}}
+{{--    }--}}
 
-    div.test {
-        display: flex;
-        color: #0b7437;
-        font-size: 15px;
-        font-weight: 800;
-    }
+{{--    div.test {--}}
+{{--        display: flex;--}}
+{{--        color: #0b7437;--}}
+{{--        font-size: 15px;--}}
+{{--        font-weight: 800;--}}
+{{--    }--}}
 
-    div.location {
-        width: calc(100% - 2px);
-    }
+{{--    div.location {--}}
+{{--        width: calc(100% - 2px);--}}
+{{--    }--}}
 
-    div.time {
-        width: calc(50% - 1px);
-    }
+{{--    div.time {--}}
+{{--        width: calc(50% - 1px);--}}
+{{--    }--}}
 
-    div.scrollmenu {
-        background-color: #eee;
-        overflow-x: auto;
-        overflow-y: hidden;
-    }
+{{--    div.scrollmenu {--}}
+{{--        background-color: #eee;--}}
+{{--        overflow-x: auto;--}}
+{{--        overflow-y: hidden;--}}
+{{--    }--}}
 
-    div.scrollmenu li {
-        display: inline-flex;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-    }
+{{--    div.scrollmenu li {--}}
+{{--        display: inline-flex;--}}
+{{--        color: white;--}}
+{{--        text-align: center;--}}
+{{--        text-decoration: none;--}}
+{{--    }--}}
 
-    div.scrollmenu a:hover {
-        background-color: #777;
-    }
-</style>
+{{--    div.scrollmenu a:hover {--}}
+{{--        background-color: #777;--}}
+{{--    }--}}
+{{--</style>--}}
 <!-- -->
 <!-- Looking for an API? Ask @Kidran! -->
 <!-- -->
 @section('content')
-    <div class="mt-4">
+    <div class="container">
 
+
+    <div class="mt-4">
         <!-- Day Nav Tabs -->
         <div class="scrollmenu">
             <ul class="nav nav-tabs">
@@ -148,146 +149,29 @@
         </div>
 
         <!-- Tab panes /Content -->
-        <div class="tab-content">
-            @foreach ($days as $index => $day)
-                <div class="tab-pane{{ $loop->first ? ' active' : '' }}" id="ConDay{{ $index + 1 }}">
-                    <div class="scrollmenu">
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#All{{ $index + 1 }}">
-                                    All
-                                </a>
-                            </li>
-                            @foreach ($locations as $location)
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab"
-                                        href="#{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
-                                        {{ $location->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="All{{ $index + 1 }}">
-                            @foreach ($entries as $event)
-                                @if ($event->start->format('d.m.Y') == $day)
-                                    <div class="d-flex justify-content-center pt-2">
-                                        <div class="card" style="width: 50rem;">
-                                            <div class="row g-0">
-                                                <div class="col-md-3 text-center pt-2 border-light bg-light">
-                                                    <h5>
-                                                        {{ $event->start->format('H:i') }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-md-8 border-light">
-                                                    <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
-                                                        <div class="card-body">
-                                                            <div class="row text-start" style="margin-top: 0.5rem;">
-                                                                <div class="col-12 col-md-12">
-                                                                    <div class="col-12 text-start col-md-12">
-                                                                        <h5><b><i class="bi bi-ticket-fill"></i>
-                                                                            {{ $event->sigEvent->name }}</b>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-12 text-start col-md-12">
-                                                                        @if ($event->sigEvent->sigHost->hide == 0)
-                                                                        <i class="bi bi-person-fill"></i>
-                                                                        {{ $event->sigEvent->sigHost->name }}
-                                                                        @endif
-                                                                    </div>
-                                                                    <div class="col-12 text-start col-md-12">
-                                                                        <i class="bi bi-geo-fill"></i>
-                                                                        {{ $event->sigEvent->sigLocation->name }}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-1 border-light">
-                                                    <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
-                                                        @if (!is_null(auth()->user()))
-                                                        @if ($event->getFavStatus())
-                                                            <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
-                                                            </a>
-                                                        @else
-                                                            <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
-                                                            </a>
-                                                        @endif
-                                                    @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                        @foreach ($locations as $location)
-                            <div class="tab-pane"
-                                id="{{ Str::remove(['-', ' ', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], $location->name) . $index + 1 }}">
-                                @foreach ($entries as $event)
-                                    @if ($event->start->format('d.m.Y') == $day)
-                                        @if ($event->sigEvent->sigLocation->id == $location->id)
-                                            <div class="d-flex justify-content-center pt-2">
-                                                <div class="card" style="width: 50rem;">
-                                                    <div class="row g-0">
-                                                        <div class="col-md-3 text-center pt-2 border-light bg-light">
-                                                            <h5>
-                                                                {{ $event->start->format('H:i') }}
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-md-8 border-light">
-                                                            <a href="{{ route('public.timeslot-show', $event->id) }}"class="nav nav-link">
-                                                                <div class="card-body">
-                                                                    <div class="row text-start" style="margin-top: 0.5rem;">
-                                                                        <div class="col-12 col-md-12">
-                                                                            <div class="col-12 text-start col-md-12">
-                                                                                <h5><b><i class="bi bi-ticket-fill"></i>{{ $event->sigEvent->name }}</b>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <div class="col-12 text-start col-md-12">
-                                                                                @if ($event->sigEvent->sigHost->hide == 0)
-                                                                                    <i class="bi bi-person-fill"></i>
-                                                                                    {{ $event->sigEvent->sigHost->name }}
-                                                                                @endif
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-1 border-light">
-                                                            <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
-                                                                @if (!is_null(auth()->user()))
-                                                                @if ($event->getFavStatus())
-                                                                    <a type="button" class="btn text-danger btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart-fill"></span>
-                                                                    </a>
-                                                                @else
-                                                                    <a type="button" class="btn text-black btn-lg fav-btn" data-event="{{ $event->id }}">
-                                                                        <span id="fav-{{ $event->id }}" class="bi bi-heart"></span>
-                                                                    </a>
-                                                                @endif
-                                                            @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            </div>
-                        @endforeach
+        <div class="card mt-3">
+            <div class="row g-0 flex-nowrap d-flex">
+                <div class="col-lg-2 col-4 d-flex">
+                    <div class="card-body align-self-center text-center">
+                        <h2>12:00</h2>
+                        <h5 class="text-muted">90min</h5>
                     </div>
                 </div>
-            @endforeach
+                <div class="col-lg-10 col-8 d-flex">
+
+                    <div class="card-body align-self-center">
+                        <h1>Lorem ipsum.</h1>
+                        <p class="card-text">
+                            <i class="bi bi-person-circle"></i> Test 123
+                        </p>
+                        <p>
+                            <i class="bi bi-geo-alt"></i> Irgendwo
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
     </div>
         {{-- <table class="table">
         @foreach ($days as $day)
@@ -325,14 +209,14 @@
                             if (isset($rowspan[$x][$y])) {
                                 continue;
                             }
-                        
+
                             $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
                                 return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
                             });
                             if ($events->first() && $events->first()->sigEvent) {
                                 $sig = $events->first()->sigEvent;
                                 $rows = $events->first()->duration / 30;
-                        
+
                                 if ($rows + $y > 32) {
                                     $rows = 34 - $y;
                                 }
@@ -431,14 +315,14 @@
                     if (isset($rowspan[$x][$y])) {
                         continue;
                     }
-                
+
                     $events = $entries->filter(function ($value, $key) use ($locations, $currentTime, $x, $y) {
                         return $value->start <= $currentTime && $value->end > $currentTime && ($value->sigLocation->name ?? '') == $locations[$x]->name;
                     });
                     if ($events->first() && $events->first()->sigEvent) {
                         $sig = $events->first()->sigEvent;
                         $rows = $events->first()->duration / 30;
-                
+
                         if ($rows + $y > 32) {
                             $rows = 34 - $y;
                         }
@@ -475,23 +359,23 @@
     @endfor
 </table> --}}
 
-<script>
-    $('.fav-btn').click(function () {
-        let eventID = $(this).data('event');
+    {{--<script>--}}
+    {{--    $('.fav-btn').click(function () {--}}
+    {{--        let eventID = $(this).data('event');--}}
 
-        $.ajax({
-            url: {{ route('favorites.store') }},
-            method: 'POST',
-            data: {
-                _token:'<?php echo csrf_token(); ?>',
-                timetable_entry_id:eventID
-            },
-            dataType: 'JSON',
-            success: function(data) {
-               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');
-            }
-            // Eine schöne Vue bauen ;D
-        });
-    });
-</script>
+    {{--        $.ajax({--}}
+    {{--            url: {{ route('favorites.store') }},--}}
+    {{--            method: 'POST',--}}
+    {{--            data: {--}}
+    {{--                _token:'<?php echo csrf_token(); ?>',--}}
+    {{--                timetable_entry_id:eventID--}}
+    {{--            },--}}
+    {{--            dataType: 'JSON',--}}
+    {{--            success: function(data) {--}}
+    {{--               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');--}}
+    {{--            }--}}
+    {{--            // Eine schöne Vue bauen ;D--}}
+    {{--        });--}}
+    {{--    });--}}
+    {{--</script>--}}
 @endsection

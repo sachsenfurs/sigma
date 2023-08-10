@@ -46,6 +46,7 @@ Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name(
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
 Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
+Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
 
