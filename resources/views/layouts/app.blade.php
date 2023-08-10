@@ -66,36 +66,27 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown mx-3 d-flex">
-                            <a class="nav-link dropdown-toggle align-self-center" href="#" role="button" data-bs-toggle="dropdown" >
-                                <img class="align-middle mx-2" style="height: 1em; margin-top: -4px" src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img class="align-middle me-2" style="height: 1em; margin-top: -4px" src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
                             </a>
-
                             <ul class="dropdown-menu">
                                 @foreach(config("app.locales") AS $locale=>$name)
                                     @if(App::getLocale() != $locale)
                                         <li>
                                             <a class="dropdown-item" href="{{ route("lang.set", $locale) }}">
-                                                <img class="align-middle" src="/icons/{{ $locale }}-flag.svg" style="max-height: 1em" alt="[{{ $locale }}]">
+                                                <i class="bi"><img class="" src="/icons/{{ $locale }}-flag.svg" style="height: 1em; margin-top: -2px" alt="[{{ $locale }}]"></i>
                                                 <span class="align-middle mx-1">{{ $name }}</span>
                                             </a>
                                         </li>
-                                    @endif
+                                     @endif
                                 @endforeach
                             </ul>
                         </li>
+
+
                         <!-- Authentication Links -->
                         @guest
-                            @foreach(config("app.locales") AS $locale=>$name)
-                                @if(App::getLocale() != $locale)
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route("lang.set", $locale) }}">
-                                            <img class="" src="/icons/{{ $locale }}-flag.svg" style="height: 1em; margin-top: -2px" alt="[{{ $locale }}]">
-                                            <span class="">{{ $name }}</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
