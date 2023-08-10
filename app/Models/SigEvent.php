@@ -14,6 +14,7 @@ class SigEvent extends Model
         'languages' => 'array',
     ];
 
+
     protected $guarded = [];
 
     public function sigHost() {
@@ -35,35 +36,9 @@ class SigEvent extends Model
     public function getNameEnAttribute() {
         return $this->sigTranslation->name ?? $this->name;
     }
-    public function setNameEnAttribute($name_en) {
-        if(!$this->sigTranslation) {
-            $translate = $this->sigTranslation()->create([
-                'language' => "en",
-                'description' => $this->description,
-                'name' => $name_en,
-            ]);
-        } else {
-            $this->sigTranslation->name = $name_en;
-            $this->sigTranslation->save();
-        }
-    }
 
     public function getDescriptionEnAttribute() {
         return $this->sigTranslation->description ?? $this->description;
-    }
-
-    public function setDescriptionEnAttribute($description_en) {
-        if(!$this->sigTranslation) {
-            $translate = $this->sigTranslation()->create([
-                'language' => "en",
-                'description' => $description_en,
-                'name' => $this->name,
-            ]);
-
-        } else {
-            $this->sigTranslation->description = $description_en;
-            $this->sigTranslation->save();
-        }
     }
 
     public function isCompletelyPrivate() {

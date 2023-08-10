@@ -160,10 +160,11 @@ class SigEventController extends Controller
 
     public function update(Request $request, SigEvent $sig) {
         $this->authorize('update', $sig);
+
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
-            'host_id' => 'required',
+            'host_id' => 'exclude_if:host_id,NEW|required|exists:sig_hosts,id',
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'max_regs_per_day' => 'nullable|integer',
@@ -189,26 +190,27 @@ class SigEventController extends Controller
             $host_id = SigHost::whereId($host_id)->first()->id;
         }
 
-        unset($validated['host']);
-        unset($validated['host_id']);
-        unset($validated['reg_id']);
-
+        $sig->name = $validated['name'];
+        $sig->description = $validated['description'];
         $sig->sigLocation()->associate($validated['location']);
-        unset($validated['location']);
-
-        $sig->update($validated);
         $sig->languages = $languages;
         $sig->sigHost()->associate($host_id);
+        $sig->reg_possible = $request->has('reg_possible');
+        $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
 
-        if ($request->has('reg_possible')) {
-			$sig->reg_possible = true;
-		} else {
-            $sig->reg_possible = false;
+        if(!$sig->sigTranslation) {
+            $sig->sigTranslation()->create([
+                'language' => 'en',
+                'name' => $validated['name_en'],
+                'description' => $validated['description_en'],
+            ]);
+        } else {
+            $sig->sigTranslation->name = $validated['name_en'];
+            $sig->sigTranslation->description = $validated['description_en'];
         }
-        if ($validated['max_regs_per_day']) {
-            $sig->max_regs_per_day = $validated['max_regs_per_day'];
-        }
+
         $sig->save();
+
         return back()->withSuccess("Änderungen gespeichert");
     }
 
