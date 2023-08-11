@@ -10,4 +10,9 @@ class SigTag extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    public function sigEvent() {
+        return $this->belongsToMany(SigEvent::class);
+    }
+
 }

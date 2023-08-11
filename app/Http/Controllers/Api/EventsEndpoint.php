@@ -31,6 +31,7 @@ class EventsEndpoint extends Controller
                 'time_changed'          => $entry->hasTimeChanged(),
                 'location_changed'      => $entry->hasLocationChanged(),
                 'cancelled'             => $entry->cancelled,
+                'tags'                  => $entry->sigEvent->sigTags,
             ];
 
             $events[] = $event;

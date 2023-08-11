@@ -17,45 +17,18 @@
             <div class="row text-center" style="margin-top: 0.5rem;">
                 <div class="col-12 col-md-12">
                     <div class="col-12 text-center col-md-12">
-                        <i class="bi bi-geo-fill"></i> {{ $entry->sigEvent->sigLocation->name }}
+                        <i class="bi bi-geo-alt"></i> {{ $entry->sigEvent->sigLocation->name }}
                     </div>
                     <div class="col-12 text-center col-md-12">
-                        <i class="bi bi-person-fill"></i> {{ $entry->sigEvent->sigHost->name }}
+                        <i class="bi bi-person-circle"></i> {{ $entry->sigEvent->sigHost->name }}
                     </div>
                 </div>
             </div>
             <hr>
             <div class="col-12 col-md-12">
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link w-50 active" id="desc-nav-ger-tab" data-bs-toggle="tab" data-bs-target="#description-german,#title-german" type="button" role="tab" aria-controls="description-german" aria-selected="true">DE</button>
-                        <button class="nav-link w-50" id="desc-nav-en-tab" data-bs-toggle="tab" data-bs-target="#description-english,#title-english" type="button" role="tab" aria-controls="description-english" aria-selected="false">EN</button>                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active border border-top-0 p-1 text-center" id="description-german" role="tabpanel" aria-labelledby="desc-nav-ger-tab">
-                        <x-markdown>
-                            {{ $entry->sigEvent->description }}
-                        </x-markdown>
-                    </div>
-                    <div class="tab-pane fade border border-top-0 p-1 text-center" id="description-english" role="tabpanel" aria-labelledby="desc-nav-en-tab">
-                        <x-markdown>
-                            {{ $entry->sigEvent->description_en }}
-                        </x-markdown>
-                    </div>
-                </div>
-                <div id="event-description">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-center">
-
-                            <span class="readmore-link"></span>
-                        </div>
-                        <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-center">
-                            <i class="flag flag-us"></i>
-
-                            <span class="readmore-link"></span>
-                        </div>
-                    </div>
-                </div>
+                <x-markdown>
+                    {{ $entry->sigEvent->description_localized }}
+                </x-markdown>
             </div>
             <hr>
             @php
@@ -75,54 +48,36 @@
                         @php
                             $counter = 0;
                         @endphp
-                        @if ($e->sigTimeslots->isEmpty() == false)
-                            @forelse ($e->sigTimeslots as $timeslot)
-                                @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                @php
-                                    $counter = $counter + ($timeslot->max_users - $timeslot->sigAttendees->count());
-                                @endphp
-                                @endif
-                            @empty
-                            @endforelse
-                        @endif
-                        @if ($e->sigTimeslots->isEmpty() == false)
+
+                        @foreach ($e->sigTimeslots as $timeslot)
+                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                            @php
+                                $counter = $counter + ($timeslot->max_users - $timeslot->sigAttendees->count());
+                            @endphp
+                            @endif
+                        @endforeach
+
+                        @if ($e->sigTimeslots)
                             <div class="col-12 col-md-6">
                                 <div class="accordion">
                                 <div class="accordion-item mt-1 mb-1">
-                                    <h2 class="accordion-header">
-                                    @if ($e->sigLocation->id != $e->sigEvent->sigLocation->id)
-                                        @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze<br>@if($e->sigEvent->max_regs_per_day)Max. {{ $e->sigEvent->max_regs_per_day }} Registrierungen pro Tag @endif
-                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i>{{ $e->sigLocation->name }}</strong>
-                                            </button>
-                                        @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden |
-                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
-                                            </button>
-                                        @else
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden |
-                                                <strong style="margin-left: 80px;"><i class="bi bi-geo-fill"></i> {{ $e->sigLocation->name }}</strong>
-                                            </button>
-                                        @endif
+                                    <div class="accordion-header">
+
+                                    @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze<br>@if($e->sigEvent->max_regs_per_day)Max. {{ $e->sigEvent->max_regs_per_day }} Registrierungen pro Tag @endif
+                                        </button>
+                                    @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
+                                        </button>
                                     @else
-                                        @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>{{ $counter }} Freie Plätze<br>@if($e->sigEvent->max_regs_per_day)Max. {{ $e->sigEvent->max_regs_per_day }} Registrierungen pro Tag @endif
-                                            </button>
-                                        @elseif (Carbon\Carbon::create($e->end)->addHours(12) > Carbon\Carbon::now()->toDateTimeString())
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
-                                            </button>
-                                        @else
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                                {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
-                                            </button>
-                                        @endif
+                                        <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-ts_{{ $e->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            {{ $e->start->format("l") }} - {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}<br>Event hat bereits stattgefunden
+                                        </button>
                                     @endif
-                                    </h2>
+
+                                    </div>
                                     @if ($e->end > Carbon\Carbon::now()->toDateTimeString())
                                     <div id="panelsStayOpen-collapse-ts_{{ $e->id }}" class="accordion-collapse collapse show">
                                     @else
@@ -148,63 +103,38 @@
                                                         $regStart = strtotime($timeslot->reg_start);
                                                         $regEnd = strtotime($timeslot->reg_end);
                                                     @endphp
-                                                    @if ($timeslot->reg_start)
-                                                        @if ($regStart > $currentTime)
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
-                                                                Registrierung öffnet bald
-                                                            </a>
-                                                        @elseif ($regEnd < $currentTime)
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                Ausgelaufen
-                                                            </a>
-                                                        @else
-                                                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                                                @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
-                                                                        Bereits registriert
-                                                                    </a>
-                                                                @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                        Tageslimit erreicht
-                                                                    </a>
-                                                                @else
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
-                                                                        Registrieren
-                                                                    </a>
-                                                                @endif
-                                                            @else
-                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                    Ausgebucht
-                                                                </a>
-                                                            @endif
-                                                        @endif
+
+                                                    @if ($regStart > $currentTime)
+                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-warning" disabled>
+                                                            Registrierung öffnet bald
+                                                        </a>
+                                                    @elseif ($regEnd < $currentTime)
+                                                        <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                            Ausgelaufen
+                                                        </a>
                                                     @else
-                                                        @if ($regEnd < $currentTime)
-                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                Ausgelaufen
-                                                            </a>
-                                                        @else
-                                                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                                                @if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id))
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
-                                                                        Bereits registriert
-                                                                    </a>
-                                                                @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                        Tageslimit erreicht
-                                                                    </a>
-                                                                @else
-                                                                    <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary" onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '/register/{{ $timeslot->id }}')">
-                                                                        Registrieren
-                                                                    </a>
-                                                                @endif
-                                                            @else
+                                                        @if ($timeslot->max_users > $timeslot->sigAttendees->count())
+                                                            @if (auth()->user()?->sigTimeslots?->find($timeslot))
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-success" disabled>
+                                                                    Bereits registriert
+                                                                </a>
+                                                            @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
                                                                 <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
-                                                                    Ausgebucht
+                                                                    Tageslimit erreicht
+                                                                </a>
+                                                            @else
+                                                                <a class="col-lg-4 col-12 border align-middle text-center btn btn-primary"
+                                                                   onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{ route("registration.register", $timeslot) }}')">
+                                                                    Registrieren
                                                                 </a>
                                                             @endif
+                                                        @else
+                                                            <a class="col-lg-4 col-12 border align-middle text-center btn btn-secondary" disabled>
+                                                                Ausgebucht
+                                                            </a>
                                                         @endif
                                                     @endif
+
                                                 </div>
                                             @endforeach
                                         </div>
@@ -243,7 +173,7 @@
             <div class="modal-footer">
                 <form class="text-center w-100" id="registerForm" action="" method="POST">
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#registerModal').modal('hide');" data-dismiss="modal">Schließen</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary m-1">Registrieren</button>
                 </form>
             </div>

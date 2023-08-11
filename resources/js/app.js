@@ -1,7 +1,22 @@
 import './bootstrap';
 
+// bootstrap
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// jQuery
 import $ from 'jquery';
 window.$ = window.jQuery = $;
-
 import 'jquery-ui/ui/widgets/autocomplete';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
+
+// Vue
+import { createApp } from 'vue';
+import ExampleComponent from './components/ExampleComponent.vue'
+let app=createApp({
+    components: {
+        ExampleComponent
+    }
+}).mount("#app")
+
+

@@ -22,6 +22,10 @@ class TimetableEntry extends Model
         'end' => "datetime",
     ];
 
+    protected $appends = [
+        'formatted_length',
+    ];
+
     /**
      * Define the relationship between timetable-entries and their favorites.
      *
@@ -92,7 +96,7 @@ class TimetableEntry extends Model
         $i = 0;
 
         foreach ($this->sigTimeslots as $timeslot) {
-            if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id)) {
+            if ($timeslot->sigAttendees->contains('user_id', auth()->user()?->id)) {
                 $i++;
             }
         }
@@ -102,5 +106,14 @@ class TimetableEntry extends Model
         }
 
         return false;
+    }
+
+    public function getFormattedLengthAttribute() {
+        $mins =  $this->start->diffInMinutes($this->end);
+        if($mins == 0)
+            return "";
+        if($mins < 60)
+            return $mins." min";
+        return $this->start->floatDiffInHours($this->end). " h";
     }
 }

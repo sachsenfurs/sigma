@@ -18,12 +18,14 @@
         "postcss": "^8.1.14",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.32.11",
-        "sass-loader": "^11.0.1"
+        "sass-loader": "^11.0.1",
+        "vue-loader": "^16.2.0"
     },
     "dependencies": {
         "bootstrap-icons": "^1.9.0",
         "jquery": "^3.6.0",
         "jquery-ui": "^1.13.1",
-        "jqueryui": "^1.11.1"
+        "jqueryui": "^1.11.1",
+        "vue": "^3.3.4"
     }
 }
