@@ -37,7 +37,7 @@ class TimetableController extends Controller
         ]);
 
         $entry = TimetableEntry::create($validated);
-        
+
         if(is_array($request->get("time-start")) and is_array($request->get("reg-start"))) {
 
             foreach($request->get("time-start") AS $i=>$dateStart) {
@@ -121,7 +121,7 @@ class TimetableController extends Controller
             }
         }
 
-        return back()->withSuccess("Änderungen gespeichert!");
+        return redirect()->route("timetable.index")->withSuccess(__("Saved changes!"));
     }
 
     public function destroy(TimetableEntry $entry) {
