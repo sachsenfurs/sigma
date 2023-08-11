@@ -11,7 +11,7 @@ class SigLocationController extends Controller
 {
     public function index() {
         $locations = SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->get();
-        if(Gate::authorize("manage_locations"))
+        if(auth()->user()?->can("manage_locations"))
             $locations = SigLocation::withCount("sigEvents")->get();
 
         return view("locations.index", compact("locations"));
