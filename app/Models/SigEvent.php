@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
+use Database\Seeders\SigTagSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -14,7 +15,6 @@ class SigEvent extends Model
     protected $casts = [
         'languages' => 'array',
     ];
-
 
     protected $guarded = [];
 
@@ -53,5 +53,9 @@ class SigEvent extends Model
     public function isCompletelyPrivate() {
         $entries = $this->timetableEntries;
         return ($entries->count() == $entries->where("hide", 1)->count());
+    }
+
+    public function sigTags() {
+        return $this->belongsToMany(SigTag::class);
     }
 }
