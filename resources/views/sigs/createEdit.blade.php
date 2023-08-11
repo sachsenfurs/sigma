@@ -285,7 +285,7 @@
                                             </table>
                                             <div class="mt-3">
                                                 <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                                    <i class="bi bi-plus"></i>
+                                                    <i class="bi bi-plus"></i> (Vorher speichern nicht vergessen!)
                                                 </button>
                                             </div>
                                         @endif
