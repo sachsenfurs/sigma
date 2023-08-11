@@ -26,12 +26,14 @@
                     <div class="col-auto d-flex">
                         <i class="bi bi-clock align-self-center"></i>
                     </div>
+                    <a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none" style="flex: content">
                     <div class="col-auto">
                         <b>{{ $entry->start->format("l") }}</b> <i class="text-muted"> {{ $entry->start->format("d.m.y") }}</i>
                         <div class="text-muted">
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                         </div>
                     </div>
+                    </a>
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->cancelled)

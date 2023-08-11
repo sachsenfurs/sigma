@@ -155,12 +155,12 @@
                         <div class="col-lg-2 col-4 d-flex">
                             <div class="card-body align-self-center text-center">
                                 <h2>{{ $entry->start->format("H:i") }}</h2>
-                                <h5 class="text-muted">{{ $entry->start->diffInMinutes($entry->end) }} min</h5>
+                                <h5 class="text-muted">{{ $entry->formatted_length }}</h5>
                             </div>
                         </div>
                         <div class="col-lg-9 col-6 d-flex">
                             <div class="card-body align-self-center">
-                                <h1><a href="" class="text-decoration-none">{{ $entry->sigEvent->name }}</a></h1>
+                                <h1><a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none">{{ $entry->sigEvent->name }}</a></h1>
                                 <p class="card-text">
                                     <i class="bi bi-person-circle"></i> {{ $entry->sigEvent->sigHost->name }}
                                 </p>

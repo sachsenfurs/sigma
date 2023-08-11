@@ -67,7 +67,7 @@ class User extends Authenticatable
         if(SigHost::where('reg_id', $this->reg_id)->first()) {
             return true;
         } else {
-            return false;   
+            return false;
         }
     }
 
@@ -79,5 +79,9 @@ class User extends Authenticatable
     public function hasGroup(string $name)
     {
         return in_array($name, $this->groups);
+    }
+
+    public function sigTimeslots() {
+        return $this->belongsToMany(SigTimeslot::class, "sig_attendees");
     }
 }
