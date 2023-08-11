@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\SigEvent;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Observers\SigEventObserver;
 use App\Observers\UserObserver;
 use App\Observers\UserRoleObserver;
 use Illuminate\Auth\Events\Registered;
@@ -30,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRole::class => [
             UserRoleObserver::class,
+        ],
+        SigEvent::class => [
+            SigEventObserver::class
         ]
     ];
 
