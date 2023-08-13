@@ -18,4 +18,7 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <link rel="apple-touch-icon" href="/icons/east_sigma_appicon.png">
+    <link rel="icon" href="/icons/east_sigma_appicon.png">
 </head>
