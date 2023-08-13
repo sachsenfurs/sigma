@@ -129,5 +129,8 @@
     "Cancel registration?": "Anmeldung zurückziehen?",
     "Events you've signed up for:": "Events, für die du dich angemeldet hast:",
     "Favorite Events": "Favorisierte Events",
-    "Favorite successfully removed!": "Favorisiertes Event erfolgreich entfernt"
+    "Favorite successfully removed!": "Favorisiertes Event erfolgreich entfernt",
+
+    "Changed": "Geändert",
+    "Moved": "Verschoben"
 }
