@@ -20,7 +20,7 @@
 
                     <div class="mt-2">
                         <x-markdown>
-                            {{ $entry->sigEvent->description }}
+                            {{ $entry->sigEvent->description_localized }}
                         </x-markdown>
                     </div>
                 </div>
