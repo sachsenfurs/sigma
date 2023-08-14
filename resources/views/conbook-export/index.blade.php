@@ -15,9 +15,13 @@
                 </div>
                 <div class="card-body">
                     <div class="card-subtitle">
-                        {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }} | {{ $entry->sigLocation->name }}
+                        {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                        |
+                        {{ $entry->sigLocation->name }}
+                        @if(!$entry->sigEvent->sigHost->hide)
+                            | Host: {{ $entry->sigEvent->sigHost->name }}
+                        @endif
                     </div>
-
                     <div class="mt-2">
                         <x-markdown>
                             {{ $entry->sigEvent->description_localized }}
