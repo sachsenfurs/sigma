@@ -59,7 +59,7 @@ export default {
         },
     },
     mounted() {
-        console.log("mounted 1");
+        // console.log("mounted 1");
     },
     computed: {
         link() {

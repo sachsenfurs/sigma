@@ -15,7 +15,7 @@ export default  {
     methods: {
         async getEntries() {
             let events = await axios.get("/table/index") ;
-            console.log(events.data);
+            // console.log(events.data);
             this.entries = events.data;
         }
     },
