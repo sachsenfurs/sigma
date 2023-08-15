@@ -18,6 +18,11 @@ class SigEvent extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'name_localized',
+
+    ];
+
     public function sigHost() {
         return $this->belongsTo(SigHost::class);
     }
@@ -35,11 +40,11 @@ class SigEvent extends Model
     }
 
     public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? "";
+        return $this->sigTranslation->name ?? null;
     }
 
     public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? "";
+        return $this->sigTranslation->description ?? null;
     }
 
     public function getNameLocalizedAttribute() {

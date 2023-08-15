@@ -11,7 +11,7 @@
             </div>
             <div class="col-lg-9 col-6 d-flex">
                 <div class="card-body align-self-center">
-                    <h1><a href="{{ link }}" class="text-decoration-none">{{ entry.sig_event.name }}</a></h1>
+                    <h1><a :href="link" class="text-decoration-none">{{ entry.sig_event.name_localized }}</a></h1>
                     <p class="card-text">
                         <i class="bi bi-person-circle"></i> {{ entry.sig_event.sig_host.name }}
                     </p>
@@ -32,7 +32,6 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
     name: "TimetableEntryComponent",
@@ -45,6 +44,8 @@ export default {
             hasTimeChanged: false,
             cancelled: false,
             sig_event: {
+                name: "",
+                name_localized: "",
                 sig_host: {
                     name: "",
                 },
@@ -56,12 +57,15 @@ export default {
                 }
             }
         },
-        link: "",
     },
     mounted() {
         console.log("mounted 1");
     },
-
+    computed: {
+        link() {
+            return "/show/" + this.entry.id;
+        }
+    }
 
 }
 </script>
