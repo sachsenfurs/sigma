@@ -28,9 +28,10 @@ class EventsEndpoint extends Controller
                 'short_description_en'  => false,
                 'languages'             => $entry->sigEvent->languages,
                 'location'              => $entry->sigLocation ?? "Null",
-                'time_changed'          => $entry->hasTimeChanged(),
-                'location_changed'      => $entry->hasLocationChanged(),
+                'time_changed'          => $entry->hasTimeChanged,
+                'location_changed'      => $entry->hasLocationChanged,
                 'cancelled'             => $entry->cancelled,
+                'tags'                  => $entry->sigEvent->sigTags,
             ];
 
             $events[] = $event;

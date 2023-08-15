@@ -22,6 +22,12 @@ class TimetableEntry extends Model
         'end' => "datetime",
     ];
 
+    protected $appends = [
+        'formatted_length',
+        'hasTimeChanged',
+        'hasLocationChanged',
+    ];
+
     /**
      * Define the relationship between timetable-entries and their favorites.
      *
@@ -45,8 +51,8 @@ class TimetableEntry extends Model
     }
 
     public function sigLocation() {
-        return $this->belongsTo(SigLocation::class)->withDefault(function() {
-            return $this->sigEvent->sigLocation;
+        return $this->belongsTo(SigLocation::class)->withDefault(function($sigLocation, $timetableEntry) {
+            return $timetableEntry->sigEvent->sigLocation;
         });
     }
 
@@ -62,11 +68,11 @@ class TimetableEntry extends Model
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
-    public function hasTimeChanged() {
+    public function getHasTimeChangedAttribute() {
         return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
     }
 
-    public function hasLocationChanged() {
+    public function getHasLocationChangedAttribute() {
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
@@ -92,7 +98,7 @@ class TimetableEntry extends Model
         $i = 0;
 
         foreach ($this->sigTimeslots as $timeslot) {
-            if ($timeslot->sigAttendees->contains('user_id', auth()->user()->id)) {
+            if ($timeslot->sigAttendees->contains('user_id', auth()->user()?->id)) {
                 $i++;
             }
         }
@@ -102,5 +108,14 @@ class TimetableEntry extends Model
         }
 
         return false;
+    }
+
+    public function getFormattedLengthAttribute() {
+        $mins =  $this->start->diffInMinutes($this->end);
+        if($mins == 0)
+            return "";
+        if($mins < 60)
+            return $mins." min";
+        return $this->start->floatDiffInHours($this->end). " h";
     }
 }

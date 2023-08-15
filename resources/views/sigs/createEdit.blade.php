@@ -15,7 +15,7 @@
                             {{ isset($sig) ? __("Edit SIG") : __("Create SIG") }}
                         </div>
                         <div class="card-body">
-                            <div class="col-12 col-md-12 p-2">
+                            <div class="col-12 p-2">
                                 <div class="row">
                                     <div class="col-8 col-md-8 p-2">
                                         <h2>Sig Name</h2>
@@ -36,7 +36,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-md-4 p-2 rounded-top" style="background-color: rgb(215 215 215);">
+                                    <div class="col-4 col-md-4 p-2 rounded-top">
                                         <h2>{{ __("Languages") }}</h2>
                                         <div class="form-group row m-1">
                                             <label>
@@ -152,32 +152,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-md-4 p-2 rounded-bottom" style="background-color: rgb(215 215 215);">
-                                        <h2>{{ __("Other") }}</h2>
-                                        <div class="form-group row m-1">
-                                            <div class="col-sm-12">
-                                                <label>
-                                                    <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
-                                                    {{ __("Hide Event on Schedule") }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-1">
-                                            <div class="col-sm-12">
-                                                <label>
-                                                    <input class="form-check-input" type="checkbox" name="reg_possible"
-                                                        @isset($sig)
-                                                            @if ($sig->reg_possible)
-                                                                 checked
-                                                            @endif
-                                                        @endisset> {{ __("Allow Registrations for this Event") }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 col-md-12 p-2">
+                                    <div class="col-12 p-2">
                                         <h2 class="mb-2">{{ __("Description") }}</h2>
                                         <div class="row">
                                             <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
@@ -197,8 +174,20 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-12 col-md-12 p-2">
+                                    <div class="col-12">
+                                        <h3>Tags</h3>
+                                        @foreach(\App\Models\SigTag::all() AS $tag)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="tag_{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" @checked($sig->sigTags->find($tag->id))>
+                                                <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->description }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 p-2">
                                         @if(!isset($sig))
                                             <div class="mt-3 row">
                                                 <h2>{{ __("Define time spans") }}</h2>
@@ -285,7 +274,7 @@
                                             </table>
                                             <div class="mt-3">
                                                 <button type="button" class="btn btn-secondary text-white" onclick="$('#createModal').modal('show');" data-toggle="modal" data-target="#createModal">
-                                                    <i class="bi bi-plus"></i>
+                                                    <i class="bi bi-plus"></i> (Vorher speichern nicht vergessen!)
                                                 </button>
                                             </div>
                                         @endif

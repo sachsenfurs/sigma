@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
@@ -46,6 +47,8 @@ Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name(
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
 Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
+Route::get("/table/index", [TableViewController::class, 'timetableIndex'])->name("public.tableview-index");
+Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
 
@@ -56,6 +59,10 @@ Route::resource("/locations", SigLocationController::class)->except('show');
 Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])->name("locations.show");
 
 Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
+
+
+Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
+Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -114,8 +121,6 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/user-roles/{userRole}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
     Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
-
-    Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
 
     // Favorites
     Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');

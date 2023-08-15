@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
+use Database\Seeders\SigTagSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
 {
@@ -15,6 +17,11 @@ class SigEvent extends Model
     ];
 
     protected $guarded = [];
+
+    protected $appends = [
+        'name_localized',
+
+    ];
 
     public function sigHost() {
         return $this->belongsTo(SigHost::class);
@@ -33,41 +40,27 @@ class SigEvent extends Model
     }
 
     public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? $this->name;
-    }
-    public function setNameEnAttribute($name_en) {
-        if(!$this->sigTranslation) {
-            $translate = $this->sigTranslation()->create([
-                'language' => "en",
-                'description' => $this->description,
-                'name' => $name_en,
-            ]);
-        } else {
-            $this->sigTranslation->name = $name_en;
-            $this->sigTranslation->save();
-        }
+        return $this->sigTranslation->name ?? null;
     }
 
     public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? $this->description;
+        return $this->sigTranslation->description ?? null;
     }
 
-    public function setDescriptionEnAttribute($description_en) {
-        if(!$this->sigTranslation) {
-            $translate = $this->sigTranslation()->create([
-                'language' => "en",
-                'description' => $description_en,
-                'name' => $this->name,
-            ]);
+    public function getNameLocalizedAttribute() {
+        return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;
+    }
 
-        } else {
-            $this->sigTranslation->description = $description_en;
-            $this->sigTranslation->save();
-        }
+    public function getDescriptionLocalizedAttribute() {
+        return App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description;
     }
 
     public function isCompletelyPrivate() {
         $entries = $this->timetableEntries;
         return ($entries->count() == $entries->where("hide", 1)->count());
+    }
+
+    public function sigTags() {
+        return $this->belongsToMany(SigTag::class);
     }
 }

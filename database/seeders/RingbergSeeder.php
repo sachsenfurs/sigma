@@ -18,7 +18,7 @@ class RingbergSeeder extends Seeder
         $locations = [
             [
                 'name' => "Herbert Roth Saal",
-                'description' => "Mainstage",
+                'description' => "Main Stage",
                 'render_ids' => json_encode(["mainstageArea1", "mainstageArea2"]),
                 'floor' => "0",
                 'room' => "KE 003",
@@ -27,7 +27,7 @@ class RingbergSeeder extends Seeder
                 'infodisplay' => true,
             ],
             [
-                'name' => "Foyer",
+                'name' => "Open Stage",
                 'description' => "Tagungsfoyer unten",
                 'render_ids' => json_encode(["foyerArea"]),
                 'floor' => "-1",
@@ -213,7 +213,7 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "Außenbereich",
-                'description' => "Hinter der Bar",
+                'description' => "Hinterausgang an der Bar",
                 'render_ids' => json_encode(["outdoorArea3"]),
                 'floor' => "0",
             ]

@@ -8,6 +8,7 @@ use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigLocation;
+use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -93,6 +94,7 @@ class SigEventController extends Controller
             'date-end' => "array",
             'date-start.*' => 'date',
             'date-end.*' => 'date',
+            'tags' => "nullable|array",
         ]);
 
         $host_id = $request->input('host_id');
@@ -143,7 +145,6 @@ class SigEventController extends Controller
 
         // insert in timetable (if set)
         if(is_array($request->get("date-start"))) {
-
             foreach($request->get("date-start") AS $i=>$dateStart) {
                 $dateTimeStart = Carbon::parse($dateStart);
                 $dateTimeEnd = Carbon::parse($request->get("date-end")[$i]);
@@ -155,21 +156,27 @@ class SigEventController extends Controller
                 ]);
             }
         }
+
+        $sig->sigTags()->sync($request->get("tags"));
+
+        $sig->save();
         return redirect(route("sigs.index"))->withSuccess("SIG erstellt");
     }
 
     public function update(Request $request, SigEvent $sig) {
         $this->authorize('update', $sig);
+
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
-            'host_id' => 'required',
+            'host_id' => 'exclude_if:host_id,NEW|required|exists:sig_hosts,id',
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'max_regs_per_day' => 'nullable|integer',
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "nullable|string",
             'description_en' => "nullable|string",
+            'tags' => "nullable|array",
         ]);
         $languages = [];
         if($request->has("lang_de"))
@@ -189,26 +196,30 @@ class SigEventController extends Controller
             $host_id = SigHost::whereId($host_id)->first()->id;
         }
 
-        unset($validated['host']);
-        unset($validated['host_id']);
-        unset($validated['reg_id']);
-
+        $sig->name = $validated['name'];
+        $sig->description = $validated['description'];
         $sig->sigLocation()->associate($validated['location']);
-        unset($validated['location']);
-
-        $sig->update($validated);
         $sig->languages = $languages;
         $sig->sigHost()->associate($host_id);
+        $sig->reg_possible = $request->has('reg_possible');
+        $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
 
-        if ($request->has('reg_possible')) {
-			$sig->reg_possible = true;
-		} else {
-            $sig->reg_possible = false;
+        if(!$sig->sigTranslation) {
+            $sig->sigTranslation()->create([
+                'language' => 'en',
+                'name' => $validated['name_en'],
+                'description' => $validated['description_en'],
+            ]);
+        } else {
+            $sig->sigTranslation->name = $validated['name_en'];
+            $sig->sigTranslation->description = $validated['description_en'];
+            $sig->sigTranslation->save();
         }
-        if ($validated['max_regs_per_day']) {
-            $sig->max_regs_per_day = $validated['max_regs_per_day'];
-        }
+
+        $sig->sigTags()->sync($request->get("tags"));
+
         $sig->save();
+
         return back()->withSuccess("Änderungen gespeichert");
     }
 

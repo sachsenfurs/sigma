@@ -15,14 +15,23 @@
                 </div>
                 <div class="card-body">
                     <div class="card-subtitle">
-                        {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }} | {{ $entry->sigLocation->name }}
+                        {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                        |
+                        {{ $entry->sigLocation->name }}
+                        @if(!$entry->sigEvent->sigHost->hide)
+                            | Host: {{ $entry->sigEvent->sigHost->name }}
+                        @endif
                     </div>
-
                     <div class="mt-2">
                         <x-markdown>
-                            {{ $entry->sigEvent->description }}
+                            {{ $entry->sigEvent->description_localized }}
                         </x-markdown>
                     </div>
+                </div>
+                <div class="card-footer">
+                    @foreach($entry->sigEvent->sigTags AS $tag)
+                        <span class="badge bg-secondary">{{ $tag->description_localized }}</span>
+                    @endforeach
                 </div>
             </div>
         @endforeach

@@ -11,3 +11,16 @@
 //@import '~jqueryui/jquery-ui.theme.min.css';
 
 @import '../css/app.css';
+
+
+@include color-mode(light) {
+    .card {
+        --bs-card-bg: var(--bs-white);
+    }
+}
+
+@include color-mode(dark) {
+    .card {
+        --bs-card-bg: var(--bs-dark-bg-subtle);
+    }
+}

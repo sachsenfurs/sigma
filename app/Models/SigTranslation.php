@@ -14,6 +14,8 @@ class SigTranslation extends Model
 
     protected $primaryKey = "sig_event_id";
 
+    public $incrementing = false;
+
     public function sigEvent() {
         return $this->belongsTo(SigEvent::class);
     }
