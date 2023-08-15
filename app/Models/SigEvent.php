@@ -35,19 +35,19 @@ class SigEvent extends Model
     }
 
     public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? $this->name;
+        return $this->sigTranslation->name ?? "";
     }
 
     public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? $this->description;
+        return $this->sigTranslation->description ?? "";
     }
 
     public function getNameLocalizedAttribute() {
-        return App::getLocale() == "en" ? $this->name_en : $this->name;
+        return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;
     }
 
     public function getDescriptionLocalizedAttribute() {
-        return App::getLocale() == "en" ? $this->description_en : $this->description;
+        return App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description;
     }
 
     public function isCompletelyPrivate() {
