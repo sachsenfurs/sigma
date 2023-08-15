@@ -133,21 +133,7 @@
     <div class="container" id="app">
 
         <div class="mt-4">
-            <!-- Day Nav Tabs -->
-            <div class="scrollmenu">
-                <ul class="nav nav-tabs">
-                    @foreach ($days as $index => $day)
-                        <li class="nav-item">
-                            <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab"
-                                href="#ConDay{{ $index + 1 }}">
-                                {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->locale('en')->dayName) }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <timetable-entry-list />
+            <timetable-entry-tabs />
 
         </div>
     </div>

@@ -15,11 +15,13 @@ import { createApp } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue'
 import TimetableEntryComponent from "./components/TimetableEntryComponent.vue";
 import TimetableEntryList from "./components/TimetableEntryList.vue";
+import TimetableEntryTabs from "./components/TimetableEntryTabs";
 let app=createApp({
     components: {
         ExampleComponent,
         TimetableEntryComponent,
-        TimetableEntryList
+        TimetableEntryList,
+        TimetableEntryTabs
     }
 }).mount("#app")
 
