@@ -373,28 +373,4 @@
                         echo '<td></td>';
                     }
                 }
-            @endphp
-        </tr>
-    @endfor
-</table> --}}
-
-    {{--<script>--}}
-    {{--    $('.fav-btn').click(function () {--}}
-    {{--        let eventID = $(this).data('event');--}}
-
-    {{--        $.ajax({--}}
-    {{--            url: {{ route('favorites.store') }},--}}
-    {{--            method: 'POST',--}}
-    {{--            data: {--}}
-    {{--                _token:'<?php echo csrf_token(); ?>',--}}
-    {{--                timetable_entry_id:eventID--}}
-    {{--            },--}}
-    {{--            dataType: 'JSON',--}}
-    {{--            success: function(data) {--}}
-    {{--               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');--}}
-    {{--            }--}}
-    {{--            // Eine schöne Vue bauen ;D--}}
-    {{--        });--}}
-    {{--    });--}}
-    {{--</script>--}}
 @endsection
