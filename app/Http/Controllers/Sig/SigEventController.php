@@ -8,6 +8,7 @@ use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigLocation;
+use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -93,6 +94,7 @@ class SigEventController extends Controller
             'date-end' => "array",
             'date-start.*' => 'date',
             'date-end.*' => 'date',
+            'tags' => "nullable|array",
         ]);
 
         $host_id = $request->input('host_id');
@@ -143,7 +145,6 @@ class SigEventController extends Controller
 
         // insert in timetable (if set)
         if(is_array($request->get("date-start"))) {
-
             foreach($request->get("date-start") AS $i=>$dateStart) {
                 $dateTimeStart = Carbon::parse($dateStart);
                 $dateTimeEnd = Carbon::parse($request->get("date-end")[$i]);
@@ -155,6 +156,10 @@ class SigEventController extends Controller
                 ]);
             }
         }
+
+        $sig->sigTags()->sync($request->get("tags"));
+
+        $sig->save();
         return redirect(route("sigs.index"))->withSuccess("SIG erstellt");
     }
 
@@ -171,6 +176,7 @@ class SigEventController extends Controller
             'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "nullable|string",
             'description_en' => "nullable|string",
+            'tags' => "nullable|array",
         ]);
         $languages = [];
         if($request->has("lang_de"))
@@ -209,6 +215,8 @@ class SigEventController extends Controller
             $sig->sigTranslation->description = $validated['description_en'];
             $sig->sigTranslation->save();
         }
+
+        $sig->sigTags()->sync($request->get("tags"));
 
         $sig->save();
 

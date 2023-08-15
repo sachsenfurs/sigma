@@ -28,6 +28,11 @@
                         </x-markdown>
                     </div>
                 </div>
+                <div class="card-footer">
+                    @foreach($entry->sigEvent->sigTags AS $tag)
+                        <span class="badge bg-secondary">{{ $tag->description_localized }}</span>
+                    @endforeach
+                </div>
             </div>
         @endforeach
     </div>
