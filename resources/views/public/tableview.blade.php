@@ -1,131 +1,131 @@
 @extends('layouts.app')
 @section('title', 'Program')
-{{--<style>--}}
-{{--    ul.nav {--}}
-{{--        display: inline-block;--}}
-{{--        white-space: nowrap;--}}
-{{--    }--}}
+{{-- <style> --}}
+{{--    ul.nav { --}}
+{{--        display: inline-block; --}}
+{{--        white-space: nowrap; --}}
+{{--    } --}}
 
-{{--    table {--}}
-{{--        margin: 0;--}}
-{{--        padding: 0;--}}
-{{--        width: calc(100% - 2px);--}}
-{{--    }--}}
+{{--    table { --}}
+{{--        margin: 0; --}}
+{{--        padding: 0; --}}
+{{--        width: calc(100% - 2px); --}}
+{{--    } --}}
 
-{{--    table,--}}
-{{--    tr,--}}
-{{--    td {--}}
-{{--        box-sizing: border-box;--}}
-{{--    }--}}
+{{--    table, --}}
+{{--    tr, --}}
+{{--    td { --}}
+{{--        box-sizing: border-box; --}}
+{{--    } --}}
 
-{{--    td.event {--}}
-{{--        border: 2px solid #000;--}}
-{{--        text-align: center;--}}
-{{--        vertical-align: middle;--}}
-{{--        font-size: 1.4em;--}}
-{{--        color: #eee;--}}
-{{--        cursor: pointer;--}}
-{{--    }--}}
+{{--    td.event { --}}
+{{--        border: 2px solid #000; --}}
+{{--        text-align: center; --}}
+{{--        vertical-align: middle; --}}
+{{--        font-size: 1.4em; --}}
+{{--        color: #eee; --}}
+{{--        cursor: pointer; --}}
+{{--    } --}}
 
-{{--    /* Color Official East Event */--}}
-{{--    td.oee {--}}
-{{--        background: #ffbf90;--}}
-{{--    }--}}
+{{--    /* Color Official East Event */ --}}
+{{--    td.oee { --}}
+{{--        background: #ffbf90; --}}
+{{--    } --}}
 
-{{--    /* Color Fursuitevents/Fursuitrelevantes */--}}
-{{--    td.fe {--}}
-{{--        background: #ffc133;--}}
-{{--    }--}}
+{{--    /* Color Fursuitevents/Fursuitrelevantes */ --}}
+{{--    td.fe { --}}
+{{--        background: #ffc133; --}}
+{{--    } --}}
 
-{{--    /* Color Gamingevents/GameShow/Compatition */--}}
-{{--    td.grsswk {--}}
-{{--        background: #fee744;--}}
-{{--    }--}}
+{{--    /* Color Gamingevents/GameShow/Compatition */ --}}
+{{--    td.grsswk { --}}
+{{--        background: #fee744; --}}
+{{--    } --}}
 
-{{--    /* Color GuestSigs/Workshops */--}}
-{{--    td.gswssa {--}}
-{{--        background: #fd92c0;--}}
-{{--    }--}}
+{{--    /* Color GuestSigs/Workshops */ --}}
+{{--    td.gswssa { --}}
+{{--        background: #fd92c0; --}}
+{{--    } --}}
 
-{{--    /* Color Artshow */--}}
-{{--    td.as {--}}
-{{--        background: #30c1b6;--}}
-{{--    }--}}
+{{--    /* Color Artshow */ --}}
+{{--    td.as { --}}
+{{--        background: #30c1b6; --}}
+{{--    } --}}
 
-{{--    /* Color Con-Ops */--}}
-{{--    td.lsco {--}}
-{{--        background: #ff441c;--}}
-{{--    }--}}
+{{--    /* Color Con-Ops */ --}}
+{{--    td.lsco { --}}
+{{--        background: #ff441c; --}}
+{{--    } --}}
 
-{{--    /* Color Registration */--}}
-{{--    td.reg {--}}
-{{--        background: #1c2694;--}}
-{{--    }--}}
+{{--    /* Color Registration */ --}}
+{{--    td.reg { --}}
+{{--        background: #1c2694; --}}
+{{--    } --}}
 
-{{--    td a {--}}
-{{--        text-decoration: underline;--}}
-{{--        box-sizing: content-box;--}}
-{{--        display: block;--}}
-{{--        color: #fff;--}}
-{{--    }--}}
+{{--    td a { --}}
+{{--        text-decoration: underline; --}}
+{{--        box-sizing: content-box; --}}
+{{--        display: block; --}}
+{{--        color: #fff; --}}
+{{--    } --}}
 
-{{--    td a:hover {--}}
-{{--        text-decoration: none;--}}
-{{--        color: #cccccc;--}}
-{{--    }--}}
+{{--    td a:hover { --}}
+{{--        text-decoration: none; --}}
+{{--        color: #cccccc; --}}
+{{--    } --}}
 
-{{--    tr.active {--}}
-{{--        background: #061557;--}}
-{{--    }--}}
+{{--    tr.active { --}}
+{{--        background: #061557; --}}
+{{--    } --}}
 
-{{--    div.activ {--}}
-{{--        background: #b35050;--}}
-{{--    }--}}
+{{--    div.activ { --}}
+{{--        background: #b35050; --}}
+{{--    } --}}
 
-{{--    tr.weekday {--}}
-{{--        background: #cccccc;--}}
-{{--        font-size: 22px;--}}
-{{--    }--}}
+{{--    tr.weekday { --}}
+{{--        background: #cccccc; --}}
+{{--        font-size: 22px; --}}
+{{--    } --}}
 
-{{--    strong.weekday {--}}
-{{--        background: #cccccc;--}}
-{{--        font-size: 22px;--}}
-{{--        padding-left: 1rem;--}}
-{{--        padding-right: 1rem;--}}
-{{--    }--}}
+{{--    strong.weekday { --}}
+{{--        background: #cccccc; --}}
+{{--        font-size: 22px; --}}
+{{--        padding-left: 1rem; --}}
+{{--        padding-right: 1rem; --}}
+{{--    } --}}
 
-{{--    div.test {--}}
-{{--        display: flex;--}}
-{{--        color: #0b7437;--}}
-{{--        font-size: 15px;--}}
-{{--        font-weight: 800;--}}
-{{--    }--}}
+{{--    div.test { --}}
+{{--        display: flex; --}}
+{{--        color: #0b7437; --}}
+{{--        font-size: 15px; --}}
+{{--        font-weight: 800; --}}
+{{--    } --}}
 
-{{--    div.location {--}}
-{{--        width: calc(100% - 2px);--}}
-{{--    }--}}
+{{--    div.location { --}}
+{{--        width: calc(100% - 2px); --}}
+{{--    } --}}
 
-{{--    div.time {--}}
-{{--        width: calc(50% - 1px);--}}
-{{--    }--}}
+{{--    div.time { --}}
+{{--        width: calc(50% - 1px); --}}
+{{--    } --}}
 
-{{--    div.scrollmenu {--}}
-{{--        background-color: #eee;--}}
-{{--        overflow-x: auto;--}}
-{{--        overflow-y: hidden;--}}
-{{--    }--}}
+{{--    div.scrollmenu { --}}
+{{--        background-color: #eee; --}}
+{{--        overflow-x: auto; --}}
+{{--        overflow-y: hidden; --}}
+{{--    } --}}
 
-{{--    div.scrollmenu li {--}}
-{{--        display: inline-flex;--}}
-{{--        color: white;--}}
-{{--        text-align: center;--}}
-{{--        text-decoration: none;--}}
-{{--    }--}}
+{{--    div.scrollmenu li { --}}
+{{--        display: inline-flex; --}}
+{{--        color: white; --}}
+{{--        text-align: center; --}}
+{{--        text-decoration: none; --}}
+{{--    } --}}
 
-{{--    div.scrollmenu a:hover {--}}
-{{--        background-color: #777;--}}
-{{--    }--}}
-{{--</style>--}}
+{{--    div.scrollmenu a:hover { --}}
+{{--        background-color: #777; --}}
+{{--    } --}}
+{{-- </style> --}}
 <!-- -->
 <!-- Looking for an API? Ask @Kidran! -->
 <!-- -->
@@ -151,48 +151,48 @@
 
         </div>
     </div>
-            <!-- Tab panes /Content -->
-{{--            @foreach($entries AS $entry)--}}
-{{--                <div class="card mt-3">--}}
-{{--                    <div class="row g-0 flex-nowrap d-flex">--}}
-{{--                        <div class="col-lg-2 col-4 d-flex">--}}
-{{--                            <div class="card-body align-self-center text-center">--}}
-{{--                                <h2>{{ $entry->start->format("H:i") }}</h2>--}}
-{{--                                <h5 class="text-muted">{{ $entry->formatted_length }}</h5>--}}
-{{--                                @if($entry->cancelled)--}}
-{{--                                    <h3><span class="badge bg-danger d-block text-uppercase">{{ __("Cancelled") }}</span></h3>--}}
-{{--                                @elseif($entry->hasTimeChanged)--}}
-{{--                                    <h3><span class="badge bg-warning d-block text-uppercase">{{ __("Changed") }}</span></h3>--}}
-{{--                                @endif--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-9 col-6 d-flex">--}}
-{{--                            <div class="card-body align-self-center">--}}
-{{--                                <h1><a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none">{{ $entry->sigEvent->name }}</a></h1>--}}
-{{--                                <p class="card-text">--}}
-{{--                                    <i class="bi bi-person-circle"></i> {{ $entry->sigEvent->sigHost->name }}--}}
-{{--                                </p>--}}
-{{--                                <p>--}}
-{{--                                    <i class="bi bi-geo-alt"></i> {{ $entry->sigLocation->name }}--}}
-{{--                                    @if($entry->hasLocationChanged)--}}
-{{--                                        <span class="badge bg-danger">{{ __("Changed") }}</span>--}}
-{{--                                    @endif--}}
-{{--                                </p>--}}
-{{--                                @foreach($entry->sigEvent->sigTags AS $tag)--}}
-{{--                                    <h3 class="d-inline"><span class="badge bg-secondary">{{ $tag->description }}</span></h3>--}}
-{{--                                @endforeach--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="card-body col-lg-1 col-2 d-flex">--}}
-{{--                            <a type="button" class="fav-btn text-secondary align-self-center w-100 text-end" data-event="{{ $entry->id }}">--}}
-{{--                                <i class="bi bi-heart" style="font-size: 2em"></i>--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
+    <!-- Tab panes /Content -->
+    {{--            @foreach ($entries as $entry) --}}
+    {{--                <div class="card mt-3"> --}}
+    {{--                    <div class="row g-0 flex-nowrap d-flex"> --}}
+    {{--                        <div class="col-lg-2 col-4 d-flex"> --}}
+    {{--                            <div class="card-body align-self-center text-center"> --}}
+    {{--                                <h2>{{ $entry->start->format("H:i") }}</h2> --}}
+    {{--                                <h5 class="text-muted">{{ $entry->formatted_length }}</h5> --}}
+    {{--                                @if ($entry->cancelled) --}}
+    {{--                                    <h3><span class="badge bg-danger d-block text-uppercase">{{ __("Cancelled") }}</span></h3> --}}
+    {{--                                @elseif($entry->hasTimeChanged) --}}
+    {{--                                    <h3><span class="badge bg-warning d-block text-uppercase">{{ __("Changed") }}</span></h3> --}}
+    {{--                                @endif --}}
+    {{--                            </div> --}}
+    {{--                        </div> --}}
+    {{--                        <div class="col-lg-9 col-6 d-flex"> --}}
+    {{--                            <div class="card-body align-self-center"> --}}
+    {{--                                <h1><a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none">{{ $entry->sigEvent->name }}</a></h1> --}}
+    {{--                                <p class="card-text"> --}}
+    {{--                                    <i class="bi bi-person-circle"></i> {{ $entry->sigEvent->sigHost->name }} --}}
+    {{--                                </p> --}}
+    {{--                                <p> --}}
+    {{--                                    <i class="bi bi-geo-alt"></i> {{ $entry->sigLocation->name }} --}}
+    {{--                                    @if ($entry->hasLocationChanged) --}}
+    {{--                                        <span class="badge bg-danger">{{ __("Changed") }}</span> --}}
+    {{--                                    @endif --}}
+    {{--                                </p> --}}
+    {{--                                @foreach ($entry->sigEvent->sigTags as $tag) --}}
+    {{--                                    <h3 class="d-inline"><span class="badge bg-secondary">{{ $tag->description }}</span></h3> --}}
+    {{--                                @endforeach --}}
+    {{--                            </div> --}}
+    {{--                        </div> --}}
+    {{--                        <div class="card-body col-lg-1 col-2 d-flex"> --}}
+    {{--                            <a type="button" class="fav-btn text-secondary align-self-center w-100 text-end" data-event="{{ $entry->id }}"> --}}
+    {{--                                <i class="bi bi-heart" style="font-size: 2em"></i> --}}
+    {{--                            </a> --}}
+    {{--                        </div> --}}
+    {{--                    </div> --}}
+    {{--                </div> --}}
+    {{--            @endforeach --}}
 
-        {{-- <table class="table">
+    {{-- <table class="table">
         @foreach ($days as $day)
         <tr></tr>
             <tr class="weekday">
@@ -274,7 +274,7 @@
     </table>
 </body> --}}
 
-{{-- <ul class="nav nav-tabs">
+    {{-- <ul class="nav nav-tabs">
     @foreach ($locations as $location)
         <li class="nav-item">
             <a class="nav-link{{ $loop->first ? ' active' : '' }}" data-bs-toggle="tab" href="#{{ $location->name }}">
@@ -306,7 +306,7 @@
     <div class="tab-pane" id="niedersachsen">2</div>
     <div class="tab-pane" id="saarland">3</div>
 </div> --}}
-{{-- <table class="table">
+    {{-- <table class="table">
     <tr>
         <th></th>
         @foreach ($locations as $location)
@@ -373,4 +373,28 @@
                         echo '<td></td>';
                     }
                 }
+            @endphp
+        </tr>
+    @endfor
+</table> --}}
+
+    {{--<script>--}}
+    {{--    $('.fav-btn').click(function () {--}}
+    {{--        let eventID = $(this).data('event');--}}
+
+    {{--        $.ajax({--}}
+    {{--            url: {{ route('favorites.store') }},--}}
+    {{--            method: 'POST',--}}
+    {{--            data: {--}}
+    {{--                _token:'<?php echo csrf_token(); ?>',--}}
+    {{--                timetable_entry_id:eventID--}}
+    {{--            },--}}
+    {{--            dataType: 'JSON',--}}
+    {{--            success: function(data) {--}}
+    {{--               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');--}}
+    {{--            }--}}
+    {{--            // Eine schöne Vue bauen ;D--}}
+    {{--        });--}}
+    {{--    });--}}
+    {{--</script>--}}
 @endsection
