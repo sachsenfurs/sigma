@@ -13,9 +13,13 @@ import 'jquery-ui/ui/widgets/autocomplete';
 // Vue
 import { createApp } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue'
+import TimetableEntryComponent from "./components/TimetableEntryComponent.vue";
+import TimetableEntryList from "./components/TimetableEntryList.vue";
 let app=createApp({
     components: {
-        ExampleComponent
+        ExampleComponent,
+        TimetableEntryComponent,
+        TimetableEntryList
     }
 }).mount("#app")
 

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\SigEvent;
 use App\Models\TimetableEntry;
 use App\Models\SigLocation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TableViewController extends Controller
@@ -39,5 +41,16 @@ class TableViewController extends Controller
                                       ->orderByRaw("FIELD(sig_locations.id, 27,13,11,22,10,5,15,14,2,21,20,19,18,7,6,25,1) DESC")
                                       ->get(),
         ]);
+    }
+
+    public function timetableIndex() {
+        return TimetableEntry::public()
+            ->with("sigEvent", function($query) {
+                return $query->with("sigHost")
+                    ->with("sigLocation")
+                    ->with("sigTags");
+            })
+            ->with("sigLocation")
+            ->orderBy("start")->get();
     }
 }

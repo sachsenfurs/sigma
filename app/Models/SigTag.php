@@ -10,6 +10,10 @@ class SigTag extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'description_localized',
+    ];
+
     public $timestamps = false;
 
     public function sigEvent() {
