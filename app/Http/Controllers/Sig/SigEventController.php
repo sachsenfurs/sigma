@@ -149,7 +149,7 @@ class SigEventController extends Controller
                 $dateTimeStart = Carbon::parse($dateStart);
                 $dateTimeEnd = Carbon::parse($request->get("date-end")[$i]);
 
-                $sig->timeTableEntries()->create([
+                $sig->timetableEntries()->create([
                     'start' => $dateTimeStart,
                     'end' => $dateTimeEnd,
                     'hide' => $request->boolean("hide"),

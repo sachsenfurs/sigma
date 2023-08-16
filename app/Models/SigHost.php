@@ -30,7 +30,7 @@ class SigHost extends Model
     public function scopePublic($query) {
         return $query->where('hide', false)
             ->whereHas("sigEvents", function($query) {
-                $query->whereHas("timeTableEntries", function($query) {
+                $query->whereHas("timetableEntries", function($query) {
                    $query->where("hide", false);
                 });
             });

@@ -36,7 +36,7 @@ class SigEvent extends Model
     }
 
     public function getTimetableCountAttribute() {
-        return $this->timeTableEntries->count();
+        return $this->timetableEntries->count();
     }
 
     public function getNameEnAttribute() {
@@ -62,5 +62,11 @@ class SigEvent extends Model
 
     public function sigTags() {
         return $this->belongsToMany(SigTag::class);
+    }
+
+    public function scopePublic($query) {
+        return $query->whereHas("timetableEntries", function($query) {
+            $query->where("hide", false);
+        });
     }
 }

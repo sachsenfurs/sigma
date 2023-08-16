@@ -16,7 +16,7 @@
                 <th>Aktion</th>
             </tr>
             @forelse($sigs AS $sig)
-                <tr class="@if($sig->timeTableCount == 0) alert-danger @endif">
+                <tr class="@if($sig->timetableCount == 0) alert-danger @endif">
                     <td>
                         @if($sig->description == "" OR $sig->description_en == "")
                             <div class="badge bg-danger">Text unvollständig!</div>
@@ -55,7 +55,7 @@
                             </span>
                         @endforeach
                     </td>
-                    <td>{{ $sig->timeTableCount }}</td>
+                    <td>{{ $sig->timetableCount }}</td>
                     <td>
                         <a href="{{ route("sigs.edit", $sig) }}">
                             <button type="button" class="btn btn-primary"><i class="bi bi-pen"></i></button>

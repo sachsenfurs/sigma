@@ -16,7 +16,7 @@ trait NameIdAsSlug {
         $parts = explode("-", $value);
         $id = end($parts);
 
-        $instances = self::where("id", $id)->orWhere("name", $value);
+        $instances = self::where($this->getTable().".id", $id)->orWhere($this->getTable().".name", $value);
 
         return $instances->first();
     }
