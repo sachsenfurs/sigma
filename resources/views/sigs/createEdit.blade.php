@@ -180,7 +180,11 @@
                                         <h3>Tags</h3>
                                         @foreach(\App\Models\SigTag::all() AS $tag)
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="tag_{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" @checked($sig->sigTags->find($tag->id))>
+                                                <input class="form-check-input" type="checkbox" id="tag_{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}"
+                                                    @isset($sig)
+                                                        @checked($sig->sigTags->find($tag->id))
+                                                    @endisset
+                                                >
                                                 <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->description }}</label>
                                             </div>
                                         @endforeach
