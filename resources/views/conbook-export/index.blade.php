@@ -34,9 +34,11 @@
                         @if($tag->name == "signup")
                             <p>
                             <span class="badge bg-secondary">{{ $tag->description_localized }}</span>
-                            <img src="{{ 'https://chart.googleapis.com/chart?chs=500x500&chld=L|1&cht=qr&chl='.urlencode(route("public.timeslot-show", $entry)) }}"
+                            <img src="https://chart.googleapis.com/chart?chs=500x500&chld=L|1&cht=qr&chl=sigma.sachsenfurs.de/show/{{ $entry->id }}"
                                  style="max-height: 5em"
-                                 alt="{{ route("public.timeslot-show", $entry) }} - {{ 'https://chart.googleapis.com/chart?chs=500x500&chld=L|1&cht=qr&chl='.urlencode(route("public.timeslot-show", $entry)) }}"
+                                 alt="{{ route("public.timeslot-show", $entry) }}
+                                 -
+                                 https://chart.googleapis.com/chart?chs=500x500&chld=L|1&cht=qr&chl=sigma.sachsenfurs.de/show/{{ $entry->id }}"
                             >
                             <br>
                             </p>
