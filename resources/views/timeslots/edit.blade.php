@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-8 col-md-8">
                                 {{ $timeslot->timetableEntry->start->format("d.m.Y") }}<br>
-                                {{ $timeslot->timetableEntry->start->format("H:i") }} - {{ $timeslot->timetableEntry->start->end("H:i") }}
+                                {{ $timeslot->timetableEntry->start->format("H:i") }} - {{ $timeslot->timetableEntry->end->format("H:i") }}
                             </div>
                         </div>
                     </div>
@@ -42,26 +42,26 @@
                         <label for="" class="col-sm-4 col-form-label text-end">{{ __("Slot Start") }}</label>
                         <div class="col-sm-8">
                             <input type="time" class="form-control" name="slot_start"
-                                   id="slot_start" value="{{ date('H:i', strtotime($timeslot->slot_start)) }}">
+                                   id="slot_start" value="{{ \Illuminate\Support\Carbon::parse($timeslot->slot_start)->format("H:i") }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">{{ __("Slot End") }}</label>
                         <div class="col-sm-8">
                             <input type="time" class="form-control" name="slot_end"
-                                   id="slot_end" value="{{ date('H:i', strtotime($timeslot->slot_end)) }}">
+                                   id="slot_end" value="{{ \Illuminate\Support\Carbon::parse($timeslot->slot_end)->format("H:i") }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">{{ __("Registration Start") }}</label>
                         <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" name="reg_start" id="reg_start" value="{{ date('Y-m-d H:i', strtotime($timeslot->reg_start)) }}">
+                            <input type="datetime-local" class="form-control" name="reg_start" id="reg_start" value="{{ $timeslot->reg_start }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">{{ __("Registration End") }}</label>
                         <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" name="reg_end" id="reg_end" value="{{ date('Y-m-d H:i', strtotime($timeslot->reg_end)) }}">
+                            <input type="datetime-local" class="form-control" name="reg_end" id="reg_end" value="{{ $timeslot->reg_end }}">
                         </div>
                     </div>
                     <div class="form-group row m-1">

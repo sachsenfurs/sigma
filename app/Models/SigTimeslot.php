@@ -11,6 +11,11 @@ class SigTimeslot extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'reg_start' => 'datetime',
+        'reg_end' => 'datetime',
+    ];
+
     public function timetableEntry() {
         return $this->belongsTo(TimetableEntry::class);
     }
