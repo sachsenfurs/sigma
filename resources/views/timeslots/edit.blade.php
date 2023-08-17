@@ -29,7 +29,7 @@
                                 <strong>{{ __("Schedule Entry") }}</strong>
                             </div>
                             <div class="col-8 col-md-8">
-                                {{ date('d.h.Y', strtotime($timeslot->timetableEntry->start)) }}<br>
+                                {{ date('d.m.Y', strtotime($timeslot->timetableEntry->start)) }}<br>
                                 {{ date('H:i', strtotime($timeslot->timetableEntry->start)) }} - {{ date('H:i', strtotime($timeslot->timetableEntry->end)) }}
                             </div>
                         </div>
