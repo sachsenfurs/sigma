@@ -101,11 +101,15 @@
                     <h2 class="text-center text-md-start">Description</h2>
                     <div class="col-12 col-md-12 text-center text-md-start">
                         <h3>German</h3>
-                        <p>{{ $sig->description }}</p>
+                        <x-markdown>
+                            {{ $sig->description }}
+                        </x-markdown>
                     </div>
                     <div class="col-12 col-md-12 text-center text-md-start">
                         <h3>English</h3>
-                        <p>{{ $sig->description_en }}</p>
+                        <x-markdown>
+                            {{ $sig->description_en }}
+                        </x-markdown>
                     </div>
                 </div>
             </div>
