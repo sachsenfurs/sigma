@@ -20,7 +20,10 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-{{ $tte->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapse{{ $tte->id }}">
-                                    {{ date('l', strtotime($tte->start)) }} ({{ date('H:i', strtotime($tte->start)) }} - {{ date('H:i', strtotime($tte->end)) }}) - <i class="bi bi-heart-fill text-danger pl-2 pr-2"></i> {{ $additionalInformations[$tte->id]['favorites'] }}
+                                    {{ $tte->start->isoFormat("dddd") }} {{ $tte->start->format("(H:i") }} - {{ $tte->end->format("H:i)") }}
+                                    -
+                                    <i class="bi bi-heart-fill text-danger px-1"></i>
+                                    {{ $additionalInformations[$tte->id]['favorites'] }}
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapse-{{ $tte->id }}" class="accordion-collapse collapse show">
@@ -30,7 +33,7 @@
                                             <div class="col-12 col-md-12 mb-2">
                                                 <div class="row border border-light">
                                                     <div class="col-12 col-md-3 bg-light d-flex" style="align-items: center; justify-content: center;">
-                                                        <h3>{{ date('H:i', strtotime($ts->slot_start)) }} - {{ date('H:i', strtotime($ts->slot_end)) }}</h3>
+                                                        <h3>{{ $ts->slot_start->format("H:i") }} - {{ $ts->slot_end->format("H:i") }}</h3>
                                                     </div>
                                                     <div class="col-12 col-md-9 p-2">
                                                         <h3>{{ __('Attendees') }}</h3>
@@ -99,6 +102,9 @@
                 </div>
                 <div class="col-12 col-md-12 mt-3">
                     <h2 class="text-center text-md-start">Description</h2>
+
+                    <a href="{{ route("sigs.edit", $sig) }}" class="btn btn-primary d-block my-4">{{ __("Edit") }}</a>
+
                     <div class="col-12 col-md-12 text-center text-md-start">
                         <h3>German</h3>
                         <x-markdown>
