@@ -33,7 +33,7 @@
                                             <div class="col-12 col-md-12 mb-2">
                                                 <div class="row border border-light">
                                                     <div class="col-12 col-md-3 bg-light d-flex" style="align-items: center; justify-content: center;">
-                                                        <h3>{{ $ts->slot_start->format("H:i") }} - {{ $ts->slot_end->format("H:i") }}</h3>
+                                                        <h3>{{ \Illuminate\Support\Carbon::parse($ts->slot_start)->format("H:i") }} - {{ \Illuminate\Support\Carbon::parse($ts->slot_end)->format("H:i") }}</h3>
                                                     </div>
                                                     <div class="col-12 col-md-9 p-2">
                                                         <h3>{{ __('Attendees') }}</h3>

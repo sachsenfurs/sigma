@@ -6,11 +6,11 @@
         <div class="accordion-header">
            @if($entry->end->isAfter(now()))
                <x-timeslot.accordion-button :entry="$entry">
-                   {{ $entry->getAvailableSlotCount() }} Freie Plätze
+                   {{ $entry->getAvailableSlotCount() }} {{ __("Slots available") }}
                </x-timeslot.accordion-button>
            @elseif($entry->end->addHours(12)->isAfter(now()))
                 <x-timeslot.accordion-button :entry="$entry">
-                    Event hat bereits stattgefunden
+                    {{ __("Event already took place") }}
                 </x-timeslot.accordion-button>
            @endif
         </div>
@@ -20,11 +20,11 @@
                 @foreach($entry->sigTimeslots as $timeslot)
                     <div @class(['row mb-3 mb-md-0 border p-1', 'bg-secondary text-white' => $timeslot->max_users <= $timeslot->sigAttendees->count()])>
                         <div class="col-lg-4 col-6 align-self-center">
-                            {{ date('H:i', strtotime($timeslot->slot_start)) }} - {{ date('H:i', strtotime($timeslot->slot_end))  }}
+                            {{ \Illuminate\Support\Carbon::parse($timeslot->slot_start)->format("H:i") }} - {{ \Illuminate\Support\Carbon::parse($timeslot->slot_end)->format("H:i")  }}
                         </div>
                         <div class="col-lg-4 col-6 align-self-center">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
-                            <span class="text-nowrap">Plätze belegt</span>
+                            <span class="text-nowrap">{{ __("Slots taken") }}</span>
                         </div>
 
                         @if ($timeslot->reg_start->isAfter(now()))

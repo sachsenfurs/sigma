@@ -134,6 +134,10 @@
     "Changed": "Geändert",
     "Moved": "Verschoben",
 
-    "Sign up": "Melde dich an:",
-    "Scheduled": "Im Programmplan:"
+    "Sign up": "Melde dich an",
+    "Scheduled": "Im Programmplan:",
+    "Slots available": "Freie Plätze",
+    "Slots taken": "Plätze vergeben",
+    "Event already took place": "Event hat bereits stattgefunden",
+    "Sold out": "Ausgebucht"
 }
