@@ -1,28 +1,26 @@
-import './bootstrap';
+import "./bootstrap";
 
 // bootstrap
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 // jQuery
-import $ from 'jquery';
+import $ from "jquery";
 window.$ = window.jQuery = $;
-import 'jquery-ui/ui/widgets/autocomplete';
-
-
+import "jquery-ui/ui/widgets/autocomplete";
 
 // Vue
-import { createApp } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue'
-import TimetableEntryComponent from "./components/TimetableEntryComponent.vue";
-import TimetableEntryList from "./components/TimetableEntryList.vue";
-import TimetableEntryTabs from "./components/TimetableEntryTabs";
-let app=createApp({
+import { createApp } from "vue";
+import ExampleComponent from "./components/ExampleComponent.vue";
+import EntryComponent from "./components/TimetableEntrys/EntryComponent.vue";
+import EntryList from "./components/TimetableEntrys/EntryList.vue";
+import DayTabComponent from "./components/TimetableEntrys/DayTabComponent.vue";
+import RoomTabComponent from "./components/TimetableEntrys/RoomTabComponent.vue";
+let app = createApp({
     components: {
         ExampleComponent,
-        TimetableEntryComponent,
-        TimetableEntryList,
-        TimetableEntryTabs
-    }
-}).mount("#app")
-
-
+        EntryComponent,
+        EntryList,
+        DayTabComponent,
+        RoomTabComponent
+    },
+}).mount("#app");

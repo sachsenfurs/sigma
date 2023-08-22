@@ -133,8 +133,7 @@
     <div class="container" id="app">
 
         <div class="mt-4">
-            <timetable-entry-tabs />
-
+            <entry-list />
         </div>
     </div>
     <!-- Tab panes /Content -->
@@ -364,23 +363,23 @@
     @endfor
 </table> --}}
 
-    {{--<script>--}}
-    {{--    $('.fav-btn').click(function () {--}}
-    {{--        let eventID = $(this).data('event');--}}
+    {{-- <script> --}}
+    {{--    $('.fav-btn').click(function () { --}}
+    {{--        let eventID = $(this).data('event'); --}}
 
-    {{--        $.ajax({--}}
-    {{--            url: {{ route('favorites.store') }},--}}
-    {{--            method: 'POST',--}}
-    {{--            data: {--}}
-    {{--                _token:'<?php echo csrf_token(); ?>',--}}
-    {{--                timetable_entry_id:eventID--}}
-    {{--            },--}}
-    {{--            dataType: 'JSON',--}}
-    {{--            success: function(data) {--}}
-    {{--               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill');--}}
-    {{--            }--}}
-    {{--            // Eine schöne Vue bauen ;D--}}
-    {{--        });--}}
-    {{--    });--}}
-    {{--</script>--}}
+    {{--        $.ajax({ --}}
+    {{--            url: {{ route('favorites.store') }}, --}}
+    {{--            method: 'POST', --}}
+    {{--            data: { --}}
+    {{--                _token:'<?php echo csrf_token(); ?>', --}}
+    {{--                timetable_entry_id:eventID --}}
+    {{--            }, --}}
+    {{--            dataType: 'JSON', --}}
+    {{--            success: function(data) { --}}
+    {{--               $('#fav-' . eventID).removeClass('bi-heart').addClass('bi-heart-fill'); --}}
+    {{--            } --}}
+    {{--            // Eine schöne Vue bauen ;D --}}
+    {{--        }); --}}
+    {{--    }); --}}
+    {{-- </script> --}}
 @endsection
