@@ -8,11 +8,14 @@ use App\Models\TimetableEntry;
 use App\Models\SigTimeslot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class TimetableController extends Controller
 {
 
     public function index() {
+        Gate::authorize("manage_events");
+
         $entriesPerDay = TimetableEntry::orderBy('start', "ASC")->get()
             ->groupBy(function($item, $key) {
                 return Carbon::parse($item['start'])->format("Y-m-d");
@@ -29,6 +32,8 @@ class TimetableController extends Controller
     }
 
     public function store(Request $request) {
+        Gate::authorize("manage_events");
+
         $validated = $request->validate([
             'sig_event_id' => "required|exists:" . SigEvent::class . ",id",
             'sig_location_id' => "nullable|exists:" . SigLocation::class . ",id",
@@ -68,6 +73,8 @@ class TimetableController extends Controller
     }
 
     public function edit(TimetableEntry $entry) {
+        Gate::authorize("manage_events");
+
         $locations = SigLocation::all();
 
         return view("timetable.edit", [
@@ -77,6 +84,8 @@ class TimetableController extends Controller
     }
 
     public function update(Request $request, TimetableEntry $entry) {
+        Gate::authorize("manage_events");
+
         $validated = $request->validate([
             'start' => 'required|date',
             'end' => 'required|date',
@@ -125,6 +134,8 @@ class TimetableController extends Controller
     }
 
     public function destroy(TimetableEntry $entry) {
+        Gate::authorize("manage_events");
+
         $entry->delete();
 
         return redirect(route("timetable.index"))->withSuccess("Eintrag gelöscht");
