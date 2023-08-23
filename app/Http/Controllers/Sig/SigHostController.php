@@ -21,10 +21,10 @@ class SigHostController extends Controller
 
     public function show(SigHost $host) {
         $events = $host->sigEvents()
-            ->with("timeTableEntries")
+            ->with("timetableEntries")
             ->get()
             ->sortBy(function($event, $key) {
-                return ($event->timeTableEntries->first()?->start);
+                return ($event->timetableEntries->first()?->start);
             });
 
         return view("hosts.show", [

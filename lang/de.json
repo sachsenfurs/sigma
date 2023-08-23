@@ -132,5 +132,12 @@
     "Favorite successfully removed!": "Favorisiertes Event erfolgreich entfernt",
 
     "Changed": "Geändert",
-    "Moved": "Verschoben"
+    "Moved": "Verschoben",
+
+    "Sign up": "Melde dich an",
+    "Scheduled": "Im Programmplan:",
+    "Slots available": "Freie Plätze",
+    "Slots taken": "Plätze vergeben",
+    "Event already took place": "Event hat bereits stattgefunden",
+    "Sold out": "Ausgebucht"
 }

@@ -5,12 +5,20 @@ namespace App\Models\Traits;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use Illuminate\Database\Query\Builder;
 
 trait HasSigEvents {
 
     public function sigEvents() {
-        return $this->hasMany(SigEvent::class);
-//
+        return $this->hasMany(SigEvent::class)
+            ->orderByRaw("
+             (
+                SELECT START FROM timetable_entries
+                WHERE timetable_entries.sig_event_id = sig_events.id
+                ORDER BY start
+                LIMIT 1
+             )
+        ");
 //        // das hier geht bestimmt noch schöner >.>
 //        if($this instanceof SigLocation) {
 //
@@ -30,7 +38,7 @@ trait HasSigEvents {
 
     public function getPublicSigEventCount() {
         return $this->sigEvents()
-                    ->with("timeTableEntries")
+                    ->with("timetableEntries")
                     ->get()
                     ->filter(function($sigEvent) {
                         return !$sigEvent->isCompletelyPrivate();
