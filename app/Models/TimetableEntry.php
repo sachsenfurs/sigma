@@ -70,6 +70,13 @@ class TimetableEntry extends Model
     public function sigTimeslots() {
         return $this->hasMany(SigTimeslot::class);
     }
+    public function getAvailableSlotCount() {
+        $counter = 0;
+        foreach($this->sigTimeslots AS $timeslot) {
+            $counter += $timeslot->max_users - $timeslot->sigAttendees->count();
+        }
+        return $counter;
+    }
 
     public function replacedBy() {
         return $this->belongsTo(TimetableEntry::class);

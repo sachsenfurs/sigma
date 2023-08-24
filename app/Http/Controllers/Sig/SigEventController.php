@@ -12,8 +12,10 @@ use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Gate;
 use function PHPUnit\Framework\isNull;
 
 class SigEventController extends Controller
@@ -109,6 +111,7 @@ class SigEventController extends Controller
             $host_id = SigHost::whereId($host_id)->first()->id;
         }
 
+
         $languages = [];
         if($request->has("lang_de"))
             $languages[] = "de";
@@ -122,14 +125,8 @@ class SigEventController extends Controller
         $sig->sigLocation()->associate($validated['location']);
         $sig->description = $validated['description'];
         $sig->languages = $languages;
-        if ($request->has('reg_possible')) {
-			$sig->reg_possible = true;
-		} else {
-            $sig->reg_possible = false;
-        }
-        if ($validated['max_regs_per_day']) {
-            $sig->max_regs_per_day = $validated['max_regs_per_day'];
-        }
+        $sig->reg_possible = $request->has('reg_possible');
+        $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? null;
         $sig->save();
 
         // Insert translation
@@ -169,11 +166,11 @@ class SigEventController extends Controller
         $validated = $request->validate([
             'name' => "required|string",
             'name_en' => "required|string",
-            'host_id' => 'exclude_if:host_id,NEW|required|exists:sig_hosts,id',
+            'host_id' => 'exclude_if:host_id,NEW|exists:sig_hosts,id',
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'max_regs_per_day' => 'nullable|integer',
-            'location' => 'required|exists:' . SigLocation::class . ",id",
+            'location' => 'exists:' . SigLocation::class . ",id",
             'description' => "nullable|string",
             'description_en' => "nullable|string",
             'tags' => "nullable|array",
@@ -184,25 +181,30 @@ class SigEventController extends Controller
         if($request->has("lang_en")) {
             $languages[] = "en";
         }
-        $host_id = $request->get('host_id');
-        if($host_id == 'NEW') {
-            // Does not exist
-            $host_id = SigHost::create([
-                'name' => $validated['host'],
-                'reg_id' => $validated['reg_id'],
-            ]);
-        } else {
-            // Does exist
-            $host_id = SigHost::whereId($host_id)->first()->id;
+
+        if(Gate::check("manage_events")) {
+            $host_id = $request->get('host_id');
+            if($host_id == 'NEW') {
+                // Does not exist
+                $host_id = SigHost::create([
+                    'name' => $validated['host'],
+                    'reg_id' => $validated['reg_id'],
+                ]);
+            } else {
+                // Does exist
+                $host_id = SigHost::whereId($host_id)->first()->id;
+            }
+            $sig->sigHost()->associate($host_id);
+            $sig->reg_possible = $request->has('reg_possible');
+            $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
+            $sig->sigLocation()->associate($validated['location']);
+
+            $sig->sigTags()->sync($request->get("tags"));
         }
 
         $sig->name = $validated['name'];
         $sig->description = $validated['description'];
-        $sig->sigLocation()->associate($validated['location']);
         $sig->languages = $languages;
-        $sig->sigHost()->associate($host_id);
-        $sig->reg_possible = $request->has('reg_possible');
-        $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
 
         if(!$sig->sigTranslation) {
             $sig->sigTranslation()->create([
@@ -215,8 +217,6 @@ class SigEventController extends Controller
             $sig->sigTranslation->description = $validated['description_en'];
             $sig->sigTranslation->save();
         }
-
-        $sig->sigTags()->sync($request->get("tags"));
 
         $sig->save();
 

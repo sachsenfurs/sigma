@@ -18,9 +18,7 @@ class SigEventPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
+        return $user->role->perm_manage_events;
     }
 
     /**
@@ -32,13 +30,7 @@ class SigEventPolicy
      */
     public function view(User $user, SigEvent $sigEvent)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
-
-        if ($sigEvent->sigHost->reg_id === $user->reg_id) {
-            return true;
-        }
+        return $user->role->perm_manage_events || $sigEvent->sigHost->reg_id === $user->reg_id;
     }
 
     /**
@@ -49,9 +41,7 @@ class SigEventPolicy
      */
     public function create(User $user)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
+        return $user->role->perm_manage_events;
     }
 
     /**
@@ -63,13 +53,7 @@ class SigEventPolicy
      */
     public function update(User $user, SigEvent $sigEvent)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
-
-        if ($sigEvent->host_id === auth()->user()->id) {
-            return true;
-        }
+         return $user->role->perm_manage_events || $sigEvent->sigHost->reg_id === $user->reg_id;
     }
 
     /**
@@ -81,9 +65,7 @@ class SigEventPolicy
      */
     public function delete(User $user, SigEvent $sigEvent)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
+        return $user->role->perm_manage_events;
     }
 
     /**
@@ -95,9 +77,7 @@ class SigEventPolicy
      */
     public function restore(User $user, SigEvent $sigEvent)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
+        return $user->role->perm_manage_events;
     }
 
     /**
@@ -109,8 +89,6 @@ class SigEventPolicy
      */
     public function forceDelete(User $user, SigEvent $sigEvent)
     {
-        if ($user->role->perm_manage_events) {
-            return true;
-        }
+        return $user->role->perm_manage_events;
     }
 }

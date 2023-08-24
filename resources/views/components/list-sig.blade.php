@@ -4,7 +4,10 @@
 
 <div class="card mb-4">
     <div class="card-header">
-        <h4 class="d-inline">{{ $sig->name_localized }}</h4>
+        <h4 class="d-inline">
+            {{ $sig->name_localized }}
+        </h4>
+
         @can("manage_events")
             <a href="{{ route("sigs.edit", $sig) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
@@ -28,7 +31,7 @@
                     </div>
                     <a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none" style="flex: content">
                     <div class="col-auto">
-                        <b>{{ $entry->start->format("l") }}</b> <i class="text-muted"> {{ $entry->start->format("d.m.y") }}</i>
+                        <b>{{ $entry->start->dayName }}</b> <i class="text-muted"> {{ $entry->start->format("d.m.y") }}</i>
                         <div class="text-muted">
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                         </div>
@@ -37,13 +40,15 @@
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->cancelled)
-                                <span class="badge bg-danger">{{ __("Cancelled") }}</span>
+                                <h2><span class="badge bg-danger">{{ __("Cancelled") }}</span></h2>
                             @else
                                 @if($entry->sigEvent->reg_possible)
                                     <a href="{{ route("public.timeslot-show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged)
-                                    <span class="badge bg-warning">{{ __("Changed") }}</span>
+                                    <h2>
+                                        <span class="badge bg-warning">{{ __("Changed") }}</span>
+                                    </h2>
                                 @endif
                             @endif
                         </div>
