@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\SigReminder;
+use App\Notifications\SigFavorite\SigFavoriteReminder;
 use Illuminate\Console\Command;
 
 class SendReminders extends Command
@@ -27,6 +29,12 @@ class SendReminders extends Command
      */
     public function handle()
     {
+        $upcomingReminders = SigReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
+
+        foreach ($upcomingReminders as $reminder) {
+            $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry));
+        }
+
         return 0;
     }
 }

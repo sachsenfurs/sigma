@@ -6,6 +6,7 @@ use App\Models\Traits\HasTimetableEntries;
 use Database\Seeders\SigTagSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model

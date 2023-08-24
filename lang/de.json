@@ -130,6 +130,12 @@
     "Events you've signed up for:": "Events, für die du dich angemeldet hast:",
     "Favorite Events": "Favorisierte Events",
     "Favorite successfully removed!": "Favorisiertes Event erfolgreich entfernt",
+    "Connect your account with telegram to enable notifications": "Verbinde deinen Account mit Telegram um Benachrichtigungen zu erlauben",
+    "Notifications": "Benachrichtigungen",
+    "Telegram ID": "Telegram ID",
+    "Modify reminder": "Erinnerung bearbeiten",
+    "How many minutes before the event :event do you want to be reminded for?": "Wie viele Minuten vor dem Event :event willst du daran erinnert werden?",
+    "Minutes": "Minuten",
 
     "Changed": "Geändert",
     "Moved": "Verschoben"

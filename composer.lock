@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75a546419cdd5a6a7760e131afd6e9fe",
+    "content-hash": "fc5eb0b8fee779bfb4d78c4a24d0e747",
     "packages": [
         {
             "name": "brick/math",
@@ -1316,6 +1316,79 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
+        },
+        {
+            "name": "laravel-notification-channels/telegram",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-notification-channels/telegram.git",
+                "reference": "8609d67d2f0b6ae5adfba85021722443dd332fb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-notification-channels/telegram/zipball/8609d67d2f0b6ae5adfba85021722443dd332fb8",
+                "reference": "8609d67d2f0b6ae5adfba85021722443dd332fb8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.0",
+                "illuminate/contracts": "^9.0",
+                "illuminate/notifications": "^9.0",
+                "illuminate/support": "^9.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4",
+                "nunomaduro/larastan": "^2.0",
+                "orchestra/testbench": "^7.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\Telegram\\TelegramServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\Telegram\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Irfaq Syed",
+                    "email": "github@lukonet.net",
+                    "homepage": "https://lukonet.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Telegram Notifications Channel for Laravel",
+            "homepage": "https://github.com/laravel-notification-channels/telegram",
+            "keywords": [
+                "laravel",
+                "notification",
+                "telegram",
+                "telegram notification",
+                "telegram notifications channel"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-notification-channels/telegram/issues",
+                "source": "https://github.com/laravel-notification-channels/telegram/tree/3.0.0"
+            },
+            "time": "2022-10-15T01:56:19+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2850,6 +2923,68 @@
                 }
             ],
             "time": "2023-02-25T19:38:58+00:00"
+        },
+        {
+            "name": "pschocke/laravel-telegram-login-widget",
+            "version": "v2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pschocke/laravel-telegram-login-widget.git",
+                "reference": "27ae71e93267fdb785cd1e46f544bc9c6779d33f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pschocke/laravel-telegram-login-widget/zipball/27ae71e93267fdb785cd1e46f544bc9c6779d33f",
+                "reference": "27ae71e93267fdb785cd1e46f544bc9c6779d33f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~9"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.1",
+                "orchestra/testbench": "~7",
+                "phpunit/phpunit": "^9",
+                "sempro/phpunit-pretty-print": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "pschocke\\TelegramLoginWidget\\TelegramLoginWidgetServiceProvider"
+                    ],
+                    "aliases": {
+                        "MyPackage": "pschocke\\TelegramLoginWidget\\Facades\\MyPackage"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "pschocke\\TelegramLoginWidget\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Schocke",
+                    "email": "patrick@ausbildung-ms.de",
+                    "homepage": "https://github.com/pschocke/"
+                }
+            ],
+            "description": "Easily integrate Telegrams login widget into your Laravel application to send Telegram messages",
+            "homepage": "https://github.com/pschocke/telegramloginwidget",
+            "keywords": [
+                "TelegramLoginWidget",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/pschocke/laravel-telegram-login-widget/issues",
+                "source": "https://github.com/pschocke/laravel-telegram-login-widget/tree/v2"
+            },
+            "time": "2022-04-02T10:00:28+00:00"
         },
         {
             "name": "psr/cache",

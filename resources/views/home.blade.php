@@ -17,7 +17,15 @@
 {{--                    {{ __('You are logged in!') }}--}}
 {{--                </div>--}}
 {{--            </div>--}}
-
+            @if (!auth()->user()->telegram_uder_id)
+                <div class="row m-3">
+                    <div class="col-12 col-md-12 text-center">
+                        <h2>{{ __("Notifications") }}</h2>
+                        <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
+                    </div>
+                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="cyber_kacec_bot" data-size="large" data-auth-url="https://sigma.sachsenfurs.de/telegram/auth" data-request-access="write"></script>
+                </div>
+            @endif
             <div class="row m-3">
                 <div class="col-12 col-md-12 text-center">
                     <h2>{{ __("Events you've signed up for:") }}</h2>
