@@ -62,6 +62,7 @@
 export default {
     name: "EntryComponent",
     props: {
+        id :"",
         entry: {
             id: 0,
             start: "",

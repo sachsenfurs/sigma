@@ -1,53 +1,37 @@
 <template>
-        <li class="nav-item">
+    <ul class="nav nav-underline d-flex bg-body flex-nowrap navbar-nav-scroll" ref="scrollTab">
+        <li v-for="(date, dateIndex) in Array.from(days.values())" :key="date" class="nav-item flex-fill p-1 py-2">
             <a
-                :class="['nav-link', { active: id === activeTabIndex }]"
-                data-bs-toggle="tab"
-                :href="'#ConDay' + (entry.id + 1)"
+                :class="['nav-link text-center', { active: activeDayIndex == dateIndex }]"
+                :href="'#day' + dateIndex"
+                @click="switchDay(dateIndex, date, this)"
             >
-                {{ getWeekday(entry.start) }}
+                <h3>
+                    {{ getWeekday(date) }}
+                </h3>
             </a>
         </li>
+    </ul>
 </template>
 
 <script>
 export default {
     name: "DayTabComponent",
     props: {
-        entry: {
-            id: 0,
-            start: "",
-            formatted_length: "",
-            hasLocationChanged: false,
-            hasTimeChanged: false,
-            cancelled: false,
-            sig_event: {
-                name: "",
-                name_localized: "",
-                sig_host: {
-                    name: "",
-                },
-                sig_location: {
-                    name: "",
-                },
-                sig_tags: {
-                    description_localized: "",
-                },
-            },
-        },
+        days: [],
+        activeDayIndex: 0,
     },
     methods: {
-        getWeekday(dateString) {
-            const daysOfWeek = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
-            const date = new Date(dateString);
-            const weekday = daysOfWeek[date.getDay()];
-            return weekday;
+        getWeekday(date) {
+            return new Date(date).toLocaleDateString("de", { weekday: 'long' })
         },
-    },
-    data() {
-        return {
-            activeTabIndex: 0, // Index des aktiven Tabs
-        };
+        switchDay(dateIndex, date, el) {
+            this.$emit("scrollToDay", dateIndex);
+            this.$emit("setActiveTab", dateIndex);
+            let navOffset = this.$el.getBoundingClientRect().left;
+            let targetOffset = event.target.getBoundingClientRect().left;
+            this.$el.scrollTo(targetOffset-navOffset, 0);
+        }
     }
 };
 </script>
