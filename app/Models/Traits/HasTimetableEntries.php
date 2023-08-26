@@ -10,7 +10,8 @@ trait HasTimetableEntries {
 
     public function timetableEntries() {
 
-        return $this->hasMany(TimetableEntry::class);
+        return $this->hasMany(TimetableEntry::class)
+            ->orderBy("start");
 //        // TODO:
 //        // das hier geht bestimmt auch noch schöner >.>
 //        $relation = $this->hasMany(TimetableEntry::class)

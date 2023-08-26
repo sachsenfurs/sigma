@@ -77,7 +77,7 @@
                         <x-timeslot.accordion :entry="$e"></x-timeslot.accordion>
                     </div>
                 @else
-                    <div class="col-5 col-md-4 m-1 mx-auto">
+                    <div class="col-5 col-md-4 m-3 mx-auto">
                         <div class="card text-center">
                             <div class="card-header">
                                 <span style="font-size: 1.3em">
