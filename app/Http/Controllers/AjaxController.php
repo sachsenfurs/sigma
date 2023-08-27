@@ -33,6 +33,10 @@ class AjaxController extends Controller
             if (auth()->user()->favorites()->create($attributes)) {
                 $result = 'success';
             }
+            //$reminderAttributes = [
+            //
+            //];
+            //auth()->user()->reminders()->create($reminderAttributes);
         }
 
         $response = [
