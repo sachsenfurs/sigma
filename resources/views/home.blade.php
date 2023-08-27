@@ -115,9 +115,11 @@
                                                 <button type="button" class="btn btn-danger text-white"
                                                 onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" 
                                                 data-toggle="modal" data-target="#deleteModal"
+                                                {{--
                                                 @if ($registration->sigTimeslot->slot_start < \Carbon\Carbon::now())
                                                     @disabled(true)
                                                 @endif
+                                                --}}
                                                 >
                                                 
                                                     <span class="bi bi-x"></span>
@@ -130,9 +132,11 @@
                                                 <button type="button" class="btn btn-danger text-white btn-lg"
                                                 onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" 
                                                 data-toggle="modal" data-target="#deleteModal"
+                                                {{--
                                                 @if ($registration->sigTimeslot->slot_start < \Carbon\Carbon::now())
                                                     @disabled(true)
                                                 @endif
+                                                --}}
                                                 >
                                                     <span class="bi bi-x"></span>
                                                 </button>
