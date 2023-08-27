@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
-use Database\Seeders\SigTagSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -20,6 +19,7 @@ class SigEvent extends Model
 
     protected $appends = [
         'name_localized',
+        'description_localized'
     ];
 
     protected $hidden = [
