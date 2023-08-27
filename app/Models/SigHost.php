@@ -23,6 +23,12 @@ class SigHost extends Model
         'hide' => "boolean",
     ];
 
+    protected $visible = [
+        'id',
+        'name',
+        'description',
+    ];
+
     public function user() {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
     }

@@ -28,6 +28,13 @@ class TimetableEntry extends Model
         'hasLocationChanged',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'replaced_by_id',
+        'parentEntry'
+    ];
+
     /**
      * Define the relationship between timetable-entries and their favorites.
      *
