@@ -12,7 +12,7 @@
                     <p v-html="description_markdown" />
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary w-100" :href="link">Zum Event</a>
+                    <a class="btn btn-primary w-100" :href="link">{{  $t("Show Event") }}</a>
                 </div>
             </div>
         </div>

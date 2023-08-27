@@ -7,7 +7,7 @@
                         <h2>
                             <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                             {{
-                                new Date(entry.start).toLocaleTimeString("de-DE", {
+                                new Date(entry.start).toLocaleTimeString(getActiveLanguage(), {
                                     hour: "numeric",
                                     minute: "numeric",
                                 })
@@ -15,10 +15,10 @@
                         </h2>
                         <h5 class="text-muted">{{ entry.formatted_length }}</h5>
                         <h3 v-if="entry.cancelled">
-                            <span class="badge bg-danger d-block text-uppercase">Cancelled</span>
+                            <span class="badge bg-danger d-block text-uppercase">{{  $t("Cancelled") }}</span>
                         </h3>
                         <h3 v-else-if="entry.hasTimeChanged">
-                            <span class="badge bg-warning d-block text-uppercase">Changed</span>
+                            <span class="badge bg-warning d-block text-uppercase">{{  $t("Changed") }}</span>
                         </h3>
                         <div v-if="entry.sig_event.languages.length > 0" class="mt-3">
                             <img v-for="lang in entry.sig_event.languages" :src="'/icons/' + lang + '-flag.svg'" class="m-1" style="height: 1.2em; opacity: 0.7" :alt="'[' + lang.toUpperCase() + ']'" />
@@ -40,7 +40,7 @@
                         <p>
                             <i class="bi bi-geo-alt"></i>
                             {{ entry.sig_location.name }}
-                            <span v-if="entry.hasLocationChanged" class="badge bg-danger">Changed</span>
+                            <span v-if="entry.hasLocationChanged" class="badge bg-danger">{{  $t("Changed") }}</span>
                         </p>
 
                         <h4 v-for="tag in entry.sig_event.sig_tags" class="d-inline m-1">
@@ -63,9 +63,10 @@
 </template>
 <script>
 import EntryModal from "./EntryModal.vue";
-
+import {getActiveLanguage} from "laravel-vue-i18n";
 export default {
     name: "EntryComponent",
+    methods: {getActiveLanguage},
     components: {EntryModal},
     props: {
         id :"",

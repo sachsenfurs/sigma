@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import {getActiveLanguage} from "laravel-vue-i18n";
+
 export default {
     name: "DayTabComponent",
     props: {
@@ -24,7 +26,7 @@ export default {
     },
     methods: {
         getWeekday(date) {
-            return new Date(date).toLocaleDateString("de", { weekday: 'long' })
+            return new Date(date).toLocaleDateString(getActiveLanguage(), { weekday: 'long' })
         },
         switchDay(dateIndex, date, el) {
             this.$emit("scrollToDay", dateIndex);
