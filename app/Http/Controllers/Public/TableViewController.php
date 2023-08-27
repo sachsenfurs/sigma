@@ -44,13 +44,25 @@ class TableViewController extends Controller
     }
 
     public function timetableIndex() {
-        return TimetableEntry::public()
+        $entries = TimetableEntry::public()
+            ->with("sigLocation")
             ->with("sigEvent", function($query) {
                 return $query->with("sigHost")
-                    ->with("sigLocation")
+//                    ->without("sigLocation")
                     ->with("sigTags");
             })
-            ->with("sigLocation")
-            ->orderBy("start")->get();
+            ->orderBy("start")
+            ->get();
+
+        // remove unnecessary information
+        foreach($entries AS $entry) {
+            $entry->sigLocation->setVisible([
+                'id',
+                'name',
+                'description',
+                'name_localized'
+            ]);
+        }
+        return $entries;
     }
 }

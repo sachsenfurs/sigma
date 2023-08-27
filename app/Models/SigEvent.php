@@ -21,7 +21,11 @@ class SigEvent extends Model
 
     protected $appends = [
         'name_localized',
+    ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
 
     public function sigHost() {
