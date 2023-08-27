@@ -27,6 +27,7 @@ class SigHost extends Model
         'id',
         'name',
         'description',
+        'hide',
     ];
 
     public function user() {

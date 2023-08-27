@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div :class="['card mt-3', { 'opacity-50': eventPassed }]">
+        <div :class="['card mt-3', { 'opacity-50': eventPassed }]" :id="'event' + entry.id" @click="showInfoModal()" >
             <div class="row g-0 flex-nowrap d-flex">
                 <div class="col-lg-2 col-4 d-flex">
                     <div class="card-body align-self-center text-center">
-                        <h2>
+                        <h3 class="text-muted">
                             <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                             {{
                                 new Date(entry.start).toLocaleTimeString(getActiveLanguage(), {
@@ -12,8 +12,8 @@
                                     minute: "numeric",
                                 })
                             }}
-                        </h2>
-                        <h5 class="text-muted">{{ entry.formatted_length }}</h5>
+                        </h3>
+                        <h6 class="text-muted">{{ entry.formatted_length }}</h6>
                         <h3 v-if="entry.cancelled">
                             <span class="badge bg-danger d-block text-uppercase">{{  $t("Cancelled") }}</span>
                         </h3>
@@ -28,9 +28,7 @@
                 <div class="col-lg-9 col-7 d-flex">
                     <div class="card-body px-1 pe-0 align-self-center ">
                         <h1>
-                            <a data-bs-toggle="modal" :data-bs-target="'#eventInfo' + entry.id" href="#" class="text-decoration-none" :id="'event' + entry.id">
-                                {{ entry.sig_event.name_localized }}
-                            </a>
+                            {{ entry.sig_event.name_localized }}
                         </h1>
 
                         <p v-if="!entry.sig_event.sig_host.hide" class="card-text">
@@ -48,12 +46,9 @@
                         </h4>
                     </div>
                 </div>
-                <div class="card-body col-lg-1 col-1 d-flex flex-column justify-content-center ps-0">
-    <!--                <a class="fav-btn text-secondary align-self-center w-100 text-end" data-bs-toggle="modal" :data-bs-target="'#eventInfo' + entry.id">-->
-    <!--                    <i class="bi bi-info-circle" style="font-size: calc(1.305rem + 0.66vw)"></i>-->
-    <!--                </a>-->
-                    <a class="fav-btn text-secondary align-self-center w-100 text-end" :data-event="entry.id">
-                        <i class="bi bi-heart" style="font-size: calc(1.305rem + 0.66vw)"></i>
+                <div class="card-body col-lg-1 col-1 d-flex flex-column justify-content-center text-end ps-0">
+                    <a href="#" class="fav-btn text-secondary w-100 justify-content-center" :data-event="entry.id" @click.stop.prevent="toggleFavorite()">
+                        <i :class="['fav bi', {'text-danger bi-heart-fill pop': entry.is_favorite, 'bi-heart': !entry.is_favorite}]"></i>
                     </a>
                 </div>
             </div>
@@ -64,9 +59,39 @@
 <script>
 import EntryModal from "./EntryModal.vue";
 import {getActiveLanguage} from "laravel-vue-i18n";
+import {Modal} from "bootstrap";
+import {trans} from "laravel-vue-i18n";
 export default {
     name: "EntryComponent",
-    methods: {getActiveLanguage},
+    methods: {
+        getActiveLanguage,
+        toggleFavorite() {
+            if(!this.favoriteUpdating) {
+                let self = this;
+                this.favoriteUpdating = true;
+                axios.post("/favorites", {
+                    timetable_entry_id: this.entry.id,
+                })
+                .then((response) => {
+                    this.entry.is_favorite = !this.entry.is_favorite;
+                    self.favoriteUpdating = false;
+                })
+                .catch((error) => {
+                    if(error.response.status == 401) {
+                        this.$emit("alert", trans("You have to be logged in"));
+                    }
+                })
+                .finally(() => {
+                    // alert(trans("You have to be logged in"));
+                    self.favoriteUpdating = false;
+                });
+            }
+        },
+        showInfoModal() {
+            let m = new Modal('#eventInfo' + this.entry.id);
+            m.show();
+        }
+    },
     components: {EntryModal},
     props: {
         id :"",
@@ -90,7 +115,8 @@ export default {
                     description_localized: "",
                 },
             },
-        },
+            is_favorite: false
+        }
     },
     mounted() {
         let self = this;
@@ -115,16 +141,34 @@ export default {
     },
     data() {
         return {
-            now: Date.now()
+            now: Date.now(),
+            favoriteUpdating: false
         }
     }
 };
 </script>
-
 <style scoped>
+
+.card {
+    cursor: pointer;
+}
 
 .blink {
     transition: opacity 1s ease-in-out;
+}
+
+.fav {
+    font-size: calc(1.305rem + 0.66vw);
+    transition: color 0.2s ease-in-out;
+}
+
+.pop::before {
+    animation: pop 0.2s ease-in;
+}
+
+@keyframes pop{
+    75%  {transform: scale(1.2);}
+    70%  {transform: scale(0.8);}
 }
 
 @media only screen and (max-width: 400px) {

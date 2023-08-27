@@ -44,5 +44,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage_hosts', function ($user) {
             return $user->role->perm_manage_hosts;
         });
+
+        Gate::define("login", function($user) {
+            return $user;
+        });
     }
 }

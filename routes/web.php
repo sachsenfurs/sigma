@@ -126,5 +126,5 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
 
     //Ajax-Controller
-    Route::post("/favorites", [AjaxController::class, 'setFavorite'])->name('favorites.store');
+    Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
 });
