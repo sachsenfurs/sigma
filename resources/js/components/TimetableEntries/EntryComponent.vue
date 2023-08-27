@@ -1,9 +1,10 @@
 <template>
-    <div class="card mt-3">
+    <div :class="['card mt-3', { 'opacity-50': eventPassed }]">
         <div class="row g-0 flex-nowrap d-flex">
             <div class="col-lg-2 col-4 d-flex">
                 <div class="card-body align-self-center text-center">
                     <h2>
+                        <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                         {{
                             new Date(entry.start).toLocaleTimeString("de-DE", {
                                 hour: "numeric",
@@ -26,7 +27,7 @@
             <div class="col-lg-9 col-7 d-flex">
                 <div class="card-body align-self-center pe-0">
                     <h1>
-                        <a :href="link" class="text-decoration-none">{{ entry.sig_event.name_localized }}</a>
+                        <a :href="link" class="text-decoration-none" :id="'event' + entry.id">{{ entry.sig_event.name_localized }}</a>
                     </h1>
 
                     <p v-if="!entry.sig_event.sig_host.hide" class="card-text">
@@ -86,14 +87,40 @@ export default {
         },
     },
     mounted() {
-        // console.log(this.entry.sig_event.languages);
+        let self = this;
+        setInterval(function() {
+            self.now = new Date();
+        }, 10000);
+
+        // blink effect (separate function to SYNC them!)
+        function blinkFadeInOut(dirBool) {
+            document.querySelectorAll(".blink").forEach((el) => el.style.opacity = (dirBool ? 1 : 0));
+            setTimeout(() => blinkFadeInOut(!dirBool), 1050);
+        }
+        blinkFadeInOut(true);
     },
     computed: {
         link() {
             return "/show/" + this.entry.id;
         },
+        eventRunning() {
+            return !this.entry.cancelled && this.now >= new Date(this.entry.start) && !this.eventPassed;
+        },
+        eventPassed() {
+            return this.now >= new Date(this.entry.end);
+        }
     },
+    data() {
+        return {
+            now: Date.now()
+        }
+    }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.blink {
+    transition: opacity 1s ease-in-out;
+}
+</style>

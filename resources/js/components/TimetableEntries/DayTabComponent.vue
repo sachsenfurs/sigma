@@ -5,6 +5,7 @@
                 :class="['nav-link text-center', { active: activeDayIndex == dateIndex }]"
                 :href="'#day' + dateIndex"
                 @click="switchDay(dateIndex, date, this)"
+                :ref="dateIndex"
             >
                 <h3>
                     {{ getWeekday(date) }}
@@ -28,9 +29,19 @@ export default {
         switchDay(dateIndex, date, el) {
             this.$emit("scrollToDay", dateIndex);
             this.$emit("setActiveTab", dateIndex);
+        },
+        scrollToWeekday(dateIndex) {
             let navOffset = this.$el.getBoundingClientRect().left;
-            let targetOffset = event.target.getBoundingClientRect().left;
+            let targetOffset = this.$refs[dateIndex][0]?.getBoundingClientRect().left;
+            this.$refs[dateIndex][0]?.blur();
             this.$el.scrollTo(targetOffset-navOffset, 0);
+        }
+    },
+    watch: {
+        activeDayIndex(newIndex, oldIndex, x) {
+            if(newIndex != oldIndex) {
+                this.scrollToWeekday(newIndex)
+            }
         }
     }
 };
