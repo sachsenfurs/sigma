@@ -129,6 +129,6 @@ Route::group(['middleware' => "auth"], function() {
     // Reminders
     Route::post("/reminders", [SigReminderController::class, 'setReminder'])->name('reminders.store');
 
-    // Ajax-Controller
-    Route::post("/favorites", [AjaxController::class, 'setFavorite'])->name('favorites.store');
+    //Ajax-Controller
+    Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
 });
