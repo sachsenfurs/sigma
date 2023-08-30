@@ -127,7 +127,9 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
 
     // Reminders
-    Route::post("/reminders", [SigReminderController::class, 'setReminder'])->name('reminders.store');
+    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
+    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
+    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
 
     //Ajax-Controller
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
