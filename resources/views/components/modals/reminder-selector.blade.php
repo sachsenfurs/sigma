@@ -4,7 +4,7 @@
 <div class="modal fade" id="reminderModal{{ $timetableEntry->id }}" tabindex="-1" role="dialog" aria-labelledby="reminderModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form id="reminderForm" action="{{ route("reminders.store") }}" method="POST">
+        <form id="reminderForm{{ $timetableEntry->id }}" action="" method="POST">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title" id="reminderModalLabel">{{ __("Modify reminder") }}</h5>
@@ -21,7 +21,7 @@
             </div>
             <div class="modal-footer">
                 <a class="btn btn-secondary" onclick="$('#reminderModal{{ $timetableEntry->id }}').modal('toggle')" data-dismiss="reminderModal">{{ __("Close") }}</a>
-                <button type="submit" class="btn btn-primary">{{ __("Create") }}</button>
+                <button type="submit" class="btn btn-primary">{{ __("Update") }}</button>
             </div>
         </form>
       </div>

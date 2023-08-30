@@ -115,11 +115,11 @@
                                                 <button type="button" class="btn btn-danger text-white"
                                                 onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" 
                                                 data-toggle="modal" data-target="#deleteModal"
-                                                {{--
-                                                @if ($registration->sigTimeslot->slot_start < \Carbon\Carbon::now())
-                                                    @disabled(true)
+                                                
+                                                @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
+                                                    disabled
                                                 @endif
-                                                --}}
+                                                
                                                 >
                                                 
                                                     <span class="bi bi-x"></span>
@@ -132,11 +132,11 @@
                                                 <button type="button" class="btn btn-danger text-white btn-lg"
                                                 onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" 
                                                 data-toggle="modal" data-target="#deleteModal"
-                                                {{--
-                                                @if ($registration->sigTimeslot->slot_start < \Carbon\Carbon::now())
-                                                    @disabled(true)
+                                                
+                                                @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
+                                                    disabled
                                                 @endif
-                                                --}}
+                                                
                                                 >
                                                     <span class="bi bi-x"></span>
                                                 </button>
@@ -232,32 +232,15 @@
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
-                                                <button type="button" class="btn 
-                                                    @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                        btn-success
-                                                    @else
-                                                        btn-primary
-                                                    @endif
-                                                    text-white"
-                                                    onclick="$('#reminderModal{{ $fav->timetableEntry->id }}').modal('toggle')"
-                                                    data-toggle="modal"
-                                                    data-target="#reminderModal{{ $fav->timetableEntry->id }}"
-                                                    @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                                        @disabled(true)
-                                                    @endif
-                                                    >
-                                                    
-                                                    @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                        <span class="bi bi-bell">
-                                                            {{--
-                                                            {{ dd(auth()->user()->reminders->get('timetable_entry_id', $fav->timetableEntry->id)) }}
-                                                            {{ auth()->user()->reminders->get('timetable_entry_id', $fav->timetableEntry->id)->send_at }} {{ __("Minutes")}}
-                                                            --}}
-                                                        </span>
-                                                    @else
+                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
+                                                    <x-buttons.notification-edit class="btn-success" :timetableEntry="$fav->timetableEntry" route='reminders.update' >
+                                                        <span class="bi bi-bell"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @else
+                                                    <x-buttons.notification-edit class="btn-primary" :timetableEntry="$fav->timetableEntry" route='reminders.store' >
                                                         <span class="bi bi-clock"></span>
-                                                    @endif
-                                                </button>
+                                                    </x-buttons.notificationEdit>
+                                                @endif
                                                 <button type="button" class="btn btn-danger text-white" 
                                                 onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
                                                 data-toggle="modal" data-target="#deleteFavModal"
@@ -268,33 +251,16 @@
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
-                                            <div class="d-block d-sm-none">
-                                                <button type="button" class="btn btn-lg
-                                                    @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                        btn-success
-                                                    @else
-                                                        btn-primary
-                                                    @endif
-                                                    text-white"
-                                                    onclick="$('#reminderModal{{ $fav->timetableEntry->id }}').modal('toggle')"
-                                                    data-toggle="modal"
-                                                    data-target="#reminderModal{{ $fav->timetableEntry->id }}"
-                                                    @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                                        @disabled(true)
-                                                    @endif
-                                                    >
-                                                    
-                                                    @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                        <span class="bi bi-bell">
-                                                            {{--
-                                                            {{ dd(auth()->user()->reminders->get('timetable_entry_id', $fav->timetableEntry->id)) }}
-                                                            {{ auth()->user()->reminders->get('timetable_entry_id', $fav->timetableEntry->id)->send_at }} {{ __("Minutes")}}
-                                                            --}}
-                                                        </span>
-                                                    @else
+                                            <div class="d-block d-sm-none">             
+                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
+                                                    <x-buttons.notification-edit class="btn-lg btn-success" :timetableEntry="$fav->timetableEntry" route="reminders.update" >
+                                                        <span class="bi bi-bell"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @else
+                                                    <x-buttons.notification-edit class="btn-lg btn-primary" :timetableEntry="$fav->timetableEntry" route="reminders.store" >
                                                         <span class="bi bi-clock"></span>
-                                                    @endif
-                                                </button>
+                                                    </x-buttons.notificationEdit>
+                                                @endif
                                                 <button type="button" class="btn btn-danger text-white btn-lg" 
                                                 onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
                                                 data-toggle="modal" data-target="#deleteFavModal"

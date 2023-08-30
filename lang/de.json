@@ -137,6 +137,9 @@
     "How many minutes before the event :event do you want to be reminded for?": "Wie viele Minuten vor dem Event :event willst du daran erinnert werden?",
     "Minutes": "Minuten",
     "Reminder successfully created!": "Erinnerung erfolgreich erstellt!",
+    "This reminder already exists!": "Diese Erinnerung existiert bereits!",
+    "This reminder doesn't exists!": "Diese Erinnerung existiert nicht!",
+    "Reminder successfully updated!": "Erinnerung erfolgreich aktualisiert!",
 
     "Changed": "Geändert",
     "Moved": "Verschoben",
