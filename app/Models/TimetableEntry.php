@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasSigEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
@@ -43,6 +44,16 @@ class TimetableEntry extends Model
     public function favorites()
     {
         return $this->hasMany(SigFavorite::class);
+    }
+
+    /**
+     * Define the relationship between timetable-entries and their reminders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reminders()
+    {
+        return $this->hasMany(SigReminder::class);
     }
 
     public function scopePublic($query) {

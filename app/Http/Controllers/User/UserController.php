@@ -52,6 +52,7 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($user->id),
             ],
             'user_role_id' => 'required|exists:' . UserRole::class . ',id',
+            'telegram_user_id' => 'string',
         ]);
 
         $user->role()->associate($validated['user_role_id']);

@@ -31,6 +31,12 @@
                         </div>
                     </div>
                     <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">{{ __("Telegram ID") }}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="telegram_user_id" id="telegram_user_id" value="{{ old("telegram_user_id") ?? $user->telegram_user_id }}">
+                        </div>
+                    </div>
+                    <div class="form-group row m-1">
                         <label for="" class="col-sm-4 col-form-label text-end">{{ __("User Role") }}</label>
                         <div class="col-sm-8">
                             <select name="user_role_id" class="form-control">

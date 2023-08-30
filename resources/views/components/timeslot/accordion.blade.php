@@ -4,15 +4,19 @@
 <div class="accordion">
     <div class="accordion-item mt-1 mb-1">
         <div class="accordion-header">
-           @if($entry->end->isAfter(now()))
+            @if($entry->end->isAfter(now()))
                <x-timeslot.accordion-button :entry="$entry">
                    {{ $entry->getAvailableSlotCount() }} {{ __("Slots available") }}
                </x-timeslot.accordion-button>
-           @elseif($entry->end->addHours(12)->isAfter(now()))
+            @elseif($entry->end->addHours(12)->isAfter(now()))
                 <x-timeslot.accordion-button :entry="$entry">
                     {{ __("Event already took place") }}
                 </x-timeslot.accordion-button>
-           @endif
+            @else
+                <x-timeslot.accordion-button :entry="$entry">
+                    {{ __("Event already took place") }}
+                </x-timeslot.accordion-button>
+            @endif
         </div>
 
         <div id="panelsStayOpen-collapse-ts_{{ $entry->id }}" @class(['accordion-collapse collapse', 'show' => $entry->end > Carbon\Carbon::now()->toDateTimeString()])>
@@ -25,13 +29,18 @@
                         <div class="col-lg-4 col-6 align-self-center">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
                             <span class="text-nowrap">{{ __("Slots taken") }}</span>
-                        </div>
+                            @if ($timeslot->sigAttendees->count() > 0)
+                                <br>
+                                <i class="bi bi-people-fill"></i> 
+                                {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}    
+                            @endif
+                            </div>
 
-                        @if ($timeslot->reg_start->isAfter(now()))
+                        @if ($timeslot->reg_start?->isAfter(now()))
                             <x-timeslot.button :disabled="true" class="btn-warning">
                                 {{ __("Registration opens") }}: {{ $timeslot->reg_start->diffForHumans() }}
                             </x-timeslot.button>
-                        @elseif ($timeslot->reg_end->isBefore(now()))
+                        @elseif ($timeslot->reg_end?->isBefore(now()))
                             <x-timeslot.button :disabled="true" class="btn-secondary">
                                 {{ __("Expired") }}
                             </x-timeslot.button>

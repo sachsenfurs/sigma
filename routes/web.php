@@ -17,6 +17,7 @@ use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
+use App\Http\Controllers\Sig\SigReminderController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
@@ -124,6 +125,11 @@ Route::group(['middleware' => "auth"], function() {
 
     // Favorites
     Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
+
+    // Reminders
+    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
+    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
+    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
 
     //Ajax-Controller
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
