@@ -32,9 +32,9 @@ class UserController extends Controller
     public function edit(User $user) {
         $roles = UserRole::all();
 
-        //if($user->id == auth()->user()->id) {
-        //    return back()->withErrors("You can't edit your own account!");
-        //}
+        if($user->id == auth()->user()->id) {
+            return back()->withErrors("You can't edit your own account!");
+        }
 
         return view("users.edit", compact([
             'user',
