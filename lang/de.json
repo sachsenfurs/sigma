@@ -36,7 +36,7 @@
     "Access the event schedule": "Den Programmplan abrufen",
     "View Schedule": "Zum Programmplan",
     "Signup for specific SIGs": "Dich für bestimmte SIGs anmelden",
-    "Manage Your Own SIGs": "Deine eigenen SIGs verwalten",
+    "Manage your own SIGs": "Deine eigenen SIGs verwalten",
     "Set up reminder Notifications": "Erinnerungen für SIGs einrichten",
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
 
@@ -150,5 +150,7 @@
     "Slots taken": "Plätze vergeben",
     "Event already took place": "Event hat bereits stattgefunden",
     "Sold out": "Ausgebucht",
-    "Show Event": "Zum Event"
+    "Show Event": "Zum Event",
+
+    "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)"
 }
