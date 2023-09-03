@@ -23,7 +23,7 @@
                         <h2>{{ __("Notifications") }}</h2>
                         <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
                     </div>
-                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="cyber_kacec_bot" data-size="large" data-auth-url="https://sigma.sachsenfurs.de/telegram/auth" data-request-access="write"></script>
+                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="cyber_kacec_bot" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
                 </div>
             @endif
             <div class="row m-3">
