@@ -18,6 +18,7 @@ use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigReminderController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
@@ -133,4 +134,8 @@ Route::group(['middleware' => "auth"], function() {
 
     //Ajax-Controller
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
+
+    // Telegram auth
+    Route::post("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
+
 });
