@@ -48,8 +48,8 @@ Route::get("/oauth", [OAuthLoginController::class, 'redirect']);
 Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name("oauthlogin_regsys");
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
-Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
-Route::get("/table/index", [TableViewController::class, 'timetableIndex'])->name("public.tableview-index");
+Route::get("/schedule", [TableViewController::class, 'index'])->name("public.tableview");
+Route::get("/schedule/index", [TableViewController::class, 'timetableIndex'])->name("public.tableview-index");
 Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
