@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Clean up composer directory
+        run: cd ~/staging/sigma && rm -fr ./vendor
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
