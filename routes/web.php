@@ -53,7 +53,7 @@ Route::get("/schedule", [ListViewController::class, 'index'])->name("public.list
 Route::get("/schedule/index", [ListViewController::class, 'timetableIndex'])->name("public.listview-index");
 Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
-Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview-old");
+Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
 Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
 
 
