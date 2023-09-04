@@ -14,7 +14,7 @@
                 <ul class="navbar-nav me-auto">
                     <!-- Visible in any case -->
                     <li>
-                        <a class="nav-link px-3 {{ Route::is("public.tableview") ? "active" : "" }}" href="{{ route("public.tableview") }}">
+                        <a class="nav-link px-3 {{ Route::is("public.listview") ? "active" : "" }}" href="{{ route("public.listview") }}">
                             <i class="bi bi-calendar-week"></i> {{ __("Event Schedule") }}
                         </a>
                     </li>

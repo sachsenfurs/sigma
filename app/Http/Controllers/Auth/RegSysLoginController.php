@@ -24,6 +24,7 @@ class RegSysLoginController extends Controller
     }
 
     public function index(Request $request) {
+        return redirect()->back()->withError(__("Login not available yet! Please try again in a few days :)"));
         // initialize state
         $authorizationUrl = $this->provider->getAuthorizationUrl();
 

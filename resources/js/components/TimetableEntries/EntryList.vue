@@ -46,7 +46,7 @@ export default {
             let self = this;
             await axios
                 .request({
-                    url: "/table/index",
+                    url: "/schedule/index",
                     method: "GET",
                     timeout: 30000,
                     signal: AbortSignal.timeout(30000)
