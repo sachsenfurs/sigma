@@ -12,19 +12,7 @@ use Illuminate\Http\Request;
 class TableViewController extends Controller
 {
     public function index() {
-        $entries = TimetableEntry::public()->orderBy("start")->get();
-        $days = $entries->pluck("start")->groupBy(function($item) {
-            return $item->format("d.m.Y");
-        })->keys();
-        return view("public.tableview",[
-            'days' => $days,
-            'entries' => $entries,
-            'locations' => SigLocation::withCount("sigEvents")
-                                                  ->having("sig_events_count", ">", 0)
-                                                  ->groupBy("name")
-                                                  ->orderByRaw("FIELD(sig_locations.id, 27,13,11,22,10,5,15,14,2,21,20,19,18,7,6,25,1) DESC")
-                                                  ->get(),
-        ]);
+        return view("public.tableview");
     }
 
     public function indexOld() {
@@ -43,26 +31,4 @@ class TableViewController extends Controller
         ]);
     }
 
-    public function timetableIndex() {
-        $entries = TimetableEntry::public()
-            ->with("sigLocation")
-            ->with("sigEvent", function($query) {
-                return $query->with("sigHost")
-//                    ->without("sigLocation")
-                    ->with("sigTags");
-            })
-            ->orderBy("start")
-            ->get();
-
-        // remove unnecessary information
-        foreach($entries AS $entry) {
-            $entry->sigLocation->setVisible([
-                'id',
-                'name',
-                'description',
-                'name_localized'
-            ]);
-        }
-        return $entries;
-    }
 }

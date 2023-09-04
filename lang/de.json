@@ -152,5 +152,10 @@
     "Sold out": "Ausgebucht",
     "Show Event": "Zum Event",
 
-    "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)"
+    "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)",
+    "We have enhanced our schedule view": "Wir haben unsere Programmplan-Ansicht überarbeitet!",
+    "Take me to the enhanced event schedule view": "Zum verbesserten Programmplan",
+    "Classic View": "Klassische Ansicht",
+    "Or do you prefer the classic table view?": "Oder bevorzugst du die klassische Tabellenansicht?",
+    "Take me to the classic view": "Zur Tabellenansicht"
 }
