@@ -13,6 +13,9 @@ git reset --hard
 # Pull the latest version of the app
 git pull origin main
 
+# reset vendor dir
+rm -rf vendor
+
 # Install composer dependencies
 composer update
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
