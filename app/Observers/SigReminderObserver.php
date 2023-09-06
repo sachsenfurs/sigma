@@ -18,6 +18,11 @@ class SigReminderObserver
         if ($sigReminder->send_at < Carbon::now()) {
             return false;
         }
+        
+        if (SigReminder::where('user_id', auth()->user()->id)->where('timetable_entry_id', $sigReminder->timetable_entry_id)->exists()) {
+            return false;
+        }
+
     }
 
     /**

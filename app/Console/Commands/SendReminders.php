@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\SigFavorite;
 use App\Models\SigReminder;
 use App\Notifications\SigFavorite\SigFavoriteReminder;
 use Carbon\Carbon;
@@ -33,7 +34,8 @@ class SendReminders extends Command
         $upcomingReminders = SigReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
 
         foreach ($upcomingReminders as $reminder) {
-            $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry));
+            //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
+            $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
             $reminder->executed_at = strtotime(Carbon::now());
             $reminder->save();
         }
