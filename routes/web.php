@@ -139,6 +139,6 @@ Route::group(['middleware' => "auth"], function() {
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
 
     // Telegram auth
-    Route::post("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
+    Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
 
 });
