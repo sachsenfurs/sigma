@@ -10,7 +10,7 @@ class TelegramController extends Controller
     {
         $this->authorize("login");
         dd($request);
-        auth()->user()->telegram_user_id = $request['id'];
+        auth()->user()->telegram_user_id = $request->input('id');
 
         return redirect()->back()->withSuccess(__('Telegram Connected!'));
     }
