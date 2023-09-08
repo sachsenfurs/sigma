@@ -8,11 +8,13 @@
         "php": "^8.0.2",
         "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-notification-channels/telegram": "^3.0",
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
         "league/oauth2-client": "^2.6",
+        "pschocke/laravel-telegram-login-widget": "^2.0",
         "spatie/laravel-markdown": "^2.3"
     },
     "require-dev": {

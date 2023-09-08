@@ -15,7 +15,7 @@
                             {{ isset($sig) ? __("Edit SIG") : __("Create SIG") }}
                         </div>
                         <div class="card-body">
-                            <div class="col-12 col-md-12 p-2">
+                            <div class="col-12 p-2">
                                 <div class="row">
                                     <div class="col-8 col-md-8 p-2">
                                         <h2>Sig Name</h2>
@@ -36,7 +36,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-md-4 p-2 rounded-top" style="background-color: rgb(215 215 215);">
+                                    <div class="col-4 col-md-4 p-2 rounded-top">
                                         <h2>{{ __("Languages") }}</h2>
                                         <div class="form-group row m-1">
                                             <label>
@@ -56,128 +56,108 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-8 col-md-8 p-2">
-                                        <h2>Sig Host</h2>
-                                        {{-- <!--<input type="hidden" name="host_id" id="host_id" value="{{ old("host_id", $sig->sigHost->id ?? "") }}">-->--}}
-                                        <div class="form-group row m-1">
-                                            <label for="location" class="col-sm-3 col-form-label text-end">
-                                                {{ __("Host") }}
-                                            </label>
-                                            <div class="col-sm-9">
-                                                <select name="host_id" id="host_id" class="form-control">
-                                                    <option value="NEW">-- {{ __("Create New Host") }} --</option>
-                                                    @foreach($hosts AS $host)
-                                                        <option value="{{ $host->id }}" {{ old("host_id", $sig->sigHost->id ?? null) == $host->id ? "selected" : "" }}>
-                                                            {{ $host->name }}@if ($host->reg_id != '') - {{ $host->reg_id }}@endif
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        @if (!isset($sig))
-                                            <div id="host_row" class="form-group row m-1">
-                                                <label for="host" class="col-sm-3 col-form-label text-end">
-                                                    {{ __("Name") }}
-                                                </label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="host"
-                                                           id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
-                                                </div>
-                                            </div>
-                                            <div id="reg_id_row" class="form-group row m-1">
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">
-                                                    {{ __("Reg Number") }}
-                                                </label>
-                                                <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="reg_id"
-                                                           id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div id="host_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
-                                                <label for="host" class="col-sm-3 col-form-label text-end">
-                                                    {{ __("Name") }}
-                                                </label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="host" id="host"
-                                                           value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
-                                                </div>
-                                            </div>
-                                            <div id="reg_id_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">
-                                                    {{ __("Reg Number") }}
-                                                </label>
-                                                <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="reg_id"
-                                                           id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
-                                                </div>
-                                            </div>
-                                        @endif
 
-                                        <h2 class="mt-3">{{ __("SIG Location") }}</h2>
-                                        <div class="form-group row m-1">
-                                            <label for="location" class="col-sm-3 col-form-label text-end">Ort</label>
-                                            <div class="col-sm-9">
-                                                <select name="location" class="form-control">
-                                                    @foreach($locations AS $location)
-                                                        <option value="{{ $location->id }}" {{ old("location", $sig->sigLocation->id ?? null) == $location->id ? "selected" : "" }}>
-                                                            {{ $location->name . ($location->description ? " - " . $location->description : "")}}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <h2 class="mt-3">{{ __("Registration") }}</h2>
-                                        <div class="form-group row m-1">
+                                        @can("manage_events")
+                                            <h2>Sig Host</h2>
                                             <div class="form-group row m-1">
-                                                <div class="col-sm-3"></div>
+                                                <label for="location" class="col-sm-3 col-form-label text-end">
+                                                    {{ __("Host") }}
+                                                </label>
                                                 <div class="col-sm-9">
-                                                    <label>
-                                                        <input class="form-check-input" type="checkbox" name="reg_possible"
-                                                            @isset($sig)
-                                                                @if ($sig->reg_possible)
-                                                                     checked
-                                                                @endif
-                                                            @endisset>
-                                                        {{ __("Allow Registrations for this Event") }}
+                                                    <select name="host_id" id="host_id" class="form-control">
+                                                        <option value="NEW">-- {{ __("Create New Host") }} --</option>
+                                                        @foreach($hosts AS $host)
+                                                            <option value="{{ $host->id }}" {{ old("host_id", $sig->sigHost->id ?? null) == $host->id ? "selected" : "" }}>
+                                                                {{ $host->name }}@if ($host->reg_id != '') - {{ $host->reg_id }}@endif
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            @if (!isset($sig))
+                                                <div id="host_row" class="form-group row m-1">
+                                                    <label for="host" class="col-sm-3 col-form-label text-end">
+                                                        {{ __("Name") }}
                                                     </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="host"
+                                                               id="host" value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
+                                                    </div>
+                                                </div>
+                                                <div id="reg_id_row" class="form-group row m-1">
+                                                    <label for="reg_id" class="col-sm-3 col-form-label text-end">
+                                                        {{ __("Reg Number") }}
+                                                    </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" class="form-control" name="reg_id"
+                                                               id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div id="host_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
+                                                    <label for="host" class="col-sm-3 col-form-label text-end">
+                                                        {{ __("Name") }}
+                                                    </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="host" id="host"
+                                                               value="{{ old("host", $sig->sigHost->name ?? "") }}" required>
+                                                    </div>
+                                                </div>
+                                                <div id="reg_id_row" class="form-group row m-1" @if ($sig->sigHost->id != null) style="display: none;" @endif>
+                                                    <label for="reg_id" class="col-sm-3 col-form-label text-end">
+                                                        {{ __("Reg Number") }}
+                                                    </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" class="form-control" name="reg_id"
+                                                               id="reg_id" value="{{ old("host", $sig->sigHost->reg_id ?? "") }}">
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <h2 class="mt-3">{{ __("SIG Location") }}</h2>
+                                            <div class="form-group row m-1">
+                                                <label for="location" class="col-sm-3 col-form-label text-end">{{ __("Location") }}</label>
+                                                <div class="col-sm-9">
+                                                    <select name="location" class="form-control">
+                                                        @foreach($locations AS $location)
+                                                            <option value="{{ $location->id }}" {{ old("location", $sig->sigLocation->id ?? null) == $location->id ? "selected" : "" }}>
+                                                                {{ $location->name . ($location->description ? " - " . $location->description : "")}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div id="max_regs_per_day_row" class="form-group row m-1">
-                                                <label for="reg_id" class="col-sm-3 col-form-label text-end">{{ __("Registrations per day") }}</label>
-                                                <div class="col-sm-4">
-                                                    <input type="number" class="form-control" name="max_regs_per_day"
-                                                           id="max_regs_per_day" value="{{ old("max_regs_per_day", $sig->max_regs_per_day ?? "1") }}">
+
+                                            <h2 class="mt-3">{{ __("Registration") }}</h2>
+                                            <div class="form-group row m-1">
+                                                <div class="form-group row m-1">
+                                                    <div class="col-sm-3"></div>
+                                                    <div class="col-sm-9">
+                                                        <label>
+                                                            <input class="form-check-input" type="checkbox" name="reg_possible"
+                                                                @isset($sig)
+                                                                    @if ($sig->reg_possible)
+                                                                         checked
+                                                                    @endif
+                                                                @endisset>
+                                                            {{ __("Allow Registrations for this Event") }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div id="max_regs_per_day_row" class="form-group row m-1">
+                                                    <label for="reg_id" class="col-sm-3 col-form-label text-end">{{ __("Registrations per day") }}</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" class="form-control" name="max_regs_per_day"
+                                                               id="max_regs_per_day" value="{{ old("max_regs_per_day", $sig->max_regs_per_day ?? "1") }}">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-md-4 p-2 rounded-bottom" style="background-color: rgb(215 215 215);">
-                                        <h2>{{ __("Other") }}</h2>
-                                        <div class="form-group row m-1">
-                                            <div class="col-sm-12">
-                                                <label>
-                                                    <input class="form-check-input" type="checkbox" name="hide" {{ !empty(old("hide")) ? "checked" : "" }}>
-                                                    {{ __("Hide Event on Schedule") }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-1">
-                                            <div class="col-sm-12">
-                                                <label>
-                                                    <input class="form-check-input" type="checkbox" name="reg_possible"
-                                                        @isset($sig)
-                                                            @if ($sig->reg_possible)
-                                                                 checked
-                                                            @endif
-                                                        @endisset> {{ __("Allow Registrations for this Event") }}
-                                                </label>
-                                            </div>
-                                        </div>
+                                        @endcan
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 col-md-12 p-2">
+                                    <div class="col-12 p-2">
                                         <h2 class="mb-2">{{ __("Description") }}</h2>
                                         <div class="row">
                                             <div class="col-2 col-md-2 text-end" style="display:flex; align-items: center; justify-content: center;">
@@ -197,8 +177,27 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                @can("manage_events")
                                 <div class="row">
-                                    <div class="col-12 col-md-12 p-2">
+                                    <div class="col-12">
+                                        <h3>Tags</h3>
+                                        @foreach(\App\Models\SigTag::all() AS $tag)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="tag_{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}"
+                                                @isset($sig)
+                                                    @checked($sig->sigTags->find($tag->id))
+                                                    @endisset
+                                                >
+                                                <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->description }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 p-2">
                                         @if(!isset($sig))
                                             <div class="mt-3 row">
                                                 <h2>{{ __("Define time spans") }}</h2>
@@ -212,10 +211,10 @@
                                             <div id="timetableEntries-parent" style="display: none">
                                                 <div class="mt-1 row timetableEntry" id="timetableEntry">
                                                     <div class="col-5">
-                                                        <input type="datetime-local" class="form-control" data-name="date-start[]" name="tester" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
+                                                        <input type="datetime-local" class="form-control" data-name="date-start[]" name="date-start[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
                                                     </div>
                                                     <div class="col-5">
-                                                        <input type="datetime-local" class="form-control" data-name="date-end[]" name="tester2" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
+                                                        <input type="datetime-local" class="form-control" data-name="date-end[]" name="date-end[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
                                                     </div>
                                                     <div class="col-2 row">
                                                         <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
@@ -263,13 +262,13 @@
                                                     @foreach($sig->timetableEntries AS $timetableEntry)
                                                         <tr id="{{ $timetableEntry->id }}">
                                                             <td>
-                                                                {{ date('d.m.Y', strtotime($timetableEntry->start)) }}
-                                                                @if (date('d.m.Y', strtotime($timetableEntry->start)) != date('d.m.Y', strtotime($timetableEntry->end)))
-                                                                - {{ date('d.m.Y', strtotime($timetableEntry->end)) }}
+                                                                {{ $timetableEntry->start->isoFormat("dddd, DD.MM.") }}
+                                                                @if ($timetableEntry->start->format("d.m.Y") != $timetableEntry->end->format("d.m.Y"))
+                                                                - {{ $timetableEntry->end->format("d.m.") }}
                                                                 @endif
                                                             </td>
                                                             <td >
-                                                                {{ date('H:i', strtotime($timetableEntry->start)) }} - {{ date('H:i', strtotime($timetableEntry->end)) }}
+                                                                {{ $timetableEntry->start->format("H:i") }} - {{ $timetableEntry->end->format("H:i") }}
                                                             </td>
                                                             <td>
                                                                 {{ $timetableEntry->sigTimeslots->count() }}
@@ -291,6 +290,7 @@
                                         @endif
                                     </div>
                                 </div>
+                                @endcan
                             </div>
                         </div>
                         <div class="card-footer">
@@ -303,6 +303,7 @@
                     </div>
                 </form>
                 @isset($sig)
+                    @can("manage_events")
                     <div class="accordion mt-4" id="options">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -321,6 +322,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
                 @endisset
             </div>
         </div>

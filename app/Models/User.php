@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory;
+    use Notifiable;
 
     protected $guarded = [
         'user_role_id',
@@ -55,6 +57,16 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(SigFavorite::class);
+    }
+
+    /**
+     * Define the relationship between users and their reminders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reminders()
+    {
+        return $this->hasMany(SigReminder::class);
     }
 
     /**

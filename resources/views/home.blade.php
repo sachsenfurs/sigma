@@ -17,7 +17,17 @@
 {{--                    {{ __('You are logged in!') }}--}}
 {{--                </div>--}}
 {{--            </div>--}}
-
+            @if (!auth()->user()->telegram_user_id)
+                <div class="row m-3">
+                    <div class="col-12 col-md-12 text-center">
+                        <h2>{{ __("Notifications") }}</h2>
+                        <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
+                    </div>
+                    <div class="col-10 col-md-4 mx-auto">
+                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ config("services.telegram-bot-api.name") }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
+                    </div>
+                </div>
+            @endif
             <div class="row m-3">
                 <div class="col-12 col-md-12 text-center">
                     <h2>{{ __("Events you've signed up for:") }}</h2>
@@ -25,7 +35,7 @@
                 <div class="col-12 col-md-12 text-center">
                     @if (auth()->user()->attendeeEvents()->count() == 0)
                         <p>{{ __("You haven't signed up for any event yet!") }}</p>
-                        <a class="btn btn-primary btn-lg" href="{{ route("public.tableview") }}" role="button">
+                        <a class="btn btn-primary btn-lg" href="{{ route("public.listview") }}" role="button">
                             {{ __("Explore Events") }}
                         </a>
                     @else
@@ -101,22 +111,35 @@
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
-                                                <!-- Until it can be specified if attendees should be visible or not
-                                                <a type="button" class="btn btn-info text-black" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal">
+                                                <a type="button" class="btn btn-info text-black" onclick="$('#attendeeListModal{{$registration->sigTimeslot->id}}').modal('toggle');" data-toggle="modal" data-target="#attendeeListModal{{$registration->sigTimeslot->id}}">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
-                                                -->
-                                                <button type="button" class="btn btn-danger text-white" onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal">
+                                                <button type="button" class="btn btn-danger text-white"
+                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
+                                                data-toggle="modal" data-target="#deleteModal"
+
+                                                @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
+                                                    disabled
+                                                @endif
+
+                                                >
+
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
                                             <div class="d-block d-sm-none">
-                                                <!-- Until it can be specified if attendees should be visible or not
-                                                <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#userModal').modal('show'); $('#deleteForm').attr('action', '/timeslots/--')" data-toggle="modal" data-target="#deleteModal">
+                                                <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#attendeeListModal{{$registration->sigTimeslot->id}}').modal('toggle');" data-toggle="modal" data-target="#attendeeListModal{{$registration->sigTimeslot->id}}">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
-                                                -->
-                                                <button type="button" class="btn btn-danger text-white btn-lg" onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')" data-toggle="modal" data-target="#deleteModal">
+                                                <button type="button" class="btn btn-danger text-white btn-lg"
+                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
+                                                data-toggle="modal" data-target="#deleteModal"
+
+                                                @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
+                                                    disabled
+                                                @endif
+
+                                                >
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
@@ -127,6 +150,7 @@
                                     <hr>
                                 </div>
                             </div>
+                            <x-modals.attendee-list :timeslot="$registration->sigTimeslot" />
                         @endforeach
                     @endif
                 </div>
@@ -210,12 +234,42 @@
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
-                                                <button type="button" class="btn btn-danger text-white" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal">
+                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
+                                                    <x-buttons.notification-edit class="btn-success" :timetableEntry="$fav->timetableEntry" route='reminders.update' >
+                                                        <span class="bi bi-bell"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @else
+                                                    <x-buttons.notification-edit class="btn-primary" :timetableEntry="$fav->timetableEntry" route='reminders.store' >
+                                                        <span class="bi bi-clock"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @endif
+                                                <button type="button" class="btn btn-danger text-white"
+                                                onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
+                                                data-toggle="modal" data-target="#deleteFavModal"
+                                                @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
+                                                    @disabled(true)
+                                                @endif
+                                                >
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
                                             <div class="d-block d-sm-none">
-                                                <button type="button" class="btn btn-danger text-white btn-lg" onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');" data-toggle="modal" data-target="#deleteFavModal" data-eventname="{{ $fav->timetableEntry->sigEvent->name }}">
+                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
+                                                    <x-buttons.notification-edit class="btn-lg btn-success" :timetableEntry="$fav->timetableEntry" route="reminders.update" >
+                                                        <span class="bi bi-bell"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @else
+                                                    <x-buttons.notification-edit class="btn-lg btn-primary" :timetableEntry="$fav->timetableEntry" route="reminders.store" >
+                                                        <span class="bi bi-clock"></span>
+                                                    </x-buttons.notificationEdit>
+                                                @endif
+                                                <button type="button" class="btn btn-danger text-white btn-lg"
+                                                onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
+                                                data-toggle="modal" data-target="#deleteFavModal"
+                                                @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
+                                                    @disabled(true)
+                                                @endif
+                                                >
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
@@ -226,6 +280,7 @@
                                     <hr>
                                 </div>
                             </div>
+                            <x-modals.reminder-selector :timetableEntry="$fav->timetableEntry" />
                         @endforeach
                     @endif
                 </div>

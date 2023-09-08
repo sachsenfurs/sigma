@@ -1,6 +1,11 @@
-@section('title', "Program")
-@include('layouts.head')
-<body>
+@extends('layouts.app')
+@section('title', __("Event Schedule"))
+
+@section('content')
+{{--    --}}
+{{--@section('title', __("Event Schedule"))--}}
+{{--@include('layouts.head')--}}
+{{--<body>--}}
 <style>
     table {
         margin: 0;
@@ -45,7 +50,7 @@
         <tr></tr>
         <tr class="weekday">
             <td colspan="{{ count($locations)+1 }}">
-                <strong>{{ $day }} - {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->dayName) . " | " . Str::upper(\Illuminate\Support\Carbon::parse($day)->locale("en")->dayName) }}</strong>
+                <strong>{{ $day }} - {{ Str::upper(\Illuminate\Support\Carbon::parse($day)->dayName) }}</strong>
             </td>
         </tr>
         <tr>
@@ -85,7 +90,7 @@
                             }
                             echo '<td rowspan="'.$rows.'" class="event">';
                             echo '<a href="'. route("public.timeslot-show", $events->first()) .'">';
-                            echo $sig->name;
+                            echo $sig->name_localized;
                             echo '</a>';
                             echo '</td>';
                             for($i=0; $i<$rows; $i++) {
@@ -99,5 +104,6 @@
             </tr>
         @endfor
     @endforeach
-</table>
-</body>
+{{--</table>--}}
+{{--</body>--}}
+@endsection

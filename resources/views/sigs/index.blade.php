@@ -11,42 +11,54 @@
                 <th>Host</th>
                 <th>Sprachen</th>
                 <th>Location</th>
+                <th>Tags</th>
                 <th>Im Programmplan</th>
                 <th>Aktion</th>
             </tr>
             @forelse($sigs AS $sig)
-                <tr class="@if($sig->timeTableCount == 0) alert-danger @endif">
+                <tr class="@if($sig->timetableCount == 0) alert-danger @endif">
                     <td>
-                        @if($sig->description == "")
-                            <div class="badge bg-danger">Text fehlt!</div>
+                        @if($sig->description == "" OR $sig->description_en == "")
+                            <div class="badge bg-danger">Text unvollständig!</div>
                         @endif
-                        <a href="{{ route("sigs.show", $sig) }}">
-                            {{ $sig->name }}
+
+                        <a href="{{ route("sigs.show", $sig) }}" class="text-decoration-none">
+                            <h5 class="d-inline">
+                                {{ $sig->name }}
+                            </h5>
                         </a>
                     </td>
                     <td>
-                        <a href="{{ route("hosts.show", $sig->sigHost) }}">
-                            <span class="badge bg-light text-dark">
-                                {{ $sig->sigHost->name }}
-                            </span>
+                        <a href="{{ route("hosts.edit", $sig->sigHost) }}" class="btn btn-secondary">
+                            <i class="bi bi-person-circle"></i>
+                            {{ $sig->sigHost->name }}
+                            @if($sig->sigHost->reg_id)
+                                ({{ $sig->sigHost->reg_id }})
+                            @endif
                         </a>
                     </td>
                     <td>
                         @foreach($sig->languages AS $lang)
-                            {{ $lang }}
+                            <img src="/icons/{{ $lang }}-flag.svg" alt="" style="height: 1em">
                         @endforeach
                     </td>
                     <td>
-                        <a href="{{ route("locations.show", $sig->sigLocation) }}">
-                            <span class="badge bg-secondary">
-                                {{ $sig->sigLocation->name }}
-                            </span>
+                        <a href="{{ route("locations.show", $sig->sigLocation) }}" class="btn btn-secondary">
+                            <i class="bi bi-geo-alt"></i>
+                            {{ $sig->sigLocation->name }}
                         </a>
                     </td>
-                    <td>{{ $sig->timeTableCount }}</td>
+                    <td>
+                        @foreach($sig->sigTags AS $tag)
+                            <span class="badge bg-success d-block m-1">
+                                {{ $tag->description_localized }}
+                            </span>
+                        @endforeach
+                    </td>
+                    <td>{{ $sig->timetableCount }}</td>
                     <td>
                         <a href="{{ route("sigs.edit", $sig) }}">
-                            <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
+                            <button type="button" class="btn btn-primary"><i class="bi bi-pen"></i></button>
                         </a>
                     </td>
                 </tr>

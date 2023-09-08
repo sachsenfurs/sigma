@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasSigEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
@@ -24,6 +25,15 @@ class TimetableEntry extends Model
 
     protected $appends = [
         'formatted_length',
+        'hasTimeChanged',
+        'hasLocationChanged',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'replaced_by_id',
+        'parentEntry'
     ];
 
     /**
@@ -34,6 +44,16 @@ class TimetableEntry extends Model
     public function favorites()
     {
         return $this->hasMany(SigFavorite::class);
+    }
+
+    /**
+     * Define the relationship between timetable-entries and their reminders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reminders()
+    {
+        return $this->hasMany(SigReminder::class);
     }
 
     public function scopePublic($query) {
@@ -49,13 +69,20 @@ class TimetableEntry extends Model
     }
 
     public function sigLocation() {
-        return $this->belongsTo(SigLocation::class)->withDefault(function() {
-            return $this->sigEvent->sigLocation;
+        return $this->belongsTo(SigLocation::class)->withDefault(function($sigLocation, $timetableEntry) {
+            return $timetableEntry->sigEvent->sigLocation;
         });
     }
 
     public function sigTimeslots() {
         return $this->hasMany(SigTimeslot::class);
+    }
+    public function getAvailableSlotCount() {
+        $counter = 0;
+        foreach($this->sigTimeslots AS $timeslot) {
+            $counter += $timeslot->max_users - $timeslot->sigAttendees->count();
+        }
+        return $counter;
     }
 
     public function replacedBy() {
@@ -66,11 +93,11 @@ class TimetableEntry extends Model
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
-    public function hasTimeChanged() {
+    public function getHasTimeChangedAttribute() {
         return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
     }
 
-    public function hasLocationChanged() {
+    public function getHasLocationChangedAttribute() {
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
@@ -114,6 +141,6 @@ class TimetableEntry extends Model
             return "";
         if($mins < 60)
             return $mins." min";
-        return $this->start->floatDiffInHours($this->end). " h";
+        return round($this->start->floatDiffInHours($this->end), 1). " h";
     }
 }

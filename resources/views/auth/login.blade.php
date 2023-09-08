@@ -9,7 +9,7 @@
                 <div class="list-group mt-4">
                     <li class="list-group-item">
                         <h5 class="mb-1"><i class="bi bi-calendar-week"></i> {{ __("Access the event schedule") }}</h5>
-                        <small><a href="{{ route("public.tableview") }}">{{ __("View Schedule") }}</a></small>
+                        <small><a href="{{ route("public.listview") }}">{{ __("View Schedule") }}</a></small>
                     </li>
                     <li class="list-group-item">
                         <h5 class="mb-1"><i class="bi bi-list-check"></i> {{ __("Signup for specific SIGs") }}</h5>

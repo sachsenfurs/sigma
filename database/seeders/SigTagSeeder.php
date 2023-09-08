@@ -18,16 +18,24 @@ class SigTagSeeder extends Seeder
         SigTag::insert([
             [
                 'name' => "NSFW",
-                'description' => "NSFW Event",
+                'description' => "NSFW",
+                'description_en' => "NSFW",
             ],
             [
                 'name' => "dance",
-                'description' => 'Loud Music, Flashing Lights'
+                'description' => 'Laute Musik',
+                'description_en' => 'Loud Music',
             ],
             [
-                'nane' => "signup",
-                'description' => 'Anmeldung erforderlich'
-            ]
+                'name' => "signup",
+                'description' => 'Anmeldung erforderlich',
+                'description_en' => 'Sign up Required',
+            ],
+            [
+                'name' => "fursuit",
+                'description' => 'Fursuit-Event',
+                'description_en' => 'Fursuit-Event',
+            ],
         ]);
     }
 }

@@ -18,9 +18,9 @@ class SigLocationController extends Controller
     }
 
     public function show(SigLocation $location) {
-        $events = $location->sigEvents()
-                       ->with("timeTableEntries")
-                       ->get();
+        $query = auth()->user()?->can("manage_locations") ? $location->sigEvents() : $location->sigEvents()->public();
+
+        $events = $query->get();
         return view("locations.show", [
             'location' => $location,
             'events' => $events,

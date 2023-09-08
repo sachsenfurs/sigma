@@ -73,7 +73,7 @@
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                             @if($entry->cancelled)
                                 <span class="badge bg-danger">{{ __("Cancelled") }}</span>
-                            @elseif($entry->hasTimeChanged())
+                            @elseif($entry->hasTimeChanged)
                                 <span class="badge bg-info">{{ __("Changed") }}</span>
                             @endif
                         </td>

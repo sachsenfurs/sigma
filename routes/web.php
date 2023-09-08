@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Public\ConbookExportController;
+use App\Http\Controllers\Public\ListViewController;
 use App\Http\Controllers\Public\TableViewController;
 use App\Http\Controllers\Public\TimeslotShowController;
 use App\Http\Controllers\SetLocaleController;
@@ -16,6 +18,8 @@ use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
+use App\Http\Controllers\Sig\SigReminderController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
@@ -45,9 +49,12 @@ Route::get("/oauth", [OAuthLoginController::class, 'redirect']);
 Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name("oauthlogin_regsys");
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
+Route::get("/schedule", [ListViewController::class, 'index'])->name("public.listview");
+Route::get("/schedule/index", [ListViewController::class, 'timetableIndex'])->name("public.listview-index");
+Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
+
 Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
 Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
-Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
 
 
 Route::resource("/hosts", SigHostController::class)->except('show');
@@ -57,6 +64,10 @@ Route::resource("/locations", SigLocationController::class)->except('show');
 Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])->name("locations.show");
 
 Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
+
+
+Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
+Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -116,11 +127,18 @@ Route::group(['middleware' => "auth"], function() {
     Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 
-    Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
-
     // Favorites
     Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
 
+    // Reminders
+    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
+    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
+    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
+
     //Ajax-Controller
-    Route::post("/favorites", [AjaxController::class, 'setFavorite'])->name('favorites.store');
+    Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
+
+    // Telegram auth
+    Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
+
 });

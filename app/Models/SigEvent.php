@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
-use Database\Seeders\SigTagSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -17,6 +17,16 @@ class SigEvent extends Model
     ];
 
     protected $guarded = [];
+
+    protected $appends = [
+        'name_localized',
+        'description_localized'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 
     public function sigHost() {
         return $this->belongsTo(SigHost::class);
@@ -31,15 +41,15 @@ class SigEvent extends Model
     }
 
     public function getTimetableCountAttribute() {
-        return $this->timeTableEntries->count();
+        return $this->timetableEntries->count();
     }
 
     public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? "";
+        return $this->sigTranslation->name ?? null;
     }
 
     public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? "";
+        return $this->sigTranslation->description ?? null;
     }
 
     public function getNameLocalizedAttribute() {
@@ -57,5 +67,11 @@ class SigEvent extends Model
 
     public function sigTags() {
         return $this->belongsToMany(SigTag::class);
+    }
+
+    public function scopePublic($query) {
+        return $query->whereHas("timetableEntries", function($query) {
+            $query->where("hide", false);
+        });
     }
 }
