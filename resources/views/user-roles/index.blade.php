@@ -29,6 +29,9 @@
                     <div class="col-1 col-md-1">
                         <strong>Manage Hosts</strong>
                     </div>
+                    <div class="col-1 col-md-1">
+                        <strong>Manage Posts</strong>
+                    </div>
                     <div class="col-3 col-md-3">
                         <strong>{{ __("Actions") }}</strong>
                     </div>
@@ -116,7 +119,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-3 mt-1 mb-1 p-0">
+                <div class="col-12 col-md-1 mt-1 mb-1">
+                    <div class="row">
+                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
+                            <strong>Manage Hosts</strong>
+                        </div>
+                        <div class="col-6 col-md-12">
+                            @if ($role->perm_post)
+                                <i class="bi bi-check-square-fill text-success"></i>
+                            @else
+                            <i class="bi bi-x-square-fill text-danger"></i>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1 col-md-2 mt-1 mb-1 p-0">
                     <div class="row">
                         @if ($role->id != 1)
                             <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
@@ -199,6 +216,12 @@
                             <label for="" class="col-sm-4 col-form-label text-end">Manage Hosts</label>
                             <div class="col-sm-8">
                                 <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_hosts">
+                            </div>
+                        </div>
+                        <div class="form-group row m-1">
+                            <label for="" class="col-sm-4 col-form-label text-end">Manage Posts</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" class="form-check-input" name="perms[]" value="perm_post">
                             </div>
                         </div>
                     </div>

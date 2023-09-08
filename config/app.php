@@ -230,4 +230,7 @@ return [
         'redirectUri' => env('REGSYS_OAUTH_REDIRECT_URI', ""),
     ],
 
+
+    'deeplApiKey' => env('DEEPL_API_KEY', ""),
+
 ];

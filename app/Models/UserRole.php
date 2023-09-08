@@ -15,6 +15,7 @@ class UserRole extends Model
         'perm_manage_events',
         'perm_manage_locations',
         'perm_manage_hosts',
+        'perm_post'
     ];
 
     /**

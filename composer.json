@@ -6,8 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "deeplcom/deepl-php": "^1.5",
         "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^2.7",
+        "irazasyed/telegram-bot-sdk": "^3.13",
         "laravel-notification-channels/telegram": "^3.0",
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^2.14.1",
