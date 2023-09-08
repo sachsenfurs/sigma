@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\TranslateController;
 use App\Http\Controllers\Public\ConbookExportController;
 use App\Http\Controllers\Public\ListViewController;
 use App\Http\Controllers\Public\TableViewController;
@@ -141,4 +143,13 @@ Route::group(['middleware' => "auth"], function() {
     // Telegram auth
     Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
 
+    // SF Post
+    Route::prefix("post")->name("posts.")->group(function() {
+        Route::get("/", [PostController::class, 'index'])->name("index");
+        Route::post("/", [PostController::class, 'store'])->name("store");
+        Route::get("/create", [PostController::class, "create"])->name("create");
+        Route::delete("/{post}", [PostController::class, 'destroy'])->name("destroy");
+
+        Route::post("/translate", TranslateController::class)->name("translate");
+    });
 });

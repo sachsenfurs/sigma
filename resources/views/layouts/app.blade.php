@@ -19,7 +19,7 @@
                         </a>
                     </li>
                     <!-- End visible in any case -->
-                    @canany(["manage_events", "manage_locations"])
+                    @canany(["manage_events", "post"])
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle px-3" href="#" id="adminDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-gear"></i> {{ __("Administration") }}
@@ -36,6 +36,13 @@
                                             <i class="bi bi-easel"></i> SIGs
                                         </a>
                                     </li>
+                                @endcan
+                                @can("post")
+                                        <li>
+                                            <a class="dropdown-item {{ Route::is("posts.index") ? "active" : "" }}" href="{{ route("posts.index") }}">
+                                                <i class="bi bi-megaphone"></i> @lang("Announcements")
+                                            </a>
+                                        </li>
                                 @endcan
                             </ul>
                         </li>

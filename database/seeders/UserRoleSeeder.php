@@ -38,5 +38,10 @@ class UserRoleSeeder extends Seeder
             'perm_manage_events'    => true,
             'created_at'            => now()
         ]);
+        DB::table('user_roles')->insert([
+            'title'                 => 'Social Media',
+            'perm_post'             => true,
+            'created_at'            => now()
+        ]);
     }
 }

@@ -96,4 +96,8 @@ class User extends Authenticatable
     public function sigTimeslots() {
         return $this->belongsToMany(SigTimeslot::class, "sig_attendees");
     }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
 }

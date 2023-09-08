@@ -48,6 +48,12 @@
                             <input type="checkbox" class="form-check-input" name="perms[]" value="perm_manage_hosts" @checked($userRole->perm_manage_hosts)>
                         </div>
                     </div>
+                    <div class="form-group row m-1">
+                        <label for="" class="col-sm-4 col-form-label text-end">Manage Posts</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="form-check-input" name="perms[]" value="perm_post" @checked($userRole->perm_post)>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>

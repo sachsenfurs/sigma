@@ -28,6 +28,14 @@ class UserObserver
             $user->role()->associate(3);
             $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
         }
+        if(in_array("foto", $user->groups ?? [])) {
+            $user->role()->associate(3);
+            $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
+        }
+        if(in_array("socialmedia", $user->groups ?? [])) {
+            $user->role()->associate(4);
+            $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
+        }
     }
 
     public function deleted(User $user)

@@ -48,5 +48,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define("login", function($user) {
             return $user;
         });
+
+        Gate::define("post", function($user) {
+            return $user->role->perm_post;
+        });
     }
 }
