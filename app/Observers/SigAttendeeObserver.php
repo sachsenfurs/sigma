@@ -30,12 +30,12 @@ class SigAttendeeObserver
     }
 
     /**
-     * Handle the SigAttendee "deleted" event.
+     * Handle the SigAttendee "deleting" event.
      *
      * @param  \App\Models\SigAttendee  $sigAttendee
      * @return void
      */
-    public function deleted(SigAttendee $sigAttendee)
+    public function deleting(SigAttendee $sigAttendee)
     {
         if($sigAttendee->sigTimeslot()->reg_end < Carbon::now()) {
             return false;

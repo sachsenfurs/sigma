@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\SigAttendee;
 use App\Models\SigEvent;
+use App\Models\SigFavorite;
+use App\Models\SigReminder;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Observers\SigAttendeeObserver;
 use App\Observers\SigEventObserver;
+use App\Observers\SigFavoriteObserver;
+use App\Observers\SigReminderObserver;
 use App\Observers\UserObserver;
 use App\Observers\UserRoleObserver;
 use Illuminate\Auth\Events\Registered;
@@ -35,6 +41,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         SigEvent::class => [
             SigEventObserver::class
+        ],
+        SigFavorite::class => [
+            SigFavoriteObserver::class
+        ],
+        SigAttendee::class => [
+            SigAttendeeObserver::class
+        ],
+        SigReminder::class => [
+            SigReminderObserver::class
         ]
     ];
 

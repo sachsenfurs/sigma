@@ -29,7 +29,7 @@
                         <div class="col-lg-4 col-6 align-self-center">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
                             <span class="text-nowrap">{{ __("Slots taken") }}</span>
-                            @if ($timeslot->sigAttendees->count() > 0)
+                            @if ($timeslot->sigAttendees->count() > 0 && auth()->check()) 
                                 <br>
                                 <i class="bi bi-people-fill"></i> 
                                 {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}    

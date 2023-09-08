@@ -29,13 +29,13 @@
                             <div id="panelsStayOpen-collapse-{{ $tte->id }}" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
                                     @forelse ($tte->sigTimeslots as $ts)
-                                        <a href="{{ route('timeslots.editNotes', $ts->id) }}" style="text-decoration: none; color: #000;">
+                                        <a href="{{ route('timeslots.editNotes', $ts->id) }}" style="text-decoration: none;">
                                             <div class="col-12 col-md-12 mb-2">
-                                                <div class="row border border-light">
-                                                    <div class="col-12 col-md-3 bg-light d-flex" style="align-items: center; justify-content: center;">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-3 d-flex border" style="align-items: center; justify-content: center;">
                                                         <h3>{{ \Illuminate\Support\Carbon::parse($ts->slot_start)->format("H:i") }} - {{ \Illuminate\Support\Carbon::parse($ts->slot_end)->format("H:i") }}</h3>
                                                     </div>
-                                                    <div class="col-12 col-md-9 p-2">
+                                                    <div class="col-12 col-md-9 p-2 border">
                                                         <h3>{{ __('Attendees') }}</h3>
                                                         <div class="row">
                                                             @foreach ($additionalInformations[$tte->id]['timeslots'][$ts->id] as $attendee)
