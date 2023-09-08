@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-6 col-md-9 text-start">
                     @foreach ($attendees as $attendee)
-                        <div class="col-12 col-md-12">{{ $attendee->user->name }}</div>
+                        <div class="col-12 col-md-12">{{ $attendee->user->name }} ({{ $attendee->user->reg_id }})</div>
                     @endforeach
                 </div>
             </div>

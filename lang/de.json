@@ -141,6 +141,7 @@
     "This reminder doesn't exists!": "Diese Erinnerung existiert nicht!",
     "Reminder successfully updated!": "Erinnerung erfolgreich aktualisiert!",
     "Telegram Connected!": "Telegram Verknüpft!",
+    "An error occured while connecting Telegram!": "Es ist ein Fehler beim Verbinden mit Telegram aufgetreten!",
 
     "Changed": "Geändert",
     "Moved": "Verschoben",
