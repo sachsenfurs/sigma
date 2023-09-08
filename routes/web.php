@@ -130,15 +130,14 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 
     // Favorites
-    Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete');
+    Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete("/favorites/{entry}", [SigFavoriteController::class, 'destroy'])->name('favorites.destroy');
+    Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete'); // TODO
 
     // Reminders
     Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
     Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
     Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
-
-    //Ajax-Controller
-    Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
 
     // Telegram auth
     Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');

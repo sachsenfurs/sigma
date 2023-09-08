@@ -43,8 +43,15 @@ class SigFavoriteController extends Controller
             'minutes_before' => 15,
             'send_at' => strtotime(TimetableEntry::find(['id' => $attributes['timetable_entry_id']])->first()->start) - (15 * 60),
         ];
-        
+
         auth()->user()->reminders()->create($reminderAttributes);
 
+    }
+
+
+    public function destroy(TimetableEntry $entry) {
+        $this->authorize("login");
+
+        auth()->user()->favorites()->where("timetable_entry_id", $entry->id)->delete();
     }
 }
