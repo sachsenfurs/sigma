@@ -15,7 +15,7 @@ class SigReminderObserver
      */
     public function creating(SigReminder $sigReminder)
     {
-        if ($sigReminder->send_at < Carbon::now()) {
+        if ($sigReminder->send_at < Carbon::now()->timestamp) {
             return false;
         }
         
