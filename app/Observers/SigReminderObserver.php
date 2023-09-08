@@ -8,18 +8,18 @@ use Carbon\Carbon;
 class SigReminderObserver
 {
     /**
-     * Handle the SigReminder "created" event.
+     * Handle the SigReminder "creating" event.
      *
      * @param  \App\Models\SigReminder  $sigReminder
      * @return void
      */
-    public function created(SigReminder $sigReminder)
+    public function creating(SigReminder $sigReminder)
     {
         if ($sigReminder->send_at < Carbon::now()) {
             return false;
         }
         
-        if (SigReminder::where('user_id', auth()->user()->id)->where('timetable_entry_id', $sigReminder->timetable_entry_id)->exists()) {
+        if (SigReminder::where('user_id', $sigReminder->user_id)->where('timetable_entry_id', $sigReminder->timetable_entry_id)->exists()) {
             return false;
         }
 
