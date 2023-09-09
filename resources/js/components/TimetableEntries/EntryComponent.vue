@@ -69,10 +69,18 @@ export default {
             if(!this.favoriteUpdating) {
                 let self = this;
                 this.favoriteUpdating = true;
-                axios.post("/favorites", {
-                    timetable_entry_id: this.entry.id,
-                })
-                .then((response) => {
+                let request;
+
+                if(this.entry.is_favorite) {
+                    request = axios.delete("/favorites/" + this.entry.id);
+                } else {
+                    request = axios.post("/favorites", {
+                        timetable_entry_id: this.entry.id
+                    });
+                }
+
+
+                request.then((response) => {
                     this.entry.is_favorite = !this.entry.is_favorite;
                     self.favoriteUpdating = false;
                 })

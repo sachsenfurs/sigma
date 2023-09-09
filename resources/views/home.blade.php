@@ -4,19 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-{{--            <div class="card text-center">--}}
-{{--                <div class="card-header">{{ __('Dashboard') }}</div>--}}
-
-{{--                <div class="card-body">--}}
-{{--                    @if (session('status'))--}}
-{{--                        <div class="alert alert-success" role="alert">--}}
-{{--                            {{ session('status') }}--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-
-{{--                    {{ __('You are logged in!') }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
             @if (!auth()->user()->telegram_user_id)
                 <div class="row m-3">
                     <div class="col-12 col-md-12 text-center">
@@ -62,7 +49,7 @@
                         <!-- Table head end -->
 
                         <!-- Table body start -->
-                        @foreach (auth()->user()->attendeeEvents as $registration)
+                        @foreach ($registrations as $registration)
                             <div class="row mb-2">
                                 <div class="col-12 col-md-3 mt-1 mb-1">
                                     <div class="row">
@@ -70,7 +57,7 @@
                                             <strong>{{ __("Event") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
-                                            {{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}
+                                            {{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +87,7 @@
                                             <strong>{{ __("Location") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
-                                            {{ $registration->sigTimeslot->timetableEntry->sigLocation->name }}
+                                            {{ $registration->sigTimeslot->timetableEntry->sigLocation->name_localized }}
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +102,7 @@
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
                                                 <button type="button" class="btn btn-danger text-white"
-                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
+                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
                                                 data-toggle="modal" data-target="#deleteModal"
 
                                                 @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
@@ -132,7 +119,7 @@
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
                                                 <button type="button" class="btn btn-danger text-white btn-lg"
-                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
+                                                onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
                                                 data-toggle="modal" data-target="#deleteModal"
 
                                                 @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
@@ -154,140 +141,126 @@
                         @endforeach
                     @endif
                 </div>
-                <hr class="mt-5 mb-5">
-                <div class="col-12 col-md-12 text-center mt-2">
+                <hr class="my-4">
+                <div class="col-12 col-md-12 text-center my-3">
                     <h2>{{ __("Favorite Events") }}</h2>
                 </div>
                 <div class="col-12 col-md-12 text-center">
-                    @if (auth()->user()->favorites->count() == 0)
-                        <p>{{ __("You currently don't have any favorite events") }}</p>
-                    @else
-                        <!-- Table head start -->
-                        <div class="d-none d-xl-block">
-                            <div class="row border-bottom border-dark mb-2">
-                                <div class="col-3 col-md-3">
-                                    <strong>{{ __("Event") }}</strong>
-                                </div>
-                                <div class="col-2 col-md-2">
-                                    <strong>{{ __("Date") }}</strong>
-                                </div>
-                                <div class="col-3 col-md-3">
-                                    <strong>{{ __("Time span") }}</strong>
-                                </div>
-                                <div class="col-2 col-md-2">
-                                    <strong>{{ __("Location") }}</strong>
-                                </div>
-                                <div class="col-2 col-md-2">
-                                    <strong>{{ __("Actions") }}</strong>
-                                </div>
+                    <!-- Table head start -->
+                    <div class="d-none d-xl-block">
+                        <div class="row border-bottom border-dark mb-2">
+                            <div class="col-3 col-md-3">
+                                <strong>{{ __("Event") }}</strong>
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <strong>{{ __("Date") }}</strong>
+                            </div>
+                            <div class="col-3 col-md-3">
+                                <strong>{{ __("Time span") }}</strong>
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <strong>{{ __("Location") }}</strong>
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <strong>{{ __("Actions") }}</strong>
                             </div>
                         </div>
-                        <!-- Table head end -->
+                    </div>
+                    <!-- Table head end -->
 
-                        <!-- Table body start -->
-                        @foreach (auth()->user()->favorites as $fav)
-                            <div class="row mb-2">
-                                <div class="col-12 col-md-3 mt-1 mb-1">
-                                    <div class="row">
-                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>{{ __("Event") }}</strong>
-                                        </div>
-                                        <div class="col-6 col-md-12">
-                                            {{ $fav->timetableEntry->sigEvent->name }}
-                                        </div>
+                    <!-- Table body start -->
+                    @forelse ($favorites as $fav)
+                        <div class="row mb-2">
+                            <div class="col-12 col-md-3 mt-1 mb-1">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 d-block d-md-none align-middle">
+                                        <strong>{{ __("Event") }}</strong>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-2 mt-1 mb-1">
-                                    <div class="row">
-                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>{{ __("Date") }}</strong>
-                                        </div>
-                                        <div class="col-6 col-md-12">
-                                            {{ date('l', strtotime($fav->timetableEntry->start)) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})
-                                        </div>
+                                    <div class="col-6 col-md-12">
+                                        {{ $fav->timetableEntry->sigEvent->name_localized }}
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-3 mt-1 mb-1">
-                                    <div class="row">
-                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>{{ __("Time span") }}</strong>
-                                        </div>
-                                        <div class="col-6 col-md-12">
-                                            {{ date('H:i', strtotime($fav->timetableEntry->start)) }} - {{ date('H:i', strtotime($fav->timetableEntry->end)) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-2 mt-1 mb-1">
-                                    <div class="row">
-                                        <div class="col-6 col-md-6 d-block d-sm-none align-middle">
-                                            <strong>{{ __("Location") }}</strong>
-                                        </div>
-                                        <div class="col-6 col-md-12">
-                                            {{ $fav->timetableEntry->sigLocation->name }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-2 mt-1 mb-1 p-0">
-                                    <div class="row">
-                                        <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
-                                            <strong>{{ __("Actions") }}</strong>
-                                        </div>
-                                        <div class="col-6 col-md-12">
-                                            <div class="d-none d-lg-block d-xl-block">
-                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                    <x-buttons.notification-edit class="btn-success" :timetableEntry="$fav->timetableEntry" route='reminders.update' >
-                                                        <span class="bi bi-bell"></span>
-                                                    </x-buttons.notificationEdit>
-                                                @else
-                                                    <x-buttons.notification-edit class="btn-primary" :timetableEntry="$fav->timetableEntry" route='reminders.store' >
-                                                        <span class="bi bi-clock"></span>
-                                                    </x-buttons.notificationEdit>
-                                                @endif
-                                                <button type="button" class="btn btn-danger text-white"
-                                                onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
-                                                data-toggle="modal" data-target="#deleteFavModal"
-                                                @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                                    @disabled(true)
-                                                @endif
-                                                >
-                                                    <span class="bi bi-x"></span>
-                                                </button>
-                                            </div>
-                                            <div class="d-block d-sm-none">
-                                                @if (auth()->user()->reminders->contains('timetable_entry_id', $fav->timetableEntry->id))
-                                                    <x-buttons.notification-edit class="btn-lg btn-success" :timetableEntry="$fav->timetableEntry" route="reminders.update" >
-                                                        <span class="bi bi-bell"></span>
-                                                    </x-buttons.notificationEdit>
-                                                @else
-                                                    <x-buttons.notification-edit class="btn-lg btn-primary" :timetableEntry="$fav->timetableEntry" route="reminders.store" >
-                                                        <span class="bi bi-clock"></span>
-                                                    </x-buttons.notificationEdit>
-                                                @endif
-                                                <button type="button" class="btn btn-danger text-white btn-lg"
-                                                onclick="document.getElementById('deleteFavModalEventName').innerHTML = '{{ $fav->timetableEntry->sigEvent->name }}'; var input = document.getElementById('deleteFavForm_timetable_entry_id'); input.value = '{{ $fav->timetableEntry->id }}'; $('#deleteFavModal').modal('show');"
-                                                data-toggle="modal" data-target="#deleteFavModal"
-                                                @if ($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                                    @disabled(true)
-                                                @endif
-                                                >
-                                                    <span class="bi bi-x"></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-6 d-block d-sm-none mx-auto">
-                                    <hr>
                                 </div>
                             </div>
-                            <x-modals.reminder-selector :timetableEntry="$fav->timetableEntry" />
-                        @endforeach
-                    @endif
+                            <div class="col-12 col-md-2 mt-1 mb-1">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 d-block d-md-none align-middle">
+                                        <strong>{{ __("Date") }}</strong>
+                                    </div>
+                                    <div class="col-6 col-md-12">
+                                        {{ $fav->timetableEntry->start->isoFormat("dddd, DD.MM") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 mt-1 mb-1">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 d-block d-md-none align-middle">
+                                        <strong>{{ __("Time span") }}</strong>
+                                    </div>
+                                    <div class="col-6 col-md-12">
+                                        {{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 mt-1 mb-1">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 d-block d-md-none align-middle">
+                                        <strong>{{ __("Location") }}</strong>
+                                    </div>
+                                    <div class="col-6 col-md-12">
+                                        {{ $fav->timetableEntry->sigLocation->name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 mt-1 mb-1 p-0">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 d-block d-md-none align-items-center">
+                                        <strong>{{ __("Actions") }}</strong>
+                                    </div>
+                                    <div class="col-6 col-md-12">
+                                        <div class="d-block">
+                                            <x-buttons.notification-edit :fav="$fav" />
+                                            <button type="button" class="btn btn-danger text-white btn"
+                                                    data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
+                                                    data-bs-entryid="{{ $fav->timetableEntry->id }}"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteFavModal"
+                                                    @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
+                                            >
+                                                <span class="bi bi-x"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6 d-block d-sm-none mx-auto">
+                                <hr>
+                            </div>
+                        </div>
+                        <x-modals.reminder-selector :timetableEntry="$fav->timetableEntry" />
+                    @empty
+                        <p>{{ __("You currently don't have any favorite events") }}</p>
+                    @endforelse
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        document.querySelectorAll("#deleteModal,#deleteFavModal").forEach((modal) => {
+            modal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                let button = event.relatedTarget;
+                // Extract info from data-bs-* attributes
+                let name = button.getAttribute('data-bs-signame');
+                let id = button.getAttribute('data-bs-entryid');
+                modal.querySelector("form").action = "/favorites/" + id;
+                modal.querySelector('.modal-body p').textContent = name;
+            });
+        });
+    });
+</script>
+
 <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -304,7 +277,7 @@
             <form id="userForm" action="" method="POST">
                 @method('CREATE')
                 @csrf
-                <a class="btn btn-secondary" onclick="$('#userModal').modal('hide');" data-dismiss="modal">{{ __("Close") }}</a>
+                <a class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Close") }}</a>
             </form>
         </div>
       </div>
@@ -318,13 +291,13 @@
             </div>
             <div class="modal-body">
                 {{ __("Do you really want to cancel the following registration?") }}<br>
-                <strong><p class="m-0" id="deleteModalEventName"></p></strong>
+                <strong><p class="m-0"></p></strong>
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" action="" method="POST">
                     @method('DELETE')
                     @csrf
-                    <a class="btn btn-secondary" onclick="$('#deleteModal').modal('hide');" data-dismiss="modal">{{ __("Abort") }}</a>
+                    <a class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Abort") }}</a>
                     <button type="submit" class="btn btn-danger">{{ __("Yes") }}</button>
                 </form>
             </div>
@@ -339,14 +312,14 @@
         </div>
         <div class="modal-body">
             {{ __("Do you really want to remove the following event from your favorites?") }}<br>
-            <strong><p class="m-0" id="deleteFavModalEventName"></p></strong>
+            <strong><p class="m-0"></p></strong>
         </div>
         <div class="modal-footer">
-            <form id="deleteFavForm" action="{{ route('favorites.delete') }}" method="POST">
+            <form id="deleteFavForm" action="" method="POST">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" id="deleteFavForm_timetable_entry_id" name="timetable_entry_id" />
-                <a class="btn btn-secondary" onclick="$('#deleteFavModal').modal('hide');" data-dismiss="modal">{{ __("Abort") }}</a>
+                <a class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Abort") }}</a>
                 <button type="submit" class="btn btn-danger">{{ __("Yes")  }}</button>
             </form>
         </div>

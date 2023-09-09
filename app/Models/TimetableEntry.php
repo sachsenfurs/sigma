@@ -6,6 +6,7 @@ use App\Models\Traits\HasSigEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
@@ -27,6 +28,7 @@ class TimetableEntry extends Model
         'formatted_length',
         'hasTimeChanged',
         'hasLocationChanged',
+        'is_favorite',
     ];
 
     protected $hidden = [
@@ -34,6 +36,10 @@ class TimetableEntry extends Model
         'updated_at',
         'replaced_by_id',
         'parentEntry'
+    ];
+
+    protected $with = [
+        'favorites'
     ];
 
     /**
@@ -142,5 +148,12 @@ class TimetableEntry extends Model
         if($mins < 60)
             return $mins." min";
         return round($this->start->floatDiffInHours($this->end), 1). " h";
+    }
+
+    public function getIsFavoriteAttribute() {
+        if(Auth::check()) {
+            return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
+        }
+        return false;
     }
 }

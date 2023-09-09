@@ -74,13 +74,11 @@ export default {
         getMostRecentEvent() {
             let firstEvent = false;
             this.entries.forEach((entry) => {
-                if(firstEvent)
-                    return;
-                if(new Date(entry.start) <= new Date() && new Date(entry.end) >= new Date()) {
+                if(new Date(entry.start) <= new Date()) {
                     firstEvent = entry;
                 }
             });
-            return firstEvent;
+            return firstEvent || this.entries[0];
         },
         scrollToDay(dateIndex) {
             this.scrollActive = true;

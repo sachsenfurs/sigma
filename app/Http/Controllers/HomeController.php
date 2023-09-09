@@ -23,6 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $registrations  = auth()->user()->attendeeEvents;
+        $favorites      = auth()->user()->favorites()->upcoming()->with("timetableEntry")->get()->sortBy(function($query) {
+            return $query->timetableEntry->start;
+        })->all();
+        return view('home', compact([
+            'registrations',
+            'favorites'
+        ]));
     }
 }
