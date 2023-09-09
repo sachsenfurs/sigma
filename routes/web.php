@@ -132,7 +132,6 @@ Route::group(['middleware' => "auth"], function() {
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
     Route::delete("/favorites/{entry}", [SigFavoriteController::class, 'destroy'])->name('favorites.destroy');
-    Route::delete("/favorites", [SigFavoriteController::class, 'removeFavorite'])->name('favorites.delete'); // TODO
 
     // Reminders
     Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
