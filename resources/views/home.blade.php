@@ -35,13 +35,13 @@
                                 <div class="col-2 col-md-2">
                                     <strong>{{ __("Date") }}</strong>
                                 </div>
-                                <div class="col-3 col-md-3">
+                                <div class="col-2 col-md-2">
                                     <strong>{{ __("Time span") }}</strong>
                                 </div>
                                 <div class="col-2 col-md-2">
                                     <strong>{{ __("Location") }}</strong>
                                 </div>
-                                <div class="col-2 col-md-2">
+                                <div class="col-3 col-md-3">
                                     <strong>{{ __("Actions") }}</strong>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-3 mt-1 mb-1">
+                                <div class="col-12 col-md-2 mt-1 mb-1">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-middle">
                                             <strong>{{ __("Time span") }}</strong>
@@ -87,17 +87,18 @@
                                             <strong>{{ __("Location") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
-                                            {{ $registration->sigTimeslot->timetableEntry->sigLocation->name_localized }}
+                                            {{ $registration->sigTimeslot->timetableEntry->sigLocation->name }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-2 mt-1 mb-1 p-0">
+                                <div class="col-12 col-md-3 mt-1 mb-1 p-0">
                                     <div class="row">
                                         <div class="col-6 col-md-6 d-block d-sm-none align-items-center">
                                             <strong>{{ __("Actions") }}</strong>
                                         </div>
                                         <div class="col-6 col-md-12">
                                             <div class="d-none d-lg-block d-xl-block">
+                                                <x-buttons.timeslot-notification-edit :reg="$registration" />
                                                 <a type="button" class="btn btn-info text-black" onclick="$('#attendeeListModal{{$registration->sigTimeslot->id}}').modal('toggle');" data-toggle="modal" data-target="#attendeeListModal{{$registration->sigTimeslot->id}}">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
@@ -115,6 +116,7 @@
                                                 </button>
                                             </div>
                                             <div class="d-block d-sm-none">
+                                                <x-buttons.timeslot-notification-edit :reg="$registration" />
                                                 <a type="button" class="btn btn-info text-black btn-lg" onclick="$('#attendeeListModal{{$registration->sigTimeslot->id}}').modal('toggle');" data-toggle="modal" data-target="#attendeeListModal{{$registration->sigTimeslot->id}}">
                                                     <span class="bi bi-people-fill"></span>
                                                 </a>
@@ -130,6 +132,7 @@
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
+                                            <x-modals.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +294,7 @@
             </div>
             <div class="modal-body">
                 {{ __("Do you really want to cancel the following registration?") }}<br>
-                <strong><p class="m-0"></p></strong>
+                <strong><p class="m-0" id="deleteModalEventName"></p></strong>
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" action="" method="POST">

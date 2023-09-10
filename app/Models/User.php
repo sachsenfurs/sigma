@@ -70,6 +70,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Define the relationship between users and their timeslot-reminders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeslotReminders()
+    {
+        return $this->hasMany(SigTimeslotReminder::class);
+    }
+
+    /**
      * Define the relationship between users and their favorites.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
