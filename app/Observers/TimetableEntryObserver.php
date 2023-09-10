@@ -19,7 +19,7 @@ class TimetableEntryObserver
      */
     public function updated(TimetableEntry $timetableEntry)
     {
-        $users = User::where('telegram_id', '!=', null)->get();
+        $users = User::where('telegram_user_id', '!=', null)->get();
 
         if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
             Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
