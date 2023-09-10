@@ -1,33 +1,28 @@
 <?php
 
-namespace App\Notifications\SigFavorite;
+namespace App\Notifications\TimetableEntry;
 
-use App\Models\SigFavorite;
-use App\Models\SigReminder;
 use App\Models\TimetableEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class SigFavoriteReminder extends Notification
+class TimetableEntryLocationChanged extends Notification
 {
     use Queueable;
 
     protected $timetableEntry;
-    protected $reminder;
 
     /**
      * Create a new notification instance.
      *
-     * @param TimetableEntry $entry
-     * @param SigFavorite $fav
      * @return void
      */
-    public function __construct(TimetableEntry $entry, SigReminder $reminder)
+    public function __construct(TimetableEntry $timetableEntry)
     {
-        $this->timetableEntry = $entry;
-        $this->reminder = $reminder;
+        $this->timetableEntry = $timetableEntry;
     }
 
     /**
@@ -42,18 +37,18 @@ class SigFavoriteReminder extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the Telegram representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return NotificationChannels\Telegram\TelegramMessage
+     * @return \NotificationChannels\Telegram\TelegramMessage;
      */
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line("Hi " . $notifiable->name . ",")
-            ->line("your favorite event " . $this->timetableEntry->sigEvent->name . " starts in "  . $this->reminder->minutes_before . " Minutes!")
-            ->button("View Event" , route("public.timeslot-show", ['entry' => $this->timetableEntry->id]));
+            ->line('Hi ' . $notifiable->name . ',')
+            ->line('the location for the event ' . $this->timetableEntry->sigEvent->name . ' has changed!')
+            ->button('View Event', route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

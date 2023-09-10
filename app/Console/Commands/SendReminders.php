@@ -41,6 +41,8 @@ class SendReminders extends Command
                 $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
                 $reminder->executed_at = strtotime(Carbon::now());
                 $reminder->save();
+            } else {
+                $reminder->delete();
             }
         }
 

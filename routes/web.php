@@ -21,6 +21,7 @@ use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigReminderController;
+use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
@@ -137,6 +138,11 @@ Route::group(['middleware' => "auth"], function() {
     Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
     Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
     Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
+
+    // Reminders
+    Route::post("/timeslotReminders", [SigTimeslotReminderController::class, 'store'])->name('timeslotReminders.store');
+    Route::post("/timeslotReminders/update", [SigTimeslotReminderController::class, 'update'])->name('timeslotReminders.update');
+    Route::delete("/timeslotReminders/delete", [SigTimeslotReminderController::class, 'delete'])->name('timeslotReminders.delete');
 
     // Telegram auth
     Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
