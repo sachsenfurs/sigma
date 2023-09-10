@@ -262,10 +262,12 @@
                                                     @foreach($sig->timetableEntries AS $timetableEntry)
                                                         <tr id="{{ $timetableEntry->id }}">
                                                             <td>
-                                                                {{ $timetableEntry->start->isoFormat("dddd, DD.MM.") }}
-                                                                @if ($timetableEntry->start->format("d.m.Y") != $timetableEntry->end->format("d.m.Y"))
-                                                                - {{ $timetableEntry->end->format("d.m.") }}
-                                                                @endif
+                                                                <a href="{{ route("public.timeslot-show", $timetableEntry) }}">
+                                                                    {{ $timetableEntry->start->isoFormat("dddd, DD.MM.") }}
+                                                                    @if ($timetableEntry->start->format("d.m.Y") != $timetableEntry->end->format("d.m.Y"))
+                                                                    - {{ $timetableEntry->end->format("d.m.") }}
+                                                                    @endif
+                                                                </a>
                                                             </td>
                                                             <td >
                                                                 {{ $timetableEntry->start->format("H:i") }} - {{ $timetableEntry->end->format("H:i") }}
