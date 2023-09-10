@@ -25,7 +25,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label>{{ __("Time spans") }}</label>
+                            <label>{{ __("Time span") }}</label>
                             <div class="mt-1 row">
                                 <div class="col-6">
                                     <input type="datetime-local" class="form-control" name="start" value="{{ \Carbon\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
@@ -36,7 +36,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-5">
+                        <div class="mb-3">
                             <label for="name">{{ __("Different Location") }}</label>
                             <select name="sig_location_id" class="form-control">
                                 <option value="">-</option>
@@ -44,6 +44,11 @@
                                     <option value="{{ $location->id }}">{{ $location->name }} {{ $location->description ? " - " . $location->description : "" }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>
+                                <input type="checkbox" class="form-check-input" name="hide"> @lang("Internal Event")
+                            </label>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -78,7 +83,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}"><button type="button" class="btn btn-secondary">{{ $entry->sigEvent->name }}</button></a>
+                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}"><button type="button" @class(["btn", "btn-secondary" => !$entry->hide, "btn-dark" => $entry->hide])>{{ $entry->sigEvent->name }}</button></a>
                         </td>
                         <td>
                             <a href="{{ route("locations.show", $entry->sigLocation) }}">
