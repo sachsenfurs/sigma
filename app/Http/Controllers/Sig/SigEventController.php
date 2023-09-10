@@ -53,9 +53,9 @@ class SigEventController extends Controller
     public function edit(SigEvent $sig) {
         $this->authorize('update', $sig);
 
-        $host_names      = SigHost::pluck("name")->all();
-        $locations  = SigLocation::orderBy("name")->get();
-        $hosts = SigHost::all();
+        $host_names     = SigHost::orderBy("name")->pluck("name")->all();
+        $locations      = SigLocation::orderBy("name")->get();
+        $hosts = SigHost::orderBy("name")->get();
         return view("sigs.createEdit", compact([
             'sig',
             'hosts',
