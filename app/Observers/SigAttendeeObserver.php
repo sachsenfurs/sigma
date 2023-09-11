@@ -47,7 +47,7 @@ class SigAttendeeObserver
      */
     public function deleting(SigAttendee $sigAttendee)
     {
-        if($sigAttendee->sigTimeslot()->reg_end < Carbon::now()) {
+        if($sigAttendee->sigTimeslot->reg_end < Carbon::now()) {
             return false;
         }
     }
@@ -59,8 +59,8 @@ class SigAttendeeObserver
      * @return void
      */
     public function deleted(SigAttendee $sigAttendee) {
-        if (SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timetable_entry_id', $sigAttendee->timetable_entry_id)->exists()) {
-            $reminder = SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timetable_entry_id', $sigAttendee->timetable_entry_id)->first();
+        if (SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->exists()) {
+            $reminder = SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->first();
             $reminder->delete();
         }
     }
