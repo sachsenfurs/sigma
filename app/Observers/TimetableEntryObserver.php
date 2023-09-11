@@ -23,22 +23,24 @@ class TimetableEntryObserver
     {
         $users = User::where('telegram_user_id', '!=', null)->get();
 
-        if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
-            Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
-            foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
-                $reminder->update([
-                    'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
-                ]);
-                $reminder->save();
+        if ($timetableEntry->hide == false && config()->has("services.telegram-bot-api.name") != null) {
+            if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
+                Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
+                foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
+                    $reminder->update([
+                        'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
+                    ]);
+                    $reminder->save();
+                }
             }
-        }
-
-        if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
-            Notification::send($users, new TimetableEntryCancelled($timetableEntry));
-        }
-
-        if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
-            Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
+    
+            if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
+                Notification::send($users, new TimetableEntryCancelled($timetableEntry));
+            }
+    
+            if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
+                Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
+            }   
         }
     }
 }

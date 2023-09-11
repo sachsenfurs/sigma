@@ -50,7 +50,7 @@ class TimetableEntryTimeChanged extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
-            ->line(__('the times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
+            ->line(__('The times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
             ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))
             ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
