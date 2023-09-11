@@ -2,6 +2,7 @@
 
 namespace App\Notifications\TimetableEntry;
 
+use App;
 use App\Models\TimetableEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,11 +45,13 @@ class TimetableEntryLocationChanged extends Notification
      */
     public function toTelegram($notifiable)
     {
+        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line('Hi ' . $notifiable->name . ',')
-            ->line('the location for the event ' . $this->timetableEntry->sigEvent->name . ' has changed!')
-            ->button('View Event', route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+            ->line(__('Hi ') . $notifiable->name . ',')
+            ->line(__('the location for the event ') . $this->timetableEntry->sigEvent->name_localized . ' has changed!')
+            ->line(__('New location: ') . $this->timetableEntry->sigLocation->name_localized)
+            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

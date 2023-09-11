@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\SigFavorite;
 use App\Models\SigReminder;
+use App\Models\SigTimeslotReminder;
 use App\Notifications\SigFavorite\SigFavoriteReminder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -39,6 +40,19 @@ class SendReminders extends Command
             //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
             if (!isNull($reminder->user->telegram_user_id)) {
                 $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
+                $reminder->executed_at = strtotime(Carbon::now());
+                $reminder->save();
+            } else {
+                $reminder->delete();
+            }
+        }
+
+        $upcomingTimeslotReminders = SigTimeslotReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
+
+        foreach ($upcomingTimeslotReminders as $reminder) {
+            //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
+            if (!isNull($reminder->user->telegram_user_id)) {
+                $reminder->user->notify(new SigTimeslotReminder($reminder->sigTimeslot, $reminder));
                 $reminder->executed_at = strtotime(Carbon::now());
                 $reminder->save();
             } else {
