@@ -14,6 +14,9 @@
                             }}
                         </h3>
                         <h6 class="text-muted">{{ entry.formatted_length }}</h6>
+                        <h3 v-if="entry.new">
+                            <span class="badge bg-info d-block text-uppercase">{{ $t("New") }}</span>
+                        </h3>
                         <h3 v-if="entry.cancelled">
                             <span class="badge bg-danger d-block text-uppercase">{{  $t("Cancelled") }}</span>
                         </h3>
