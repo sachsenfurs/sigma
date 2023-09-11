@@ -2,6 +2,7 @@
 
 namespace App\Notifications\TimetableEntry;
 
+use App;
 use App\Models\TimetableEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,11 +45,12 @@ class TimetableEntryCancelled extends Notification
      */
     public function toTelegram($notifiable)
     {
+        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line('Hi ' . $notifiable->name . ',')
-            ->line('the event ' . $this->timetableEntry->sigEvent->name . ' was cancelled!')
-            ->button('View Event', route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+            ->line('[INFO]')
+            ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**
