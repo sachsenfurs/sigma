@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Timeslot - {$entry->sigEvent->name}")
+@section('title', "{$entry->sigEvent->name}")
 @section('content')
     <div class="container">
         <nav aria-label="breadcrumb">
