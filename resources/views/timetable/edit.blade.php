@@ -36,6 +36,12 @@
                             <div class="mt-4">
                                 <div class="form-check">
                                     <label>
+                                        <input class="form-check-input" type="checkbox" name="new" {{ $entry->new ? "checked" : ""}}>
+                                        {{ __("New Event") }}
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
                                         <input class="form-check-input" type="checkbox" name="cancelled" {{ $entry->cancelled ? "checked" : ""}}>
                                         {{ __("Event Cancelled") }}
                                     </label>

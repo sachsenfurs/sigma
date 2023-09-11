@@ -1,10 +1,15 @@
 @extends('layouts.app')
 @section('title', "Timetable")
 @section('content')
-    <div class="mt-4 mb-4 text-center">
+    <div class="container">
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> {{ __("Add Entry") }}</button>
+        <div class="mt-4 mb-4 text-center">
 
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> {{ __("Add Entry") }}</button>
+        </div>
+        <div class="m-3 text-center">
+            <a class="btn btn-secondary" href="{{ route("public.tableview-old") }}">@lang("Table View")</a>
+        </div>
     </div>
     <div class="modal fade" id="createEntryModal" tabindex="-1">
         <div class="modal-dialog">
@@ -78,8 +83,13 @@
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                             @if($entry->cancelled)
                                 <span class="badge bg-danger">{{ __("Cancelled") }}</span>
-                            @elseif($entry->hasTimeChanged)
-                                <span class="badge bg-info">{{ __("Changed") }}</span>
+                            @else
+                                @if($entry->new)
+                                    <span class="badge bg-info">{{ __("New") }}</span>
+                                @endif
+                                @if($entry->hasTimeChanged)
+                                    <span class="badge bg-info">{{ __("Changed") }}</span>
+                                @endif
                             @endif
                         </td>
                         <td>

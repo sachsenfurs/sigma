@@ -42,6 +42,7 @@ class TimetableController extends Controller
         ]);
 
         $validated['hide'] = $request->has("hide");
+        $validated['new'] = $request->has("new");
 
         $entry = TimetableEntry::create($validated);
 
@@ -96,6 +97,7 @@ class TimetableController extends Controller
 
         $validated['hide'] = $request->has("hide");
         $validated['cancelled'] = $request->has("cancelled");
+        $validated['new'] = $request->has("new");
 
         if(!$request->has("send_update"))
             $entry->timestamps = false;
