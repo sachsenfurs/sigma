@@ -48,7 +48,7 @@ class TimetableEntryCancelled extends Notification
         App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line(__('Hi ') . $notifiable->name . ',')
+            ->line('[INFO]')
             ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
