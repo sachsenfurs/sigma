@@ -24,6 +24,9 @@
         background: #b78d2b;
         cursor: pointer;
     }
+    .internal {
+        background: #ff3232 !important;
+    }
     td a {
         text-decoration: underline;
         box-sizing: content-box;
@@ -82,13 +85,14 @@
                             && (($value->sigLocation->name ?? "") == $locations[$x]->name);
                         });
                         if($events->first() && $events->first()->sigEvent) {
-                            $sig = $events->first()->sigEvent;
+                            $entry = $events->first();
+                            $sig = $entry->sigEvent;
                             $rows = ($events->first()->duration / 30);
 
                             if($rows + $y > 32) {
                                 $rows = 34-$y;
                             }
-                            echo '<td rowspan="'.$rows.'" class="event">';
+                            echo '<td rowspan="'.$rows.'" class="event '.($entry->hide ? "internal":"").'">';
                             echo '<a href="'. route("public.timeslot-show", $events->first()) .'">';
                             echo $sig->name_localized;
                             echo '</a>';
