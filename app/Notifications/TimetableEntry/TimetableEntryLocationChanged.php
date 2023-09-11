@@ -50,7 +50,7 @@ class TimetableEntryLocationChanged extends Notification
             ->to($notifiable->telegram_user_id)
             ->line(__('Hi ') . $notifiable->name . ',')
             ->line(__('the location for the event ') . $this->timetableEntry->sigEvent->name_localized . ' has changed!')
-            ->line(__('New location: ') . $this->timetableEntry->sigLocation->name_localized)
+            ->line(__('New location: ') . $this->timetableEntry->sigLocation->name)
             ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 

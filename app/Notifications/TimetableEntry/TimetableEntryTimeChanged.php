@@ -4,6 +4,7 @@ namespace App\Notifications\TimetableEntry;
 
 use App;
 use App\Models\TimetableEntry;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -50,7 +51,7 @@ class TimetableEntryTimeChanged extends Notification
             ->to($notifiable->telegram_user_id)
             ->line(__('Hi ') . $notifiable->name . ',')
             ->line(__('the times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
-            ->line(__('New Time: ') . $this->timetableEntry->start . ' - ' . $this->timetableEntry->end)
+            ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))
             ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
