@@ -24,7 +24,7 @@ class TimetableEntryObserver
         $users = User::where('telegram_user_id', '!=', null)->get();
 
         if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
-            //Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
+            Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
             foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
                 $reminder->update([
                     'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
