@@ -86,6 +86,15 @@
                                 <p class="card-subtitle text-secondary">
                                     {{ $e->start->format("d.m.Y") }}
                                 </p>
+
+                                @can("manage_events")
+                                    <div class="text-end">
+                                        <a href="{{ route("timetable.edit", $e) }}">
+                                            <i class="bi bi-pencil"></i>
+                                            {{ __("Edit") }}
+                                        </a>
+                                    </div>
+                                @endcan
                             </div>
                             <div class="card-body">
                                 {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}
