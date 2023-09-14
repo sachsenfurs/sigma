@@ -53,7 +53,7 @@ class SendReminders extends Command
 
         foreach ($upcomingTimeslotReminders as $reminder) {
             //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
-            if ($reminder->user->telegram_user_id) {
+            if ($reminder->user->telegram_user_id && $reminder->send_at <= strtotime('-1 hour')) {
                 $reminder->user->notify(new SigTimeslotReminderNotification($reminder->timeslot, $reminder));
                 $reminder->executed_at = strtotime(Carbon::now());
                 $reminder->save();
