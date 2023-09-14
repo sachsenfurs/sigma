@@ -44,7 +44,7 @@ class SendReminders extends Command
                     $reminder->executed_at = strtotime(Carbon::now());
                     $reminder->save();
                 } catch (\Exception $e) {
-                    Console::info($e->getMessage());
+                    $this->info($e->getMessage());
                 }
             } else {
                 $reminder->delete();
@@ -59,10 +59,10 @@ class SendReminders extends Command
                 $reminder->user->notify(new SigTimeslotReminderNotification($reminder->timeslot, $reminder));
                 $reminder->executed_at = strtotime(Carbon::now());
                 $reminder->save();
-                Console::info('Reminder with id: '. $reminder->id . ' sent');
+                $this->info('Reminder with id: '. $reminder->id . ' sent');
             } else {
                 $reminder->delete();
-                Console::info('Reminder with id: '. $reminder->id . ' skipped');
+                $this->info('Reminder with id: '. $reminder->id . ' skipped');
             }
         }
 
