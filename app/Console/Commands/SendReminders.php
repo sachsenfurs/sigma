@@ -11,8 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use \Console;
 
-use function PHPUnit\Framework\isNull;
-
 class SendReminders extends Command
 {
     /**
@@ -40,7 +38,7 @@ class SendReminders extends Command
 
         foreach ($upcomingReminders as $reminder) {
             //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
-            if (!isNull($reminder->user->telegram_user_id)) {
+            if ($reminder->user->telegram_user_id) {
                 $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
                 $reminder->executed_at = strtotime(Carbon::now());
                 $reminder->save();
