@@ -39,9 +39,13 @@ class SendReminders extends Command
         foreach ($upcomingReminders as $reminder) {
             //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
             if ($reminder->user->telegram_user_id) {
-                $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
-                $reminder->executed_at = strtotime(Carbon::now());
-                $reminder->save();
+                try {
+                    $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
+                    $reminder->executed_at = strtotime(Carbon::now());
+                    $reminder->save();
+                } catch (\Exception $e) {
+                    Console::info($e->getMessage());
+                }
             } else {
                 $reminder->delete();
             }
