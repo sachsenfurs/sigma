@@ -4,7 +4,8 @@ namespace App\Notifications\SigTimeslot;
 
 use App;
 use App\Models\SigTimeslot;
-use App\Notifications\SigFavorite\SigFavoriteReminder;
+use App\Models\SigFavoriteReminder;
+use App\Models\SigTimeslotReminder as SigTimeSlotReminderModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -24,7 +25,7 @@ class SigTimeslotReminder extends Notification
      * @param SigTimeslot $fav
      * @return void
      */
-    public function __construct(SigTimeslot $timeslot, SigFavoriteReminder $reminder)
+    public function __construct(SigTimeslot $timeslot, SigTimeSlotReminderModel $reminder)
     {
         $this->sigTimeslot = $timeslot;
         $this->reminder = $reminder;
