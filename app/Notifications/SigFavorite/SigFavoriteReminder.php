@@ -51,11 +51,14 @@ class SigFavoriteReminder extends Notification
     public function toTelegram($notifiable)
     {
         App::setLocale($notifiable->language);
+        $timeslot = $this->timetableEntry->sigTimeslots()->first();
+        if(!$timeslot)
+            return null;
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
             ->line(__("your favorite event ") . $this->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
-            ->button(__("View Event") , route("public.timeslot-show", ['entry' => $this->timetableEntry->sigTimeslots()->first()->id]));
+            ->button(__("View Event") , route("public.timeslot-show", ['entry' => $timeslot->id]));
     }
 
     /**
