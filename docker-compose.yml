@@ -8,13 +8,6 @@ services:
                 user: "sigma"
                 uid: "1337"
         volumes:
-            - .:/var/www
-        depends_on:
-            - database
-
-    caddy:
-        image: dunglas/frankenphp
-        volumes:
             - .:/app
         ports:
             - "443:443"
