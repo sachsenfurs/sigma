@@ -5,16 +5,15 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
 // Vue
-import { createApp } from 'vue/dist/vue.esm-bundler'
-
 import RoomTabComponent from "./components/TimetableEntries/RoomTabComponent.vue";
 import EntryComponent from "./components/TimetableEntries/EntryComponent.vue";
 import EntryList from "./components/TimetableEntries/EntryList.vue";
 import DayTabComponent from "./components/TimetableEntries/DayTabComponent.vue";
 
 import { i18nVue } from 'laravel-vue-i18n'
+import {createApp} from "vue";
 
-let app = createApp({
+createApp({
     components: {
         EntryComponent,
         EntryList,
