@@ -5,11 +5,9 @@ Event Management System für die EAST Convention
 
 ## Setup
 ### System requirements
-- PHP8.0 minimum
-- PHP8 mysql extension ``
+- PHP8.1 minimum
+- PHP mysql extension
 - Linux or WSL2 with linux (recommended)
-- Laravel
-    -  You can install it with `composer global require laravel/installer`
 
 ### Local installation
 1. Clone git repository

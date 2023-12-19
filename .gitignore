@@ -22,8 +22,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 .idea
-.idea/
-.idea/sigma.iml
-.idea/php.xml
-.idea/sigma.iml
-.idea/php.xml
+.data
