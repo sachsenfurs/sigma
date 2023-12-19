@@ -28,7 +28,7 @@ php artisan optimize
 
 # Compile npm assets
 npm install
-npm run prod
+npm build
 
 # Run database migrations
 php artisan migrate --force
