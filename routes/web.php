@@ -39,6 +39,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get("/devlogin/{id?}", function($id=1) {
+   if(App::environment("local") OR App::environment("development")) {
+       Auth::loginUsingId($id);
+       return redirect(\App\Providers\RouteServiceProvider::HOME);
+   }
+})->name("devlogin");
 
 
 // Auth
