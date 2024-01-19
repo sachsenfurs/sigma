@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Telegram\LoginWidget;
 use Illuminate\Http\Request;
-use pschocke\TelegramLoginWidget\Facades\TelegramLoginWidget;
 
 class TelegramController extends Controller
 {
     public function connect(Request $request)
     {
         $this->authorize("login");
-        
-        if($telegramUser = TelegramLoginWidget::validate($request)) {
+
+        if($telegramUser = LoginWidget::validate($request)) {
             auth()->user()->update([
                 'telegram_user_id' => $request['id']
             ]);

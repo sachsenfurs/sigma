@@ -37,6 +37,13 @@
                                         {{ __('SF Staff-Login') }}
                                     </a>
                                 </small>
+                                @if(\Illuminate\Support\Facades\App::environment("local"))
+                                    <small class="d-flex w-100 justify-content-end mt-1">
+                                        <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">
+                                            {{ __('Dev-Login ID 1') }}
+                                        </a>
+                                    </small>
+                                @endif
                             </div>
                         </div>
                     </div>
