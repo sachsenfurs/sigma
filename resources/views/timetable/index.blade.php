@@ -1,10 +1,15 @@
 @extends('layouts.app')
 @section('title', "Timetable")
 @section('content')
-    <div class="mt-4 mb-4 text-center">
+    <div class="container">
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> {{ __("Add Entry") }}</button>
+        <div class="mt-4 mb-4 text-center">
 
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEntryModal"> {{ __("Add Entry") }}</button>
+        </div>
+        <div class="m-3 text-center">
+            <a class="btn btn-secondary" href="{{ route("public.tableview-old") }}">@lang("Table View")</a>
+        </div>
     </div>
     <div class="modal fade" id="createEntryModal" tabindex="-1">
         <div class="modal-dialog">
@@ -25,7 +30,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label>{{ __("Time spans") }}</label>
+                            <label>{{ __("Time span") }}</label>
                             <div class="mt-1 row">
                                 <div class="col-6">
                                     <input type="datetime-local" class="form-control" name="start" value="{{ \Carbon\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
@@ -36,7 +41,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-5">
+                        <div class="mb-3">
                             <label for="name">{{ __("Different Location") }}</label>
                             <select name="sig_location_id" class="form-control">
                                 <option value="">-</option>
@@ -44,6 +49,11 @@
                                     <option value="{{ $location->id }}">{{ $location->name }} {{ $location->description ? " - " . $location->description : "" }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>
+                                <input type="checkbox" class="form-check-input" name="hide"> @lang("Internal Event")
+                            </label>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -73,12 +83,17 @@
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                             @if($entry->cancelled)
                                 <span class="badge bg-danger">{{ __("Cancelled") }}</span>
-                            @elseif($entry->hasTimeChanged)
-                                <span class="badge bg-info">{{ __("Changed") }}</span>
+                            @else
+                                @if($entry->new)
+                                    <span class="badge bg-info">{{ __("New") }}</span>
+                                @endif
+                                @if($entry->hasTimeChanged)
+                                    <span class="badge bg-info">{{ __("Changed") }}</span>
+                                @endif
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}"><button type="button" class="btn btn-secondary">{{ $entry->sigEvent->name }}</button></a>
+                            <a href="{{ route("sigs.edit", $entry->sigEvent) }}"><button type="button" @class(["btn", "btn-secondary" => !$entry->hide, "btn-dark" => $entry->hide])>{{ $entry->sigEvent->name }}</button></a>
                         </td>
                         <td>
                             <a href="{{ route("locations.show", $entry->sigLocation) }}">

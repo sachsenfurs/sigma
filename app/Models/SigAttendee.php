@@ -23,4 +23,8 @@ class SigAttendee extends Model
     public function sigTimeslot() {
         return $this->belongsTo(SigTimeslot::class);
     }
+
+    public function timeslotReminders() {
+        return auth()?->user()->timeslotReminders()->where("timeslot_id", $this->sigTimeslot->id);
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\SigAttendee;
+use App\Models\SigTimeslot;
+use App\Models\SigTimeslotReminder;
 use Carbon\Carbon;
 
 class SigAttendeeObserver
@@ -15,7 +17,15 @@ class SigAttendeeObserver
      */
     public function created(SigAttendee $sigAttendee)
     {
-        //
+        $reminderAttributes = [
+            'timeslot_id' => $sigAttendee->sig_timeslot_id,
+            'minutes_before' => 15,
+            'user_id' => $sigAttendee->user_id,
+            'send_at' => strtotime(SigTimeslot::find(['id' => $sigAttendee->sig_timeslot_id])->first()->slot_start) - (15 * 60),
+        ];
+
+        $sigAttendee->user->timeslotReminders()->create($reminderAttributes);
+   
     }
 
     /**
@@ -30,15 +40,28 @@ class SigAttendeeObserver
     }
 
     /**
+     * Handle the SigAttendee "deleting" event.
+     *
+     * @param  \App\Models\SigAttendee  $sigAttendee
+     * @return void
+     */
+    public function deleting(SigAttendee $sigAttendee)
+    {
+        if($sigAttendee->sigTimeslot->reg_end < Carbon::now()) {
+            return false;
+        }
+    }
+
+    /**
      * Handle the SigAttendee "deleted" event.
      *
      * @param  \App\Models\SigAttendee  $sigAttendee
      * @return void
      */
-    public function deleted(SigAttendee $sigAttendee)
-    {
-        if($sigAttendee->sigTimeslot()->reg_end < Carbon::now()) {
-            return false;
+    public function deleted(SigAttendee $sigAttendee) {
+        if (SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->exists()) {
+            $reminder = SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->first();
+            $reminder->delete();
         }
     }
 

@@ -14,6 +14,9 @@
                             }}
                         </h3>
                         <h6 class="text-muted">{{ entry.formatted_length }}</h6>
+                        <h3 v-if="entry.new">
+                            <span class="badge bg-info d-block text-uppercase">{{ $t("New") }}</span>
+                        </h3>
                         <h3 v-if="entry.cancelled">
                             <span class="badge bg-danger d-block text-uppercase">{{  $t("Cancelled") }}</span>
                         </h3>
@@ -69,10 +72,18 @@ export default {
             if(!this.favoriteUpdating) {
                 let self = this;
                 this.favoriteUpdating = true;
-                axios.post("/favorites", {
-                    timetable_entry_id: this.entry.id,
-                })
-                .then((response) => {
+                let request;
+
+                if(this.entry.is_favorite) {
+                    request = axios.delete("/favorites/" + this.entry.id);
+                } else {
+                    request = axios.post("/favorites", {
+                        timetable_entry_id: this.entry.id
+                    });
+                }
+
+
+                request.then((response) => {
                     this.entry.is_favorite = !this.entry.is_favorite;
                     self.favoriteUpdating = false;
                 })

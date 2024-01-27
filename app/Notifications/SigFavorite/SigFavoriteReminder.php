@@ -2,7 +2,9 @@
 
 namespace App\Notifications\SigFavorite;
 
+use App;
 use App\Models\SigFavorite;
+use App\Models\SigReminder;
 use App\Models\TimetableEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,16 +16,19 @@ class SigFavoriteReminder extends Notification
     use Queueable;
 
     protected $timetableEntry;
+    protected $reminder;
 
     /**
      * Create a new notification instance.
      *
+     * @param TimetableEntry $entry
      * @param SigFavorite $fav
      * @return void
      */
-    public function __construct(TimetableEntry $entry)
+    public function __construct(TimetableEntry $entry, SigReminder $reminder)
     {
         $this->timetableEntry = $entry;
+        $this->reminder = $reminder;
     }
 
     /**
@@ -45,12 +50,12 @@ class SigFavoriteReminder extends Notification
      */
     public function toTelegram($notifiable)
     {
+        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line("Hi " . $notifiable->name . ",")
-            ->line("your favorite event " . $this->timetableEntry->sigEvent->name . " starts in 15 Minutes!")
-            //->button('View Event', route("public.timeslot-show", ['entry' => $this->timetableEntry->id]));
-            ->button('View Event', 'https://sigma.staging.sachsenfurs.de/show/2');
+            ->line(__("Hi ") . $notifiable->name . ",")
+            ->line(__("your favorite event ") . $this->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
+            ->button(__("View Event") , route("public.timeslot-show", ['entry' => $this->timetableEntry]));
     }
 
     /**

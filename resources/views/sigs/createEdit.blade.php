@@ -211,10 +211,10 @@
                                             <div id="timetableEntries-parent" style="display: none">
                                                 <div class="mt-1 row timetableEntry" id="timetableEntry">
                                                     <div class="col-5">
-                                                        <input type="datetime-local" class="form-control" data-name="date-start[]" name="date-start[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
+                                                        <input type="datetime-local" class="form-control" data-name="date-start[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->format("Y-m-d\TH:i") }}">
                                                     </div>
                                                     <div class="col-5">
-                                                        <input type="datetime-local" class="form-control" data-name="date-end[]" name="date-end[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
+                                                        <input type="datetime-local" class="form-control" data-name="date-end[]" value="{{ \Illuminate\Support\Carbon::now()->setMinutes(0)->addMinutes(60)->format("Y-m-d\TH:i") }}">
                                                     </div>
                                                     <div class="col-2 row">
                                                         <button type="button" class="btn btn-danger text-white" onclick="if($('.timetableEntry').length > 1) $(this).parent().parent().remove()">
@@ -262,10 +262,12 @@
                                                     @foreach($sig->timetableEntries AS $timetableEntry)
                                                         <tr id="{{ $timetableEntry->id }}">
                                                             <td>
-                                                                {{ $timetableEntry->start->isoFormat("dddd, DD.MM.") }}
-                                                                @if ($timetableEntry->start->format("d.m.Y") != $timetableEntry->end->format("d.m.Y"))
-                                                                - {{ $timetableEntry->end->format("d.m.") }}
-                                                                @endif
+                                                                <a href="{{ route("public.timeslot-show", $timetableEntry) }}">
+                                                                    {{ $timetableEntry->start->isoFormat("dddd, DD.MM.") }}
+                                                                    @if ($timetableEntry->start->format("d.m.Y") != $timetableEntry->end->format("d.m.Y"))
+                                                                    - {{ $timetableEntry->end->format("d.m.") }}
+                                                                    @endif
+                                                                </a>
                                                             </td>
                                                             <td >
                                                                 {{ $timetableEntry->start->format("H:i") }} - {{ $timetableEntry->end->format("H:i") }}

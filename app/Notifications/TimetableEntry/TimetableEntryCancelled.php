@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Notifications\SigEvent;
+namespace App\Notifications\TimetableEntry;
 
-use App\Models\SigEvent;
+use App;
+use App\Models\TimetableEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class EventUpdateReminder extends Notification
+class TimetableEntryCancelled extends Notification
 {
     use Queueable;
 
-    protected $sigEvent;
+    protected $timetableEntry;
 
     /**
      * Create a new notification instance.
      *
-     * @param SigFavorite $fav
      * @return void
      */
-    public function __construct(SigEvent $event)
+    public function __construct(TimetableEntry $timetableEntry)
     {
-        $this->sigEvent = $event;
+        $this->timetableEntry = $timetableEntry;
     }
 
     /**
@@ -37,19 +38,19 @@ class EventUpdateReminder extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the Telegram representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return \NotificationChannels\Telegram\TelegramMessage;
      */
     public function toTelegram($notifiable)
     {
+        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line("Hi " . $notifiable->name . ",")
-            ->line("the event " . $this->sigEvent->name . " starts in 15 Minutes!")
-            //->button('View Event', route("public.timeslot-show", ['entry' => $this->timetableEntry->id]));
-            ->button('View Event', 'https://sigma.staging.sachsenfurs.de/show/2');
+            ->line('[INFO]')
+            ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

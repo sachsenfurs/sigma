@@ -8,6 +8,8 @@ use App\Models\TimetableEntry;
 use App\Models\SigLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TableViewController extends Controller
 {
@@ -16,7 +18,11 @@ class TableViewController extends Controller
     }
 
     public function indexOld() {
-        $entries = TimetableEntry::public()->orderBy("start")->get();
+        if(Gate::check("manage_events"))
+            $entries = TimetableEntry::orderBy("start")->get();
+        else
+            $entries = TimetableEntry::public()->orderBy("start")->get();
+
         $days = $entries->pluck("start")->groupBy(function($item) {
             return $item->format("d.m.Y");
         })->keys();

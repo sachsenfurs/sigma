@@ -23,13 +23,13 @@
             <div class="accordion-body container text-center">
                 @foreach($entry->sigTimeslots as $timeslot)
                     <div @class(['row mb-3 mb-md-0 border p-1', 'bg-secondary text-white' => $timeslot->max_users <= $timeslot->sigAttendees->count()])>
-                        <div class="col-lg-4 col-6 align-self-center">
+                        <div class="col-lg-4 col-6 align-self-center p-1 my-1">
                             {{ \Illuminate\Support\Carbon::parse($timeslot->slot_start)->format("H:i") }} - {{ \Illuminate\Support\Carbon::parse($timeslot->slot_end)->format("H:i")  }}
                         </div>
-                        <div class="col-lg-4 col-6 align-self-center">
+                        <div class="col-lg-4 col-6 align-self-center p-1 my-1">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
                             <span class="text-nowrap">{{ __("Slots taken") }}</span>
-                            @if ($timeslot->sigAttendees->count() > 0)
+                            @if ($timeslot->sigAttendees->count() > 0 && auth()->check()) 
                                 <br>
                                 <i class="bi bi-people-fill"></i> 
                                 {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}    

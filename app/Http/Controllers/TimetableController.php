@@ -41,6 +41,9 @@ class TimetableController extends Controller
             'end' => "required|date",
         ]);
 
+        $validated['hide'] = $request->has("hide");
+        $validated['new'] = $request->has("new");
+
         $entry = TimetableEntry::create($validated);
 
         if(is_array($request->get("time-start")) and is_array($request->get("reg-start"))) {
@@ -94,8 +97,9 @@ class TimetableController extends Controller
 
         $validated['hide'] = $request->has("hide");
         $validated['cancelled'] = $request->has("cancelled");
+        $validated['new'] = $request->has("new");
 
-        if($request->has("ignore_update"))
+        if(!$request->has("send_update"))
             $entry->timestamps = false;
 
         if($request->has("reset_update"))

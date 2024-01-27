@@ -4,21 +4,18 @@ Special Interest Group Management Assistant
 Event Management System für die EAST Convention
 
 ## Setup
+- PHP8.1 minimum
 ### System requirements
-- PHP8.0 minimum
-- PHP8 mysql extension ``
+- PHP mysql extension
 - Linux or WSL2 with linux (recommended)
-- Laravel
-    -  You can install it with `composer global require laravel/installer`
 
 ### Local installation
 1. Clone git repository
-2. Run command `composer install` in project root
-3. Copy file `.env.example` to `.env`
-4. Add your local database credentials
+2. Copy file `.env.example` to `.env`
+3. Add your local database credentials
+4. Run command `composer install` and `npm run build` (or `npm run dev` to listen for any changes)
 5. Generate app key with this command `php artisan key:generate`
-6. Test connection with `php artisan db`, when successful, exit with typing `exit`
-7. Migrate Database `php artisan migrate`
-8. Open mysql console with `php artisan db`
-9. Create new user in db with `INSERT INTO users (name, email, is_admin) VALUES ("NICKNAME", "YOUREMAIL@sachsenfurs.de", true);` This is required because the app is connected to authentication is passed to an external provider 
-10. php artisan serve
+6. (Optional) Test connection with `php artisan db`, when successful, exit with typing `exit`
+7. Create tables in database `php artisan migrate`
+8. (Optional) Fill with testing data `php artisan db:seed` or if you want to refresh the whole database `php artisan migrate:fresh --seed`
+9. run local webserver with `php artisan serve` [`--port=80`]

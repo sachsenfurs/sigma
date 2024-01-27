@@ -36,6 +36,12 @@
                             <div class="mt-4">
                                 <div class="form-check">
                                     <label>
+                                        <input class="form-check-input" type="checkbox" name="new" {{ $entry->new ? "checked" : ""}}>
+                                        {{ __("New Event") }}
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
                                         <input class="form-check-input" type="checkbox" name="cancelled" {{ $entry->cancelled ? "checked" : ""}}>
                                         {{ __("Event Cancelled") }}
                                     </label>
@@ -44,12 +50,6 @@
                                     <label>
                                         <input class="form-check-input" type="checkbox" name="hide" {{ $entry->hide ? "checked" : ""}}>
                                         {{ __("Internal Event") }}
-                                    </label>
-                                </div>
-                                <div class="form-check mt-3">
-                                    <label>
-                                        <input class="form-check-input" type="checkbox" name="ignore_update">
-                                        {{ __("Don't publish changes") }}
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -118,6 +118,15 @@
                             @endif
 
                             <div class="mt-4 text-center">
+                                <div class="form-check my-3">
+                                    <label>
+                                        <input class="form-check-input" type="checkbox" name="send_update">
+                                        {{ __("Announce Changes") }}
+                                    </label>
+                                    <p class="text-muted">
+                                        @lang("This needs to be checked if the event should be marked as changed!")
+                                    </p>
+                                </div>
                                 <input type="submit" class="btn btn-success" value="{{ __("Save") }}">
                             </div>
                         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sig;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use Redirect;
 use Illuminate\Support\Carbon;
@@ -39,8 +40,9 @@ class SigRegistrationController extends Controller
     }
 
     public function cancel(SigTimeslot $timeslot) {
-        $timeslot->sigAttendees()->delete(['user_id' => auth()->user()->id]);
+        //$timeslot->sigAttendees->forget(['user_id' => auth()->user()->id]);
+        SigAttendee::where(['user_id' => auth()->user()->id, 'sig_timeslot_id' => $timeslot->id])->first()->delete();
 
-       return redirect()->back()->with('success', 'Registrierung erfolgreich gelöscht!');
+        return redirect()->back()->with('success', 'Registrierung erfolgreich gelöscht!');
     }
 }

@@ -28,15 +28,15 @@ class SigEvent extends Model
         'updated_at'
     ];
 
-    public function sigHost() {
+    public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(SigHost::class);
     }
 
-    public function sigLocation() {
+    public function sigLocation(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(SigLocation::class);
     }
 
-    public function sigTranslation() {
+    public function sigTranslation(): \Illuminate\Database\Eloquent\Relations\HasOne {
         return $this->hasOne(SigTranslation::class, "sig_event_id");
     }
 
@@ -65,7 +65,7 @@ class SigEvent extends Model
         return ($entries->count() == $entries->where("hide", 1)->count());
     }
 
-    public function sigTags() {
+    public function sigTags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
         return $this->belongsToMany(SigTag::class);
     }
 

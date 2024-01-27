@@ -2,14 +2,16 @@
 
 namespace App\Notifications\TimetableEntry;
 
+use App;
 use App\Models\TimetableEntry;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class TimetableEntryReminder extends Notification
+class TimetableEntryTimeChanged extends Notification
 {
     use Queueable;
 
@@ -18,7 +20,6 @@ class TimetableEntryReminder extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param SigFavorite $fav
      * @return void
      */
     public function __construct(TimetableEntry $timetableEntry)
@@ -38,19 +39,20 @@ class TimetableEntryReminder extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the Telegram representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return \NotificationChannels\Telegram\TelegramMessage;
      */
     public function toTelegram($notifiable)
     {
+        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->line("Hi " . $notifiable->name . ",")
-            ->line("your favorite event " . $this->timetableEntry->sigEvent->name . " starts in 15 Minutes!")
-            //->button('View Event', route("public.timeslot-show", ['entry' => $this->timetableEntry->id]));
-            ->button('View Event', 'https://sigma.staging.sachsenfurs.de/show/2');
+            ->line(__('[CHANGE]'))
+            ->line(__('The times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
+            ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))
+            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**
