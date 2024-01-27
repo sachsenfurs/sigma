@@ -233,4 +233,6 @@ return [
 
     'deeplApiKey' => env('DEEPL_API_KEY', ""),
 
+    'lassieApiKey' => env('LASSIE_API_KEY', 'ae629a834729fd3aac6d1f827b1793b0'),
+
 ];

@@ -86,8 +86,9 @@
     "Different Location": "Abweichende Location",
     "Event Cancelled": "Event Abgesagt",
     "Internal Event": "Internes Event",
-    "Don't publish changes": "Änderungen nicht kommunizieren",
-    "Reset 'Changed'-flag": "'Changed'-flag zurücksetzen",
+    "Announce Changes": "Änderungen kommunizieren",
+    "Reset 'Changed'-flag": "'Geändert'-flag zurücksetzen",
+    "This needs to be checked if the event should be marked as changed!": "Haken setzen, damit -Geändert- mit dran steht!",
     "Manage Time Slots": "Timeslots verwalten",
     "Slot Time span": "Slot Zeitraum",
     "Reg Time span": "Reg Zeitraum",
@@ -141,9 +142,26 @@
     "This reminder doesn't exists!": "Diese Erinnerung existiert nicht!",
     "Reminder successfully updated!": "Erinnerung erfolgreich aktualisiert!",
     "Telegram Connected!": "Telegram Verknüpft!",
+    "An error occured while connecting Telegram!": "Es ist ein Fehler beim Verbinden mit Telegram aufgetreten!",
 
     "Changed": "Geändert",
     "Moved": "Verschoben",
+
+    "Hi ": "Hallo ",
+    "your favorite event ": "Dein Favorisiertes Event ",
+    " starts in ": " startet in ",
+    " minutes!": " Minuten!",
+    "View Event": "Event Anzeigen",
+    "the event ": "das Event ",
+    " was cancelled!": " wurde abgesagt!",
+    "The location for the event ": "die Location für das Event ",
+    " has changed!": " hat sich geändert!",
+    "New location: ": "Neue Location: ",
+    "The times for the event ": "die Zeiten für das Event ",
+    " have changed!": " haben sich geändert!",
+    "New Time: ": "Neue Uhrzeit: ",
+    "your timeslot from the event ": "dein Zeitslot für das Event ",
+    "[CHANGE]": "ÄNDERUNG",
 
     "Sign up": "Melde dich an",
     "Scheduled": "Im Programmplan:",
@@ -158,5 +176,13 @@
     "Take me to the enhanced event schedule view": "Zum verbesserten Programmplan",
     "Classic View": "Klassische Ansicht",
     "Or do you prefer the classic table view?": "Oder bevorzugst du die klassische Tabellenansicht?",
-    "Take me to the classic view": "Zur Tabellenansicht"
+    "Take me to the classic view": "Zur Tabellenansicht",
+    "Table View": "Tabellenansicht",
+    "New": "Neu",
+    "New Event": "Neues Event",
+
+    "Lost": "Verloren",
+    "Found": "Gefunden",
+    "Nothing has been found yet": "Es wurden noch keine Fundsachen abgegeben",
+    "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet"
 }

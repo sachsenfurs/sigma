@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\TranslateController;
 use App\Http\Controllers\Public\ConbookExportController;
@@ -70,6 +70,7 @@ Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.se
 
 Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
 Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
+
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -152,4 +153,7 @@ Route::group(['middleware' => "auth"], function() {
 
         Route::post("/translate", TranslateController::class)->name("translate");
     });
+
+    Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
+
 });
