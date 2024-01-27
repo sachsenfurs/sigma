@@ -23,3 +23,6 @@ Homestead.json
 .phpunit.result.cache
 .idea
 .data
+public/build
+public/css/filament
+public/js/filament
