@@ -8,6 +8,7 @@
         "php": "^8.1",
         "deeplcom/deepl-php": "^1.5",
         "doctrine/dbal": "^3.6",
+        "filament/filament": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "irazasyed/telegram-bot-sdk": "^3.13",
@@ -43,7 +44,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"

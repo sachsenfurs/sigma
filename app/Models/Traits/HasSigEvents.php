@@ -5,11 +5,12 @@ namespace App\Models\Traits;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 
 trait HasSigEvents {
 
-    public function sigEvents() {
+    public function sigEvents() : HasMany {
         return $this->hasMany(SigEvent::class)
             ->orderByRaw("
              (
