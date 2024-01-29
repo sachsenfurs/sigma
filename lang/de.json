@@ -179,5 +179,10 @@
     "Take me to the classic view": "Zur Tabellenansicht",
     "Table View": "Tabellenansicht",
     "New": "Neu",
-    "New Event": "Neues Event"
+    "New Event": "Neues Event",
+
+    "Lost": "Verloren",
+    "Found": "Gefunden",
+    "Nothing has been found yet": "Es wurden noch keine Fundsachen abgegeben",
+    "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet"
 }
