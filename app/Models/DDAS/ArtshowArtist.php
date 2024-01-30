@@ -12,6 +12,10 @@ class ArtshowArtist extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user.reg_id','name', 'social'
+    ];
+
     public function user(): BelongsTo|null {
         return $this->belongsTo(User::class);
     }

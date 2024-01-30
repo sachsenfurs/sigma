@@ -26,6 +26,8 @@ use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\DDAS\DealersDenController;
+use App\Http\Controllers\DDAS\ArtshowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -162,4 +164,15 @@ Route::group(['middleware' => "auth"], function() {
 
         Route::post("/translate", TranslateController::class)->name("translate");
     });
+
+    // Dealer´s Dan
+    Route::prefix('dealersden')->name('dealersden.')->group(function() {
+        Route::get('/', [DealersDenController::class, 'index'])->name('index');
+    });
+
+    //Artshow
+    Route::prefix('artshow')->name('artshow.')->group(function(){
+        Route::get('/', [ArtshowController::class, 'index'])->name('index');
+    });
+
 });

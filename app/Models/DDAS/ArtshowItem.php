@@ -12,6 +12,13 @@ class ArtshowItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'artshow_artist.name','name', 'description',
+        'description_en', 'starting_bid', 'charity_percentage',
+        'approved', 'additional_info','image_file',
+        'sold', 'paid'
+    ];
+
     public function artist(): BelongsTo {
         return $this->belongsTo(ArtshowArtist::class);
     }

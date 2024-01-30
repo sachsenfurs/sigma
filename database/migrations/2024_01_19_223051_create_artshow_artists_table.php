@@ -23,7 +23,7 @@ return new class extends Migration
             // Name des Künstlers wie er erwähnt werden möchte
             $table->string('name')->nullable();
 
-            $table->string("social")->nullable()->comment("Twitter, FA, Gallery, etc.");
+            $table->string('social')->nullable()->comment('Twitter, FA, Gallery, etc.');
 
             $table->timestamps();
         });
