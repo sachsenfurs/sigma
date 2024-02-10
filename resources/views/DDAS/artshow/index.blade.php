@@ -3,21 +3,33 @@
 
 @section('content')
     <div class="container">
-        <h1 class="pt-2 pb-5 text-center">
-            Anmeldung Artshow
-        </h1>
-        
-        <div class="row pt-4 pb-2 justify-content-center">
-            <x-form.input-half ident="ArtistName" pht="KenthArt" lt="Artist Name"/>
-            <x-form.input-half ident="ArtistItem" pht="Handpaws" lt="Item Name" />
-        </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.text-l ident="ArtistItemDescription" lt="Description" />
-        </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.input-half ident="ArtistItemStartbid" lt="Start Bid"/>
-            <x-form.input-half ident="ArtistItemCharity" lt="Charity Ammount" />
-        </div>
+        @foreach ($artshow as $artist)
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <i class="bi bi-person-circle"></i>
+                            {{ $artist->name }}
+                        </h2>
+                        <a href="{{ $artist->social }}" class="card-text">
+                            {{ $artist->social }}
+                        </a>
+                        <div class="col-md-2 align-middle">
+                            <div class="container d-flex h-100 w-100">
+                                <div class="align-self-center" style="text-align: right">
+                                    <div class="display-6">{{ $artist->id }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                    <div class="card-footer">
+                        <div class="w-100 container p-2">
+                            <a href="#" class="">
+                                <i class="bi bi-pen"></i> {{ __('Edit') }}
+                            </a>
+                        </div>
+                    </div>
+        @endforeach
     </div>
 @endsection

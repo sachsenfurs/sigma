@@ -26,7 +26,13 @@ class ArtshowController extends Controller
      */
     public function create()
     {
-        //
+        $id = ArtshowArtist::pluck("id")->all();
+        $name = ArtshowArtist::orderBy("id")->get();
+        $artshow = ArtshowArtist::all();
+        return view("DDAS.artshow.create", compact([
+            'artshow',
+            'id',
+            'name',]));
     }
 
     /**
@@ -40,9 +46,9 @@ class ArtshowController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(ArtshowArtist $asa)
     {
-        //
+        return view('DDAS.artshow.show',[ 'artshow' => ArtshowArtist::all()]);
     }
 
     /**

@@ -60,30 +60,33 @@
                         </a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle px-3" href="#" id="DdasDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-geo-alt"></i> {{ __("Anmeldung DD & AS")}}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="DdasDropdownMenu">
-                            <li>
-                                <a class="dropdown-item {{ Route::is("artshow.index") ? "active" : "" }}" href="{{ route("artshow.index") }}">
-                                    <i class="bi bi-list"></i> {{ __("ArtShow")}}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ Route::is("dealersden.index") ? "active" : ""}}" href="{{ route("dealersden.index")}}">
-                                    <i class="bi bi-list"></i> {{ __("Dealer's Den")}}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-
                     @if (auth()?->user()?->isSigHost())
                         <li>
                             <a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">
                                 <i class="bi bi-view-list"></i> {{ __("My Events") }}
                             </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" id="SignInDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-briefcase"></i> {{ __("Anmeldungen")}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="SignInDropdownMenu">
+                                <li>
+                                    <a class="dropdown-item {{ Route::is("artshow.index") ? "active" : "" }}" href="{{ route("artshow.index") }}">
+                                        <i class="bi bi-cash-stack"></i> {{ __("ArtShow")}}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ Route::is("dealersden.index") ? "active" : ""}}" href="{{ route("dealersden.index")}}">
+                                        <i class="bi bi-cash-stack"></i> {{ __("Dealer's Den")}}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ Route::is("ssi.index") ? "activ" : ""}}" href="{{ route("sigsignin.index")}}">
+                                        <i class="bi bi-chat-left"></i> {{ __("Sig Anmeldung")}}
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     @endif
                 </ul>
