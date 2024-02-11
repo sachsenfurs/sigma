@@ -45,13 +45,17 @@ class TimeslotTable extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('slot_start')
-                ->label(__('Slot Start')),
+                ->label(__('Slot Start'))
+                ->dateTime('H:i'),
             Tables\Columns\TextColumn::make('slot_end')
-                ->label(__('Slot End')),
+                ->label(__('Slot End'))
+                ->dateTime('H:i'),
             Tables\Columns\TextColumn::make('reg_start')
-                ->label(__('Registration Start')),
+                ->label(__('Registration Start'))
+                ->dateTime('d.m.Y, H:i'),
             Tables\Columns\TextColumn::make('reg_end')
-                ->label(__('Registration End')),
+                ->label(__('Registration End'))
+                ->dateTime('d.m.Y, H:i'),
             Tables\Columns\TextColumn::make('max_users')
                 ->label(__('Attendees'))
                 ->formatStateUsing(function (SigTimeslot $timeslot) {
