@@ -14,7 +14,6 @@
     "Manage Roles": "Rollen verwalten",
 
     "My Events": "Meine Events",
-    "Reg Number": "Reg Nr",
 
     "English": "Englisch",
     "German": "Deutsch",
@@ -41,7 +40,6 @@
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
 
     "Edit": "Bearbeiten",
-    "Changed": "Geändert",
 
     "Not listed in schedule": "Nicht im Programmplan",
     "Click here to sign up": "Hier gehts zur Anmeldung",
@@ -95,6 +93,7 @@
     "Registrations for this event are disabled": "Registrierungen für dieses Event sind deaktiviert",
     "Delete Entry": "Eintrag löschen",
 
+    "Time Slot": "Timeslot",
     "Create new time slot": "Neuen Timeslot erstellen",
     "Create Time Slot": "Timeslot erstellen",
     "Attendee List": "Teilnehmerliste",
