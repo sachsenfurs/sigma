@@ -41,7 +41,8 @@ class TimetableEntryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('sig_event_id')
-                    ->label(__('Event'))
+                    ->label('Event')
+                    ->translateLabel()
                     ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name'))
                     ->getOptionLabelFromRecordUsing(function (Model $record) {
                         return $record->name . ' - ' . $record->sigLocation->name . ' ' . $record->sigLocation->description;
@@ -49,7 +50,8 @@ class TimetableEntryResource extends Resource
                     ->required()
                     ->disabled(fn (string $operation): bool => $operation !== 'create'),
                 Forms\Components\Select::make('sig_location_id')
-                    ->label(__('Different Location'))
+                    ->label('Different Location')
+                    ->translateLabel()
                     ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
                     ->getOptionLabelFromRecordUsing(function (Model $record) {
                         // If the location has a description, append it to the name
@@ -59,28 +61,35 @@ class TimetableEntryResource extends Resource
                         return $record->name;
                     }),
                 Forms\Components\DateTimePicker::make('start')
-                    ->label(__('Beginning'))
+                    ->label('Beginning')
+                    ->translateLabel()
                     ->format('Y-m-d\TH:i')
                     ->seconds(false)
                     ->required(),
                 Forms\Components\DateTimePicker::make('end')
-                    ->label(__('End'))
+                    ->label('End')
+                    ->translateLabel()
                     ->format('Y-m-d\TH:i')
                     ->seconds(false)
                     ->required(),
                 Forms\Components\Checkbox::make('new')
-                    ->label(__('New Event'))
+                    ->label('New Event')
+                    ->translateLabel()
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
                 Forms\Components\Checkbox::make('cancelled')
-                    ->label(__('Event Cancelled'))
+                    ->label('Event Cancelled')
+                    ->translateLabel()
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
                 Forms\Components\Checkbox::make('hide')
-                    ->label(__('Internal Event')),
+                    ->label('Internal Event')
+                    ->translateLabel(),
                 Forms\Components\Checkbox::make('reset_update')
-                    ->label(__('Reset \'Changed\'-flag'))
+                    ->label('Reset \'Changed\'-flag')
+                    ->translateLabel()
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
                 Forms\Components\Checkbox::make('send_update')
-                    ->label(__('Announce Changes'))
+                    ->label('Announce Changes')
+                    ->translateLabel()
                     ->helperText(__('This needs to be checked if the event should be marked as changed!'))
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
             ]);
@@ -119,13 +128,17 @@ class TimetableEntryResource extends Resource
                         }
                         return 'secondary';
                     })
-                    ->label(__('Time span')),
+                    ->label('Time span')
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('sigEvent.name')
-                    ->label(__('Event')),
+                    ->label('Event')
+                    ->translateLabel(),
                 Tables\Columns\TextColumn ::make('sigLocation.name')
                     ->badge()
-                    ->label(__('Location')),
+                    ->label('Location')
+                    ->translateLabel(),
             ])
+            ->defaultPaginationPageOption('all')
             ->defaultGroup(
                 Group::make('start')
                     ->label('')

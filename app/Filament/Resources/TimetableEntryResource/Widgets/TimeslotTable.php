@@ -45,19 +45,24 @@ class TimeslotTable extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('slot_start')
-                ->label(__('Slot Start'))
+                ->label('Slot Start')
+                ->translateLabel()
                 ->dateTime('H:i'),
             Tables\Columns\TextColumn::make('slot_end')
-                ->label(__('Slot End'))
+                ->label('Slot End')
+                ->translateLabel()
                 ->dateTime('H:i'),
             Tables\Columns\TextColumn::make('reg_start')
-                ->label(__('Registration Start'))
+                ->label('Registration Start')
+                ->translateLabel()
                 ->dateTime('d.m.Y, H:i'),
             Tables\Columns\TextColumn::make('reg_end')
-                ->label(__('Registration End'))
+                ->label('Registration End')
+                ->translateLabel()
                 ->dateTime('d.m.Y, H:i'),
             Tables\Columns\TextColumn::make('max_users')
-                ->label(__('Attendees'))
+                ->label('Attendees')
+                ->translateLabel()
                 ->formatStateUsing(function (SigTimeslot $timeslot) {
                     return $timeslot->sigAttendees->count() . '/' . $timeslot->max_users;
                 }),
@@ -68,7 +73,8 @@ class TimeslotTable extends BaseWidget
     {
         return [
             ViewAction::make('view')
-                ->label(__('Attendees'))
+                ->label('Attendees')
+                ->translateLabel()
                 ->icon('heroicon-s-users')
                 ->modalWidth(MaxWidth::Medium)
                 ->modalHeading(__('Attendee List'))
@@ -84,12 +90,14 @@ class TimeslotTable extends BaseWidget
                         ])
                 ]),
             EditAction::make('edit')
-                ->label(__('Edit'))
+                ->label('Edit')
+                ->translateLabel()
                 ->modalWidth(MaxWidth::Medium)
                 ->modalHeading(__('Edit Time Slot'))
                 ->form($this->getTimeslotForm()),
             DeleteAction::make('delete')
-                ->label(__('Delete'))
+                ->label('Delete')
+                ->translateLabel()
                 ->modalHeading(__('Delete Time Slot?'))
         ];
     }
@@ -98,7 +106,8 @@ class TimeslotTable extends BaseWidget
     {
         return [
             Tables\Actions\CreateAction::make('addTimeslot')
-                ->label(__('Add Time Slot'))
+                ->label('Add Time Slot')
+                ->translateLabel()
                 ->form($this->getTimeslotForm())
                 ->modalWidth(MaxWidth::Medium)
                 ->modalHeading(__('Create new time slot'))
@@ -120,31 +129,36 @@ class TimeslotTable extends BaseWidget
     {
         return [
             DateTimePicker::make('slot_start')
-                ->label(__('Slot Start'))
+                ->label('Slot Start')
+                ->translateLabel()
                 ->format('H:i')
                 ->date(false)
                 ->seconds(false)
                 ->default($this->record->start->format('H:i'))
                 ->required(),
             DateTimePicker::make('slot_end')
-                ->label(__('Slot End'))
+                ->label('Slot End')
+                ->translateLabel()
                 ->format('H:i')
                 ->date(false)
                 ->seconds(false)
                 ->default($this->record->start->addMinutes(15)->format('H:i'))
                 ->required(),
             DateTimePicker::make('reg_start')
-                ->label(__('Registration Start'))
+                ->label('Registration Start')
+                ->translateLabel()
                 ->format('Y-m-d\TH:i')
                 ->seconds(false)
                 ->default($this->record->start->subHours(24)->format('Y-m-d\TH:i')),
             DateTimePicker::make('reg_end')
-                ->label(__('Registration End'))
+                ->label('Registration End')
+                ->translateLabel()
                 ->format('Y-m-d\TH:i')
                 ->seconds(false)
                 ->default($this->record->start->subMinutes(60)->format('Y-m-d\TH:i')),
             TextInput::make('max_users')
-                ->label(__('Max. Attendees'))
+                ->label('Max. Attendees')
+                ->translateLabel()
                 ->type('number')
                 ->minValue(1)
                 ->default(1),

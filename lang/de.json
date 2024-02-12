@@ -1,9 +1,10 @@
 {
 
     "Event Schedule": "Programmplan",
+    "Host": "Veranstalter",
     "Hosts": "Veranstalter",
     "Locations": "Räumlichkeiten",
-    "Location": "Location",
+    "Location": "Räumlichkeit",
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
@@ -45,6 +46,7 @@
     "Click here to sign up": "Hier gehts zur Anmeldung",
     "Cancelled": "Abgesagt",
 
+    "No SIGs available": "Keine SIGs vorhanden",
     "No SIGs assigned": "Keine SIGs zugeordnet",
     "Edit SIG": "SIG bearbeiten",
     "Create SIG": "SIG anlegen",
@@ -164,6 +166,7 @@
 
     "Sign up": "Melde dich an",
     "Scheduled": "Im Programmplan:",
+    "In Schedule": "Im Programmplan",
     "Slots available": "Freie Plätze",
     "Slots taken": "Plätze vergeben",
     "Event already took place": "Event hat bereits stattgefunden",
