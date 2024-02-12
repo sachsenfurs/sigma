@@ -132,7 +132,8 @@ class TimetableEntryResource extends Resource
                     ->translateLabel(),
                 Tables\Columns\TextColumn::make('sigEvent.name')
                     ->label('Event')
-                    ->translateLabel(),
+                    ->translateLabel()
+                    ->searchable(),
                 Tables\Columns\TextColumn ::make('sigLocation.name')
                     ->badge()
                     ->label('Location')
@@ -146,7 +147,26 @@ class TimetableEntryResource extends Resource
                     ->getTitleFromRecordUsing(fn (Model $record) => Str::upper($record->start->dayName) . ', ' . $record->start->format('d.m.Y'))
             )
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('sigLocation')
+                    ->label('Location')
+                    ->translateLabel()
+                    ->options(function (Model $record) {
+                        // If the location has a description, append it to the name
+                        if ($record->description) {
+                            return $record->name . ' - ' . $record->description;
+                        }
+                        return $record->name;
+                    })
+                    ->getOptionLabelFromRecordUsing(function (Model $record) {
+                        // If the location has a description, append it to the name
+                        if ($record->description) {
+                            return $record->name . ' - ' . $record->description;
+                        }
+                        return $record->name;
+                    })
+                    ->searchable()
+                    ->preload()
+                    ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
