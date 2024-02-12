@@ -11,15 +11,21 @@
                 {{ $user->name }}
             </div>
             @if ($user->reg_id)
-                <div class="row py-2">
-                    <x-form.input-xs ident="UserRegID" lt="User Reg-ID" value="{{ $user->reg_id }}"/>
+                <div class="row pt-2 pb-3">
+                    <x-form.input-read-only ident="UserRegId" lt="User Reg-ID" value="{{ $user->reg_id }}"/>
                 </div>
                 <div class="row py-2">
                     <x-form.input-full ident="SigMail" lt="E-Mail Addresse" value="{{ $user->email }}" />
                 </div>
+                @if($sighost)
                 <div class="row py-2">
                     <x-form.input-full ident="SigHostName" lt="Name / Nickname" value="{{ $sighost->name }}" />
                 </div>
+                @else
+                <div class="row py-2">
+                    <p>Please Add a Sig-Host</p>
+                </div>
+                @endif
                 <div class="row py-2">
                     <x-form.input-full ident="SigTG" lt="Telegram-@" value="{{ $user->telegram_user_id }}" />
                 </div>

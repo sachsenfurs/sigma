@@ -5,7 +5,7 @@
     'value' =>"",
 ])
 
-<div class="col-1">
+<div class="col-6">
     <label for="{{ $ident }}" class="form-label">{{ $lt }}</label>
-    <input type="text" class="form-control" name="{{ $ident }}" placeholder="{{ $pht }}" value="{{ $value }}" />
+    <input type="text" readonly class="form-control-plaintext" name="{{ $ident }}" placeholder="{{ $pht }}" value="{{ $value }}" />
 </div>

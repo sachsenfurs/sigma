@@ -25,25 +25,33 @@ class SigSignInController extends Controller
 
         if ($user->reg_id)
         {
-            $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
+            if ($sighost)
+            {
+                $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
 
-            $siglocations = [];
-            foreach($sigs as $sig) {
-                $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-            
-                $location = SigLocation::where('id', $time->sig_location_id)->first();
-            
-                $siglocations[$sig->id] = [
-                    'location' => $location,
-                    'time' => $time
-                ];
+                $siglocations = [];
+                foreach($sigs as $sig) {
+                    $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
+                
+                    $location = SigLocation::where('id', $time->sig_location_id)->first();
+                
+                    $siglocations[$sig->id] = [
+                        'location' => $location,
+                        'time' => $time
+                    ];
+                }
+
+                return view('sigs.sigsignin.index', compact([
+                    'user',
+                    'sighost',
+                    'sigs',
+                    'siglocations',
+                ]));
             }
 
             return view('sigs.sigsignin.index', compact([
                 'user',
                 'sighost',
-                'sigs',
-                'siglocations',
             ]));
         }
         else 
@@ -62,6 +70,7 @@ class SigSignInController extends Controller
         if ($user->reg_id)
         {
             $sighost = SigHost::where('reg_id', $user->reg_id)->first();
+            // dd($user);
             return view('sigs.sigsignin.create', compact(['user','sighost']));
         }
         else{
