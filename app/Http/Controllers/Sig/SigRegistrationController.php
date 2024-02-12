@@ -17,9 +17,10 @@ class SigRegistrationController extends Controller
     }
 
     public function register(SigTimeslot $timeslot) {
-        $userId = request()->input('regNumber', auth()->user()->id);
+        $regId = request()->input('regId', auth()->user()->reg_id);
+        $user = User::where('reg_id', '=', $regId)->first();
 
-        if (!User::find($userId)) {
+        if ($user === null) {
             return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
         }
 
@@ -31,14 +32,14 @@ class SigRegistrationController extends Controller
         }
         if ($timeslot->max_users <= $timeslot->sigAttendees->count()) {
             return redirect()->back()->with('error', 'Dieser Timeslot ist bereits voll!');
-        } elseif($timeslot->sigAttendees->contains('user_id', $userId)) {
+        } elseif($timeslot->sigAttendees->contains('user_id', $user->id)) {
             return redirect()->back()->with('error', 'Du nimmst bereits an diesem Timeslot teil!');
         } elseif($regStart > $currentTime) {
             return redirect()->back()->with('error', 'Du kannst dich noch nicht registrieren!');
         } elseif($regEnd < $currentTime) {
             return redirect()->back()->with('error', 'Die Registrierung für dieses Event ist nicht mehr verfügbar!');
         } else {
-            $timeslot->sigAttendees()->create(['user_id' => $userId]);
+            $timeslot->sigAttendees()->create(['user_id' => $user->id]);
             //auth()->user()->reminders->create(['timetable_entry_id']);
             return redirect()->back()->with('success', 'Erfolgreich für den Timeslot registriert!');
         }
