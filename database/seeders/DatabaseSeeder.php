@@ -26,14 +26,12 @@ class DatabaseSeeder extends Seeder
         (new UserRoleSeeder())->run();
         User::factory()->create([
             'name' => "Kidran",
-            'email' => "mail@kidran.de",
-            'user_role_id' => 1,
+            'email' => "mail@kidran.de"
         ]);
 
         User::factory()->create([
             'name' => "Kenthanar",
-            'email' => "kenthanar@sachsenfurs.de",
-            'user_role_id' => 1,
+            'email' => "kenthanar@sachsenfurs.de"
         ]);
 
         //SigLocation::factory()->count(12)->create();

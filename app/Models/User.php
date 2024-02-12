@@ -34,10 +34,15 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Define the relationship between users and their role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo(UserRole::class, 'user_role_id');
+    public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
+        return $this->belongsToMany(UserRole::class, 'user_user_roles');
+    }
+
+    public function permissions(): array
+    {
+        return $this->roles->map->permissions->flatten()->pluck('name')->unique();
     }
 
     /**

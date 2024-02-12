@@ -103,12 +103,7 @@ class UserRoleController extends Controller
     {
         Gate::authorize('manage_users');
 
-        $attributes = $request->validate([
-            'title' => 'required|min:2|max:20',
-            'perms' => 'array',
-        ]);
-
-        $userRole->setPerms($attributes['perms'] ?? []);
+        // Needs to be done in Filament...
 
         return back()->with('success', 'Benutzerrolle erfolgreich aktualisiert');
     }
