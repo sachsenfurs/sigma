@@ -108,7 +108,7 @@ class SigEventResource extends Resource
     {
         return
             Forms\Components\Fieldset::make('name')
-            ->label('Sig Name')
+            ->label('SIG Name')
             ->translateLabel()
             ->schema([
                 Forms\Components\TextInput::make('name')
@@ -163,7 +163,7 @@ class SigEventResource extends Resource
     {
         return
             Forms\Components\Fieldset::make('host')
-            ->label('Sig Host')
+            ->label('SIG Host')
             ->translateLabel()
             ->schema([
                 Forms\Components\Select::make('sig_host_id')
