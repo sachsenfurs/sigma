@@ -86,10 +86,12 @@ class TimetableEntryResource extends Resource
                 Forms\Components\Checkbox::make('reset_update')
                     ->label('Reset \'Changed\'-flag')
                     ->translateLabel()
+                    ->dehydrated(false)
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
                 Forms\Components\Checkbox::make('send_update')
                     ->label('Announce Changes')
                     ->translateLabel()
+                    ->dehydrated(false)
                     ->helperText(__('This needs to be checked if the event should be marked as changed!'))
                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
             ]);
