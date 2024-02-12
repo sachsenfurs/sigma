@@ -125,7 +125,7 @@ class SigEventResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('English')
                             ->translateLabel()
-                            ->formatStateUsing(function (SigTranslation $record) {
+                            ->formatStateUsing(function (SigTranslation $record = null) {
                                 return $record->name ?? '';
                             })
                             ->required()
@@ -291,7 +291,7 @@ class SigEventResource extends Resource
                             Forms\Components\Textarea::make('description')
                                 ->label('English')
                                 ->translateLabel()
-                                ->formatStateUsing(function (SigTranslation $record) {
+                                ->formatStateUsing(function (SigTranslation $record = null) {
                                     return $record->description ?? '';
                                 })
                                 //->required(fn (Get $get) => in_array('en', $get('../languages')) ?? false)
