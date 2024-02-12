@@ -6,8 +6,9 @@
         <h1 class="pt-2 pb-5 text-center">Sig Anmeldung</h1>
 
         <div class="m-5">
-            <a href="{{ route('sigsignin.create') }}">Create New Sig &rarr;</a>
-
+            <div class="d-md-flex justify-content-md-center">
+                <a href="{{ route('sigsignin.create') }}" class="pb-2 btn btn-success">Create New Sig</a>
+            </div>
 
             <div class="m-auto">
                 <p>

@@ -7,18 +7,36 @@
 
         <form action="/sigsignin" method="POST">
             @csrf
-            <div class="row py-2">
+            <div class="row p-2">
                 {{ $user->name }}
             </div>
-            <div class="row py-2">
-                <x-form.input-full ident="SigMail" lt="E-Mail Addresse" value="{{ $user->email }}" />
-            </div>
-            <div class="row py-2">
-                <x-form.input-full ident="SigHostName" lt="Name / Nickname" value="{{ $sighost->name }}" />
-            </div>
-            <div class="row py-2 pb-4">
-                <x-form.input-full ident="SigTG" lt="Telegram-@" value="{{ $user->telegram_user_id }}" />
-            </div>
+            @if ($user->reg_id)
+                <div class="row py-2">
+                    <x-form.input-xs ident="UserRegID" lt="User Reg-ID" value="{{ $user->reg_id }}"/>
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigMail" lt="E-Mail Addresse" value="{{ $user->email }}" />
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigHostName" lt="Name / Nickname" value="{{ $sighost->name }}" />
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigTG" lt="Telegram-@" value="{{ $user->telegram_user_id }}" />
+                </div>
+            @else
+                <div class="row py-2">
+                    <x-form.input-xs ident="UserRegID" lt="User Reg-ID"/>
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigMail" lt="E-Mail Addresse" />
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigHostName" lt="Name / Nickname" />
+                </div>
+                <div class="row py-2">
+                    <x-form.input-full ident="SigTG" lt="Telegram-@" />
+                </div>
+            @endif
             <hr class="py-4">
             <h2 class="py-2 text-center">Programmplanung</h2>
             <p class="py-1">Hier kannst du deine eigene SIG (Special Interest Group) anmelden, welche dann in unser
@@ -30,7 +48,7 @@
                 <x-form.input-full ident="SigName" lt="SIG Name" />
             </div>
             <div class="row py-2">
-                <x-form.text-l ident="SigDescription" lt="SIG Beschreibung fürs Conbook (GER)" />
+                <x-form.text-l ident="SigDescriptionDE" lt="SIG Beschreibung fürs Conbook (GER)" />
             </div>
             <div class="row py-2">
                 <x-form.text-l ident="SigDescription" lt="SIG Beschreibung fürs Conbook (ENG)" />

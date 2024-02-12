@@ -19,34 +19,37 @@ class SigSignInController extends Controller
      */
     public function index()
     {
-        $user = User::where('reg_id', auth()->user()->reg_id)->first();
-        if (!User::where('reg_id', auth()->user()->reg_id)->first()) {
-            return redirect('sigsignin/create')->withErrors("Du hast keine Sigs erstellt!");
-        }
-
+        $user = User::where('id', auth()->user()->id)->first();
         $sighost = SigHost::where('reg_id', $user->reg_id)->first();
         
-        $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
-        
-        $siglocations = [];
-        foreach($sigs as $sig) {
-            $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-            
-            $location = SigLocation::where('id', $time->sig_location_id)->first();
-            
-            $siglocations[$sig->id] = [
-                'location' => $location,
-                'time' => $time
-            ];
-        }
 
-        
-        return view('sigs.sigsignin.index', compact([
-            'user',
-            'sighost',
-            'sigs',
-            'siglocations',
-        ]));
+        if ($user->reg_id)
+        {
+            $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
+
+            $siglocations = [];
+            foreach($sigs as $sig) {
+                $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
+            
+                $location = SigLocation::where('id', $time->sig_location_id)->first();
+            
+                $siglocations[$sig->id] = [
+                    'location' => $location,
+                    'time' => $time
+                ];
+            }
+
+            return view('sigs.sigsignin.index', compact([
+                'user',
+                'sighost',
+                'sigs',
+                'siglocations',
+            ]));
+        }
+        else 
+        {
+            return redirect('sigsignin/create')->withErrors("Du hast keine Sigs erstellt!");
+        }
     }
 
     /**
@@ -56,9 +59,14 @@ class SigSignInController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
         
-        $sighost = SigHost::where('reg_id', $user->reg_id)->first();
-
-        return view('sigs.sigsignin.create', compact(['user','sighost']));
+        if ($user->reg_id)
+        {
+            $sighost = SigHost::where('reg_id', $user->reg_id)->first();
+            return view('sigs.sigsignin.create', compact(['user','sighost']));
+        }
+        else{
+            return view('sigs.sigsignin.create', compact(['user']));
+        }
     }
 
     /**
@@ -66,7 +74,15 @@ class SigSignInController extends Controller
      */
     public function store(Request $request)
     {
-        dd('test');
+        $host = SigHost::create([
+            'name' => $request->input('SigHostName'),
+            'description' => 'Dies ist ein Test',
+            'hide' => '0',
+            'reg_id' => $request->input('UserRegID'),
+        ]);
+
+        // dd($host);
+
         return redirect('sigsignin');
     }
 
