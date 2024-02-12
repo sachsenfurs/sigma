@@ -266,7 +266,36 @@ class SigEventResource extends Resource
                         ->relationship('sigTags', 'description')
                         ->preload()
                         ->multiple()
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->live()
+                        ->createOptionModalHeading(__('Create Tag'))
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('name')
+                                ->label('Name')
+                                ->translateLabel()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\Fieldset::make('description')
+                                ->label('Description')
+                                ->translateLabel()
+                                ->schema([
+                                    Forms\Components\Textarea::make('description')
+                                        ->label('German')
+                                        ->translateLabel()
+                                        ->rows(4),
+                                    Forms\Components\Textarea::make('description_en')
+                                        ->label('English')
+                                        ->translateLabel()
+                                        ->rows(4),
+                                ]),
+                        ])
+                        ->createOptionUsing(function ($data) {
+                            return SigTag::create([
+                                'name' => $data['name'],
+                                'description' => $data['description'] ?? null,
+                                'description_en' => $data['description_en'] ?? null,
+                            ]);
+                        }),
                 ])
                 ->columnSpan(1)
                 ->visible(auth()->user()->can('manage_events'));
