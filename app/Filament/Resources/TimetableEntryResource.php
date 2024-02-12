@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
+use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -52,14 +53,17 @@ class TimetableEntryResource extends Resource
                 Forms\Components\Select::make('sig_location_id')
                     ->label('Different Location')
                     ->translateLabel()
-                    ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        // If the location has a description, append it to the name
-                        if ($record->description) {
-                            return $record->name . ' - ' . $record->description;
-                        }
-                        return $record->name;
-                    }),
+                    ->options(function(): array {
+                        return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
+                            if ($sigLocation->description) {
+                                return [$sigLocation->id => $sigLocation->name . ' - ' . $sigLocation->description];
+                            }
+                            return [$sigLocation->id => $sigLocation->name];
+                        })->toArray();
+                    })
+                    ->searchable()
+                    ->preload()
+                    ->placeholder(__('No different Location')),
                 Forms\Components\DateTimePicker::make('start')
                     ->label('Beginning')
                     ->translateLabel()
