@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Sig;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
-use App\Models\User;
 use Illuminate\Support\Carbon;
 
 class SigRegistrationController extends Controller
@@ -16,7 +16,14 @@ class SigRegistrationController extends Controller
         return view("registration.index", compact("sigs"));
     }
 
-    public function register(SigTimeslot $timeslot, ?User $user) {
+    public function register(SigTimeslot $timeslot, User $user) {
+        $regId = request()->input('regId', auth()->user()->reg_id);
+        $user = User::where('reg_id', '=', $regId)->first();
+
+        if ($user === null) {
+            return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
+        }
+
         $currentTime = strtotime(Carbon::now()->toDateTimeString());
         $regStart = strtotime($timeslot->reg_start);
         $regEnd = strtotime($timeslot->reg_end);
