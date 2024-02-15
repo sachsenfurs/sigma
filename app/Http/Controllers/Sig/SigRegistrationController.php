@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Sig;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use App\Models\User;
-use Auth;
-use Redirect;
 use Illuminate\Support\Carbon;
 
 class SigRegistrationController extends Controller
