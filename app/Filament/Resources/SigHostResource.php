@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\SigHostResource\Pages;
 use App\Filament\Resources\SigHostResource\RelationManagers;
 use App\Models\SigHost;
@@ -10,13 +11,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SigHostResource extends Resource
 {
     protected static ?string $model = SigHost::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

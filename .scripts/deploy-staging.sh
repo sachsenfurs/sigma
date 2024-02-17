@@ -25,6 +25,8 @@ php artisan clear-compiled
 
 # Recreate cache
 php artisan optimize
+php artisan icons:cache
+php artisan filament:cache-components
 
 # Compile npm assets
 npm install

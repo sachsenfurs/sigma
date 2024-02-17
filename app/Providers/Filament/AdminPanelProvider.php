@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Clusters\SigPlanning\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
+use App\Models\SigLocation;
+use App\Models\TimetableEntry;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -16,7 +19,10 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Carbon;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,13 +37,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+//                SigPlannerWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -52,6 +60,55 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->plugin(
+                FilamentFullCalendarPlugin::make()
+                    ->schedulerLicenseKey("CC-Attribution-NonCommercial-NoDerivatives")
+                    ->selectable(true)
+                    ->editable(true)
+                    ->plugins([
+                        'resourceTimeGrid',
+                        'resourceTimeline',
+                    ])
+                    ->config([
+                        'initialView' => "resourceTimeGridDay",
+                        'resources' => SigLocation::select("id", "name AS title")->where("show_default", true)->get()->toArray(),
+                        'headerToolbar' => [
+                            'left' => 'prev,next,today',
+                            'center' => 'title',
+                            'right' => 'resourceTimeGridDay,resourceTimeline,dayGridMonth'
+                        ],
+                        'titleFormat' => [
+                            'day' => 'numeric',
+                            'month' => 'long',
+                            'weekday' => 'long',
+                        ],
+//                        'titleRangeSeparator' => "false",
+                        'expandRows' => true,
+                        'nowIndicator' => true,
+                        'slotMinTime' => "08:00:00",
+                        'slotMaxTime' => "28:00:00",
+                        'eventResizableFromStart' => true,
+//                        'nextDayThreshold' => "04:00:00",
+                        'allDaySlot' => false,
+                        'showNonCurrentDates' => true,
+//                        'defaultAllDay' => true,
+                        'defaultTimedEventDuration' => "01:00",
+                        'forceEventDuration' => true,
+                        'scrollTimeReset' => false,
+                        'height' => '150vh',
+                        'expandRows' => true,
+                        'stickyHeaderDates' => true,
+//                        'aspectRatio' => 0,
+                        'contentHeight' => "auto",
+                        'initialDate' => (function() {
+                            $first = TimetableEntry::orderBy('start')->first();
+                            if(Carbon::parse($first->start)->isAfter(Carbon::now()))
+                                return $first->start->format("Y-m-d");
+                            return Carbon::now()->format("Y-m-d");
+                         })(),
+                    ])
+            )
+            ;
     }
 }

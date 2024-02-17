@@ -22,6 +22,7 @@ class SigLocation extends Model
     protected $casts = [
         'render_ids' => "array",
         'infodisplay' => "boolean",
+        'show_default' => "boolean",
     ];
 
 

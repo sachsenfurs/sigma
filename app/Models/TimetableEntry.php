@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Models\Traits\HasSigEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,20 +48,18 @@ class TimetableEntry extends Model
     /**
      * Define the relationship between timetable-entries and their favorites.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function favorites()
-    {
+    public function favorites(): HasMany {
         return $this->hasMany(SigFavorite::class);
     }
 
     /**
      * Define the relationship between timetable-entries and their reminders.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function reminders()
-    {
+    public function reminders(): HasMany {
         return $this->hasMany(SigReminder::class);
     }
 
@@ -70,20 +71,20 @@ class TimetableEntry extends Model
         return $query->where(DB::raw("TIMESTAMPDIFF(SECOND, start, end)"), "!=", "0");
     }
 
-    public function sigEvent() {
+    public function sigEvent(): BelongsTo {
         return $this->belongsTo(SigEvent::class);
     }
 
-    public function sigLocation() {
+    public function sigLocation(): BelongsTo {
         return $this->belongsTo(SigLocation::class)->withDefault(function($sigLocation, $timetableEntry) {
             return $timetableEntry->sigEvent->sigLocation;
         });
     }
 
-    public function sigTimeslots() {
+    public function sigTimeslots(): HasMany {
         return $this->hasMany(SigTimeslot::class);
     }
-    public function getAvailableSlotCount() {
+    public function getAvailableSlotCount(): int {
         $counter = 0;
         foreach($this->sigTimeslots AS $timeslot) {
             $counter += $timeslot->max_users - $timeslot->sigAttendees->count();
@@ -91,28 +92,27 @@ class TimetableEntry extends Model
         return $counter;
     }
 
-    public function replacedBy() {
+    public function replacedBy(): BelongsTo {
         return $this->belongsTo(TimetableEntry::class);
     }
 
-    public function parentEntry() {
+    public function parentEntry(): HasOne {
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
-    public function getHasTimeChangedAttribute() {
+    public function getHasTimeChangedAttribute(): bool {
         return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
     }
 
-    public function getHasLocationChangedAttribute() {
+    public function getHasLocationChangedAttribute(): bool {
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
-    public function getDurationAttribute() {
+    public function getDurationAttribute(): int {
         return $this->end->diffInMinutes($this->start);
     }
 
-    public function getFavStatus()
-    {
+    public function getFavStatus(): bool {
         if (auth()->user()->favorites->where('timetable_entry_id', $this->id)->first()) {
             return true;
         }
@@ -120,8 +120,7 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function maxUserRegsExeeded()
-    {
+    public function maxUserRegsExeeded(): bool {
         if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
             return false;
         }
@@ -141,7 +140,7 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function getFormattedLengthAttribute() {
+    public function getFormattedLengthAttribute(): string {
         $mins =  $this->start->diffInMinutes($this->end);
         if($mins == 0)
             return "";
@@ -150,7 +149,7 @@ class TimetableEntry extends Model
         return round($this->start->floatDiffInHours($this->end), 1). " h";
     }
 
-    public function getIsFavoriteAttribute() {
+    public function getIsFavoriteAttribute(): bool {
         if(Auth::check()) {
             return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
         }
