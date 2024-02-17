@@ -6,7 +6,6 @@ namespace App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\EditRecord;
 
 class EditTimetableEntry extends EditRecord
@@ -18,15 +17,25 @@ class EditTimetableEntry extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
         ];
     }
 
-    protected function getFormSchema(): array {
+    public function getHeading(): string
+    {
+        return __('Manage Event Schedule');
 
-        return [
-            TextInput::make("name"),
-        ];
     }
+
+    protected function getFooterWidgets(): array
+    {
+        if ($this->record->sigEvent->reg_possible) {
+            // Only show the TimeslotTable widget if the event allows registration
+            return [
+                TimetableEntryResource\Widgets\TimeslotTable::class,
+            ];
+        }
+        return [];
+    }
+
 }

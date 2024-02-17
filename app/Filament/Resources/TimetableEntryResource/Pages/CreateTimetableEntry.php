@@ -15,4 +15,8 @@ class CreateTimetableEntry extends CreateRecord
     protected static ?string $cluster = SigPlanning::class;
 
 
+    public function getHeading(): string
+    {
+        return __('Add Time Slot');
+    }
 }

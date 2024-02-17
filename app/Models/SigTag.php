@@ -10,6 +10,8 @@ class SigTag extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $appends = [
         'description_localized',
     ];

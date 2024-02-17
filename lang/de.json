@@ -1,9 +1,10 @@
 {
 
     "Event Schedule": "Programmplan",
+    "Host": "Veranstalter",
     "Hosts": "Veranstalter",
     "Locations": "Räumlichkeiten",
-    "Location": "Location",
+    "Location": "Räumlichkeit",
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
@@ -14,7 +15,6 @@
     "Manage Roles": "Rollen verwalten",
 
     "My Events": "Meine Events",
-    "Reg Number": "Reg Nr",
 
     "English": "Englisch",
     "German": "Deutsch",
@@ -41,12 +41,12 @@
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
 
     "Edit": "Bearbeiten",
-    "Changed": "Geändert",
 
     "Not listed in schedule": "Nicht im Programmplan",
     "Click here to sign up": "Hier gehts zur Anmeldung",
     "Cancelled": "Abgesagt",
 
+    "No SIGs available": "Keine SIGs vorhanden",
     "No SIGs assigned": "Keine SIGs zugeordnet",
     "Edit SIG": "SIG bearbeiten",
     "Create SIG": "SIG anlegen",
@@ -67,6 +67,7 @@
     "Time slots": "Time Slots",
     "Actions": "Aktionen",
     "Cancel": "Abbrechen",
+    "Create Tag": "Tag erstellen",
 
     "Delete SIG": "SIG Löschen",
     "Create Schedule Entry": "Neuen Kalendereintrag erstellen",
@@ -84,6 +85,7 @@
     "Notes": "Anmerkungen",
 
     "Different Location": "Abweichende Location",
+    "No different Location": "Keine abweichende Location",
     "Event Cancelled": "Event Abgesagt",
     "Internal Event": "Internes Event",
     "Announce Changes": "Änderungen kommunizieren",
@@ -95,6 +97,7 @@
     "Registrations for this event are disabled": "Registrierungen für dieses Event sind deaktiviert",
     "Delete Entry": "Eintrag löschen",
 
+    "Time Slot": "Timeslot",
     "Create new time slot": "Neuen Timeslot erstellen",
     "Create Time Slot": "Timeslot erstellen",
     "Attendee List": "Teilnehmerliste",
@@ -165,6 +168,7 @@
 
     "Sign up": "Melde dich an",
     "Scheduled": "Im Programmplan:",
+    "In Schedule": "Im Programmplan",
     "Slots available": "Freie Plätze",
     "Slots taken": "Plätze vergeben",
     "Event already took place": "Event hat bereits stattgefunden",
