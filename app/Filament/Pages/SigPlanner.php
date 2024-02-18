@@ -20,13 +20,14 @@ class SigPlanner extends Page
 
     protected static ?string $cluster = SigPlanning::class;
 
+//    protected ?string $heading = "";
+
     protected function getHeaderWidgets(): array {
         return [
             SigPlannerWidget::class,
         ];
     }
 
-    protected ?string $heading = "";
 
     public function getMaxContentWidth(): MaxWidth|string|null {
         return MaxWidth::Full;

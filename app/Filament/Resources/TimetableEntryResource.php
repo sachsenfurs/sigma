@@ -2,30 +2,30 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class TimetableEntryResource extends Resource
 {
     protected static ?string $model = TimetableEntry::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('Event Schedule');
-    }
+    protected static ?string $cluster = SigPlanning::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getLabel(): ?string
     {
@@ -40,65 +40,72 @@ class TimetableEntryResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('sig_event_id')
-                    ->label('Event')
-                    ->translateLabel()
-                    ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        return $record->name . ' - ' . $record->sigLocation->name . ' ' . $record->sigLocation->description;
-                    })
-                    ->required()
-                    ->disabled(fn (string $operation): bool => $operation !== 'create'),
-                Forms\Components\Select::make('sig_location_id')
-                    ->label('Different Location')
-                    ->translateLabel()
-                    ->options(function(): array {
-                        return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
-                            if ($sigLocation->description) {
-                                return [$sigLocation->id => $sigLocation->name . ' - ' . $sigLocation->description];
-                            }
-                            return [$sigLocation->id => $sigLocation->name];
-                        })->toArray();
-                    })
-                    ->searchable()
-                    ->preload()
-                    ->placeholder(__('No different Location')),
-                Forms\Components\DateTimePicker::make('start')
-                    ->label('Beginning')
-                    ->translateLabel()
-                    ->format('Y-m-d\TH:i')
-                    ->seconds(false)
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end')
-                    ->label('End')
-                    ->translateLabel()
-                    ->format('Y-m-d\TH:i')
-                    ->seconds(false)
-                    ->required(),
-                Forms\Components\Checkbox::make('new')
-                    ->label('New Event')
-                    ->translateLabel()
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('cancelled')
-                    ->label('Event Cancelled')
-                    ->translateLabel()
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('hide')
-                    ->label('Internal Event')
-                    ->translateLabel(),
-                Forms\Components\Checkbox::make('reset_update')
-                    ->label('Reset \'Changed\'-flag')
-                    ->translateLabel()
-                    ->dehydrated(false)
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('send_update')
-                    ->label('Announce Changes')
-                    ->translateLabel()
-                    ->dehydrated(false)
-                    ->helperText(__('This needs to be checked if the event should be marked as changed!'))
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-            ]);
+            ->schema(static::getSchema());
+    }
+
+    public static function getSchema() {
+        return [
+            Forms\Components\Select::make('sig_event_id')
+                     ->label('Event')
+                     ->translateLabel()
+                     ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with("sigHost"))
+                     ->getOptionLabelFromRecordUsing(function (Model $record) {
+                         return $record->name . ' - ' . $record->sigHost->name;
+                     })
+                     ->required()
+                     ->searchable()
+                     ->preload(),
+            Forms\Components\Select::make('sig_location_id')
+                     ->label('Location')
+                     ->translateLabel()
+                     ->relationship('sigLocation', 'name')
+                     ->options(function(): array {
+                         return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
+                             $name = $sigLocation->description ? $sigLocation->name . " - " . $sigLocation->description : $sigLocation->name;
+                             return [ $sigLocation->id => $name ];
+                         })->toArray();
+                     })
+                     ->searchable()
+                     ->preload(),
+            Forms\Components\DateTimePicker::make('start')
+                     ->label('Beginning')
+                     ->translateLabel()
+                     ->format('Y-m-d\TH:i')
+                     ->seconds(false)
+                     ->required(),
+            Forms\Components\DateTimePicker::make('end')
+                     ->label('End')
+                     ->translateLabel()
+                     ->format('Y-m-d\TH:i')
+                     ->seconds(false)
+                     ->required(),
+            Forms\Components\Checkbox::make('new')
+                     ->label('New Event')
+                     ->translateLabel()
+                     ->formatStateUsing(function() {
+                         // automatically prefill to "true" when con (in this case the first event) has started
+                         return Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                     })
+            ,
+            Forms\Components\Checkbox::make('cancelled')
+                     ->label('Event Cancelled')
+                     ->translateLabel()
+                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
+            Forms\Components\Checkbox::make('hide')
+                     ->label('Internal Event')
+                     ->translateLabel(),
+            Forms\Components\Checkbox::make('reset_update')
+                     ->label('Reset \'Changed\'-flag')
+                     ->translateLabel()
+                     ->dehydrated(false)
+                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
+            Forms\Components\Checkbox::make('send_update')
+                     ->label('Announce Changes')
+                     ->translateLabel()
+                     ->dehydrated(false)
+                     ->helperText(__('This needs to be checked if the event should be marked as changed!'))
+                     ->hidden(fn (string $operation): bool => $operation !== 'edit'),
+        ];
     }
 
     public static function table(Table $table): Table

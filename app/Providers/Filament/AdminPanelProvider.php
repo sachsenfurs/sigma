@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->plugin(
                 FilamentFullCalendarPlugin::make()
                     ->schedulerLicenseKey("CC-Attribution-NonCommercial-NoDerivatives")
@@ -85,23 +86,18 @@ class AdminPanelProvider extends PanelProvider
                             'month' => 'long',
                             'weekday' => 'long',
                         ],
-//                        'titleRangeSeparator' => "false",
-                        'expandRows' => true,
                         'nowIndicator' => true,
                         'slotMinTime' => "08:00:00",
                         'slotMaxTime' => "28:00:00",
                         'eventResizableFromStart' => true,
-//                        'nextDayThreshold' => "04:00:00",
                         'allDaySlot' => false,
                         'showNonCurrentDates' => true,
-//                        'defaultAllDay' => true,
                         'defaultTimedEventDuration' => "01:00",
                         'forceEventDuration' => true,
                         'scrollTimeReset' => false,
                         'height' => '150vh',
                         'expandRows' => true,
                         'stickyHeaderDates' => true,
-//                        'aspectRatio' => 0,
                         'contentHeight' => "auto",
                         'initialDate' => (function() {
                             $first = TimetableEntry::orderBy('start')->first();

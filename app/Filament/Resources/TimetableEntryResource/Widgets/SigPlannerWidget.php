@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use App\Filament\Resources\TimetableEntryResource;
 use App\Models\TimetableEntry;
 use Filament\Actions\Action;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 use Saade\FilamentFullCalendar\Actions\DeleteAction;
 use Saade\FilamentFullCalendar\Actions\EditAction;
@@ -22,6 +18,7 @@ class SigPlannerWidget extends FullCalendarWidget
 {
     public Model | string | null $model = TimetableEntry::class;
 
+    protected static string $view = "vendor.filament-fullcalendar.sig-planner";
 
     public function fetchEvents(array $info): array {
         return TimetableEntry::query()
@@ -37,17 +34,28 @@ class SigPlannerWidget extends FullCalendarWidget
                   ->title($entry->sigEvent->name)
                   ->start($entry->start->toDateTimeLocalString())
                   ->end($entry->end->toDateTimeLocalString())
-//                  ->allDay($entry->duration >= 1339)
-//                  ->url(
-//                      url: "/",
-//                      shouldOpenUrlInNewTab: true
-//                  )
                   ->extraProperties([
-                      'resourceId' => $entry->sigLocation->id,
-                      'backgroundColor' => $entry->hide ? "rgb(113, 113, 113)" : "",
+                      'resourceId' => $entry->sigLocation->id ? $entry->sigLocation->id : 11,
+                      'backgroundColor' => (function() use ($entry) {
+                          if($entry->cancelled)
+                              return "#eb8060";
+                          if($entry->hide)
+                              return "#948e8a";
+
+                          return "";
+                      })(),
+                      'borderColor' => (function() use ($entry) {
+                          if($entry->cancelled)
+                              return "#ba5334";
+                          if($entry->hide)
+                              return "#756d6a";
+                          if($entry->has_time_changed || $entry->has_location_changed)
+                              return "#ff0000";
+                          return "";
+                      })(),
                   ])
              )
-                             ->toArray();
+             ->toArray();
     }
 
     protected function headerActions(): array {
@@ -59,6 +67,7 @@ class SigPlannerWidget extends FullCalendarWidget
                         'end' => $arguments['end'] ?? null,
                         'sig_location_id' => $arguments['resource']['id'] ?? null,
                     ]);
+
                 }),
         ];
     }
@@ -67,19 +76,10 @@ class SigPlannerWidget extends FullCalendarWidget
         return [
             EditAction::make()
                   ->mountUsing(function(TimetableEntry $entry, Form $form, array $arguments) {
-                      $start    = $arguments['event']['start'] ?? $entry->start;
-                      $end      = $arguments['event']['end'] ?? $entry->end;
-
-//                      if($arguments['event']['allDay'] ?? false) {
-//                          $start  = Carbon::parse($start)->setTime(0, 0, 0);
-//                          $end    = Carbon::parse($end)->setTime(0, 0, 0);
-//                      }
-
-                      $form->fill([
-                          'start' => $start,
-                          'end' => $end,
-                          'sig_location_id' => $arguments['newResource']['id'] ?? null,
-                      ]);
+                      $entry->start             = $arguments['event']['start'] ?? $entry->start;
+                      $entry->end               = $arguments['event']['end'] ?? $entry->end;
+                      $entry->sig_location_id   = $arguments['newResource']['id'] ?? $entry->sig_location_id;
+                      $form->fill($entry->attributesToArray());
                   }),
             EditAction::make('view')
                 ->modalFooterActions([
@@ -94,51 +94,40 @@ class SigPlannerWidget extends FullCalendarWidget
                 ])
         ];
     }
+
+    /**
+     * Override from InteractsWithActions to refresh/revert the view if unsuccessful
+     * @param bool $shouldCancelParentActions
+     * @return void
+     */
     public function unmountAction(bool $shouldCancelParentActions = true): void {
         parent::unmountAction($shouldCancelParentActions);
         $this->refreshRecords();
     }
 
+
+    /**
+     * Override from InteractsWithEvents to set the default clickAction to "edit"
+     * @param array $event
+     * @return void
+     */
+    public function onEventClick(array $event): void {
+        if ($this->getModel()) {
+            $this->record = $this->resolveRecord($event['id']);
+        }
+
+        $this->mountAction('edit', [
+            'type' => 'click',
+            'event' => $event,
+        ]);
+    }
+
     public function getFormSchema(): array {
         return [
-
             Grid::make()
-                ->columns(2)
-                ->schema([
-                    Select::make('sig_event_id')
-                        ->relationship('sigEvent', 'name')
-                        ->prefix(__("SIG"))
-                        ->hiddenLabel()
-                        ->searchable()
-                        ->preload()
-                        ->required(),
-                    Select::make('sig_location_id')
-                        ->prefix(__("Location"))
-                        ->hiddenLabel()
-                        ->relationship('sigLocation', 'name'),
-
-                    DateTimePicker::make('start')
-                        ->seconds(false)
-                        ->required()
-                        ->prefix(__("Start"))
-                        ->hiddenLabel(true),
-                    DateTimePicker::make('end')
-                        ->seconds(false)
-                        ->required()
-                        ->prefix(__("End"))
-                        ->hiddenLabel(true),
-
-                    Section::make(__("Options"))
-                        ->schema([
-                            Toggle::make('hide')
-                                  ->label(__("Hide Event on Schedule")),
-                            Toggle::make('new')
-                                  ->label(__("New Event")),
-                        ])
-                ]),
+            ->columns(2)
+            ->schema(TimetableEntryResource::getSchema())
         ];
     }
-    protected static string $view = "vendor.filament-fullcalendar.sig-planner";
-
 
 }
