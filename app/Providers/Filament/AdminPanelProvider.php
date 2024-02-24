@@ -64,49 +64,57 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->plugin(
-                FilamentFullCalendarPlugin::make()
-                    ->schedulerLicenseKey("CC-Attribution-NonCommercial-NoDerivatives")
-                    ->selectable(true)
-                    ->editable(true)
-                    ->plugins([
-                        'resourceTimeGrid',
-                        'resourceTimeline',
-                    ])
-                    ->config([
-                        'initialView' => "resourceTimeGridDay",
-                        'resources' => SigLocation::select("id", "name AS title")->where("show_default", true)->get()->toArray(),
-                        'headerToolbar' => [
-                            'left' => 'prev,next,today',
-                            'center' => 'title',
-                            'right' => 'resourceTimeGridDay,resourceTimeline,dayGridMonth'
-                        ],
-                        'titleFormat' => [
-                            'day' => 'numeric',
-                            'month' => 'long',
-                            'weekday' => 'long',
-                        ],
-                        'nowIndicator' => true,
-                        'slotMinTime' => "08:00:00",
-                        'slotMaxTime' => "28:00:00",
-                        'eventResizableFromStart' => true,
-                        'allDaySlot' => false,
-                        'showNonCurrentDates' => true,
-                        'defaultTimedEventDuration' => "01:00",
-                        'forceEventDuration' => true,
-                        'scrollTimeReset' => false,
-                        'height' => '150vh',
-                        'expandRows' => true,
-                        'stickyHeaderDates' => true,
-                        'contentHeight' => "auto",
-                        'initialDate' => (function() {
-                            $first = TimetableEntry::orderBy('start')->first();
-                            if(Carbon::parse($first->start)->isAfter(Carbon::now()))
-                                return $first->start->format("Y-m-d");
-                            return Carbon::now()->format("Y-m-d");
-                         })(),
-                    ])
-            )
+            ->bootUsing(function() use ($panel) {
+
+                // this has to be inside the "bootUsing" function since we are using database queries
+                // which are not always available when the AdminPanelProvider is registered!
+                // ServiceProviders otherwise are registered in an early state of the application, even in artisan commands!
+
+                $panel->plugin(
+                    FilamentFullCalendarPlugin::make()
+                      ->schedulerLicenseKey("CC-Attribution-NonCommercial-NoDerivatives")
+                      ->selectable(true)
+                      ->editable(true)
+                      ->plugins([
+                          'resourceTimeGrid',
+                          'resourceTimeline',
+                      ])
+                      ->config([
+                          'initialView' => "resourceTimeGridDay",
+                          'resources' => SigLocation::select("id", "name AS title")->where("show_default", true)->get()->toArray(),
+                          'headerToolbar' => [
+                              'left' => 'prev,next,today',
+                              'center' => 'title',
+                              'right' => 'resourceTimeGridDay,resourceTimeline,dayGridMonth'
+                          ],
+                          'titleFormat' => [
+                              'day' => 'numeric',
+                              'month' => 'long',
+                              'weekday' => 'long',
+                          ],
+                          'nowIndicator' => true,
+                          'slotMinTime' => "08:00:00",
+                          'slotMaxTime' => "28:00:00",
+                          'eventResizableFromStart' => true,
+                          'allDaySlot' => false,
+                          'showNonCurrentDates' => true,
+                          'defaultTimedEventDuration' => "01:00",
+                          'forceEventDuration' => true,
+                          'scrollTimeReset' => false,
+                          'height' => '150vh',
+                          'expandRows' => true,
+                          'stickyHeaderDates' => true,
+                          'contentHeight' => "auto",
+                          'initialDate' => (function() {
+                              $first = TimetableEntry::orderBy('start')->first();
+                              if(Carbon::parse($first->start)->isAfter(Carbon::now()))
+                                  return $first->start->format("Y-m-d");
+                              return Carbon::now()->format("Y-m-d");
+                          })(),
+                      ])
+                );
+            })
+
             ;
     }
 }
