@@ -8,6 +8,7 @@ echo "Deployment started ..."
 (php artisan down) || true
 
 # reset local changes (if any)
+git clean -d -f .
 git reset --hard
 
 # Pull the latest version of the app
