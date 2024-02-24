@@ -9,7 +9,7 @@ use App\Models\SigLocation;
 use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
-use Database\Factories\TimeTableEntryFactory;
+use Database\Factories\TimetableEntryFactory;
 use Database\Factories\SigTranslationFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
