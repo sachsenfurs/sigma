@@ -107,7 +107,7 @@ class AdminPanelProvider extends PanelProvider
                           'contentHeight' => "auto",
                           'initialDate' => (function() {
                               $first = TimetableEntry::orderBy('start')->first();
-                              if(Carbon::parse($first->start)->isAfter(Carbon::now()))
+                              if(Carbon::parse($first?->start)->isAfter(Carbon::now()))
                                   return $first->start->format("Y-m-d");
                               return Carbon::now()->format("Y-m-d");
                           })(),
