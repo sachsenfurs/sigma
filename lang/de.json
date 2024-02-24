@@ -11,8 +11,20 @@
 
     "Administration": "Administration",
     "Manage Event Schedule": "Programmplan bearbeiten",
-    "Manage Users": "Benutzer verwalten",
+    "Manage Events": "Events verwalten",
+    "Manage Hosts": "Veranstalter verwalten",
+    "Manage Locations": "Räumlichkeiten verwalten",
+    "Manage Posts": "Posts verwalten",
     "Manage Roles": "Rollen verwalten",
+    "Manage Settings": "Einstellungen verwalten",
+    "Manage Users": "Benutzer verwalten",
+
+    "User Role": "Benutzerrolle",
+    "User Roles": "Benutzerrollen",
+
+    "Border Color": "Randfarbe",
+    "Background Color": "Hintergrundfarbe",
+    "Foreground Color": "Vordergrundfarbe",
 
     "My Events": "Meine Events",
 
