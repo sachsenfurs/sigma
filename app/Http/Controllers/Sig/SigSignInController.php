@@ -32,14 +32,36 @@ class SigSignInController extends Controller
                 $siglocations = [];
                 foreach($sigs as $sig) {
                     $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-                
-                    $location = SigLocation::where('id', $time->sig_location_id)->first();
-                
-                    $siglocations[$sig->id] = [
-                        'location' => $location,
-                        'time' => $time
-                    ];
+                    // dd($time);
+                    
+                    if (!$time)
+                    {
+                        $siglocations[$sig->id] = [
+                            'time' => "Keine Zeit eingetragen",
+                            'location' => "Kein Ort eingetragen",
+                        ];
+                    }
+                    else
+                    {
+                        $location = SigLocation::where('id', $time->sig_location_id)->first();
+                        if (!$location)
+                        {
+                            $siglocations[$sig->id] = [
+                                'time' => $time,
+                                'location' => "Kein Ort eingetragen",
+                            ];
+                        }
+                        else
+                        {
+                            $siglocations[$sig->id] = [
+                                'time' => $time,
+                                'location' => $location->name,
+                            ];
+                        }
+                    }
+                    // dd($sigs);
                 }
+
 
                 return view('sigs.sigsignin.index', compact([
                     'user',
@@ -82,18 +104,50 @@ class SigSignInController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+{
+    $user = User::where('id', auth()->user()->id)->first();
+    
+    if (!SigHost::where('reg_id', $user->reg_id)->first())
     {
         $host = SigHost::create([
             'name' => $request->input('SigHostName'),
-            'description' => 'Dies ist ein Test',
             'hide' => '0',
-            'reg_id' => $request->input('UserRegID'),
+            'reg_id' => $request->input('UserRegId'),
+            'telegram_add' => $request->input('SigTG'),
         ]);
-
-        // dd($host);
-
-        return redirect('sigsignin');
     }
+
+    $languages = []; // Initialisiert das Array für die Sprachen leer
+
+    // Ermitteln der gewünschten Sprachkonfiguration basierend auf der Eingabe
+    switch ($request->input('SigAttendeeLang')) {
+        case '0':
+            $languages = ["de"]; // Nur Deutsch
+            break;
+        case '1':
+            $languages = ["en"]; // Nur Englisch
+            break;
+        case '2':
+            $languages = ["de", "en"]; // Deutsch und Englisch
+            break;
+        default:
+            $languages = []; // Falls keine gültige Option ausgewählt wurde, bleibt das Array leer
+            break;
+    }
+
+    $event = SigEvent::create([
+        'name' => $request->input('SigName'),
+        'sig_host_id' => SigHost::where('reg_id', $user->reg_id)->first()->id,
+        'default_language' => $request->input('SigHostLang'),
+        'languages' => $languages, // Verwendet das modifizierte $languages Array
+        'description' => $request->input('SigDescriptionDE'),
+        'sig_location_id' => '2',
+        'reg_possible' => '0',
+        'max_regs_per_day' => '1',
+    ]);
+    return redirect('sigsignin');
+}
+
 
     /**
      * Display the specified resource.

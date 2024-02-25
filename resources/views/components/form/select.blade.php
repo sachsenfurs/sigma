@@ -5,7 +5,7 @@
 
 <div class="col col-sm-2">
     <label for="{{ $ident }}" class="form-label">{{ $lt }}</label>
-    <select name="Test" class="form-control" id="{{ $ident }}">
+    <select class="form-control" name="{{ $ident }}">
         {{ $slot }}
     </select>
 </div>

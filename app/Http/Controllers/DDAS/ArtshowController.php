@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DDAS;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\DDAS\ArtshowArtist;
 use App\Models\DDAS\ArtshowItem;
 use App\Models\DDAS\ArtshowBid;
@@ -17,8 +18,10 @@ class ArtshowController extends Controller
     public function index()
     {
         
-        $artshow = ArtshowArtist::all();
-        return view('DDAS.artshow.index', compact('artshow'));
+        $as_items = ArtshowItem::all();
+        $as_artists = ArtshowArtist::all();
+        // dd($as_items, $as_artists);
+        return view('DDAS.artshow.index', compact('as_items', 'as_artists'));
     }
 
     /**
@@ -26,6 +29,8 @@ class ArtshowController extends Controller
      */
     public function create()
     {
+        $user = User::where('id', auth()->user()->id)->first();
+
         $id = ArtshowArtist::pluck("id")->all();
         $name = ArtshowArtist::orderBy("id")->get();
         $artshow = ArtshowArtist::all();

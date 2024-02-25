@@ -18,6 +18,8 @@ class SigEventResource extends Resource
     protected static ?string $model = SigEvent::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    
+    protected static ?string $navigationGroup = 'Sig';
 
     public static function form(Form $form): Form
     {
@@ -80,7 +82,10 @@ class SigEventResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
