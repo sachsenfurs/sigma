@@ -1,6 +1,14 @@
 {
+  "bootstrap-icons.woff": {
+    "file": "assets/bootstrap-icons-d0346eea.woff",
+    "src": "bootstrap-icons.woff"
+  },
+  "bootstrap-icons.woff2": {
+    "file": "assets/bootstrap-icons-5b2dd4d4.woff2",
+    "src": "bootstrap-icons.woff2"
+  },
   "lang/de.json": {
-    "file": "assets/de-8d5398e1.js",
+    "file": "assets/de-b8990406.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -32,7 +40,7 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-a2f6745a.js",
+    "file": "assets/app-5257dc18.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
