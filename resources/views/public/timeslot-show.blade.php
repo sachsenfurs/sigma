@@ -116,19 +116,32 @@
     <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content text-center">
-                <div class="modal-header text-center">
-                    <h5 class="modal-title w-100" id="registerModalLabel">Registrieren</h5>
-                </div>
-                <div class="modal-body">
-                    <p>Möchtest du dich für dieses Event registrieren?</p>
-                </div>
-                <div class="modal-footer">
-                    <form class="text-center w-100" id="registerForm" action="" method="POST">
+                <form class="w-100" id="registerForm" action="" method="POST">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title w-100" id="registerModalLabel">Registrieren</h5>
+                    </div>
+                    <div class="modal-body">
+                        @can("manage_events")
+                            <p>Wen möchtest du für dieses Event registrieren?</p>
+                            <p><a href=""></a></p>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Reg-Nummer</p>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" name="regNumber" placeholder="Reg-Nummer" value="{{ Auth::user()->id }}">
+                                </div>
+                            </div>
+                        @else
+                            <p>Möchtest du dich für dieses Event registrieren?</p>
+                        @endcan
+                    </div>
+                    <div class="modal-footer">
                         @csrf
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary m-1">Registrieren</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

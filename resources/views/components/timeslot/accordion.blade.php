@@ -46,22 +46,31 @@
                             </x-timeslot.button>
                         @else
                             @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                @if (auth()->user()?->sigTimeslots?->find($timeslot))
-                                    <x-timeslot.button :disabled="true" class="btn-success">
-                                        {{ __("Already signed up") }}
-                                    </x-timeslot.button>
-                                @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
-                                    <x-timeslot.button :disabled="true" class="btn-secondary">
-                                        {{ __("Daily limit reached") }}
-                                    </x-timeslot.button>
-                                @else
+                                @can("manage_events")
                                     <x-timeslot.button
                                         class="btn-primary"
                                         onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
                                     >
-                                        {{ __("Sign up") }}
+                                        {{ __("Sign up someone") }}
                                     </x-timeslot.button>
-                                @endif
+                                @else
+                                    @if (auth()->user()?->sigTimeslots?->find($timeslot))
+                                        <x-timeslot.button :disabled="true" class="btn-success">
+                                            {{ __("Already signed up") }}
+                                        </x-timeslot.button>
+                                    @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
+                                        <x-timeslot.button :disabled="true" class="btn-secondary">
+                                            {{ __("Daily limit reached") }}
+                                        </x-timeslot.button>
+                                    @else
+                                        <x-timeslot.button
+                                                class="btn-primary"
+                                                onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
+                                        >
+                                            {{ __("Sign up") }}
+                                        </x-timeslot.button>
+                                    @endif
+                                @endcan
                             @else
                                 <x-timeslot.button :disabled="true" class="btn-secondary">
                                     {{ __("Sold out") }}

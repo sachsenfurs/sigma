@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\TranslateController;
 use App\Http\Controllers\Public\ConbookExportController;
@@ -80,6 +80,7 @@ Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.se
 
 Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
 Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
+
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -165,39 +166,5 @@ Route::group(['middleware' => "auth"], function() {
 
         Route::post("/translate", TranslateController::class)->name("translate");
     });
-
-    // Dealer´s Dan
-    Route::prefix('dealersden')->name('dealersden.')->group(function() {
-        Route::get('/', [DealersDenController::class, 'index'])->name('index');
-        Route::post("/", [DealersDenController::class, 'store'])->name("store");
-        Route::get("/{id}", [DealersDenController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [ArtshowController::class, "edit"])->name("edit");
-        Route::post('/{id}', [DealersDenController::class, 'create'])->name('create');
-        Route::put("/{id}", [DealersDenController::class, 'update'])->name('update');
-        Route::delete('/{id}', [DealersDenController::class, 'destroy'])->name('destroy');
-    });
-
-    //Artshow
-    Route::prefix('artshow')->name('artshow.')->group(function(){
-        Route::get('/', [ArtshowController::class, 'index'])->name('index');
-        Route::post("/", [ArtshowController::class, 'store'])->name("store");
-        Route::get("/{id}", [ArtshowController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [ArtshowController::class, "edit"])->name("edit");
-        Route::get('/{id}', [ArtshowController::class, 'create'])->name('create');
-        Route::put("/{id}", [ArtshowController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ArtshowController::class, 'destroy'])->name('destroy');
-    });
-
-    // Sig SignIn (Sigs Anmelden)
-    /* Route::prefix('sigsignin')->name('ssi.')->group(function(){
-        Route::get('/', [SigSignInController::class, 'index'])->name('index');
-        Route::post("/", [SigSignInController::class, 'store'])->name("store");
-        Route::get("/{id}", [SigSignInController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [SigSignInController::class, "edit"])->name("edit");
-        Route::get("/create", [SigSignInController::class, "create"])->name("create");
-        Route::put("/{id}", [SigSignInController::class, 'update'])->name('update');
-        Route::delete('/{id}', [SigSignInController::class, 'destroy'])->name('destroy');
-    }); */
-    Route::resource('/sigsignin', SigSignInController::class);
-
+    Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
 });

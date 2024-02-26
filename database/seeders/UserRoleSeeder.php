@@ -17,9 +17,9 @@ class UserRoleSeeder extends Seeder
     {
         DB::table('user_roles')->insert([
             'title'                 => 'Administrator',
-            'fore_color'            => '333333',
-            'border_color'          => '2196F3',
-            'background_color'      => 'DDFFFF',
+            'fore_color'            => '#333333',
+            'border_color'          => '#2196F3',
+            'background_color'      => '#DDFFFF',
             'perm_manage_settings'  => true,
             'perm_manage_users'     => true,
             'perm_manage_events'    => true,

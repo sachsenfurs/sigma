@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
@@ -35,12 +33,13 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('reg_id')
                     ->numeric(),
-                Forms\Components\TextInput::make('groups')
-                    ->required(),
+                Forms\Components\Select::make('groups')
+                    ->relationship('role', 'title')
+                    ->multiple()
+                    ->preload(),
                 Forms\Components\TextInput::make('telegram_user_id')
                     ->tel()
                     ->maxLength(255),

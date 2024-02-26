@@ -1,0 +1,12 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* Table styling for filament panel */
+.fi-ta-table .fi-ta-cell > div {
+    @apply py-2;
+}
+
+.fi-ta-table .fi-ta-text {
+    @apply py-0;
+}
