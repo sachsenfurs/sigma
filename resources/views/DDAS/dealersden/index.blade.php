@@ -20,7 +20,6 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
                                 <th scope="col">Dealer</th>
                                 <th scope="col">Infos</th>
                                 <th scope="col">Social Media</th>
@@ -29,17 +28,18 @@
                         </thead>
                         <tbody>
                             @foreach ($dealers as $dealer)
-                                <tr>
-                                    <th scope="row">{{ $dealer->id }}</th>
-                                    <td>{{ $dealer->name }}</td>
-                                    <td>{{ $dealer->info }}</td>
-                                    <td>{{ $dealer->gallery_link }}</td>
-                                    <td>{{ $dealer->icon_file }}</td>
-                                </tr>
+                                @if ($dealer->approved == 1)
+                                    <tr>
+                                        <td>{{ $dealer->name }}</td>
+                                        <td>{{ $dealer->info }}</td>
+                                        <td>{{ $dealer->gallery_link }}</td>
+                                        <td>{{ $dealer->icon_file }}</td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-    </div>
-@endsection
+        </div>
+    @endsection
