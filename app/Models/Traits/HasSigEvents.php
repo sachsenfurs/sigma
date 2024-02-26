@@ -37,7 +37,7 @@ trait HasSigEvents {
 //            return $sigEvents->union($events);
     }
 
-    public function getPublicSigEventCount() {
+    public function getPublicSigEventCount(): int {
         return $this->sigEvents()
                     ->with("timetableEntries")
                     ->get()

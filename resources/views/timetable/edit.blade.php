@@ -70,7 +70,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th><strong>{{ _("Slot Time span") }}</strong></th>
+                                            <th><strong>{{ __("Slot Time span") }}</strong></th>
                                             <th><strong>{{ __("Reg Time span") }}</strong></th>
                                             <th><strong>{{ __("Attendees") }}</strong></th>
                                             <th><strong>{{ __("Actions") }}</strong></th>

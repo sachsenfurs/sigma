@@ -60,6 +60,12 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a class="nav-link px-3 {{ Route::is("lostfound.index") ? "active" : "" }}" href="{{ route("lostfound.index") }}">
+                            {{ __("Lost & Found") }}
+                        </a>
+                    </li>
+
                     @if (auth()?->user()?->isSigHost())
                         <li>
                             <a class="nav-link px-3 {{ Route::is("mysigs.index") ? "active" : "" }}" href="{{ route("mysigs.index") }}">

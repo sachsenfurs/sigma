@@ -1,20 +1,32 @@
 {
 
     "Event Schedule": "Programmplan",
+    "Host": "Veranstalter",
     "Hosts": "Veranstalter",
     "Locations": "Räumlichkeiten",
-    "Location": "Location",
+    "Location": "Räumlichkeit",
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
 
     "Administration": "Administration",
     "Manage Event Schedule": "Programmplan bearbeiten",
-    "Manage Users": "Benutzer verwalten",
+    "Manage Events": "Events verwalten",
+    "Manage Hosts": "Veranstalter verwalten",
+    "Manage Locations": "Räumlichkeiten verwalten",
+    "Manage Posts": "Posts verwalten",
     "Manage Roles": "Rollen verwalten",
+    "Manage Settings": "Einstellungen verwalten",
+    "Manage Users": "Benutzer verwalten",
+
+    "User Role": "Benutzerrolle",
+    "User Roles": "Benutzerrollen",
+
+    "Border Color": "Randfarbe",
+    "Background Color": "Hintergrundfarbe",
+    "Foreground Color": "Vordergrundfarbe",
 
     "My Events": "Meine Events",
-    "Reg Number": "Reg Nr",
 
     "English": "Englisch",
     "German": "Deutsch",
@@ -41,12 +53,12 @@
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
 
     "Edit": "Bearbeiten",
-    "Changed": "Geändert",
 
     "Not listed in schedule": "Nicht im Programmplan",
     "Click here to sign up": "Hier gehts zur Anmeldung",
     "Cancelled": "Abgesagt",
 
+    "No SIGs available": "Keine SIGs vorhanden",
     "No SIGs assigned": "Keine SIGs zugeordnet",
     "Edit SIG": "SIG bearbeiten",
     "Create SIG": "SIG anlegen",
@@ -67,6 +79,7 @@
     "Time slots": "Time Slots",
     "Actions": "Aktionen",
     "Cancel": "Abbrechen",
+    "Create Tag": "Tag erstellen",
 
     "Delete SIG": "SIG Löschen",
     "Create Schedule Entry": "Neuen Kalendereintrag erstellen",
@@ -84,6 +97,7 @@
     "Notes": "Anmerkungen",
 
     "Different Location": "Abweichende Location",
+    "No different Location": "Keine abweichende Location",
     "Event Cancelled": "Event Abgesagt",
     "Internal Event": "Internes Event",
     "Announce Changes": "Änderungen kommunizieren",
@@ -95,6 +109,7 @@
     "Registrations for this event are disabled": "Registrierungen für dieses Event sind deaktiviert",
     "Delete Entry": "Eintrag löschen",
 
+    "Time Slot": "Timeslot",
     "Create new time slot": "Neuen Timeslot erstellen",
     "Create Time Slot": "Timeslot erstellen",
     "Attendee List": "Teilnehmerliste",
@@ -165,11 +180,13 @@
 
     "Sign up": "Melde dich an",
     "Scheduled": "Im Programmplan:",
+    "In Schedule": "Im Programmplan",
     "Slots available": "Freie Plätze",
     "Slots taken": "Plätze vergeben",
     "Event already took place": "Event hat bereits stattgefunden",
     "Sold out": "Ausgebucht",
     "Show Event": "Zum Event",
+    "Sign up someone": "Melde jemanden an",
 
     "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)",
     "We have enhanced our schedule view": "Wir haben unsere Programmplan-Ansicht überarbeitet!",
@@ -179,5 +196,10 @@
     "Take me to the classic view": "Zur Tabellenansicht",
     "Table View": "Tabellenansicht",
     "New": "Neu",
-    "New Event": "Neues Event"
+    "New Event": "Neues Event",
+
+    "Lost": "Verloren",
+    "Found": "Gefunden",
+    "Nothing has been found yet": "Es wurden noch keine Fundsachen abgegeben",
+    "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet"
 }
