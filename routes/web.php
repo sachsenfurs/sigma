@@ -127,7 +127,7 @@ Route::group(['middleware' => "auth"], function() {
 
     // Registraton
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
-    Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
+    Route::post('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
     // User-Roles
     Route::get("/user-roles", [UserRoleController::class, 'index'])->name("user-roles.index");

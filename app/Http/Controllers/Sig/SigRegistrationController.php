@@ -16,11 +16,11 @@ class SigRegistrationController extends Controller
         return view("registration.index", compact("sigs"));
     }
 
-    public function register(SigTimeslot $timeslot, User $user) {
+    public function register(SigTimeslot $timeslot) {
         $regId = request()->input('regId', auth()->user()->reg_id);
-        $user = User::where('reg_id', '=', $regId)->first();
+        $user = User::where('reg_id', $regId)->first();
 
-        if ($user === null) {
+        if (!$user) {
             return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
         }
 
@@ -30,14 +30,12 @@ class SigRegistrationController extends Controller
 
         /*
          *  ToDo: 
-         * - Make it possible for the main registered user to add more attendees
-         * - Update Modal for adding users
          * - Add Possibility to Event to register more users per timeslot for master attendee
          * - 
          * 
          */
 
-        if ($timeslot->timetableEntry->maxUserRegsExeeded()) {
+        if ($timeslot->timetableEntry->maxUserRegsExeeded($user)) {
             // Check if max registrations per day limit is reached
             return redirect()->back()->with('error', 'Maximale Anzahl an Registrierungen für diesen Tag für dieses Event erreicht!');
         }
@@ -67,7 +65,14 @@ class SigRegistrationController extends Controller
     }
 
     public function cancel(SigTimeslot $timeslot) {
-        SigAttendee::where(['user_id' => auth()->user()->id, 'sig_timeslot_id' => $timeslot->id])->first()->delete();
+        $regId = request()->input('regId', auth()->user()->reg_id);
+        $user = User::where('reg_id', $regId)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
+        }
+        
+        SigAttendee::where(['user_id' => $user->id, 'sig_timeslot_id' => $timeslot->id])->first()->delete();
 
         return redirect()->back()->with('success', 'Registrierung erfolgreich gelöscht!');
     }
