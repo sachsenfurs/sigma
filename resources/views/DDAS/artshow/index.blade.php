@@ -6,6 +6,10 @@
         <h2 class="pt-2 pb-5 text-center">
             Art Show Item List
         </h2>
+
+        <div class="d-flex justify-content-center p-3">
+            <a href="{{ route('artshow.create') }}" class="btn btn-primary">Add Item</a>
+        </div>
         <div class="card">
             <div class="card-header">
                 <h3 class="text-center">

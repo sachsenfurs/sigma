@@ -178,26 +178,10 @@ Route::group(['middleware' => "auth"], function() {
     });
 
     //Artshow
-    Route::prefix('artshow')->name('artshow.')->group(function(){
-        Route::get('/', [ArtshowController::class, 'index'])->name('index');
-        Route::post("/", [ArtshowController::class, 'store'])->name("store");
-        Route::get("/{id}", [ArtshowController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [ArtshowController::class, "edit"])->name("edit");
-        Route::get('/{id}', [ArtshowController::class, 'create'])->name('create');
-        Route::put("/{id}", [ArtshowController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ArtshowController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('/artshow', ArtshowController::class);
 
     // Sig SignIn (Sigs Anmelden)
-    /* Route::prefix('sigsignin')->name('ssi.')->group(function(){
-        Route::get('/', [SigSignInController::class, 'index'])->name('index');
-        Route::post("/", [SigSignInController::class, 'store'])->name("store");
-        Route::get("/{id}", [SigSignInController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [SigSignInController::class, "edit"])->name("edit");
-        Route::get("/create", [SigSignInController::class, "create"])->name("create");
-        Route::put("/{id}", [SigSignInController::class, 'update'])->name('update');
-        Route::delete('/{id}', [SigSignInController::class, 'destroy'])->name('destroy');
-    }); */
+    
     Route::resource('/sigsignin', SigSignInController::class);
 
 });

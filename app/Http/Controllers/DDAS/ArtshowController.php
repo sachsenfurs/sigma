@@ -31,13 +31,8 @@ class ArtshowController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
 
-        $id = ArtshowArtist::pluck("id")->all();
-        $name = ArtshowArtist::orderBy("id")->get();
-        $artshow = ArtshowArtist::all();
         return view("DDAS.artshow.create", compact([
-            'artshow',
-            'id',
-            'name',]));
+            'user',]));
     }
 
     /**
@@ -45,7 +40,7 @@ class ArtshowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd("got it");
     }
 
     /**
