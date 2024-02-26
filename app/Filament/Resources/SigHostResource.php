@@ -17,12 +17,15 @@ class SigHostResource extends Resource
     protected static ?string $model = SigHost::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Sig';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('telegram_add')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->required()
@@ -31,7 +34,8 @@ class SigHostResource extends Resource
                 Forms\Components\Toggle::make('hide')
                     ->required(),
                 Forms\Components\TextInput::make('reg_id')
-                    ->numeric(),
+                    ->numeric()
+                    ->minValue(1),
             ]);
     }
 
@@ -51,7 +55,10 @@ class SigHostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

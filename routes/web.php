@@ -18,6 +18,7 @@ use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
+use App\Http\Controllers\Sig\SigSignInController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigReminderController;
@@ -26,6 +27,8 @@ use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\DDAS\DealersDenController;
+use App\Http\Controllers\DDAS\ArtshowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -163,7 +166,5 @@ Route::group(['middleware' => "auth"], function() {
 
         Route::post("/translate", TranslateController::class)->name("translate");
     });
-
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
-
 });
