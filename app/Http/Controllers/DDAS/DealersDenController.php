@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DDAS;
 use App\Http\Controllers\Controller;
 use App\Models\DDAS\DealerTag;
 use App\Models\DDAS\Dealer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DealersDenController extends Controller
@@ -15,8 +16,8 @@ class DealersDenController extends Controller
     public function index()
     {
         
-        $dealersden = Dealer::all();
-        return view('DDAS.dealersden.index', compact('dealersden'));
+        $dealers = Dealer::all();
+        return view('DDAS.dealersden.index', compact('dealers'));
     }
 
     /**
@@ -24,7 +25,9 @@ class DealersDenController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        $tags = DealerTag::all();
+        return view('DDAS.dealersden.create', compact('users', 'tags'));
     }
 
     /**

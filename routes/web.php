@@ -168,15 +168,7 @@ Route::group(['middleware' => "auth"], function() {
     });
 
     // Dealer´s Dan
-    Route::prefix('dealersden')->name('dealersden.')->group(function() {
-        Route::get('/', [DealersDenController::class, 'index'])->name('index');
-        Route::post("/", [DealersDenController::class, 'store'])->name("store");
-        Route::get("/{id}", [DealersDenController::class, 'show'])->name("show");
-        Route::get("/{id}/edit", [ArtshowController::class, "edit"])->name("edit");
-        Route::post('/{id}', [DealersDenController::class, 'create'])->name('create');
-        Route::put("/{id}", [DealersDenController::class, 'update'])->name('update');
-        Route::delete('/{id}', [DealersDenController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('/dealersden', DealersDenController::class);
 
     //Artshow
     Route::resource('/artshow', ArtshowController::class);

@@ -4,34 +4,42 @@
 @section('content')
     <div class="container">
         <h1 class="pt-2 pb-5 text-center">
-            Anmeldung Dealer's Den
+            Liste der Dealer
         </h1>
 
-        <div class="row pt-4 pb-2 justify-content-center">
-            <x-form.input-full ident="DealerName" pht="Kenthart" lt="Dealer Name" />
+        <div class="d-flex justify-content-center p-3">
+            <a href="{{ route('dealersden.create') }}" class="btn btn-primary">New Dealer</a>
         </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.input-full ident="DealerGalerie" pht="https://t.me/Kenths_Kreative_Corner"
-                lt="Art-Channel/-Group"/>
-        </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.select ident="DealerContactType" lt="Contact Way">
-                <option>Telegram</option>
-                <option>Phone</option>
-                <option>E-Mail</option>
-            </x-form.select>
-            <x-form.input-half ident="DealerContact" lt="Contact" />
-        </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.text ident="DealerSort" lt="Sortiment" pht="Fullsuits, Partials, Art-Works" />
-        </div>
-        <div class="row py-2 justify-content-center">
-            <x-form.image ident="DealerLogo" lt="Logo"></x-form.image>
-            <x-form.select ident="DealerSpace" lt="Space">
-                <option>0 Tische</option>
-                <option>1 Tisch</option>
-                <option>2 Tische</option>
-            </x-form.select>
-        </div>
+
+        <div class="justify-center px-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Dealer List</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Dealer</th>
+                                <th scope="col">Infos</th>
+                                <th scope="col">Social Media</th>
+                                <th scope="col">Logo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($dealers as $dealer)
+                                <tr>
+                                    <th scope="row">{{ $dealer->id }}</th>
+                                    <td>{{ $dealer->name }}</td>
+                                    <td>{{ $dealer->info }}</td>
+                                    <td>{{ $dealer->gallery_link }}</td>
+                                    <td>{{ $dealer->icon_file }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
     </div>
 @endsection
