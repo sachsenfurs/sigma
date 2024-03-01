@@ -110,10 +110,13 @@ class TimetableEntryResource extends Resource
                         $suffix = '';
                         if ($record->cancelled) {
                             $suffix = ' - ' . __('Cancelled');
-                        } else if ($record->new) {
-                            $suffix = ' - ' . __('New');
-                        } else  if ($record->hasTimeChanged) {
-                            $suffix = ' - ' . __('Changed');
+                        } else {
+                            if ($record->new) {
+                                $suffix = ' - ' . __('New');
+                            }
+                            if ($record->hasTimeChanged) {
+                                $suffix = ' - ' . __('Changed');
+                            }
                         }
                         return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
                     })
@@ -123,9 +126,7 @@ class TimetableEntryResource extends Resource
                     ->color(function (Model $record) {
                         if ($record->cancelled) {
                             return 'danger';
-                        } else if ($record->new) {
-                            return 'info';
-                        } else if ($record->hasTimeChanged) {
+                        } else if ($record->new || $record->hasTimeChanged) {
                             return 'info';
                         }
                         return 'secondary';
