@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -76,6 +77,7 @@ class SigEventResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('timetable_entries_count', 'desc')
+            ->defaultPaginationPageOption('25')
             ->emptyStateHeading(__('No SIGs available'))
             ->filters([
                 //
@@ -101,6 +103,13 @@ class SigEventResource extends Resource
             'index' => Pages\ListSigEvents::route('/'),
             'create' => Pages\CreateSigEvent::route('/create'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TimetableEntriesTable::class,
         ];
     }
 

@@ -40,6 +40,7 @@
     "Set up reminder Notifications": "Erinnerungen für SIGs einrichten",
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
 
+    "View": "Anzeigen",
     "Edit": "Bearbeiten",
 
     "Not listed in schedule": "Nicht im Programmplan",
@@ -75,6 +76,9 @@
 
     "Edit Time Slot": "Timeslot bearbeiten",
     "Schedule Entry": "Kalendereintrag",
+    "Schedule Entries": "Kalendereinträge",
+    "Edit Schedule Entry": "Kalendereintrag bearbeiten",
+    "Delete Schedule Entry": "Kalendereintrag löschen",
 
     "Slot Start": "Slot Start",
     "Slot End": "Slot Ende",
