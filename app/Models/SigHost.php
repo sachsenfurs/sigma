@@ -30,7 +30,8 @@ class SigHost extends Model
         'hide',
     ];
 
-    public function user() {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
     }
 
