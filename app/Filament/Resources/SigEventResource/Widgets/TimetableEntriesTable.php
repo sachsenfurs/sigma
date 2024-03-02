@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Table;
@@ -70,6 +71,10 @@ class TimetableEntriesTable extends BaseWidget
     protected function getTableEntryActions(): array
     {
         return [
+            ViewAction::make('view')
+                ->label('View')
+                ->translateLabel()
+                ->url(fn(TimetableEntry $entry) => route('filament.admin.resources.timetable-entries.edit', $entry)),
             EditAction::make('edit')
                 ->label('Edit')
                 ->translateLabel()
