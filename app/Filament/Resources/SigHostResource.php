@@ -19,7 +19,10 @@ class SigHostResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
 
-    protected static ?string $label = 'SIG Hosts';
+    public static function getPluralLabel(): ?string
+    {
+        return __('Hosts');
+    }
 
     public static function form(Form $form): Form
     {

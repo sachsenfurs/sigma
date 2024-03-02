@@ -17,10 +17,12 @@ class SigTagResource extends Resource
     protected static ?string $model = SigTag::class;
 
     protected static ?string $navigationGroup = 'SIG';
-
-    protected static ?string $label = 'SIG Tags';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Tags');
+    }
     public static function form(Form $form): Form
     {
         return $form

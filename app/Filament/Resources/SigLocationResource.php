@@ -17,7 +17,19 @@ class SigLocationResource extends Resource
 {
     protected static ?string $model = SigLocation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+
+    protected static ?string $navigationGroup = 'SIG';
+
+    public static function getLabel(): ?string
+    {
+        return __('Location');
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __('Locations');
+    }
 
     public static function form(Form $form): Form
     {
