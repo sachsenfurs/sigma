@@ -45,38 +45,7 @@ class SigEventResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sigHost.name')
-                    ->label('Host')
-                    ->translateLabel()
-                    ->searchable()
-                    ->formatStateUsing(function (Model $record) {
-                        $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                        return $record->sigHost->name . $regNr;
-                    })
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('languages')
-                    ->label('Languages')
-                    ->translateLabel()
-                    ->view('filament.tables.columns.sig-event.flag-icon'),
-                Tables\Columns\TextColumn::make('sigLocation.name')
-                    ->label('Location')
-                    ->translateLabel()
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sigTags.description_localized')
-                    ->label('Tags')
-                    ->translateLabel()
-                    ->badge(),
-                Tables\Columns\TextColumn::make('timetable_entries_count')
-                    ->label('In Schedule')
-                    ->translateLabel()
-                    ->counts('timetableEntries')
-                    ->sortable(),
-            ])
+            ->columns(self::getTableColumns())
             ->defaultSort('timetable_entries_count', 'desc')
             ->defaultPaginationPageOption('25')
             ->emptyStateHeading(__('No SIGs available'))
@@ -111,6 +80,42 @@ class SigEventResource extends Resource
     {
         return [
             TimetableEntriesTable::class,
+        ];
+    }
+
+    private static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('sigHost.name')
+                ->label('Host')
+                ->translateLabel()
+                ->searchable()
+                ->formatStateUsing(function (Model $record) {
+                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
+                    return $record->sigHost->name . $regNr;
+                })
+                ->sortable(),
+            Tables\Columns\ImageColumn::make('languages')
+                ->label('Languages')
+                ->translateLabel()
+                ->view('filament.tables.columns.sig-event.flag-icon'),
+            Tables\Columns\TextColumn::make('sigLocation.name')
+                ->label('Location')
+                ->translateLabel()
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('sigTags.description_localized')
+                ->label('Tags')
+                ->translateLabel()
+                ->badge(),
+            Tables\Columns\TextColumn::make('timetable_entries_count')
+                ->label('In Schedule')
+                ->translateLabel()
+                ->counts('timetableEntries')
+                ->sortable(),
         ];
     }
 

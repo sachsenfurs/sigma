@@ -41,105 +41,22 @@ class TimetableEntryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('sig_event_id')
-                    ->label('Event')
-                    ->translateLabel()
-                    ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        return $record->name . ' - ' . $record->sigLocation->name . ' ' . $record->sigLocation->description;
-                    })
-                    ->required()
-                    ->disabled(fn (string $operation): bool => $operation !== 'create'),
-                Forms\Components\Select::make('sig_location_id')
-                    ->label('Different Location')
-                    ->translateLabel()
-                    ->options(function(): array {
-                        return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
-                            if ($sigLocation->description) {
-                                return [$sigLocation->id => $sigLocation->name . ' - ' . $sigLocation->description];
-                            }
-                            return [$sigLocation->id => $sigLocation->name];
-                        })->toArray();
-                    })
-                    ->searchable()
-                    ->preload()
-                    ->placeholder(__('No different Location')),
-                Forms\Components\DateTimePicker::make('start')
-                    ->label('Beginning')
-                    ->translateLabel()
-                    ->format('Y-m-d\TH:i')
-                    ->seconds(false)
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end')
-                    ->label('End')
-                    ->translateLabel()
-                    ->format('Y-m-d\TH:i')
-                    ->seconds(false)
-                    ->required(),
-                Forms\Components\Checkbox::make('new')
-                    ->label('New Event')
-                    ->translateLabel()
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('cancelled')
-                    ->label('Event Cancelled')
-                    ->translateLabel()
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('hide')
-                    ->label('Internal Event')
-                    ->translateLabel(),
-                Forms\Components\Checkbox::make('reset_update')
-                    ->label('Reset \'Changed\'-flag')
-                    ->translateLabel()
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
-                Forms\Components\Checkbox::make('send_update')
-                    ->label('Announce Changes')
-                    ->translateLabel()
-                    ->helperText(__('This needs to be checked if the event should be marked as changed!'))
-                    ->hidden(fn (string $operation): bool => $operation !== 'edit'),
+                self::getSigEventField(),
+                self::getSigLocationField(),
+                self::getSigStartField(),
+                self::getSigEndField(),
+                self::getSigNewField(),
+                self::getSigCancelledField(),
+                self::getSigHideField(),
+                self::getResetUpdateField(),
+                self::getSendUpdateField(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('timestamp')
-                    ->getStateUsing(function ($record) {
-                        $suffix = '';
-                        if ($record->cancelled) {
-                            $suffix = ' - ' . __('Cancelled');
-                        } else {
-                            if ($record->new) {
-                                $suffix = ' - ' . __('New');
-                            }
-                            if ($record->hasTimeChanged) {
-                                $suffix = ' - ' . __('Changed');
-                            }
-                        }
-                        return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
-                    })
-                    ->badge(function (Model $record) {
-                        return $record->cancelled || $record->new || $record->hasTimeChanged;
-                    })
-                    ->color(function (Model $record) {
-                        if ($record->cancelled) {
-                            return 'danger';
-                        } else if ($record->new || $record->hasTimeChanged) {
-                            return 'info';
-                        }
-                        return 'secondary';
-                    })
-                    ->label('Time span')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('sigEvent.name')
-                    ->label('Event')
-                    ->translateLabel()
-                    ->searchable(),
-                Tables\Columns\TextColumn ::make('sigLocation.name')
-                    ->badge()
-                    ->label('Location')
-                    ->translateLabel(),
-            ])
+            ->columns(self::getTableColumns())
             ->defaultPaginationPageOption('all')
             ->defaultGroup(
                 Group::make('start')
@@ -148,26 +65,7 @@ class TimetableEntryResource extends Resource
                     ->getTitleFromRecordUsing(fn (Model $record) => Str::upper($record->start->dayName) . ', ' . $record->start->format('d.m.Y'))
             )
             ->filters([
-                Tables\Filters\SelectFilter::make('sigLocation')
-                    ->label('Location')
-                    ->translateLabel()
-                    ->options(function (Model $record) {
-                        // If the location has a description, append it to the name
-                        if ($record->description) {
-                            return $record->name . ' - ' . $record->description;
-                        }
-                        return $record->name;
-                    })
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        // If the location has a description, append it to the name
-                        if ($record->description) {
-                            return $record->name . ' - ' . $record->description;
-                        }
-                        return $record->name;
-                    })
-                    ->searchable()
-                    ->preload()
-                    ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name')),
+                self::getLocationFilter(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -202,4 +100,160 @@ class TimetableEntryResource extends Resource
         ];
     }
 
+    private static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('timestamp')
+                ->getStateUsing(function ($record) {
+                    $suffix = '';
+                    if ($record->cancelled) {
+                        $suffix = ' - ' . __('Cancelled');
+                    } else {
+                        if ($record->new) {
+                            $suffix = ' - ' . __('New');
+                        }
+                        if ($record->hasTimeChanged) {
+                            $suffix = ' - ' . __('Changed');
+                        }
+                    }
+                    return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
+                })
+                ->badge(function (Model $record) {
+                    return $record->cancelled || $record->new || $record->hasTimeChanged;
+                })
+                ->color(function (Model $record) {
+                    if ($record->cancelled) {
+                        return 'danger';
+                    } else if ($record->new || $record->hasTimeChanged) {
+                        return 'info';
+                    }
+                    return 'secondary';
+                })
+                ->label('Time span')
+                ->translateLabel(),
+            Tables\Columns\TextColumn::make('sigEvent.name')
+                ->label('Event')
+                ->translateLabel()
+                ->searchable(),
+            Tables\Columns\TextColumn ::make('sigLocation.name')
+                ->badge()
+                ->label('Location')
+                ->translateLabel(),
+        ];
+    }
+
+    private static function getLocationFilter(): Tables\Filters\SelectFilter
+    {
+        return Tables\Filters\SelectFilter::make('sigLocation')
+            ->label('Location')
+            ->translateLabel()
+            ->options(function (Model $record) {
+                // If the location has a description, append it to the name
+                if ($record->description) {
+                    return $record->name . ' - ' . $record->description;
+                }
+                return $record->name;
+            })
+            ->getOptionLabelFromRecordUsing(function (Model $record) {
+                // If the location has a description, append it to the name
+                if ($record->description) {
+                    return $record->name . ' - ' . $record->description;
+                }
+                return $record->name;
+            })
+            ->searchable()
+            ->preload()
+            ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'));
+    }
+
+    private static function getSigEventField(): Forms\Components\Component
+    {
+        return Forms\Components\Select::make('sig_event_id')
+            ->label('Event')
+            ->translateLabel()
+            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name'))
+            ->getOptionLabelFromRecordUsing(function (Model $record) {
+                return $record->name . ' - ' . $record->sigLocation->name . ' ' . $record->sigLocation->description;
+            })
+            ->required()
+            ->disabled(fn (string $operation): bool => $operation !== 'create');
+    }
+
+    private static function getSigLocationField(): Forms\Components\Component
+    {
+        return Forms\Components\Select::make('sig_location_id')
+            ->label('Different Location')
+            ->translateLabel()
+            ->options(function(): array {
+                return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
+                    if ($sigLocation->description) {
+                        return [$sigLocation->id => $sigLocation->name . ' - ' . $sigLocation->description];
+                    }
+                    return [$sigLocation->id => $sigLocation->name];
+                })->toArray();
+            })
+            ->searchable()
+            ->preload()
+            ->placeholder(__('No different Location'));
+    }
+
+    private static function getSigStartField(): Forms\Components\Component
+    {
+        return Forms\Components\DateTimePicker::make('start')
+            ->label('Beginning')
+            ->translateLabel()
+            ->format('Y-m-d\TH:i')
+            ->seconds(false)
+            ->required();
+    }
+
+    private static function getSigEndField(): Forms\Components\Component
+    {
+        return Forms\Components\DateTimePicker::make('end')
+            ->label('End')
+            ->translateLabel()
+            ->format('Y-m-d\TH:i')
+            ->seconds(false)
+            ->required();
+    }
+
+    private static function getSigNewField(): Forms\Components\Component
+    {
+        return Forms\Components\Checkbox::make('new')
+            ->label('New Event')
+            ->translateLabel()
+            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+    }
+
+    private static function getSigCancelledField(): Forms\Components\Component
+    {
+        return Forms\Components\Checkbox::make('cancelled')
+            ->label('Event Cancelled')
+            ->translateLabel()
+            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+    }
+
+    private static function getSigHideField(): Forms\Components\Component
+    {
+        return Forms\Components\Checkbox::make('hide')
+            ->label('Internal Event')
+            ->translateLabel();
+    }
+
+    private static function getResetUpdateField(): Forms\Components\Component
+    {
+        return Forms\Components\Checkbox::make('reset_update')
+            ->label('Reset \'Changed\'-flag')
+            ->translateLabel()
+            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+    }
+
+    private static function getSendUpdateField(): Forms\Components\Component
+    {
+        return Forms\Components\Checkbox::make('send_update')
+            ->label('Announce Changes')
+            ->translateLabel()
+            ->helperText(__('This needs to be checked if the event should be marked as changed!'))
+            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+    }
 }
