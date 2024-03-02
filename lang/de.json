@@ -70,7 +70,10 @@
     "Time slots": "Time Slots",
     "Actions": "Aktionen",
     "Cancel": "Abbrechen",
+
     "Create Tag": "Tag erstellen",
+    "Edit Tag": "Tag bearbeiten",
+    "Assigned SIGs": "Zugewiesene SIGs",
 
     "Delete SIG": "SIG Löschen",
     "Create Schedule Entry": "Neuen Kalendereintrag erstellen",
