@@ -182,6 +182,14 @@ class SigEventResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required()
+                    ->default(function () {
+                        // Try to prefill the host (passed when creating a new SIG from the host's detail page)
+                        $hostId = request()->input('host_id') ?? null;
+                        if (SigHost::find($hostId)) {
+                            return $hostId;
+                        }
+                        return null;
+                    })
                     ->getOptionLabelFromRecordUsing(function (Model $record) {
                         $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
                         return $record->name . $regNr;
