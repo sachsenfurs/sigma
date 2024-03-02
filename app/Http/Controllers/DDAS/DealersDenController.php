@@ -35,7 +35,26 @@ class DealersDenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::where('id', auth()->user()->id)->first();
+
+        if (!Dealer::where('user_id', $user->id)->first())
+        {
+            $dealer = Dealer::created([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+        }
+        else
+        {
+            $dealer = Dealer::where('user_id', $user->id)->first();
+            $dealer->name = $request->name;
+            $dealer->description = $request->description;
+            $dealer->save();
+            $dealer->tags()->sync($request->tags);
+        }
+        dd("got it");
+        return redirect('dealersden');
     }
 
     /**
@@ -43,7 +62,8 @@ class DealersDenController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $dealer = Dealer::where('id', $id)->first();
+        return view('DDAS.dealersden.show', compact('dealer'));
     }
 
     /**

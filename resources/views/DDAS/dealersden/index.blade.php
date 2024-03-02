@@ -30,10 +30,17 @@
                             @foreach ($dealers as $dealer)
                                 @if ($dealer->approved == 1)
                                     <tr>
-                                        <td>{{ $dealer->name }}</td>
-                                        <td>{{ $dealer->info }}</td>
-                                        <td>{{ $dealer->gallery_link }}</td>
-                                        <td>{{ $dealer->icon_file }}</td>
+                                        <td class="w-10">
+                                            <a href="{{ route('dealersden.show', $dealer) }}">{{ $dealer->name }}</a>
+                                        </td>
+                                        <td class="w-50">{{ $dealer->info }}</td>
+                                        <td>
+                                            <a href="{{ $dealer->gallery_link }}">
+                                                {{ $dealer->name }} Social-Media
+                                            </a>
+                                        </td>
+                                        <td><img src="{{ $dealer->icon_file }}" alt="{{ $dealer->name }}" width="120">
+                                        </td>
                                     </tr>
                                 @endif
                             @endforeach

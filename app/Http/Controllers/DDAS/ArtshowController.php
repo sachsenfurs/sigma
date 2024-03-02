@@ -40,15 +40,21 @@ class ArtshowController extends Controller
      */
     public function store(Request $request)
     {
-        dd("got it");
+        // dd("got it");
+        
+        return redirect('artshow');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ArtshowArtist $asa)
+    public function show(string $id)
     {
-        return view('DDAS.artshow.show',[ 'artshow' => ArtshowArtist::all()]);
+        $artist = ArtshowArtist::find($id);
+        $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
+
+        // dd($artist, $items);
+        return view('DDAS.artshow.show', compact('artist', 'item'));
     }
 
     /**
@@ -56,7 +62,11 @@ class ArtshowController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $artist = ArtshowArtist::find($id);
+        $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
+
+        // dd($artist, $items);
+        return view('DDAS.artshow.edit', compact('artist', 'item'));
     }
 
     /**

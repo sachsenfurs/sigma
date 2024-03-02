@@ -17,7 +17,10 @@ class SigHostResource extends Resource
     protected static ?string $model = SigHost::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Sig';
+    protected static ?string $navigationGroup = 'SIG';
+
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         return $form
