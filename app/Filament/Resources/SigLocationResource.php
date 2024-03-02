@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SigLocationResource extends Resource
 {
@@ -92,6 +90,8 @@ class SigLocationResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('infodisplay')
+                    ->label('Infodisplay')
+                    ->translateLabel()
                     ->boolean()
                     ->sortable(),
             ])
