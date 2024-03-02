@@ -36,21 +36,34 @@ class SigLocationResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Name')
+                    ->translateLabel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('description')
-                    ->required()
+                    ->label('Description')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('render_ids'),
                 Forms\Components\TextInput::make('floor')
+                    ->label('Floor')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('room')
+                    ->label('Room')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('infodisplay')
-                    ->required(),
+                    ->label('Digital display in front of the door?')
+                    ->translateLabel()
+                    ->inline(false),
                 Forms\Components\TextInput::make('roomsize')
+                    ->label('Room Size')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('seats')
+                    ->label('Seats')
+                    ->translateLabel()
                     ->maxLength(255),
             ]);
     }
@@ -60,37 +73,41 @@ class SigLocationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Name')
+                    ->translateLabel()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->label('Description')
+                    ->translateLabel()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('floor')
-                    ->searchable(),
+                    ->label('Floor')
+                    ->translateLabel()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('room')
-                    ->searchable(),
+                    ->label('Room')
+                    ->translateLabel()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\IconColumn::make('infodisplay')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('roomsize')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seats')
-                    ->searchable(),
+                    ->boolean()
+                    ->sortable(),
             ])
+            ->defaultPaginationPageOption('all')
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SigEventsRelationManager::class,
         ];
     }
 

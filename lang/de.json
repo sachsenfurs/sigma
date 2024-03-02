@@ -34,6 +34,12 @@
     "Name": "Name",
     "Delete Location": "Location löschen",
 
+    "Floor": "Stockwerk",
+    "Room": "Raum",
+    "Seats": "Sitze",
+    "Room Size": "Raumgröße",
+    "Digital display in front of the door?": "Digitale Anzeige vor der Tür?",
+
     "Welcome to the SIG-Manager, here you can:": "Herzlich Willkommen beim SIG-Manager, hier kannst du:",
     "Access the event schedule": "Den Programmplan abrufen",
     "View Schedule": "Zum Programmplan",

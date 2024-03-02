@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\SigHostResource\RelationManagers;
+namespace App\Filament\Resources\SigLocationResource\RelationManagers;
 
 use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -34,7 +34,7 @@ class SigEventsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->url(route('filament.admin.resources.sig-events.create', [
-                        'host_id' => $this->getOwnerRecord()->id,
+                        'location_id' => $this->getOwnerRecord()->id,
                     ])),
             ])
             ->actions([

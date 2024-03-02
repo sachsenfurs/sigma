@@ -6,6 +6,7 @@ use App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
+use App\Models\SigLocation;
 use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Filament\Forms;
@@ -232,6 +233,14 @@ class SigEventResource extends Resource
                         ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
                         ->searchable()
                         ->preload()
+                        ->default(function () {
+                            // Try to prefill the location (passed when creating a new SIG from the location detail page)
+                            $locationId = request()->input('location_id') ?? null;
+                            if (SigLocation::find($locationId)) {
+                                return $locationId;
+                            }
+                            return null;
+                        })
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
                             // If the location has a description, append it to the name
                             if ($record->description) {

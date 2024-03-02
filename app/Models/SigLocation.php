@@ -24,11 +24,13 @@ class SigLocation extends Model
         'infodisplay' => "boolean",
     ];
 
-
     public function translation() {
         return $this->hasMany(SigLocationTranslation::class);
     }
 
-
+    public function sigEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SigEvent::class);
+    }
 
 }
