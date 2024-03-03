@@ -299,6 +299,14 @@ class SigEventResource extends Resource
                         ->multiple()
                         ->columnSpanFull()
                         ->live()
+                        ->default(function () {
+                            // Try to prefill the tag (passed when creating a new SIG from the tag detail page)
+                            $tagId = request()->input('tag_id') ?? null;
+                            if (SigTag::find($tagId)) {
+                                return [$tagId];
+                            }
+                            return null;
+                        })
                         ->createOptionModalHeading(__('Create Tag'))
                         ->createOptionForm([
                             Forms\Components\TextInput::make('name')

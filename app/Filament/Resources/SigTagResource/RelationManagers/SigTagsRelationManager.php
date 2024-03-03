@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigTagResource\RelationManagers;
 
+use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +18,7 @@ class SigTagsRelationManager extends RelationManager
             ->heading(__('Assigned SIGs'))
             ->recordTitleAttribute('name')
             ->columns(self::getTableColumns())
-            ->defaultPaginationPageOption('25')
+            ->headerActions(self::getTableHeaderActions())
             ->actions(self::getTableEntryActions());
     }
 
@@ -47,6 +48,20 @@ class SigTagsRelationManager extends RelationManager
                 ->translateLabel()
                 ->searchable()
                 ->sortable(),
+            Tables\Columns\TextColumn::make('timetable_entries_count')
+                ->label('In Schedule')
+                ->translateLabel()
+                ->counts('timetableEntries'),
+        ];
+    }
+
+    protected function getTableHeaderActions(): array
+    {
+        return [
+            Tables\Actions\CreateAction::make()
+                ->url(route('filament.admin.resources.sig-events.create', [
+                    'tag_id' => $this->getOwnerRecord()->id,
+                ])),
         ];
     }
 
@@ -54,7 +69,7 @@ class SigTagsRelationManager extends RelationManager
     {
         return [
             Tables\Actions\EditAction::make()
-                ->url(fn ($record) => route('filament.admin.resources.sig-events.edit', $record)),
+                ->url(fn(SigEvent $entry) => route('filament.admin.resources.sig-events.edit', $entry)),
         ];
     }
 }
