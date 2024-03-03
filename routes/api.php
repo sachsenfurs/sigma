@@ -22,3 +22,4 @@ Route::get("/events", [\App\Http\Controllers\Api\EventsEndpoint::class, "index"]
 Route::get("/locations", [\App\Http\Controllers\Api\LocationsEndpoint::class, "index"])->name("api.locations");
 Route::get("/socials", [\App\Http\Controllers\Api\SocialsEndpoint::class, "index"])->name("api.socials");
 Route::get("/essentials", [\App\Http\Controllers\Api\EssentialsEndpoint::class, "index"])->name("api.essentials");
+Route::get("/auctions", [\App\Http\Controllers\Api\AuctionEndpoint::class, "index"])->name("api.auction");

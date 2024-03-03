@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sig;
 
+use App\Models\User;
 use \Gate;
 use App\Http\Controllers\Controller;
 use App\Models\SigHost;
@@ -17,6 +18,24 @@ class SigHostController extends Controller
             $hosts = SigHost::public()->get();
 
         return view("hosts.index", compact("hosts"));
+    }
+
+    public function create(){
+        $user = User::where('reg_id', auth()->user()->reg_id)->first();
+        return view('hosts.create', compact('user'));
+
+    }
+    public function store(Request $request){
+
+        $host = SigHost::create([
+            'name' => $request->input('SigHostName'),
+            'description' => 'Dies ist ein Test',
+            'hide' => '0',
+            'reg_id' => $request->input('UserRegID'),
+        ]);
+
+        return redirect('sigsignin');
+
     }
 
     public function show(SigHost $host) {

@@ -25,6 +25,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "572",
                 'seats' => 850,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Open Stage",
@@ -34,6 +35,7 @@ class RingbergSeeder extends Seeder
                 'room' => "KE 001",
                 'roomsize' => "",
                 'seats' => 0,
+                'show_default' => true,
             ],
             [
                 'name' => "Brandenburg",
@@ -43,6 +45,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "35",
                 'seats' => 80,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Sachsen 1+2",
@@ -62,6 +65,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "102",
                 'seats' => 100,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Niedersachsen",
@@ -71,6 +75,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "50",
                 'seats' => 50,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Saarland",
@@ -80,6 +85,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "51",
                 'seats' => 50,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Thüringen",
@@ -89,6 +95,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "52",
                 'seats' => 50,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Bayern",
@@ -98,6 +105,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "52",
                 'seats' => 50,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Berlin",
@@ -108,6 +116,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "68",
                 'seats' => 50,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "Suhl",
@@ -117,6 +126,7 @@ class RingbergSeeder extends Seeder
                 'roomsize' => "96",
                 'seats' => 0,
                 'infodisplay' => true,
+                'show_default' => true,
             ],
             [
                 'name' => "WC",
@@ -200,6 +210,7 @@ class RingbergSeeder extends Seeder
                 'name' => "4-Jahreszeiten",
                 'render_ids' => json_encode(["seasonsArea"]),
                 'floor' => "0",
+                'show_default' => true,
             ],
             [
                 'name' => "Rezeption",
@@ -210,6 +221,7 @@ class RingbergSeeder extends Seeder
                 'name' => "Kulisse",
                 'render_ids' => json_encode([]),
                 'floor' => "-2",
+                'show_default' => true,
             ],
             [
                 'name' => "Außenbereich",
