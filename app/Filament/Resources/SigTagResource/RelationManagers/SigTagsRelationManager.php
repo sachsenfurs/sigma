@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\SigHostResource\RelationManagers;
+namespace App\Filament\Resources\SigTagResource\RelationManagers;
 
 use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -8,9 +8,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class SigEventsRelationManager extends RelationManager
+class SigTagsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'sigEvents';
+    protected static string $relationship = 'sigEvent';
 
     public function table(Table $table): Table
     {
@@ -60,7 +60,7 @@ class SigEventsRelationManager extends RelationManager
         return [
             Tables\Actions\CreateAction::make()
                 ->url(route('filament.admin.resources.sig-events.create', [
-                    'host_id' => $this->getOwnerRecord()->id,
+                    'tag_id' => $this->getOwnerRecord()->id,
                 ])),
         ];
     }

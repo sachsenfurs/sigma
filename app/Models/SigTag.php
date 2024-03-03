@@ -18,11 +18,13 @@ class SigTag extends Model
 
     public $timestamps = false;
 
-    public function sigEvent() {
+    public function sigEvent(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(SigEvent::class);
     }
 
-    public function getDescriptionLocalizedAttribute() {
+    public function getDescriptionLocalizedAttribute(): string
+    {
         return App::getLocale() == "en" ? $this->description_en : $this->description;
     }
 

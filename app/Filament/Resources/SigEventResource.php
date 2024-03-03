@@ -3,8 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
+use App\Models\SigLocation;
 use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Filament\Forms;
@@ -45,39 +47,9 @@ class SigEventResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sigHost.name')
-                    ->label('Host')
-                    ->translateLabel()
-                    ->searchable()
-                    ->formatStateUsing(function (Model $record) {
-                        $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                        return $record->sigHost->name . $regNr;
-                    })
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('languages')
-                    ->label('Languages')
-                    ->translateLabel()
-                    ->view('filament.tables.columns.sig-event.flag-icon'),
-                Tables\Columns\TextColumn::make('sigLocation.name')
-                    ->label('Location')
-                    ->translateLabel()
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sigTags.description_localized')
-                    ->label('Tags')
-                    ->translateLabel()
-                    ->badge(),
-                Tables\Columns\TextColumn::make('timetable_entries_count')
-                    ->label('In Schedule')
-                    ->translateLabel()
-                    ->counts('timetableEntries')
-                    ->sortable(),
-            ])
+            ->columns(self::getTableColumns())
             ->defaultSort('timetable_entries_count', 'desc')
+            ->defaultPaginationPageOption('25')
             ->emptyStateHeading(__('No SIGs available'))
             ->filters([
                 //
@@ -106,6 +78,49 @@ class SigEventResource extends Resource
             'index' => Pages\ListSigEvents::route('/'),
             'create' => Pages\CreateSigEvent::route('/create'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TimetableEntriesTable::class,
+        ];
+    }
+
+    private static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('sigHost.name')
+                ->label('Host')
+                ->translateLabel()
+                ->searchable()
+                ->formatStateUsing(function (Model $record) {
+                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
+                    return $record->sigHost->name . $regNr;
+                })
+                ->sortable(),
+            Tables\Columns\ImageColumn::make('languages')
+                ->label('Languages')
+                ->translateLabel()
+                ->view('filament.tables.columns.sig-event.flag-icon'),
+            Tables\Columns\TextColumn::make('sigLocation.name')
+                ->label('Location')
+                ->translateLabel()
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('sigTags.description_localized')
+                ->label('Tags')
+                ->translateLabel()
+                ->badge(),
+            Tables\Columns\TextColumn::make('timetable_entries_count')
+                ->label('In Schedule')
+                ->translateLabel()
+                ->counts('timetableEntries')
+                ->sortable(),
         ];
     }
 
@@ -178,6 +193,14 @@ class SigEventResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required()
+                    ->default(function () {
+                        // Try to prefill the host (passed when creating a new SIG from the host's detail page)
+                        $hostId = request()->input('host_id') ?? null;
+                        if (SigHost::find($hostId)) {
+                            return $hostId;
+                        }
+                        return null;
+                    })
                     ->getOptionLabelFromRecordUsing(function (Model $record) {
                         $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
                         return $record->name . $regNr;
@@ -220,6 +243,14 @@ class SigEventResource extends Resource
                         ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
                         ->searchable()
                         ->preload()
+                        ->default(function () {
+                            // Try to prefill the location (passed when creating a new SIG from the location detail page)
+                            $locationId = request()->input('location_id') ?? null;
+                            if (SigLocation::find($locationId)) {
+                                return $locationId;
+                            }
+                            return null;
+                        })
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
                             // If the location has a description, append it to the name
                             if ($record->description) {
@@ -273,6 +304,14 @@ class SigEventResource extends Resource
                         ->multiple()
                         ->columnSpanFull()
                         ->live()
+                        ->default(function () {
+                            // Try to prefill the tag (passed when creating a new SIG from the tag detail page)
+                            $tagId = request()->input('tag_id') ?? null;
+                            if (SigTag::find($tagId)) {
+                                return [$tagId];
+                            }
+                            return null;
+                        })
                         ->createOptionModalHeading(__('Create Tag'))
                         ->createOptionForm([
                             Forms\Components\TextInput::make('name')
