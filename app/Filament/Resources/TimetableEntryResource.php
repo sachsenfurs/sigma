@@ -28,11 +28,6 @@ class TimetableEntryResource extends Resource
     protected static ?string $cluster = SigPlanning::class;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('Event Schedule');
-    }
-
     public static function getLabel(): ?string
     {
         return __('Event Schedule');
@@ -177,30 +172,29 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Select::make('sig_event_id')
             ->label('Event')
             ->translateLabel()
-            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name'))
+            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHost'))
             ->getOptionLabelFromRecordUsing(function (Model $record) {
-                return $record->name . ' - ' . $record->sigLocation->name . ' ' . $record->sigLocation->description;
+                return $record->name . ' - ' . $record->sigHost->name;
             })
             ->required()
-            ->disabled(fn (string $operation): bool => $operation !== 'create');
+            ->searchable()
+            ->preload();
     }
 
     private static function getSigLocationField(): Forms\Components\Component
     {
         return Forms\Components\Select::make('sig_location_id')
-            ->label('Different Location')
+            ->label('Location')
             ->translateLabel()
+            ->relationship('sigLocation', 'name')
             ->options(function(): array {
                 return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
-                    if ($sigLocation->description) {
-                        return [$sigLocation->id => $sigLocation->name . ' - ' . $sigLocation->description];
-                    }
-                    return [$sigLocation->id => $sigLocation->name];
+                    $name = $sigLocation->description ? $sigLocation->name . " - " . $sigLocation->description : $sigLocation->name;
+                    return [ $sigLocation->id => $name ];
                 })->toArray();
             })
             ->searchable()
-            ->preload()
-            ->placeholder(__('No different Location'));
+            ->preload();
     }
 
     private static function getSigStartField(): Forms\Components\Component
@@ -228,7 +222,10 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Checkbox::make('new')
             ->label('New Event')
             ->translateLabel()
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->formatStateUsing(function() {
+                // automatically prefill to "true" when con (in this case the first event) has started
+                return Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+            });
     }
 
     private static function getSigCancelledField(): Forms\Components\Component
