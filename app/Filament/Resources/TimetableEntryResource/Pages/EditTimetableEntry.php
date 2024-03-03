@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
-
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
