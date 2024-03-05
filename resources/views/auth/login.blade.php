@@ -12,7 +12,7 @@
                         <small><a href="{{ route("public.listview") }}">{{ __("View Schedule") }}</a></small>
                     </li>
                     <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-list-check"></i> {{ __("Signup for specific SIGs") }}</h5>
+                        <h5 class="mb-1"><i class="bi bi-list-check"></i> {{ __("Sign up for specific SIGs") }}</h5>
                     </li>
                     <li class="list-group-item">
                         <h5 class="mb-1"><i class="bi bi-gear"></i> {{ __("Manage your own SIGs") }}</h5>
