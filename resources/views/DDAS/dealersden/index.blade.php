@@ -8,10 +8,10 @@
         </h1>
 
         <div class="row pt-4 pb-2 justify-content-center">
-            <x-form.input-full ident="DealerName" pht="Kenthart" lt="Dealer Name" />
+            <x-form.input ident="DealerName" pht="Kenthart" lt="Dealer Name" />
         </div>
         <div class="row py-2 justify-content-center">
-            <x-form.input-full ident="DealerGalerie" pht="https://t.me/Kenths_Kreative_Corner"
+            <x-form.input ident="DealerGalerie" pht="https://t.me/Kenths_Kreative_Corner"
                 lt="Art-Channel/-Group"/>
         </div>
         <div class="row py-2 justify-content-center">
@@ -20,7 +20,7 @@
                 <option>Phone</option>
                 <option>E-Mail</option>
             </x-form.select>
-            <x-form.input-half ident="DealerContact" lt="Contact" />
+            <x-form.input ident="DealerContact" lt="Contact" />
         </div>
         <div class="row py-2 justify-content-center">
             <x-form.text ident="DealerSort" lt="Sortiment" pht="Fullsuits, Partials, Art-Works" />
