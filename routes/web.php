@@ -167,4 +167,17 @@ Route::group(['middleware' => "auth"], function() {
         Route::post("/translate", TranslateController::class)->name("translate");
     });
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
+
+    // Artshow
+    Route::get('/artshow', [ArtshowController::class, 'index'])->name('artshow.index');
+
+    // Dealers Den
+    Route::get('/dealersden', [DealersDenController::class, 'index'])->name('dealersden.index');
+
+    // Sig Sign In
+    Route::prefix('/sigsignin')->name('sigsignin.')->group(function() {
+        Route::get('/', [SigSignInController::class, 'index'])->name('index');
+        Route::post('/', [SigSignInController::class, 'store'])->name('store');
+        Route::get('/create', [SigSignInController::class, 'create'])->name('create');
+    });
 });
