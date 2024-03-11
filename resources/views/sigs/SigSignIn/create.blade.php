@@ -6,9 +6,12 @@
         <h1 class="pt-2 pb-5 text-center">{{ __('SIG Sign In') }}</h1>
 
         <div class="card">
-            <div class="card-body">
-                <form action="/sigsignin" method="POST">
-                    @csrf
+            <form action="/sigsignin" method="POST">
+                @csrf
+                <div class="card-header">
+                    <h3 class="text-center">{{ __('SIG Sign In') }}</h3>
+                </div>
+                <div class="card-body">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="text-center">{{ __('Personal Informations') }}</h3>
@@ -158,7 +161,7 @@
                     </div>
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h3 class="py-2 text-center">{{ __('Program planning') }}</h3>
+                            <h3 class="text-center">{{ __('Program planning') }}</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -263,11 +266,11 @@
                                 <div class="col-md-5 mb-3 pe-md-0">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4> {{ __('What do you need from us?')}} </h4>
+                                            {{ __('What do you need from us?') }}
                                         </div>
                                         <div class="card-body">
-                                            {{ __('Please select the things you need from us.')}} <br>
-                                            {{ __('If you need something else, please specify it below.')}}
+                                            {{ __('Please select the things you need from us.') }} <br>
+                                            {{ __('If you need something else, please specify it below.') }}
                                         </div>
                                     </div>
                                 </div>
@@ -282,7 +285,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <x-form.checkbox ident="SigNeedsFurSuport"
-                                                        lt="{{ __('Fursuit Support (Water, Fans, ...)')}}" />
+                                                        lt="{{ __('Fursuit Support (Water, Fans, ...)') }}" />
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-form.checkbox ident="SigNeedsSecu" lt="Security" />
@@ -294,7 +297,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-form.checkbox ident="SigNeedsOther"
-                                                        lt="{{__('Other (Please enter below!)')}}" />
+                                                        lt="{{ __('Other (Please enter below!)') }}" />
                                                 </div>
                                             </div>
                                         </div>
@@ -320,11 +323,13 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="justify-center btn btn-primary mt-3">
-                        Submit
-                    </button>
-                </form>
-            </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">{{__('Submit')}}</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

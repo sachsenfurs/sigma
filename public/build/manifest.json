@@ -8,7 +8,7 @@
     "src": "bootstrap-icons.woff2"
   },
   "lang/de.json": {
-    "file": "assets/de-ca0fbd27.js",
+    "file": "assets/de-49346f8f.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -45,7 +45,7 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-beef4f5a.js",
+    "file": "assets/app-dc250872.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
