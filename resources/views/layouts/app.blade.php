@@ -76,22 +76,22 @@
                     @endif
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle px-3" href="#" id="SignInDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-briefcase"></i> {{ __("Anmeldungen")}}
+                            <i class="bi bi-briefcase"></i> {{ __("Sign Up's")}}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="SignInDropdownMenu">
                             <li>
                                 <a class="dropdown-item {{ Route::is("artshow.index") ? "active" : "" }}" href="{{ route("artshow.index") }}">
-                                    <i class="bi bi-cash-stack"></i> {{ __("ArtShow")}}
+                                    <i class="bi bi-cash-stack"></i> {{ __("Artshow Item Sign Up")}}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item {{ Route::is("dealersden.index") ? "active" : ""}}" href="{{ route("dealersden.index")}}">
-                                    <i class="bi bi-cash-stack"></i> {{ __("Dealer's Den")}}
+                                    <i class="bi bi-cash-stack"></i> {{ __("Dealers Den Sign Up")}}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item {{ Route::is("ssi.index") ? "activ" : ""}}" href="{{ route("sigsignin.index")}}">
-                                    <i class="bi bi-chat-left"></i> {{ __("Sig Anmeldung")}}
+                                    <i class="bi bi-chat-left"></i> {{ __("SIG Sign Up")}}
                                 </a>
                             </li>
                         </ul>

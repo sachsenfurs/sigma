@@ -1,24 +1,24 @@
 @extends('layouts.app')
-@section('title', __('Show Artshow Item'))
+@section('title', __('Art Show Item'))
 
 @section('content')
 
     <div class="container">
-        <h1 class="pt-2 pb-5 text-center">Show Artshow Item</h1>
+        <h1 class="pt-2 pb-5 text-center">{{ __('Show Art Show Items') }}</h1>
 
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Artshow Item</h3>
+                <h3 class="text-center">{{ __('Show Item') }}</h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col-md-5">
                         <div class="row">
                             <div class="col mb-3 pe-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Artist
+                                            {{ __('Artist') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -28,11 +28,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col pe-0">
+                            <div class="col pe-md-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Item
+                                            {{ __('Item Name') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -48,12 +48,16 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Bestätigung
+                                            {{ __('Approved') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            {{ $item->approved }}
+                                            @if ($item->approved == 0)
+                                                {{ __('No') }}
+                                            @elseif ($item->approved == 1)
+                                                {{ __('Yes') }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -62,35 +66,39 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Verkauft
+                                            {{ __('Sold') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            {{ $item->sold }}
+                                            @if ($item->sold == 0)
+                                                {{ __('No') }}
+                                            @elseif ($item->sold == 1)
+                                                {{ __('Yes') }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col pe-0">
+                            <div class="col pe-md-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Start Bid
+                                            {{ __('Start Bid') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            {{ $item->starting_bid }}
+                                            {{ $item->starting_bid }} €
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col pe-0">
+                            <div class="col pe-md-0 mb-3 mb-md-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
-                                            Charety
+                                            {{ __('Charity') }}
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -102,7 +110,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col mb-3 pe-0">
+                            <div class="col mb-3 pe-md-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
@@ -118,7 +126,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col mb-3 pe-0">
+                            <div class="col mb-3 pe-md-0">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="col">
@@ -133,13 +141,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <a href="{{ route('artshow.edit', $item->id) }}" class="btn btn-primary">Edit</a>
-                            </div>
-                        </div>
                     </div>
-                    <div class="col">
+                    <div class="col mb-3">
                         <div class="card">
                             <div class="card-header">
                                 <div class="col">
@@ -152,6 +155,32 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="col">
+                                    Additional Information
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ $item->additional_info }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('artshow.index') }}" class="btn btn-primary me-2">Back</a>
+                        <a href="{{ route('artshow.edit', $item->id) }}" class="btn btn-primary">Edit</a>
                     </div>
                 </div>
             </div>

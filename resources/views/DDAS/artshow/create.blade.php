@@ -3,12 +3,12 @@
 
 @section('content') <div class="container">
         <h1 class="pt-2 pb-5 text-center">
-            Anmeldung Artshow
+            {{ __('Artshow Item Sing In') }}
         </h1>
         <div class="card">
             <div class="card-header">
                 <h3 class="text-center">
-                    Neues Item
+                    {{ __('New Item') }}
                 </h3>
             </div>
             <div class="card-body">
@@ -31,7 +31,7 @@
                     <div class="row py-2 justify-content-center">
                         <x-form.upload ident="ArtistItemImage" lt="Image" />
                     </div>
-                    <button type="submit" class="justify-center btn btn-primary">Submit</button>
+                    <button type="submit" class="justify-center btn btn-primary">{{ __('Add Entry') }}</button>
                 </form>
             </div>
 

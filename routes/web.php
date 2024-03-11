@@ -174,7 +174,6 @@ Route::group(['middleware' => "auth"], function() {
     Route::resource('/artshow', ArtshowController::class);
 
     // Sig SignIn (Sigs Anmelden)
-    
     Route::resource('/sigsignin', SigSignInController::class);
 
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");

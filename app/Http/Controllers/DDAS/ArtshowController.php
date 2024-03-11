@@ -31,8 +31,10 @@ class ArtshowController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
 
+        $artist = ArtshowArtist::where('user_id', $user->id)->first();
+
         return view("DDAS.artshow.create", compact([
-            'user',]));
+            'user', 'artist']));
     }
 
     /**
@@ -40,8 +42,29 @@ class ArtshowController extends Controller
      */
     public function store(Request $request)
     {
-        // dd("got it");
-        
+        $user = User::where('id', auth()->user()->id)->first();
+
+        if (!ArtshowArtist::where('user_id', $user->id)->first())
+        {
+            ArtshowArtist::created([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'social' => $request->social,
+            ]);
+        }
+        else
+        {
+            ArtshowItem::create([
+                'artshow_artist_id' => $request->artshow_artist_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'description_en' => $request->description_en,
+                'starting_bid' => $request->starting_bid,
+                'charity_percentage' => $request->charity_percentage,
+                'additional_info' => $request->additional_info,
+                'image_file' => $request->image_file,
+            ]);
+        }
         return redirect('artshow');
     }
 
