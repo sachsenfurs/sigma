@@ -41,17 +41,22 @@ class TimetableEntryResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                self::getSigEventField(),
-                self::getSigLocationField(),
-                self::getSigStartField(),
-                self::getSigEndField(),
-                self::getSigNewField(),
-                self::getSigCancelledField(),
-                self::getSigHideField(),
-                self::getResetUpdateField(),
-                self::getSendUpdateField(),
-            ]);
+            ->schema(self::getSchema());
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            self::getSigEventField(),
+            self::getSigLocationField(),
+            self::getSigStartField(),
+            self::getSigEndField(),
+            self::getSigNewField(),
+            self::getSigCancelledField(),
+            self::getSigHideField(),
+            self::getResetUpdateField(),
+            self::getSendUpdateField(),
+        ];
     }
 
     public static function table(Table $table): Table
