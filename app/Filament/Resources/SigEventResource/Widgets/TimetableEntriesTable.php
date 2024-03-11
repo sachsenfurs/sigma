@@ -74,7 +74,7 @@ class TimetableEntriesTable extends BaseWidget
             ViewAction::make('view')
                 ->label('View')
                 ->translateLabel()
-                ->url(fn(TimetableEntry $entry) => route('filament.admin.resources.timetable-entries.edit', $entry)),
+                ->url(fn(TimetableEntry $entry) => route('filament.admin.sig-planning.resources.timetable-entries.edit', $entry)),
             EditAction::make('edit')
                 ->label('Edit')
                 ->translateLabel()
