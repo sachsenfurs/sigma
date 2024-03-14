@@ -17,4 +17,11 @@ class EditSigEvent extends EditRecord
                 ->modalHeading(__('Delete SIG')),
         ];
     }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            SigEventResource\Widgets\TimetableEntriesTable::class,
+        ];
+    }
 }

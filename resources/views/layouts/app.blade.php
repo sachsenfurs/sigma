@@ -72,8 +72,8 @@
                                 <i class="bi bi-view-list"></i> {{ __("My Events") }}
                             </a>
                         </li>
-                        
                     @endif
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle px-3" href="#" id="SignInDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-briefcase"></i> {{ __("Sign Up's")}}

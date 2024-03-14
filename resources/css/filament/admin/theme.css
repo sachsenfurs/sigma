@@ -10,3 +10,7 @@
 .fi-ta-table .fi-ta-text {
     @apply py-0;
 }
+
+.fi-ta-table .fi-ta-icon {
+    @apply py-0;
+}
