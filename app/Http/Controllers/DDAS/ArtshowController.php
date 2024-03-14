@@ -31,13 +31,10 @@ class ArtshowController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
 
-        $id = ArtshowArtist::pluck("id")->all();
-        $name = ArtshowArtist::orderBy("id")->get();
-        $artshow = ArtshowArtist::all();
+        $artist = ArtshowArtist::where('user_id', $user->id)->first();
+
         return view("DDAS.artshow.create", compact([
-            'artshow',
-            'id',
-            'name',]));
+            'user', 'artist']));
     }
 
     /**
@@ -45,15 +42,42 @@ class ArtshowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::where('id', auth()->user()->id)->first();
+
+        if (!ArtshowArtist::where('user_id', $user->id)->first())
+        {
+            ArtshowArtist::created([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'social' => $request->social,
+            ]);
+        }
+        else
+        {
+            ArtshowItem::create([
+                'artshow_artist_id' => $request->artshow_artist_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'description_en' => $request->description_en,
+                'starting_bid' => $request->starting_bid,
+                'charity_percentage' => $request->charity_percentage,
+                'additional_info' => $request->additional_info,
+                'image_file' => $request->image_file,
+            ]);
+        }
+        return redirect('artshow');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ArtshowArtist $asa)
+    public function show(string $id)
     {
-        return view('DDAS.artshow.show',[ 'artshow' => ArtshowArtist::all()]);
+        $artist = ArtshowArtist::find($id);
+        $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
+
+        // dd($artist, $items);
+        return view('DDAS.artshow.show', compact('artist', 'item'));
     }
 
     /**
@@ -61,7 +85,11 @@ class ArtshowController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $artist = ArtshowArtist::find($id);
+        $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
+
+        // dd($artist, $items);
+        return view('DDAS.artshow.edit', compact('artist', 'item'));
     }
 
     /**

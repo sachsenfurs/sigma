@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DDAS;
 use App\Http\Controllers\Controller;
 use App\Models\DDAS\DealerTag;
 use App\Models\DDAS\Dealer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DealersDenController extends Controller
@@ -15,8 +16,8 @@ class DealersDenController extends Controller
     public function index()
     {
         
-        $dealersden = Dealer::all();
-        return view('DDAS.dealersden.index', compact('dealersden'));
+        $dealers = Dealer::all();
+        return view('DDAS.dealersden.index', compact('dealers'));
     }
 
     /**
@@ -24,7 +25,9 @@ class DealersDenController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        $tags = DealerTag::all();
+        return view('DDAS.dealersden.create', compact('users', 'tags'));
     }
 
     /**
@@ -32,7 +35,26 @@ class DealersDenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::where('id', auth()->user()->id)->first();
+
+        if (!Dealer::where('user_id', $user->id)->first())
+        {
+            $dealer = Dealer::created([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+        }
+        else
+        {
+            $dealer = Dealer::where('user_id', $user->id)->first();
+            $dealer->name = $request->name;
+            $dealer->description = $request->description;
+            $dealer->save();
+            $dealer->tags()->sync($request->tags);
+        }
+        dd("got it");
+        return redirect('dealersden');
     }
 
     /**
@@ -40,7 +62,8 @@ class DealersDenController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $dealer = Dealer::where('id', $id)->first();
+        return view('DDAS.dealersden.show', compact('dealer'));
     }
 
     /**

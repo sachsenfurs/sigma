@@ -1,15 +1,15 @@
 {
   "lang/de.json": {
-    "file": "assets/de-8d5398e1.js",
+    "file": "assets/de-49346f8f.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
   "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff": {
-    "file": "assets/bootstrap-icons-d0346eea.woff",
+    "file": "assets/bootstrap-icons-bb1de989.woff",
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff"
   },
   "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2": {
-    "file": "assets/bootstrap-icons-5b2dd4d4.woff2",
+    "file": "assets/bootstrap-icons-476adf42.woff2",
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2"
   },
   "resources/css/app.css": {
@@ -17,27 +17,32 @@
     "isEntry": true,
     "src": "resources/css/app.css"
   },
+  "resources/css/filament/admin/theme.css": {
+    "file": "assets/theme-327651a0.css",
+    "isEntry": true,
+    "src": "resources/css/filament/admin/theme.css"
+  },
   "resources/js/app.css": {
-    "file": "assets/app-92cd90e6.css",
+    "file": "assets/app-a1066807.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
     "assets": [
-      "assets/bootstrap-icons-5b2dd4d4.woff2",
-      "assets/bootstrap-icons-d0346eea.woff"
+      "assets/bootstrap-icons-476adf42.woff2",
+      "assets/bootstrap-icons-bb1de989.woff"
     ],
     "css": [
-      "assets/app-92cd90e6.css"
+      "assets/app-a1066807.css"
     ],
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-a2f6745a.js",
+    "file": "assets/app-dc250872.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-b15c6205.css",
+    "file": "assets/app-c9b4fca0.css",
     "isEntry": true,
     "src": "resources/sass/app.scss"
   }

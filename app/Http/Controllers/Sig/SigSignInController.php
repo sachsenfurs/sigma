@@ -7,6 +7,7 @@ use App\Models\SigTimeslot;
 use App\Models\SigHost;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
+use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,17 +29,16 @@ class SigSignInController extends Controller
             if ($sighost)
             {
                 $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
-
+                
                 $siglocations = [];
                 foreach($sigs as $sig) {
                     $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-                    // dd($time);
                     
                     if (!$time)
                     {
                         $siglocations[$sig->id] = [
-                            'time' => "Keine Zeit eingetragen",
-                            'location' => "Kein Ort eingetragen",
+                            'time' => __('No Time Assigned'),
+                            'location' => __('No Location Assigned'),
                         ];
                     }
                     else
@@ -59,7 +59,7 @@ class SigSignInController extends Controller
                             ];
                         }
                     }
-                    // dd($sigs);
+                    // dd($translations);
                 }
 
 
@@ -104,23 +104,22 @@ class SigSignInController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
     $user = User::where('id', auth()->user()->id)->first();
     
     if (!SigHost::where('reg_id', $user->reg_id)->first())
     {
-        $host = SigHost::create([
-            'name' => $request->input('SigHostName'),
+        SigHost::create([
+            'name' => $user->name,
             'hide' => '0',
             'reg_id' => $request->input('UserRegId'),
-            'telegram_add' => $request->input('SigTG'),
         ]);
     }
 
     $languages = []; // Initialisiert das Array für die Sprachen leer
 
     // Ermitteln der gewünschten Sprachkonfiguration basierend auf der Eingabe
-    switch ($request->input('SigAttendeeLang')) {
+    switch ($request->input('SigLang')) {
         case '0':
             $languages = ["de"]; // Nur Deutsch
             break;
@@ -144,9 +143,16 @@ class SigSignInController extends Controller
         'sig_location_id' => '2',
         'reg_possible' => '0',
         'max_regs_per_day' => '1',
+/*         'fursuit_support' => $request->input('SigNeedsFurrySupport'), 
+        'medic' => $request->input('SigNeedsMedic'),
+        'security' => $request->input('SigNeedsSecu'),
+        'other_stuff' => $request->input('SigNeedsOther'),*/
+        'additional_infos' => $request->input('additional_infos'),
+
     ]);
+    
     return redirect('sigsignin');
-}
+    }
 
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SigEventFactory extends Factory
 {
+
     /**
      * Define the model's default state.
      *
@@ -25,6 +26,7 @@ class SigEventFactory extends Factory
             'default_language' => $this->faker->randomElement(['de', 'en']),
             'languages' => $this->faker->randomElement([["de"], ["de","en"]]),
             'description' => $this->faker->realText(),
+            'description_en' => $this->faker->realText(),
             'sig_location_id' => SigLocation::all()->random(),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->randomElement([$this->faker->dateTime(), $datetime]),
