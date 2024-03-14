@@ -22,7 +22,6 @@
                             <div class="mt-3">
                                 <label>{{ __("Description") }}:</label>
                                 <textarea class="form-control" name="description">{{ old("description", $host->description) }}</textarea>
-
                             </div>
                             <div class="mt-3">
                                 <div class="form-check">

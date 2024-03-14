@@ -172,25 +172,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <div class="col">
-                                                        SIG Description
-                                                    </div>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="col">
-                                                        {{ $translations->description }}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr>
                         @endforeach
                     @endif
                 </div>

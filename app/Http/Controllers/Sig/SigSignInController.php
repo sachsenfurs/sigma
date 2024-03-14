@@ -33,7 +33,6 @@ class SigSignInController extends Controller
                 $siglocations = [];
                 foreach($sigs as $sig) {
                     $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-                    $translations = SigTranslation::where('sig_event_id', $sig->id)->first();
                     
                     if (!$time)
                     {
@@ -69,7 +68,6 @@ class SigSignInController extends Controller
                     'sighost',
                     'sigs',
                     'siglocations',
-                    'translations'
                 ]));
             }
 
@@ -112,10 +110,9 @@ class SigSignInController extends Controller
     if (!SigHost::where('reg_id', $user->reg_id)->first())
     {
         SigHost::create([
-            'name' => $request->input('SigHostName'),
+            'name' => $user->name,
             'hide' => '0',
             'reg_id' => $request->input('UserRegId'),
-            // 'telegram_add' => $request->input('SigTG'),
         ]);
     }
 
@@ -146,25 +143,14 @@ class SigSignInController extends Controller
         'sig_location_id' => '2',
         'reg_possible' => '0',
         'max_regs_per_day' => '1',
+/*         'fursuit_support' => $request->input('SigNeedsFurrySupport'), 
+        'medic' => $request->input('SigNeedsMedic'),
+        'security' => $request->input('SigNeedsSecu'),
+        'other_stuff' => $request->input('SigNeedsOther'),*/
+        'additional_infos' => $request->input('additional_infos'),
+
     ]);
-
-    $lang = "de";
-    if ($request->input('SigHostLang') == "en")
-    {
-        $lang = "de";
-    }
-    else
-    {
-        $lang = "en";
-    }
-
-    $translations = SigTranslation::create([
-        'sig_event_id' => $event->id,
-        'language' => $lang,
-        'name' => $request->input('SigName'),
-        'description' => $request->input('SigDescriptionEN'),
-    ]);
-
+    
     return redirect('sigsignin');
     }
 

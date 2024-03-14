@@ -1,12 +1,4 @@
 {
-  "bootstrap-icons.woff": {
-    "file": "assets/bootstrap-icons-bb1de989.woff",
-    "src": "bootstrap-icons.woff"
-  },
-  "bootstrap-icons.woff2": {
-    "file": "assets/bootstrap-icons-476adf42.woff2",
-    "src": "bootstrap-icons.woff2"
-  },
   "lang/de.json": {
     "file": "assets/de-49346f8f.js",
     "isDynamicEntry": true,

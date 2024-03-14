@@ -19,6 +19,7 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Herbert Roth Saal",
                 'description' => "Main Stage",
+                'description_en' => "Main Stage",
                 'render_ids' => json_encode(["mainstageArea1", "mainstageArea2"]),
                 'floor' => "0",
                 'room' => "KE 003",
@@ -30,6 +31,7 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Open Stage",
                 'description' => "Tagungsfoyer unten",
+                'description_en' => "Conference Foyer downstairs",
                 'render_ids' => json_encode(["foyerArea"]),
                 'floor' => "-1",
                 'room' => "KE 001",
@@ -50,6 +52,7 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Sachsen 1+2",
                 'description' => "Fursuitlounge",
+                'description_en' => "Fursuitlounge",
                 'render_ids' => json_encode(["sachsenArea"]),
                 'floor' => "-1",
                 'room' => "K 1.U 028/029",
@@ -110,6 +113,7 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Berlin",
                 'description' => "Gamesroom",
+                'description_en' => "Gamesroom",
                 'render_ids' => json_encode(["gamesArea"]),
                 'floor' => "-1",
                 'room' => "K 1.U 052",
@@ -147,18 +151,21 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Lobby",
                 'description' => "Vor der Bar",
+                'description_en' => "In front of the bar",
                 'render_ids' => json_encode(["munchArea1"]),
                 'floor' => "0",
             ],
             [
                 'name' => "Lobby",
                 'description' => "Vor Rasselbock (Reg)",
+                'description_en' => "In front of Rasselbock (Reg)",
                 'render_ids' => json_encode(["lobbyArea2"]),
                 'floor' => "0",
             ],
             [
                 'name' => "Außenbereich",
                 'description' => "Hinterer Parkplatz (Motorfurs)",
+                'description_en' => "Rear parking lot (Motorfurs)",
                 'render_ids' => json_encode(["parkplatzArea1", "parkplatzArea2"]),
                 'floor' => "0",
             ],
@@ -170,24 +177,28 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Außenbereich",
                 'description' => "Volleyballfeld",
+                'description_en' => "Volleyball field",
                 'render_ids' => json_encode(["volleyArea"]),
                 'floor' => "0",
             ],
             [
                 'name' => "Außenbereich",
                 'description' => "BBQ Bereich",
+                'description_en' => "BBQ area",
                 'render_ids' => json_encode(["outdoorArea1"]),
                 'floor' => "0",
             ],
             [
                 'name' => "Außenbereich",
                 'description' => "Vor dem Hotel",
+                'description_en' => "In front of the hotel",
                 'render_ids' => json_encode(["outdoorArea2"]),
                 'floor' => "0",
             ],
             [
                 'name' => "Außenbereich",
                 'description' => "Hinten auf der Wiese",
+                'description_en' => "Back on the lawn",
                 'render_ids' => json_encode(["outdoorArea6"]),
                 'floor' => "0",
             ],
@@ -226,6 +237,7 @@ class RingbergSeeder extends Seeder
             [
                 'name' => "Außenbereich",
                 'description' => "Hinterausgang an der Bar",
+                'description_en' => "Back exit at the bar",
                 'render_ids' => json_encode(["outdoorArea3"]),
                 'floor' => "0",
             ]
