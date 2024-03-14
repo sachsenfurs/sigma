@@ -74,14 +74,16 @@ class SigHostResource extends Resource
     private static function getTableColumns(): array
     {
         return [
+            Tables\Columns\ViewColumn::make('name')
+                ->label('Name')
+                ->translateLabel()
+                ->searchable()
+                ->sortable()
+                ->view('filament.tables.columns.host-avatar'),
             Tables\Columns\TextColumn::make('reg_id')
                 ->label('Reg Number')
                 ->translateLabel()
                 ->numeric()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('name')
-                ->label('Name')
-                ->translateLabel()
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('description')
