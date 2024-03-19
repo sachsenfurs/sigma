@@ -91,6 +91,10 @@ class SigHostResource extends Resource
                 ->translateLabel()
                 ->searchable()
                 ->limit(50),
+            Tables\Columns\TextColumn::make('publicSigEventCount')
+                ->label('Event count')
+                ->translateLabel()
+                ->getStateUsing(fn (SigHost $record) => $record->getPublicSigEventCount()),
             Tables\Columns\IconColumn::make('hide')
                 ->label('Hidden')
                 ->translateLabel()
