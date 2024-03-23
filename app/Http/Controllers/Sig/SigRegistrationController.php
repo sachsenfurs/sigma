@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Sig;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
-use Redirect;
 use Illuminate\Support\Carbon;
 
 class SigRegistrationController extends Controller
@@ -18,6 +17,12 @@ class SigRegistrationController extends Controller
     }
 
     public function register(SigTimeslot $timeslot) {
+        $userId = request()->input('regNumber', auth()->user()->id);
+
+        if (!User::find($userId)) {
+            return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
+        }
+
         $currentTime = strtotime(Carbon::now()->toDateTimeString());
         $regStart = strtotime($timeslot->reg_start);
         $regEnd = strtotime($timeslot->reg_end);
@@ -26,14 +31,14 @@ class SigRegistrationController extends Controller
         }
         if ($timeslot->max_users <= $timeslot->sigAttendees->count()) {
             return redirect()->back()->with('error', 'Dieser Timeslot ist bereits voll!');
-        } elseif($timeslot->sigAttendees->contains('user_id', auth()->user()->id)) {
+        } elseif($timeslot->sigAttendees->contains('user_id', $userId)) {
             return redirect()->back()->with('error', 'Du nimmst bereits an diesem Timeslot teil!');
         } elseif($regStart > $currentTime) {
             return redirect()->back()->with('error', 'Du kannst dich noch nicht registrieren!');
         } elseif($regEnd < $currentTime) {
             return redirect()->back()->with('error', 'Die Registrierung für dieses Event ist nicht mehr verfügbar!');
         } else {
-            $timeslot->sigAttendees()->create(['user_id' => auth()->user()->id]);
+            $timeslot->sigAttendees()->create(['user_id' => $userId]);
             //auth()->user()->reminders->create(['timetable_entry_id']);
             return redirect()->back()->with('success', 'Erfolgreich für den Timeslot registriert!');
         }

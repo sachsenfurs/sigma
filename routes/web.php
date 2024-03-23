@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\TranslateController;
 use App\Http\Controllers\Public\ConbookExportController;
@@ -18,6 +18,7 @@ use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
+use App\Http\Controllers\Sig\SigSignInController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigReminderController;
@@ -26,6 +27,8 @@ use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\DDAS\DealersDenController;
+use App\Http\Controllers\DDAS\ArtshowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,6 +80,7 @@ Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.se
 
 Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
 Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
+
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -161,5 +165,19 @@ Route::group(['middleware' => "auth"], function() {
         Route::delete("/{post}", [PostController::class, 'destroy'])->name("destroy");
 
         Route::post("/translate", TranslateController::class)->name("translate");
+    });
+    Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
+
+    // Artshow
+    Route::get('/artshow', [ArtshowController::class, 'index'])->name('artshow.index');
+
+    // Dealers Den
+    Route::get('/dealersden', [DealersDenController::class, 'index'])->name('dealersden.index');
+
+    // Sig Sign In
+    Route::prefix('/sigsignin')->name('sigsignin.')->group(function() {
+        Route::get('/', [SigSignInController::class, 'index'])->name('index');
+        Route::post('/', [SigSignInController::class, 'store'])->name('store');
+        Route::get('/create', [SigSignInController::class, 'create'])->name('create');
     });
 });

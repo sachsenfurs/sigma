@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\DDAS\ArtshowItem;
+use App\Models\DDAS\Dealer;
 use App\Models\PostChannel;
 use App\Models\SigEvent;
 use App\Models\SigHost;
@@ -9,7 +11,7 @@ use App\Models\SigLocation;
 use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
-use Database\Factories\TimeTableEntryFactory;
+use Database\Factories\TimetableEntryFactory;
 use Database\Factories\SigTranslationFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -48,5 +50,8 @@ class DatabaseSeeder extends Seeder
         }
 
         TimetableEntry::factory()->count(50)->create();
+
+        ArtshowItem::factory(10)->create();
+        Dealer::factory(10)->create();
     }
 }

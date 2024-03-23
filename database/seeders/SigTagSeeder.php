@@ -29,7 +29,7 @@ class SigTagSeeder extends Seeder
             [
                 'name' => "signup",
                 'description' => 'Anmeldung erforderlich',
-                'description_en' => 'Sign up Required',
+                'description_en' => 'Sign-up Required',
             ],
             [
                 'name' => "fursuit",
