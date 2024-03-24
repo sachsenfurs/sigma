@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserRoleResource\Pages;
+use App\Models\Permission;
 use App\Models\UserRole;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -34,6 +35,7 @@ class UserRoleResource extends Resource
                 self::getForegroundColorField(),
                 self::getBorderColorField(),
                 self::getBackgroundColorField(),
+                self::getPermissionListField(),
             ]);
     }
 
@@ -117,5 +119,22 @@ class UserRoleResource extends Resource
             ->translateLabel()
             ->required()
             ->default('#E6E6E6');
+    }
+
+    private static function getPermissionListField(): Forms\Components\Component
+    {
+        return Forms\Components\Section::make()
+            ->heading(__('Permissions'))
+            ->collapsible()
+            ->collapsed()
+            ->schema([
+                Forms\Components\CheckboxList::make('permissions')
+                    ->label('')
+                    ->columns(4)
+                    ->columnSpanFull()
+                    ->relationship('permissions', 'name')
+                    ->options(fn() => collect(Permission::all()->pluck('name', 'id')))
+                    ->descriptions(fn() => collect(Permission::all()->pluck('friendly_name', 'id'))),
+            ]);
     }
 }
