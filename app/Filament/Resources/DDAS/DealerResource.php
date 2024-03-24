@@ -21,6 +21,11 @@ class DealerResource extends Resource
 
     protected static ?string $navigationGroup = 'Dealer\'s Den';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Dealers');
+    }
+
     protected static ?int $navigationSort = 0;
     public static function form(Form $form): Form
     {
