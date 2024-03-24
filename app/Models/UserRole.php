@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class UserRole extends Model
 {
@@ -16,13 +18,23 @@ class UserRole extends Model
      */
     protected $guarded = [];
 
-    public function members(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function users(): HasManyThrough
     {
-        return $this->hasMany(User::class);
+        return $this->hasManyThrough(
+            User::class,
+            UserUserRole::class,
+            'user_role_id',
+            'id',
+            'id',
+            'user_id'
+        );
     }
 
-    public function permissions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'user_role_permissions');
+        return $this->belongsToMany(
+            Permission::class,
+            'user_role_permissions'
+        );
     }
 }

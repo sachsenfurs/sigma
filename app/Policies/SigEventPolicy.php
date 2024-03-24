@@ -14,11 +14,11 @@ class SigEventPolicy
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
-        return $user->role->perm_manage_events;
+        return $user->permissions()->contains('manage_events');
     }
 
     /**
@@ -26,22 +26,22 @@ class SigEventPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\SigEvent  $sigEvent
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function view(User $user, SigEvent $sigEvent)
+    public function view(User $user, SigEvent $sigEvent): bool
     {
-        return $user->role->perm_manage_events || $sigEvent->sigHost->reg_id === $user->reg_id;
+        return $user->permissions()->contains('manage_events') || $sigEvent->sigHost->reg_id === $user->reg_id;
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
-        return $user->role->perm_manage_events;
+        return $user->permissions()->contains('manage_events');
     }
 
     /**
@@ -49,23 +49,22 @@ class SigEventPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\SigEvent  $sigEvent
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function update(User $user, SigEvent $sigEvent)
+    public function update(User $user, SigEvent $sigEvent): bool
     {
-         return $user->role->perm_manage_events || $sigEvent->sigHost->reg_id === $user->reg_id;
+         return $user->permissions()->contains('manage_events') || $sigEvent->sigHost->reg_id === $user->reg_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SigEvent  $sigEvent
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function delete(User $user, SigEvent $sigEvent)
+    public function delete(User $user): bool
     {
-        return $user->role->perm_manage_events;
+        return $user->permissions()->contains('manage_events');
     }
 
     /**
@@ -73,11 +72,11 @@ class SigEventPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\SigEvent  $sigEvent
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function restore(User $user, SigEvent $sigEvent)
+    public function restore(User $user): bool
     {
-        return $user->role->perm_manage_events;
+        return $user->permissions()->contains('manage_events');
     }
 
     /**
@@ -85,10 +84,10 @@ class SigEventPolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\SigEvent  $sigEvent
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return bool
      */
-    public function forceDelete(User $user, SigEvent $sigEvent)
+    public function forceDelete(User $user): bool
     {
-        return $user->role->perm_manage_events;
+        return $user->permissions()->contains('manage_events');
     }
 }

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static where(string $string, mixed $permissionName)
+ * @method static create(array $array)
+ */
 class Permission extends Model
 {
     use HasFactory;
