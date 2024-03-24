@@ -20,7 +20,7 @@ class ArtshowArtist extends Model
      * Fillables für das Artshow Artist Model
      */
     protected $fillable = [
-        'user.reg_id','name', 'social'
+        'name', 'social', 'user_id'
     ];
 
     /**

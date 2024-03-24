@@ -27,22 +27,48 @@ class DealerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
+                    ->label('Benutzername')
                     ->relationship('user', 'name'),
                 Forms\Components\Select::make('sig_location_id')
+                    ->label('SIG Location')
                     ->relationship('sigLocation', 'name'),
                 Forms\Components\TextInput::make('name')
+                    ->label('Dealer Name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('info')
+                    ->label('Dealer Info')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('info_en')
+                    ->label('Dealer Info (EN)')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('gallery_link')
+                    ->label('Galerie Link')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('icon_file')
+                Forms\Components\TextInput::make('space')
+                    ->label('Platzbedarf')
+                    ->required()
+                    ->default(1)
                     ->maxLength(255),
+                forms\Components\TextInput::make('contact_way')
+                    ->label('Kontaktart')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('contact')
+                    ->label('Kontakt')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('icon_file')
+                    ->label('Logo')
+                    ->required()
+                    ->disk('public')
+                    ->image()
+                    ->imageEditor()
+                    ->maxFiles(1)
+                    ->preserveFilenames()
+                    ->maxSize(5120),
                 Forms\Components\Toggle::make('approved')
                     ->required(),
             ]);
@@ -53,17 +79,37 @@ class DealerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Benutzername')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sigLocation.name')
+                    ->label('SIG Location')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Dealer Name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('gallery_link')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('icon_file')
-                    ->searchable(),
+                    ->label('Galerie Link')
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('space')
+                    ->label('Platzbedarf')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('contact_way')
+                    ->label('Kontaktart')
+                    ->toggleable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('contact')
+                    ->label('Kontakt')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\ImageColumn::make('icon_file')
+                    ->label('Logo')
+                    ->toggleable(),
                 Tables\Columns\IconColumn::make('approved')
                     ->boolean(),
             ])

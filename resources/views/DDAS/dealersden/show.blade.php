@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 py-2">
-                            <img src="{{ $dealer->icon_file }}" alt="{{ $dealer->name }}" width="120">
+                            <img src="/storage/{{ $dealer->icon_file }}" alt="{{ $dealer->name }}" width="120">
                         </div>
                         <div class="col-md-6 py-2">
                             <a href="{{ $dealer->gallery_link }}">

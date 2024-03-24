@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sig_events', function (Blueprint $table) {
-            $table->after("description-en", function(Blueprint $table) {
+            $table->after("description_en", function(Blueprint $table) {
                 $table->text('additional_infos')->nullable();
-                $table->boolean('fursuit_support')->default(false); //TODO: Muss später noch überarbeitet werden ist gerade aus Zeitgründen so gemacht
-                $table->boolean('medic')->default(false);
-                $table->boolean('security')->default(false);
-                $table->boolean('other_stuff')->default(false);
+                $table->text('fursuit_support')->default("0"); //TODO: Muss später noch überarbeitet werden ist gerade aus Zeitgründen so gemacht
+                $table->text('medic')->default("0");
+                $table->text('security')->default("0");
+                $table->text('other_stuff')->default("0");
             });
         });
     }

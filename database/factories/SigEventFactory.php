@@ -23,11 +23,15 @@ class SigEventFactory extends Factory
         return [
             'name' => $this->faker->text(25),
             'sig_host_id' => SigHost::all()->random(),
-            'default_language' => $this->faker->randomElement(['de', 'en']),
-            'languages' => $this->faker->randomElement([["de"], ["de","en"]]),
+            'languages' => $this->faker->randomElement([["de"], ["en"], ["de","en"]]),
             'description' => $this->faker->realText(),
             'description_en' => $this->faker->realText(),
+            'additional_infos' => $this->faker->realText(),
             'sig_location_id' => SigLocation::all()->random(),
+            'fursuit_support' => $this->faker->randomElement(["0", "1"]),
+            'medic' => $this->faker->randomElement(["0", "1"]),
+            'security' => $this->faker->randomElement(["0", "1"]),
+            'other_stuff' => $this->faker->randomElement(["0", "1"]),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->randomElement([$this->faker->dateTime(), $datetime]),
         ];

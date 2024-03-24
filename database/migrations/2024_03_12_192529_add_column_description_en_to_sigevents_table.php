@@ -14,11 +14,6 @@ return new class extends Migration
         Schema::table('sig_events', function (Blueprint $table) {
             $table->after("description", function(Blueprint $table) {
                 $table->string('description_en')->nullable();
-                $table->text('additional_infos')->nullable();
-                $table->boolean('fursuit_support')->default(false); //TODO: Muss später noch überarbeitet werden ist gerade aus Zeitgründen so gemacht
-                $table->boolean('medic')->default(false);
-                $table->boolean('security')->default(false);
-                $table->boolean('other_stuff')->default(false);
             });
         });
     }

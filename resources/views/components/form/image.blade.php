@@ -5,6 +5,6 @@
 ])
 
 <div class="col{{ $size }}">
-        <label for="{{ $ident }}" class="form-label">{{ $lt }}</label>
-        <input type="file" class="form-control" id="{{ $ident }}" name="image">
+        <label for="image" class="form-label">{{ $lt }}</label>
+        <input type="file" class="form-control" id="image" name="{{ $ident }}">
 </div>

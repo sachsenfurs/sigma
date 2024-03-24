@@ -13,7 +13,7 @@ class ArtshowItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'artshow_artist.name','name', 'description',
+        'artshow_artist_id','name', 'description',
         'description_en', 'starting_bid', 'charity_percentage',
         'approved', 'additional_info','image_file',
         'sold', 'paid'

@@ -41,6 +41,7 @@ class SigEventResource extends Resource
                 self::getSigRegistrationFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigDescriptionFieldSet(),
+                self::getAdditionalInfosFieldSet(),
             ]);
     }
 
@@ -138,21 +139,6 @@ class SigEventResource extends Resource
                     //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
                     ->maxLength(255)
                     ->inlineLabel()
-                    ->columnSpanFull(),
-                Forms\Components\Group::make()
-                    ->relationship('sigTranslation')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('English')
-                            ->translateLabel()
-                            ->formatStateUsing(function (SigTranslation $record = null) {
-                                return $record->name ?? '';
-                            })
-                            ->required()
-                            //->required(fn (Get $get) => in_array('en', $get('../languages')) ?? false)
-                            ->maxLength(255)
-                            ->inlineLabel()
-                    ])
                     ->columnSpanFull(),
             ])
             ->columnSpan(1);
@@ -358,18 +344,43 @@ class SigEventResource extends Resource
                         //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
                         ->rows(4)
                         ->columnSpanFull(),
-                    Forms\Components\Group::make()
-                        ->relationship('sigTranslation')
-                        ->schema([
-                            Forms\Components\Textarea::make('description')
-                                ->label('English')
-                                ->translateLabel()
-                                ->formatStateUsing(function (SigTranslation $record = null) {
-                                    return $record->description ?? '';
-                                })
-                                //->required(fn (Get $get) => in_array('en', $get('../languages')) ?? false)
-                                ->rows(4),
-                        ])
+                    Forms\Components\Textarea::make('description_en')
+                        ->label('English')
+                        ->translateLabel()
+                        //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
+                        ->rows(4)
+                        ->columnSpanFull(),
+                ]);
+    }
+
+    private static function getAdditionalInfosFieldSet(): Forms\Components\Component
+    {
+        return
+            Forms\Components\Fieldset::make('infos')
+                ->label('Additional Informations')
+                ->translateLabel()
+                ->schema([
+                    Forms\Components\Checkbox::make('fursuit_support')
+                        ->label('Furry Support')
+                        ->translateLabel()
+                        ->live(),
+                    Forms\Components\Checkbox::make('medic')
+                        ->label('Medic')
+                        ->translateLabel()
+                        ->live(),
+                    Forms\Components\Checkbox::make('security')
+                        ->label('Security')
+                        ->translateLabel()
+                        ->live(),
+                    Forms\Components\Checkbox::make('other_stuff')
+                        ->label('Other Stuff')
+                        ->translateLabel()
+                        ->live(),
+                    Forms\Components\Textarea::make('additional_infos')
+                        ->label('Additional Informations')
+                        ->translateLabel()
+                        //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
+                        ->rows(4)
                         ->columnSpanFull(),
                 ]);
     }

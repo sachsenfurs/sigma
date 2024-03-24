@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="col ">
-                                                <img src="{{ $dealer->icon_file }}" alt="{{ $dealer->name }}" class="card-img-bottom">
+                                                <img src="/storage/{{ $dealer->icon_file }}" alt="{{ $dealer->name }}" class="card-img-bottom">
                                             </div>
                                         </div>
                                     </div>

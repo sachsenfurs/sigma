@@ -1,6 +1,14 @@
 {
+  "bootstrap-icons.woff": {
+    "file": "assets/bootstrap-icons-bb1de989.woff",
+    "src": "bootstrap-icons.woff"
+  },
+  "bootstrap-icons.woff2": {
+    "file": "assets/bootstrap-icons-476adf42.woff2",
+    "src": "bootstrap-icons.woff2"
+  },
   "lang/de.json": {
-    "file": "assets/de-49346f8f.js",
+    "file": "assets/de-85a3f7b4.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -18,7 +26,7 @@
     "src": "resources/css/app.css"
   },
   "resources/css/filament/admin/theme.css": {
-    "file": "assets/theme-327651a0.css",
+    "file": "assets/theme-36c30127.css",
     "isEntry": true,
     "src": "resources/css/filament/admin/theme.css"
   },
@@ -37,7 +45,7 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-dc250872.js",
+    "file": "assets/app-035ecbc9.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },

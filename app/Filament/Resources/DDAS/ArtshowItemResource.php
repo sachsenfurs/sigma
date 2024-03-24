@@ -27,34 +27,51 @@ class ArtshowItemResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('artshow_artist_id')
+                    ->label('Künstler ID')
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('name')
+                    ->label('Gegenstandsname')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
+                    ->label('Beschreibung')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description_en')
+                    ->label('Beschreibung (EN)')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('starting_bid')
+                    ->label('Startgebot')
                     ->required()
                     ->numeric()
                     ->default(0.00),
                 Forms\Components\TextInput::make('charity_percentage')
+                    ->label('Charity-Prozentsatz')
                     ->required()
                     ->numeric()
                     ->default(0.00),
                 Forms\Components\Textarea::make('additional_info')
+                    ->label('Zusätzliche Informationen')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image_file')
-                    ->image(),
+                    ->label('Bild')
+                    ->required()
+                    ->disk('public')
+                    ->image()
+                    ->imageEditor()
+                    ->maxFiles(1)
+                    ->preserveFilenames()
+                    ->maxSize(5120),
                 Forms\Components\Toggle::make('approved')
+                    ->label('Genehmigt')
                     ->required(),
                 Forms\Components\Toggle::make('sold')
+                    ->label('Verkauft')
                     ->required(),
                 Forms\Components\Toggle::make('paid')
+                    ->label('Bezahlt')
                     ->required(),
             ]);
     }
@@ -64,25 +81,35 @@ class ArtshowItemResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('artshow_artist_id')
+                    ->label('Künstler ID')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Gegenstandsname')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('starting_bid')
+                    ->label('Startgebot')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('charity_percentage')
+                    ->label('Charity-Prozentsatz')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image_file'),
+                Tables\Columns\ImageColumn::make('image_file')
+                    ->label('Bild')
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\IconColumn::make('approved')
+                    ->label('Genehmigt')
                     ->boolean()
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('sold')
+                    ->label('Verkauft')
                     ->boolean()
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('paid')
+                    ->label('Bezahlt')
                     ->boolean()
                     ->toggleable(),
             ])

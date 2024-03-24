@@ -44,13 +44,13 @@ class SigEvent extends Model
         return $this->timetableEntries->count();
     }
 
-    public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? null;
-    }
+    // public function getNameEnAttribute() {
+    //     return $this->sigTranslation->name ?? null;
+    // }
 
-    public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? null;
-    }
+    // public function getDescriptionEnAttribute() {
+    //     return $this->sigTranslation->description ?? null;
+    // }
 
     public function getNameLocalizedAttribute() {
         return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;

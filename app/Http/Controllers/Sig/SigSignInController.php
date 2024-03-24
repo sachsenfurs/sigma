@@ -48,7 +48,7 @@ class SigSignInController extends Controller
                         {
                             $siglocations[$sig->id] = [
                                 'time' => $time,
-                                'location' => "Kein Ort eingetragen",
+                                'location' => __('No Location Assigned'),
                             ];
                         }
                         else
@@ -105,14 +105,24 @@ class SigSignInController extends Controller
      */
     public function store(Request $request)
     {
-    $user = User::where('id', auth()->user()->id)->first();
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $validated = $request->validate([
+            'SigName' => 'required|string',
+            'SigDescriptionDE' => 'required|string',
+            'additional_infos' => 'required_if:SigNeedsOther,1',
+        ], [
+            'SigName.required' => __('Please insert a SIG Name!'),
+            'SigDescriptionDE.required' => __('Please insert a SIG Description!'),
+            'additional_infos.required_if' => __('The Additional Informations field is required when Other Stuff is Yes!'),
+        ]);
     
     if (!SigHost::where('reg_id', $user->reg_id)->first())
     {
         SigHost::create([
             'name' => $user->name,
             'hide' => '0',
-            'reg_id' => $request->input('UserRegId'),
+            'reg_id' => $user->reg_id,
         ]);
     }
 
@@ -129,27 +139,28 @@ class SigSignInController extends Controller
         case '2':
             $languages = ["de", "en"]; // Deutsch und Englisch
             break;
-        default:
+            default:
             $languages = []; // Falls keine gültige Option ausgewählt wurde, bleibt das Array leer
             break;
-    }
-
+        }
+    
+    // dd($request);
     $event = SigEvent::create([
-        'name' => $request->input('SigName'),
+        'name' => $validated['SigName'],
         'sig_host_id' => SigHost::where('reg_id', $user->reg_id)->first()->id,
-        'default_language' => $request->input('SigHostLang'),
         'languages' => $languages, // Verwendet das modifizierte $languages Array
         'description' => $request->input('SigDescriptionDE'),
         'sig_location_id' => '2',
         'reg_possible' => '0',
         'max_regs_per_day' => '1',
-/*         'fursuit_support' => $request->input('SigNeedsFurrySupport'), 
+        'fursuit_support' => $request->input('SigNeedsFurrySupport'),
         'medic' => $request->input('SigNeedsMedic'),
         'security' => $request->input('SigNeedsSecu'),
-        'other_stuff' => $request->input('SigNeedsOther'),*/
+        'other_stuff' => $request->input('SigNeedsOther'),
         'additional_infos' => $request->input('additional_infos'),
-
     ]);
+    // dd($event);
+
     
     return redirect('sigsignin');
     }

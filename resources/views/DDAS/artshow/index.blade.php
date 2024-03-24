@@ -66,7 +66,7 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="col">
-                                                            {{ $item->starting_bid }}
+                                                            {{ $item->starting_bid }} €
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,7 +80,7 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="col">
-                                                            {{ $item->charity_percentage }}%
+                                                            {{ $item->charity_percentage }} %
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,7 +110,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="col">
-                                                    <img src="{{ $item->image_file }}" alt="{{ $item->name }}"
+                                                    <img src="/storage/{{ $item->image_file }}" alt="{{ $item->name }}"
                                                         class="card-img-bottom">
                                                 </div>
                                             </div>

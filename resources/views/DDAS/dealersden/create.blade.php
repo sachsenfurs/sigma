@@ -4,51 +4,93 @@
 @section('content')
     <div class="container">
         <h1 class="pt-2 pb-5 text-center">
-            Anmeldung Dealer's Den
+            {{ __('Dealers Den Sign Up') }}
         </h1>
-
-        <div class="justify-center px-md-5">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Anmeldeformular</h3>
-                </div>
+        <div class="row justify-content-center px-md-5">
+            <div class="col-md-7">
                 <form action="{{ route('dealersden.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="card-body">
-                        <div class="row pt-4 pb-2 justify-content-center">
-                            <x-form.input ident="DealerName" pht="Kenthart" lt="Dealer Name" />
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="text-center">{{ __('Dealer Infos') }}</h3>
                         </div>
-                        <div class="row py-2 justify-content-center">
-                            <x-form.input ident="DealerGalerie" pht="https://t.me/Kenths_Kreative_Corner"
-                                lt="Art-Channel/-Group" />
-                        </div>
-                        <div class="row py-2 justify-content-center">
-                            <x-form.select ident="DealerContactType" lt="Contact Way">
-                                <option>Telegram</option>
-                                <option>Phone</option>
-                                <option>E-Mail</option>
-                            </x-form.select>
-                            <x-form.input ident="DealerContact" lt="Contact" />
-                        </div>
-                        <div class="row py-2 justify-content-center">
-                            <x-form.text ident="DealerSort" lt="Sortiment" pht="Fullsuits, Partials, Art-Works" />
-                        </div>
-                        <div class="row py-2 justify-content-center">
-                            <x-form.image ident="DealerLogo" lt="Logo" size="-5"></x-form.image>
-                            <x-form.select ident="DealerSpace" lt="Space">
-                                <option>0 Tische</option>
-                                <option>1 Tisch</option>
-                                <option>2 Tische</option>
-                            </x-form.select>
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ __('Dealer') }}
+                                        </div>
+                                        <div class="col mb-3">
+                                            <input name="DealerName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ __('Art-Channle/-Group') }}
+                                        </div>
+                                        <div class="col mb-3">
+                                            <input name="DealerGalerie" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ __('Contact Ways') }}
+                                        </div>
+                                        <div class="col mb-3">
+                                            <select name="DealerContactType" class="form-control">
+                                                <option value="telegram" selected>{{ __('Telegram')}}</option>
+                                                <option value="phone">{{ __('Phone')}}</option>
+                                                <option value="email">{{ __('Email')}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ __('Contact') }}
+                                        </div>
+                                        <div class="col mb-3">
+                                            <input name="DealerContact" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ __('Dealer Space') }}
+                                        </div>
+                                        <div class="col mb-3">
+                                            <select name="DealerSpace" class="form-control">
+                                                <option value="0">0 Tische</option>
+                                                <option value="1" selected>1 Tisch</option>
+                                                <option value="2">2 Tische</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <x-form.image ident="DealerLogo" lt="{{ __('Dealer Logo')}}"></x-form.image>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                        <x-form.text ident="DealerSort" lt="{{ __('Sortiment') }}"
+                                            pht="Fullsuits, Partials, Art-Works" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/sigsignin" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            </div>
                         </div>
                     </div>
-                    </form>
+                </form>
             </div>
         </div>
     </div>

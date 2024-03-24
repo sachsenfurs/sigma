@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            {{ $artist->name }}
+                                            {{ $as_artist->name }}
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            {{ $item->charity_percentage }}%
+                                            {{ $item->charity_percentage }} %
                                         </div>
                                     </div>
                                 </div>
@@ -146,12 +146,12 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col">
-                                    Image
+                                    {{__('Image')}}
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="col">
-                                    <img src="{{ $item->image_file }}" alt="{{ $item->name }}" class="card-img-bottom">
+                                    <img src="/storage/{{ $item->image_file }}" alt="{{ $item->name }}" class="card-img-bottom">
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col">
-                                    Additional Information
+                                    {{__('Additional Informations')}}
                                 </div>
                             </div>
                             <div class="card-body">
@@ -180,7 +180,9 @@
                 <div class="row">
                     <div class="d-flex justify-content-center">
                         <a href="{{ route('artshow.index') }}" class="btn btn-primary me-2">Back</a>
+                    @if ($user->id == $as_artist->user_id)
                         <a href="{{ route('artshow.edit', $item->id) }}" class="btn btn-primary">Edit</a>
+                    @endif
                     </div>
                 </div>
             </div>

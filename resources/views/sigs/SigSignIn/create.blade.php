@@ -100,24 +100,13 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col">
-                                            {{ __('Language Host') }}
-                                        </div>
-                                        <div class="col">
-                                            <select name="SigHostLang" class="form-control">
-                                                <option value="de">{{ __('German') }}</option>
-                                                <option value="en">{{ __('English') }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col">
                                             {{ __('Languages SIG') }}
                                         </div>
                                         <div class="col">
                                             <select name="SigLang" class="form-control">
-                                                <option value="de">{{ __('German') }}</option>
-                                                <option value="en">{{ __('English') }}</option>
-                                                <option value="de-en">{{ __('German & English') }}</option>
+                                                <option selected value="0">{{ __('German') }}</option>
+                                                <option value="1">{{ __('English') }}</option>
+                                                <option value="2">{{ __('German & English') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -157,40 +146,72 @@
                                             <h4 class="text-center">{{ __('I Need...') }}</h4>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <x-form.checkbox ident="SigNeedsFurrySupport"
-                                                lt="{{ __('Fursuit Support (Water, Fans, ...)') }}" />
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            {{ __('Fursuit Support (Water, Fans, ...)') }}
                                         </div>
-                                        <div class="col-md-6">
-                                            <x-form.checkbox ident="SigNeedsSecu" lt="Security" />
+                                        <div class="col-4">
+                                            <select name="SigNeedsFurrySupport" class="form-control">
+                                                <option selected value="0">{{ __('No') }}</option>
+                                                <option value="1">{{ __('Yes') }}</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <x-form.checkbox ident="SigNeedsMedic" lt="Medic" />
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            {{ __('Medic') }}
                                         </div>
-                                        <div class="col-md-6">
-                                            <x-form.checkbox ident="SigNeedsOther"
-                                                lt="{{ __('Other (Please enter below!)') }}" />
+                                        <div class="col-4">
+                                            <select name="SigNeedsMedic" class="form-control">
+                                                <option selected value="0">{{ __('No') }}</option>
+                                                <option value="1">{{ __('Yes') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            {{ __('Security') }}
+                                        </div>
+                                        <div class="col-4">
+                                            <select name="SigNeedsSecu" class="form-control">
+                                                <option selected value="0">{{ __('No') }}</option>
+                                                <option value="1">{{ __('Yes') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            {{ __('Other Stuff') }}
+                                        </div>
+                                        <div class="col-4">
+                                            <select name="SigNeedsOther" class="form-control">
+                                                <option selected value="0">{{ __('No') }}</option>
+                                                <option value="1">{{ __('Yes') }}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <x-form.text ident="additional_infos" lt="{{ __('Additional Informations') }}" />
+                                            <x-form.text ident="additional_infos"
+                                                lt="{{ __('Additional Informations') }}" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/sigsignin" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-        </div>
-        </form>
-    </div>
-    </div>
     </div>
 @endsection

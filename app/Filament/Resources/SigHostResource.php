@@ -29,9 +29,9 @@ class SigHostResource extends Resource
         return $form
             ->schema([
                 self::getNameField(),
-                self::getTelegramHandleField(),
                 self::getRegIdField(),
                 self::getDescriptionField(),
+                self::getDescriptionEnField(),
                 self::getHideField(),
             ]);
     }
@@ -106,16 +106,6 @@ class SigHostResource extends Resource
                 ->required()->maxLength(255);
     }
 
-    private static function getTelegramHandleField(): Forms\Components\Component
-    {
-        return
-            Forms\Components\TextInput::make('telegram_add')
-                ->label('Telegram Handle')
-                ->translateLabel()
-                ->prefix('@')
-                ->maxLength(255);
-    }
-
     private static function getRegIdField(): Forms\Components\Component
     {
         return
@@ -133,7 +123,18 @@ class SigHostResource extends Resource
     {
         return
             Forms\Components\Textarea::make('description')
-                ->label('Description')
+                ->label('Description (German)')
+                ->translateLabel()
+                ->required()
+                ->maxLength(65535)
+                ->columnSpanFull();
+    }
+
+    private static function getDescriptionEnField(): Forms\Components\Component
+    {
+        return
+            Forms\Components\Textarea::make('description_en')
+                ->label('Description (English)')
                 ->translateLabel()
                 ->required()
                 ->maxLength(65535)
