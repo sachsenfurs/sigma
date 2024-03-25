@@ -8,13 +8,9 @@ use Filament\Pages\SubNavigationPosition;
 class SigPlanning extends Cluster
 {
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-
     protected static ?int $navigationSort = 100;
+    protected static ?string $navigationGroup = 'SIG';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('Event Schedule');
-    }
 
     public static function getLabel(): ?string
     {
