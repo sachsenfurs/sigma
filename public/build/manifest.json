@@ -1,6 +1,6 @@
 {
   "lang/de.json": {
-    "file": "assets/de-46b69580.js",
+    "file": "assets/de-1382b9e7.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -37,7 +37,7 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-d0a9b569.js",
+    "file": "assets/app-af3757e2.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },

@@ -25,8 +25,6 @@ use App\Http\Controllers\Sig\SigReminderController;
 use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\DDAS\DealersDenController;
 use App\Http\Controllers\DDAS\ArtshowController;
 use Illuminate\Support\Facades\Route;
@@ -84,11 +82,6 @@ Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lass
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/users', [UserController::class, 'index'])->name("users.index");
-    Route::post('/users', [UserController::class, 'store'])->name("users.store");
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put("/users/{user}", [UserController::class, 'update'])->name("users.update");
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name("users.destroy");
 
     // SIG Events
     Route::get("/sigs", [SigEventController::class, 'index'])->name("sigs.index");
@@ -128,17 +121,9 @@ Route::group(['middleware' => "auth"], function() {
     Route::get("/timeslots/{timeslot}/editNotes", [SigTimeslotController::class, 'editNotes'])->name("timeslots.editNotes");
     Route::POST("/timeslots/{timeslot}/updateNotes", [SigTimeslotController::class, 'updateNotes'])->name("timeslots.updateNotes");
 
-    // Registraton
+    // Registration
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
     Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
-
-    // User-Roles
-    Route::get("/user-roles", [UserRoleController::class, 'index'])->name("user-roles.index");
-    Route::get("/user-roles/create", [UserRoleController::class, 'create'])->name("user-roles.create");
-    Route::post("/user-roles", [UserRoleController::class, 'store'])->name("user-roles.store");
-    Route::get("/user-roles/{userRole}/edit", [UserRoleController::class, "edit"])->name("user-roles.edit");
-    Route::put("/user-roles/{userRole}", [UserRoleController::class, 'update'])->name("user-roles.update");
-    Route::delete("/user-roles/{userRole}", [UserRoleController::class, 'destroy'])->name("user-roles.destroy");
 
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
