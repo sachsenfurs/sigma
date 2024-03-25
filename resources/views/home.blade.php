@@ -111,7 +111,6 @@
                                                 @endif
 
                                                 >
-
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>

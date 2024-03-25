@@ -1,8 +1,37 @@
 @props([
     'name' => "",
     'avatar' => null,
+    'attendee',
 ])
-<div class="row mb-1">
+<div class="row mb-3">
+    @if($avatar)
+        <div class="col-4 col-md-2" style="max-height: 100%;">
+            <img class="mx-auto" src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded" style="object-fit: cover; max-height: 30vw" alt="">
+        </div>
+    @else
+        <div class="col-4 col-md-2" style="max-height: 100%;">
+            <img class="mx-auto" style="max-height: 30vw;" src="{{ asset('icons/paw.svg') }}" alt="Attendee Paw">
+        </div>
+    @endif
+    <div class="col-6 col-md-6 text-left" style="display: flex; justify-content: center; align-items: center;">
+        <div>
+            {{ $name }}
+        </div>
+    </div>
+    <div class="col-2 col-md-4" style="display: flex; justify-content: center; align-items: center;">
+        <div>
+            @if($attendee->user->id == auth()->user()->id)
+                <a type="button" class="btn btn-warning text-black">
+                    <span class="bi bi-award-fill"></span>
+                </a>
+            @else
+                <a type="button" class="btn btn-danger text-white" onclick="$('#removeAttendeeModal{{$attendee->id}}').modal('toggle'); $('#removeAttendeeForm{{ $attendee->id }}').attr('action', '/cancel/{{ $attendee->sigTimeslot->id }}')" data-toggle="modal" data-target="#removeAttendeeModal{{$attendee->id}}">
+                    <span class="bi bi-x"></span>
+                </a>
+            @endif
+        </div>
+    </div>
+    <!---
     @if($avatar)
         <div class="col-4 col-md-2" style="max-height: 100%">
             <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded" style="object-fit: cover; max-height: 30vw" alt="">
@@ -15,4 +44,5 @@
             <li>{{ $name }}</li>
         @endif
     </div>
+    --->
 </div>

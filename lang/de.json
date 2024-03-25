@@ -19,8 +19,22 @@
     "Manage Settings": "Einstellungen verwalten",
     "Manage Users": "Benutzer verwalten",
 
-    "User Role": "Benutzerrolle",
+    "User Count": "Benutzeranzahl",
     "User Roles": "Benutzerrollen",
+    "Assign": "Zuweisen",
+    "Remove": "Aufheben",
+    "Assign User": "Benutzer zuweisen",
+    "Remove User": "Benutzer aufheben",
+    "Assign Role": "Rolle zuweisen",
+    "Remove Role": "Rolle aufheben",
+    "Role Assigned": "Rolle zugewiesen",
+    "Role Removed": "Rolle aufgehoben",
+
+    "Permission": "Berechtigung",
+    "Permissions": "Berechtigungen",
+
+    "Group keys": "Gruppenschlüssel",
+    "Group keys from registration system (seperated with a comma)": "Gruppenschlüssel aus dem Registrierungssystem (getrennt mit Komma)",
 
     "Border Color": "Randfarbe",
     "Background Color": "Hintergrundfarbe",
@@ -58,6 +72,7 @@
     "Edit Host": "Host bearbeiten",
     "Delete Host": "Host löschen",
     "Really delete it?": "Wirklich löschen?",
+    "Event count": "Anzahl Events",
     "Hidden": "Versteckt",
     "Name / Nickname": "Name / Nickname",
 
@@ -179,6 +194,7 @@
     "Updated at": "Zuletzt geändert",
     "Add User": "Benutzer hinzufügen",
     "Create User": "Benutzer erstellen",
+    "User": "Benutzer",
     "Users": "Benutzer",
     "User": "Benutzer",
     "Username": "Benutzername",
@@ -229,6 +245,8 @@
     "New Time: ": "Neue Uhrzeit: ",
     "your timeslot from the event ": "dein Zeitslot für das Event ",
     "[CHANGE]": "ÄNDERUNG",
+    "Remove Attendee": "Telnehmer entfernen",
+    "Do you really want to remove :attendee from your booking?": "Möchtest du wirklich :attendee aus deiner Buchung entfernen?",
 
     "Sign up": "Melde dich an",
     "Sign Up's": "Anmeldungen",

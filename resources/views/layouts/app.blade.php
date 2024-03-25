@@ -131,25 +131,6 @@
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                @canany(['manage_users', 'manage_settings'])
-                                    @can('manage_users')
-                                         <li>
-                                             <a class="dropdown-item" href="{{ route('users.index') }}">
-                                                 {{ __("Manage Users") }}
-                                             </a>
-                                         </li>
-                                    @endcan
-                                    @can('manage_settings')
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('user-roles.index') }}">
-                                                {{ __("Manage Roles") }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    <li><hr class="dropdown-divider"></li>
-
-                                @endcanany
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
