@@ -32,6 +32,7 @@ class UserRoleResource extends Resource
         return $form
             ->schema([
                 self::getTitleField(),
+                self::getRegistrationSystemKeyField(),
                 self::getForegroundColorField(),
                 self::getBorderColorField(),
                 self::getBackgroundColorField(),
@@ -91,6 +92,15 @@ class UserRoleResource extends Resource
             ->label('User Role')
             ->translateLabel()
             ->required()
+            ->maxLength(255);
+    }
+
+    private static function getRegistrationSystemKeyField(): Forms\Components\Component
+    {
+        return Forms\Components\TextInput::make('registration_system_key')
+            ->label('Group keys')
+            ->translateLabel()
+            ->helperText(__('Group keys from registration system (seperated with a comma)'))
             ->maxLength(255);
     }
 

@@ -33,6 +33,9 @@
     "Permission": "Berechtigung",
     "Permissions": "Berechtigungen",
 
+    "Group keys": "Gruppenschlüssel",
+    "Group keys from registration system (seperated with a comma)": "Gruppenschlüssel aus dem Registrierungssystem (getrennt mit Komma)",
+
     "Border Color": "Randfarbe",
     "Background Color": "Hintergrundfarbe",
     "Foreground Color": "Vordergrundfarbe",

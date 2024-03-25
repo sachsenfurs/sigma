@@ -18,37 +18,39 @@ class UserRoleSeeder extends Seeder
     public function run(): void
     {
         DB::table('user_roles')->insert([
-            'title'                 => 'Administrator',
-            'fore_color'            => '#333333',
-            'border_color'          => '#2196F3',
-            'background_color'      => '#DDFFFF',
-            'perm_manage_settings'  => true,
-            'perm_manage_users'     => true,
-            'perm_manage_events'    => true,
-            'perm_manage_locations' => true,
-            'perm_manage_hosts'     => true,
-            'created_at'            => now()
+            'title'                     => 'Administrator',
+            'fore_color'                => '#333333',
+            'border_color'              => '#2196F3',
+            'background_color'          => '#DDFFFF',
+            'perm_manage_settings'      => true,
+            'perm_manage_users'         => true,
+            'perm_manage_events'        => true,
+            'perm_manage_locations'     => true,
+            'perm_manage_hosts'         => true,
+            'created_at'                => now()
         ]);
         $this->insertPermissions('Administrator', Permission::all()->pluck('name')->toArray());
 
         DB::table('user_roles')->insert([
-            'title'                 => 'Gast',
-            'created_at'            => now()
+            'title'                     => 'Gast',
+            'created_at'                => now()
         ]);
 
         DB::table('user_roles')->insert([
-            'title'                 => 'Leitstelle',
-            'perm_manage_events'    => true,
-            'created_at'            => now()
+            'title'                     => 'Leitstelle',
+            'perm_manage_events'        => true,
+            'registration_system_key'   => 'leitstelle,foto',
+            'created_at'                => now()
         ]);
         $this->insertPermissions('Leitstelle', [
             'manage_events',
         ]);
 
         DB::table('user_roles')->insert([
-            'title'                 => 'Social Media',
-            'perm_post'             => true,
-            'created_at'            => now()
+            'title'                     => 'Social Media',
+            'perm_post'                 => true,
+            'registration_system_key'   => 'socialmedia',
+            'created_at'                => now()
         ]);
         $this->insertPermissions('Social Media', [
             'post',
