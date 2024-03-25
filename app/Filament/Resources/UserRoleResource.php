@@ -142,6 +142,7 @@ class UserRoleResource extends Resource
                     ->label('')
                     ->columns(4)
                     ->columnSpanFull()
+                    ->bulkToggleable()
                     ->relationship('permissions', 'name')
                     ->options(fn() => collect(Permission::all()->pluck('name', 'id')))
                     ->descriptions(fn() => collect(Permission::all()->pluck('friendly_name', 'id'))),
