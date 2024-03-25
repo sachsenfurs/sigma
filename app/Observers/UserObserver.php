@@ -29,6 +29,9 @@ class UserObserver
         });
 
         $userGroups = $user->groups;
+        if (!$userGroups) {
+            return;
+        }
         foreach ($userGroups as $userGroup) {
             if (!$userGroup) {
                 continue;
