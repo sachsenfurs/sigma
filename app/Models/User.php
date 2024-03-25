@@ -8,12 +8,11 @@ use App\Models\DDAS\Dealer;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -34,9 +33,17 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            UserRole::class,
+            'user_user_roles'
+        );
+    }
 
-    public function role(): BelongsTo {
-        return $this->belongsTo(UserRole::class, 'user_role_id');
+    public function permissions(): Collection
+    {
+        return $this->roles->map->permissions->flatten()->pluck('name')->unique();
     }
 
     public function attendeeEvents(): HasMany {
@@ -64,7 +71,7 @@ class User extends Authenticatable implements FilamentUser
         }
     }
 
-    public function hasGroup(string $name)
+    public function hasGroup(string $name): bool
     {
         return in_array($name, $this->groups);
     }

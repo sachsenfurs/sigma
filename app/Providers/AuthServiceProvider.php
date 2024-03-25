@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,32 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Gate::define('manage_settings', function ($user) {
-            return $user->role->perm_manage_settings;
-        });
-
-        Gate::define('manage_users', function ($user) {
-            return $user->role->perm_manage_users;
-        });
-
-        Gate::define('manage_events', function ($user) {
-            return $user->role->perm_manage_events;
-        });
-
-        Gate::define('manage_locations', function ($user) {
-            return $user->role->perm_manage_locations;
-        });
-
-        Gate::define('manage_hosts', function ($user) {
-            return $user->role->perm_manage_hosts;
-        });
-
-        Gate::define("login", function($user) {
-            return $user;
-        });
-
-        Gate::define("post", function($user) {
-            return $user->role->perm_post;
+        Gate::before(function ($user, $permission) {
+            return $user->permissions()->contains($permission);
         });
     }
 }

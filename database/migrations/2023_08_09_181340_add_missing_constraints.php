@@ -18,10 +18,6 @@ return new class extends Migration
            $table->foreignId("timetable_entry_id")->change()->constrained()->cascadeOnDelete();
         });
 
-        Schema::table("users", function(Blueprint $table) {
-            $table->foreignId("user_role_id")->change()->constrained()->restrictOnDelete();
-        });
-
         Schema::table("sig_timeslots", function(Blueprint $table) {
            $table->foreignId("timetable_entry_id")->change()->constrained()->cascadeOnDelete();
         });

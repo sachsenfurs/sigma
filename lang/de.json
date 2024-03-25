@@ -19,8 +19,22 @@
     "Manage Settings": "Einstellungen verwalten",
     "Manage Users": "Benutzer verwalten",
 
-    "User Role": "Benutzerrolle",
+    "User Count": "Benutzeranzahl",
     "User Roles": "Benutzerrollen",
+    "Assign": "Zuweisen",
+    "Remove": "Aufheben",
+    "Assign User": "Benutzer zuweisen",
+    "Remove User": "Benutzer aufheben",
+    "Assign Role": "Rolle zuweisen",
+    "Remove Role": "Rolle aufheben",
+    "Role Assigned": "Rolle zugewiesen",
+    "Role Removed": "Rolle aufgehoben",
+
+    "Permission": "Berechtigung",
+    "Permissions": "Berechtigungen",
+
+    "Group keys": "Gruppenschlüssel",
+    "Group keys from registration system (seperated with a comma)": "Gruppenschlüssel aus dem Registrierungssystem (getrennt mit Komma)",
 
     "Border Color": "Randfarbe",
     "Background Color": "Hintergrundfarbe",
@@ -147,6 +161,7 @@
     "Updated at": "Zuletzt geändert",
     "Add User": "Benutzer hinzufügen",
     "Create User": "Benutzer erstellen",
+    "User": "Benutzer",
     "Users": "Benutzer",
     "Delete User?": "Benutzer löschen?",
     "You haven't signed up for any event yet!": "Du hast dich für noch kein Event angemeldet!",
