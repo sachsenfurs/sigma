@@ -129,7 +129,7 @@
                                     <p>Reg-Nummer</p>
                                 </div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control" name="regNumber" placeholder="Reg-Nummer" value="{{ Auth::user()->id }}">
+                                    <input type="text" class="form-control" name="regId" placeholder="Reg-ID" value="{{ Auth::user()->reg_id }}">
                                 </div>
                             </div>
                         @else

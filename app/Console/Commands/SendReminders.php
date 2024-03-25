@@ -37,7 +37,6 @@ class SendReminders extends Command
         $upcomingReminders = SigReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
 
         foreach ($upcomingReminders as $reminder) {
-            //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
             if ($reminder->user->telegram_user_id) {
                 try {
                     $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
@@ -54,12 +53,15 @@ class SendReminders extends Command
         $upcomingTimeslotReminders = SigTimeslotReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
 
         foreach ($upcomingTimeslotReminders as $reminder) {
-            //$favorite = SigFavorite::where('user_id', $reminder->user_id)->where('timetable_entry_id', $reminder->timetable_entry_id)->first();
             if ($reminder->user->telegram_user_id && $reminder->send_at <= strtotime('-1 hour')) {
-                $reminder->user->notify(new SigTimeslotReminderNotification($reminder->timeslot, $reminder));
-                $reminder->executed_at = strtotime(Carbon::now());
-                $reminder->save();
-                $this->info('Reminder with id: '. $reminder->id . ' sent');
+                try {
+                    $reminder->user->notify(new SigTimeslotReminderNotification($reminder->timeslot, $reminder));
+                    $reminder->executed_at = strtotime(Carbon::now());
+                    $reminder->save();
+                    $this->info('Reminder with id: '. $reminder->id . ' sent');
+                } catch (\Exception $e) {
+                    $this->info($e->getMessage());
+                }
             } else {
                 $reminder->delete();
                 $this->info('Reminder with id: '. $reminder->id . ' skipped');
