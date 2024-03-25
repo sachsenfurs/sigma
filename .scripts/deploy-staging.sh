@@ -8,8 +8,11 @@ echo "Deployment started ..."
 (php artisan down) || true
 
 # reset local changes (if any)
-git clean -d -f .
+echo "git reset --hard"
 git reset --hard
+
+echo "git clean -d -f ."
+git clean -d -f .
 
 # Pull the latest version of the app
 git pull origin main
