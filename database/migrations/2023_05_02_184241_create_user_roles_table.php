@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
 
             $table->string('title');
-            $table->string('fore_color')->default('333333');
-            $table->string('border_color')->default('666666');
-            $table->string('background_color')->default('E6E6E6');
+            $table->string('fore_color')->default('#333333');
+            $table->string('border_color')->default('#666666');
+            $table->string('background_color')->default('#E6E6E6');
 
             $table->boolean('perm_manage_settings')->default(false);
             $table->boolean('perm_manage_users')->default(false);

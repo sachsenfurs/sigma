@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('sig_timeslot_reminders', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('timeslot_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('timeslot_id')->constrained("sig_timeslots")->cascadeOnDelete();
             $table->integer('send_at');
             $table->integer('executed_at')->nullable();
             $table->string('result')->nullable();

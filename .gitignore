@@ -28,3 +28,5 @@ public/css/filament
 public/js/filament
 composer.lock
 package-lock.json
+public/css
+public/js

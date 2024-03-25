@@ -13,7 +13,13 @@ class EditSigHost extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->modalHeading(__('Delete Host')),
         ];
+    }
+
+    public function getHeading(): string
+    {
+        return __('Edit Host');
     }
 }
