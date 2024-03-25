@@ -129,6 +129,7 @@ class SigEventController extends Controller
         $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? null;
         $sig->save();
 
+        //TODO: SigTranslation is not nessessary anymore and can be removed
         // Insert translation
         //if(in_array("en", $languages)){
             $translate = new SigTranslation([

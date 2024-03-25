@@ -21,6 +21,11 @@ class ArtshowBidResource extends Resource
 
     protected static ?string $navigationGroup = 'Artshow';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Artshow Bids');
+    }
+
     protected static ?int $navigationSort = 2;
     
     public static function form(Form $form): Form

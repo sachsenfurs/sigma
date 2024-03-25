@@ -21,16 +21,24 @@ class ArtshowArtistResource extends Resource
 
     protected static ?string $navigationGroup = 'Artshow';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Artshow Artists');
+    }
+
     protected static ?int $navigationSort = 0;
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
+                    ->label('Benutzername')
                     ->relationship('user', 'name'),
                 Forms\Components\TextInput::make('name')
+                    ->label('Künstlername')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('social')
+                    ->label('Soziale Medien')
                     ->maxLength(255),
             ]);
     }
@@ -40,11 +48,14 @@ class ArtshowArtistResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Benutzername')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Künstlername')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('social')
+                    ->label('Soziale Medien')
                     ->searchable(),
             ])
             ->filters([

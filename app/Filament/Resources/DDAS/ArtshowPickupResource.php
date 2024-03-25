@@ -21,6 +21,11 @@ class ArtshowPickupResource extends Resource
 
     protected static ?string $navigationGroup = 'Artshow';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Artshow Pickups');
+    }
+
     protected static ?int $navigationSort = 3;
     
     public static function form(Form $form): Form

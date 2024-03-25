@@ -14,9 +14,10 @@ class Dealer extends Model
     use HasFactory;
     
     protected $fillable = [
-        'user.reg_id','name', 'info',
+        'user_id','name', 'info',
         'info_en', 'gallery_link', 'icon_file',
-        'approved', 'sig_location.room'
+        'approved', 'sig_location.room', 'contact_way',
+        'contact', 'space'
     ];
 
     public function user(): BelongsTo|null {

@@ -19,6 +19,7 @@ class SigHostFactory extends Factory
         return [
             'name' => $this->faker->firstName,
             'description' => $this->faker->realText(),
+            'description_en' => $this->faker->realText(),
         ];
     }
 }

@@ -17,7 +17,6 @@ class ArtshowController extends Controller
      */
     public function index()
     {
-        
         $as_items = ArtshowItem::all();
         $as_artists = ArtshowArtist::all();
         // dd($as_items, $as_artists);
@@ -31,13 +30,12 @@ class ArtshowController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
 
-        $id = ArtshowArtist::pluck("id")->all();
-        $name = ArtshowArtist::orderBy("id")->get();
-        $artshow = ArtshowArtist::all();
+        $artist = ArtshowArtist::where('user_id', $user->id)->first();
+
+        // dd($user, $artist);
+
         return view("DDAS.artshow.create", compact([
-            'artshow',
-            'id',
-            'name',]));
+            'user', 'artist']));
     }
 
     /**
@@ -45,15 +43,75 @@ class ArtshowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $validate = $request->validate([
+            'ArtistName' => 'sometimes|required|string|max:255',
+            'ArtistWeb' => 'sometimes|required|url',
+            'ArtistItemName' => 'required|string|max:255',
+            'ArtistItemDescriptionDE' => 'required|string',
+            'ArtistItemAdditionalInfo' => 'nullable',
+            'ArtistItemStartBid' => 'required|numeric|min:0|max:10000',
+            'ArtistItemCharity' => 'required|integer|min:0|max:100',
+            'ArtistItemImage' => 'required|mimes:jpeg,png,jpg|max:5048',
+        ]);
+
+        $newImageName = time() . '-ArtShow-'. $user->id . '-' . $request->ArtistItemName . '.' . $request->ArtistItemImage->extension();
+
+        $request->ArtistItemImage->move(public_path('storage'), $newImageName);
+
+        // dd($request->all());
+
+        if (!ArtshowArtist::where('user_id', $user->id)->first())
+        {
+            ArtshowArtist::create([
+                'user_id' => $user->id,
+                'name' => $validate['ArtistName'],
+                'social' => $validate['ArtistWeb'],
+            ]);
+        }
+
+        $artist = ArtshowArtist::where('user_id', $user->id)->first();
+
+        // dd($artist);
+
+        ArtshowItem::create([
+            'artshow_artist_id' => $artist->id,
+            'name' => $validate['ArtistItemName'],
+            'description' => $validate['ArtistItemDescriptionDE'],
+            'starting_bid' => $validate['ArtistItemStartBid'],
+            'charity_percentage' => $validate['ArtistItemCharity'],
+            'additional_info' => $validate['ArtistItemAdditionalInfo'],
+            'image_file' => $newImageName,
+        ]);
+
+        return redirect('artshow');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ArtshowArtist $asa)
+    public function show(string $id)
     {
-        return view('DDAS.artshow.show',[ 'artshow' => ArtshowArtist::all()]);
+        $user = User::where('id', auth()->user()->id)->first();
+        $item = ArtshowItem::where('id',$id)->first();
+        $artists = ArtshowArtist::all();
+
+        $as_artist = null;
+
+        foreach ($artists as $artist)
+        {
+            if ($artist->id == $item->artshow_artist_id)
+            {
+                $as_artist = $artist;
+            }
+        }
+        // dd($as_artist);
+        
+        // dd($item);
+
+        // dd($artist, $item);
+        return view('DDAS.artshow.show', compact('as_artist', 'item', 'user'));
     }
 
     /**
@@ -61,7 +119,11 @@ class ArtshowController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $artist = ArtshowArtist::find($id);
+        $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
+
+        // dd($artist, $items);
+        return view('DDAS.artshow.edit', compact('artist', 'item'));
     }
 
     /**

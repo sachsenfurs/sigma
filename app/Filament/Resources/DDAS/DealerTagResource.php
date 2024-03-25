@@ -21,13 +21,25 @@ class DealerTagResource extends Resource
 
     protected static ?string $navigationGroup = 'Dealer\'s Den';
 
+    public static function getPluralLabel(): ?string
+    {
+        return __('Dealer Tags');
+    }
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->label('Tag Name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('name_en')
+                    ->label('Tag Name (EN)')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -35,7 +47,12 @@ class DealerTagResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('name_en')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //

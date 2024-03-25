@@ -31,6 +31,7 @@ class SigHostResource extends Resource
                 self::getNameField(),
                 self::getRegIdField(),
                 self::getDescriptionField(),
+                self::getDescriptionEnField(),
                 self::getHideField(),
             ]);
     }
@@ -128,7 +129,18 @@ class SigHostResource extends Resource
     {
         return
             Forms\Components\Textarea::make('description')
-                ->label('Description')
+                ->label('Description (German)')
+                ->translateLabel()
+                ->required()
+                ->maxLength(65535)
+                ->columnSpanFull();
+    }
+
+    private static function getDescriptionEnField(): Forms\Components\Component
+    {
+        return
+            Forms\Components\Textarea::make('description_en')
+                ->label('Description (English)')
                 ->translateLabel()
                 ->required()
                 ->maxLength(65535)

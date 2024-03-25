@@ -151,6 +151,16 @@ Route::group(['middleware' => "auth"], function() {
 
         Route::post("/translate", TranslateController::class)->name("translate");
     });
+
+    // Dealer´s Dan
+    Route::resource('/dealersden', DealersDenController::class);
+
+    //Artshow
+    Route::resource('/artshow', ArtshowController::class);
+
+    // Sig SignIn (Sigs Anmelden)
+    Route::resource('/sigsignin', SigSignInController::class);
+
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
 
     // Artshow

@@ -27,6 +27,12 @@ return new class extends Migration
 
             // Link zur Galerie o.ä.
             $table->string("gallery_link")->nullable();
+            $table->smallInteger("space")->default(1);
+
+            //Kontaktmöglichkeiten
+            $table->string("contact_way")->nullable();
+            $table->string("contact")->nullable();
+
 
             // Icon fürs Conbook (relativer Pfad, local storage)
             $table->string("icon_file")->nullable();

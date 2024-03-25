@@ -48,12 +48,6 @@ class DatabaseSeeder extends Seeder
 
         SigEvent::factory()->count(25)->create();
 
-        foreach(SigEvent::all() AS $event) {
-            SigTranslation::factory()->create([
-                'sig_event_id' => $event->id,
-            ]);
-        }
-
         TimetableEntry::factory()->count(50)->create();
 
         ArtshowItem::factory(10)->create();
