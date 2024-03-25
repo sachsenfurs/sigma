@@ -21,6 +21,18 @@ class DealerResource extends Resource
 
     protected static ?string $navigationGroup = 'Dealer\'s Den';
 
+    protected static array $spaces = [
+        '0' => '0',
+        '1' => '1',
+        '2' => '2',
+    ];
+
+    protected static array $contactWays = [
+        'telegram' => 'Telegram',
+        'phone' => 'Phone',
+        'email' => 'Email',
+    ];
+
     public static function getPluralLabel(): ?string
     {
         return __('Dealers');
@@ -52,15 +64,16 @@ class DealerResource extends Resource
                 Forms\Components\TextInput::make('gallery_link')
                     ->label('Galerie Link')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('space')
+                Forms\Components\Select::make('space')
                     ->label('Platzbedarf')
+                    ->options(static::$spaces)
                     ->required()
-                    ->default(1)
-                    ->maxLength(255),
-                forms\Components\TextInput::make('contact_way')
+                    ->default(1),
+                forms\Components\Select::make('contact_way')
                     ->label('Kontaktart')
+                    ->options(static::$contactWays)
                     ->required()
-                    ->maxLength(255),
+                    ->default('telegram'),
                 Forms\Components\TextInput::make('contact')
                     ->label('Kontakt')
                     ->required()

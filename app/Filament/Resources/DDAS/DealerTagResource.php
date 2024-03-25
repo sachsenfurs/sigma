@@ -32,7 +32,14 @@ class DealerTagResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->label('Tag Name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('name_en')
+                    ->label('Tag Name (EN)')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -40,7 +47,12 @@ class DealerTagResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('name_en')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //

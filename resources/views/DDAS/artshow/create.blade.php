@@ -42,10 +42,10 @@
                             @else
                                 <div class="row">
                                     <div class="col">
-                                        <x-form.input ident="ArtistName" pht="{{ $user->name }}" lt="Artist Name" />
+                                        <x-form.input ident="ArtistName" pht="{{ $user->name }}" lt="{{ __('Artist Name')}}" />
                                     </div>
                                     <div class="col">
-                                        <x-form.input ident="ArtistWeb" pht="{{ $user->social }}" lt="Social Media" />
+                                        <x-form.input ident="ArtistWeb" pht="{{ $user->social }}" lt="{{ __('Social Media')}}" />
                                     </div>
                                 </div>
                             @endif
@@ -60,28 +60,28 @@
                         <div class="card-body">
                             <div class="row pb-2">
                                 <div class="col">
-                                    <x-form.input ident="ArtistItemName" pht="Handpaws" lt="Item Name" />
+                                    <x-form.input ident="ArtistItemName" pht="Handpaws" lt="{{ __('Item Name')}}" />
                                 </div>
                                 <div class="col">
-                                    <x-form.image ident="ArtistItemImage" lt="Image" />
+                                    <x-form.image ident="ArtistItemImage" lt="{{ __('Image')}}" />
                                 </div>
                             </div>
                             <div class="row pb-2">
                                 <div class="col">
-                                    <x-form.input ident="ArtistItemStartBid" lt="Start Bid" />
+                                    <x-form.input ident="ArtistItemStartBid" lt="{{ __('Start Bid')}}" />
                                 </div>
                                 <div class="col">
-                                    <x-form.input ident="ArtistItemCharity" lt="Charity Ammount" />
+                                    <x-form.input ident="ArtistItemCharity" lt="{{ __('Charity Ammount in %')}}" />
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col">
+                                    <x-form.text ident="ArtistItemDescriptionDE" lt="{{ __('Description')}}" />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <x-form.text ident="ArtistItemDescriptionDE" lt="Beschreibung" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <x-form.text ident="ArtistItemAdditionalInfo" lt="Description" />
+                                    <x-form.text ident="ArtistItemAdditionalInfo" lt="{{ __('Additional Informations')}}" />
                                 </div>
                             </div>
                         </div>
