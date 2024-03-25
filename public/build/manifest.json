@@ -1,6 +1,6 @@
 {
   "lang/de.json": {
-    "file": "assets/de-1382b9e7.js",
+    "file": "assets/de-31cba74e.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -13,7 +13,7 @@
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-c112b4e0.css",
+    "file": "assets/app-152a82e9.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -37,12 +37,12 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-af3757e2.js",
+    "file": "assets/app-3fdd439b.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-c9b4fca0.css",
+    "file": "assets/app-468d37cc.css",
     "isEntry": true,
     "src": "resources/sass/app.scss"
   }
