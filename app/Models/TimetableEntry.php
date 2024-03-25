@@ -120,7 +120,7 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function maxUserRegsExeeded()
+    public function maxUserRegsExeeded(User $user)
     {
         if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
             return false;
@@ -129,7 +129,7 @@ class TimetableEntry extends Model
         $i = 0;
 
         foreach ($this->sigTimeslots as $timeslot) {
-            if ($timeslot->sigAttendees->contains('user_id', auth()->user()?->id)) {
+            if ($timeslot->sigAttendees->contains('user_id', $user?->id)) {
                 $i++;
             }
         }

@@ -123,7 +123,7 @@ Route::group(['middleware' => "auth"], function() {
 
     // Registration
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
-    Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
+    Route::post('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
