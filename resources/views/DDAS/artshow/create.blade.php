@@ -42,10 +42,10 @@
                             @else
                                 <div class="row">
                                     <div class="col">
-                                        <x-form.input ident="ArtistName" pht="{{ $user->name }}" lt="{{ __('Artist Name')}}" />
+                                        <x-form.input ident="ArtistName" value="{{ old('ArtistName')}}" lt="{{ __('Artist Name')}}" />
                                     </div>
                                     <div class="col">
-                                        <x-form.input ident="ArtistWeb" pht="{{ $user->social }}" lt="{{ __('Social Media')}}" />
+                                        <x-form.input ident="ArtistWeb" value="{{ old('ArtistWeb') }}" lt="{{ __('Social Media')}}" />
                                     </div>
                                 </div>
                             @endif
@@ -60,39 +60,39 @@
                         <div class="card-body">
                             <div class="row pb-2">
                                 <div class="col">
-                                    <x-form.input ident="ArtistItemName" pht="Handpaws" lt="{{ __('Item Name')}}" />
+                                    <x-form.input ident="ArtistItemName" value="{{ old('ArtistItemName')}}" lt="{{ __('Item Name')}}" />
                                 </div>
                                 <div class="col">
-                                    <x-form.image ident="ArtistItemImage" lt="{{ __('Image')}}" />
-                                </div>
-                            </div>
-                            <div class="row pb-2">
-                                <div class="col">
-                                    <x-form.input ident="ArtistItemStartBid" lt="{{ __('Start Bid')}}" />
-                                </div>
-                                <div class="col">
-                                    <x-form.input ident="ArtistItemCharity" lt="{{ __('Charity Ammount in %')}}" />
+                                    <x-form.image ident="ArtistItemImage" value="{{ old('ArtistItemImage')}}" lt="{{ __('Image')}}" />
                                 </div>
                             </div>
                             <div class="row pb-2">
                                 <div class="col">
-                                    <x-form.text ident="ArtistItemDescriptionDE" lt="{{ __('Description')}}" />
+                                    <x-form.input ident="ArtistItemStartBid" value="{{ old('ArtistItemStartBid')}}" lt="{{ __('Start Bid')}}" />
+                                </div>
+                                <div class="col">
+                                    <x-form.input ident="ArtistItemCharity" value="{{ old('ArtistItemCharity')}}" lt="{{ __('Charity Ammount in %')}}" />
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col">
+                                    <x-form.text ident="ArtistItemDescriptionDE" value="{{ old('ArtistItemDescriptionDE')}}" lt="{{ __('Description')}}" />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <x-form.text ident="ArtistItemAdditionalInfo" lt="{{ __('Additional Informations')}}" />
+                                    <x-form.text ident="ArtistItemAdditionalInfo" value="{{ old('ArtistItemAdditionalInfo')}}" lt="{{ __('Additional Informations')}}" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-3">
                         <div class="row">
+                            <div class="col-md-6">
+                                <a href="/sigs/signup" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            </div>
                             <div class="col-md-5">
                                 <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="/sigsignin" class="btn btn-secondary">{{ __('Cancel') }}</a>
                             </div>
                         </div>
                     </div>

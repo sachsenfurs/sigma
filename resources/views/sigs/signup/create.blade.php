@@ -7,7 +7,7 @@
 
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form action="/sigsignin" method="POST">
+                <form action="/sigs/signup" method="POST">
                     @csrf
                     <div class="card">
                         <div class="card-header">
@@ -51,7 +51,7 @@
                                                 {{ __('User Reg-ID') }}
                                             </div>
                                             <div class="col">
-                                                <input type="text" name="UserRegID" class="form-control" />
+                                                <input type="text" name="UserRegID" value="{{ old('UserRegID')}}" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -59,7 +59,7 @@
                                                 {{ __('Name / Nickname') }}
                                             </div>
                                             <div class="col">
-                                                <input type="text" name="SigHostName" class="form-control" />
+                                                <input type="text" name="SigHostName" value="{{ old('SigHostName')}}" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
@@ -67,7 +67,7 @@
                                                 {{ __('E-Mail Addresse') }}
                                             </div>
                                             <div class="col">
-                                                <input type="text" name="SigMail" class="form-control" />
+                                                <input type="text" name="SigMail" value="{{ old('SigMail')}}" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                                             {{ __('SIG Name') }}
                                         </div>
                                         <div class="col">
-                                            <input type="text" name="SigName" class="form-control" />
+                                            <input type="text" name="SigName" value="{{ old('SigName')}}" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -116,7 +116,7 @@
                                 <div class="col-md-10">
                                     <div class="row">
                                         <div class="col">
-                                            <x-form.text ident="SigDescriptionDE" lt="{{ __('Description') }}" />
+                                            <x-form.text ident="SigDescriptionDE" value="{{ old('SigDescriptionDE')}}" lt="{{ __('Description') }}" />
                                         </div>
                                     </div>
                                 </div>
@@ -193,7 +193,7 @@
                                     <div class="row">
                                         <div class="col">
                                             <x-form.text ident="additional_infos"
-                                                lt="{{ __('Additional Informations') }}" />
+                                                lt="{{ __('Additional Informations') }}" value="{{ old('additional_infos')}}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -202,11 +202,11 @@
                     </div>
                     <div class="d-flex justify-content-center mt-3">
                         <div class="row">
+                            <div class="col-md-6">
+                                <a href="/sigs/signup" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            </div>
                             <div class="col-md-5">
                                 <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="/sigsignin" class="btn btn-secondary">{{ __('Cancel') }}</a>
                             </div>
                         </div>
                     </div>

@@ -30,7 +30,7 @@
                                             {{ __('Art-Channle/-Group') }}
                                         </div>
                                         <div class="col mb-3">
-                                            <input name="DealerGalerie" class="form-control" />
+                                            <input name="DealerGalerie" value="{{ old('DealerGalerie')}}" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row">
@@ -50,10 +50,10 @@
                                             {{ __('Contact') }}
                                         </div>
                                         <div class="col mb-3">
-                                            <input name="DealerContact" class="form-control" />
+                                            <input name="DealerContact" value="{{ old('DealerContact')}}" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="col">
                                             {{ __('Dealer Space') }}
                                         </div>
@@ -64,16 +64,15 @@
                                                 <option value="2">2 Tische</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="row">
                                         <div class="col mb-3">
-                                            <x-form.image ident="DealerLogo" lt="{{ __('Dealer Logo')}}"></x-form.image>
+                                            <x-form.image ident="DealerLogo" value="{{ old('DealerLogo')}}" lt="{{ __('Dealer Logo')}}"></x-form.image>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                        <x-form.text ident="DealerSort" lt="{{ __('Sortiment') }}"
-                                            pht="Fullsuits, Partials, Art-Works" />
+                                        <x-form.text ident="DealerSort" value="{{ old('DealerSort')}}" lt="{{ __('Sortiment') }}" />
                                         </div>
                                     </div>
                                 </div>
@@ -82,11 +81,11 @@
                     </div>
                     <div class="d-flex justify-content-center mt-3">
                         <div class="row">
+                            <div class="col-md-6">
+                                <a href="/sigs/signup" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            </div>
                             <div class="col-md-5">
                                 <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="/sigsignin" class="btn btn-secondary">{{ __('Cancel') }}</a>
                             </div>
                         </div>
                     </div>

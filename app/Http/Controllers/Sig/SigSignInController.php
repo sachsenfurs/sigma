@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
-use App\Models\SigTimeslot;
 use App\Models\SigHost;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
-use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +20,6 @@ class SigSignInController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
         $sighost = SigHost::where('reg_id', $user->reg_id)->first();
-        
 
         if ($user->reg_id)
         {
@@ -59,11 +56,9 @@ class SigSignInController extends Controller
                             ];
                         }
                     }
-                    // dd($translations);
                 }
 
-
-                return view('sigs.sigsignin.index', compact([
+                return view('sigs.signup.index', compact([
                     'user',
                     'sighost',
                     'sigs',
@@ -71,14 +66,14 @@ class SigSignInController extends Controller
                 ]));
             }
 
-            return view('sigs.sigsignin.index', compact([
+            return view('sigs.signup.index', compact([
                 'user',
                 'sighost',
             ]));
         }
         else 
         {
-            return redirect('sigsignin/create')->withErrors("Du hast keine Sigs erstellt!");
+            return redirect('sigs/signup/create')->withErrors("Du hast keine Sigs erstellt!");
         }
     }
 
@@ -93,10 +88,10 @@ class SigSignInController extends Controller
         {
             $sighost = SigHost::where('reg_id', $user->reg_id)->first();
             // dd($user);
-            return view('sigs.sigsignin.create', compact(['user','sighost']));
+            return view('sigs.signup.create', compact(['user','sighost']));
         }
         else{
-            return view('sigs.sigsignin.create', compact(['user']));
+            return view('sigs.signup.create', compact(['user']));
         }
     }
 
@@ -162,7 +157,7 @@ class SigSignInController extends Controller
     // dd($event);
 
     
-    return redirect('sigsignin');
+    return redirect('sigs/signup');
     }
 
 

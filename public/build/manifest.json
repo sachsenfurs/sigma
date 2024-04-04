@@ -1,14 +1,6 @@
 {
-  "bootstrap-icons.woff": {
-    "file": "assets/bootstrap-icons-bb1de989.woff",
-    "src": "bootstrap-icons.woff"
-  },
-  "bootstrap-icons.woff2": {
-    "file": "assets/bootstrap-icons-476adf42.woff2",
-    "src": "bootstrap-icons.woff2"
-  },
   "lang/de.json": {
-    "file": "assets/de-2d57c279.js",
+    "file": "assets/de-9e1993f0.js",
     "isDynamicEntry": true,
     "src": "lang/de.json"
   },
@@ -21,12 +13,12 @@
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-c112b4e0.css",
+    "file": "assets/app-152a82e9.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/css/filament/admin/theme.css": {
-    "file": "assets/theme-36c30127.css",
+    "file": "assets/theme-8e7c44ab.css",
     "isEntry": true,
     "src": "resources/css/filament/admin/theme.css"
   },
@@ -45,12 +37,12 @@
     "dynamicImports": [
       "lang/de.json"
     ],
-    "file": "assets/app-21cd2e63.js",
+    "file": "assets/app-6d2fbe92.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-c9b4fca0.css",
+    "file": "assets/app-468d37cc.css",
     "isEntry": true,
     "src": "resources/sass/app.scss"
   }
