@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasSigEvents;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -107,8 +108,14 @@ class TimetableEntry extends Model
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
-    public function getDurationAttribute() {
-        return $this->end->diffInMinutes($this->start);
+    public function duration(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->end->diffInMinutes($this->start)
+        );
+    }
+
+    public function hasEventChanged(): bool {
+        return $this->updated_at->isAfter($this->created_at);
     }
 
     public function getFavStatus()
@@ -141,19 +148,23 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function getFormattedLengthAttribute() {
-        $mins =  $this->start->diffInMinutes($this->end);
-        if($mins == 0)
-            return "";
-        if($mins < 60)
-            return $mins." min";
-        return round($this->start->floatDiffInHours($this->end), 1). " h";
+    public function formattedLength(): Attribute {
+        return Attribute::make(function() {
+            $mins =  $this->start->diffInMinutes($this->end);
+            if($mins == 0)
+                return "";
+            if($mins < 60)
+                return $mins." min";
+            return round($this->start->floatDiffInHours($this->end), 1). " h";
+        });
     }
 
-    public function getIsFavoriteAttribute() {
-        if(Auth::check()) {
-            return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
-        }
-        return false;
+    public function isFavorite(): Attribute {
+        return Attribute::make(function() {
+            if(Auth::check()) {
+                return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
+            }
+            return false;
+        });
     }
 }
