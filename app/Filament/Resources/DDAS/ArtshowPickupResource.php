@@ -26,8 +26,8 @@ class ArtshowPickupResource extends Resource
         return __('Artshow Pickups');
     }
 
-    protected static ?int $navigationSort = 3;
-    
+    protected static ?int $navigationSort = 240;
+
     public static function form(Form $form): Form
     {
         return $form

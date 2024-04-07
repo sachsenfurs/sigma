@@ -21,6 +21,8 @@ class DealerResource extends Resource
 
     protected static ?string $navigationGroup = 'Dealer\'s Den';
 
+    protected static ?int $navigationSort = 300;
+
     protected static array $spaces = [
         '0' => '0',
         '1' => '1',
@@ -38,7 +40,7 @@ class DealerResource extends Resource
         return __('Dealers');
     }
 
-    protected static ?int $navigationSort = 0;
+
     public static function form(Form $form): Form
     {
         return $form

@@ -26,7 +26,7 @@ class ArtshowArtistResource extends Resource
         return __('Artshow Artists');
     }
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 200;
     public static function form(Form $form): Form
     {
         return $form

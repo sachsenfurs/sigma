@@ -18,7 +18,7 @@ class SigLocationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationGroup = 'SIG';
-
+    protected static ?int $navigationSort = 100;
     public static function getLabel(): ?string
     {
         return __('Location');

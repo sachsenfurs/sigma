@@ -61,16 +61,14 @@ class SigEventResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                 ]),
             ])
+            ->defaultPaginationPageOption(50)
             ->bulkActions([
                 //
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+    public static function getNavigationBadge(): ?string {
+        return "123"; // TODO: count "unconfirmed" SIGs
     }
 
     public static function getPages(): array

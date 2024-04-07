@@ -17,6 +17,7 @@ class SigTagResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?int $navigationSort = 50;
 
     public static function getPluralLabel(): ?string
     {

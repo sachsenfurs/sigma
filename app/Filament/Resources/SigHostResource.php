@@ -18,6 +18,7 @@ class SigHostResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'SIG';
+    protected static ?int $navigationSort = 20;
 
     public static function getPluralLabel(): ?string
     {
@@ -41,7 +42,7 @@ class SigHostResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('reg_id')
-            ->defaultPaginationPageOption('25')
+            ->defaultPaginationPageOption(50)
             ->filters([
                 //
             ])
