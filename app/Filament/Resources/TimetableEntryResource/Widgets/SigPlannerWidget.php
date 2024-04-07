@@ -5,8 +5,13 @@ namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\TimetableEntry;
 use Filament\Actions\Action;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 use Saade\FilamentFullCalendar\Actions\DeleteAction;
@@ -67,33 +72,74 @@ class SigPlannerWidget extends FullCalendarWidget
                         'end' => $arguments['end'] ?? null,
                         'sig_location_id' => $arguments['resource']['id'] ?? null,
                     ]);
-
-                }),
+                })
+                ->modalFooterActionsAlignment(Alignment::End)
+                ->createAnother(false)
+            ,
         ];
     }
 
     protected function modalActions(): array {
         return [
-            EditAction::make()
-                  ->mountUsing(function(TimetableEntry $entry, Form $form, array $arguments) {
-                      $entry->start             = $arguments['event']['start'] ?? $entry->start;
-                      $entry->end               = $arguments['event']['end'] ?? $entry->end;
-                      $entry->sig_location_id   = $arguments['newResource']['id'] ?? $entry->sig_location_id;
-                      $form->fill($entry->attributesToArray());
-                  }),
-            EditAction::make('view')
+            EditAction::make("edit")
+                ->using(function(Model $record, array $data) {
+                    return TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data);
+                })
+                ->mountUsing(function(TimetableEntry $entry, Form $form, array $arguments) {
+                    $entry->start             = $arguments['event']['start'] ?? $entry->start;
+                    $entry->end               = $arguments['event']['end'] ?? $entry->end;
+                    $entry->sig_location_id   = $arguments['newResource']['id'] ?? $entry->sig_location_id;
+
+                    $form->fill($entry->attributesToArray());
+                })
                 ->modalFooterActions([
                     Action::make(__("Save"))
-                        ->submit("form"),
+                        ->submit("form")
+                        ->keyBindings(["return"]),
+                    Action::make(__("Cancel"))
+                        ->color("gray")
+                        ->close(),
+                ])
+                ->modalFooterActionsAlignment(Alignment::End)
+            ,
+            EditAction::make("view")
+                ->using(function(Model $record, array $data) {
+                    return TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data);
+                })
+                ->modalFooterActions([
+                    Action::make(__("Save"))
+                        ->submit("form")
+                        ->keyBindings(["return"]),
                     Action::make(__("Cancel"))
                         ->color("gray")
                         ->close(),
                     DeleteAction::make()
                         ->outlined()
-                        ->size("xs")
                 ])
+                ->modalFooterActionsAlignment(Alignment::End)
         ];
     }
+
+//    /**
+//     * "Fast Mode" without confirmation dialog
+//     * @param string $name
+//     * @param array $arguments
+//     * @return mixed
+//     */
+//    public function mountAction(string $name, array $arguments = []): mixed {
+//        // TODO: Implement toggle switch for "fast mode"
+//        if($name == "edit") {
+//            $entry = TimetableEntry::findOrFail($arguments['event']['id'] ?? null);
+//            $entry->start = $arguments['event']['start'] ?? $entry->start;
+//            $entry->end = $arguments['event']['end'] ?? $entry->end;
+//            $entry->sig_location_id = $arguments['newResource']['id'] ?? $entry->sig_location_id;
+//            $entry->save();
+//            $this->refreshRecords();
+//            return true;
+//        } else {
+//            return parent::mountAction($name, $arguments);
+//        }
+//    }
 
     /**
      * Override from InteractsWithActions to refresh/revert the view if unsuccessful
@@ -111,20 +157,56 @@ class SigPlannerWidget extends FullCalendarWidget
      * @param array $event
      * @return void
      */
-    public function onEventClick(array $event): void {
-        if ($this->getModel()) {
-            $this->record = $this->resolveRecord($event['id']);
-        }
+//    public function onEventClick(array $event): void {
+//        if ($this->getModel()) {
+//            $this->record = $this->resolveRecord($event['id']);
+//        }
+//
+//
+//        $this->replaceMountedAction('edit', [
+//            'type' => 'click',
+//            'event' => $event,
+//        ]);
+//    }
 
-        $this->mountAction('edit', [
-            'type' => 'click',
-            'event' => $event,
-        ]);
-    }
+//    public function getFormSchema(): array {
+//        return [
+//            Grid::make()
+//            ->columns(2)
+//            ->schema(TimetableEntryResource::getSchema())
+//        ];
+//    }
 
     public function getFormSchema(): array {
-        return [
+        return //TimetableEntryResource::getSchema();
+            [
+
             Grid::make()
+                ->columns(2)
+                ->schema([
+                    Select::make('sig_event_id')
+                          ->relationship('sigEvent', 'name')
+                          ->prefix(__("SIG"))
+                          ->hiddenLabel()
+                          ->searchable()
+                          ->preload()
+                          ->required(),
+                    Select::make('sig_location_id')
+                          ->prefix(__("Location"))
+                          ->hiddenLabel()
+                          ->relationship('sigLocation', 'name'),
+
+                    DateTimePicker::make('start')
+                                  ->seconds(false)
+                                  ->required()
+                                  ->prefix(__("Start"))
+                                  ->hiddenLabel(true),
+                    DateTimePicker::make('end')
+                                  ->seconds(false)
+                                  ->required()
+                                  ->prefix(__("End"))
+                                  ->hiddenLabel(true),
+                ])
             ->columns(2)
             ->schema(TimetableEntryResource::getSchema())
         ];

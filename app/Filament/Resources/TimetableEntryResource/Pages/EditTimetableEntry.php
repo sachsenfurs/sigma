@@ -40,6 +40,10 @@ class EditTimetableEntry extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
+        return self::handleUpdate($record, $data);
+    }
+
+    public static function handleUpdate(Model $record, array $data): Model {
         // If the send_update flag is set, we will update the timestamps
         $record->timestamps = false;
         if ($data['send_update'] ?? false) {
@@ -57,5 +61,4 @@ class EditTimetableEntry extends EditRecord
 
         return $record;
     }
-
 }

@@ -26,6 +26,7 @@ class TimetableEntryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = SigPlanning::class;
+    protected static ?int $navigationSort = 10;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getLabel(): ?string
@@ -51,11 +52,23 @@ class TimetableEntryResource extends Resource
             self::getSigLocationField(),
             self::getSigStartField(),
             self::getSigEndField(),
-            self::getSigNewField(),
-            self::getSigCancelledField(),
-            self::getSigHideField(),
+
+            Forms\Components\Fieldset::make("Event Settings")
+                ->schema([
+                    self::getSigNewField(),
+                    self::getSigHideField(),
+                    self::getSigCancelledField(),
+                ])
+                ->columns(3),
+
+            Forms\Components\Fieldset::make("Communication Settings")
+                ->schema([
+                    self::getSendUpdateField(),
+                ])
+                ->hidden(fn(string $operation): bool => $operation == "create")
+            ,
+
             self::getResetUpdateField(),
-            self::getSendUpdateField(),
         ];
     }
 
@@ -224,26 +237,29 @@ class TimetableEntryResource extends Resource
 
     private static function getSigNewField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('new')
+        return Forms\Components\Toggle::make('new')
             ->label('New Event')
             ->translateLabel()
-            ->formatStateUsing(function() {
+            ->formatStateUsing(function(?Model $record) {
                 // automatically prefill to "true" when con (in this case the first event) has started
-                return Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                if(!$record) // only prefill when a new record is created (current $record == null)
+                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                return (bool)$record->new;
             });
     }
 
     private static function getSigCancelledField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('cancelled')
+        return Forms\Components\Toggle::make('cancelled')
             ->label('Event Cancelled')
-            ->translateLabel()
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->onColor("danger")
+            ->visible(fn(?Model $record): bool => $record !== null)
+            ->translateLabel();
     }
 
     private static function getSigHideField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('hide')
+        return Forms\Components\Toggle::make('hide')
             ->label('Internal Event')
             ->translateLabel();
     }
@@ -253,7 +269,8 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Checkbox::make('reset_update')
             ->label('Reset \'Changed\'-flag')
             ->translateLabel()
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false))
+            ;
     }
 
     private static function getSendUpdateField(): Forms\Components\Component
@@ -261,7 +278,6 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Checkbox::make('send_update')
             ->label('Announce Changes')
             ->translateLabel()
-            ->helperText(__('This needs to be checked if the event should be marked as changed!'))
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->helperText(__('This needs to be checked if the event should be marked as changed!'));
     }
 }
