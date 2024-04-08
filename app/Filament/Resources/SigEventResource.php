@@ -47,7 +47,6 @@ class SigEventResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('timetable_entries_count', 'desc')
-            ->defaultPaginationPageOption('25')
             ->emptyStateHeading(__('No SIGs available'))
             ->filters([
                 //
@@ -58,7 +57,6 @@ class SigEventResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                 ]),
             ])
-            ->defaultPaginationPageOption(50)
             ->bulkActions([
                 //
             ]);

@@ -2,8 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Models\SigLocation;
-use App\Models\TimetableEntry;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -11,6 +9,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Tables\Table;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -18,15 +17,17 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Carbon;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
-
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        // Default pagination for all tables
+        Table::configureUsing(function(Table $table): void {
+            $table->defaultPaginationPageOption(50);
+        });
+
         return $panel
             ->default()
             ->id('admin')
@@ -65,15 +66,10 @@ class AdminPanelProvider extends PanelProvider
             ->breadcrumbs(false)
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->bootUsing(function() use ($panel) {
-
                 // this has to be inside the "bootUsing" function since we are using database queries
                 // which are not always available when the AdminPanelProvider is registered!
                 // ServiceProviders otherwise are registered in an early state of the application, even in artisan commands!
-
                 FilamentFullCalendarProvider::registerPlugin($panel);
-
-            })
-
-            ;
+            });
     }
 }

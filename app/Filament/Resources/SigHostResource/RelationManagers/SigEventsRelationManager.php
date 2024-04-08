@@ -19,7 +19,6 @@ class SigEventsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns(self::getTableColumns())
             ->headerActions(self::getTableHeaderActions())
-            ->defaultPaginationPageOption(50)
             ->actions(self::getTableEntryActions());
     }
 

@@ -37,7 +37,6 @@ class SigTagResource extends Resource
     {
         return $table
             ->columns(self::getTableColumns())
-            ->defaultPaginationPageOption('25')
             ->filters([
                 //
             ])

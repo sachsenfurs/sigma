@@ -41,7 +41,6 @@ class SigHostResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('reg_id')
-            ->defaultPaginationPageOption(50)
             ->filters([
                 //
             ])

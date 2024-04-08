@@ -48,7 +48,6 @@ class SigLocationResource extends Resource
     {
         return $table
             ->columns(self::getTableColumns())
-            ->defaultPaginationPageOption('all')
             ->filters([
                 //
             ])
