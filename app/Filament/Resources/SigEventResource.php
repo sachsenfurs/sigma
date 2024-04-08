@@ -189,7 +189,7 @@ class SigEventResource extends Resource
                                 'name' => $data['name'],
                                 'description' => $data['description'] ?? null,
                                 'description_en' => $data['description_en'] ?? null,
-                            ]);
+                            ])->id ?? null;
                         }),
                 ])
                 ->columnSpan(1)
@@ -247,7 +247,7 @@ class SigEventResource extends Resource
                         return SigHost::create([
                             'name' => $data['name'],
                             'reg_id' => $data['reg_id'] ?? null,
-                        ]);
+                        ])->id ?? null;
                     })
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
