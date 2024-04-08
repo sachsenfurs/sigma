@@ -22,18 +22,18 @@ class SigSignInController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
         $sighost = SigHost::where('reg_id', $user->reg_id)->first();
-        
+
 
         if ($user->reg_id)
         {
             if ($sighost)
             {
                 $sigs = SigEvent::where('sig_host_id', $sighost->id)->get();
-                
+
                 $siglocations = [];
                 foreach($sigs as $sig) {
                     $time = TimetableEntry::where('sig_event_id', $sig->id)->first();
-                    
+
                     if (!$time)
                     {
                         $siglocations[$sig->id] = [
@@ -76,7 +76,7 @@ class SigSignInController extends Controller
                 'sighost',
             ]));
         }
-        else 
+        else
         {
             return redirect('sigsignin/create')->withErrors("Du hast keine Sigs erstellt!");
         }
@@ -88,7 +88,7 @@ class SigSignInController extends Controller
     public function create()
     {
         $user = User::where('id', auth()->user()->id)->first();
-        
+
         if ($user->reg_id)
         {
             $sighost = SigHost::where('reg_id', $user->reg_id)->first();
@@ -116,7 +116,7 @@ class SigSignInController extends Controller
             'SigDescriptionDE.required' => __('Please insert a SIG Description!'),
             'additional_infos.required_if' => __('The Additional Informations field is required when Other Stuff is Yes!'),
         ]);
-    
+
     if (!SigHost::where('reg_id', $user->reg_id)->first())
     {
         SigHost::create([
@@ -143,14 +143,13 @@ class SigSignInController extends Controller
             $languages = []; // Falls keine gültige Option ausgewählt wurde, bleibt das Array leer
             break;
         }
-    
+
     // dd($request);
     $event = SigEvent::create([
         'name' => $validated['SigName'],
         'sig_host_id' => SigHost::where('reg_id', $user->reg_id)->first()->id,
         'languages' => $languages, // Verwendet das modifizierte $languages Array
         'description' => $request->input('SigDescriptionDE'),
-        'sig_location_id' => '2',
         'reg_possible' => '0',
         'max_regs_per_day' => '1',
         'fursuit_support' => $request->input('SigNeedsFurrySupport'),
@@ -161,7 +160,7 @@ class SigSignInController extends Controller
     ]);
     // dd($event);
 
-    
+
     return redirect('sigsignin');
     }
 

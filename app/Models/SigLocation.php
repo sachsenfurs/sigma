@@ -7,11 +7,9 @@ use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\HasTimetableEntries;
 use App\Models\Traits\NameIdAsSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class SigLocation extends Model
 {
@@ -31,9 +29,16 @@ class SigLocation extends Model
         return $this->hasMany(SigLocationTranslation::class);
     }
 
-    public function sigEvents(): HasMany
+    public function sigEvents(): HasManyThrough
     {
-        return $this->hasMany(SigEvent::class);
+        return $this->hasManyThrough(
+            SigEvent::class,
+            TimetableEntry::class,
+            'sig_location_id',
+            'id',
+            'id',
+            'sig_event_id'
+        );
     }
     public function dealers(): HasMany {
         return $this->hasMany(Dealer::class);
