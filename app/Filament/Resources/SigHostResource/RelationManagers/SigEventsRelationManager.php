@@ -43,11 +43,6 @@ class SigEventsRelationManager extends RelationManager
                 ->label('Languages')
                 ->translateLabel()
                 ->view('filament.tables.columns.sig-event.flag-icon'),
-            Tables\Columns\TextColumn::make('sigLocation.name')
-                ->label('Location')
-                ->translateLabel()
-                ->searchable()
-                ->sortable(),
             Tables\Columns\TextColumn::make('timetable_entries_count')
                 ->label('In Schedule')
                 ->translateLabel()

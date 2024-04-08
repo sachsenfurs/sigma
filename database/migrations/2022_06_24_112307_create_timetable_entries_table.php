@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('timetable_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId("sig_event_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("sig_location_id")->nullable()->constrained()->nullOnDelete();
+            $table->foreignId("sig_location_id")->constrained()->cascadeOnDelete();
             $table->dateTime("start");
             $table->dateTime("end");
             $table->boolean("cancelled")->default(false);

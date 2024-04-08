@@ -8,12 +8,9 @@ use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigLocation;
-use App\Models\SigTag;
 use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Gate;
 use function PHPUnit\Framework\isNull;
@@ -87,7 +84,6 @@ class SigEventController extends Controller
             'host_id' => 'required',
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'nullable|int',
-            'location' => 'required|exists:' . SigLocation::class . ",id",
             'description' => "nullable|string",
             'description_en' => "nullable|string",
             'reg_possible' => '',
@@ -122,7 +118,6 @@ class SigEventController extends Controller
         $sig = new SigEvent();
         $sig->name = $validated['name'];
         $sig->sigHost()->associate($host_id);
-        $sig->sigLocation()->associate($validated['location']);
         $sig->description = $validated['description'];
         $sig->languages = $languages;
         $sig->reg_possible = $request->has('reg_possible');
@@ -171,7 +166,6 @@ class SigEventController extends Controller
             'host' => "required_if:host_id,NEW|string",
             'reg_id' => 'integer|nullable',
             'max_regs_per_day' => 'nullable|integer',
-            'location' => 'exists:' . SigLocation::class . ",id",
             'description' => "nullable|string",
             'description_en' => "nullable|string",
             'tags' => "nullable|array",
@@ -198,7 +192,6 @@ class SigEventController extends Controller
             $sig->sigHost()->associate($host_id);
             $sig->reg_possible = $request->has('reg_possible');
             $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
-            $sig->sigLocation()->associate($validated['location']);
 
             $sig->sigTags()->sync($request->get("tags"));
         }

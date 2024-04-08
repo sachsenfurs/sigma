@@ -10,7 +10,6 @@
                 <th>Titel</th>
                 <th>Host</th>
                 <th>Sprachen</th>
-                <th>Location</th>
                 <th>Tags</th>
                 <th>Im Programmplan</th>
                 <th>Aktion</th>
@@ -41,12 +40,6 @@
                         @foreach($sig->languages AS $lang)
                             <img src="/icons/{{ $lang }}-flag.svg" alt="" style="height: 1em">
                         @endforeach
-                    </td>
-                    <td>
-                        <a href="{{ route("locations.show", $sig->sigLocation) }}" class="btn btn-secondary">
-                            <i class="bi bi-geo-alt"></i>
-                            {{ $sig->sigLocation->name }}
-                        </a>
                     </td>
                     <td>
                         @foreach($sig->sigTags AS $tag)

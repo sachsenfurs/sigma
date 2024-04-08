@@ -198,6 +198,7 @@ class TimetableEntryResource extends Resource
                     return [ $sigLocation->id => $name ];
                 })->toArray();
             })
+            ->required()
             ->searchable()
             ->preload();
     }

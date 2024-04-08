@@ -32,10 +32,6 @@ class SigEvent extends Model
         return $this->belongsTo(SigHost::class);
     }
 
-    public function sigLocation(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo(SigLocation::class);
-    }
-
     public function sigTranslation(): \Illuminate\Database\Eloquent\Relations\HasOne {
         return $this->hasOne(SigTranslation::class, "sig_event_id");
     }

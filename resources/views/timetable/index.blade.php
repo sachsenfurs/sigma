@@ -25,7 +25,7 @@
                             <label for="name">{{ __("SIG") }}</label>
                             <select name="sig_event_id" class="form-control">
                                 @foreach($sigEvents AS $sig)
-                                    <option value="{{ $sig->id }}">{{ $sig->name }} - {{ $sig->sigLocation->name . " " . $sig->sigLocation->description }}</option>
+                                    <option value="{{ $sig->id }}">{{ $sig->name }}</option>
                                 @endforeach
                             </select>
                         </div>

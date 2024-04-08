@@ -6,9 +6,7 @@ use App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
-use App\Models\SigLocation;
 use App\Models\SigTag;
-use App\Models\SigTranslation;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -35,11 +33,10 @@ class SigEventResource extends Resource
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
+                self::getSigTagsFieldSet(),
                 self::getSigLanguageFieldSet(),
                 self::getSigHostFieldSet(),
-                self::getSigLocationFieldSet(),
                 self::getSigRegistrationFieldSet(),
-                self::getSigTagsFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfosFieldSet(),
             ]);
@@ -108,11 +105,6 @@ class SigEventResource extends Resource
                 ->label('Languages')
                 ->translateLabel()
                 ->view('filament.tables.columns.sig-event.flag-icon'),
-            Tables\Columns\TextColumn::make('sigLocation.name')
-                ->label('Location')
-                ->translateLabel()
-                ->searchable()
-                ->sortable(),
             Tables\Columns\TextColumn::make('sigTags.description_localized')
                 ->label('Tags')
                 ->translateLabel()
@@ -142,6 +134,62 @@ class SigEventResource extends Resource
                     ->columnSpanFull(),
             ])
             ->columnSpan(1);
+    }
+
+    private static function getSigTagsFieldSet(): Forms\Components\Component
+    {
+        return
+            Forms\Components\Fieldset::make('tags')
+                ->label('Tags')
+                ->translateLabel()
+                ->schema([
+                    Forms\Components\Select::make('sigTags')
+                        ->label('')
+                        ->options(SigTag::all()->pluck('description', 'id'))
+                        ->relationship('sigTags', 'description')
+                        ->preload()
+                        ->multiple()
+                        ->columnSpanFull()
+                        ->live()
+                        ->default(function () {
+                            // Try to prefill the tag (passed when creating a new SIG from the tag detail page)
+                            $tagId = request()->input('tag_id') ?? null;
+                            if (SigTag::find($tagId)) {
+                                return [$tagId];
+                            }
+                            return null;
+                        })
+                        ->createOptionModalHeading(__('Create Tag'))
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('name')
+                                ->label('Name')
+                                ->translateLabel()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\Fieldset::make('description')
+                                ->label('Description')
+                                ->translateLabel()
+                                ->schema([
+                                    Forms\Components\Textarea::make('description')
+                                        ->label('German')
+                                        ->translateLabel()
+                                        ->rows(4),
+                                    Forms\Components\Textarea::make('description_en')
+                                        ->label('English')
+                                        ->translateLabel()
+                                        ->rows(4),
+                                ]),
+                        ])
+                        ->createOptionUsing(function ($data) {
+                            return SigTag::create([
+                                'name' => $data['name'],
+                                'description' => $data['description'] ?? null,
+                                'description_en' => $data['description_en'] ?? null,
+                            ]);
+                        }),
+                ])
+                ->columnSpan(1)
+                ->visible(auth()->user()->can('manage_events'));
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component
@@ -216,40 +264,6 @@ class SigEventResource extends Resource
             ->visible(auth()->user()->can('manage_events'));
     }
 
-    private static function getSigLocationFieldSet(): Forms\Components\Component
-    {
-        return
-            Forms\Components\Fieldset::make('location')
-                ->label('SIG Location')
-                ->translateLabel()
-                ->schema([
-                    Forms\Components\Select::make('sig_location_id')
-                        ->label('Location')
-                        ->translateLabel()
-                        ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
-                        ->searchable()
-                        ->preload()
-                        ->default(function () {
-                            // Try to prefill the location (passed when creating a new SIG from the location detail page)
-                            $locationId = request()->input('location_id') ?? null;
-                            if (SigLocation::find($locationId)) {
-                                return $locationId;
-                            }
-                            return null;
-                        })
-                        ->getOptionLabelFromRecordUsing(function (Model $record) {
-                            // If the location has a description, append it to the name
-                            if ($record->description) {
-                                return $record->name . ' - ' . $record->description;
-                            }
-                            return $record->name;
-                        })
-                        ->columnSpanFull(),
-                ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
-    }
-
     private static function getSigRegistrationFieldSet(): Forms\Components\Component
     {
         return
@@ -270,62 +284,6 @@ class SigEventResource extends Resource
                         ->default(1)
                         ->visible(fn (Get $get) => $get('reg_possible') === true)
                         ->columnSpanFull(),
-                ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
-    }
-
-    private static function getSigTagsFieldSet(): Forms\Components\Component
-    {
-        return
-            Forms\Components\Fieldset::make('tags')
-                ->label('Tags')
-                ->translateLabel()
-                ->schema([
-                    Forms\Components\Select::make('sigTags')
-                        ->label('')
-                        ->options(SigTag::all()->pluck('description', 'id'))
-                        ->relationship('sigTags', 'description')
-                        ->preload()
-                        ->multiple()
-                        ->columnSpanFull()
-                        ->live()
-                        ->default(function () {
-                            // Try to prefill the tag (passed when creating a new SIG from the tag detail page)
-                            $tagId = request()->input('tag_id') ?? null;
-                            if (SigTag::find($tagId)) {
-                                return [$tagId];
-                            }
-                            return null;
-                        })
-                        ->createOptionModalHeading(__('Create Tag'))
-                        ->createOptionForm([
-                            Forms\Components\TextInput::make('name')
-                                ->label('Name')
-                                ->translateLabel()
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\Fieldset::make('description')
-                                ->label('Description')
-                                ->translateLabel()
-                                ->schema([
-                                    Forms\Components\Textarea::make('description')
-                                        ->label('German')
-                                        ->translateLabel()
-                                        ->rows(4),
-                                    Forms\Components\Textarea::make('description_en')
-                                        ->label('English')
-                                        ->translateLabel()
-                                        ->rows(4),
-                                ]),
-                        ])
-                        ->createOptionUsing(function ($data) {
-                            return SigTag::create([
-                                'name' => $data['name'],
-                                'description' => $data['description'] ?? null,
-                                'description_en' => $data['description_en'] ?? null,
-                            ]);
-                        }),
                 ])
                 ->columnSpan(1)
                 ->visible(auth()->user()->can('manage_events'));

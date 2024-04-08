@@ -81,14 +81,6 @@
                     <h2 class="text-center text-md-start">General</h2>
                     <div class="row">
                         <div class="col-6 col-md-4 text-end">
-                            Room
-                        </div>
-                        <div class="col-6 col-md-8 text-start">
-                            {{ $sig->sigLocation->name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 col-md-4 text-end">
                             Attendee list
                         </div>
                         <div class="col-6 col-md-8 text-start">
