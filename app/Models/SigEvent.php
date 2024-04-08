@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Traits\HasTimetableEntries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -32,21 +31,9 @@ class SigEvent extends Model
         return $this->belongsTo(SigHost::class);
     }
 
-    public function sigTranslation(): \Illuminate\Database\Eloquent\Relations\HasOne {
-        return $this->hasOne(SigTranslation::class, "sig_event_id");
-    }
-
     public function getTimetableCountAttribute() {
         return $this->timetableEntries->count();
     }
-
-    // public function getNameEnAttribute() {
-    //     return $this->sigTranslation->name ?? null;
-    // }
-
-    // public function getDescriptionEnAttribute() {
-    //     return $this->sigTranslation->description ?? null;
-    // }
 
     public function getNameLocalizedAttribute() {
         return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;

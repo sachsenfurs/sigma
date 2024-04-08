@@ -128,6 +128,14 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('name_en')
+                    ->label('English')
+                    ->translateLabel()
+                    ->required()
+                    //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
+                    ->maxLength(255)
+                    ->inlineLabel()
+                    ->columnSpanFull(),
             ])
             ->columnSpan(1);
     }

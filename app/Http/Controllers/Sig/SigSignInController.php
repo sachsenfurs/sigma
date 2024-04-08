@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
-use App\Models\SigTimeslot;
 use App\Models\SigHost;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
-use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Redirect;
 
 class SigSignInController extends Controller
 {
@@ -59,7 +56,6 @@ class SigSignInController extends Controller
                             ];
                         }
                     }
-                    // dd($translations);
                 }
 
 

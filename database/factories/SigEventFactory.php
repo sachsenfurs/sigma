@@ -21,6 +21,7 @@ class SigEventFactory extends Factory
         $datetime = $this->faker->dateTime();
         return [
             'name' => $this->faker->text(25),
+            'name_en' => $this->faker->text(25),
             'sig_host_id' => SigHost::all()->random(),
             'languages' => $this->faker->randomElement([["de"], ["en"], ["de","en"]]),
             'description' => $this->faker->realText(),

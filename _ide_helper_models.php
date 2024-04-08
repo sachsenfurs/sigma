@@ -341,6 +341,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property string|null $name_en
  * @property int|null $sig_host_id
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
@@ -361,7 +362,6 @@ namespace App\Models{
  * @property-read \App\Models\SigHost|null $sigHost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
- * @property-read \App\Models\SigTranslation|null $sigTranslation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
  * @method static \Database\Factories\SigEventFactory factory($count = null, $state = [])
@@ -380,6 +380,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMedic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNameEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereOtherStuff($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSecurity($value)
@@ -467,8 +468,6 @@ namespace App\Models{
  * @property-read mixed $slug
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigLocationTranslation> $translation
- * @property-read int|null $translation_count
  * @method static \Database\Factories\SigLocationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newQuery()
@@ -486,18 +485,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereShowDefault($value)
  */
 	class SigLocation extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\SigLocationTranslation
- *
- * @property-read \App\Models\SigLocation|null $sigLocation
- * @method static \Illuminate\Database\Eloquent\Builder|SigLocationTranslation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SigLocationTranslation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SigLocationTranslation query()
- */
-	class SigLocationTranslation extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -624,19 +611,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTranslation
- *
- * @property-read \App\Models\SigEvent|null $sigEvent
- * @method static \Database\Factories\SigTranslationFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SigTranslation query()
- */
-	class SigTranslation extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\TimetableEntry
  *
  * @property int $id
@@ -650,9 +624,9 @@ namespace App\Models{
  * @property int $new
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $duration
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
- * @property-read mixed $duration
  * @property-read mixed $formatted_length
  * @property-read mixed $has_location_changed
  * @property-read mixed $has_time_changed

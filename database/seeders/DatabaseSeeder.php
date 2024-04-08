@@ -6,7 +6,6 @@ use App\Models\DDAS\ArtshowItem;
 use App\Models\DDAS\Dealer;
 use App\Models\SigEvent;
 use App\Models\SigHost;
-use App\Models\SigTranslation;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Illuminate\Database\Seeder;

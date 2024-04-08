@@ -25,10 +25,6 @@ class SigLocation extends Model
         'show_default' => "boolean",
     ];
 
-    public function translation() {
-        return $this->hasMany(SigLocationTranslation::class);
-    }
-
     public function sigEvents(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -43,6 +39,4 @@ class SigLocation extends Model
     public function dealers(): HasMany {
         return $this->hasMany(Dealer::class);
     }
-
-
 }

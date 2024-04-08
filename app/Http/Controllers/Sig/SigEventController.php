@@ -8,7 +8,6 @@ use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigLocation;
-use App\Models\SigTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -117,24 +116,14 @@ class SigEventController extends Controller
 
         $sig = new SigEvent();
         $sig->name = $validated['name'];
+        $sig->name_en = $validated['name_en'];
         $sig->sigHost()->associate($host_id);
         $sig->description = $validated['description'];
+        $sig->description_en = $validated['description_en'];
         $sig->languages = $languages;
         $sig->reg_possible = $request->has('reg_possible');
         $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? null;
         $sig->save();
-
-        //TODO: SigTranslation is not nessessary anymore and can be removed
-        // Insert translation
-        //if(in_array("en", $languages)){
-            $translate = new SigTranslation([
-                'language' => "en",
-                'name' => $validated['name_en'],
-                'description' => $validated['description_en'] ?? "",
-            ]);
-            $translate->sigEvent()->associate($sig);
-            $translate->save();
-        //}
 
         // insert in timetable (if set)
         if(is_array($request->get("date-start"))) {
@@ -197,20 +186,10 @@ class SigEventController extends Controller
         }
 
         $sig->name = $validated['name'];
+        $sig->name_en = $validated['name_en'];
         $sig->description = $validated['description'];
+        $sig->description_en = $validated['description_en'];
         $sig->languages = $languages;
-
-        if(!$sig->sigTranslation) {
-            $sig->sigTranslation()->create([
-                'language' => 'en',
-                'name' => $validated['name_en'],
-                'description' => $validated['description_en'],
-            ]);
-        } else {
-            $sig->sigTranslation->name = $validated['name_en'];
-            $sig->sigTranslation->description = $validated['description_en'];
-            $sig->sigTranslation->save();
-        }
 
         $sig->save();
 
