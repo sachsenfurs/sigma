@@ -95,6 +95,11 @@ class SigLocationResource extends Resource
                 ->translateLabel()
                 ->searchable()
                 ->sortable(),
+            Tables\Columns\TextColumn::make('sig_events_count')
+                ->label('Event count')
+                ->translateLabel()
+                ->counts('sigEvents')
+                ->sortable(),
             Tables\Columns\IconColumn::make('infodisplay')
                 ->label('Infodisplay')
                 ->translateLabel()
