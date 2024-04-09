@@ -44,6 +44,8 @@ class UserRoleSeeder extends Seeder
         ]);
         $this->insertPermissions('Leitstelle', [
             'manage_events',
+            'manage_sig_base_data',
+            'manage_sigs',
         ]);
 
         DB::table('user_roles')->insert([

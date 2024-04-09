@@ -23,29 +23,11 @@ class PermissionSeeder extends Seeder
             'post' => 'Manage posts',
             'login' => 'Login',
 
-            // Laravel & Filament permissions
-            'view' => 'View data',
-            'viewAny' => 'View any data',
-            'create' => 'Create data',
-            'createAny' => 'Create any data',
-            'update' => 'Update data',
-            'updateAny' => 'Update any data',
-            'delete' => 'Delete data',
-            'deleteAny' => 'Delete any data',
-            'forceDelete' => 'Force delete data',
-            'forceDeleteAny' => 'Force delete any data',
-            'restore' => 'Restore data',
-            'restoreAny' => 'Restore any data',
-            'attach' => 'Attach data',
-            'attachAny' => 'Attach any data',
-            'detach' => 'Detach data',
-            'detachAny' => 'Detach any data',
-            'reorder' => 'Reorder data',
-            'replicate' => 'Replicate data',
-            'associate' => 'Associate data',
-            'associateAny' => 'Associate any data',
-            'dissociate' => 'Dissociate data',
-            'dissociateAny' => 'Dissociate any data',
+            // Permissions for filament
+            'manage_sig_base_data' => 'Manage SIG base data (Hosts, Tags, Locations)',
+            'manage_sigs' => 'Manage SIGs (SIGs, Timetable)',
+            'manage_artshow' => 'Manage artshow (Artists, Commandments, Items, Pickups)',
+            'manage_dealers_den' => 'Manage dealers den (Dealer, Dealer Tags)',
         ];
 
         foreach ($permission as $name => $friendly_name) {
