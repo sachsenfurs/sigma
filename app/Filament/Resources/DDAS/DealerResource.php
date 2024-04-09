@@ -10,7 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DealerResource extends Resource
 {
@@ -33,11 +34,6 @@ class DealerResource extends Resource
         'phone' => 'Phone',
         'email' => 'Email',
     ];
-
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_dealers_den');
-    }
 
     public static function getPluralLabel(): ?string
     {

@@ -12,17 +12,6 @@ class SigTagsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigEvent';
 
-    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
-    {
-        // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can('manage_sigs');
-    }
-
-    protected function can(string $action, ?Model $record = null): bool
-    {
-        // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('manage_sigs');
-    }
     public function table(Table $table): Table
     {
         return $table

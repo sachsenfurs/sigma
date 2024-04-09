@@ -10,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class SigHostResource extends Resource
 {
@@ -20,11 +19,6 @@ class SigHostResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 20;
-
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_sig_base_data');
-    }
 
     public static function getPluralLabel(): ?string
     {

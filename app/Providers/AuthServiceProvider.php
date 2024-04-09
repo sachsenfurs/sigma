@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,15 +15,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\SigEvent' => 'App\Policies\SigEventPolicy',
-        'App\Models\User' => 'App\Policies\UserPolicy',
-        'App\Models\UserRole' => 'App\Policies\UserRolePolicy',
-        'App\Models\UserUserRole' => 'App\Policies\UserUserRolePolicy',
-        'App\Models\DDAS\ArtshowArtist' => 'App\Policies\ArtshowArtistPolicy',
-        'App\Models\DDAS\ArtshowBid' => 'App\Policies\ArtshowBidPolicy',
-        'App\Models\DDAS\ArtshowItem' => 'App\Policies\ArtshowItemPolicy',
-        'App\Models\DDAS\ArtshowPickup' => 'App\Policies\ArtshowPickupPolicy',
-        'App\Models\DDAS\Dealer' => 'App\Policies\DealerPolicy',
-        'App\Models\DDAS\DealerTag' => 'App\Policies\DealerTagPolicy',
     ];
 
     /**

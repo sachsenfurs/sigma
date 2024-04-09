@@ -11,18 +11,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_users');
-    }
 
     public static function getLabel(): ?string
     {

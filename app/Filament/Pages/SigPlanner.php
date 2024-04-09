@@ -33,7 +33,7 @@ class SigPlanner extends Page
     }
 
     public static function canAccess(): bool {
-        return auth()->user()->can('manage_sigs') || auth()->user()->can('manage_events');
+        return auth()->user()->can("manage_events");
     }
 
 

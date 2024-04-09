@@ -29,11 +29,6 @@ class TimetableEntryResource extends Resource
     protected static ?int $navigationSort = 10;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_sigs');
-    }
-
     public static function getLabel(): ?string
     {
         return __('Event Schedule');

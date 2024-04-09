@@ -8,23 +8,11 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
 
 class RoleRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
 
-    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
-    {
-        // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can('manage_users');
-    }
-
-    protected function can(string $action, ?Model $record = null): bool
-    {
-        // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('manage_users');
-    }
 
     protected function getTableHeading(): string|Htmlable|null
     {

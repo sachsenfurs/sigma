@@ -10,7 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ArtshowArtistResource extends Resource
 {
@@ -19,11 +20,6 @@ class ArtshowArtistResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Artshow';
-
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_artshow');
-    }
 
     public static function getPluralLabel(): ?string
     {

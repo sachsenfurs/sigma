@@ -28,11 +28,6 @@ class SigEventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
-        return auth()->user()->can('manage_sigs');
-    }
-
     public static function form(Form $form): Form
     {
         return $form
