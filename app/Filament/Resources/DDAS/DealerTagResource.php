@@ -10,8 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class DealerTagResource extends Resource
 {
@@ -23,6 +22,10 @@ class DealerTagResource extends Resource
 
     protected static ?int $navigationSort = 320;
 
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->can('manage_dealers_den');
+    }
 
     public static function getPluralLabel(): ?string
     {
