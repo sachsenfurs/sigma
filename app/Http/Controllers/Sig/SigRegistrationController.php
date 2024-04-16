@@ -28,13 +28,6 @@ class SigRegistrationController extends Controller
         $regStart = strtotime($timeslot->reg_start);
         $regEnd = strtotime($timeslot->reg_end);
 
-        /*
-         *  ToDo: 
-         * - Add Possibility to Event to register more users per timeslot for master attendee
-         * - 
-         * 
-         */
-
         if ($timeslot->timetableEntry->maxUserRegsExeeded($user)) {
             // Check if max registrations per day limit is reached
             return redirect()->back()->with('error', 'Maximale Anzahl an Registrierungen für diesen Tag für dieses Event erreicht!');
