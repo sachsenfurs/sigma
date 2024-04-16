@@ -18,6 +18,7 @@
     "Manage Roles": "Rollen verwalten",
     "Manage Settings": "Einstellungen verwalten",
     "Manage Users": "Benutzer verwalten",
+    "User Settings": "Benutzer Einstellungen",
 
     "User Role": "Benutzerrolle",
     "User Roles": "Benutzerrollen",
@@ -219,5 +220,13 @@
     "Lost": "Verloren",
     "Found": "Gefunden",
     "Nothing has been found yet": "Es wurden noch keine Fundsachen abgegeben",
-    "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet"
+    "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet",
+
+    "Personal settings": "Persönliche Einstellungen",
+    "Email": "E-Mail",
+    "sig_favorite_reminder": "Favoriten Erinnerungen",
+    "sig_timeslot_reminder": "Registrierungs Erinnerungen",
+    "timetable_entry_cancelled": "Sig abgesagt",
+    "timetable_entry_location_changed": "Sig Location geändert",
+    "timetable_entry_time_changed": "Sig Zeit geändert"
 }

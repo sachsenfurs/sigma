@@ -149,6 +149,12 @@
 
                                     <li><hr class="dropdown-divider"></li>
 
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('user-settings.edit') }}">
+                                            {{ __("User Settings") }}
+                                        </a>
+                                    </li>
+
                                 @endcanany
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"

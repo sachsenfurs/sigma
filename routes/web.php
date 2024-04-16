@@ -29,6 +29,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\DDAS\DealersDenController;
 use App\Http\Controllers\DDAS\ArtshowController;
+use App\Http\Controllers\UserNotificationChannelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -180,4 +181,9 @@ Route::group(['middleware' => "auth"], function() {
         Route::post('/', [SigSignInController::class, 'store'])->name('store');
         Route::get('/create', [SigSignInController::class, 'create'])->name('create');
     });
+
+    // User Settings
+    Route::get("/settings", [UserNotificationChannelController::class, "edit"])->name("user-settings.edit");
+    Route::patch("/settings", [UserNotificationChannelController::class, "update"])->name("user-settings.update");
+
 });
