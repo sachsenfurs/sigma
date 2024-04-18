@@ -147,13 +147,13 @@
                                         </li>
                                     @endcan
 
-                                    <li><hr class="dropdown-divider"></li>
-
                                     <li>
                                         <a class="dropdown-item" href="{{ route('user-settings.edit') }}">
                                             {{ __("User Settings") }}
                                         </a>
                                     </li>
+
+                                    <li><hr class="dropdown-divider"></li>
 
                                 @endcanany
                                 <li>
