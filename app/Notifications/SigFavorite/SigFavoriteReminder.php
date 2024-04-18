@@ -6,6 +6,7 @@ use App;
 use App\Models\SigFavorite;
 use App\Models\SigReminder;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -39,7 +40,8 @@ class SigFavoriteReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_favorite_reminder')->first();
+        //return ['telegram'];
     }
 
     /**
