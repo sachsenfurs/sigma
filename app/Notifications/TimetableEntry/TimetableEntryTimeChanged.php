@@ -4,6 +4,7 @@ namespace App\Notifications\TimetableEntry;
 
 use App;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +36,7 @@ class TimetableEntryTimeChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_time_changed')->first();
     }
 
     /**

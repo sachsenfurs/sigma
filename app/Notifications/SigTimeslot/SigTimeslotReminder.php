@@ -6,6 +6,7 @@ use App;
 use App\Models\SigTimeslot;
 use App\Models\SigFavoriteReminder;
 use App\Models\SigTimeslotReminder as SigTimeSlotReminderModel;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -39,7 +40,7 @@ class SigTimeslotReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_timeslot_reminder')->first();
     }
 
     /**
