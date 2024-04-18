@@ -14,6 +14,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\SigEvent' => 'App\Policies\SigEventPolicy',
+        'App\Models\SigHost' => 'App\Policies\SigHostPolicy',
+        'App\Models\SigLocation' => 'App\Policies\SigLocationPolicy',
+        'App\Models\SigTag' => 'App\Policies\SigTagPolicy',
+        'App\Models\SigTimeslot' => 'App\Policies\SigTimeslotPolicy',
+        'App\Models\TimetableEntry' => 'App\Policies\TimetableEntryPolicy',
         'App\Models\User' => 'App\Policies\UserPolicy',
         'App\Models\UserRole' => 'App\Policies\UserRolePolicy',
         'App\Models\UserUserRole' => 'App\Policies\UserUserRolePolicy',

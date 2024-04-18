@@ -12,7 +12,7 @@ class DealerPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     /**
@@ -20,7 +20,7 @@ class DealerPolicy
      */
     public function view(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den') || $dealer->user_id === $user->id;
+        return $user->permissions()->contains('manage_dealers_den') || $dealer->user_id === $user->id;
     }
 
     /**
@@ -28,7 +28,7 @@ class DealerPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     /**
@@ -36,7 +36,7 @@ class DealerPolicy
      */
     public function update(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den') || $dealer->user_id === $user->id;
+        return $user->permissions()->contains('manage_dealers_den') || $dealer->user_id === $user->id;
     }
 
     /**
@@ -44,7 +44,7 @@ class DealerPolicy
      */
     public function delete(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     /**
@@ -52,7 +52,7 @@ class DealerPolicy
      */
     public function restore(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     /**
@@ -60,61 +60,61 @@ class DealerPolicy
      */
     public function forceDelete(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function associate(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function attach(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function detach(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function detachAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function disassociate(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function disassociateAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function reorder(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function replicate(User $user, Dealer $dealer): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 
     public function restoreAny(User $user): bool
     {
-        return $user->can('manage_dealers_den');
+        return $user->permissions()->contains('manage_dealers_den');
     }
 }

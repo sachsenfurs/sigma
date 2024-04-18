@@ -12,7 +12,6 @@ class SigPlanning extends Cluster
     protected static ?string $navigationGroup = 'SIG';
     protected static ?string $title = "SIG Planning";
 
-
     public static function getLabel(): ?string
     {
         return __('Event Schedule');

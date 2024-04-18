@@ -30,7 +30,7 @@ class SigEventResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool
     {
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->permissions()->contains('manage_sigs');
     }
 
     public static function form(Form $form): Form
@@ -198,7 +198,7 @@ class SigEventResource extends Resource
                         }),
                 ])
                 ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
+                ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component
@@ -270,7 +270,7 @@ class SigEventResource extends Resource
                     ->columnSpanFull(),
             ])
             ->columnSpan(1)
-            ->visible(auth()->user()->can('manage_events'));
+            ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component
@@ -295,7 +295,7 @@ class SigEventResource extends Resource
                         ->columnSpanFull(),
                 ])
                 ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
+                ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component

@@ -20,7 +20,7 @@ class UserRoleResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool
     {
-        return auth()->user()->can('manage_users');
+        return auth()->user()->permissions()->contains('manage_users');
     }
 
     public static function getLabel(): ?string

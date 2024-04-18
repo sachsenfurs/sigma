@@ -11,7 +11,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     /**
@@ -19,7 +19,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->can('manage_users') || $model->id === $user->id;
+        return $user->permissions()->contains('manage_users') || $model->id === $user->id;
     }
 
     /**
@@ -27,7 +27,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     /**
@@ -35,7 +35,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->can('manage_users') || $model->id === $user->id;
+        return $user->permissions()->contains('manage_users') || $model->id === $user->id;
     }
 
     /**
@@ -43,7 +43,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     /**
@@ -51,7 +51,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     /**
@@ -59,61 +59,61 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function associate(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function attach(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function detach(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function detachAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function disassociate(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function disassociateAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function reorder(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function replicate(User $user, User $model): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 
     public function restoreAny(User $user): bool
     {
-        return $user->can('manage_users');
+        return $user->permissions()->contains('manage_users');
     }
 }

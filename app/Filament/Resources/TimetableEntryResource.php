@@ -31,7 +31,7 @@ class TimetableEntryResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool
     {
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->permissions()->contains('manage_sigs');
     }
 
     public static function getLabel(): ?string

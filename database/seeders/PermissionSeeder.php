@@ -15,12 +15,12 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permission = [
-            'manage_settings' => 'Manage settings',
-            'manage_users' => 'Manage users',
-            'manage_events' => 'Manage events',
-            'manage_locations' => 'Manage locations',
-            'manage_hosts' => 'Manage hosts',
-            'post' => 'Manage posts',
+            'manage_settings' => 'Manage settings (Legacy)',
+            'manage_users' => 'Manage users (Legacy & Filament)',
+            'manage_events' => 'Manage events (Legacy)',
+            'manage_locations' => 'Manage locations (Legacy)',
+            'manage_hosts' => 'Manage hosts (Legacy)',
+            'post' => 'Manage posts (Legacy)',
             'login' => 'Login',
 
             // Permissions for filament

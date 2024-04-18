@@ -12,7 +12,7 @@ class ArtshowPickupPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     /**
@@ -20,7 +20,7 @@ class ArtshowPickupPolicy
      */
     public function view(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow') || $artshowPickup->user_id === $user->id;
+        return $user->permissions()->contains('manage_artshow') || $artshowPickup->user_id === $user->id;
     }
 
     /**
@@ -28,7 +28,7 @@ class ArtshowPickupPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     /**
@@ -36,7 +36,7 @@ class ArtshowPickupPolicy
      */
     public function update(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow') || $artshowPickup->user_id === $user->id;
+        return $user->permissions()->contains('manage_artshow') || $artshowPickup->user_id === $user->id;
     }
 
     /**
@@ -44,7 +44,7 @@ class ArtshowPickupPolicy
      */
     public function delete(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     /**
@@ -52,7 +52,7 @@ class ArtshowPickupPolicy
      */
     public function restore(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     /**
@@ -60,61 +60,61 @@ class ArtshowPickupPolicy
      */
     public function forceDelete(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function associate(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function attach(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function detach(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function detachAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function disassociate(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function disassociateAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function reorder(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function replicate(User $user, ArtshowPickup $artshowPickup): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 
     public function restoreAny(User $user): bool
     {
-        return $user->can('manage_artshow');
+        return $user->permissions()->contains('manage_artshow');
     }
 }
