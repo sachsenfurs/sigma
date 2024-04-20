@@ -159,7 +159,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::resource('/artshow', ArtshowController::class);
 
     // Sig SignIn (Sigs Anmelden)
-    Route::resource('/sigsignin', SigSignInController::class);
+    Route::resource('sig/signup', SigSignInController::class);
 
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
 
@@ -170,7 +170,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::get('/dealersden', [DealersDenController::class, 'index'])->name('dealersden.index');
 
     // Sig Sign In
-    Route::prefix('/sigsignin')->name('sigsignin.')->group(function() {
+    Route::prefix('/sigs/signup')->name('sigs.signup.')->group(function() {
         Route::get('/', [SigSignInController::class, 'index'])->name('index');
         Route::post('/', [SigSignInController::class, 'store'])->name('store');
         Route::get('/create', [SigSignInController::class, 'create'])->name('create');

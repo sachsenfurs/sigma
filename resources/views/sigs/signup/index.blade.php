@@ -7,7 +7,7 @@
 
         <div>
             <div class="d-flex justify-content-center p-3">
-                <a href="{{ route('sigsignin.create') }}" class="pb-2 btn btn-primary">{{ __('Create SIG') }}</a>
+                <a href="{{ route('sigs.signup.create') }}" class="pb-2 btn btn-primary">{{ __('Create SIG') }}</a>
             </div>
 
             <div class="card">

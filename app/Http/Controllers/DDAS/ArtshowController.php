@@ -34,7 +34,7 @@ class ArtshowController extends Controller
 
         // dd($user, $artist);
 
-        return view("DDAS.artshow.create", compact([
+        return view("ddas.artshow.create", compact([
             'user', 'artist']));
     }
 
@@ -85,7 +85,7 @@ class ArtshowController extends Controller
             'image_file' => $newImageName,
         ]);
 
-        return redirect('artshow');
+        return redirect('ddas.artshow');
     }
 
     /**
@@ -111,7 +111,7 @@ class ArtshowController extends Controller
         // dd($item);
 
         // dd($artist, $item);
-        return view('DDAS.artshow.show', compact('as_artist', 'item', 'user'));
+        return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
     }
 
     /**
@@ -123,7 +123,7 @@ class ArtshowController extends Controller
         $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
 
         // dd($artist, $items);
-        return view('DDAS.artshow.edit', compact('artist', 'item'));
+        return view('ddas.artshow.edit', compact('artist', 'item'));
     }
 
     /**

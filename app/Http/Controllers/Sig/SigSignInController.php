@@ -9,6 +9,7 @@ use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Redirect;
 
 class SigSignInController extends Controller
 {
@@ -19,7 +20,6 @@ class SigSignInController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
         $sighost = SigHost::where('reg_id', $user->reg_id)->first();
-
 
         if ($user->reg_id)
         {
@@ -58,8 +58,7 @@ class SigSignInController extends Controller
                     }
                 }
 
-
-                return view('sigs.sigsignin.index', compact([
+                return view('sigs.signup.index', compact([
                     'user',
                     'sighost',
                     'sigs',
@@ -67,14 +66,14 @@ class SigSignInController extends Controller
                 ]));
             }
 
-            return view('sigs.sigsignin.index', compact([
+            return view('sigs.signup.index', compact([
                 'user',
                 'sighost',
             ]));
         }
         else
         {
-            return redirect('sigsignin/create')->withErrors("Du hast keine Sigs erstellt!");
+            return redirect('sigs/signup/create')->withErrors("Du hast keine Sigs erstellt!");
         }
     }
 
@@ -89,10 +88,10 @@ class SigSignInController extends Controller
         {
             $sighost = SigHost::where('reg_id', $user->reg_id)->first();
             // dd($user);
-            return view('sigs.sigsignin.create', compact(['user','sighost']));
+            return view('sigs.signup.create', compact(['user','sighost']));
         }
         else{
-            return view('sigs.sigsignin.create', compact(['user']));
+            return view('sigs.signup.create', compact(['user']));
         }
     }
 
@@ -146,6 +145,7 @@ class SigSignInController extends Controller
         'sig_host_id' => SigHost::where('reg_id', $user->reg_id)->first()->id,
         'languages' => $languages, // Verwendet das modifizierte $languages Array
         'description' => $request->input('SigDescriptionDE'),
+        'sig_location_id' => '2',
         'reg_possible' => '0',
         'max_regs_per_day' => '1',
         'fursuit_support' => $request->input('SigNeedsFurrySupport'),
@@ -157,7 +157,7 @@ class SigSignInController extends Controller
     // dd($event);
 
 
-    return redirect('sigsignin');
+    return redirect('sigs/signup');
     }
 
 
