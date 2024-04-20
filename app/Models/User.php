@@ -63,12 +63,8 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(SigTimeslotReminder::class);
     }
 
-    public function isSigHost(): HasMany|bool {
-        if(SigHost::where('reg_id', $this->reg_id)->first()) {
-            return true;
-        } else {
-            return false;
-        }
+    public function isSigHost(): bool {
+        return SigHost::where('reg_id', $this->reg_id)->first() != false;
     }
 
     public function hasGroup(string $name): bool
