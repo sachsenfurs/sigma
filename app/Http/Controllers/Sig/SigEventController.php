@@ -117,7 +117,7 @@ class SigEventController extends Controller
         $sig = new SigEvent();
         $sig->name = $validated['name'];
         $sig->name_en = $validated['name_en'];
-        $sig->sigHost()->associate($host_id);
+        $sig->sigHosts()->associate($host_id);
         $sig->description = $validated['description'];
         $sig->description_en = $validated['description_en'];
         $sig->languages = $languages;
@@ -178,7 +178,7 @@ class SigEventController extends Controller
                 // Does exist
                 $host_id = SigHost::whereId($host_id)->first()->id;
             }
-            $sig->sigHost()->associate($host_id);
+            $sig->sigHosts()->associate($host_id);
             $sig->reg_possible = $request->has('reg_possible');
             $sig->max_regs_per_day = $validated['max_regs_per_day'] ?? $sig->max_regs_per_day;
 

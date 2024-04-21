@@ -13,7 +13,6 @@ use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class SigEventResource extends Resource
@@ -88,13 +87,11 @@ class SigEventResource extends Resource
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
-                ->label('Host')
+            Tables\Columns\TextColumn::make('hosts')
+                ->label('Hosts')
                 ->translateLabel()
-                ->searchable()
                 ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
+                    return $record->hosts->implode(', ');
                 })
                 ->sortable(),
             Tables\Columns\ImageColumn::make('languages')
@@ -220,50 +217,41 @@ class SigEventResource extends Resource
     private static function getSigHostFieldSet(): Forms\Components\Component
     {
         return
-            Forms\Components\Fieldset::make('host')
-            ->label('SIG Host')
+            Forms\Components\Fieldset::make('hosts')
+            ->label('SIG Hosts')
+            ->schema(
+                [
+                    Forms\Components\Select::make('sigHosts')
+                        ->label('')
+                        ->options(SigHost::all()->pluck('name', 'id'))
+                        ->relationship('sigHosts', 'name')
+                        ->preload()
+                        ->multiple()
+                        ->columnSpanFull()
+                        ->createOptionModalHeading(__('Create Host'))
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('name')
+                                ->label('Name')
+                                ->translateLabel()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('id')
+                                ->label('Registration Number')
+                                ->translateLabel()
+                                ->numeric()
+                                ->maxLength(255),
+                        ])
+                        ->createOptionUsing(function ($data) {
+                            $sigHost = SigHost::create([
+                                'name' => $data['name'],
+                                'id' => $data['id'] ?? null,
+                            ]);
+
+                            return $sigHost->id ?? null;
+                        }),
+                ]
+            )
             ->translateLabel()
-            ->schema([
-                Forms\Components\Select::make('sig_host_id')
-                    ->label('Host')
-                    ->translateLabel()
-                    ->relationship('sigHost', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->default(function () {
-                        // Try to prefill the host (passed when creating a new SIG from the host's detail page)
-                        $hostId = request()->input('host_id') ?? null;
-                        if (SigHost::find($hostId)) {
-                            return $hostId;
-                        }
-                        return null;
-                    })
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
-                        return $record->name . $regNr;
-                    })
-                    ->createOptionUsing(function ($data) {
-                        return SigHost::create([
-                            'name' => $data['name'],
-                            'reg_id' => $data['reg_id'] ?? null,
-                        ])->id ?? null;
-                    })
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Name')
-                            ->translateLabel()
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('reg_id')
-                            ->label('Reg Number')
-                            ->translateLabel()
-                            ->type('number')
-                            ->minValue(1)
-                            ->maxLength(10),
-                    ])
-                    ->columnSpanFull(),
-            ])
             ->columnSpan(1)
             ->visible(auth()->user()->can('manage_events'));
     }

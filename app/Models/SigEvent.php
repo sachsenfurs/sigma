@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasTimetableEntries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -27,8 +28,8 @@ class SigEvent extends Model
         'updated_at'
     ];
 
-    public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo(SigHost::class);
+    public function sigHosts(): BelongsToMany {
+        return $this->belongsToMany(SigHost::class, 'sig_host_sig_events');
     }
 
     public function getTimetableCountAttribute() {
