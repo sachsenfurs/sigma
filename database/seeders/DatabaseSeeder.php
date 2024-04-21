@@ -47,6 +47,8 @@ class DatabaseSeeder extends Seeder
 
         SigEvent::factory()->count(25)->create();
 
+        (new SigHostSigEventsTableSeeder())->run();
+
         TimetableEntry::factory()->count(50)->create();
 
         ArtshowItem::factory(10)->create();
