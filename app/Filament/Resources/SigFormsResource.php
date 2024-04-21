@@ -146,6 +146,7 @@ class SigFormsResource extends Resource
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
+                        ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
                         ->columnSpanFull(),
@@ -242,6 +243,7 @@ class SigFormsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
+                    ->alphaDash()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
@@ -281,6 +283,7 @@ class SigFormsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
+                    ->alphaDash()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
@@ -320,6 +323,7 @@ class SigFormsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
+                    ->alphaDash()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
@@ -359,6 +363,7 @@ class SigFormsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
+                    ->alphaDash()
                     ->required()
                     ->maxLength(255),
             ]);
@@ -395,6 +400,7 @@ class SigFormsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
+                    ->alphaDash()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
@@ -436,6 +442,7 @@ class SigFormsResource extends Resource
                                 Forms\Components\TextInput::make('value')
                                     ->label('Value')
                                     ->translateLabel()
+                                    ->alphaDash()
                                     ->required()
                                     ->maxLength(255),
                             ]),
