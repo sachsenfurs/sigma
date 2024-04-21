@@ -247,6 +247,8 @@ class SigEventResource extends Resource
                                 'id' => $data['id'] ?? null,
                             ]);
 
+                            // TODO: Der Timestamp wird nicht richtig geschrieben
+
                             return $sigHost->id ?? null;
                         }),
                 ]
