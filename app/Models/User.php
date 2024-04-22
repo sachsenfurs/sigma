@@ -33,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -81,8 +82,8 @@ class User extends Authenticatable implements FilamentUser
     }
 
     public function canAccessPanel(Panel $panel): bool {
-        // TODO: admin permission
-        return true;
+        // needs at least 1 permission
+        return $this->permissions()->count() > 0;
     }
 
     public function artists(): HasMany {
