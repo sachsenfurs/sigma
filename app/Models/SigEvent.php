@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasTimetableEntries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -56,5 +57,10 @@ class SigEvent extends Model
         return $query->whereHas("timetableEntries", function($query) {
             $query->where("hide", false);
         });
+    }
+
+    public function forms(): HasMany
+    {
+        return $this->hasMany(SigForms::class);
     }
 }
