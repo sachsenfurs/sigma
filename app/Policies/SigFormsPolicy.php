@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\SigEvent;
+use App\Models\SigForms;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SigEventPolicy
+class SigFormsPolicy
 {
     use HandlesAuthorization;
 
@@ -25,12 +25,12 @@ class SigEventPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param SigEvent $sigEvent
+     * @param SigForms $sigForms
      * @return bool
      */
-    public function view(User $user, SigEvent $sigEvent): bool
+    public function view(User $user, SigForms $sigForms): bool
     {
-        return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs') || $sigEvent->sigHost->reg_id === $user->reg_id;
+        return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs') || $sigForms->sigHost->reg_id === $user->reg_id;
     }
 
     /**
@@ -48,12 +48,12 @@ class SigEventPolicy
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param SigEvent $sigEvent
+     * @param SigForms $sigForms
      * @return bool
      */
-    public function update(User $user, SigEvent $sigEvent): bool
+    public function update(User $user, SigForms $sigForms): bool
     {
-        return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs') || $sigEvent->sigHost->reg_id === $user->reg_id;
+        return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs') || $sigForms->sigHost->reg_id === $user->reg_id;
     }
 
     /**
@@ -104,7 +104,7 @@ class SigEventPolicy
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }
 
-    public function detach(User $user, SigEvent $sigEvent): bool
+    public function detach(User $user, SigForms $sigForms): bool
     {
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }
@@ -114,7 +114,7 @@ class SigEventPolicy
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }
 
-    public function disassociate(User $user, SigEvent $sigEvent): bool
+    public function disassociate(User $user, SigForms $sigForms): bool
     {
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }
@@ -134,7 +134,7 @@ class SigEventPolicy
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }
 
-    public function replicate(User $user, SigEvent $sigEvent): bool
+    public function replicate(User $user, SigForms $sigForms): bool
     {
         return $user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs');
     }

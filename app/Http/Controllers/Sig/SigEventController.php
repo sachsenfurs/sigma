@@ -17,14 +17,14 @@ use function PHPUnit\Framework\isNull;
 class SigEventController extends Controller
 {
     public function index() {
-        $this->authorize('viewAny', SigEvent::class);
+        Gate::authorize('manage_events');
 
         $sigs   = SigEvent::withCount("TimetableEntries")->orderBy("timetable_entries_count", "ASC")->get();
         return view("sigs.index", compact("sigs"));
     }
 
     public function show(SigEvent $sig) {
-        $this->authorize('view', $sig);
+        Gate::authorize('manage_events');
 
         $additionalInformations = [];
         $favs = 0;
@@ -47,7 +47,7 @@ class SigEventController extends Controller
     }
 
     public function edit(SigEvent $sig) {
-        $this->authorize('update', $sig);
+        Gate::authorize('manage_events');
 
         $host_names     = SigHost::orderBy("name")->pluck("name")->all();
         $locations      = SigLocation::orderBy("name")->get();
@@ -61,7 +61,7 @@ class SigEventController extends Controller
     }
 
     public function create() {
-        $this->authorize('create', SigEvent::class);
+        Gate::authorize('manage_events');
 
         $host_names = SigHost::pluck("name")->all();
         $locations = SigLocation::orderBy("name")->get();
@@ -75,7 +75,7 @@ class SigEventController extends Controller
     }
 
     public function store(Request $request) {
-        $this->authorize('create', SigEvent::class);
+        Gate::authorize('manage_events');
 
         $validated = $request->validate([
             'name' => "required|string|unique:" . SigEvent::class . ",name",
@@ -146,7 +146,7 @@ class SigEventController extends Controller
     }
 
     public function update(Request $request, SigEvent $sig) {
-        $this->authorize('update', $sig);
+        Gate::authorize('manage_events');
 
         $validated = $request->validate([
             'name' => "required|string",
@@ -197,7 +197,7 @@ class SigEventController extends Controller
     }
 
     public function destroy(SigEvent $sig) {
-        $this->authorize('delete', $sig);
+        Gate::authorize('manage_events');
 
         $sig->delete();
         return redirect(route("sigs.index"))->withSuccess("SIG gelöscht");

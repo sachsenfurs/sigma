@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
+use App\Models\SigFilledForms;
 use App\Models\SigReminder;
 use App\Models\User;
 use App\Models\UserRole;
@@ -12,6 +13,7 @@ use App\Models\TimetableEntry;
 use App\Observers\SigAttendeeObserver;
 use App\Observers\SigEventObserver;
 use App\Observers\SigFavoriteObserver;
+use App\Observers\SigFilledFormObserver;
 use App\Observers\SigReminderObserver;
 use App\Observers\TimetableEntryObserver;
 use App\Observers\UserObserver;
@@ -46,6 +48,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SigFavorite::class => [
             SigFavoriteObserver::class
+        ],
+        SigFilledForms::class => [
+            SigFilledFormObserver::class
         ],
         SigAttendee::class => [
             SigAttendeeObserver::class

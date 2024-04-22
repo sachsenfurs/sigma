@@ -14,6 +14,7 @@ use App\Http\Controllers\Public\TableViewController;
 use App\Http\Controllers\Public\TimeslotShowController;
 use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\Sig\SigEventController;
+use App\Http\Controllers\Sig\SigFormController;
 use App\Http\Controllers\Sig\SigMyEventController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
@@ -174,5 +175,11 @@ Route::group(['middleware' => "auth"], function() {
         Route::get('/', [SigSignInController::class, 'index'])->name('index');
         Route::post('/', [SigSignInController::class, 'store'])->name('store');
         Route::get('/create', [SigSignInController::class, 'create'])->name('create');
+    });
+
+    Route::prefix('form')->name('forms.')->group(function() {
+        Route::get('/{form}', [SigFormController::class, 'show'])->name('show');
+        Route::post('/{form}', [SigFormController::class, 'store'])->name('store');
+        Route::delete('/{form}', [SigFormController::class, 'destroy'])->name('destroy');
     });
 });
