@@ -22,38 +22,6 @@
                         </a>
                     </li>
                     <!-- End visible in any case -->
-                    @canany(['manage_events', 'post'])
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle px-3" href="#" id="adminDropdownMenu" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-gear"></i> {{ __('Administration') }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="adminDropdownMenu">
-                                @can('manage_events')
-                                    <li>
-                                        <a class="dropdown-item {{ Route::is('timetable.index') ? 'active' : '' }}"
-                                            href="{{ route('timetable.index') }}">
-                                            <i class="bi bi-list"></i> {{ __('Manage Event Schedule') }}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item {{ Route::is('sigs.index') ? 'active' : '' }}"
-                                            href="{{ route('sigs.index') }}">
-                                            <i class="bi bi-easel"></i> SIGs
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('post')
-                                    <li>
-                                        <a class="dropdown-item {{ Route::is('posts.index') ? 'active' : '' }}"
-                                            href="{{ route('posts.index') }}">
-                                            <i class="bi bi-megaphone"></i> @lang('Announcements')
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
 
                     <li>
                         <a class="nav-link px-3 {{ Route::is('hosts.index') ? 'active' : '' }}"
@@ -108,7 +76,7 @@
                             </li>
                         </ul>
                     </li>
-                        
+
                     @endif
                 </ul>
 
@@ -195,8 +163,95 @@
         @yield('content')
     </main>
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-4 mb-0 text-body-secondary">
+                <span style="cursor: pointer; font-size:0.75em" data-bs-toggle="modal" data-bs-target="#creditsModal">&Sigma; - made by awesome people</span>
+            </p>
 
+            <a href="//sachsenfurs.de/east" class="col-4 text-center text-body text-decoration-none">
+                EAST Website
+            </a>
+
+            <ul class="nav col-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//t.me/eastinfo{{ (\Illuminate\Support\Facades\App::getLocale() == "en") ? "_en" : "" }}"><i class="bi bi-telegram"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//x.com/sachsenfurs"><i class="bi bi-twitter-x"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//instagram.com/sachsenfurs"><i class="bi bi-instagram"></i></a></li>
+            </ul>
+        </footer>
+        <!-- Modal -->
+        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModallLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <h1 class="modal-title fs-5" id="creditsModalLabel">Credits</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <a class="icon-link" href="https://github.com/sachsenfurs/sigma" target="_blank"><i class="bi bi-github"></i> SIGMA on GitHub</a>
+                            <ul>
+                                <li>
+                                    <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
+                                    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
+                                </li>
+                            </ul>
+
+
+                        </div>
+                        <h5>Contributors</h5>
+                        <div class="d-flex flex-wrap pb-3 gap-2">
+                            <a href="https://github.com/Kidran" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/63103731?s=24" loading="lazy" alt="">
+                                    Kidran
+                                </span>
+                            </a>
+
+                            <a href="https://github.com/Lytrox" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/9468383?s=24" loading="lazy" alt="">
+                                    Lytrox
+                                </span>
+                            </a>
+
+                            <a href="https://github.com/CyberSpaceDragon" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/58507164?s=24" loading="lazy" alt="">
+                                    CyberSpaceDragon
+                                </span>
+                            </a>
+
+                            <a href="https://github.com/kacecfox" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/30048300?s=24" loading="lazy" alt="">
+                                    Kacec
+                                </span>
+                            </a>
+
+                            <a href="https://github.com/d3xter-dev" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/62628584?s=24" loading="lazy" alt="">
+                                    Dexter
+                                </span>
+                            </a>
+                            <a href="https://github.com/Kenthanar" target="_blank" class="text-decoration-none">
+                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
+                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/100375107?s=24" loading="lazy" alt="">
+                                    Kenthanar
+                                </span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Modal -->
+
+    </div>
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </body>
 
 </html>
