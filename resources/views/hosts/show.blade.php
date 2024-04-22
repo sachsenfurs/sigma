@@ -16,7 +16,7 @@
                         </h2>
                         <p class="text-muted">{{ $host->description_localized }}</p>
                         @can("manage_hosts")
-                            <a href="{{ route("hosts.edit", $host) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
+                            <a href="{{ \App\Filament\Resources\SigHostResource::getUrl('edit', ['record' => $host]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan
                     </div>
                 </div>
