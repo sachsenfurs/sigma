@@ -2,7 +2,46 @@
 @section('title', "Home")
 @section('content')
 <div class="container">
+    <h2>{{ __("Before the convention") }}</h2>
+    <div class="row gap-4 py-4 justify-content-center">
+
+        <div class="card" style="width: 18rem">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ __("SIG Sign Up") }}</h5>
+                <img class="img-fluid rounded" src="/images/signup/sigfox.jpg" alt="">
+
+                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Submit your Events, Workshops, Presentations and more!") }}</h6>
+
+                <a href="{{ route("sigs.signup.create") }}" class="card-link stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ __("Dealers Den Sign Up") }}</h5>
+                <img class="img-fluid rounded" src="/images/signup/dealerfox.png" alt="">
+
+                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Would you like to sell your art at the con?") }}</h6>
+
+                <a href="{{ route("dealersden.create") }}" class="card-link stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ __("Artshow Item Sign Up") }}</h5>
+                <img class="img-fluid rounded" src="/images/signup/artshowfox.png" alt="">
+
+                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Submit your art for exhibition or auction") }}</h6>
+
+                <a href="{{ route("artshow.create") }}" class="card-link stretched-link"></a>
+            </div>
+        </div>
+    </div>
+
+    <h2>{{ __("At the convention") }}</h2>
     <div class="row justify-content-center">
+
         <div class="col-md-8">
             @if (!auth()->user()->telegram_user_id)
                 <div class="row m-3">
