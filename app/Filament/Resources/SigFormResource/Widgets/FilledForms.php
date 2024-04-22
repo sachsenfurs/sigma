@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\SigFormsResource\Widgets;
+namespace App\Filament\Resources\SigFormResource\Widgets;
 
-use App\Models\SigFilledForms;
+use App\Models\SigFilledForm;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Get;
@@ -32,8 +32,8 @@ class FilledForms extends BaseWidget
     {
         return $table
             ->query(
-                SigFilledForms::query()
-                    ->where('sig_forms_id', $this->record->id)
+                SigFilledForm::query()
+                    ->where('sig_form_id', $this->record->id)
             )
             ->filters([
                 self::getApprovedFilter(),

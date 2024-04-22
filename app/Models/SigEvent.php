@@ -61,6 +61,6 @@ class SigEvent extends Model
 
     public function forms(): HasMany
     {
-        return $this->hasMany(SigForms::class);
+        return $this->hasMany(SigForm::class);
     }
 }

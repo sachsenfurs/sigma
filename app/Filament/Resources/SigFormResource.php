@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SigFormsResource\Pages;
-use App\Filament\Resources\SigFormsResource\Widgets\FilledForms;
-use App\Models\SigFilledForms;
-use App\Models\SigForms;
+use App\Filament\Resources\SigFormResource\Pages;
+use App\Filament\Resources\SigFormResource\Widgets\FilledForms;
+use App\Models\SigFilledForm;
+use App\Models\SigForm;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class SigFormsResource extends Resource
+class SigFormResource extends Resource
 {
-    protected static ?string $model = SigForms::class;
+    protected static ?string $model = SigForm::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-pencil';
 
@@ -44,7 +44,7 @@ class SigFormsResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return SigFilledForms::where('approved', 0)->count();
+        return SigFilledForm::where('approved', 0)->count();
     }
 
     public static function form(Form $form): Form
@@ -77,8 +77,8 @@ class SigFormsResource extends Resource
     {
         return [
             'index' => Pages\ListSigForms::route('/'),
-            'create' => Pages\CreateSigForms::route('/create'),
-            'edit' => Pages\EditSigForms::route('/{record}/edit'),
+            'create' => Pages\CreateSigForm::route('/create'),
+            'edit' => Pages\EditSigForm::route('/{record}/edit'),
         ];
     }
 
@@ -116,7 +116,7 @@ class SigFormsResource extends Resource
             Tables\Columns\TextColumn::make('sig_filled_forms_approval_needed_count')
                 ->label('To be approved')
                 ->translateLabel()
-                ->getStateUsing(function (SigForms $record) {
+                ->getStateUsing(function (SigForm $record) {
                     return $record->sigFilledForms()->where('approved', 0)->count();
                 }),
         ];

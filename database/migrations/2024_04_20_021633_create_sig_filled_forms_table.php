@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sig_filled_forms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sig_forms_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('sig_form_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->json('form_data')->nullable();
             $table->timestamps();

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
-class SigForms extends Model
+class SigForm extends Model
 {
     use HasFactory;
 
@@ -26,7 +26,11 @@ class SigForms extends Model
     }
 
     public function sigFilledForms() {
-        return $this->hasMany(SigFilledForms::class);
+        return $this->hasMany(SigFilledForm::class);
+    }
+
+    public function userRoles() {
+        return $this->belongsToMany(UserRole::class);
     }
 
     public function resolveRouteBinding($value, $field = null) {
