@@ -11,6 +11,35 @@
                 </div>
             </div>
         @endif
+        @switch($filledForm->approved ?? null)
+            @case(0)
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-warning">
+                            {{ __('This form has not been approved yet.') }}
+                        </div>
+                    </div>
+                </div>
+            @break
+            @case(1)
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-success">
+                            {{ __('This form has been approved.') }}
+                        </div>
+                    </div>
+                </div>
+            @break
+            @case(2)
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-danger">
+                            {{ __('This form has been rejected. Reason for rejection: ') . ($filledForm->rejection_reason ?? __('No reason available')) }}
+                        </div>
+                    </div>
+                </div>
+            @break
+        @endswitch
         @if($form->sig_event_id)
             <div class="row justify-content-center mb-4">
                 <div class="col-md-6">
@@ -136,6 +165,11 @@
                                     @endif
                                 @endif
                             </div>
+                            @if($filledForm)
+                                <div>
+                                    <small class="text-muted ml-2">{{ __('When the form is saved, the data must be checked and approved again.') }}</small>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @if(!$form->form_closed)

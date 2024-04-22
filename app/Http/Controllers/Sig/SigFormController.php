@@ -69,6 +69,8 @@ class SigFormController extends Controller
         $filledForm->sigForms()->associate($form);
         $filledForm->user()->associate(auth()->user());
         $filledForm->form_data = $validated;
+        $filledForm->approved = 0; // To reset the approval state
+        // Do not reset reject reason, so we know why it was rejected
         $filledForm->save();
 
         return redirect(route('forms.show', [ $form->slug ]))->withSuccess(__('Form data saved'));

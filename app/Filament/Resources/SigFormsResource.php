@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigFormsResource\Pages;
 use App\Filament\Resources\SigFormsResource\Widgets\FilledForms;
+use App\Models\SigFilledForms;
 use App\Models\SigForms;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -39,6 +40,11 @@ class SigFormsResource extends Resource
     public static function getPluralLabel(): ?string
     {
         return __('Forms');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return SigFilledForms::where('approved', 0)->count();
     }
 
     public static function form(Form $form): Form
@@ -104,9 +110,15 @@ class SigFormsResource extends Resource
                 ->sortable()
                 ->limit(50),
             Tables\Columns\TextColumn::make('sig_filled_forms_count')
-                ->label('Filled forms')
+                ->label('Filled')
                 ->translateLabel()
                 ->counts('sigFilledForms'),
+            Tables\Columns\TextColumn::make('sig_filled_forms_approval_needed_count')
+                ->label('To be approved')
+                ->translateLabel()
+                ->getStateUsing(function (SigForms $record) {
+                    return $record->sigFilledForms()->where('approved', 0)->count();
+                }),
         ];
     }
 
