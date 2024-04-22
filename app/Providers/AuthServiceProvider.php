@@ -14,6 +14,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\SigEvent' => 'App\Policies\SigEventPolicy',
+        'App\Models\SigFilledForms' => 'App\Policies\SigFilledFormsPolicy',
+        'App\Models\SigForms' => 'App\Policies\SigFormsPolicy',
         'App\Models\SigHost' => 'App\Policies\SigHostPolicy',
         'App\Models\SigLocation' => 'App\Policies\SigLocationPolicy',
         'App\Models\SigTag' => 'App\Policies\SigTagPolicy',
