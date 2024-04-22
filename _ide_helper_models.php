@@ -341,7 +341,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string|null $name_en
+ * @property string $name_en
  * @property int|null $sig_host_id
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
@@ -628,8 +628,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
  * @property-read mixed $formatted_length
- * @property-read mixed $has_location_changed
- * @property-read mixed $has_time_changed
+ * @property-read bool $has_location_changed
+ * @property-read bool $has_time_changed
  * @property-read mixed $is_favorite
  * @property-read TimetableEntry|null $parentEntry
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigReminder> $reminders
@@ -638,6 +638,7 @@ namespace App\Models{
  * @property-read \App\Models\SigEvent $sigEvent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
+ * @property-read \App\Models\SigLocation $sigLocation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
  * @property-read int|null $sig_timeslots_count
  * @method static \Database\Factories\TimetableEntryFactory factory($count = null, $state = [])
@@ -733,12 +734,6 @@ namespace App\Models{
  * @property string $border_color
  * @property string $background_color
  * @property string|null $registration_system_key
- * @property int $perm_manage_settings
- * @property int $perm_manage_users
- * @property int $perm_manage_events
- * @property int $perm_manage_locations
- * @property int $perm_manage_hosts
- * @property int $perm_post
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
@@ -753,12 +748,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereForeColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageEvents($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageHosts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageLocations($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageUsers($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermPost($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereRegistrationSystemKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereUpdatedAt($value)
