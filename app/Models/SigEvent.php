@@ -27,12 +27,16 @@ class SigEvent extends Model
         'updated_at'
     ];
 
+    protected $with = [
+        'timetableEntries'
+    ];
+
     public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(SigHost::class);
     }
 
     public function getTimetableCountAttribute() {
-        return $this->timetableEntries->count();
+        return $this->timetableEntries()->count();
     }
 
     public function getNameLocalizedAttribute() {

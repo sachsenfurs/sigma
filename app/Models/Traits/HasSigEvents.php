@@ -7,6 +7,7 @@ use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Cache;
 
 trait HasSigEvents {
 
@@ -38,12 +39,13 @@ trait HasSigEvents {
     }
 
     public function getPublicSigEventCount(): int {
-        return $this->sigEvents()
-                    ->with("timetableEntries")
-                    ->get()
-                    ->filter(function($sigEvent) {
-                        return !$sigEvent->isCompletelyPrivate();
-                    })->count();
+        return Cache::remember('getPublicSigEventCount'.static::class.$this->id, 120, function() {
+            return $this->sigEvents
+                 ->filter(function($sigEvent) {
+                     return !$sigEvent->isCompletelyPrivate();
+                 })
+                 ->count();
+        });
     }
 
 }
