@@ -28,6 +28,7 @@ class PermissionSeeder extends Seeder
             'manage_sigs' => 'Manage SIGs (SIGs, Timetable)',
             'manage_artshow' => 'Manage artshow (Artists, Commandments, Items, Pickups)',
             'manage_dealers_den' => 'Manage dealers den (Dealer, Dealer Tags)',
+            'manage_forms' => 'Manage dynamic forms (Forms)',
         ];
 
         foreach ($permission as $name => $friendly_name) {
