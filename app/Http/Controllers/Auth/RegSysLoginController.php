@@ -8,6 +8,7 @@ use App\OAuth2\RegSysProvider;
 use App\OAuth2\RegSysResourceOwner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class RegSysLoginController extends Controller
@@ -98,7 +99,8 @@ class RegSysLoginController extends Controller
                 string(59) "https://regtest.kidran.de/uploads/e62135ecc114efb8a3440.jpg"
               }
              */
-            return redirect(route("home"));
+            $route = Session::get('redirect', route("home"));
+            return redirect($route);
         } catch (IdentityProviderException $e) {
             return redirect("/login")->withErrors(['email' => "Token ungültig"]);
         }
