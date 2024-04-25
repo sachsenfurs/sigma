@@ -194,6 +194,7 @@ class SigFormResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('userRoles')
+                        ->relationship('userRoles')
                         ->label('')
                         ->options(function () {
                             if (auth()->user()->isAdmin()) {
