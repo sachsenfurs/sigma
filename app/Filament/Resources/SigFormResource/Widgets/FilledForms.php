@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\SigFormsResource\Widgets;
+namespace App\Filament\Resources\SigFormResource\Widgets;
 
-use App\Models\SigFilledForms;
+use App\Models\SigFilledForm;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Get;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 
 class FilledForms extends BaseWidget
 {
@@ -27,9 +32,12 @@ class FilledForms extends BaseWidget
     {
         return $table
             ->query(
-                SigFilledForms::query()
-                    ->where('sig_forms_id', $this->record->id)
+                SigFilledForm::query()
+                    ->where('sig_form_id', $this->record->id)
             )
+            ->filters([
+                self::getApprovedFilter(),
+            ])
             ->columns($this->getTableColumns())
             ->actions($this->getTableEntryActions())
             ->striped();
@@ -37,7 +45,19 @@ class FilledForms extends BaseWidget
 
     protected function getTableColumns(): array
     {
-        $tableColumns = [];
+        $tableColumns = [
+            Tables\Columns\IconColumn::make('approved')
+                ->label('Approved')
+                ->translateLabel()
+                ->boolean()
+                ->getStateUsing(function ($record) {
+                    switch ($record->approved) {
+                        case 0: return null;
+                        case 1: return true;
+                        case 2: return false;
+                    }
+                }),
+        ];
         foreach ($this->record->form_definition as $formDefinition) {
             $formData = $formDefinition['data'];
             switch ($formDefinition['type']) {
@@ -97,10 +117,51 @@ class FilledForms extends BaseWidget
     protected function getTableEntryActions(): array
     {
         return [
+            EditAction::make('approval')
+                ->label('Approval')
+                ->translateLabel()
+                ->modalHeading(__('Approve or reject form'))
+                ->modalDescription(function ($record) {
+                    if (($record->approved === 0) && ($record->rejection_reason)) {
+                        $reasonText = __('This form was rejected during the last audit for the following reason: ');
+                        return new HtmlString('<div style="color: red;">' . $reasonText . $record->rejection_reason . '</div>');
+                    }
+                    return null;
+                })
+                ->form([
+                    Select::make('approved')
+                        ->label('Approval')
+                        ->translateLabel()
+                        ->required()
+                        ->live()
+                        ->options([
+                            1 => __('Approve'),
+                            2 => __('Reject')
+                        ]),
+                    Textarea::make('rejection_reason')
+                        ->label('Rejection reason')
+                        ->translateLabel()
+                        ->visible(fn (Get $get) => $get('approved') == 2)
+                        ->required(fn (Get $get) => $get('approved') == 2)
+                        ->live()
+                        ->rows(3),
+                ]),
             DeleteAction::make('delete')
                 ->label('Delete')
                 ->translateLabel()
                 ->modalHeading(__('Really delete form data?')),
         ];
+    }
+
+    private static function getApprovedFilter(): Tables\Filters\SelectFilter
+    {
+        return Tables\Filters\SelectFilter::make('approved')
+            ->label('Approval')
+            ->translateLabel()
+            ->options([
+                '0' => __('To be approved'),
+                '1' => __('Approved'),
+                '2' => __('Rejected'),
+            ]);
     }
 }

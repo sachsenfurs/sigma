@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SigFilledForms extends Model
+class SigFilledForm extends Model
 {
     use HasFactory;
 
@@ -15,11 +16,13 @@ class SigFilledForms extends Model
         'form_data' => 'array'
     ];
 
-    public function sigForms() {
-        return $this->belongsTo(SigForms::class);
+    public function sigForm(): BelongsTo
+    {
+        return $this->belongsTo(SigForm::class);
     }
 
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

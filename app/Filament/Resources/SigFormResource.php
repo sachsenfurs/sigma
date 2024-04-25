@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SigFormsResource\Pages;
-use App\Filament\Resources\SigFormsResource\Widgets\FilledForms;
-use App\Models\SigForms;
+use App\Filament\Resources\SigFormResource\Pages;
+use App\Filament\Resources\SigFormResource\Widgets\FilledForms;
+use App\Models\SigFilledForm;
+use App\Models\SigForm;
+use App\Models\UserRole;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,9 +18,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class SigFormsResource extends Resource
+class SigFormResource extends Resource
 {
-    protected static ?string $model = SigForms::class;
+    protected static ?string $model = SigForm::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-pencil';
 
@@ -28,7 +30,20 @@ class SigFormsResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool
     {
-        return auth()->user()->permissions()->contains('manage_sigs');
+        return auth()->user()->permissions()->contains('manage_forms');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        // Filter query to only show forms that the user has access to
+        if (!auth()->user()->isAdmin()) {
+            $query->whereHas('userRoles', function (Builder $query) {
+                $query->where('user_roles.id', auth()->user()->roles()->pluck('user_roles.id'));
+            });
+        }
+        return $query;
     }
 
     public static function getLabel(): ?string
@@ -41,12 +56,18 @@ class SigFormsResource extends Resource
         return __('Forms');
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return SigFilledForm::where('approved', 0)->count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 self::getNameFieldSet(),
                 self::getSlugFieldSet(),
+                self::getRolesFieldSet(),
                 self::getFormClosedFieldSet(),
                 self::getSigEventFieldSet(),
                 self::getFormDefinitionFieldSet(),
@@ -71,8 +92,8 @@ class SigFormsResource extends Resource
     {
         return [
             'index' => Pages\ListSigForms::route('/'),
-            'create' => Pages\CreateSigForms::route('/create'),
-            'edit' => Pages\EditSigForms::route('/{record}/edit'),
+            'create' => Pages\CreateSigForm::route('/create'),
+            'edit' => Pages\EditSigForm::route('/{record}/edit'),
         ];
     }
 
@@ -104,9 +125,15 @@ class SigFormsResource extends Resource
                 ->sortable()
                 ->limit(50),
             Tables\Columns\TextColumn::make('sig_filled_forms_count')
-                ->label('Filled forms')
+                ->label('Filled')
                 ->translateLabel()
                 ->counts('sigFilledForms'),
+            Tables\Columns\TextColumn::make('sig_filled_forms_approval_needed_count')
+                ->label('To be approved')
+                ->translateLabel()
+                ->getStateUsing(function (SigForm $record) {
+                    return $record->sigFilledForms()->where('approved', 0)->count();
+                }),
         ];
     }
 
@@ -155,6 +182,30 @@ class SigFormsResource extends Resource
                         ->maxLength(255)
                         ->inlineLabel()
                         ->columnSpanFull(),
+                ])
+                ->columnSpan(1);
+    }
+
+    private static function getRolesFieldSet(): Forms\Components\Component
+    {
+        return
+            Forms\Components\Fieldset::make('roles')
+                ->label('User Roles')
+                ->translateLabel()
+                ->schema([
+                    Forms\Components\Select::make('userRoles')
+                        ->label('')
+                        ->options(function () {
+                            if (auth()->user()->isAdmin()) {
+                                return UserRole::all()->pluck('title', 'id');
+                            } else {
+                                return auth()->user()->roles()->pluck('title');
+                            }
+                        })
+                        ->preload()
+                        ->multiple()
+                        ->columnSpanFull()
+                        ->live(),
                 ])
                 ->columnSpan(1);
     }
