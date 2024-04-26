@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', __('SIG Sign In'))
+@section('title', __('SIG Sign Up'))
 
 @section('content')
 
@@ -14,21 +14,14 @@
                 <div class="card-body">
                     <div class="row g-3 align-items-end">
                         <div class="col-sm-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="{{ __("SIG Name") }}">
-                                <label for="name">{{ __("SIG Name") }}</label>
-                            </div>
-
+                            <x-form.input-floating name="name" :placeholder="__('SIG Name')"/>
                         </div>
                         <div class="col-md-2 col-12">
-                            <div class="form-floating">
-                                <select name="duration" id="duration" class="form-select">
-                                    @foreach(range(30, 360, 30) AS $mins)
-                                        <option value="{{ $mins }}" {{ old('duration') == $mins ? "selected":"" }}>{{ $mins/60 }} h</option>
-                                    @endforeach
-                                </select>
-                                <label for="duration">{{ __("Duration") }} *</label>
-                            </div>
+                            <x-form.input-floating type="select" name="duration" :placeholder="__('Duration')">
+                                @foreach(range(30, 360, 30) AS $mins)
+                                    <option value="{{ $mins }}" {{ old('duration') == $mins ? "selected":"" }}>{{ $mins/60 }} h</option>
+                                @endforeach
+                            </x-form.input-floating>
                         </div>
                         <div class="col-md-4">
                             <span class="col-form-label">{{ __("Language") }}</span>

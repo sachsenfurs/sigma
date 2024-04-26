@@ -36,7 +36,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Bild (optional)</label>
-                            <input type="file" accept="image/*" class="form-control" name="image" @error('image') is-invalid @enderror id="selectImage">
+                            <input type="file" accept="image/*" class="form-control" name="image" id="selectImage">
                             <img id="preview" src="#" alt="your image" class="p-3 object-fit-cover" style="display:none; width: 100%;height: 100%"/>
                         </div>
                         <script>
