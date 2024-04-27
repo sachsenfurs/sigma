@@ -33,6 +33,10 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    protected $with = [
+        'roles'
+    ];
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(

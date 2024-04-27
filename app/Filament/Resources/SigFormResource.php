@@ -33,19 +33,6 @@ class SigFormResource extends Resource
         return auth()->user()->permissions()->contains('manage_forms');
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-
-        // Filter query to only show forms that the user has access to
-        if (!auth()->user()->isAdmin()) {
-            $query->whereHas('userRoles', function (Builder $query) {
-                $query->where('user_roles.id', auth()->user()->roles()->pluck('user_roles.id'));
-            });
-        }
-        return $query;
-    }
-
     public static function getLabel(): ?string
     {
         return __('Form');
@@ -58,7 +45,8 @@ class SigFormResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return SigFilledForm::where('approved', 0)->count();
+        $count = SigFilledForm::where('approved', 0)->count();
+        return ($count > 0) ? $count : "";
     }
 
     public static function form(Form $form): Form
@@ -132,7 +120,7 @@ class SigFormResource extends Resource
                 ->label('To be approved')
                 ->translateLabel()
                 ->getStateUsing(function (SigForm $record) {
-                    return $record->sigFilledForms()->where('approved', 0)->count();
+                    return $record->sigFilledForms->where('approved', 0)->count();
                 }),
         ];
     }
@@ -200,7 +188,7 @@ class SigFormResource extends Resource
                             if (auth()->user()->isAdmin()) {
                                 return UserRole::all()->pluck('title', 'id');
                             } else {
-                                return auth()->user()->roles()->pluck('title');
+                                return auth()->user()->roles()->pluck('title', 'user_roles.id');
                             }
                         })
                         ->preload()

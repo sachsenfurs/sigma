@@ -34,6 +34,7 @@ class FilledForms extends BaseWidget
             ->query(
                 SigFilledForm::query()
                     ->where('sig_form_id', $this->record->id)
+                    ->orderBy('approved')
             )
             ->filters([
                 self::getApprovedFilter(),
@@ -51,11 +52,11 @@ class FilledForms extends BaseWidget
                 ->translateLabel()
                 ->boolean()
                 ->getStateUsing(function ($record) {
-                    switch ($record->approved) {
-                        case 0: return null;
-                        case 1: return true;
-                        case 2: return false;
-                    }
+                    return match($record->approved) {
+                        0 => null,
+                        1 => true,
+                        2 => false,
+                    };
                 }),
         ];
         foreach ($this->record->form_definition as $formDefinition) {

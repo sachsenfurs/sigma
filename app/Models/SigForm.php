@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SigFormAccessScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +20,10 @@ class SigForm extends Model
     protected $casts = [
         'form_definition' => 'array'
     ];
+
+    protected static function booted() {
+        static::addGlobalScope(new SigFormAccessScope);
+    }
 
     public function getNameLocalizedAttribute()
     {
