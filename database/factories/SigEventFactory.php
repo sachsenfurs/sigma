@@ -27,10 +27,6 @@ class SigEventFactory extends Factory
             'description' => $this->faker->realText(),
             'description_en' => $this->faker->realText(),
             'additional_infos' => $this->faker->realText(),
-            'fursuit_support' => $this->faker->randomElement(["0", "1"]),
-            'medic' => $this->faker->randomElement(["0", "1"]),
-            'security' => $this->faker->randomElement(["0", "1"]),
-            'other_stuff' => $this->faker->randomElement(["0", "1"]),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->randomElement([$this->faker->dateTime(), $datetime]),
         ];

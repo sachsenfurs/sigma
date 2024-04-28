@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3 align-items-end">
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <x-form.input-floating name="name" :placeholder="__('SIG Name')"/>
                         </div>
                         <div class="col-md-2 col-12">

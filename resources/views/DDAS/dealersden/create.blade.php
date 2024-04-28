@@ -20,17 +20,7 @@
                                     <img id="preview" src="#" alt="" class="rounded" style="display: none; width: 100%; height: 100%;  object-fit: cover"/>
                                 </div>
                             </label>
-                            <input style="display: none" type="file" accept="image/*" class="form-control" name="image" id="selectImage">
-                            <script>
-                                selectImage.onchange = evt => {
-                                    let preview = document.getElementById('preview');
-                                    preview.style.display = 'block';
-                                    const [file] = selectImage.files
-                                    if (file) {
-                                        preview.src = URL.createObjectURL(file)
-                                    }
-                                }
-                            </script>
+                            <x-form.input-image name="image" id="selectImage" style="display:none"/>
                         </div>
                         <div class="col-md-7 col-12 col-lg-9">
                             <div class="row g-3 d-flex">

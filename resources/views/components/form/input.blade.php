@@ -1,12 +1,10 @@
 @props([
-    'ident' => "",
-    'pht' => "",
-    'lt' => "",
-    'value' =>"",
-    'size' => "",
+    'type' => "text",
+    'name' => "",
+    'id' => null,
 ])
-
-<div class="col{{ $size }}">
-    <label for="{{ $ident }}" class="form-label">{{ $lt }}</label>
-    <input type="text" class="form-control" name="{{ $ident }}" placeholder="{{ $pht }}" value="{{ $value }}">
-</div>
+@if($type == "textarea")
+<textarea type="{{ $type }}" name="{{$name}}" id="{{ $id ?? $name }}" {{ $attributes->merge(['class' => "form-control"])->except("value") }}>{{ $attributes->get("value", old($name)) }}</textarea>
+@else
+<input type="{{ $type }}" name="{{$name}}" id="{{ $id ?? $name }}" {{ $attributes->merge(['class' => "form-control"]) }} value="{{ old($name) }}">
+@endif

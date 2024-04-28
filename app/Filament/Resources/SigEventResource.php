@@ -327,22 +327,22 @@ class SigEventResource extends Resource
                 ->label('Additional Informations')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Checkbox::make('fursuit_support')
-                        ->label('Furry Support')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('medic')
-                        ->label('Medic')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('security')
-                        ->label('Security')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('other_stuff')
-                        ->label('Other Stuff')
-                        ->translateLabel()
-                        ->live(),
+//                    Forms\Components\Checkbox::make('fursuit_support')
+//                        ->label('Furry Support')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('medic')
+//                        ->label('Medic')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('security')
+//                        ->label('Security')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('other_stuff')
+//                        ->label('Other Stuff')
+//                        ->translateLabel()
+//                        ->live(),
                     Forms\Components\Textarea::make('additional_infos')
                         ->label('Additional Informations')
                         ->translateLabel()

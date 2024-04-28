@@ -37,6 +37,9 @@ return new class extends Migration
             // relativer Pfad zur Datei (local storage)
             $table->string('image_file')->nullable();
 
+            // Nur Ausstellungstück oder zur Auktion freigegeben?
+            $table->boolean('auction')->default(true);
+
             // Status, ob es nach der Anmeldung "angenommen" wurde
             $table->boolean('approved')->default(false);
 

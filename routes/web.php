@@ -68,10 +68,10 @@ Route::get("/table", [TableViewController::class, 'index'])->name("public.tablev
 Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
 
 
-Route::resource("/hosts", SigHostController::class)->except('show');
+Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");
 Route::get("/hosts/{host:slug}", [SigHostController::class, 'show'])->name("hosts.show");
 
-Route::resource("/locations", SigLocationController::class)->except('show');
+Route::get("/locations", [SigLocationController::class, 'index'])->name("locations.index");
 Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])->name("locations.show");
 
 Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
@@ -86,12 +86,12 @@ Route::group(['middleware' => "auth"], function() {
 
     // SIG Events
     Route::get("/sigs", [SigEventController::class, 'index'])->name("sigs.index");
-    Route::get("/sigs/create", [SigEventController::class, 'create'])->name("sigs.create");
-    Route::post("/sigs", [SigEventController::class, 'store'])->name("sigs.store");
-    Route::get("/sigs/{sig}/edit", [SigEventController::class, 'edit'])->name("sigs.edit");
     Route::get("/sigs/{sig}", [SigEventController::class, 'show'])->name("sigs.show");
-    Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
-    Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
+//    Route::get("/sigs/create", [SigEventController::class, 'create'])->name("sigs.create");
+//    Route::post("/sigs", [SigEventController::class, 'store'])->name("sigs.store");
+//    Route::get("/sigs/{sig}/edit", [SigEventController::class, 'edit'])->name("sigs.edit");
+//    Route::put("/sigs/{sig}", [SigEventController::class, 'update'])->name("sigs.update");
+//    Route::delete("/sigs/{sig}", [SigEventController::class, 'destroy'])->name("sigs.destroy");
 
     // Sig My Events
     Route::get("/my-events", [SigMyEventController::class, 'index'])->name("mysigs.index");
@@ -182,4 +182,8 @@ Route::group(['middleware' => "auth"], function() {
         Route::post('/{form}', [SigFormController::class, 'store'])->name('store');
         Route::delete('/{form}', [SigFormController::class, 'destroy'])->name('destroy');
     });
+});
+Route::get("/sleep", function () {
+    sleep(1);
+    return "ok";
 });

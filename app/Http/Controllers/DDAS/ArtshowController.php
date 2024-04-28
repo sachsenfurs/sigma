@@ -49,10 +49,10 @@ class ArtshowController extends Controller
             'ArtistName' => 'sometimes|required|string|max:255',
             'ArtistWeb' => 'sometimes|required|url',
             'ArtistItemName' => 'required|string|max:255',
-            'ArtistItemDescriptionDE' => 'required|string',
+            'description' => 'required|string|min:100',
             'ArtistItemAdditionalInfo' => 'nullable',
-            'ArtistItemStartBid' => 'required|numeric|min:0|max:10000',
-            'ArtistItemCharity' => 'required|integer|min:0|max:100',
+            'starting_bid' => 'required|numeric|min:0|max:10000',
+            'charity_percentage' => 'required|integer|min:35|max:100',
             'ArtistItemImage' => 'required|mimes:jpeg,png,jpg|max:5048',
         ]);
 
@@ -106,11 +106,9 @@ class ArtshowController extends Controller
                 $as_artist = $artist;
             }
         }
-        // dd($as_artist);
-        
-        // dd($item);
+        if(request()->wantsJson())
+            return compact('as_artist', 'item', 'user');
 
-        // dd($artist, $item);
         return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
     }
 

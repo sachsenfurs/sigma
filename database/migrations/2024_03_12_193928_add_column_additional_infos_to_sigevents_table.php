@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::table('sig_events', function (Blueprint $table) {
             $table->after("description_en", function(Blueprint $table) {
+                $table->boolean('approved')->default(1);
                 $table->text('additional_infos')->nullable();
-                $table->text('fursuit_support')->default("0"); //TODO: Muss später noch überarbeitet werden ist gerade aus Zeitgründen so gemacht
-                $table->text('medic')->default("0");
-                $table->text('security')->default("0");
-                $table->text('other_stuff')->default("0");
+                $table->json('requirements')->nullable();
+//                $table->text('fursuit_support')->default("0"); //TODO: Muss später noch überarbeitet werden ist gerade aus Zeitgründen so gemacht
+//                $table->text('medic')->default("0");
+//                $table->text('security')->default("0");
+//                $table->text('other_stuff')->default("0");
             });
         });
     }

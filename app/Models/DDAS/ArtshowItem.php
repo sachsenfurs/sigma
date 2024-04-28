@@ -2,6 +2,7 @@
 
 namespace App\Models\DDAS;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,8 +20,14 @@ class ArtshowItem extends Model
         'sold', 'paid'
     ];
 
+    public function scopeOwn(Builder $query) {
+        $query->whereHas('artist.user', function(Builder $query) {
+            $query->where('artshow_artists.user_id', auth()->user()?->id);
+        });
+    }
+
     public function artist(): BelongsTo {
-        return $this->belongsTo(ArtshowArtist::class);
+        return $this->belongsTo(ArtshowArtist::class, 'artshow_artist_id');
     }
 
     public function artshowBids(): HasMany {
