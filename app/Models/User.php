@@ -6,6 +6,7 @@ use App\Models\DDAS\ArtshowArtist;
 use App\Models\DDAS\ArtshowBid;
 use App\Models\DDAS\Dealer;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasFactory;
     use Notifiable;
@@ -84,6 +85,10 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool {
         // needs at least 1 permission
         return $this->permissions()->count() > 0;
+    }
+
+    public function getFilamentAvatarUrl(): ?string {
+        return $this->avatar_thumb;
     }
 
     public function artists(): HasMany {
