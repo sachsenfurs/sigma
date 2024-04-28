@@ -88,6 +88,7 @@ namespace App\Models\DDAS{
  * @method static \Database\Factories\DDAS\ArtshowItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem own()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem query()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAdditionalInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereApproved($value)
@@ -356,6 +357,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $max_regs_per_day
  * @property int|null $max_group_attendees_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigForms> $forms
+ * @property-read int|null $forms_count
  * @property-read mixed $description_localized
  * @property-read mixed $name_localized
  * @property-read mixed $timetable_count
@@ -412,6 +415,64 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigFavorite whereUserId($value)
  */
 	class SigFavorite extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SigFilledForms
+ *
+ * @property int $id
+ * @property int $sig_forms_id
+ * @property int $user_id
+ * @property array|null $form_data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigForms $sigForms
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereFormData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereSigFormsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForms whereUserId($value)
+ */
+	class SigFilledForms extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SigForms
+ *
+ * @property int $id
+ * @property string $slug
+ * @property string $name
+ * @property string $name_en
+ * @property int|null $sig_event_id
+ * @property array|null $form_definition
+ * @property int $form_closed
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $name_localized
+ * @property-read \App\Models\SigEvent|null $sigEvent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForms> $sigFilledForms
+ * @property-read int|null $sig_filled_forms_count
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereFormClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereFormDefinition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereSigEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForms whereUpdatedAt($value)
+ */
+	class SigForms extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -721,7 +782,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTelegramUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent implements \Filament\Models\Contracts\FilamentUser {}
+	class User extends \Eloquent implements \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
 }
 
 namespace App\Models{
