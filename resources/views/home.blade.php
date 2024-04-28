@@ -170,7 +170,7 @@
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
-                                            <x-modals.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
+                                            <x-modal.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@
                                     <hr>
                                 </div>
                             </div>
-                            <x-modals.attendee-list :timeslot="$registration->sigTimeslot" />
+                            <x-modal.attendee-list :timeslot="$registration->sigTimeslot" />
                         @endforeach
                     @endif
                 </div>
@@ -276,7 +276,7 @@
                                 <hr>
                             </div>
                         </div>
-                        <x-modals.reminder-selector :timetableEntry="$fav->timetableEntry" />
+                        <x-modal.reminder-selector :timetableEntry="$fav->timetableEntry" />
                     @empty
                         <p>{{ __("You currently don't have any favorite events") }}</p>
                     @endforelse

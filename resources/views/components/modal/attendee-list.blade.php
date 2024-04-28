@@ -25,7 +25,7 @@
                   </div>
                   <button type="submit" class="btn btn-primary m-1 mt-3">Teilnehmer hinzufügen</button>
                 </form>
-              </div> 
+              </div>
             @endif
             <hr>
           <div>
@@ -37,10 +37,10 @@
                 :attendee="$attendee"
               />
               @if ($attendee->user->id != auth()->user()->id)
-                <x-modals.attendee-remove :sigAttendee="$attendee" />
+                <x-modal.attendee-remove :sigAttendee="$attendee" />
               @endif
             @endforeach
-          </div> 
+          </div>
         </div>
         <div class="modal-footer" style="display: flex; justify-content: center;">
             <a class="btn btn-secondary" onclick="$('#attendeeListModal{{ $timeslot->id }}').modal('toggle');" data-dismiss="modal">{{ __("Close") }}</a>
