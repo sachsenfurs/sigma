@@ -73,8 +73,6 @@ class ArtshowController extends Controller
 
         $artist = ArtshowArtist::where('user_id', $user->id)->first();
 
-        // dd($artist);
-
         ArtshowItem::create([
             'artshow_artist_id' => $artist->id,
             'name' => $validate['ArtistItemName'],
@@ -91,25 +89,10 @@ class ArtshowController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(ArtshowItem $artshowItem)
     {
-        $user = User::where('id', auth()->user()->id)->first();
-        $item = ArtshowItem::where('id',$id)->first();
-        $artists = ArtshowArtist::all();
-
-        $as_artist = null;
-
-        foreach ($artists as $artist)
-        {
-            if ($artist->id == $item->artshow_artist_id)
-            {
-                $as_artist = $artist;
-            }
-        }
-        if(request()->wantsJson())
-            return compact('as_artist', 'item', 'user');
-
-        return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
+        return $artshowItem;
+//        return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
     }
 
     /**

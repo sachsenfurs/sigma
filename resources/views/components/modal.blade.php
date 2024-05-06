@@ -57,10 +57,35 @@
                     window.el = elements;
                     axios.get(editUrl)
                         .then((response) => {
-                            // response.data.item
-                           // console.log(response.data.item)
+                            Object.entries(response.data).forEach(function(data) {
+                                let [key, value] = data;
+                                let ele = Object.values(elements).find(e => e.name === key);
+                                if(ele !== undefined) {
+                                    switch (ele.type) {
+                                        case 'checkbox':
+                                            ele.checked = value;
+                                            break;
+                                        case "text":
+                                        case "number":
+                                        case "textarea":
+                                        case "email":
+                                        case "password":
+                                        case "color":
+                                        case "date":
+                                        case "datetime-local":
+                                        case "month":
+                                        case "range":
+                                        case "search":
+                                        case "tel":
+                                        case "time":
+                                        case "url":
+                                        case "week":
+                                            ele.value = value;
+                                            break;
+                                    }
+                                }
+                            })
                         });
-                    // console.log(elements);
                 }
 
             });

@@ -157,15 +157,13 @@ Route::group(['middleware' => "auth"], function() {
     Route::resource('/dealersden', DealersDenController::class);
 
     //Artshow
-    Route::resource('/artshow', ArtshowController::class);
+    Route::resource('/artshow', ArtshowController::class)
+         ->parameters(['artshow' => 'artshowItem']);
 
     // Sig SignIn (Sigs Anmelden)
     Route::resource('sig/signup', SigSignInController::class);
 
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
-
-    // Artshow
-    Route::get('/artshow', [ArtshowController::class, 'index'])->name('artshow.index');
 
     // Dealers Den
     Route::get('/dealersden', [DealersDenController::class, 'index'])->name('dealersden.index');

@@ -94,7 +94,8 @@
 
         </div>
 
-        <x-modal :title="__('Add Item')" id="itemModal" class="modal-xl" method="POST" :action="route('artshow.store')" x-data="{auction: true, starting_bid:0, test:0}" data-editurl="/artshow/">
+        <x-modal :title="__('Add Item')" id="itemModal" class="modal-xl" method="POST" :action="route('artshow.store')"
+                 x-data="{auction: true, starting_bid:0, file: null}" data-editurl="/artshow/">
             <div class="card-body">
                 <div class="row g-3 align-items-start">
                     <div class="col-ld-7 col-12 col-xl-8">
@@ -130,12 +131,14 @@
                     </div>
                     <div class="col-ld-5 col-12 col-xl-4">
                         <label class="container rounded bg-body border p-3" style="cursor: pointer" for="selectImage">
-                            {{ __("Image") }}
+                            <span x-show="!file">
+                                {{ __("Image") }}
+                            </span>
                             <div class="text-center" style="">
-                                <img id="preview" src="#" alt="" class="rounded" style="display: none; width: 100%; height: 100%;  object-fit: cover"/>
+                                <img id="preview" src="#" alt="" class="rounded" style="display: none; width: 100%; height: 100%;  object-fit: cover" />
                             </div>
                         </label>
-                        <x-form.input-image name="image" id="selectImage" />
+                        <x-form.input-image name="image" id="selectImage" x-model="file" />
                     </div>
                 </div>
             </div>

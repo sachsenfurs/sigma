@@ -13,11 +13,10 @@ class ArtshowItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'artshow_artist_id','name', 'description',
-        'description_en', 'starting_bid', 'charity_percentage',
-        'approved', 'additional_info','image_file',
-        'sold', 'paid'
+    protected $guarded = [];
+
+    protected $with = [
+        'artist'
     ];
 
     public function scopeOwn(Builder $query) {
