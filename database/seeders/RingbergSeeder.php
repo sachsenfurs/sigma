@@ -134,7 +134,7 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "WC",
-                'render_ids' => json_encode(["toilet1Area", "toilet2Area", "babyArea", "potatoArea"]),
+                'render_ids' => json_encode(["toilet1Area", "toilet2Area", "babyArea", "disabledWC"]),
                 'floor' => "-1",
                 'room' => "K 1.U 035-042",
                 'roomsize' => "0",
@@ -222,6 +222,7 @@ class RingbergSeeder extends Seeder
                 'render_ids' => json_encode(["seasonsArea"]),
                 'floor' => "0",
                 'show_default' => true,
+                'infodisplay' => true,
             ],
             [
                 'name' => "Rezeption",
@@ -239,6 +240,21 @@ class RingbergSeeder extends Seeder
                 'description' => "Hinterausgang an der Bar",
                 'description_en' => "Back exit at the bar",
                 'render_ids' => json_encode(["outdoorArea3"]),
+                'floor' => "0",
+            ],
+            [
+                'name' => "Leseraum",
+                'description' => '"Glaskasten" in der Lobby',
+                'description_en' => "Glass office in the lobby",
+                'render_ids' => json_encode(["outdoorArea3"]),
+                'floor' => "0",
+                'show_default' => true,
+            ],
+            [
+                'name' => "Billardraum",
+                'description' => 'Billardraum',
+                'description_en' => "Billiard room",
+                'render_ids' => json_encode(["smokersArea"]),
                 'floor' => "0",
             ]
         ];
