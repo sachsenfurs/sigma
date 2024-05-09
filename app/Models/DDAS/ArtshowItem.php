@@ -3,17 +3,25 @@
 namespace App\Models\DDAS;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class ArtshowItem extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'auction' => "boolean",
+        'sold' => "boolean",
+        'paid' => "boolean",
+    ];
 
     protected $with = [
         'artist'
@@ -35,5 +43,11 @@ class ArtshowItem extends Model
 
     public function artshowPickup(): HasOne {
         return $this->hasOne(ArtshowPickup::class);
+    }
+
+    public function imageUrl(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->image ? Storage::url($this->image) : null
+        );
     }
 }

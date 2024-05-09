@@ -1,32 +1,45 @@
 <?php
 
-namespace App\Livewire\ddas;
+namespace App\Livewire\DDAS;
 
+use App\Livewire\Forms\ArtshowItemForm;
 use App\Models\DDAS\ArtshowItem;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ArtshowItemSignup extends Component
 {
+    use WithFileUploads;
 
-    public $items = [];
-    public $name = "fuchx";
+    public ?ArtshowItem $editArtshowItem = null;
+    public ArtshowItemForm $form;
 
-    public function mount() {
-        $this->addItem();
+    public function newItem() {
+        $this->form->reset();
+        $this->dispatch("showModal", "itemModal");
     }
 
-    public function render()
-    {
-        return view('livewire.ddas.artshow-item-signup');
+    public function editItem(ArtshowItem $artshowItem) {
+        $this->authorize('update', $artshowItem);
+        $this->editArtshowItem = $artshowItem;
+        $this->form->fill($this->editArtshowItem);
+        $this->dispatch("showModal", "itemModal");
     }
 
-    public function addItem() {
-        $item = new ArtshowItem();
-        $item->pseudo_id = rand();
-        $this->items[] = $item;
+    public function deleteItem(ArtshowItem $artshowItem) {
+        $this->authorize('delete', $artshowItem);
+        $this->editArtshowItem = $artshowItem;
+        $this->dispatch("showModal", "confirmModal");
     }
 
-    public function removeItem($index) {
-        array_splice($this->items, $index, 1);
+    public function submit() {
+        $this->form->store($this->editArtshowItem);
+        $this->dispatch("hideModal", "itemModal");
+    }
+
+    public function confirm($modalId) {
+        $this->authorize('delete', $this->editArtshowItem);
+        $this->editArtshowItem->delete();
+        $this->dispatch("hideModal", "confirmModal");
     }
 }

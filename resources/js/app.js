@@ -21,14 +21,14 @@ const addVueApp = (id, component) => {
 addVueApp("app", EntryList);
 
 
-import Alpine from 'alpinejs';
-import { form } from "./alpine/form"
-import { input } from "./alpine/input"
-// Await Alpine.js initialization
-document.addEventListener("alpine:init", () => {
-    Alpine.data("form", form)
-    Alpine.data("input", input)
-})
-Alpine.start();
+// DONT INJECT ALPINE HERE!
+// IT WILL DESTROY LIVEWIRE COMPONENTS
+// Alpine.js is included with @livewireScripts in the app.blade.php
 
-window.Alpine = Alpine;
+// import Alpine from 'alpinejs';
+// // Await Alpine.js initialization
+// document.addEventListener("alpine:init", () => {
+// })
+// Alpine.start();
+//
+// window.Alpine = Alpine;

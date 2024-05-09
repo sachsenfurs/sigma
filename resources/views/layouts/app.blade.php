@@ -257,6 +257,9 @@
     </div>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    {{--  Just to make sure Alpine.js is loaded on every page without Livewire components  --}}
+    @livewireScripts
 </body>
 
 </html>

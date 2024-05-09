@@ -75,16 +75,18 @@ namespace App\Models\DDAS{
  * @property string $starting_bid
  * @property string $charity_percentage
  * @property string|null $additional_info only visible for adminstration/auctioner
- * @property string|null $image_file
+ * @property string|null $image
+ * @property bool $auction
  * @property int $approved
  * @property int $sold
  * @property int $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowArtist|null $artist
+ * @property-read \App\Models\DDAS\ArtshowArtist $artist
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
  * @property-read \App\Models\DDAS\ArtshowPickup|null $artshowPickup
+ * @property-read mixed $image_url
  * @method static \Database\Factories\DDAS\ArtshowItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newQuery()
@@ -93,12 +95,13 @@ namespace App\Models\DDAS{
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAdditionalInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereArtshowArtistId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAuction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereCharityPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImageFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereSold($value)
@@ -347,11 +350,9 @@ namespace App\Models{
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
+ * @property int $approved
  * @property string|null $additional_infos
- * @property string $fursuit_support
- * @property string $medic
- * @property string $security
- * @property string $other_stuff
+ * @property mixed|null $requirements
  * @property int $reg_possible
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -373,20 +374,18 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent query()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescriptionEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereFursuitSupport($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereLanguages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxGroupAttendeesCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMedic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNameEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereOtherStuff($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSecurity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigHostId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereUpdatedAt($value)
  */

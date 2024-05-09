@@ -24,7 +24,7 @@ class ArtshowItemFactory extends Factory
             'starting_bid' => $this->faker->numberBetween(0, 500),
             'charity_percentage' => $this->faker->numberBetween(0, 100),
             'additional_info' => $this->faker->text(),
-            'image_file' => $this->faker->imageUrl(),
+            'image' => $this->faker->imageUrl(),
             'artshow_artist_id' => ArtshowArtist::factory(),
         ];
     }

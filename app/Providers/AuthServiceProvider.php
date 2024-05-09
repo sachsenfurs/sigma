@@ -13,23 +13,22 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        'App\Models\SigEvent' => 'App\Policies\SigEventPolicy',
-        'App\Models\SigFilledForms' => 'App\Policies\SigFilledFormsPolicy',
-        'App\Models\SigForms' => 'App\Policies\SigFormsPolicy',
-        'App\Models\SigHost' => 'App\Policies\SigHostPolicy',
-        'App\Models\SigLocation' => 'App\Policies\SigLocationPolicy',
-        'App\Models\SigTag' => 'App\Policies\SigTagPolicy',
-        'App\Models\SigTimeslot' => 'App\Policies\SigTimeslotPolicy',
-        'App\Models\TimetableEntry' => 'App\Policies\TimetableEntryPolicy',
-        'App\Models\User' => 'App\Policies\UserPolicy',
-        'App\Models\UserRole' => 'App\Policies\UserRolePolicy',
-        'App\Models\UserUserRole' => 'App\Policies\UserUserRolePolicy',
-        'App\Models\DDAS\ArtshowArtist' => 'App\Policies\ArtshowArtistPolicy',
-        'App\Models\DDAS\ArtshowBid' => 'App\Policies\ArtshowBidPolicy',
-        'App\Models\DDAS\ArtshowItem' => 'App\Policies\ArtshowItemPolicy',
-        'App\Models\DDAS\ArtshowPickup' => 'App\Policies\ArtshowPickupPolicy',
-        'App\Models\DDAS\Dealer' => 'App\Policies\DealerPolicy',
-        'App\Models\DDAS\DealerTag' => 'App\Policies\DealerTagPolicy',
+        \App\Models\SigEvent::class             => \App\Policies\SigEventPolicy::class,
+        \App\Models\SigFilledForms::class       => \App\Policies\SigFilledFormsPolicy::class,
+        \App\Models\SigForms::class             => \App\Policies\SigFormsPolicy::class,
+        \App\Models\SigHost::class              => \App\Policies\SigHostPolicy::class,
+        \App\Models\SigLocation::class          => \App\Policies\SigLocationPolicy::class,
+        \App\Models\SigTag::class               => \App\Policies\SigTagPolicy::class,
+        \App\Models\TimetableEntry::class       => \App\Policies\TimetableEntryPolicy::class,
+        \App\Models\User::class                 => \App\Policies\UserPolicy::class,
+        \App\Models\UserRole::class             => \App\Policies\UserRolePolicy::class,
+        \App\Models\UserUserRole::class         => \App\Policies\UserUserRolePolicy::class,
+        \App\Models\DDAS\ArtshowArtist::class   => \App\Policies\ArtshowArtistPolicy::class,
+        \App\Models\DDAS\ArtshowBid::class      => \App\Policies\ArtshowBidPolicy::class,
+        \App\Models\DDAS\ArtshowItem::class     => \App\Policies\ArtshowItemPolicy::class,
+        \App\Models\DDAS\ArtshowPickup::class   => \App\Policies\ArtshowPickupPolicy::class,
+        \App\Models\DDAS\Dealer::class          => \App\Policies\DealerPolicy::class,
+        \App\Models\DDAS\DealerTag::class       => \App\Policies\DealerTagPolicy::class,
     ];
 
     /**
@@ -37,10 +36,10 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-        Gate::before(function ($user, $permission) {
-            return $user->permissions()->contains($permission);
-        });
+    public function boot() {
+//        Gate::before(function ($user, $permission) {
+//            if($user->permissions()->contains($permission))
+//                return true;
+//        });
     }
 }

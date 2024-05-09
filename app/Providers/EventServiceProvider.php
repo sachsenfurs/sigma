@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\DDAS\ArtshowItem;
 use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
@@ -10,6 +11,7 @@ use App\Models\SigReminder;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\TimetableEntry;
+use App\Observers\ArtshowItemObserver;
 use App\Observers\SigAttendeeObserver;
 use App\Observers\SigEventObserver;
 use App\Observers\SigFavoriteObserver;
@@ -60,7 +62,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         TimetableEntry::class => [
             TimetableEntryObserver::class
-        ]
+        ],
+
+        ArtshowItem::class => [
+            ArtshowItemObserver::class
+        ],
     ];
 
     /**

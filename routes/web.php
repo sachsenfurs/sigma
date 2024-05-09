@@ -181,7 +181,3 @@ Route::group(['middleware' => "auth"], function() {
         Route::delete('/{form}', [SigFormController::class, 'destroy'])->name('destroy');
     });
 });
-Route::get("/sleep", function () {
-    sleep(1);
-    return "ok";
-});

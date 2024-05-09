@@ -133,7 +133,7 @@ return [
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid timezone.',
     'unique' => 'The :attribute has already been taken.',
-    'uploaded' => 'The :attribute failed to upload.',
+    'uploaded' => 'Failed to upload :attribute.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
@@ -165,6 +165,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'files.*'           => "File",
+    ],
 
 ];

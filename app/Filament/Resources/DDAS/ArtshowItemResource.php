@@ -64,7 +64,7 @@ class ArtshowItemResource extends Resource
                     ->label('Zusätzliche Informationen')
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image_file')
+                Forms\Components\FileUpload::make('image')
                     ->label('Bild')
                     ->required()
                     ->disk('public')
@@ -105,7 +105,7 @@ class ArtshowItemResource extends Resource
                     ->label('Charity-Prozentsatz')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image_file')
+                Tables\Columns\ImageColumn::make('image')
                     ->label('Bild')
                     ->sortable()
                     ->toggleable(),

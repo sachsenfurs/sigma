@@ -15,8 +15,7 @@ class ArtshowController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $as_items = ArtshowItem::all();
         $as_artists = ArtshowArtist::all();
         // dd($as_items, $as_artists);
@@ -26,8 +25,7 @@ class ArtshowController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create() {
         $user = User::where('id', auth()->user()->id)->first();
 
         $artist = ArtshowArtist::where('user_id', $user->id)->first();
@@ -41,8 +39,7 @@ class ArtshowController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $user = User::where('id', auth()->user()->id)->first();
 
         $validate = $request->validate([
@@ -56,14 +53,13 @@ class ArtshowController extends Controller
             'ArtistItemImage' => 'required|mimes:jpeg,png,jpg|max:5048',
         ]);
 
-        $newImageName = time() . '-ArtShow-'. $user->id . '-' . $request->ArtistItemName . '.' . $request->ArtistItemImage->extension();
+        $newImageName = time() . '-ArtShow-' . $user->id . '-' . $request->ArtistItemName . '.' . $request->ArtistItemImage->extension();
 
         $request->ArtistItemImage->move(public_path('storage'), $newImageName);
 
         // dd($request->all());
 
-        if (!ArtshowArtist::where('user_id', $user->id)->first())
-        {
+        if(!ArtshowArtist::where('user_id', $user->id)->first()) {
             ArtshowArtist::create([
                 'user_id' => $user->id,
                 'name' => $validate['ArtistName'],
@@ -80,7 +76,7 @@ class ArtshowController extends Controller
             'starting_bid' => $validate['ArtistItemStartBid'],
             'charity_percentage' => $validate['ArtistItemCharity'],
             'additional_info' => $validate['ArtistItemAdditionalInfo'],
-            'image_file' => $newImageName,
+            'image' => $newImageName,
         ]);
 
         return redirect('ddas.artshow');
@@ -89,17 +85,16 @@ class ArtshowController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ArtshowItem $artshowItem)
-    {
+    public function show(ArtshowItem $artshowItem) {
+        $this->authorize('view', $artshowItem);
         return $artshowItem;
-//        return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
+        //        return view('ddas.artshow.show', compact('as_artist', 'item', 'user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
+    public function edit(string $id) {
         $artist = ArtshowArtist::find($id);
         $item = ArtshowItem::where('artshow_artist_id', $id)->find($id);
 
@@ -110,16 +105,14 @@ class ArtshowController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
         //
     }
 }
