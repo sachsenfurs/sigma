@@ -120,11 +120,11 @@
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li>
-                                    @can(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
+                                    @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
                                         <a class="dropdown-item" href="{{ \Filament\Facades\Filament::getUrl() }}">
                                             {{ __('Administration') }}
                                         </a>
-                                    @endcan
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
