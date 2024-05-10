@@ -2,8 +2,9 @@
     'title' => "",
     'type' => "submit",
     'id' => "modal",
+    'action' => null,
 ])
-<div wire:ignore.self id="{{ $id }}" tabindex="-1" {{ $attributes->class(['modal fade']) }} aria-modal="true" role="dialog" {{ $attributes }}>
+<div wire:ignore.self id="{{ $id }}" tabindex="-1" {{ $attributes->class(['modal fade']) }} aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,10 +17,10 @@
             <div class="modal-footer">
                 @if($type == "submit")
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary" wire:click="submit">{{ __('Save') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click="{{$action}}">{{ __('Save') }}</button>
                 @elseif($type == "confirm")
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('No') }}</button>
-                    <button type="button" class="btn btn-primary" wire:click="confirm('{{$id}}')">{{ __('Yes') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click="{{$action}}">{{ __('Yes') }}</button>
                 @elseif($type == "alert")
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __('OK') }}</button>
                 @endif

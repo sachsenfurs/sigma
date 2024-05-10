@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DDAS\ArtshowArtist;
 use App\Models\DDAS\ArtshowItem;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
@@ -26,8 +27,8 @@ class ArtshowItemPolicy
         return $user->permissions()->contains('manage_artshow') || $this->isOwnItem($user, $artshowItem);
     }
 
-    public function create(User $user): bool {
-        return $user->permissions()->contains('manage_artshow');
+    public function create(User $user, ?ArtshowArtist $artshowArtist=null): bool {
+        return $user->permissions()->contains('manage_artshow') || $artshowArtist?->user_id == auth()->user()->id;
     }
 
     public function update(User $user, ArtshowItem $artshowItem): bool {

@@ -5,7 +5,7 @@
     <h2>{{ __("Before the convention") }}</h2>
     <div class="row gap-4 py-4 justify-content-center">
 
-        <div class="card" style="width: 18rem">
+        <div class="card btn btn-primary" style="width: 18rem">
             <div class="card-body text-center">
                 <h5 class="card-title">{{ __("SIG Sign Up") }}</h5>
                 <img class="img-fluid rounded" src="/images/signup/sigfox.jpg" alt="">
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 18rem">
+        <div class="card btn btn-primary" style="width: 18rem">
             <div class="card-body text-center">
                 <h5 class="card-title">{{ __("Dealers Den Sign Up") }}</h5>
                 <img class="img-fluid rounded" src="/images/signup/dealerfox.png" alt="">
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 18rem">
+        <button class="card btn btn-primary" style="width: 18rem">
             <div class="card-body text-center">
                 <h5 class="card-title">{{ __("Artshow Item Sign Up") }}</h5>
                 <img class="img-fluid rounded" src="/images/signup/artshowfox.png" alt="">
@@ -36,7 +36,7 @@
 
                 <a href="{{ route("artshow.create") }}" class="card-link stretched-link"></a>
             </div>
-        </div>
+        </button>
     </div>
 
     <h2>{{ __("At the convention") }}</h2>
