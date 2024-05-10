@@ -17,6 +17,7 @@ class EventsEndpoint extends Controller
              * @var TimetableEntry $entry
              */
             $event = [
+                'id'                    => $entry->id,
                 'name'                  => $entry->sigEvent->name,
                 'name_en'               => $entry->sigEvent->name_en,
                 'host'                  => $entry->sigEvent->sigHost->hide ? false : $entry->sigEvent->sigHost,
