@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("description")->default("");
+            $table->string('description_en')->nullable()->default("");
             $table->json("render_ids")->nullable()
                 ->comment("layer id for displaying as interactive SVG or whatever");
             $table->string("floor")->nullable();
@@ -26,6 +27,8 @@ return new class extends Migration
             // just an idea
             $table->string("roomsize")->nullable();
             $table->string("seats")->nullable();
+
+            $table->boolean('show_default')->default(false)->comment('Show in calendar view (resource view) by default?');
         });
     }
 
