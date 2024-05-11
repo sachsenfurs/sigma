@@ -19,17 +19,29 @@
                             <i class="bi bi-calendar-week"></i> {{ __('Event Schedule') }}
                         </a>
                     </li>
-
-                    <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('hosts.index')]) href="{{ route('hosts.index') }}">
-                            <i class="bi bi-person-circle"></i> {{ __('Hosts') }}
+                    <li class="nav-item dropdown">
+                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("sigs.*")]) href="#" id="sigMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-view-list"></i> {{ __("Events")}}
                         </a>
-                    </li>
-
-                    <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('locations.index')]) href="{{ route('locations.index') }}">
-                            <i class="bi bi-geo-alt"></i> {{ __('Locations') }}
-                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="sigMenu">
+                            <li>
+                                <a @class(['dropdown-item', 'active' => Route::is("hosts.index")]) href="{{ route("hosts.index")}}">
+                                    <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
+                                </a>
+                            </li>
+                            <li>
+                                <a @class(['dropdown-item', 'active' => Route::is("locations.index")]) href="{{ route("locations.index") }}">
+                                    <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
+                                </a>
+                            </li>
+                            @if (auth()?->user()?->isSigHost())
+                                <li>
+                                    <a @class(['dropdown-item', 'active' => Route::is("mysigs.index")]) href="{{ route("mysigs.index") }}">
+                                        <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </li>
 
                     <li>
@@ -37,14 +49,6 @@
                             <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                         </a>
                     </li>
-
-                    @if (auth()?->user()?->isSigHost())
-                        <li>
-                            <a @class(['nav-link px-3', 'active' => Route::is('mysigs.index')]) href="{{ route('mysigs.index') }}">
-                                <i class="bi bi-view-list"></i> {{ __('My Events') }}
-                            </a>
-                        </li>
-                    @endif
 
                     @auth
                     <li class="nav-item dropdown">
