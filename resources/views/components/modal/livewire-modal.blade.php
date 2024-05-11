@@ -28,9 +28,9 @@
         </div>
     </div>
     @script
-        <script>
-            $wire.on('showModal', (id) => $('#'+id[0]).modal('show'));
-            $wire.on('hideModal', (id) => $('#'+id[0]).modal('hide'));
-        </script>
+    <script>
+        $wire.on('showModal', (id) => $('#'+id[0]).modal('show'));
+        $wire.on('hideModal', (id) => $('#'+id[0]).modal('hide'));
+    </script>
     @endscript
 </div>

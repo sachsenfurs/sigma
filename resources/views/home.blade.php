@@ -3,40 +3,16 @@
 @section('content')
 <div class="container">
     <h2>{{ __("Before the convention") }}</h2>
-    <div class="row gap-4 py-4 justify-content-center">
-
-        <div class="card btn btn-primary" style="width: 18rem">
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ __("SIG Sign Up") }}</h5>
-                <img class="img-fluid rounded" src="/images/signup/sigfox.jpg" alt="">
-
-                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Submit your Events, Workshops, Presentations and more!") }}</h6>
-
-                <a href="{{ route("sigs.signup.create") }}" class="card-link stretched-link"></a>
-            </div>
-        </div>
-
-        <div class="card btn btn-primary" style="width: 18rem">
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ __("Dealers Den Sign Up") }}</h5>
-                <img class="img-fluid rounded" src="/images/signup/dealerfox.png" alt="">
-
-                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Would you like to sell your art at the con?") }}</h6>
-
-                <a href="{{ route("dealersden.create") }}" class="card-link stretched-link"></a>
-            </div>
-        </div>
-
-        <button class="card btn btn-primary" style="width: 18rem">
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ __("Artshow Item Sign Up") }}</h5>
-                <img class="img-fluid rounded" src="/images/signup/artshowfox.png" alt="">
-
-                <h6 class="card-subtitle text-body-secondary pt-3">{{ __("Submit your art for exhibition or auction") }}</h6>
-
-                <a href="{{ route("artshow.create") }}" class="card-link stretched-link"></a>
-            </div>
-        </button>
+    <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch" style="max-width: 970px">
+        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.jpg" :href="route('sigs.signup.create')">
+            {{ __("Submit your Events, Workshops, Presentations and more!") }}
+        </x-home-signup-card>
+        <x-home-signup-card :title="__('Dealers Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
+            {{ __("Would you like to sell your art at the con?") }}
+        </x-home-signup-card>
+        <x-home-signup-card :title="__('Artshow Item Sign Up')" img="/images/signup/artshowfox.png" :href="route('artshow.create')">
+            {{ __("Submit your art for exhibition or auction") }}
+        </x-home-signup-card>
     </div>
 
     <h2>{{ __("At the convention") }}</h2>

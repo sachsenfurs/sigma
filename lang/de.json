@@ -284,7 +284,6 @@
     "Do you really want to remove :attendee from your booking?": "Möchtest du wirklich :attendee aus deiner Buchung entfernen?",
 
     "Sign up": "Melde dich an",
-    "Sign Up's": "Anmeldungen",
     "Scheduled": "Im Programmplan:",
     "In Schedule": "Im Programmplan",
     "Slots available": "Freie Plätze",
@@ -345,13 +344,14 @@
     "Gallery Link, Social Media, etc. (optional)": "Galerielink, Social Media, etc. (optional)",
 
     "Dealers Den Sign Up": "Dealers Den Anmeldung",
+    "Dealers Den Overview": "Dealers Den Übersicht",
     "Dealer List": "Händlerliste",
     "Dealer Logo": "Händler-Logo",
     "Show Dealer": "Händler anzeigen",
     "Dealers": "Händler",
     "Dealer Tags": "Händler Tags",
     "Dealer Infos": "Händler Informationen",
-    "New Dealer": "Neuer Händler",
+    "Register as Dealer": "Als Händler anmelden",
     "Logo": "Logo",
     "Gallery Link, Website, ...": "Galerie Link, Website, ...",
     "Dealer": "Händler",
@@ -362,6 +362,7 @@
     "Telegram": "Telegram",
     "Website": "Webseite",
     "Phone": "Telefon",
-    "Email": "E-Mail"
+    "Email": "E-Mail",
+    "Show All": "Zeige alle"
 
 }

@@ -18,7 +18,7 @@ class ArtshowItemForm extends Form
     #[Validate('required_if:auction,true|int|min:0|nullable')]
     public ?int $starting_bid;
 
-    #[Validate('required_if:auction,on|int')]
+    #[Validate('required_if:auction,on|int|min:0|max:100')]
     public int $charity_percentage = 0;
 
     #[Validate('nullable|max:1000|string')]

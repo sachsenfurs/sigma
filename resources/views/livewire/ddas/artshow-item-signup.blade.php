@@ -188,7 +188,7 @@
                             {{ __('Image') }}
                         @endif
                         <div class="text-center">
-                            <img id="preview" src="{{ $form->new_image?->temporaryUrl() ?? $editArtshowItem->imageUrl ?? "#" }}" alt="" class="rounded"
+                            <img id="preview" src="{{ $form->new_image?->temporaryUrl() ?? $editArtshowItem->imageUrl ?? "" }}" alt="" class="rounded"
                                  style="width: 100%; height: 100%; object-fit: cover">
                         </div>
                     </label>

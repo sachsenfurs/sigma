@@ -172,5 +172,13 @@ return [
         'size'                  => 'Größe',
         'files.*'               => "Datei",
 
+        'charity_percentage' => "Charityanteil",
+        'starting_bid' => "Startgebot",
+        'additional_info' => "Zusatzinformationen",
+        'new_image' => "Bild",
+        'auction' => '"Zur Versteigerung"',
+        'true' => "aktiviert",
+        'false' => "deaktiviert",
+        'social' => "Link zu Social Media",
     ],
 ];

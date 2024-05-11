@@ -19,7 +19,7 @@ class ArtshowController extends Controller
         $as_items = ArtshowItem::all();
         $as_artists = ArtshowArtist::all();
         // dd($as_items, $as_artists);
-        return view('DDAS.artshow.index', compact('as_items', 'as_artists'));
+        return view('ddas.artshow.index', compact('as_items', 'as_artists'));
     }
 
     /**

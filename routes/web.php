@@ -153,8 +153,8 @@ Route::group(['middleware' => "auth"], function() {
         Route::post("/translate", TranslateController::class)->name("translate");
     });
 
-    // Dealer´s Dan
-    Route::resource('/dealersden', DealersDenController::class);
+    // Dealers Den
+    Route::resource('/dealers', DealersDenController::class)->names("dealers");
 
     //Artshow
     Route::resource('/artshow', ArtshowController::class)
@@ -164,9 +164,6 @@ Route::group(['middleware' => "auth"], function() {
     Route::resource('sig/signup', SigSignInController::class);
 
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
-
-    // Dealers Den
-    Route::get('/dealersden', [DealersDenController::class, 'index'])->name('dealersden.index');
 
     // Sig Sign In
     Route::prefix('/sigs/signup')->name('sigs.signup.')->group(function() {

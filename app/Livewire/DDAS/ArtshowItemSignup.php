@@ -58,6 +58,7 @@ class ArtshowItemSignup extends Component
     public function editItem(ArtshowItem $artshowItem) {
         $this->authorize('update', $artshowItem);
         $this->editArtshowItem = $artshowItem;
+        $this->form->reset();
         $this->form->fill($this->editArtshowItem);
         $this->dispatch("showModal", "itemModal");
     }
@@ -93,6 +94,7 @@ class ArtshowItemSignup extends Component
     public function confirm($modalId) {
         $this->authorize('delete', $this->editArtshowItem);
         $this->editArtshowItem->delete();
+        $this->editArtshowItem = null;
         $this->dispatch("hideModal", "confirmModal");
     }
 }

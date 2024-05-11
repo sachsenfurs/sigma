@@ -5,7 +5,7 @@
 
     <div class="container">
         <h2>{{ __('Dealers Den Sign Up') }}</h2>
-        <form action="{{ route("dealersden.store") }}" method="POST">
+        <form action="{{ route("dealers.store") }}" method="POST">
             @csrf
             <div class="card mt-3">
                 <div class="card-header">

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\DDAS\ArtshowItem;
 use App\Models\DDAS\Dealer;
+use App\Models\DDAS\DealerTag;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\TimetableEntry;
@@ -50,6 +51,31 @@ class DatabaseSeeder extends Seeder
         TimetableEntry::factory()->count(50)->create();
 
         ArtshowItem::factory(10)->create();
-        Dealer::factory(10)->create();
+
+        DealerTag::insert([
+            [
+                'name' => "NSFW",
+                'name_en' => "NSFW",
+            ],
+            [
+                'name' => "Merch",
+                'name_en' => "Merch",
+            ],
+            [
+                'name' => "Prints",
+                'name_en' => "Prints",
+            ],
+            [
+                'name' => "Plushies",
+                'name_en' => "Plushies",
+            ]
+        ]);
+
+        Dealer::factory(15)->create();
+
+        foreach(Dealer::all() AS $dealer) {
+            $dealer->tags()->sync(DealerTag::inRandomOrder()->limit(rand(0,3))->get());
+        }
+
     }
 }

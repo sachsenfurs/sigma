@@ -14,70 +14,58 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-                    <!-- Visible in any case -->
                     <li>
-                        <a class="nav-link px-3 {{ Route::is('public.listview') ? 'active' : '' }}"
-                            href="{{ route('public.listview') }}">
+                        <a @class(['nav-link px-3', 'active' => Route::is('public.listview')]) href="{{ route('public.listview') }}">
                             <i class="bi bi-calendar-week"></i> {{ __('Event Schedule') }}
                         </a>
                     </li>
-                    <!-- End visible in any case -->
 
                     <li>
-                        <a class="nav-link px-3 {{ Route::is('hosts.index') ? 'active' : '' }}"
-                            href="{{ route('hosts.index') }}">
+                        <a @class(['nav-link px-3', 'active' => Route::is('hosts.index')]) href="{{ route('hosts.index') }}">
                             <i class="bi bi-person-circle"></i> {{ __('Hosts') }}
                         </a>
                     </li>
 
                     <li>
-                        <a class="nav-link px-3 {{ Route::is('locations.index') ? 'active' : '' }}"
-                            href="{{ route('locations.index') }}">
+                        <a @class(['nav-link px-3', 'active' => Route::is('locations.index')]) href="{{ route('locations.index') }}">
                             <i class="bi bi-geo-alt"></i> {{ __('Locations') }}
                         </a>
                     </li>
 
                     <li>
-                        <a class="nav-link px-3 {{ Route::is('lostfound.index') ? 'active' : '' }}"
-                            href="{{ route('lostfound.index') }}">
-                            {{ __('Lost & Found') }}
+                        <a @class(['nav-link px-3', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
+                            <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                         </a>
                     </li>
 
                     @if (auth()?->user()?->isSigHost())
                         <li>
-                            <a class="nav-link px-3 {{ Route::is('mysigs.index') ? 'active' : '' }}"
-                                href="{{ route('mysigs.index') }}">
+                            <a @class(['nav-link px-3', 'active' => Route::is('mysigs.index')]) href="{{ route('mysigs.index') }}">
                                 <i class="bi bi-view-list"></i> {{ __('My Events') }}
                             </a>
                         </li>
                     @endif
 
-                    @if (auth()?->user())
+                    @auth
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle px-3" href="#" id="SignInDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-briefcase"></i> {{ __("Sign Up's")}}
+                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-palette"></i> {{ __("Dealers Den & Artshow")}}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="SignInDropdownMenu">
+                        <ul class="dropdown-menu" aria-labelledby="artMenu">
                             <li>
-                                <a class="dropdown-item {{ Route::is("artshow.index") ? "active" : "" }}" href="{{ route("artshow.index") }}">
-                                    <i class="bi bi-cash-stack"></i> {{ __("Artshow Item Sign Up")}}
+                                <a @class(['dropdown-item', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
+                                    <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item {{ Route::is("dealersden.index") ? "active" : ""}}" href="{{ route("dealersden.index")}}">
-                                    <i class="bi bi-cash-stack"></i> {{ __("Dealers Den Sign Up")}}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ Route::is("sigs.signup.create") ? "activ" : ""}}" href="{{ route("sigs.signup.create")}}">
-                                    <i class="bi bi-chat-left"></i> {{ __("SIG Sign Up")}}
+                                <a @class(['dropdown-item', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
+                                    <i class="bi bi-easel"></i> {{ __("Artshow Overview")}}
                                 </a>
                             </li>
                         </ul>
                     </li>
 
-                    @endif
+                    @endauth
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -93,10 +81,9 @@
                                 @if (App::getLocale() != $locale)
                                     <li>
                                         <a class="dropdown-item" href="{{ route('lang.set', $locale) }}">
-                                            <i class="bi"><img class=""
-                                                    src="/icons/{{ $locale }}-flag.svg"
-                                                    style="height: 1em; margin-top: -2px"
-                                                    alt="[{{ $locale }}]"></i>
+                                            <i class="bi">
+                                                <img class="" src="/icons/{{ $locale }}-flag.svg" style="height: 1em; margin-top: -2px" alt="[{{ $locale }}]">
+                                            </i>
                                             <span class="align-middle mx-1">{{ $name }}</span>
                                         </a>
                                     </li>

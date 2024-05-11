@@ -7,7 +7,7 @@
             Dealer Details
         </h1>
         <div class="d-flex justify-content-center p-3">
-            <a href="{{ route('dealersden.index') }}" class="btn btn-primary">Back to Dealer List</a>
+            <a href="{{ route('dealers.index') }}" class="btn btn-primary">Back to Dealer List</a>
         </div>
         <div class="justify-center px-md-5">
             <div class="card">

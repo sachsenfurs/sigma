@@ -22,8 +22,9 @@ class DealerFactory extends Factory
             'name' => $this->faker->firstName(),
             'info' => $this->faker->realText(),
             'info_en' => $this->faker->realText(),
+            'approved' => $this->faker->boolean(),
             'gallery_link' => $this->faker->url(),
-            'icon_file' => $this->faker->imageUrl(),
+            'icon_file' => $this->faker->imageUrl(width: 300, height: 300),
             'sig_location_id' => SigLocation::inRandomOrder()->first()->id,
             'user_id' => User::factory(),
         ];
