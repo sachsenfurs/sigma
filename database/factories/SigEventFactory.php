@@ -26,7 +26,7 @@ class SigEventFactory extends Factory
             'languages' => $this->faker->randomElement([["de"], ["en"], ["de","en"]]),
             'description' => $this->faker->realText(),
             'description_en' => $this->faker->realText(),
-            'additional_infos' => $this->faker->realText(),
+            'additional_info' => $this->faker->realText(),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->randomElement([$this->faker->dateTime(), $datetime]),
         ];

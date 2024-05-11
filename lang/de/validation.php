@@ -180,5 +180,12 @@ return [
         'true' => "aktiviert",
         'false' => "deaktiviert",
         'social' => "Link zu Social Media",
+        'additonal_info' => "Zusätzliche Informationen",
+        'duration' => "Dauer",
+        'language' => "Sprache",
+        'languages' => "Sprachen",
+        'name_en' => "Name (Englisch)",
+        'approved' => "Bestätigt",
+        'requirements' => "Anforderungen",
     ],
 ];

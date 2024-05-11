@@ -343,8 +343,8 @@ class SigEventResource extends Resource
 //                        ->label('Other Stuff')
 //                        ->translateLabel()
 //                        ->live(),
-                    Forms\Components\Textarea::make('additional_infos')
-                        ->label('Additional Informations')
+                    Forms\Components\Textarea::make('additional_info')
+                        ->label(__("Additional Information"))
                         ->translateLabel()
                         //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
                         ->rows(4)

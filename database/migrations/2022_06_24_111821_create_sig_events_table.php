@@ -18,7 +18,7 @@ return new class extends Migration
             // isConEvent (Hide HOSTs)
             $table->string("name");
             $table->string('name_en');
-            
+
             $table->foreignId("sig_host_id")->nullable()->constrained()->nullOnDelete();
             $table->json("languages")->comment("two letter language code as JSON array")->default(json_encode([]));
 
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text("description_en")->nullable()->default("");
 
             $table->boolean('approved')->default(1);
-            $table->text('additional_infos')->nullable();
+            $table->text('additional_info')->nullable();
             $table->json('requirements')->nullable();
             $table->boolean("reg_possible")->default(false);
 

@@ -168,7 +168,7 @@ return [
     'attributes' => [
         'files.*'           => "File",
         'charity_percentage' => "Charity Percentage",
-
+        'additional_info' => "Additional Information",
     ],
 
 ];

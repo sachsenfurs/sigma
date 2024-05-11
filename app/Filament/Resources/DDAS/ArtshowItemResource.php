@@ -27,7 +27,7 @@ class ArtshowItemResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return __('Artshow Items');
+        return __('Art Show Items');
     }
 
     protected static ?int $navigationSort = 230;

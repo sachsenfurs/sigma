@@ -4,9 +4,7 @@
 @section('content')
     <div class="container">
         <h2 class="pb-3">
-            {{ __('Artshow Item List') }}
+            {{ __('Art Show Item List') }}
         </h2>
-
-
     </div>
 @endsection

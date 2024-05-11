@@ -351,7 +351,7 @@ namespace App\Models{
  * @property string|null $description
  * @property string|null $description_en
  * @property int $approved
- * @property string|null $additional_infos
+ * @property string|null $additional_info
  * @property mixed|null $requirements
  * @property int $reg_possible
  * @property \Illuminate\Support\Carbon|null $created_at

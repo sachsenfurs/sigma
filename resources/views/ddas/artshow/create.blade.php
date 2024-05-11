@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', __('New Artshow Item'))
+@section('title', __('New Art Show Item'))
 
 @section('content')
 
