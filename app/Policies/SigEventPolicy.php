@@ -22,10 +22,10 @@ class SigEventPolicy
             || $sigEvent->sigHost->reg_id === $user->reg_id;
     }
 
-    public function create(User $user, ?SigHost $sigHost = null): bool {
+    public function create(User $user, $sigHostId = null): bool {
         return $user->permissions()->contains('manage_events')
             || $user->permissions()->contains('manage_sigs')
-            || $sigHost?->user?->id == $user->id;
+            || $user->sigHosts->contains($sigHostId);
     }
 
     public function update(User $user, SigEvent $sigEvent): bool {

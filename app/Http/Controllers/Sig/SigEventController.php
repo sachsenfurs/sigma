@@ -24,7 +24,7 @@ class SigEventController extends Controller
 
 
     public function store(Request $request) {
-        $this->authorize("create", SigEvent::class );
+        $this->authorize("create", [SigEvent::class, $request->get("sig_host_id")] );
         $validated = $request->validate([
             'name' => "required|string|min:3|max:65",
             'duration' => "required|int|min:30|max:360",
