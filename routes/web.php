@@ -25,8 +25,8 @@ use App\Http\Controllers\Sig\SigReminderController;
 use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
-use App\Http\Controllers\DDAS\DealersDenController;
-use App\Http\Controllers\DDAS\ArtshowController;
+use App\Http\Controllers\Ddas\DealersDenController;
+use App\Http\Controllers\Ddas\ArtshowController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
