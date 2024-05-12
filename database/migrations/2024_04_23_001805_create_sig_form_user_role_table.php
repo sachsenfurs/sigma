@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sig_filled_forms', function (Blueprint $table) {
+        Schema::create('sig_form_user_roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sig_form_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->json('form_data')->nullable();
+            $table->foreignId('sig_form_id')->constrained('sig_forms')->cascadeOnDelete();
+            $table->foreignId('user_role_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sig_filled_forms');
+        Schema::dropIfExists('sig_form_user_roles');
     }
 };

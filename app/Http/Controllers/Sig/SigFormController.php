@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
-use App\Models\SigFilledForms;
-use App\Models\SigForms;
+use App\Models\SigFilledForm;
+use App\Models\SigForm;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class SigFormController extends Controller
 {
-    public function show(SigForms $form) {
-        $form = SigForms::with('sigEvent')
+    public function show(SigForm $form) {
+        $form = SigForm::with('sigEvent')
             ->where('slug', $form->slug)
             ->first();
         if (!$form) {
             abort(404);
         }
 
-        $filledForm = SigFilledForms::with('sigForms')
-            ->where('sig_forms_id', $form->id)
+        $filledForm = SigFilledForm::with('sigForm')
+            ->where('sig_form_id', $form->id)
             ->where('user_id', auth()->user()->id)
             ->first();
 
@@ -30,8 +30,8 @@ class SigFormController extends Controller
         ]));
     }
 
-    public function store(SigForms $form, Request $request) {
-        $form = SigForms::with('sigEvent')
+    public function store(SigForm $form, Request $request) {
+        $form = SigForm::with('sigEvent')
             ->where('slug', $form->slug)
             ->first();
         if (!$form) {
@@ -59,31 +59,33 @@ class SigFormController extends Controller
             }
         }
 
-        $filledForm = SigFilledForms::with('sigForms')
-            ->where('sig_forms_id', $form->id)
+        $filledForm = SigFilledForm::with('sigForm')
+            ->where('sig_form_id', $form->id)
             ->where('user_id', auth()->user()->id)
             ->first();
         if (!$filledForm) {
-            $filledForm = new SigFilledForms();
+            $filledForm = new SigFilledForm();
         }
-        $filledForm->sigForms()->associate($form);
+        $filledForm->sigForm()->associate($form);
         $filledForm->user()->associate(auth()->user());
         $filledForm->form_data = $validated;
+        $filledForm->approved = 0; // To reset the approval state
+        // Do not reset reject reason, so we know why it was rejected
         $filledForm->save();
 
         return redirect(route('forms.show', [ $form->slug ]))->withSuccess(__('Form data saved'));
     }
 
-    public function destroy(SigForms $form) {
-        $form = SigForms::with('sigEvent')
+    public function destroy(SigForm $form) {
+        $form = SigForm::with('sigEvent')
             ->where('slug', $form->slug)
             ->first();
         if (!$form) {
             abort(404);
         }
 
-        $filledForm = SigFilledForms::with('sigForms')
-            ->where('sig_forms_id', $form->id)
+        $filledForm = SigFilledForm::with('sigForm')
+            ->where('sig_form_id', $form->id)
             ->where('user_id', auth()->user()->id)
             ->first();
 

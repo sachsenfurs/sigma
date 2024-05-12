@@ -14,8 +14,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         \App\Models\SigEvent::class             => \App\Policies\SigEventPolicy::class,
-        \App\Models\SigFilledForms::class       => \App\Policies\SigFilledFormsPolicy::class,
-        \App\Models\SigForms::class             => \App\Policies\SigFormsPolicy::class,
+        \App\Models\SigFilledForm::class        => \App\Policies\SigFilledFormPolicy::class,
+        \App\Models\SigForm::class              => \App\Policies\SigFormPolicy::class,
         \App\Models\SigHost::class              => \App\Policies\SigHostPolicy::class,
         \App\Models\SigLocation::class          => \App\Policies\SigLocationPolicy::class,
         \App\Models\SigTag::class               => \App\Policies\SigTagPolicy::class,
@@ -37,9 +37,8 @@ class AuthServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot() {
-//        Gate::before(function ($user, $permission) {
-//            if($user->permissions()->contains($permission))
-//                return true;
-//        });
+        Gate::before(function ($user, $permission) {
+            return $user->permissions()->contains($permission);
+        });
     }
 }

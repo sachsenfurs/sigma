@@ -3,14 +3,14 @@
 namespace App\Observers;
 
 
-use App\Models\SigFilledForms;
+use App\Models\SigFilledForm;
 use Illuminate\Support\Facades\Storage;
 
 class SigFilledFormObserver
 {
-    public function deleted(SigFilledForms $filledForm)
+    public function deleted(SigFilledForm $filledForm)
     {
-        $sigForm = $filledForm->sigForms;
+        $sigForm = $filledForm->sigForm;
         foreach ($sigForm->form_definition as $formDefinition) {
             if ($formDefinition['type'] !== 'file_upload') {
                 continue;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\SigFormsResource\Pages;
+namespace App\Filament\Resources\SigFormResource\Pages;
 
-use App\Filament\Resources\SigFormsResource;
+use App\Filament\Resources\SigFormResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditSigForms extends EditRecord
+class EditSigForm extends EditRecord
 {
-    protected static string $resource = SigFormsResource::class;
+    protected static string $resource = SigFormResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -24,7 +24,7 @@ class EditSigForms extends EditRecord
     protected function getFooterWidgets(): array
     {
         return [
-            SigFormsResource\Widgets\FilledForms::class
+            SigFormResource\Widgets\FilledForms::class
         ];
     }
 }

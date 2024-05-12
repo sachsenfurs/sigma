@@ -34,6 +34,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'remember_token',
     ];
 
+    protected $with = [
+        'roles'
+    ];
 
     public function roles(): BelongsToMany
     {
@@ -105,5 +108,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function artshowBids(): HasMany {
         return $this->hasMany(ArtshowBid::class);
+    }
+
+    public function isAdmin(): bool {
+        // The permission 'manage_sig_base_data' is used to determine if the user is an admin
+        return $this->permissions()->contains('manage_sig_base_data');
     }
 }
