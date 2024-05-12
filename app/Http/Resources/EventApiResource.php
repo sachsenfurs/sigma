@@ -34,6 +34,7 @@ class EventApiResource extends JsonResource
                 'name_en' => $this->sigLocation->name_en,
                 'description' => $this->sigLocation->description,
                 'description_en' => $this->sigLocation->description_en,
+                'render_ids' => $this->sigLocation->render_ids,
             ],
             'time_changed'          => $this->hasTimeChanged,
             'location_changed'      => $this->hasLocationChanged,
