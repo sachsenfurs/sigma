@@ -30,8 +30,6 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "Headless Area",
-                'description' => "Headless Area",
-                'description_en' => "Headless Area",
                 'render_ids' => json_encode(["mainstageArea1"]),
                 "essential_description" => "Während Mainstage-Events hast du hier einen geschützten Bereich um dich zu erfrischen und deinen Head abzusetzen.",
                 "essential_description_en" => "During Mainstage events you can use this area to refresh yourself and take off your head.",
@@ -146,6 +144,8 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "WC",
+                'description' => "Toiletten",
+                'description_en' => "Toilets",
                 'render_ids' => json_encode(["toilet1Area", "toilet2Area", "babyArea", "disabledWC"]),
                 'floor' => "-1",
                 'room' => "K 1.U 035-042",
@@ -157,6 +157,8 @@ class RingbergSeeder extends Seeder
             ],
             [
                 'name' => "WC",
+                'description' => "Toiletten",
+                'description_en' => "Toilets",
                 'render_ids' => json_encode(["toilet3Area"]),
                 'floor' => "0",
                 'room' => "",
