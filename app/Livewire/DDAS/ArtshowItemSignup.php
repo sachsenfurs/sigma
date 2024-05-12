@@ -2,19 +2,19 @@
 
 namespace App\Livewire\DDAS;
 
-use App\Livewire\Forms\ArtshowArtistForm;
-use App\Livewire\Forms\ArtshowItemForm;
+use App\Livewire\DDAS\Forms\ArtshowArtistForm;
+use App\Livewire\DDAS\Forms\ArtshowItemForm;
+use App\Livewire\Traits\HasModal;
 use App\Models\DDAS\ArtshowArtist;
 use App\Models\DDAS\ArtshowItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class ArtshowItemSignup extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, HasModal;
 
     public ?ArtshowItem $editArtshowItem = null;
     public ArtshowItemForm $form;
@@ -39,12 +39,12 @@ class ArtshowItemSignup extends Component
 
     public function newItem() {
         $this->form->reset();
-        $this->dispatch("showModal", "itemModal");
+        $this->showModal("itemModal");
     }
 
     public function newArtist() {
         $this->artistForm->name = auth()->user()->name;
-        $this->dispatch("showModal", "artistModal");
+        $this->showModal("artistModal");
     }
 
     public function createArtist() {
@@ -52,7 +52,7 @@ class ArtshowItemSignup extends Component
         $validated = $this->artistForm->validate();
         $this->artistProfile = auth()->user()->artists()->create($validated);
         $this->boot();
-        $this->dispatch("hideModal", "artistModal");
+        $this->hideModal("artistModal");
     }
 
     public function editItem(ArtshowItem $artshowItem) {
@@ -60,13 +60,13 @@ class ArtshowItemSignup extends Component
         $this->editArtshowItem = $artshowItem;
         $this->form->reset();
         $this->form->fill($this->editArtshowItem);
-        $this->dispatch("showModal", "itemModal");
+        $this->showModal("itemModal");
     }
 
     public function deleteItem(ArtshowItem $artshowItem) {
         $this->authorize('delete', $artshowItem);
         $this->editArtshowItem = $artshowItem;
-        $this->dispatch("showModal", "confirmModal");
+        $this->showModal("confirmModal");
     }
 
     public function submit() {
@@ -88,13 +88,13 @@ class ArtshowItemSignup extends Component
             $this->authorize("create", [ArtshowItem::class, $this->artistProfile]);
             $this->artistProfile->artshowItems()->create($validated);
         }
-        $this->dispatch("hideModal", "itemModal");
+        $this->hideModal("itemModal");
     }
 
     public function confirm($modalId) {
         $this->authorize('delete', $this->editArtshowItem);
         $this->editArtshowItem->delete();
         $this->editArtshowItem = null;
-        $this->dispatch("hideModal", "confirmModal");
+        $this->hideModal("confirmModal");
     }
 }
