@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('sig_tags', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string("description")->nullable()->default("");
-            $table->string("description_en")->nullable()->default("");
+            $table->string("name")->unique()->comment("Internal name, used for internal automation (eg. 'signup')");
+            $table->string("description")->nullable();
+            $table->string("description_en")->nullable();
             $table->string("icon")->nullable();
         });
     }

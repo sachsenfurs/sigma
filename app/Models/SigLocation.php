@@ -23,6 +23,7 @@ class SigLocation extends Model
         'render_ids' => "array",
         'infodisplay' => "boolean",
         'show_default' => "boolean",
+        'essential' => "boolean"
     ];
 
     public function sigEvents(): HasManyThrough

@@ -128,7 +128,7 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function maxUserRegsExeeded(User $user): bool {
+    public function maxUserRegsExeeded(User $user=null): bool {
         if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
             return false;
         }

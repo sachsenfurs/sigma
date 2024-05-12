@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SigEvent;
 use App\Models\SigTag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -37,5 +38,6 @@ class SigTagSeeder extends Seeder
                 'description_en' => 'Fursuit-Event',
             ],
         ]);
+
     }
 }
