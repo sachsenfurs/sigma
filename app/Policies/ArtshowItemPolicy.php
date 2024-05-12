@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\DDAS\ArtshowArtist;
-use App\Models\DDAS\ArtshowItem;
+use App\Models\Ddas\ArtshowArtist;
+use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
 

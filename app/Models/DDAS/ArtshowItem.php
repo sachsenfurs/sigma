@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\DDAS;
+namespace App\Models\Ddas;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

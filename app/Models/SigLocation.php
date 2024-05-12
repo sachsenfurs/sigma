@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\Dealer;
 use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\HasTimetableEntries;
 use App\Models\Traits\NameIdAsSlug;

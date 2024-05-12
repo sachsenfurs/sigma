@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Ddas;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\DDAS\ArtshowArtist;
-use App\Models\DDAS\ArtshowItem;
-use App\Models\DDAS\ArtshowBid;
-use App\Models\DDAS\ArtshowPickup;
+use App\Models\Ddas\ArtshowArtist;
+use App\Models\Ddas\ArtshowItem;
+use App\Models\Ddas\ArtshowBid;
+use App\Models\Ddas\ArtshowPickup;
 use Illuminate\Http\Request;
 
 class ArtshowController extends Controller

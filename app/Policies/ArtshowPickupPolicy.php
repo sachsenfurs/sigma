@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DDAS\ArtshowPickup;
+use App\Models\Ddas\ArtshowPickup;
 use App\Models\User;
 
 class ArtshowPickupPolicy

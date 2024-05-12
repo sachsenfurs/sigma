@@ -1,13 +1,13 @@
 <?php
 
-namespace Database\Factories\DDAS;
+namespace Database\Factories\Ddas;
 
 use App\Models\SigLocation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DDAS\Dealer>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ddas\Dealer>
  */
 class DealerFactory extends Factory
 {

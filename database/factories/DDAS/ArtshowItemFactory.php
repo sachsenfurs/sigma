@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Factories\DDAS;
+namespace Database\Factories\Ddas;
 
-use App\Models\DDAS\ArtshowArtist;
+use App\Models\Ddas\ArtshowArtist;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DDAS\ArtshowItem>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ddas\ArtshowItem>
  */
 class ArtshowItemFactory extends Factory
 {

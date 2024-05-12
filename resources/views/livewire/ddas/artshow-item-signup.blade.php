@@ -122,7 +122,7 @@
                 </div>
             @endforeach
 
-            @can("create", [\App\Models\DDAS\ArtshowItem::class, $artistProfile])
+            @can("create", [\App\Models\Ddas\ArtshowItem::class, $artistProfile])
                 <div class="col">
                     <button class="btn card h-100 w-100 text-center justify-content-center btn-success" style="min-height: 10rem" wire:click="newItem">
                         <div class="fs-2">

@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DDAS\ArtshowArtist;
+use App\Models\Ddas\ArtshowArtist;
 use App\Models\User;
 
 class ArtshowArtistPolicy

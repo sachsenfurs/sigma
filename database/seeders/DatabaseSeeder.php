@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\DDAS\ArtshowItem;
-use App\Models\DDAS\Dealer;
-use App\Models\DDAS\DealerTag;
+use App\Models\Ddas\ArtshowItem;
+use App\Models\Ddas\Dealer;
+use App\Models\Ddas\DealerTag;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\TimetableEntry;

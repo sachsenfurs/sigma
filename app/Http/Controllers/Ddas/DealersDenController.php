@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Ddas;
 
 use App\Http\Controllers\Controller;
-use App\Models\DDAS\DealerTag;
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\DealerTag;
+use App\Models\Ddas\Dealer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

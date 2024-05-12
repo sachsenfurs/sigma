@@ -23,12 +23,12 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\User::class                 => \App\Policies\UserPolicy::class,
         \App\Models\UserRole::class             => \App\Policies\UserRolePolicy::class,
         \App\Models\UserUserRole::class         => \App\Policies\UserUserRolePolicy::class,
-        \App\Models\DDAS\ArtshowArtist::class   => \App\Policies\ArtshowArtistPolicy::class,
-        \App\Models\DDAS\ArtshowBid::class      => \App\Policies\ArtshowBidPolicy::class,
-        \App\Models\DDAS\ArtshowItem::class     => \App\Policies\ArtshowItemPolicy::class,
-        \App\Models\DDAS\ArtshowPickup::class   => \App\Policies\ArtshowPickupPolicy::class,
-        \App\Models\DDAS\Dealer::class          => \App\Policies\DealerPolicy::class,
-        \App\Models\DDAS\DealerTag::class       => \App\Policies\DealerTagPolicy::class,
+        \App\Models\Ddas\ArtshowArtist::class   => \App\Policies\ArtshowArtistPolicy::class,
+        \App\Models\Ddas\ArtshowBid::class      => \App\Policies\ArtshowBidPolicy::class,
+        \App\Models\Ddas\ArtshowItem::class     => \App\Policies\ArtshowItemPolicy::class,
+        \App\Models\Ddas\ArtshowPickup::class   => \App\Policies\ArtshowPickupPolicy::class,
+        \App\Models\Ddas\Dealer::class          => \App\Policies\DealerPolicy::class,
+        \App\Models\Ddas\DealerTag::class       => \App\Policies\DealerTagPolicy::class,
     ];
 
     /**

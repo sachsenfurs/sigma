@@ -11,7 +11,7 @@
  */
 
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
  * Model für die ArtshowArtist Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
  *
@@ -21,10 +21,10 @@ namespace App\Models\DDAS{
  * @property string|null $social Twitter, FA, Gallery, etc.
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowItem> $artshowItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowItem> $artshowItems
  * @property-read int|null $artshow_items_count
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\DDAS\ArtshowArtistFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\Ddas\ArtshowArtistFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist query()
@@ -38,7 +38,7 @@ namespace App\Models\DDAS{
 	class ArtshowArtist extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
  * Model für die ArtshowBid Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
  *
@@ -48,7 +48,7 @@ namespace App\Models\DDAS{
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowItem $artshowItem
+ * @property-read \App\Models\Ddas\ArtshowItem $artshowItem
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowBid newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowBid newQuery()
@@ -63,9 +63,9 @@ namespace App\Models\DDAS{
 	class ArtshowBid extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\ArtshowItem
+ * App\Models\Ddas\ArtshowItem
  *
  * @property int $id
  * @property int $artshow_artist_id
@@ -82,12 +82,12 @@ namespace App\Models\DDAS{
  * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowArtist $artist
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
+ * @property-read \App\Models\Ddas\ArtshowArtist $artist
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
- * @property-read \App\Models\DDAS\ArtshowPickup|null $artshowPickup
+ * @property-read \App\Models\Ddas\ArtshowPickup|null $artshowPickup
  * @property-read mixed $image_url
- * @method static \Database\Factories\DDAS\ArtshowItemFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\Ddas\ArtshowItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem own()
@@ -111,9 +111,9 @@ namespace App\Models\DDAS{
 	class ArtshowItem extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\ArtshowPickup
+ * App\Models\Ddas\ArtshowPickup
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -121,7 +121,7 @@ namespace App\Models\DDAS{
  * @property string|null $info
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowItem $artshowItem
+ * @property-read \App\Models\Ddas\ArtshowItem $artshowItem
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowPickup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowPickup newQuery()
@@ -136,9 +136,9 @@ namespace App\Models\DDAS{
 	class ArtshowPickup extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\Dealer
+ * App\Models\Ddas\Dealer
  *
  * @property int $id
  * @property string $name
@@ -156,11 +156,11 @@ namespace App\Models\DDAS{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $info_localized
  * @property-read \App\Models\SigLocation|null $sigLocation
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\DealerTag> $tags
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\DealerTag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer approved()
- * @method static \Database\Factories\DDAS\DealerFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\Ddas\DealerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer query()
@@ -182,14 +182,14 @@ namespace App\Models\DDAS{
 	class Dealer extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\DealerTag
+ * App\Models\Ddas\DealerTag
  *
  * @property int $id
  * @property string $name
  * @property string|null $name_en
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealer
  * @property-read int|null $dealer_count
  * @property-read mixed $name_localized
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newModelQuery()
@@ -529,7 +529,7 @@ namespace App\Models{
  * @property string|null $roomsize
  * @property string|null $seats
  * @property bool $show_default Show in calendar view (resource view) by default?
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -746,13 +746,13 @@ namespace App\Models{
  * @property string|null $telegram_user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowArtist> $artists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowArtist> $artists
  * @property-read int|null $artists_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $attendeeEvents
  * @property-read int|null $attendee_events_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count

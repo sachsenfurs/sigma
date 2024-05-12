@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\DDAS\ArtshowItem;
+use App\Models\Ddas\ArtshowItem;
 use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;

@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\Dealer;
 use App\Models\User;
 
 class DealerPolicy

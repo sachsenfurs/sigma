@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\DDAS\ArtshowItem;
+use App\Models\Ddas\ArtshowItem;
 use Illuminate\Support\Facades\Storage;
 
 class ArtshowItemObserver

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\DDAS\ArtshowArtist;
-use App\Models\DDAS\ArtshowBid;
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\ArtshowArtist;
+use App\Models\Ddas\ArtshowBid;
+use App\Models\Ddas\Dealer;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;

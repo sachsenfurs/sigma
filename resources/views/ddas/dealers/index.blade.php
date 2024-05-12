@@ -5,13 +5,13 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('dealers', () => (
-                @json(\App\Http\Resources\DealerResource::collection(\App\Models\DDAS\Dealer::approved()->with("sigLocation")->orderBy("name")->get()))
+                @json(\App\Http\Resources\DealerResource::collection(\App\Models\Ddas\Dealer::approved()->with("sigLocation")->orderBy("name")->get()))
             ));
         });
     </script>
 
     <div class="container" x-data="{dealers, filter: 0}">
-{{--        @can('create', \App\Models\DDAS\Dealer::class)--}}
+{{--        @can('create', \App\Models\Ddas\Dealer::class)--}}
 {{--            <a href="{{ route("dealers.create") }}">--}}
 {{--                <button class="btn text-center p-5 btn-success">--}}
 {{--                    <div class="fs-4">--}}
@@ -29,7 +29,7 @@
                 <input id="filterAll" class="btn-check" x-model="filter" type="radio" name="filter" value="0" />
                 <label class="btn btn-outline-primary d-flex" for="filterAll">{{ __("Show All") }}</label>
             </div>
-            @foreach(\App\Models\DDAS\DealerTag::used()->get() AS $tag)
+            @foreach(\App\Models\Ddas\DealerTag::used()->get() AS $tag)
                 <div class="col-auto flex-grow-1">
                     <input id="filter{{$tag->id}}" class="btn-check" x-model="filter" type="radio" name="filter" value="{{$tag->id}}" />
                     <label class="btn btn-outline-primary d-flex h-100" for="filter{{$tag->id}}">{{ $tag->name_localized }}</label>
