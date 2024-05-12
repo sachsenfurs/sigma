@@ -12,7 +12,7 @@
                             {{ $location->name }}
                         </h2>
                         <p class="text-muted">{{ $location->description }}</p>
-                        @can("manage_locations")
+                        @can("update", $location)
                             <a href="{{ \App\Filament\Resources\SigLocationResource::getUrl('edit', ['record' => $location]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan
                     </div>

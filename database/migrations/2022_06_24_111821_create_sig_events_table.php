@@ -17,14 +17,15 @@ return new class extends Migration
             $table->id();
             // isConEvent (Hide HOSTs)
             $table->string("name");
-            $table->string('name_en');
+            $table->string('name_en')->nullable();
 
             $table->foreignId("sig_host_id")->nullable()->constrained()->nullOnDelete();
             $table->json("languages")->comment("two letter language code as JSON array")->default(json_encode([]));
 
-            $table->text("description")->nullable()->default("");
-            $table->text("description_en")->nullable()->default("");
+            $table->text("description")->nullable();
+            $table->text("description_en")->nullable();
 
+            $table->integer("duration")->default(0);
             $table->boolean('approved')->default(1);
             $table->text('additional_info')->nullable();
             $table->json('requirements')->nullable();

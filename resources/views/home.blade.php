@@ -4,13 +4,13 @@
 <div class="container">
     <h2>{{ __("Before the convention") }}</h2>
     <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch" style="max-width: 970px">
-        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.jpg" :href="route('sigs.signup.create')">
+        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.jpg" :href="route('sigs.create')">
             {{ __("Submit your Events, Workshops, Presentations and more!") }}
         </x-home-signup-card>
         <x-home-signup-card :title="__('Dealers Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
             {{ __("Would you like to sell your art at the con?") }}
         </x-home-signup-card>
-        <x-home-signup-card :title="__('Artshow Item Sign Up')" img="/images/signup/artshowfox.png" :href="route('artshow.create')">
+        <x-home-signup-card :title="__('Art Show Item Sign Up')" img="/images/signup/artshowfox.png" :href="route('artshow.create')">
             {{ __("Submit your art for exhibition or auction") }}
         </x-home-signup-card>
     </div>

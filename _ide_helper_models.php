@@ -78,8 +78,8 @@ namespace App\Models\DDAS{
  * @property string|null $image
  * @property bool $auction
  * @property int $approved
- * @property int $sold
- * @property int $paid
+ * @property bool $sold
+ * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\DDAS\ArtshowArtist $artist
@@ -154,10 +154,12 @@ namespace App\Models\DDAS{
  * @property int|null $sig_location_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $info_localized
  * @property-read \App\Models\SigLocation|null $sigLocation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\DealerTag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Dealer approved()
  * @method static \Database\Factories\DDAS\DealerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newQuery()
@@ -187,9 +189,13 @@ namespace App\Models\DDAS{
  * @property int $id
  * @property string $name
  * @property string|null $name_en
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealer
+ * @property-read int|null $dealer_count
+ * @property-read mixed $name_localized
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealerTag used()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereNameEn($value)
@@ -350,14 +356,15 @@ namespace App\Models{
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
+ * @property int $duration
  * @property int $approved
  * @property string|null $additional_info
  * @property mixed|null $requirements
  * @property int $reg_possible
+ * @property int $max_regs_per_day
+ * @property int $max_group_attendees_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $max_regs_per_day
- * @property int|null $max_group_attendees_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigForms> $forms
  * @property-read int|null $forms_count
  * @property-read mixed $description_localized
@@ -373,11 +380,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent query()
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescriptionEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereLanguages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxGroupAttendeesCount($value)
@@ -480,10 +488,10 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property int|null $reg_id
+ * @property string|null $description
  * @property string|null $description_en
  * @property bool $hide
- * @property int|null $reg_id
  * @property-read mixed $avatar
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -513,6 +521,7 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $description
+ * @property string|null $description_en
  * @property array|null $render_ids layer id for displaying as interactive SVG or whatever
  * @property string|null $floor
  * @property string|null $room
@@ -520,7 +529,6 @@ namespace App\Models{
  * @property string|null $roomsize
  * @property string|null $seats
  * @property bool $show_default Show in calendar view (resource view) by default?
- * @property string|null $description_en
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealers
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
@@ -559,7 +567,6 @@ namespace App\Models{
  * @property string|null $result
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $minutes_before
  * @property-read \App\Models\TimetableEntry $timetableEntry
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder newModelQuery()
@@ -568,7 +575,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereExecutedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereMinutesBefore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereResult($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereSendAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder whereTimetableEntryId($value)
@@ -584,9 +590,9 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string $description
- * @property string|null $icon
+ * @property string|null $description
  * @property string|null $description_en
+ * @property string|null $icon
  * @property-read string $description_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvent
  * @property-read int|null $sig_event_count
@@ -645,12 +651,12 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $timeslot_id
+ * @property int $minutes_before
  * @property int $send_at
  * @property int|null $executed_at
  * @property string|null $result
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $minutes_before
  * @property-read \App\Models\SigTimeslot $timeslot
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslotReminder newModelQuery()
@@ -728,11 +734,9 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string|null $email
+ * @property string $email
  * @property string $password
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $reg_id
  * @property string|null $language
  * @property int|null $telegram_id
@@ -740,6 +744,8 @@ namespace App\Models{
  * @property string|null $avatar
  * @property string|null $avatar_thumb
  * @property string|null $telegram_user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowArtist> $artists
  * @property-read int|null $artists_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
@@ -758,6 +764,8 @@ namespace App\Models{
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
+ * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
  * @property-read int|null $sig_timeslots_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslotReminder> $timeslotReminders

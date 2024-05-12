@@ -59,10 +59,10 @@
                                 </div>
                             </div>
                             <div class="col-auto text-center">
-                                <div class="d-flex align-self-start justify-content-end p-3">
+                                <div x-show="dealer.icon_file" class="align-self-start justify-content-end p-3">
                                     <img x-bind:src="dealer.icon_file" class="img-fluid" style="max-height: 10em" alt="">
                                 </div>
-                                <div x-show="dealer.location" class="mx-1 p-2 d-block">
+                                <div x-show="dealer.location" class="mx-1 p-4 d-block">
                                     <i class="bi bi-geo-alt"></i>
                                     <span x-text="dealer.location"></span>
                                 </div>

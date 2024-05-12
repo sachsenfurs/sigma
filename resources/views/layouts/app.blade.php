@@ -1,3 +1,6 @@
+@props([
+    'noerror' => false
+])
 @include('layouts/head')
 
 <body>
@@ -20,7 +23,7 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("sigs.*")]) href="#" id="sigMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*")]) href="#" id="sigMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-view-list"></i> {{ __("Events")}}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="sigMenu">
@@ -34,13 +37,11 @@
                                     <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
                                 </a>
                             </li>
-                            @if (auth()?->user()?->isSigHost())
-                                <li>
-                                    <a @class(['dropdown-item', 'active' => Route::is("mysigs.index")]) href="{{ route("mysigs.index") }}">
-                                        <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
-                                    </a>
-                                </li>
-                            @endif
+                            <li>
+                                <a @class(['dropdown-item', 'active' => Route::is("sigs.index")]) href="{{ route("sigs.index") }}">
+                                    <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -50,10 +51,9 @@
                         </a>
                     </li>
 
-                    @auth
                     <li class="nav-item dropdown">
                         <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-palette"></i> {{ __("Dealers Den & Artshow")}}
+                            <i class="bi bi-palette"></i> {{ __("Dealers Den & Art Show")}}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="artMenu">
                             <li>
@@ -63,13 +63,11 @@
                             </li>
                             <li>
                                 <a @class(['dropdown-item', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
-                                    <i class="bi bi-easel"></i> {{ __("Artshow Overview")}}
+                                    <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
                                 </a>
                             </li>
                         </ul>
                     </li>
-
-                    @endauth
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -133,7 +131,7 @@
     </nav>
 
     <main class="py-4">
-        @if ($errors->any())
+        @if (!$noerror AND $errors->any())
             @foreach ($errors->all() as $error)
                 <div class="container">
                     <div class="alert alert-danger" role="alert">

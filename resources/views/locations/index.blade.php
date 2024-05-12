@@ -7,7 +7,6 @@
                     :instance="$location"
                     :link="route('locations.show', $location)"
                     :title="$location->name"
-                    edit_permission="manage_locations"
                     :edit_link="\App\Filament\Resources\SigLocationResource::getUrl('edit', [ 'record' => $location ])"
                 >
                     {{ $location->description }}

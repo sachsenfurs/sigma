@@ -16,5 +16,5 @@
     @endif
 
 @if($attributes->get("group-text")) </div> @endif
-<x-form.livewire-error :name="$name" />
+<x-form.input-error :name="$name" />
 {{ $slot }}

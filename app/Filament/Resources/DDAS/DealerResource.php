@@ -70,16 +70,6 @@ class DealerResource extends Resource
                 Forms\Components\TextInput::make('gallery_link')
                     ->label('Galerie Link')
                     ->maxLength(255),
-                Forms\Components\Select::make('space')
-                    ->label('Platzbedarf')
-                    ->options(static::$spaces)
-                    ->required()
-                    ->default(1),
-                forms\Components\Select::make('contact_way')
-                    ->label('Kontaktart')
-                    ->options(static::$contactWays)
-                    ->required()
-                    ->default('telegram'),
                 Forms\Components\TextInput::make('contact')
                     ->label('Kontakt')
                     ->required()

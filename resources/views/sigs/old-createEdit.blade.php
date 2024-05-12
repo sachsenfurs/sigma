@@ -1,3 +1,4 @@
+{{-- // TODO: REMOVE. Moved to filament --}}
 @extends('layouts.app')
 @section('title', "SIG " . (isset($sig) ? "Bearbeiten" : "Anlegen" ))
 @section('content')

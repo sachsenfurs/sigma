@@ -42,7 +42,8 @@ class TimetableEntry extends Model
     ];
 
     protected $with = [
-        'favorites'
+        'favorites',
+        'sigLocation',
     ];
 
     /**
@@ -79,9 +80,7 @@ class TimetableEntry extends Model
     }
 
     public function sigLocation(): BelongsTo {
-        return $this->belongsTo(SigLocation::class)->withDefault(function($sigLocation, $timetableEntry) {
-            return $timetableEntry->sigEvent->sigLocation;
-        });
+        return $this->belongsTo(SigLocation::class);
     }
 
     public function sigTimeslots(): HasMany {

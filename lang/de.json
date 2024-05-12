@@ -119,9 +119,10 @@
     "No SIGs assigned": "Keine SIGs zugeordnet",
     "Personal Information": "Persönliche Informationen",
     "Edit SIG": "SIG bearbeiten",
+    "Register a new SIG": "Neue SIG anmelden",
+    "SIG application sent!": "SIG Anmeldung gesendet!",
     "Create SIG": "SIG anlegen",
     "SIG Overview": "SIG Übersicht",
-    "SIG Sign In": "SIG Anmeldung",
     "SIG Host": "SIG Veranstalter",
     "Create New Host": "Neuen Host erstellen",
     "SIG Location": "SIG Location",
@@ -284,7 +285,8 @@
     "Do you really want to remove :attendee from your booking?": "Möchtest du wirklich :attendee aus deiner Buchung entfernen?",
 
     "Sign up": "Melde dich an",
-    "Scheduled": "Im Programmplan:",
+    "Schedule": "Programmplan",
+    "Scheduled": "Im Programmplan",
     "In Schedule": "Im Programmplan",
     "Slots available": "Freie Plätze",
     "Slots taken": "Plätze vergeben",
@@ -307,6 +309,11 @@
     "Found": "Gefunden",
     "Nothing has been found yet": "Es wurden noch keine Fundsachen abgegeben",
     "Nothing has been lost yet": "Es wurde noch nichts als Verloren gemeldet",
+
+    "Host Name": "Name",
+    "Register as Host": "Als Veranstalter registrieren",
+    "Translation": "Übersetzung",
+    "Registered SIGs for :name": "Angemeldete SIGs für :name",
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",

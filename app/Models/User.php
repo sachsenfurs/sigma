@@ -65,8 +65,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return $this->hasMany(SigTimeslotReminder::class);
     }
 
+    public function sigHosts(): HasMany {
+        return $this->hasMany(SigHost::class, "reg_id");
+    }
+
     public function isSigHost(): bool {
-        return SigHost::where('reg_id', $this->reg_id)->first() != false;
+        return $this->sigHosts()->count() > 0;
     }
 
     public function hasGroup(string $name): bool

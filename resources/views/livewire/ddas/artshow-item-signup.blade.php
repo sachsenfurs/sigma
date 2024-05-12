@@ -193,7 +193,7 @@
                         </div>
                     </label>
                     <input type="file" accept="image/*" class="form-control" wire:model="form.new_image" id="selectImage">
-                    <x-form.livewire-error name="form.new_image"/>
+                    <x-form.input-error name="form.new_image"/>
                     {{--                <script>--}}
                     {{--                    selectImage.onchange = evt => {--}}
                     {{--                        let preview = document.getElementById('preview');--}}
