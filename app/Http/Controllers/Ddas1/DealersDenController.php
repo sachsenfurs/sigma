@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\DDAS;
+namespace App\Http\Controllers\Ddas1;
 
 use App\Http\Controllers\Controller;
 use App\Models\DDAS\DealerTag;
