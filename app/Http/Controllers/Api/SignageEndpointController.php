@@ -7,6 +7,7 @@ use App\Http\Resources\EssentialLocationsApiResource;
 use App\Http\Resources\EventApiResource;
 use App\Http\Resources\LocationApiResource;
 use App\Http\Resources\SocialApiResource;
+use App\Models\Info\Enum\ShowMode;
 use App\Models\Info\Social;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
@@ -38,7 +39,7 @@ class SignageEndpointController extends Controller
 
     public function socials() {
         return SocialApiResource::collection(
-            Social::all()
+            Social::signage()->get()
         );
     }
 }

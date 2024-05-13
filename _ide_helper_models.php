@@ -65,7 +65,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * App\Models\Ddas\ArtshowItem
+ * 
  *
  * @property int $id
  * @property int $artshow_artist_id
@@ -113,7 +113,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * App\Models\Ddas\ArtshowPickup
+ * 
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -138,7 +138,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * App\Models\Ddas\Dealer
+ * 
  *
  * @property int $id
  * @property string $name
@@ -180,7 +180,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * App\Models\Ddas\DealerTag
+ * 
  *
  * @property int $id
  * @property string $name
@@ -201,34 +201,48 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Info{
 /**
- * App\Models\Info\Social
+ * 
  *
  * @property int $id
- * @property string $name
- * @property string|null $name_en
+ * @property string $description
+ * @property string|null $description_en
  * @property string $link
  * @property string|null $link_en
+ * @property string|null $link_name
+ * @property string|null $link_name_en
  * @property string|null $icon
  * @property string|null $qr
  * @property string|null $qr_en
+ * @property array $show_on
+ * @property int $order
+ * @property-read mixed $description_localized
+ * @property-read mixed $link_localized
+ * @property-read mixed $link_name_localized
+ * @method static \Illuminate\Database\Eloquent\Builder|Social footerIcon()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social footerText()
  * @method static \Illuminate\Database\Eloquent\Builder|Social newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Social newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Social query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social signage()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Social whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Social whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereQr($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereQrEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereShowOn($value)
  */
 	class Social extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\LostFoundItem
+ * 
  *
  * @property int $id
  * @property int $lassie_id
@@ -262,7 +276,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Permission
+ * 
  *
  * @method static where(string $string, mixed $permissionName)
  * @method static create(array $array)
@@ -287,7 +301,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Post
+ * 
  *
  * @property int $id
  * @property string $text_de
@@ -315,7 +329,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\PostChannel
+ * 
  *
  * @property int $id
  * @property int $channel_identifier
@@ -334,7 +348,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\PostChannelMessage
+ * 
  *
  * @property-read \App\Models\Post|null $post
  * @property-read \App\Models\PostChannel|null $postChannel
@@ -347,7 +361,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigAttendee
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -370,7 +384,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigEvent
+ * 
  *
  * @property int $id
  * @property string $name
@@ -382,7 +396,7 @@ namespace App\Models{
  * @property int $duration
  * @property int $approved
  * @property string|null $additional_info
- * @property mixed|null $requirements
+ * @property string|null $requirements
  * @property int $reg_possible
  * @property int $max_regs_per_day
  * @property int $max_group_attendees_count
@@ -428,7 +442,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigFavorite
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -452,7 +466,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigFilledForm
+ * 
  *
  * @property int $id
  * @property int $sig_form_id
@@ -481,7 +495,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigForm
+ * 
  *
  * @property int $id
  * @property string $slug
@@ -516,7 +530,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigFormUserRole
+ * 
  *
  * @property int $id
  * @property int $sig_form_id
@@ -539,7 +553,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigHost
+ * 
  *
  * @property int $id
  * @property string $name
@@ -571,13 +585,13 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigLocation
+ * 
  *
  * @property int $id
  * @property string $name
- * @property string|null $name_en
- * @property string $description
- * @property string|null $description_en
+ * @property-read string|null $name_en
+ * @property-read string $description
+ * @property-read string|null $description_en
  * @property string|null $floor
  * @property string|null $room
  * @property string|null $roomsize
@@ -620,7 +634,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigReminder
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -651,7 +665,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTag
+ * 
  *
  * @property int $id
  * @property string $name Internal name, used for internal automation (eg. 'signup')
@@ -675,7 +689,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTimeslot
+ * 
  *
  * @property int $id
  * @property int $timetable_entry_id
@@ -711,7 +725,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTimeslotReminder
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -742,7 +756,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TimetableEntry
+ * 
  *
  * @property int $id
  * @property int $sig_event_id
@@ -795,7 +809,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\User
+ * 
  *
  * @property int $id
  * @property string $name
@@ -859,7 +873,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\UserRole
+ * 
  *
  * @property int $id
  * @property string $title
@@ -890,7 +904,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\UserUserRole
+ * 
  *
  * @property int $id
  * @property int $user_id

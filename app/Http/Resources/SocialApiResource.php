@@ -15,10 +15,10 @@ class SocialApiResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name'          => $this->name,
-            'name_en'       => $this->name_en,
-            'link'          => $this->link,
-            'link_en'       => $this->link_en,
+            'name'          => $this->description,
+            'name_en'       => $this->description_en,
+            'link'          => $this->link_name,
+            'link_en'       => $this->link_name_en,
             'icon'          => $this->icon,
             'qr'            => $this->qr,
             'qr_en'         => $this->qr_en,

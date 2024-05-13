@@ -163,15 +163,19 @@
                 <span style="cursor: pointer; font-size:0.75em" data-bs-toggle="modal" data-bs-target="#creditsModal">&Sigma; - made by awesome people</span>
             </p>
 
-            <a href="//sachsenfurs.de/east" class="col-4 text-center text-body text-decoration-none">
-                EAST Website
-            </a>
+            @cache('footer')
+                @foreach(\App\Models\Info\Social::footerText()->get() AS $social)
+                    <a href="{{ $social->link_localized }}" class="col-4 text-center text-body text-decoration-none">
+                        {{ $social->link_name_localized }}
+                    </a>
+                @endforeach
 
-            <ul class="nav col-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//t.me/eastinfo{{ (\Illuminate\Support\Facades\App::getLocale() == "en") ? "_en" : "" }}"><i class="bi bi-telegram"></i></a></li>
-                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//x.com/sachsenfurs"><i class="bi bi-twitter-x"></i></a></li>
-                <li class="ms-3"><a class="text-body-secondary" target="_blank" href="//instagram.com/sachsenfurs"><i class="bi bi-instagram"></i></a></li>
-            </ul>
+                <ul class="nav col-4 justify-content-end list-unstyled d-flex">
+                    @foreach(\App\Models\Info\Social::footerIcon()->get() AS $social)
+                        <li class="ms-3"><a class="text-body-secondary" target="_blank" href="{{ $social->link_localized }}"><x-social-icon :icon="$social->icon" /></a></li>
+                    @endforeach
+                </ul>
+            @endcache
         </footer>
         <!-- Modal -->
         <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModallLabel" aria-hidden="true">

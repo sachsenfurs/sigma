@@ -2,8 +2,12 @@
 
 namespace App\Models\Info;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Info\Enum\ShowMode;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class Social extends Model
 {
@@ -11,5 +15,36 @@ class Social extends Model
 
     public $timestamps = false;
     protected $guarded = [];
+
+    protected $casts = [
+        'show_on' => Cast\ShowMode::class
+    ];
+
+    public function scopeSignage(\Illuminate\Database\Eloquent\Builder $query) {
+        $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::SIGNAGE);
+    }
+
+    public function scopeFooterIcon(\Illuminate\Database\Eloquent\Builder $query) {
+        $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::FOOTER_ICON);
+    }
+    public function scopeFooterText(\Illuminate\Database\Eloquent\Builder $query) {
+        $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::FOOTER_TEXT);
+    }
+
+    public function descriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->description_en : $this->description
+        );
+    }
+    public function linkNameLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->link_name_en : $this->link_name
+        );
+    }
+    public function linkLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->link_en : $this->link
+        );
+    }
 
 }

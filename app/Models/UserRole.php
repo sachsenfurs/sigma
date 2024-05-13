@@ -17,6 +17,9 @@ class UserRole extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $with = [
+        'permissions'
+    ];
 
     public function users(): HasManyThrough
     {
