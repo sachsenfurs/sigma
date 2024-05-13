@@ -3,20 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\Ddas\ArtshowItem;
-use App\Models\Ddas\Dealer;
-use App\Models\Ddas\DealerTag;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\RealData\EASTSeeder;
+use Database\Seeders\RealData\PermissionSeeder;
+use Database\Seeders\RealData\RingbergSeeder;
+use Database\Seeders\RealData\SigTagSeeder;
+use Database\Seeders\RealData\UserRoleSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Seed the application's database with TESTING DATA
      *
      * @return void
      */

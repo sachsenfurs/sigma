@@ -50,10 +50,16 @@ class SocialResource extends Resource
                 Forms\Components\TextInput::make('icon')
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\Textarea::make('qr')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('qr_en')
-                    ->columnSpanFull(),
+                Forms\Components\Grid::make()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\FileUpload::make('image')
+                            ->label("Image")
+                            ->translateLabel(),
+                        Forms\Components\FileUpload::make('image_en')
+                            ->label("Image (English)")
+                            ->translateLabel(),
+                    ]),
                 Forms\Components\TextInput::make('order')
                     ->integer()
                     ->default(0),

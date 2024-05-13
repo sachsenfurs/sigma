@@ -20,8 +20,8 @@ class SocialApiResource extends JsonResource
             'link'          => $this->link_name,
             'link_en'       => $this->link_name_en,
             'icon'          => $this->icon,
-            'qr'            => $this->qr,
-            'qr_en'         => $this->qr_en,
+            'qr'            => $this->image_url,
+            'qr_en'         => $this->image_url_en,
         ];
     }
 }

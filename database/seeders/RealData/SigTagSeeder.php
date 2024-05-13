@@ -1,10 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\RealData;
 
-use App\Models\SigEvent;
 use App\Models\SigTag;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SigTagSeeder extends Seeder
