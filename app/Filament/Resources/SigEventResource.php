@@ -80,6 +80,12 @@ class SigEventResource extends Resource
         ];
     }
 
+    public static function getRelations(): array {
+        return [
+            TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
+        ];
+    }
+
     public static function getWidgets(): array
     {
         return [

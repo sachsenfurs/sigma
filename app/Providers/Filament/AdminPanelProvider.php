@@ -19,6 +19,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -29,6 +30,8 @@ class AdminPanelProvider extends PanelProvider
         Table::configureUsing(function(Table $table): void {
             $table->defaultPaginationPageOption(50);
         });
+        Table::$defaultDateTimeDisplayFormat = "l, d.m.Y - H:i";
+        Table::$defaultDateDisplayFormat = "l, d.m.Y";
 
         return $panel
             ->default()

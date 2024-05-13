@@ -80,7 +80,7 @@ class TimetableEntryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns(self::getTableColumns())
+            ->columns(static::getTableColumns())
             ->defaultPaginationPageOption('all')
             ->defaultGroup(
                 Group::make('start')
@@ -124,7 +124,7 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
+    public static function getTableColumns(): array
     {
         return [
             Tables\Columns\TextColumn::make('timestamp')
@@ -133,12 +133,10 @@ class TimetableEntryResource extends Resource
                     if ($record->cancelled) {
                         $suffix = ' - ' . __('Cancelled');
                     } else {
-                        if ($record->new) {
+                        if ($record->new)
                             $suffix = ' - ' . __('New');
-                        }
-                        if ($record->hasTimeChanged) {
+                        if ($record->hasTimeChanged)
                             $suffix = ' - ' . __('Changed');
-                        }
                     }
                     return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
                 })
@@ -154,15 +152,28 @@ class TimetableEntryResource extends Resource
                     return 'secondary';
                 })
                 ->label('Time span')
+                ->width(10)
                 ->translateLabel(),
             Tables\Columns\TextColumn::make('sigEvent.name')
                 ->label('Event')
                 ->translateLabel()
                 ->searchable(),
+            Tables\Columns\TextColumn::make('sigEvent.sigHost.name')
+                 ->label('Host')
+                 ->translateLabel()
+                 ->searchable()
+                 ->formatStateUsing(function (Model $record) {
+                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
+                     return $record->sigEvent->sigHost->name . $regNr;
+                 }),
             Tables\Columns\TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')
                 ->translateLabel(),
+            Tables\Columns\ImageColumn::make('sigEvent.languages')
+                ->label('Languages')
+                ->translateLabel()
+                ->view('filament.tables.columns.sig-event.flag-icon'),
         ];
     }
 

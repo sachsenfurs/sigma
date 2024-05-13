@@ -14,6 +14,6 @@ class CreateTimetableEntry extends CreateRecord
 
     public function getHeading(): string
     {
-        return __('Add Time Slot');
+        return __('Add Timetable Entry');
     }
 }

@@ -82,7 +82,7 @@ class SigLocationResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigEventsRelationManager::class,
+            TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
         ];
     }
 
