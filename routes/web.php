@@ -29,6 +29,8 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\DDAS\DealersDenController;
 use App\Http\Controllers\DDAS\ArtshowController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserNotificationChannelController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +44,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/test', function () {
+    // $user = App\Models\User::find(1);
+    // $timetableEntry = App\Models\TimetableEntry::find(15);
+    // \Notification::send($user, new App\Notifications\TimetableEntry\TimetableEntryCancelled($timetableEntry));
+    
+    dd(\App\Models\UserNotificationChannel::list('sig_favorite_reminder', 1, 'mail'));
+});
 
 Route::get("/devlogin/{id?}", function($id=1) {
    if(App::environment("local") OR App::environment("development")) {
@@ -185,5 +195,11 @@ Route::group(['middleware' => "auth"], function() {
     // User Settings
     Route::get("/settings", [UserNotificationChannelController::class, "edit"])->name("user-settings.edit");
     Route::patch("/settings", [UserNotificationChannelController::class, "update"])->name("user-settings.update");
+
+    // Notifications
+    Route::get("/notifications", [NotificationController::class, "index"])->name("notifications.index");
+    
+    // Messages
+    Route::get("/messages", [MessageController::class, "index"])->name("messages.index");
 
 });

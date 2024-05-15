@@ -35,7 +35,7 @@ class TimetableEntryCancelled extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_cancelled')->first();
+        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_cancelled')->first()->channel;
     }
 
     /**
@@ -44,7 +44,7 @@ class TimetableEntryCancelled extends Notification
      * @param  mixed  $notifiable
      * @return \NotificationChannels\Telegram\TelegramMessage;
      */
-    public function toTelegram($notifiable)
+    public function toTelegram($notifiable): TelegramMessage
     {
         App::setLocale($notifiable->language);
         return TelegramMessage::create()
@@ -52,6 +52,19 @@ class TimetableEntryCancelled extends Notification
             ->line('[INFO]')
             ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        App::setLocale($notifiable->language);
+        return (new MailMessage)
+            ->subject('[INFO] ' . __('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->line('[INFO]')
+            ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->action(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

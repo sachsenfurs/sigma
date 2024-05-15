@@ -228,5 +228,9 @@
     "sig_timeslot_reminder": "Registrierungs Erinnerungen",
     "timetable_entry_cancelled": "Sig abgesagt",
     "timetable_entry_location_changed": "Sig Location geändert",
-    "timetable_entry_time_changed": "Sig Zeit geändert"
+    "timetable_entry_time_changed": "Sig Zeit geändert",
+    "Email Notifications": "E-Mail Benachrichtigungen",
+    "Telegram Notifications": "Telegram Benachrichtigungen",
+    "Database Notifications": "Datenbank Benachrichtigungen",
+    "All Notifications": "Alle Benachrichtigungen"
 }

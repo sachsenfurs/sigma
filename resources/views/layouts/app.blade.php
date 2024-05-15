@@ -100,6 +100,26 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
+                    @auth
+                        <li class="nav-link px-3">
+                            <a href="{{ route('notifications.index') }}">
+                                @if (auth()->user()->unreadNotifications())
+                                    <i class="bi bi-bell-fill"></i>
+                                @else
+                                    <i class="bi bi-bell"></i>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="nav-link px-3 ">
+                            <a href="{{ route('messages.index') }}">
+                                @if (auth()->user()->unreadChats())
+                                    <i class="bi bi-mailbox2-flag text-danger jiggle"></i>
+                                @else
+                                    <i class="bi bi-mailbox2"></i>
+                                @endif
+                            </a>
+                        </li>
+                    @endauth
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="align-middle me-2" style="height: 1em; margin-top: -4px" src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">

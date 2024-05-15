@@ -97,4 +97,12 @@ class User extends Authenticatable implements FilamentUser
     public function artshowBids(): HasMany {
         return $this->hasMany(ArtshowBid::class);
     }
+
+    public function unreadChats(): bool {
+        return true;
+    }
+
+    public function unreadNotifications(): bool {
+        return true;
+    }
 }

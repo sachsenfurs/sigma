@@ -40,7 +40,7 @@ class SigTimeslotReminder extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_timeslot_reminder')->first();
+        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_timeslot_reminder')->first()->channel;
     }
 
     /**

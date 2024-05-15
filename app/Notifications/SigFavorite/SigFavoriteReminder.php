@@ -40,8 +40,7 @@ class SigFavoriteReminder extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_favorite_reminder')->first();
-        //return ['telegram'];
+        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, 'mail');
     }
 
     /**
@@ -69,7 +68,8 @@ class SigFavoriteReminder extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'sigFavoriteReminder',
+            'data' => $this->timetableEntry->id
         ];
     }
 }

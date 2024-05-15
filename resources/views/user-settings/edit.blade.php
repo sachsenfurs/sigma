@@ -11,16 +11,47 @@
             </div>
             <div class="card-body">
                 <div class="col-12">
+                    <div class="row m-2">
+                        <div class="col-7 col-md-7 text-center text-md-start pb-md-0 pb-3 my-auto">
+                            
+                        </div>
+                        <div class="col-5 col-md-5">
+                            <div class="row">
+                                <div class="col-4 col-md-4">
+                                    <i class="bi bi-envelope" title="{{ __("Email Notifications") }}"></i>
+                                </div>
+                                <div class="col-4 col-md-4">
+                                    <i class="bi bi-telegram" title="{{ __("Telegram Notifications") }}"></i>
+                                </div>
+                                <div class="col-4 col-md-4">
+                                    <i class="bi bi-database" title="{{ __("Database Notifications") }}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @foreach ($notificationType as $notification => $value)
                         <div class="row m-2">
-                            <div class="col-12 col-md-7 text-center text-md-start pb-md-0 pb-3 my-auto">
+                            <div class="col-7 col-md-7 text-center text-md-start pb-md-0 pb-3 my-auto">
                                 {{ __($notification) }}
                             </div>
-                            <div class="col-12 col-md-5">
-                                <select class="form-select" id="notification_{{ $notification }}" name="notification_{{ $notification }}">
-                                    <option value="telegram" @if ($value == 'telegram') selected @endif>Telegram</option>
-                                    <option value="email" @if ($value == 'email') selected @endif>{{ __("Email") }}</option>
-                                </select>
+                            <div class="col-5 col-md-5">
+                                <div class="row">
+                                    <div class="col-4 col-md-4">
+                                        <input class="form-check-input" type="checkbox" name="notification-mail-{{ $notification }}" value="1" @if (in_array('mail', $value)) checked @endif>
+                                    </div>
+                                    <div class="col-4 col-md-4">
+                                        <input class="form-check-input" type="checkbox" name="notification-telegram-{{ $notification }}" value="1" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->telegram_user_id) disabled @endif>
+                                    </div>
+                                    <div class="col-4 col-md-4">
+                                        <input class="form-check-input" type="checkbox" name="notification-db-{{ $notification }}" value="1" @if (in_array('db', $value)) checked @endif>
+                                    </div>
+                                </div>
+                                <!--
+                                    <select class="form-select" id="notification_{{ $notification }}" name="notification_{{ $notification }}">
+                                        <option value="telegram" @if ($value == 'telegram') selected @endif>Telegram</option>
+                                        <option value="mail" @if ($value == 'mail') selected @endif>{{ __("Email") }}</option>
+                                    </select>
+                                -->
                             </div>
                         </div>
                     @endforeach                    
