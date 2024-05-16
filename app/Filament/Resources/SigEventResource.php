@@ -27,7 +27,7 @@ class SigEventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function can(string $action, ?Model $record = null): bool
+    public static function can(string $action, Model|null $record = null): bool
     {
         return auth()->user()->permissions()->contains('manage_sigs');
     }
@@ -92,13 +92,13 @@ class SigEventResource extends Resource
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('hosts')
+            Tables\Columns\TextColumn::make('hosts.name')
                 ->label('Hosts')
                 ->translateLabel()
-                ->formatStateUsing(function (Model $record) {
-                    return $record->hosts->implode(', ');
-                })
-                ->sortable(),
+                ->formatState('test'),
+                //->formatStateUsing(function ($value, $record) {
+                //    return 'dasdsad';
+                //}),
             Tables\Columns\ImageColumn::make('languages')
                 ->label('Languages')
                 ->translateLabel()
