@@ -237,16 +237,15 @@ class SigEventResource extends Resource
                                 ->translateLabel()
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('id')
-                                ->label('Registration Number')
+                            Forms\Components\TextInput::make('reg_id')
+                                ->label('Reg ID')
                                 ->translateLabel()
-                                ->numeric()
-                                ->maxLength(255),
+                                ->numeric(),
                         ])
                         ->createOptionUsing(function ($data) {
                             $sigHost = SigHost::create([
                                 'name' => $data['name'],
-                                'id' => $data['id'] ?? null,
+                                'reg_id' => $data['reg_id'] ?? null,
                             ]);
 
                             // TODO: Der Timestamp wird nicht richtig geschrieben
