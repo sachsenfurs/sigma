@@ -5,10 +5,12 @@ namespace App\Providers\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Table;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -33,9 +35,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex("#d47f2f"),
             ])
             ->brandLogo(asset('images/logo.png'))
+            ->favicon(asset('images/favicon.png'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -70,6 +73,14 @@ class AdminPanelProvider extends PanelProvider
                 // which are not always available when the AdminPanelProvider is registered!
                 // ServiceProviders otherwise are registered in an early state of the application, even in artisan commands!
                 FilamentFullCalendarProvider::registerPlugin($panel);
-            });
+            })
+            ->userMenuItems([
+                MenuItem::make()
+                        ->label(__("Leave Admin Interface"))
+                        ->url(fn (): string => "/")
+                        ->icon('heroicon-m-cog-8-tooth'),
+            ])
+            ->maxContentWidth(MaxWidth::Full)
+            ;
     }
 }

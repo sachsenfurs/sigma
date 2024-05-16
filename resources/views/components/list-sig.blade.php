@@ -9,7 +9,7 @@
         </h4>
 
         @can("manage_events")
-            <a href="{{ route("sigs.edit", $sig) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
+            <a href="{{ \App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $sig]) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
     </div>
 

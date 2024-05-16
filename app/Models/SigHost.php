@@ -5,15 +5,17 @@ namespace App\Models;
 use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\HasTimetableEntries;
 use App\Models\Traits\NameIdAsSlug;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SigHost extends Model
 {
-    use HasFactory, HasSigEvents, HasTimetableEntries, NameIdAsSlug;
+    use HasFactory,
+        HasSigEvents,
+        HasTimetableEntries,
+        NameIdAsSlug;
 
     protected $guarded = [];
 
@@ -30,7 +32,11 @@ class SigHost extends Model
         'hide',
     ];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    protected $with = [
+        'sigEvents',
+    ];
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
     }

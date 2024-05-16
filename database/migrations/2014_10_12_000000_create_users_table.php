@@ -20,6 +20,17 @@ return new class extends Migration
             //$table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default("");
             $table->rememberToken();
+
+            $table->unsignedBigInteger("reg_id")->unique()->nullable();
+            $table->string("language", 4)->nullable();
+            $table->unsignedBigInteger("telegram_id")->nullable();
+            $table->json("groups")->default(json_encode([]));
+            $table->string("avatar")->nullable();
+            $table->string("avatar_thumb")->nullable();
+            $table->string("email")->nullable()->change();
+
+            $table->string("telegram_user_id")->nullable();
+
             $table->timestamps();
         });
     }

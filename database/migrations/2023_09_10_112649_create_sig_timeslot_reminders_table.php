@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('timeslot_id')->constrained("sig_timeslots")->cascadeOnDelete();
             $table->integer('send_at');
+            $table->integer('minutes_before');
             $table->integer('executed_at')->nullable();
             $table->string('result')->nullable();
 

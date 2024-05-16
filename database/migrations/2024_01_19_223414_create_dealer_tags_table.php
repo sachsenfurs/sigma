@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("name_en")->nullable();
         });
 
-        Schema::create('tags_to_dealer', function(Blueprint $table) {
+        Schema::create('dealer_dealer_tag', function(Blueprint $table) {
             $table->id();
             $table->foreignId("dealer_id")->constrained()->cascadeOnDelete();
             $table->foreignId("dealer_tag_id")->constrained()->cascadeOnDelete();

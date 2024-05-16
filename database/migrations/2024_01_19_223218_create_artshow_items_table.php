@@ -35,7 +35,10 @@ return new class extends Migration
             $table->text('additional_info')->nullable()->comment('only visible for adminstration/auctioner');
 
             // relativer Pfad zur Datei (local storage)
-            $table->string('image_file')->nullable();
+            $table->string('image')->nullable();
+
+            // Nur Ausstellungstück oder zur Auktion freigegeben?
+            $table->boolean('auction')->default(true);
 
             // Status, ob es nach der Anmeldung "angenommen" wurde
             $table->boolean('approved')->default(false);

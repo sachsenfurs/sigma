@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -28,23 +28,49 @@ class SigEvent extends Model
         'updated_at'
     ];
 
+    protected $with = [
+        'timetableEntries'
+    ];
+
     public function sigHosts(): BelongsToMany {
         return $this->belongsToMany(SigHost::class, 'sig_host_sig_events');
     }
 
-    public function getTimetableCountAttribute() {
-        return $this->timetableEntries->count();
+    public function timetableCout(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->timetableEntries()->count()
+        );
     }
 
-    public function getNameLocalizedAttribute() {
-        return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;
+    public function favoriteCount(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->timetableEntries->pluck("favorites")->flatten()->count()
+        );
     }
 
-    public function getDescriptionLocalizedAttribute() {
-        return App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description;
+    public function nameLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name
+        );
+    }
+    public function nameLocalizedOther(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "de" ? $this->name_en : $this->name
+        );
     }
 
-    public function isCompletelyPrivate() {
+    public function descriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description
+        );
+    }
+    public function descriptionLocalizedOther(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "de" ? $this->description_en : $this->description
+        );
+    }
+
+    public function isCompletelyPrivate(): bool {
         $entries = $this->timetableEntries;
         return ($entries->count() == $entries->where("hide", 1)->count());
     }
@@ -54,8 +80,12 @@ class SigEvent extends Model
     }
 
     public function scopePublic($query) {
-        return $query->whereHas("timetableEntries", function($query) {
+        return $query->whereHas("timetableEntries", function ($query) {
             $query->where("hide", false);
         });
+    }
+
+    public function forms(): HasMany {
+        return $this->hasMany(SigForm::class);
     }
 }

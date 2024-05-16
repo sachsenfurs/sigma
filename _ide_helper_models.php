@@ -11,7 +11,7 @@
  */
 
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
  * Model für die ArtshowArtist Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
  *
@@ -21,10 +21,10 @@ namespace App\Models\DDAS{
  * @property string|null $social Twitter, FA, Gallery, etc.
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowItem> $artshowItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowItem> $artshowItems
  * @property-read int|null $artshow_items_count
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\DDAS\ArtshowArtistFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\Ddas\ArtshowArtistFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowArtist query()
@@ -38,7 +38,7 @@ namespace App\Models\DDAS{
 	class ArtshowArtist extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
  * Model für die ArtshowBid Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
  *
@@ -48,7 +48,7 @@ namespace App\Models\DDAS{
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowItem $artshowItem
+ * @property-read \App\Models\Ddas\ArtshowItem $artshowItem
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowBid newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowBid newQuery()
@@ -63,9 +63,9 @@ namespace App\Models\DDAS{
 	class ArtshowBid extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\ArtshowItem
+ * 
  *
  * @property int $id
  * @property int $artshow_artist_id
@@ -75,29 +75,33 @@ namespace App\Models\DDAS{
  * @property string $starting_bid
  * @property string $charity_percentage
  * @property string|null $additional_info only visible for adminstration/auctioner
- * @property string|null $image_file
+ * @property string|null $image
+ * @property bool $auction
  * @property int $approved
- * @property int $sold
- * @property int $paid
+ * @property bool $sold
+ * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowArtist|null $artist
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
+ * @property-read \App\Models\Ddas\ArtshowArtist $artist
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
- * @property-read \App\Models\DDAS\ArtshowPickup|null $artshowPickup
- * @method static \Database\Factories\DDAS\ArtshowItemFactory factory($count = null, $state = [])
+ * @property-read \App\Models\Ddas\ArtshowPickup|null $artshowPickup
+ * @property-read mixed $image_url
+ * @method static \Database\Factories\Ddas\ArtshowItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem own()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem query()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAdditionalInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereArtshowArtistId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAuction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereCharityPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImageFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereSold($value)
@@ -107,9 +111,9 @@ namespace App\Models\DDAS{
 	class ArtshowItem extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\ArtshowPickup
+ * 
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -117,7 +121,7 @@ namespace App\Models\DDAS{
  * @property string|null $info
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\DDAS\ArtshowItem $artshowItem
+ * @property-read \App\Models\Ddas\ArtshowItem $artshowItem
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowPickup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowPickup newQuery()
@@ -132,9 +136,9 @@ namespace App\Models\DDAS{
 	class ArtshowPickup extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\Dealer
+ * 
  *
  * @property int $id
  * @property string $name
@@ -142,25 +146,24 @@ namespace App\Models\DDAS{
  * @property string|null $info
  * @property string|null $info_en
  * @property string|null $gallery_link
- * @property int $space
- * @property string|null $contact_way
  * @property string|null $contact
  * @property string|null $icon_file
  * @property int $approved
  * @property int|null $sig_location_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $info_localized
  * @property-read \App\Models\SigLocation|null $sigLocation
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\DealerTag> $tags
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\DealerTag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\DDAS\DealerFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Dealer approved()
+ * @method static \Database\Factories\Ddas\DealerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer query()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereContact($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereContactWay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereGalleryLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereIconFile($value)
@@ -169,23 +172,26 @@ namespace App\Models\DDAS{
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereInfoEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereSigLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereSpace($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereUserId($value)
  */
 	class Dealer extends \Eloquent {}
 }
 
-namespace App\Models\DDAS{
+namespace App\Models\Ddas{
 /**
- * App\Models\DDAS\DealerTag
+ * 
  *
  * @property int $id
  * @property string $name
  * @property string|null $name_en
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealer
+ * @property-read int|null $dealer_count
+ * @property-read mixed $name_localized
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealerTag used()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag whereNameEn($value)
@@ -193,9 +199,50 @@ namespace App\Models\DDAS{
 	class DealerTag extends \Eloquent {}
 }
 
+namespace App\Models\Info{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $description
+ * @property string|null $description_en
+ * @property string $link
+ * @property string|null $link_en
+ * @property string|null $link_name
+ * @property string|null $link_name_en
+ * @property string|null $icon
+ * @property string|null $qr
+ * @property string|null $qr_en
+ * @property array $show_on
+ * @property int $order
+ * @property-read mixed $description_localized
+ * @property-read mixed $link_localized
+ * @property-read mixed $link_name_localized
+ * @method static \Illuminate\Database\Eloquent\Builder|Social footerIcon()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social footerText()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social signage()
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereDescriptionEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereQr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereQrEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereShowOn($value)
+ */
+	class Social extends \Eloquent {}
+}
+
 namespace App\Models{
 /**
- * App\Models\LostFoundItem
+ * 
  *
  * @property int $id
  * @property int $lassie_id
@@ -229,7 +276,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Permission
+ * 
  *
  * @method static where(string $string, mixed $permissionName)
  * @method static create(array $array)
@@ -254,7 +301,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Post
+ * 
  *
  * @property int $id
  * @property string $text_de
@@ -282,7 +329,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\PostChannel
+ * 
  *
  * @property int $id
  * @property int $channel_identifier
@@ -301,7 +348,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\PostChannelMessage
+ * 
  *
  * @property-read \App\Models\Post|null $post
  * @property-read \App\Models\PostChannel|null $postChannel
@@ -314,7 +361,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigAttendee
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -337,7 +384,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigEvent
+ * 
  *
  * @property int $id
  * @property string $name
@@ -346,22 +393,26 @@ namespace App\Models{
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
- * @property string|null $additional_infos
- * @property string $fursuit_support
- * @property string $medic
- * @property string $security
- * @property string $other_stuff
+ * @property int $duration
+ * @property int $approved
+ * @property string|null $additional_info
+ * @property string|null $requirements
  * @property int $reg_possible
+ * @property int $max_regs_per_day
+ * @property int $max_group_attendees_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $max_regs_per_day
- * @property int|null $max_group_attendees_count
  * @property-read mixed $description_localized
+ * @property-read mixed $description_localized_other
+ * @property-read mixed $favorite_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigForm> $forms
+ * @property-read int|null $forms_count
  * @property-read mixed $name_localized
- * @property-read mixed $timetable_count
+ * @property-read mixed $name_localized_other
  * @property-read \App\Models\SigHost|null $sigHost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
+ * @property-read mixed $timetable_cout
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
  * @method static \Database\Factories\SigEventFactory factory($count = null, $state = [])
@@ -369,21 +420,20 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent query()
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescriptionEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereFursuitSupport($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereLanguages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxGroupAttendeesCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMedic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNameEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereOtherStuff($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSecurity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigHostId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereUpdatedAt($value)
  */
@@ -392,7 +442,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigFavorite
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -416,14 +466,101 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigHost
+ * 
+ *
+ * @property int $id
+ * @property int $sig_form_id
+ * @property int $user_id
+ * @property int $approved
+ * @property string|null $rejection_reason
+ * @property array|null $form_data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigForm $sigForm
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereFormData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereRejectionReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereSigFormId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereUserId($value)
+ */
+	class SigFilledForm extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $slug
+ * @property string $name
+ * @property string $name_en
+ * @property int|null $sig_event_id
+ * @property array|null $form_definition
+ * @property int $form_closed
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $name_localized
+ * @property-read \App\Models\SigEvent|null $sigEvent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForm> $sigFilledForms
+ * @property-read int|null $sig_filled_forms_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $userRoles
+ * @property-read int|null $user_roles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereFormClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereFormDefinition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSigEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereUpdatedAt($value)
+ */
+	class SigForm extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $sig_form_id
+ * @property int $user_role_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigForm $sigForm
+ * @property-read \App\Models\UserRole $userRole
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole whereSigFormId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFormUserRole whereUserRoleId($value)
+ */
+	class SigFormUserRole extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
  *
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property int|null $reg_id
+ * @property string|null $description
  * @property string|null $description_en
  * @property bool $hide
- * @property int|null $reg_id
  * @property-read mixed $avatar
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -448,20 +585,24 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigLocation
+ * 
  *
  * @property int $id
  * @property string $name
- * @property string $description
- * @property array|null $render_ids layer id for displaying as interactive SVG or whatever
+ * @property-read string|null $name_en
+ * @property-read string $description
+ * @property-read string|null $description_en
  * @property string|null $floor
  * @property string|null $room
- * @property bool $infodisplay Is there a digital display in front of the door? (Signage)
  * @property string|null $roomsize
  * @property string|null $seats
+ * @property array|null $render_ids layer id for displaying as interactive SVG or whatever
+ * @property bool $infodisplay Is there a digital display in front of the door? (Signage)
+ * @property bool $essential true = show periodically on the info screens (signage)
+ * @property string|null $essential_description
+ * @property string|null $essential_description_en
  * @property bool $show_default Show in calendar view (resource view) by default?
- * @property string|null $description_en
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -474,10 +615,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation query()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereDescriptionEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereEssential($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereEssentialDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereEssentialDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereFloor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereInfodisplay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereNameEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereRenderIds($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereRoom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereRoomsize($value)
@@ -489,17 +634,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigReminder
+ * 
  *
  * @property int $id
  * @property int $user_id
  * @property int $timetable_entry_id
  * @property int $send_at
+ * @property int $minutes_before
  * @property int|null $executed_at
  * @property string|null $result
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $minutes_before
  * @property-read \App\Models\TimetableEntry $timetableEntry
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigReminder newModelQuery()
@@ -520,13 +665,13 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTag
+ * 
  *
  * @property int $id
- * @property string $name
- * @property string $description
- * @property string|null $icon
+ * @property string $name Internal name, used for internal automation (eg. 'signup')
+ * @property string|null $description
  * @property string|null $description_en
+ * @property string|null $icon
  * @property-read string $description_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvent
  * @property-read int|null $sig_event_count
@@ -544,7 +689,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTimeslot
+ * 
  *
  * @property int $id
  * @property int $timetable_entry_id
@@ -580,17 +725,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\SigTimeslotReminder
+ * 
  *
  * @property int $id
  * @property int $user_id
  * @property int $timeslot_id
  * @property int $send_at
+ * @property int $minutes_before
  * @property int|null $executed_at
  * @property string|null $result
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $minutes_before
  * @property-read \App\Models\SigTimeslot $timeslot
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslotReminder newModelQuery()
@@ -611,7 +756,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TimetableEntry
+ * 
  *
  * @property int $id
  * @property int $sig_event_id
@@ -628,8 +773,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
  * @property-read mixed $formatted_length
- * @property-read mixed $has_location_changed
- * @property-read mixed $has_time_changed
+ * @property-read bool $has_location_changed
+ * @property-read bool $has_time_changed
  * @property-read mixed $is_favorite
  * @property-read TimetableEntry|null $parentEntry
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigReminder> $reminders
@@ -638,6 +783,7 @@ namespace App\Models{
  * @property-read \App\Models\SigEvent $sigEvent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
+ * @property-read \App\Models\SigLocation $sigLocation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
  * @property-read int|null $sig_timeslots_count
  * @method static \Database\Factories\TimetableEntryFactory factory($count = null, $state = [])
@@ -663,15 +809,13 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\User
+ * 
  *
  * @property int $id
  * @property string $name
- * @property string|null $email
+ * @property string $email
  * @property string $password
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $reg_id
  * @property string|null $language
  * @property int|null $telegram_id
@@ -679,13 +823,15 @@ namespace App\Models{
  * @property string|null $avatar
  * @property string|null $avatar_thumb
  * @property string|null $telegram_user_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowArtist> $artists
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowArtist> $artists
  * @property-read int|null $artists_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\ArtshowBid> $artshowBids
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $attendeeEvents
  * @property-read int|null $attendee_events_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DDAS\Dealer> $dealers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
@@ -697,6 +843,8 @@ namespace App\Models{
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
+ * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
  * @property-read int|null $sig_timeslots_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslotReminder> $timeslotReminders
@@ -720,12 +868,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTelegramUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent implements \Filament\Models\Contracts\FilamentUser {}
+	class User extends \Eloquent implements \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
 }
 
 namespace App\Models{
 /**
- * App\Models\UserRole
+ * 
  *
  * @property int $id
  * @property string $title
@@ -733,12 +881,6 @@ namespace App\Models{
  * @property string $border_color
  * @property string $background_color
  * @property string|null $registration_system_key
- * @property int $perm_manage_settings
- * @property int $perm_manage_users
- * @property int $perm_manage_events
- * @property int $perm_manage_locations
- * @property int $perm_manage_hosts
- * @property int $perm_post
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
@@ -753,12 +895,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereForeColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageEvents($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageHosts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageLocations($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermManageUsers($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole wherePermPost($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereRegistrationSystemKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereUpdatedAt($value)
@@ -768,7 +904,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\UserUserRole
+ * 
  *
  * @property int $id
  * @property int $user_id

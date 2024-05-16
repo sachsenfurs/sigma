@@ -22,6 +22,10 @@ class SigPlanner extends Page
 
 //    protected ?string $heading = "";
 
+    public static function canAccess(): bool {
+        return auth()->user()->permissions()->contains('manage_sigs');
+    }
+
     protected function getHeaderWidgets(): array {
         return [
             SigPlannerWidget::class,
@@ -31,10 +35,4 @@ class SigPlanner extends Page
     public function getMaxContentWidth(): MaxWidth|string|null {
         return MaxWidth::Full;
     }
-
-    public static function canAccess(): bool {
-        return auth()->user()->can("manage_events");
-    }
-
-
 }

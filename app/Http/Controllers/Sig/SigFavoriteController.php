@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Sig;
 use App\Http\Controllers\Controller;
 use App\Models\TimetableEntry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class SigFavoriteController extends Controller
 {
     public function store(Request $request) {
-        $this->authorize("login");
+        Gate::allowIf(Auth::check());
 
         $attributes = $request->validate([
             'timetable_entry_id' => 'required|exists:timetable_entries,id'
@@ -33,7 +34,7 @@ class SigFavoriteController extends Controller
 
 
     public function destroy(Request $request, TimetableEntry $entry) {
-        $this->authorize("login");
+        Gate::allowIf(Auth::check());
 
         auth()->user()->favorites()->where("timetable_entry_id", $entry->id)->delete();
 

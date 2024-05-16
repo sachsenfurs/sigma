@@ -57,7 +57,7 @@
 
                 @can("manage_events")
                     <div class="text-end">
-                        <a href="{{ route("sigs.edit", $entry->sigEvent) }}">
+                        <a href="{{ App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $entry->sigEvent]) }}">
                             <i class="bi bi-pencil"></i>
                             {{ __("Edit") }}
                         </a>
@@ -89,7 +89,7 @@
 
                                 @can("manage_events")
                                     <div class="text-end">
-                                        <a href="{{ route("timetable.edit", $e) }}">
+                                        <a href="{{ \App\Filament\Resources\TimetableEntryResource::getUrl('edit', ['record' => $e]) }}">
                                             <i class="bi bi-pencil"></i>
                                             {{ __("Edit") }}
                                         </a>

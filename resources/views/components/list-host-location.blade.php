@@ -4,10 +4,9 @@
     'avatar' => null,
     'instance' => null,
     'hide' => false,
-    'edit_permission' => "",
     'edit_link' => "",
 ])
-@if(!$hide OR auth()?->user()?->can($edit_permission))
+@if(!$hide OR auth()?->user()?->can("update", $instance))
     <div class="card mt-3">
         <div class="row g-0 @if($hide) bg-secondary @endif">
             @if($avatar)
@@ -45,7 +44,7 @@
             </div>
         </div>
     </div>
-    @can($edit_permission)
+    @can("update", $instance)
         <div class="card-footer">
             <div class="w-100 container p-2">
                 <a href="{{ $edit_link }}" class="">

@@ -22,11 +22,6 @@ class UserRoleSeeder extends Seeder
             'fore_color'                => '#333333',
             'border_color'              => '#2196F3',
             'background_color'          => '#DDFFFF',
-            'perm_manage_settings'      => true,
-            'perm_manage_users'         => true,
-            'perm_manage_events'        => true,
-            'perm_manage_locations'     => true,
-            'perm_manage_hosts'         => true,
             'created_at'                => now()
         ]);
         $this->insertPermissions('Administrator', Permission::all()->pluck('name')->toArray());
@@ -38,17 +33,17 @@ class UserRoleSeeder extends Seeder
 
         DB::table('user_roles')->insert([
             'title'                     => 'Leitstelle',
-            'perm_manage_events'        => true,
             'registration_system_key'   => 'leitstelle,foto',
             'created_at'                => now()
         ]);
         $this->insertPermissions('Leitstelle', [
             'manage_events',
+            'manage_sig_base_data',
+            'manage_sigs',
         ]);
 
         DB::table('user_roles')->insert([
             'title'                     => 'Social Media',
-            'perm_post'                 => true,
             'registration_system_key'   => 'socialmedia',
             'created_at'                => now()
         ]);

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\DDAS\ArtshowArtist;
-use App\Models\DDAS\ArtshowBid;
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\ArtshowArtist;
+use App\Models\Ddas\ArtshowBid;
+use App\Models\Ddas\Dealer;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasFactory;
     use Notifiable;
@@ -31,6 +32,10 @@ class User extends Authenticatable implements FilamentUser
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $with = [
+        'roles'
     ];
 
     public function roles(): BelongsToMany
@@ -63,12 +68,12 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(SigTimeslotReminder::class);
     }
 
-    public function isSigHost(): HasMany|bool {
-        if(SigHost::where('reg_id', $this->reg_id)->first()) {
-            return true;
-        } else {
-            return false;
-        }
+    public function sigHosts(): HasMany {
+        return $this->hasMany(SigHost::class, "reg_id");
+    }
+
+    public function isSigHost(): bool {
+        return $this->sigHosts()->count() > 0;
     }
 
     public function hasGroup(string $name): bool
@@ -85,8 +90,12 @@ class User extends Authenticatable implements FilamentUser
     }
 
     public function canAccessPanel(Panel $panel): bool {
-        // TODO: admin permission
-        return true;
+        // needs at least 1 permission
+        return $this->permissions()->count() > 0;
+    }
+
+    public function getFilamentAvatarUrl(): ?string {
+        return $this->avatar_thumb;
     }
 
     public function artists(): HasMany {
@@ -99,5 +108,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function artshowBids(): HasMany {
         return $this->hasMany(ArtshowBid::class);
+    }
+
+    public function isAdmin(): bool {
+        // The permission 'manage_sig_base_data' is used to determine if the user is an admin
+        return $this->permissions()->contains('manage_sig_base_data');
     }
 }

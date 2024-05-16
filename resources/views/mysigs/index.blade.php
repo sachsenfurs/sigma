@@ -1,8 +1,8 @@
 @extends('layouts.app')
-@section('title', "Meine Events")
+@section('title', __("My Events"))
 @section('content')
     <div class="container">
-        <h1 class="text-center">My Events</h1>
+        <h1 class="text-center">@yield("title")</h1>
         <div class="col-8 col-md-8 text-center mx-auto">
             <div class="d-none d-xl-block">
                 <div class="row border-bottom border-secondary mb-2">
@@ -25,7 +25,7 @@
                                     <strong>{{ __("Name") }}</strong>
                                 </div>
                                 <div class="col-6 col-md-12">
-                                    <a href="{{ route('sigs.show', $event->id) }}">
+                                    <a href="{{ route('mysigs.show', $event->id) }}">
                                         <strong>{{ $event->name }}</strong>
                                     </a>
                                 </div>

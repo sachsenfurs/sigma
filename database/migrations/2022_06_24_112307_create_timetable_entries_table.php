@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean("cancelled")->default(false);
             $table->foreignId("replaced_by_id")->nullable()->constrained($table->getTable(), "id")->nullOnDelete();
             $table->boolean("hide")->default(false);
+            $table->boolean("new")->default(false);
             $table->timestamps();
         });
     }

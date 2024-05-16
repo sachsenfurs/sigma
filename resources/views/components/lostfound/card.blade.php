@@ -31,8 +31,8 @@
         <div class="col-md-4 align-middle">
             @if($item->image_url)
                 <a href="{{ $item->image_url }}" target="_blank">
-                    <img src="{{ $item->image_url }}" class="img-fluid object-fit-cover h-100 w-100 rounded-end d-none d-md-block" alt="">
-                    <img src="{{ $item->image_url }}" class="img-fluid object-fit-cover h-100 w-100 rounded-bottom d-xs-block d-md-none" alt="">
+                    <img src="{{ $item->image_url }}" class="img-fluid object-fit-cover h-100 w-100 rounded-end d-none d-md-block" loading="lazy" alt="">
+                    <img src="{{ $item->image_url }}" class="img-fluid object-fit-cover h-100 w-100 rounded-bottom d-xs-block d-md-none" loading="lazy" alt="">
                 </a>
             @endif
         </div>

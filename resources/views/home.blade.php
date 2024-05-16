@@ -2,7 +2,22 @@
 @section('title', "Home")
 @section('content')
 <div class="container">
+    <h2>{{ __("Before the convention") }}</h2>
+    <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch" style="max-width: 970px">
+        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.jpg" :href="route('sigs.create')">
+            {{ __("Submit your Events, Workshops, Presentations and more!") }}
+        </x-home-signup-card>
+        <x-home-signup-card :title="__('Dealers Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
+            {{ __("Would you like to sell your art at the con?") }}
+        </x-home-signup-card>
+        <x-home-signup-card :title="__('Art Show Item Sign Up')" img="/images/signup/artshowfox.png" :href="route('artshow.create')">
+            {{ __("Submit your art for exhibition or auction") }}
+        </x-home-signup-card>
+    </div>
+
+    <h2>{{ __("At the convention") }}</h2>
     <div class="row justify-content-center">
+
         <div class="col-md-8">
             @if (!auth()->user()->telegram_user_id)
                 <div class="row m-3">
@@ -131,7 +146,7 @@
                                                     <span class="bi bi-x"></span>
                                                 </button>
                                             </div>
-                                            <x-modals.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
+                                            <x-modal.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +154,7 @@
                                     <hr>
                                 </div>
                             </div>
-                            <x-modals.attendee-list :timeslot="$registration->sigTimeslot" />
+                            <x-modal.attendee-list :timeslot="$registration->sigTimeslot" />
                         @endforeach
                     @endif
                 </div>
@@ -237,7 +252,7 @@
                                 <hr>
                             </div>
                         </div>
-                        <x-modals.reminder-selector :timetableEntry="$fav->timetableEntry" />
+                        <x-modal.reminder-selector :timetableEntry="$fav->timetableEntry" />
                     @empty
                         <p>{{ __("You currently don't have any favorite events") }}</p>
                     @endforelse

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\DDAS\Dealer;
+use App\Models\Ddas\Dealer;
 use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\HasTimetableEntries;
 use App\Models\Traits\NameIdAsSlug;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +24,7 @@ class SigLocation extends Model
         'render_ids' => "array",
         'infodisplay' => "boolean",
         'show_default' => "boolean",
+        'essential' => "boolean"
     ];
 
     public function sigEvents(): HasManyThrough
@@ -36,7 +38,26 @@ class SigLocation extends Model
             'sig_event_id'
         );
     }
+
     public function dealers(): HasMany {
         return $this->hasMany(Dealer::class);
+    }
+
+    public function description(): Attribute {
+        return Attribute::make(
+            get: fn($description="") => $description != "" ? $description : $this->name
+        );
+    }
+
+    public function descriptionEn(): Attribute {
+        return Attribute::make(
+            get: fn($description_en="") => $description_en != "" ? $description_en : ($this->name_en ?? $this->name)
+        );
+    }
+
+    public function nameEn(): Attribute {
+        return Attribute::make(
+            get: fn($name_en="") => $name_en ?? $this->name
+        );
     }
 }

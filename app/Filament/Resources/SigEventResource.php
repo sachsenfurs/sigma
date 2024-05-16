@@ -27,6 +27,11 @@ class SigEventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->permissions()->contains('manage_sigs');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -190,7 +195,7 @@ class SigEventResource extends Resource
                         }),
                 ])
                 ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
+                ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component
@@ -255,7 +260,7 @@ class SigEventResource extends Resource
             )
             ->translateLabel()
             ->columnSpan(1)
-            ->visible(auth()->user()->can('manage_events'));
+            ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component
@@ -280,7 +285,7 @@ class SigEventResource extends Resource
                         ->columnSpanFull(),
                 ])
                 ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_events'));
+                ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component
@@ -312,24 +317,24 @@ class SigEventResource extends Resource
                 ->label('Additional Informations')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Checkbox::make('fursuit_support')
-                        ->label('Furry Support')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('medic')
-                        ->label('Medic')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('security')
-                        ->label('Security')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Checkbox::make('other_stuff')
-                        ->label('Other Stuff')
-                        ->translateLabel()
-                        ->live(),
-                    Forms\Components\Textarea::make('additional_infos')
-                        ->label('Additional Informations')
+//                    Forms\Components\Checkbox::make('fursuit_support')
+//                        ->label('Furry Support')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('medic')
+//                        ->label('Medic')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('security')
+//                        ->label('Security')
+//                        ->translateLabel()
+//                        ->live(),
+//                    Forms\Components\Checkbox::make('other_stuff')
+//                        ->label('Other Stuff')
+//                        ->translateLabel()
+//                        ->live(),
+                    Forms\Components\Textarea::make('additional_info')
+                        ->label(__("Additional Information"))
                         ->translateLabel()
                         //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
                         ->rows(4)
