@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\RelationManagers\HostsRelationManager;
 use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
@@ -39,7 +40,7 @@ class SigEventResource extends Resource
                 self::getSigNameFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigLanguageFieldSet(),
-                self::getSigHostFieldSet(),
+                self::getSigHostsFieldSet(),
                 self::getSigRegistrationFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfosFieldSet(),
@@ -92,13 +93,9 @@ class SigEventResource extends Resource
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('hosts.name')
+            Tables\Columns\TextColumn::make('sigHosts.name')
                 ->label('Hosts')
-                ->translateLabel()
-                ->formatState('test'),
-                //->formatStateUsing(function ($value, $record) {
-                //    return 'dasdsad';
-                //}),
+                ->translateLabel(),
             Tables\Columns\ImageColumn::make('languages')
                 ->label('Languages')
                 ->translateLabel()
@@ -219,7 +216,7 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostFieldSet(): Forms\Components\Component
+    private static function getSigHostsFieldSet(): Forms\Components\Component
     {
         return
             Forms\Components\Fieldset::make('hosts')
