@@ -20,10 +20,11 @@ class FilamentFullCalendarProvider {
               ->plugins([
                   'resourceTimeGrid',
                   'resourceTimeline',
+                  'interaction'
               ])
               ->config([
                   'initialView' => "resourceTimeGridDay",
-                  'resources' => SigLocation::select("id", "name AS title", "show_default")->where("show_default", true)->get()->toArray(),
+                  'resources' => SigLocation::select(["id", "name AS title"])->used()->get()->toArray(),
                   'headerToolbar' => [
                       'left' => 'prev,next,today',
                       'center' => 'title',
