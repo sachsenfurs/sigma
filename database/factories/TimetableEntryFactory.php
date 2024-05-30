@@ -20,6 +20,7 @@ class TimetableEntryFactory extends Factory
     public function definition()
     {
         $start = $this->faker->dateTimeBetween(Carbon::yesterday(), Carbon::tomorrow()->addDay(1));
+        $start = (new Carbon($start))->setMinutes($this->faker->randomElement([0,15,30,45]))->setSeconds(0);
         return [
             'sig_event_id' => SigEvent::all()->random(),
             'sig_location_id' => SigLocation::all()->random(),
@@ -27,7 +28,6 @@ class TimetableEntryFactory extends Factory
             'end' => (new Carbon($start))->addMinute(90),
             'cancelled' => false,
             'replaced_by_id' => null,
-
         ];
     }
 }

@@ -3,18 +3,25 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserRoleResource\Pages;
+use App\Models\Permission;
 use App\Models\UserRole;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class UserRoleResource extends Resource
 {
     protected static ?string $model = UserRole::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->permissions()->contains('manage_users');
+    }
 
     public static function getLabel(): ?string
     {
@@ -30,55 +37,19 @@ class UserRoleResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->label(__('User Role'))
-                    ->maxLength(255),
-                Forms\Components\ColorPicker::make('fore_color')
-                    ->required()
-                    ->label(__('Foreground Color'))
-                    ->default('#333333'),
-                Forms\Components\ColorPicker::make('border_color')
-                    ->required()
-                    ->label(__('Border Color'))
-                    ->default('#666666'),
-                Forms\Components\ColorPicker::make('background_color')
-                    ->required()
-                    ->label(__('Background Color'))
-                    ->default('#E6E6E6'),
-                Forms\Components\Checkbox::make('perm_manage_settings')
-                    ->label(__('Manage Settings'))
-                    ->default(0),
-                Forms\Components\Checkbox::make('perm_manage_users')
-                    ->label(__('Manage Users'))
-                    ->default(0),
-                Forms\Components\Checkbox::make('perm_manage_events')
-                    ->label(__('Manage Events'))
-                    ->default(0),
-                Forms\Components\Checkbox::make('perm_manage_locations')
-                    ->label(__('Manage Locations'))
-                    ->default(0),
-                Forms\Components\Checkbox::make('perm_manage_hosts')
-                    ->label(__('Manage Hosts'))
-                    ->default(0),
-                Forms\Components\Checkbox::make('perm_post')
-                    ->label(__('Manage Posts'))
-                    ->default(0),
+                self::getTitleField(),
+                self::getRegistrationSystemKeyField(),
+                self::getForegroundColorField(),
+                self::getBorderColorField(),
+                self::getBackgroundColorField(),
+                self::getPermissionListField(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->label(__('User Role'))
-                    ->searchable()
-                    ->sortable()
-            ])
-            ->filters([
-                //
-            ])
+            ->columns(self::getTableColumns())
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -103,5 +74,84 @@ class UserRoleResource extends Resource
             'create' => Pages\CreateUserRole::route('/create'),
             'edit' => Pages\EditUserRole::route('/{record}/edit'),
         ];
+    }
+
+    private static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('title')
+                ->label('User Role')
+                ->translateLabel()
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('users_count')
+                ->label('User Count')
+                ->translateLabel()
+                ->counts('users')
+                ->sortable()
+        ];
+    }
+
+    private static function getTitleField(): Forms\Components\Component
+    {
+        return Forms\Components\TextInput::make('title')
+            ->label('User Role')
+            ->translateLabel()
+            ->required()
+            ->maxLength(255);
+    }
+
+    private static function getRegistrationSystemKeyField(): Forms\Components\Component
+    {
+        return Forms\Components\TextInput::make('registration_system_key')
+            ->label('Group keys')
+            ->translateLabel()
+            ->helperText(__('Group keys from registration system (seperated with a comma)'))
+            ->maxLength(255);
+    }
+
+    private static function getForegroundColorField(): Forms\Components\Component
+    {
+        return Forms\Components\ColorPicker::make('fore_color')
+            ->label('Foreground Color')
+            ->translateLabel()
+            ->required()
+            ->default('#333333');
+    }
+
+    private static function getBorderColorField(): Forms\Components\Component
+    {
+        return Forms\Components\ColorPicker::make('border_color')
+            ->label('Border Color')
+            ->translateLabel()
+            ->required()
+            ->default('#666666');
+    }
+
+    private static function getBackgroundColorField(): Forms\Components\Component
+    {
+        return Forms\Components\ColorPicker::make('background_color')
+            ->label('Background Color')
+            ->translateLabel()
+            ->required()
+            ->default('#E6E6E6');
+    }
+
+    private static function getPermissionListField(): Forms\Components\Component
+    {
+        return Forms\Components\Section::make()
+            ->heading(__('Permissions'))
+            ->collapsible()
+            ->collapsed()
+            ->schema([
+                Forms\Components\CheckboxList::make('permissions')
+                    ->label('')
+                    ->columns(4)
+                    ->columnSpanFull()
+                    ->bulkToggleable()
+                    ->relationship('permissions', 'name')
+                    ->options(fn() => collect(Permission::all()->pluck('name', 'id')))
+                    ->descriptions(fn() => collect(Permission::all()->pluck('friendly_name', 'id'))),
+            ]);
     }
 }

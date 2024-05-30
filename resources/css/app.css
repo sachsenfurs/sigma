@@ -8,3 +8,7 @@
 .modal-backdrop.show:nth-of-type(even) {
     z-index: 1051 !important;
 }
+
+input, label {
+    user-select: none;
+}

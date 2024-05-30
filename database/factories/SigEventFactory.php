@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\SigHost;
-use App\Models\SigLocation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SigEventFactory extends Factory
 {
+
     /**
      * Define the model's default state.
      *
@@ -21,11 +21,12 @@ class SigEventFactory extends Factory
         $datetime = $this->faker->dateTime();
         return [
             'name' => $this->faker->text(25),
+            'name_en' => $this->faker->text(25),
             'sig_host_id' => SigHost::all()->random(),
-            'default_language' => $this->faker->randomElement(['de', 'en']),
-            'languages' => $this->faker->randomElement([["de"], ["de","en"]]),
+            'languages' => $this->faker->randomElement([["de"], ["en"], ["de","en"]]),
             'description' => $this->faker->realText(),
-            'sig_location_id' => SigLocation::all()->random(),
+            'description_en' => $this->faker->realText(),
+            'additional_info' => $this->faker->realText(),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->randomElement([$this->faker->dateTime(), $datetime]),
         ];

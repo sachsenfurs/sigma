@@ -16,7 +16,12 @@ return new class extends Migration
         Schema::create('sig_hosts', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->text("description")->default("");
+            $table->unsignedBigInteger('reg_id')->nullable();
+
+            $table->text("description")->nullable()->default("");
+            $table->string('description_en')->nullable()->default("");
+
+            $table->boolean("hide")->default(false);
         });
     }
 

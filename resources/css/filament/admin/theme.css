@@ -14,3 +14,6 @@
 .fi-ta-table .fi-ta-icon {
     @apply py-0;
 }
+.fc-col-header-cell-cushion {
+    word-wrap: anywhere;
+}

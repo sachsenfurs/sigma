@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('timetable_entry_id');
             $table->integer('send_at');
+            $table->integer('minutes_before');
             $table->integer('executed_at')->nullable();
             $table->string('result')->nullable();
 

@@ -12,6 +12,18 @@ class SigEventsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigEvents';
 
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        // Filament needs to know if the user can view the relation manager for the given record.
+        return auth()->user()->can('manage_sigs');
+    }
+
+    protected function can(string $action, ?Model $record = null): bool
+    {
+        // Filament needs to know if the user can perform the given action on the relation manager.
+        return auth()->user()->can('manage_sigs');
+    }
+
     public function table(Table $table): Table
     {
         return $table
@@ -43,11 +55,6 @@ class SigEventsRelationManager extends RelationManager
                 ->label('Languages')
                 ->translateLabel()
                 ->view('filament.tables.columns.sig-event.flag-icon'),
-            Tables\Columns\TextColumn::make('sigLocation.name')
-                ->label('Location')
-                ->translateLabel()
-                ->searchable()
-                ->sortable(),
             Tables\Columns\TextColumn::make('timetable_entries_count')
                 ->label('In Schedule')
                 ->translateLabel()

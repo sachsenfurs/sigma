@@ -34,7 +34,7 @@ class SigHostController extends Controller
             'reg_id' => $request->input('UserRegID'),
         ]);
 
-        return redirect('sigsignin');
+        return redirect('sigs.signup');
 
     }
 

@@ -7,9 +7,8 @@
                 :instance="$host"
                 :link="route('hosts.show', $host)"
                 :title="$host->name"
-                edit_permission="manage_hosts"
                 :hide="$host->hide"
-                :edit_link="route('hosts.edit', $host)"
+                :edit_link="\App\Filament\Resources\SigHostResource::getUrl('edit', [ 'record' => $host ])"
                 :avatar="$host->avatar"
             >
                 {{ $host->description }}

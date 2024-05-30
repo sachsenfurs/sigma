@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Traits\HasSigEvents;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-use function PHPUnit\Framework\isNull;
 
 class TimetableEntry extends Model
 {
@@ -22,6 +23,8 @@ class TimetableEntry extends Model
         'cancelled' => "boolean",
         'start' => 'datetime',
         'end' => "datetime",
+        'updated_at' => "datetime", // according to the docs timestamps will be casted by default but it causes issues without explicitly doing it again here!
+        'created_at' => "datetime",
     ];
 
     protected $appends = [
@@ -39,26 +42,25 @@ class TimetableEntry extends Model
     ];
 
     protected $with = [
-        'favorites'
+        'favorites',
+        'sigLocation',
     ];
 
     /**
      * Define the relationship between timetable-entries and their favorites.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function favorites()
-    {
+    public function favorites(): HasMany {
         return $this->hasMany(SigFavorite::class);
     }
 
     /**
      * Define the relationship between timetable-entries and their reminders.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function reminders()
-    {
+    public function reminders(): HasMany {
         return $this->hasMany(SigReminder::class);
     }
 
@@ -66,21 +68,22 @@ class TimetableEntry extends Model
         return $query->where('hide', false);
     }
 
+    /**
+     * (Conbook-Export) filter events without same start and end date, which indicates announcements ("Reg Opening" for example)
+     */
     public function scopeNoAnnouncements($query) {
         return $query->where(DB::raw("TIMESTAMPDIFF(SECOND, start, end)"), "!=", "0");
     }
 
-    public function sigEvent() {
+    public function sigEvent(): BelongsTo {
         return $this->belongsTo(SigEvent::class);
     }
 
-    public function sigLocation() {
-        return $this->belongsTo(SigLocation::class)->withDefault(function($sigLocation, $timetableEntry) {
-            return $timetableEntry->sigEvent->sigLocation;
-        });
+    public function sigLocation(): BelongsTo {
+        return $this->belongsTo(SigLocation::class);
     }
 
-    public function sigTimeslots() {
+    public function sigTimeslots(): HasMany {
         return $this->hasMany(SigTimeslot::class);
     }
     public function getAvailableSlotCount(): int {
@@ -91,28 +94,33 @@ class TimetableEntry extends Model
         return $counter;
     }
 
-    public function replacedBy() {
+    public function replacedBy(): BelongsTo {
         return $this->belongsTo(TimetableEntry::class);
     }
 
-    public function parentEntry() {
+    public function parentEntry(): HasOne {
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
-    public function getHasTimeChangedAttribute() {
+    public function getHasTimeChangedAttribute(): bool {
         return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
     }
 
-    public function getHasLocationChangedAttribute() {
+    public function getHasLocationChangedAttribute(): bool {
         return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
     }
 
-    public function getDurationAttribute() {
-        return $this->end->diffInMinutes($this->start);
+    public function duration(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->end->diffInMinutes($this->start)
+        );
     }
 
-    public function getFavStatus()
-    {
+    public function hasEventChanged(): bool {
+        return $this->updated_at->isAfter($this->created_at);
+    }
+
+    public function getFavStatus(): bool {
         if (auth()->user()->favorites->where('timetable_entry_id', $this->id)->first()) {
             return true;
         }
@@ -120,8 +128,7 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function maxUserRegsExeeded(User $user)
-    {
+    public function maxUserRegsExeeded(User $user=null): bool {
         if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
             return false;
         }
@@ -141,19 +148,23 @@ class TimetableEntry extends Model
         return false;
     }
 
-    public function getFormattedLengthAttribute() {
-        $mins =  $this->start->diffInMinutes($this->end);
-        if($mins == 0)
-            return "";
-        if($mins < 60)
-            return $mins." min";
-        return round($this->start->floatDiffInHours($this->end), 1). " h";
+    public function formattedLength(): Attribute {
+        return Attribute::make(function() {
+            $mins =  $this->start->diffInMinutes($this->end);
+            if($mins == 0)
+                return "";
+            if($mins < 60)
+                return $mins." min";
+            return round($this->start->floatDiffInHours($this->end), 1). " h";
+        });
     }
 
-    public function getIsFavoriteAttribute() {
-        if(Auth::check()) {
-            return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
-        }
-        return false;
+    public function isFavorite(): Attribute {
+        return Attribute::make(function() {
+            if(Auth::check()) {
+                return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
+            }
+            return false;
+        });
     }
 }

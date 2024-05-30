@@ -1,72 +1,163 @@
 @extends('layouts.app')
-@section('title', "SIG Übersicht")
+@section('title', __('SIG Overview'))
+
 @section('content')
     <div class="container">
-        <div class="mt-4 mb-4 text-center">
-            <a class="btn btn-primary" href="{{ route("sigs.create") }}">SIG Eintragen</a>
-        </div>
-        <table class="table table-hover">
-            <tr>
-                <th>Titel</th>
-                <th>Host</th>
-                <th>Sprachen</th>
-                <th>Location</th>
-                <th>Tags</th>
-                <th>Im Programmplan</th>
-                <th>Aktion</th>
-            </tr>
-            @forelse($sigs AS $sig)
-                <tr class="@if($sig->timetableCount == 0) alert-danger @endif">
-                    <td>
-                        @if($sig->description == "" OR $sig->description_en == "")
-                            <div class="badge bg-danger">Text unvollständig!</div>
-                        @endif
+        <h2>{{ __('SIG Overview') }}</h2>
 
-                        <a href="{{ route("sigs.show", $sig) }}" class="text-decoration-none">
-                            <h5 class="d-inline">
-                                {{ $sig->name }}
-                            </h5>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ route("hosts.edit", $sig->sigHost) }}" class="btn btn-secondary">
-                            <i class="bi bi-person-circle"></i>
-                            {{ $sig->sigHost->name }}
-                            @if($sig->sigHost->reg_id)
-                                ({{ $sig->sigHost->reg_id }})
-                            @endif
-                        </a>
-                    </td>
-                    <td>
-                        @foreach($sig->languages AS $lang)
-                            <img src="/icons/{{ $lang }}-flag.svg" alt="" style="height: 1em">
-                        @endforeach
-                    </td>
-                    <td>
-                        <a href="{{ route("locations.show", $sig->sigLocation) }}" class="btn btn-secondary">
-                            <i class="bi bi-geo-alt"></i>
-                            {{ $sig->sigLocation->name }}
-                        </a>
-                    </td>
-                    <td>
-                        @foreach($sig->sigTags AS $tag)
-                            <span class="badge bg-success d-block m-1">
-                                {{ $tag->description_localized }}
-                            </span>
-                        @endforeach
-                    </td>
-                    <td>{{ $sig->timetableCount }}</td>
-                    <td>
-                        <a href="{{ route("sigs.edit", $sig) }}">
-                            <button type="button" class="btn btn-primary"><i class="bi bi-pen"></i></button>
-                        </a>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6">Noch keine SIGs eingetragen</td>
-                </tr>
-            @endforelse
-        </table>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-4">
+                <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
+                    <div class="card-body">
+                        <i class="bi bi-plus"></i> {{ __("Register a new SIG") }}
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        @foreach(auth()->user()->sigHosts AS $host)
+            <h5 class="py-2 fw-light pt-4">{{ __("Registered SIGs for :name", ['name' => $host->name]) }}</h5>
+            <section class="accordion pb-4" id="sigList">
+                @foreach($host->sigEvents AS $sig)
+                    <article class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$sig->id}}" aria-expanded="false" aria-controls="collapse{{$sig->id}}">
+                                <div class="row w-100">
+                                    @if(!$sig->approved)
+                                        <div class="col-12 text-start pb-2">
+                                            <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', 'bg-success' => $sig->approved, 'bg-warning text-dark' => !$sig->approved])
+                                                  style="font-size:0.75rem">
+                                                @if($sig->approved)
+                                                    {{ __("Accepted") }}
+                                                @else
+                                                    {{ __("Pending Approval") }}
+                                                @endif
+                                            </span>
+                                        </div>
+                                    @endif
+                                    <div class="col-12">
+                                        <h5 class="d-inline-block me-2">
+                                            {{ $sig->name_localized }}
+                                        </h5>
+                                        <x-flag :language="$sig->languages"/>
+                                        <span class="badge fs-6 bg-dark-subtle text-secondary">{{ $sig->duration/60 }} h</span>
+                                        @if($sig->favorite_count > 0)
+                                            <span class="badge fs-6 bg-dark-subtle text-secondary"><i class="bi bi-heart-fill"></i> {{ $sig->favorite_count }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse{{$sig->id}}" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div @class(['col-12', 'col-xl-6' => $sig->name_localized_other]) style="text-align: justify">
+                                        <h4>{{ __("Description") }}</h4>
+                                        <x-markdown>
+                                            {{ $sig->description_localized }}
+                                        </x-markdown>
+                                    </div>
+                                    @if($sig->name_localized_other)
+                                        <div class="col-12 col-xl-6 fst-italic text-secondary" style="text-align: justify">
+                                            <h4>{{ __("Translation") }}</h4>
+                                            <h5 class="me-2">
+                                                {{ $sig->name_localized_other }}
+                                            </h5>
+                                            <x-markdown>
+                                                {{ $sig->description_localized_other }}
+                                            </x-markdown>
+                                        </div>
+                                    @endif
+
+                                    @if($sig->additional_info)
+                                        <div class="col-12 my-4">
+                                            <h4>
+                                                {{ __("Organizational Information") }}
+                                            </h4>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    {{ $sig->additional_info }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="col-12">
+                                    <h4>{{ __("Scheduled") }}</h4>
+                                </div>
+
+                                <div class="row justify-items-center g-3">
+                                    @forelse($sig->timetableEntries AS $entry)
+                                        <div class="col-12 col-md-6 col-xl-4">
+                                            <div class="card">
+                                                <div class="card-body row">
+                                                    <div class="col">
+                                                        <div>
+                                                            <i class="bi bi-calendar-day"></i>
+                                                            {{ $entry->start->dayName }}, {{ $entry->start->format("d.m.Y") }}
+                                                        </div>
+                                                        <div>
+                                                            <i class="bi bi-clock"></i>
+                                                            {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col align-content-center">
+                                                        <div class="mt-1 text-center">
+                                                            <i class="bi bi-geo-alt"></i>
+                                                            <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
+                                                                {{ $entry->sigLocation->name }}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="col">
+                                            {{ __("This event is not listed in the schedule yet") }}
+                                        </div>
+                                    @endforelse
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </section>
+
+
+
+{{--            <div class="row g-3 py-3">--}}
+{{--                @foreach($host->sigEvents AS $sig)--}}
+
+{{--                    <div class="card">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <div class="row">--}}
+{{--                                <div class="col order-1 order-md-0">--}}
+{{--                                    <h4 class="me-2">{{ $sig->name }}</h4>--}}
+{{--                                    <h4 class="me-2">{{ $sig->name_en }}</h4>--}}
+{{--                                    <x-flag :language="$sig->languages"/>--}}
+{{--                                    <span class="badge fs-6 bg-dark">{{ $sig->duration/60 }} h</span>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-12 col-lg-auto text-end order-0 order-md-1 py-2">--}}
+{{--                                    <span class="badge d-flex d-md-inline bg-success fs-5">Approved</span>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-12 py-2 order-2">--}}
+
+{{--                                    {{ $sig->name }}--}}
+{{--                                </div>--}}
+{{--                                <div class="col py-2 order-3">--}}
+{{--                                    {{ $sig->additional_info }}--}}
+{{--                                </div>--}}
+
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
+        @endforeach
     </div>
 @endsection

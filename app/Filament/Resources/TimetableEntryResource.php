@@ -26,7 +26,13 @@ class TimetableEntryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = SigPlanning::class;
+    protected static ?int $navigationSort = 10;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->permissions()->contains('manage_sigs');
+    }
 
     public static function getLabel(): ?string
     {
@@ -51,18 +57,30 @@ class TimetableEntryResource extends Resource
             self::getSigLocationField(),
             self::getSigStartField(),
             self::getSigEndField(),
-            self::getSigNewField(),
-            self::getSigCancelledField(),
-            self::getSigHideField(),
+
+            Forms\Components\Fieldset::make("Event Settings")
+                ->schema([
+                    self::getSigNewField(),
+                    self::getSigHideField(),
+                    self::getSigCancelledField(),
+                ])
+                ->columns(3),
+
+            Forms\Components\Fieldset::make("Communication Settings")
+                ->schema([
+                    self::getSendUpdateField(),
+                ])
+                ->hidden(fn(string $operation): bool => $operation == "create")
+            ,
+
             self::getResetUpdateField(),
-            self::getSendUpdateField(),
         ];
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns(self::getTableColumns())
+            ->columns(static::getTableColumns())
             ->defaultPaginationPageOption('all')
             ->defaultGroup(
                 Group::make('start')
@@ -106,7 +124,7 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
+    public static function getTableColumns(): array
     {
         return [
             Tables\Columns\TextColumn::make('timestamp')
@@ -115,12 +133,10 @@ class TimetableEntryResource extends Resource
                     if ($record->cancelled) {
                         $suffix = ' - ' . __('Cancelled');
                     } else {
-                        if ($record->new) {
+                        if ($record->new)
                             $suffix = ' - ' . __('New');
-                        }
-                        if ($record->hasTimeChanged) {
+                        if ($record->hasTimeChanged)
                             $suffix = ' - ' . __('Changed');
-                        }
                     }
                     return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
                 })
@@ -136,15 +152,28 @@ class TimetableEntryResource extends Resource
                     return 'secondary';
                 })
                 ->label('Time span')
+                ->width(10)
                 ->translateLabel(),
             Tables\Columns\TextColumn::make('sigEvent.name')
                 ->label('Event')
                 ->translateLabel()
                 ->searchable(),
+            Tables\Columns\TextColumn::make('sigEvent.sigHost.name')
+                 ->label('Host')
+                 ->translateLabel()
+                 ->searchable()
+                 ->formatStateUsing(function (Model $record) {
+                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
+                     return $record->sigEvent->sigHost->name . $regNr;
+                 }),
             Tables\Columns\TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')
                 ->translateLabel(),
+            Tables\Columns\ImageColumn::make('sigEvent.languages')
+                ->label('Languages')
+                ->translateLabel()
+                ->view('filament.tables.columns.sig-event.flag-icon'),
         ];
     }
 
@@ -198,6 +227,7 @@ class TimetableEntryResource extends Resource
                     return [ $sigLocation->id => $name ];
                 })->toArray();
             })
+            ->required()
             ->searchable()
             ->preload();
     }
@@ -224,26 +254,29 @@ class TimetableEntryResource extends Resource
 
     private static function getSigNewField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('new')
+        return Forms\Components\Toggle::make('new')
             ->label('New Event')
             ->translateLabel()
-            ->formatStateUsing(function() {
+            ->formatStateUsing(function(?Model $record) {
                 // automatically prefill to "true" when con (in this case the first event) has started
-                return Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                if(!$record) // only prefill when a new record is created (current $record == null)
+                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                return (bool)$record->new;
             });
     }
 
     private static function getSigCancelledField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('cancelled')
+        return Forms\Components\Toggle::make('cancelled')
             ->label('Event Cancelled')
-            ->translateLabel()
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->onColor("danger")
+            ->visible(fn(?Model $record): bool => $record !== null)
+            ->translateLabel();
     }
 
     private static function getSigHideField(): Forms\Components\Component
     {
-        return Forms\Components\Checkbox::make('hide')
+        return Forms\Components\Toggle::make('hide')
             ->label('Internal Event')
             ->translateLabel();
     }
@@ -253,7 +286,8 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Checkbox::make('reset_update')
             ->label('Reset \'Changed\'-flag')
             ->translateLabel()
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false))
+            ;
     }
 
     private static function getSendUpdateField(): Forms\Components\Component
@@ -261,7 +295,6 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Checkbox::make('send_update')
             ->label('Announce Changes')
             ->translateLabel()
-            ->helperText(__('This needs to be checked if the event should be marked as changed!'))
-            ->hidden(fn (string $operation): bool => $operation !== 'edit');
+            ->helperText(__('This needs to be checked if the event should be marked as changed!'));
     }
 }

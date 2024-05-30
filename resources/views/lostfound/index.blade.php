@@ -2,20 +2,38 @@
 @section('title', "Lost & Found")
 @section('content')
     <div class="container">
+        <div class="sticky-top container-fluid p-0 z-1">
+            <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap" id="lostfoundTab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link w-100 active" id="found-tab" data-bs-toggle="tab" data-bs-target="#found-tab-pane" type="button" role="tab" aria-controls="found-tab-pane" aria-selected="true">
+                        <h3>{{ __("Found") }}</h3>
+                    </button>
+                </li>
 
-        <h2>{{ __("Found") }}</h2>
-        @forelse(\App\Models\LostFoundItem::found()->get() AS $item)
-            <x-lostfound.card :item="$item"></x-lostfound.card>
-        @empty
-            {{ __("Nothing has been found yet") }}
-        @endforelse
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link w-100" id="lost-tab" data-bs-toggle="tab" data-bs-target="#lost-tab-pane" type="button" role="tab" aria-controls="lost-tab-pane" aria-selected="false">
+                        <h3>{{ __("Lost") }}</h3>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="lostfoundTabContent">
+            <div class="tab-pane fade" id="lost-tab-pane" role="tabpanel" aria-labelledby="lost-tab" tabindex="0">
+                @forelse(\App\Models\LostFoundItem::lost()->get() AS $item)
+                    <x-lostfound.card :item="$item"></x-lostfound.card>
+                @empty
+                    {{ __("Nothing has been lost yet") }}
+                @endforelse
+            </div>
 
-        <h2 class="mt-3">{{ __("Lost") }}</h2>
-        @forelse(\App\Models\LostFoundItem::lost()->get() AS $item)
-            <x-lostfound.card :item="$item"></x-lostfound.card>
-        @empty
-            {{ __("Nothing has been lost yet") }}
-        @endforelse
+            <div class="tab-pane fade show active" id="found-tab-pane" role="tabpanel" aria-labelledby="found-tab" tabindex="0">
+                @forelse(\App\Models\LostFoundItem::found()->get() AS $item)
+                    <x-lostfound.card :item="$item"></x-lostfound.card>
+                @empty
+                    {{ __("Nothing has been found yet") }}
+                @endforelse
+            </div>
+        </div>
 
     </div>
 

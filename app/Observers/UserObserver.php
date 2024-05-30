@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Models\UserRole;
 
 class UserObserver
 {
@@ -23,18 +24,25 @@ class UserObserver
     }
 
     private function createUpdate(User $user) {
-        // assign user role to specific groups
-        if(in_array("leitstelle", $user->groups ?? [])) {
-            $user->role()->associate(3);
-            $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
+        $userRoles = UserRole::all()->pluck('registration_system_key', 'id')->map(function($item) {
+            return explode(',', $item);
+        });
+
+        $userGroups = $user->groups;
+        if (!$userGroups) {
+            return;
         }
-        if(in_array("foto", $user->groups ?? [])) {
-            $user->role()->associate(3);
-            $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
-        }
-        if(in_array("socialmedia", $user->groups ?? [])) {
-            $user->role()->associate(4);
-            $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
+        foreach ($userGroups as $userGroup) {
+            if (!$userGroup) {
+                continue;
+            }
+            $userRole = $userRoles->search(function ($item) use ($userGroup) {
+                return in_array($userGroup, $item);
+            });
+            if ($userRole) {
+                $user->role()->associate($userRole);
+                $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
+            }
         }
     }
 

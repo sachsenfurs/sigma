@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SigHostResource extends Resource
 {
@@ -18,6 +19,12 @@ class SigHostResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'SIG';
+    protected static ?int $navigationSort = 20;
+
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->permissions()->contains('manage_sig_base_data');
+    }
 
     public static function getPluralLabel(): ?string
     {
@@ -29,7 +36,6 @@ class SigHostResource extends Resource
         return $form
             ->schema([
                 self::getNameField(),
-                self::getTelegramHandleField(),
                 self::getRegIdField(),
                 self::getDescriptionField(),
                 self::getHideField(),
@@ -41,7 +47,6 @@ class SigHostResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('reg_id')
-            ->defaultPaginationPageOption('25')
             ->filters([
                 //
             ])
@@ -112,16 +117,6 @@ class SigHostResource extends Resource
                 ->required()->maxLength(255);
     }
 
-    private static function getTelegramHandleField(): Forms\Components\Component
-    {
-        return
-            Forms\Components\TextInput::make('telegram_add')
-                ->label('Telegram Handle')
-                ->translateLabel()
-                ->prefix('@')
-                ->maxLength(255);
-    }
-
     private static function getRegIdField(): Forms\Components\Component
     {
         return
@@ -139,7 +134,7 @@ class SigHostResource extends Resource
     {
         return
             Forms\Components\Textarea::make('description')
-                ->label('Description')
+                ->label('Description (German)')
                 ->translateLabel()
                 ->required()
                 ->maxLength(65535)

@@ -59,6 +59,9 @@ class TimetableEntriesTable extends BaseWidget
                 ->getStateUsing(function (TimetableEntry $entry) {
                     return $entry->start->format('H:i') . ' - ' . $entry->end->format('H:i');
                 }),
+            Tables\Columns\TextColumn::make('sigLocation.name')
+                ->label('Location')
+                ->translateLabel(),
             Tables\Columns\TextColumn::make('timeslots_count')
                 ->label('Time slots')
                 ->translateLabel()

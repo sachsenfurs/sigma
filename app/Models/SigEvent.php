@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use App\Models\Traits\HasTimetableEntries;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
 
 class SigEvent extends Model
@@ -28,39 +29,49 @@ class SigEvent extends Model
         'updated_at'
     ];
 
+    protected $with = [
+        'timetableEntries'
+    ];
+
     public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(SigHost::class);
     }
 
-    public function sigLocation(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo(SigLocation::class);
+    public function timetableCout(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->timetableEntries()->count()
+        );
     }
 
-    public function sigTranslation(): \Illuminate\Database\Eloquent\Relations\HasOne {
-        return $this->hasOne(SigTranslation::class, "sig_event_id");
+    public function favoriteCount(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->timetableEntries->pluck("favorites")->flatten()->count()
+        );
     }
 
-    public function getTimetableCountAttribute() {
-        return $this->timetableEntries->count();
+    public function nameLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name
+        );
+    }
+    public function nameLocalizedOther(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "de" ? $this->name_en : $this->name
+        );
     }
 
-    public function getNameEnAttribute() {
-        return $this->sigTranslation->name ?? null;
+    public function descriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description
+        );
+    }
+    public function descriptionLocalizedOther(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "de" ? $this->description_en : $this->description
+        );
     }
 
-    public function getDescriptionEnAttribute() {
-        return $this->sigTranslation->description ?? null;
-    }
-
-    public function getNameLocalizedAttribute() {
-        return App::getLocale() == "en" ? ($this->name_en ?? $this->name) : $this->name;
-    }
-
-    public function getDescriptionLocalizedAttribute() {
-        return App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description;
-    }
-
-    public function isCompletelyPrivate() {
+    public function isCompletelyPrivate(): bool {
         $entries = $this->timetableEntries;
         return ($entries->count() == $entries->where("hide", 1)->count());
     }
@@ -70,8 +81,12 @@ class SigEvent extends Model
     }
 
     public function scopePublic($query) {
-        return $query->whereHas("timetableEntries", function($query) {
+        return $query->whereHas("timetableEntries", function ($query) {
             $query->where("hide", false);
         });
+    }
+
+    public function forms(): HasMany {
+        return $this->hasMany(SigForm::class);
     }
 }

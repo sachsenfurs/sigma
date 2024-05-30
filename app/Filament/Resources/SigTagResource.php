@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SigTagResource extends Resource
 {
@@ -17,6 +18,12 @@ class SigTagResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?int $navigationSort = 50;
+
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        return auth()->user()->permissions()->contains('manage_sig_base_data');
+    }
 
     public static function getPluralLabel(): ?string
     {
@@ -36,7 +43,6 @@ class SigTagResource extends Resource
     {
         return $table
             ->columns(self::getTableColumns())
-            ->defaultPaginationPageOption('25')
             ->filters([
                 //
             ])

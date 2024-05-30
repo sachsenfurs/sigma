@@ -12,7 +12,7 @@ class SigPlanner extends Page
 {
     protected static ?string $title = "Planner View";
 
-    protected static ?int $navigationSort = -10;
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
     protected static string $view = 'filament.resources.timetable-entry-resource.pages.sig-planner';
@@ -22,15 +22,17 @@ class SigPlanner extends Page
 
 //    protected ?string $heading = "";
 
+    public static function canAccess(): bool {
+        return auth()->user()->permissions()->contains('manage_sigs');
+    }
+
     protected function getHeaderWidgets(): array {
         return [
             SigPlannerWidget::class,
         ];
     }
 
-
     public function getMaxContentWidth(): MaxWidth|string|null {
         return MaxWidth::Full;
     }
-
 }

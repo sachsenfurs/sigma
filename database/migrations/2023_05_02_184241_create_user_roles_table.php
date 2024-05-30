@@ -20,12 +20,7 @@ return new class extends Migration
             $table->string('fore_color')->default('#333333');
             $table->string('border_color')->default('#666666');
             $table->string('background_color')->default('#E6E6E6');
-
-            $table->boolean('perm_manage_settings')->default(false);
-            $table->boolean('perm_manage_users')->default(false);
-            $table->boolean('perm_manage_events')->default(false);
-            $table->boolean('perm_manage_locations')->default(false);
-            $table->boolean('perm_manage_hosts')->default(false);
+            $table->string('registration_system_key')->nullable();
 
             $table->timestamps();
         });
