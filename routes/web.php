@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserNotificationChannelController;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Mime\MessageConverter;
 
 /*
 |--------------------------------------------------------------------------
@@ -199,7 +201,12 @@ Route::group(['middleware' => "auth"], function() {
     // Notifications
     Route::get("/notifications", [NotificationController::class, "index"])->name("notifications.index");
     
+    // Chats
+    Route::get("/chats", [ChatController::class, "index"])->name("chats.index");
+
     // Messages
-    Route::get("/messages", [MessageController::class, "index"])->name("messages.index");
+    Route::get("/chats/{chat_id}/", [MessageController::class, "get"])->name("chat.getMessages");
+    Route::post("/chats/{chat_id}/message/new", [MessageController::class, "index"])->name("chat.index");
+
 
 });

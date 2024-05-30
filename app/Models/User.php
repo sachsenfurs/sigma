@@ -105,4 +105,9 @@ class User extends Authenticatable implements FilamentUser
     public function unreadNotifications(): bool {
         return true;
     }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class);
+    }
 }

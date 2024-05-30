@@ -111,7 +111,7 @@
                             </a>
                         </li>
                         <li class="nav-link px-3 ">
-                            <a href="{{ route('messages.index') }}">
+                            <a href="{{ route('chats.index') }}">
                                 @if (auth()->user()->unreadChats())
                                     <i class="bi bi-mailbox2-flag text-danger jiggle"></i>
                                 @else
