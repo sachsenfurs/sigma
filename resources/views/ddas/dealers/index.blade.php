@@ -50,7 +50,7 @@
                                     </template>
                                 </div>
                                 <div class="card-text" x-text="dealer.info"></div>
-                                <div class="mt-3">
+                                <div class="mt-3" x-show="dealer.gallery_link">
                                     <a x-bind:href="dealer.gallery_link" target="_blank">
                                         <button type="button" class="btn btn-dark">
                                             <i class="bi bi-link-45deg"></i> <span x-text="dealer.gallery_link_name"></span>
@@ -62,8 +62,8 @@
                                 <div x-show="dealer.icon_file" class="align-self-start justify-content-end p-3">
                                     <img x-bind:src="dealer.icon_file" class="img-fluid" style="max-height: 10em" alt="">
                                 </div>
-                                <div x-show="dealer.location" class="mx-1 p-4 d-block">
-                                    <i class="bi bi-geo-alt"></i>
+                                <div class="mx-1 p-4 d-block">
+                                    <i x-show="dealer.location" class="bi bi-geo-alt"></i>
                                     <span x-text="dealer.location"></span>
                                 </div>
                             </div>
