@@ -18,28 +18,24 @@ class ArtshowPickupResource extends Resource
 
     protected static ?string $navigationGroup = 'Artshow';
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Art Show Pickups');
     }
 
     protected static ?int $navigationSort = 240;
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 //
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
                 //
@@ -57,15 +53,13 @@ class ArtshowPickupResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowPickups::route('/'),
             'create' => Pages\CreateArtshowPickup::route('/create'),

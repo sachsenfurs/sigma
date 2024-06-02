@@ -106,7 +106,7 @@ return [
         'string'  => ':attribute muss :size Zeichen lang sein.',
         'array'   => ':attribute muss genau :size Elemente haben.',
     ],
-    'string'               => ':attribute muss ein String sein.',
+    'string'               => ':attribute muss ausgefüllt sein.',
     'timezone'             => ':attribute muss eine gültige Zeitzone sein.',
     'unique'               => ':attribute ist schon vergeben.',
     'uploaded'             => ':attribute konnte nicht hochgeladen werden.',

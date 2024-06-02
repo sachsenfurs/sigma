@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\SetLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -60,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
+                SetLocale::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
@@ -69,14 +71,8 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->breadcrumbs(false)
+//            ->breadcrumbs(false)
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->bootUsing(function() use ($panel) {
-                // this has to be inside the "bootUsing" function since we are using database queries
-                // which are not always available when the AdminPanelProvider is registered!
-                // ServiceProviders otherwise are registered in an early state of the application, even in artisan commands!
-                FilamentFullCalendarProvider::registerPlugin($panel);
-            })
             ->userMenuItems([
                 MenuItem::make()
                         ->label(__("Leave Admin Interface"))

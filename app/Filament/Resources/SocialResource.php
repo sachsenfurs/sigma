@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SocialResource\Pages;
-use App\Models\Info\Enum\ShowMode;
+use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -18,7 +18,8 @@ class SocialResource extends Resource
 
     protected static ?string $navigationGroup = "System";
 
-    protected static ?int $navigationSort = 400;
+    protected static ?int $navigationSort = 1500;
+
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
     public static function can(string $action, ?Model $record = null): bool {

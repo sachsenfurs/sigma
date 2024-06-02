@@ -17,7 +17,7 @@ class DealerResource extends JsonResource
         return [
             'name' => $this->name,
             'gallery_link' => $this->gallery_link,
-            'gallery_link_name' => parse_url($this->gallery_link, PHP_URL_HOST),
+            'gallery_link_name' => $this->gallery_link_name,
             'icon_file' => $this->icon_file,
             'info' => $this->info_localized,
             'location' => $this->sigLocation->name,

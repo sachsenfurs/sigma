@@ -2,7 +2,7 @@
 
 namespace App\Models\Info;
 
-use App\Models\Info\Enum\ShowMode;
+use App\Models\Info\Enums\ShowMode;
 use App\Providers\Filament\AdminPanelProvider;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;

@@ -17,6 +17,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $navigationGroup = "System";
+
+    protected static ?int $navigationSort = 1100;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function can(string $action, ?Model $record = null): bool
