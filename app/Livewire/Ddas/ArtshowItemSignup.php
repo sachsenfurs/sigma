@@ -39,6 +39,7 @@ class ArtshowItemSignup extends Component
 
     public function newItem() {
         $this->form->reset();
+        $this->editArtshowItem = null;
         $this->showModal("itemModal");
     }
 
@@ -78,7 +79,7 @@ class ArtshowItemSignup extends Component
             if($this->editArtshowItem?->image AND Storage::fileExists($this->editArtshowItem->image))
                 Storage::delete($this->editArtshowItem->image);
 
-            $validated['image'] = $this->form->new_image->store('public');
+            $validated['image'] = basename($this->form->new_image->store('public'));
         }
 
         if($this->editArtshowItem) {

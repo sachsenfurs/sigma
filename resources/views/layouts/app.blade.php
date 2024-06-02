@@ -193,7 +193,12 @@
                                     <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
                                     <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
                                 </li>
+                                <li>
+                                    Icons by Zita
+                                </li>
                             </ul>
+
+
 
 
                         </div>

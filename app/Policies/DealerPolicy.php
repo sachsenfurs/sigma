@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Ddas\Dealer;
+use App\Models\Ddas\Enums\Approval;
 use App\Models\User;
 
 class DealerPolicy
@@ -20,7 +21,7 @@ class DealerPolicy
     }
 
     public function update(User $user, Dealer $dealer): bool {
-        return $user->permissions()->contains('manage_dealers_den') || $dealer->user_id === $user->id;
+        return $user->permissions()->contains('manage_dealers_den') || ($dealer->user_id === $user->id && $dealer->approval != Approval::APPROVED);
     }
 
     public function delete(User $user, Dealer $dealer): bool {

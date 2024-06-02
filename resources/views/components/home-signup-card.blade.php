@@ -14,7 +14,7 @@
                 <a href="{{ $href }}" class="card-link stretched-link"></a>
             </div>
             <div class="col-4 col-md-12 align-content-center p-2">
-                <img class="img-fluid rounded" src="{{ $img }}" alt="">
+                <img class="img-fluid rounded bg-light" src="{{ $img }}" alt="">
             </div>
             <div class="col-12 d-none d-md-block p-3">
                 {{ $slot }}

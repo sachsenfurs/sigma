@@ -32,6 +32,7 @@
 
     "Permission": "Berechtigung",
     "Permissions": "Berechtigungen",
+    "Please log in to access this page": "Bitte logg dich ein, um diese Seite aufzurufen",
 
     "Group keys": "Gruppenschlüssel",
     "Group keys from registration system (seperated with a comma)": "Gruppenschlüssel aus dem Registrierungssystem (getrennt mit Komma)",
@@ -327,11 +328,12 @@
     "Register as Host": "Als Veranstalter registrieren",
     "Translation": "Übersetzung",
     "Registered SIGs for :name": "Angemeldete SIGs für :name",
+    "This event is not listed in the schedule yet": "Dieses Event ist noch nicht im Programmplan",
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",
     "Art Show Item List": "Art Show Gegenstandsliste",
-    "Art Show Items": "Art Show Gegenstande",
+    "Art Show Items": "Art Show Gegenstände",
     "Art Show Artists": "Art Show Künstler",
     "Art Show Bids": "Art Show Gebote",
     "Art Show Pickups": "Art Show Abholungen",
@@ -351,6 +353,7 @@
     "Image": "Bild",
     "Submitted Items": "Eingereichte Werke",
     "Pending Approval": "Bestätigung ausstehend",
+    "Rejected": "Abgelehnt",
     "Select Artist Profile": "Künstlerprofil auswählen",
     "Up for auction": "Zur Versteigerung",
     "Additional Information": "Zusätzliche Informationen",
@@ -384,6 +387,11 @@
     "Website": "Webseite",
     "Phone": "Telefon",
     "Email": "E-Mail",
-    "Show All": "Zeige alle"
+    "Show All": "Zeige alle",
+    "Image (optional)": "Bild (optional)",
+    "Dealer Information (What do you offer, ..?)": "Dealer Informationen (Was bietest du an, ..?)",
+
+    "Leave Admin Interface": "Administration verlassen",
+    "Sign out": "Abmelden"
 
 }
