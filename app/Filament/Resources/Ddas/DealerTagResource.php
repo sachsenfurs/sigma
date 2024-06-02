@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Ddas;
 
 use App\Filament\Resources\Ddas\DealerTagResource\Pages;
+use App\Filament\Resources\Ddas\DealerTagResource\RelationManagers\DealerTagRelationManager;
+use App\Filament\Resources\DealerResource\RelationManagers\DealerTagResourceRelationManager;
 use App\Models\Ddas\DealerTag;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -21,33 +23,34 @@ class DealerTagResource extends Resource
 
     protected static ?int $navigationSort = 320;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_dealers_den');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Dealer Tags');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function getSchema() {
+        return [
+            Forms\Components\TextInput::make('name')
+                  ->label('Tag Name')
+                  ->required()
+                  ->maxLength(255),
+            Forms\Components\TextInput::make('name_en')
+                  ->label('Tag Name (EN)')
+                  ->required()
+                  ->maxLength(255),
+        ];
+    }
+    public static function form(Form $form): Form {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Tag Name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name_en')
-                    ->label('Tag Name (EN)')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+            ->schema(
+                self::getSchema()
+            );
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -70,15 +73,13 @@ class DealerTagResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
-            //
+            DealerTagRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListDealerTags::route('/'),
             'create' => Pages\CreateDealerTag::route('/create'),

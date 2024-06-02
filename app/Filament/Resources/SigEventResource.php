@@ -68,7 +68,7 @@ class SigEventResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        return "123"; // TODO: count "unconfirmed" SIGs
+        return SigEvent::whereApproved(false)->count() ?: null;
     }
 
     public static function getPages(): array

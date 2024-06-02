@@ -4,11 +4,15 @@
 
 /* Table styling for filament panel */
 .fi-ta-table .fi-ta-cell > div {
-    @apply py-2;
+    @apply py-1.5;
+}
+
+.fi-ta-image {
+    @apply p-0.5;
 }
 
 .fi-ta-table .fi-ta-text {
-    @apply py-0;
+    @apply py-1;
 }
 
 .fi-ta-table .fi-ta-icon {
@@ -16,4 +20,22 @@
 }
 .fc-col-header-cell-cushion {
     word-wrap: anywhere;
+}
+
+/*
+ * File Uploader
+ */
+.filepond--file-info-main {
+    display: none;
+}
+.filepond--file-info-sub {
+    opacity: 0.8;
+    font-size: 0.75em;
+}
+.filepond--image-preview-overlay {
+    opacity: 0.4 !important;
+}
+.filepond--action-edit-item {
+    right: 0.56em;
+    left: unset !important;
 }

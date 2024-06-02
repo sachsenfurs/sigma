@@ -2,6 +2,7 @@
 
 namespace App\Models\Ddas;
 
+use App\Models\Ddas\Enums\Approval;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ class ArtshowItem extends Model
         'auction' => "boolean",
         'sold' => "boolean",
         'paid' => "boolean",
+        'approval' => Approval::class,
     ];
 
     protected $with = [
@@ -31,6 +33,10 @@ class ArtshowItem extends Model
         $query->whereHas('artist.user', function(Builder $query) {
             $query->where('artshow_artists.user_id', auth()->user()?->id);
         });
+    }
+
+    public function scopeApproved(Builder $query) {
+        $query->where("approval", "=", Approval::APPROVED->value);
     }
 
     public function artist(): BelongsTo {

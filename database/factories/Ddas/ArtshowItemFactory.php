@@ -3,6 +3,7 @@
 namespace Database\Factories\Ddas;
 
 use App\Models\Ddas\ArtshowArtist;
+use App\Models\Ddas\Enums\Approval;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,6 +26,7 @@ class ArtshowItemFactory extends Factory
             'charity_percentage' => $this->faker->numberBetween(0, 100),
             'additional_info' => $this->faker->text(),
             'image' => $this->faker->imageUrl(),
+            'approval' => $this->faker->randomElement(Approval::class)->value,
             'artshow_artist_id' => ArtshowArtist::factory(),
         ];
     }

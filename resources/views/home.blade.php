@@ -4,7 +4,7 @@
 <div class="container">
     <h2>{{ __("Before the convention") }}</h2>
     <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch" style="max-width: 970px">
-        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.jpg" :href="route('sigs.create')">
+        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
             {{ __("Submit your Events, Workshops, Presentations and more!") }}
         </x-home-signup-card>
         <x-home-signup-card :title="__('Dealers Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">

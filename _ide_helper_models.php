@@ -77,7 +77,7 @@ namespace App\Models\Ddas{
  * @property string|null $additional_info only visible for adminstration/auctioner
  * @property string|null $image
  * @property bool $auction
- * @property int $approved
+ * @property \App\Models\Ddas\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property bool $sold
  * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -87,13 +87,14 @@ namespace App\Models\Ddas{
  * @property-read int|null $artshow_bids_count
  * @property-read \App\Models\Ddas\ArtshowPickup|null $artshowPickup
  * @property-read mixed $image_url
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem approved()
  * @method static \Database\Factories\Ddas\ArtshowItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem own()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem query()
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAdditionalInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereArtshowArtistId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereAuction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereCharityPercentage($value)
@@ -146,12 +147,14 @@ namespace App\Models\Ddas{
  * @property string|null $info
  * @property string|null $info_en
  * @property string|null $gallery_link
- * @property string|null $contact
+ * @property string|null $additional_info
  * @property string|null $icon_file
- * @property int $approved
+ * @property \App\Models\Ddas\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property int|null $sig_location_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $gallery_link_name
+ * @property-read mixed $icon_file_url
  * @property-read mixed $info_localized
  * @property-read \App\Models\SigLocation|null $sigLocation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\DealerTag> $tags
@@ -162,8 +165,8 @@ namespace App\Models\Ddas{
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer query()
- * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereApproved($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereContact($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereAdditionalInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereGalleryLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dealer whereIconFile($value)
@@ -185,8 +188,8 @@ namespace App\Models\Ddas{
  * @property int $id
  * @property string $name
  * @property string|null $name_en
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealer
- * @property-read int|null $dealer_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
+ * @property-read int|null $dealers_count
  * @property-read mixed $name_localized
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealerTag newQuery()
@@ -211,11 +214,13 @@ namespace App\Models\Info{
  * @property string|null $link_name
  * @property string|null $link_name_en
  * @property string|null $icon
- * @property string|null $qr
- * @property string|null $qr_en
+ * @property string|null $image
+ * @property string|null $image_en
  * @property array $show_on
  * @property int $order
  * @property-read mixed $description_localized
+ * @property-read mixed $image_url
+ * @property-read mixed $image_url_en
  * @property-read mixed $link_localized
  * @property-read mixed $link_name_localized
  * @method static \Illuminate\Database\Eloquent\Builder|Social footerIcon()
@@ -228,13 +233,13 @@ namespace App\Models\Info{
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Social whereImageEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereLinkNameEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Social whereQr($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Social whereQrEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Social whereShowOn($value)
  */
 	class Social extends \Eloquent {}
@@ -613,6 +618,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigLocation used()
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigLocation whereEssential($value)
