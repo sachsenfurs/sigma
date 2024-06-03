@@ -78,9 +78,16 @@ class SigEvent extends Model
             get: fn() => App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description
         );
     }
+
     public function descriptionLocalizedOther(): Attribute {
         return Attribute::make(
             get: fn() => App::getLocale() == "de" ? $this->description_en : $this->description
+        );
+    }
+
+    public function durationHours(): Attribute {
+        return Attribute::make(
+            get: fn() => number_format($this->duration / 60, 1)
         );
     }
 

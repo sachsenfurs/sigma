@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Approval;
 use App\Models\SigHost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,6 +25,8 @@ class SigEventFactory extends Factory
             'name_en' => $this->faker->text(25),
             'sig_host_id' => SigHost::all()->random(),
             'languages' => $this->faker->randomElement([["de"], ["en"], ["de","en"]]),
+            'duration' => $this->faker->numberBetween(1,10) * 30,
+            'approval' => $this->faker->randomElement(Approval::cases()),
             'description' => $this->faker->realText(),
             'description_en' => $this->faker->realText(),
             'additional_info' => $this->faker->realText(),

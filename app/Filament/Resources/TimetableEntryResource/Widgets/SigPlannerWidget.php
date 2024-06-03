@@ -77,13 +77,19 @@ class SigPlannerWidget extends FullCalendarWidget
             CreateAction::make()
                 ->mountUsing(function(Form $form, array $arguments) {
                     $form->fill([
-                        'start' => $arguments['start'] ?? null,
-                        'end' => $arguments['end'] ?? null,
+                        'entries' => [
+                            [
+                                'start' => $arguments['start'] ?? null,
+                                'end' => $arguments['end'] ?? null,
+                            ]
+                        ],
                         'sig_location_id' => $arguments['resource']['id'] ?? null,
                     ]);
                 })
+                ->mutateFormDataUsing(fn($data) => TimetableEntryResource\Pages\CreateTimetableEntry::mutateData($data))
                 ->modalFooterActionsAlignment(Alignment::End)
                 ->createAnother(false)
+                ->form(TimetableEntryResource\Pages\CreateTimetableEntry::getSchema())
             ,
         ];
     }

@@ -175,8 +175,8 @@
     "If the form is closed, no new forms can be submitted and existing forms can no longer be edited.": "Wenn das Formular geschlossen wird, können keine neuen Formulare eingereicht werden und bestehende Formulare können nicht mehr editiert werden.",
     "This form has been marked as \"closed\". This means that no new submissions and no further edits are possible.": "Dieses Formular wurde als \"geschlossen\" markiert. Somit sind keine neuen Einreichungen und keine weiteren Bearbeitungen mehr möglich.",
     "Approve or reject form": "Formular genehmigen oder ablehnen",
-    "Approval": "Genehmigung",
-    "Approve": "Genehmigen",
+    "Approval": "Freigabe",
+    "Approve": "Akzeptieren",
     "Reject": "Ablehnen",
     "Rejection reason": "Ablehnungsgrund",
     "This form has not been approved yet.": "Dieses Formular wurde noch nicht genehmigt.",
@@ -194,6 +194,7 @@
     "Create Entry": "Eintrag erstellen",
     "No Time Assigned": "Keine Zeit zugewiesen",
     "No Location Assigned": "Keine Location zugewiesen",
+    "Timetable Entry": "Programmplaneintrag",
 
     "Edit Time Slot": "Timeslot bearbeiten",
     "Schedule Entry": "Kalendereintrag",
