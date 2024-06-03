@@ -19,4 +19,9 @@ class ListTimetableEntries extends ListRecords
         ];
     }
 
+    protected function getHeaderWidgets(): array {
+        return [
+            TimetableEntryResource\Widgets\UnprocessedSigEvents::class,
+        ];
+    }
 }

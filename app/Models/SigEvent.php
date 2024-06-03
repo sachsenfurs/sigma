@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Approval;
 use App\Models\Traits\HasTimetableEntries;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +17,7 @@ class SigEvent extends Model
 
     protected $casts = [
         'languages' => 'array',
+        'approval' => Approval::class
     ];
 
     protected $guarded = [];
@@ -33,11 +36,21 @@ class SigEvent extends Model
         'timetableEntries'
     ];
 
+    public function scopeUnprocessed(Builder $query) {
+        $query->withCount("timetableEntries")->having("timetable_entries_count", 0);
+    }
+
+    public function approved(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->approval == Approval::APPROVED
+        );
+    }
+
     public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(SigHost::class);
     }
 
-    public function timetableCout(): Attribute {
+    public function timetableCount(): Attribute {
         return Attribute::make(
             get: fn() => $this->timetableEntries()->count()
         );

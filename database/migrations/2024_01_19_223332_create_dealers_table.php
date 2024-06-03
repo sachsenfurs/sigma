@@ -34,7 +34,7 @@ return new class extends Migration
             // Icon fürs Conbook (relativer Pfad, local storage)
             $table->string("icon_file")->nullable();
 
-            $table->tinyInteger("approval")->default(\App\Models\Ddas\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
+            $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
 
             // in welchem Raum sitzt der Künstler später?
             $table->foreignId("sig_location_id")->nullable()->constrained()->nullOnDelete();

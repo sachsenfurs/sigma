@@ -41,7 +41,7 @@ return new class extends Migration
             $table->boolean('auction')->default(true);
 
             // Status, ob es nach der Anmeldung "angenommen" wurde
-            $table->tinyInteger("approval")->default(\App\Models\Ddas\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
+            $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
 
             // Erfolgreich verkauft?
             $table->boolean('sold')->default(false);

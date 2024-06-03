@@ -46,7 +46,8 @@ class TimetableEntriesRelationManager extends RelationManager
             Tables\Actions\CreateAction::make()
                 ->form(TimetableEntryResource::getSchema())
                 ->fillForm(fn() => [
-                    'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null ,
+                    'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null,
+                    'sig_event_id' => ($this->ownerRecord instanceof  SigEvent) ? $this->ownerRecord->id : null,
                     'start' => now()->addHour()->setMinutes(0),
                     'end' => now()->addHours(2)->setMinutes(0),
                 ])

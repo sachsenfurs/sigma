@@ -2,7 +2,7 @@
 
 namespace Database\Factories\Ddas;
 
-use App\Models\Ddas\Enums\Approval;
+use App\Enums\Approval;
 use App\Models\SigLocation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

@@ -49,11 +49,20 @@
                                     {{ $item->name }}
                                 </div>
                                 <div class="col text-end">
-                                        <span @class(['badge text-uppercase', 'bg-success' => ($item->sold OR $item->approved), 'bg-warning text-black' => !$item->approved])>
+                                        <span @class([
+                                            'badge text-uppercase',
+                                            'bg-success' => $item->sold,
+                                            match($item->approval) {
+                                                \App\Enums\Approval::PENDING => 'bg-warning text-black',
+                                                \App\Enums\Approval::APPROVED => 'bg-success',
+                                                \App\Enums\Approval::REJECTED => 'bg-danger',
+                                                default => "",
+                                            }
+                                        ])>
                                             @if($item->sold)
                                                 {{ __("Sold") }}
                                             @else
-                                                {{ $item->approved ? __("Approved") : __("Pending Approval") }}
+                                                {{ $item->approval->getLabel() }}
                                             @endif
                                         </span>
                                     @canany(['edit', 'delete'], $item)

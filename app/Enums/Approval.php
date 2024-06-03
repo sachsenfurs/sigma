@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Ddas\Enums;
+namespace App\Enums;
 
 use App\Enums\Attributes\Color;
 use App\Enums\Attributes\Icon;

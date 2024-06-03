@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class UserRoleResource extends Resource
 {
@@ -41,11 +42,22 @@ class UserRoleResource extends Resource
     {
         return $form
             ->schema([
-                self::getTitleField(),
-                self::getRegistrationSystemKeyField(),
-                self::getForegroundColorField(),
-                self::getBorderColorField(),
-                self::getBackgroundColorField(),
+                Forms\Components\Fieldset::make("details")
+                    ->label("User Details")
+                    ->translateLabel()
+                    ->schema([
+                        self::getTitleField(),
+                        self::getRegistrationSystemKeyField(),
+                    ]),
+                Forms\Components\Fieldset::make("colors")
+                    ->label("Colors")
+                    ->translateLabel()
+                    ->columns(3)
+                    ->schema([
+                        self::getForegroundColorField(),
+                        self::getBorderColorField(),
+                        self::getBackgroundColorField(),
+                    ]),
                 self::getPermissionListField(),
             ]);
     }
@@ -92,7 +104,13 @@ class UserRoleResource extends Resource
                 ->label('User Count')
                 ->translateLabel()
                 ->counts('users')
-                ->sortable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make("registration_system_key")
+                ->label("Reg Group ID")
+//                ->formatStateUsing(fn(?string $state) => explode(",", $state))
+                ->badge()
+                ->separator()
+                ->translateLabel(),
         ];
     }
 

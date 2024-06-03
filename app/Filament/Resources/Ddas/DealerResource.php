@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Enums\Approval;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
-use App\Models\Ddas\Enums\Approval;
-use App\Models\SigLocation;
-use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class DealerResource extends Resource
 {
@@ -35,6 +34,9 @@ class DealerResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
+        if(!Route::is("filament.*"))
+            return null;
+
         return Dealer::whereApproval(Approval::PENDING)->count() ?: null;
     }
 

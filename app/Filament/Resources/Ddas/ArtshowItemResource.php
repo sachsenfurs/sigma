@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Enums\Approval;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
-use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers;
 use App\Models\Ddas\ArtshowItem;
-use App\Models\Ddas\Enums\Approval;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class ArtshowItemResource extends Resource
 {
@@ -23,7 +23,6 @@ class ArtshowItemResource extends Resource
 
     protected static ?int $navigationSort = 210;
 
-
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
     }
@@ -33,6 +32,9 @@ class ArtshowItemResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
+        if(!Route::is("filament.*"))
+            return null;
+
         return ArtshowItem::whereApproval(Approval::PENDING)->count() ?: null;
     }
 

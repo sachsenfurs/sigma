@@ -65,7 +65,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $artshow_artist_id
@@ -77,7 +77,7 @@ namespace App\Models\Ddas{
  * @property string|null $additional_info only visible for adminstration/auctioner
  * @property string|null $image
  * @property bool $auction
- * @property \App\Models\Ddas\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
+ * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property bool $sold
  * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -114,7 +114,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -139,7 +139,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -149,7 +149,7 @@ namespace App\Models\Ddas{
  * @property string|null $gallery_link
  * @property string|null $additional_info
  * @property string|null $icon_file
- * @property \App\Models\Ddas\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
+ * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property int|null $sig_location_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -183,7 +183,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -204,7 +204,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Info{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $description
@@ -247,7 +247,7 @@ namespace App\Models\Info{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $lassie_id
@@ -281,7 +281,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @method static where(string $string, mixed $permissionName)
  * @method static create(array $array)
@@ -306,7 +306,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $text_de
@@ -334,7 +334,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $channel_identifier
@@ -353,7 +353,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property-read \App\Models\Post|null $post
  * @property-read \App\Models\PostChannel|null $postChannel
@@ -366,7 +366,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -389,7 +389,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -447,7 +447,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -471,7 +471,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $sig_form_id
@@ -500,7 +500,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $slug
@@ -535,7 +535,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $sig_form_id
@@ -558,7 +558,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -590,7 +590,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -640,7 +640,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -671,7 +671,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name Internal name, used for internal automation (eg. 'signup')
@@ -695,7 +695,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $timetable_entry_id
@@ -731,7 +731,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -762,7 +762,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $sig_event_id
@@ -815,7 +815,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -879,7 +879,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -910,7 +910,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id

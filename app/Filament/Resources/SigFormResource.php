@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class SigFormResource extends Resource
@@ -41,6 +42,9 @@ class SigFormResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
+        if(!Route::is("filament.*"))
+            return null;
+
         return SigFilledForm::where('approved', 0)->count() ?: null;
     }
 

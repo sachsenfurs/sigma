@@ -10,9 +10,9 @@
                                 <span @class([
                                     'badge',
                                     match($dealer->approval) {
-                                        \App\Models\Ddas\Enums\Approval::PENDING => 'bg-warning',
-                                        \App\Models\Ddas\Enums\Approval::APPROVED => 'bg-success',
-                                        \App\Models\Ddas\Enums\Approval::REJECTED => 'bg-danger',
+                                        \App\Enums\Approval::PENDING => 'bg-warning text-black',
+                                        \App\Enums\Approval::APPROVED => 'bg-success',
+                                        \App\Enums\Approval::REJECTED => 'bg-danger',
                                         default => "",
                                     }
                                 ])>

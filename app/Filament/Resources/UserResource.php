@@ -23,35 +23,34 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_users');
     }
 
-    public static function getLabel(): ?string
-    {
+    public static function getLabel(): ?string {
         return __('User');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Users');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
-                self::getNameField(),
-                self::getRegIdField(),
-                self::getEmailField(),
-                self::getPasswordField(),
-                self::getTelegramUserIdField(),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->helperText("This field is overwritten with every user logon")
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('reg_id')
+                    ->helperText("This field is overwritten with every user logon")
+                    ->translateLabel()
+                    ->numeric(),
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->filters([
@@ -67,16 +66,13 @@ class UserResource extends Resource
             ]);
     }
 
-    public static function getTableColumns(): array
-    {
+    public static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('reg_id')
                 ->numeric()
+                ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('name')
-                ->sortable()
-                ->searchable(),
-            Tables\Columns\TextColumn::make('email')
                 ->sortable()
                 ->searchable(),
             Tables\Columns\TextColumn::make('roles.title')
@@ -94,15 +90,16 @@ class UserResource extends Resource
         ];
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             RelationManagers\RoleRelationManager::class,
+            RelationManagers\ArtistsRelationManager::class,
+            RelationManagers\DealersRelationManager::class,
+            RelationManagers\SigHostsRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
@@ -110,44 +107,11 @@ class UserResource extends Resource
         ];
     }
 
-    private static function getRoleFilter(): Tables\Filters\SelectFilter
-    {
+    private static function getRoleFilter(): Tables\Filters\SelectFilter {
         return Tables\Filters\SelectFilter::make('roles')
             ->label('User Role')
             ->translateLabel()
             ->relationship('roles', 'title', fn (Builder $query) => $query->orderBy('title'));
     }
 
-    private static function getNameField(): Forms\Components\Component
-    {
-        return Forms\Components\TextInput::make('name')
-            ->required()
-            ->maxLength(255);
-    }
-    private static function getRegIdField(): Forms\Components\Component
-    {
-        return Forms\Components\TextInput::make('reg_id')
-            ->numeric();
-    }
-
-    private static function getEmailField(): Forms\Components\Component
-    {
-        return Forms\Components\TextInput::make('email')
-            ->email()
-            ->maxLength(255);
-    }
-
-    private static function getPasswordField(): Forms\Components\Component
-    {
-        return Forms\Components\TextInput::make('password')
-            ->password()
-            ->maxLength(255);
-    }
-
-    private static function getTelegramUserIdField()
-    {
-        return Forms\Components\TextInput::make('telegram_user_id')
-            ->tel()
-            ->maxLength(255);
-    }
 }

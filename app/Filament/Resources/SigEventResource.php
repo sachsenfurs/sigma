@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigEventResource\Pages;
-use App\Filament\Resources\SigEventResource\Widgets\TimetableEntriesTable;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -15,6 +14,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 
 class SigEventResource extends Resource
 {
@@ -68,7 +69,10 @@ class SigEventResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        return SigEvent::whereApproved(false)->count() ?: null;
+        if(!Route::is("filament.*"))
+            return null;
+
+        return Cache::remember("sigevent", 1, fn() => SigEvent::whereApproved(false)->count() ?: false);
     }
 
     public static function getPages(): array
@@ -83,13 +87,6 @@ class SigEventResource extends Resource
     public static function getRelations(): array {
         return [
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
-        ];
-    }
-
-    public static function getWidgets(): array
-    {
-        return [
-            TimetableEntriesTable::class,
         ];
     }
 

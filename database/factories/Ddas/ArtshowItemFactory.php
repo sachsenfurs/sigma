@@ -2,8 +2,8 @@
 
 namespace Database\Factories\Ddas;
 
+use App\Enums\Approval;
 use App\Models\Ddas\ArtshowArtist;
-use App\Models\Ddas\Enums\Approval;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

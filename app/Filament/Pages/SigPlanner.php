@@ -4,12 +4,11 @@ namespace App\Filament\Pages;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
-use App\Providers\Filament\AdminPanelProvider;
+use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
 use App\Providers\Filament\FilamentFullCalendarProvider;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Panel;
 use Filament\Support\Enums\MaxWidth;
 
 class SigPlanner extends Page
@@ -24,7 +23,6 @@ class SigPlanner extends Page
 
     protected static ?string $cluster = SigPlanning::class;
 
-
     public function __construct() {
         // registering here instead of AdminPanelProvider because otherwise all fullcalendar-related queries get executed on every other page as well...
         FilamentFullCalendarProvider::registerPlugin(Filament::getPanel('admin'));
@@ -36,6 +34,7 @@ class SigPlanner extends Page
 
     protected function getHeaderWidgets(): array {
         return [
+            UnprocessedSigEvents::class,
             SigPlannerWidget::class,
         ];
     }

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\Approval;
 use App\Models\Ddas\Dealer;
-use App\Models\Ddas\Enums\Approval;
 use App\Models\User;
 
 class DealerPolicy
