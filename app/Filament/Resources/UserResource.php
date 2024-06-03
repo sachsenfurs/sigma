@@ -21,7 +21,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1100;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_users');

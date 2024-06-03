@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sig;
 
+use App\Enums\Approval;
 use App\Http\Controllers\Controller;
 use App\Livewire\Sig\Forms\SigHostForm;
 use App\Models\SigEvent;
@@ -38,7 +39,6 @@ class SigEventController extends Controller
         ]);
 
         $sigEvent = new SigEvent($validated);
-        $sigEvent->approved = 0;
         $sigEvent->save();
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));

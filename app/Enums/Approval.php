@@ -3,6 +3,7 @@
 namespace App\Enums;
 
 use App\Enums\Attributes\Color;
+use App\Enums\Attributes\Style;
 use App\Enums\Attributes\Icon;
 use App\Enums\Attributes\Name;
 use App\Enums\Traits\AttributableEnum;
@@ -18,16 +19,19 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
     #[Name('Pending Approval')]
     #[Color(FilamentColor::Yellow)]
     #[Icon('heroicon-o-question-mark-circle')]
+    #[Style('bg-warning text-dark')]
     case PENDING = 0;
 
     #[Name('Approved')]
     #[Color(FilamentColor::Green)]
     #[Icon('heroicon-o-check-circle')]
+    #[Style('bg-success')]
     case APPROVED = 1;
 
     #[Name('Rejected')]
     #[Color(FilamentColor::Red)]
     #[Icon('heroicon-o-x-circle')]
+    #[Style('bg-danger')]
     case REJECTED = 2;
 
     /**

@@ -20,17 +20,15 @@ class SigTagResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?int $navigationSort = 50;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sig_base_data');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Tags');
     }
-    public static function form(Form $form): Form
-    {
+
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 self::getNameField(),
@@ -39,8 +37,7 @@ class SigTagResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->filters([
@@ -56,15 +53,13 @@ class SigTagResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             RelationManagers\SigTagsRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListSigTags::route('/'),
             'create' => Pages\CreateSigTag::route('/create'),
@@ -72,8 +67,7 @@ class SigTagResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
-    {
+    private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('name')
                 ->label('Name')
@@ -81,20 +75,19 @@ class SigTagResource extends Resource
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('description')
-                ->label('German')
+                ->label('Description')
                 ->translateLabel()
                 ->searchable()
                 ->limit(50),
             Tables\Columns\TextColumn::make('description_en')
-                ->label('English')
+                ->label('Description (English)')
                 ->translateLabel()
                 ->searchable()
                 ->limit(50),
         ];
     }
 
-    private static function getNameField(): Forms\Components\Component
-    {
+    private static function getNameField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('name')
             ->label('Name')
             ->translateLabel()
@@ -103,8 +96,7 @@ class SigTagResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getDescriptionField(): Forms\Components\Component
-    {
+    private static function getDescriptionField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description')
             ->label('German')
             ->translateLabel()
@@ -112,8 +104,7 @@ class SigTagResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getDescriptionENField(): Forms\Components\Component
-    {
+    private static function getDescriptionENField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description_en')
             ->label('English')
             ->translateLabel()

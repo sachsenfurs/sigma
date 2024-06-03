@@ -17,7 +17,7 @@ class ArtshowItemResource extends Resource
 {
     protected static ?string $model = ArtshowItem::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     protected static ?string $navigationGroup = 'Artshow';
 
@@ -32,7 +32,7 @@ class ArtshowItemResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        if(!Route::is("filament.*"))
+        if(!Route::is("filament.*") AND !Route::is("livewire.*"))
             return null;
 
         return ArtshowItem::whereApproval(Approval::PENDING)->count() ?: null;

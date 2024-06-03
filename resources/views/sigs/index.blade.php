@@ -26,13 +26,9 @@
                                 <div class="row w-100">
                                     @if(!$sig->approved)
                                         <div class="col-12 text-start pb-2">
-                                            <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', 'bg-success' => $sig->approved, 'bg-warning text-dark' => !$sig->approved])
+                                            <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', $sig->approval->style()])
                                                   style="font-size:0.75rem">
-                                                @if($sig->approved)
-                                                    {{ __("Accepted") }}
-                                                @else
-                                                    {{ __("Pending Approval") }}
-                                                @endif
+                                                {{ $sig->approval->name() }}
                                             </span>
                                         </div>
                                     @endif

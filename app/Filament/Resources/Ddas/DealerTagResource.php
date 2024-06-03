@@ -17,7 +17,7 @@ class DealerTagResource extends Resource
 {
     protected static ?string $model = DealerTag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $navigationGroup = 'Dealer\'s Den';
 

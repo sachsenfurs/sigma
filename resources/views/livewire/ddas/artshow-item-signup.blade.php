@@ -52,17 +52,12 @@
                                         <span @class([
                                             'badge text-uppercase',
                                             'bg-success' => $item->sold,
-                                            match($item->approval) {
-                                                \App\Enums\Approval::PENDING => 'bg-warning text-black',
-                                                \App\Enums\Approval::APPROVED => 'bg-success',
-                                                \App\Enums\Approval::REJECTED => 'bg-danger',
-                                                default => "",
-                                            }
+                                            $item->approval->style(),
                                         ])>
                                             @if($item->sold)
                                                 {{ __("Sold") }}
                                             @else
-                                                {{ $item->approval->getLabel() }}
+                                                {{ $item->approval->name() }}
                                             @endif
                                         </span>
                                     @canany(['edit', 'delete'], $item)

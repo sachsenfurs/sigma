@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Approval;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
 use App\Models\SigHost;
@@ -69,10 +70,10 @@ class SigEventResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        if(!Route::is("filament.*"))
+        if(!Route::is("filament.*") AND !Route::is("livewire.*"))
             return null;
 
-        return Cache::remember("sigevent", 1, fn() => SigEvent::whereApproved(false)->count() ?: false);
+        return SigEvent::whereApproval(Approval::PENDING)->count() ?: false;
     }
 
     public static function getPages(): array

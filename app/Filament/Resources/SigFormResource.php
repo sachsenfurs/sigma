@@ -23,7 +23,7 @@ class SigFormResource extends Resource
 {
     protected static ?string $model = SigForm::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'SIG';
 

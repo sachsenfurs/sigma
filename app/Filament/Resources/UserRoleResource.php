@@ -21,7 +21,7 @@ class UserRoleResource extends Resource
 
     protected static ?int $navigationSort = 1200;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
     public static function can(string $action, ?Model $record = null): bool
     {

@@ -65,7 +65,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $artshow_artist_id
@@ -82,6 +82,7 @@ namespace App\Models\Ddas{
  * @property bool $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $approved
  * @property-read \App\Models\Ddas\ArtshowArtist $artist
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $artshowBids
  * @property-read int|null $artshow_bids_count
@@ -114,7 +115,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -139,7 +140,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -183,7 +184,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -204,7 +205,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Info{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $description
@@ -247,7 +248,7 @@ namespace App\Models\Info{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $lassie_id
@@ -281,7 +282,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @method static where(string $string, mixed $permissionName)
  * @method static create(array $array)
@@ -306,7 +307,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $text_de
@@ -334,7 +335,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $channel_identifier
@@ -353,7 +354,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property-read \App\Models\Post|null $post
  * @property-read \App\Models\PostChannel|null $postChannel
@@ -366,7 +367,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -389,7 +390,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -399,7 +400,7 @@ namespace App\Models{
  * @property string|null $description
  * @property string|null $description_en
  * @property int $duration
- * @property int $approved
+ * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property string|null $additional_info
  * @property string|null $requirements
  * @property int $reg_possible
@@ -407,6 +408,7 @@ namespace App\Models{
  * @property int $max_group_attendees_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $approved
  * @property-read mixed $description_localized
  * @property-read mixed $description_localized_other
  * @property-read mixed $favorite_count
@@ -417,7 +419,7 @@ namespace App\Models{
  * @property-read \App\Models\SigHost|null $sigHost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
- * @property-read mixed $timetable_cout
+ * @property-read mixed $timetable_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
  * @method static \Database\Factories\SigEventFactory factory($count = null, $state = [])
@@ -425,8 +427,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent unprocessed()
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereAdditionalInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereDescriptionEn($value)
@@ -447,7 +450,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -471,7 +474,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $sig_form_id
@@ -500,7 +503,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $slug
@@ -535,7 +538,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $sig_form_id
@@ -558,7 +561,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -590,7 +593,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -640,7 +643,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -671,7 +674,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name Internal name, used for internal automation (eg. 'signup')
@@ -695,7 +698,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $timetable_entry_id
@@ -731,7 +734,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -762,7 +765,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $sig_event_id
@@ -815,7 +818,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -879,7 +882,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $title
@@ -910,7 +913,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id

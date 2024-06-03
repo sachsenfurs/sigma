@@ -19,7 +19,7 @@ class DealerResource extends Resource
 {
     protected static ?string $model = Dealer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $navigationGroup = "Dealer's Den";
 
@@ -34,7 +34,7 @@ class DealerResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        if(!Route::is("filament.*"))
+        if(!Route::is("filament.*") AND !Route::is("livewire.*"))
             return null;
 
         return Dealer::whereApproval(Approval::PENDING)->count() ?: null;
