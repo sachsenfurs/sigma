@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\SigEventResource\Widgets\NewSigEventsWidget;
+use App\Filament\Resources\SigEventResource\Widgets\OverviewStatsWidget;
 use App\Http\Middleware\SetLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                NewSigEventsWidget::class,
+                OverviewStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

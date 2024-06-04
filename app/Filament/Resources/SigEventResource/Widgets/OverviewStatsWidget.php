@@ -12,7 +12,7 @@ use App\Models\SigEvent;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class NewSigEventsWidget extends BaseWidget
+class OverviewStatsWidget extends BaseWidget
 {
     protected function getStats(): array {
         return [
