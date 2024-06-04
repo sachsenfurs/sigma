@@ -6,6 +6,7 @@ use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Livewire\Attributes\On;
 
 class ListTimetableEntries extends ListRecords
 {
@@ -23,5 +24,10 @@ class ListTimetableEntries extends ListRecords
         return [
             TimetableEntryResource\Widgets\UnprocessedSigEvents::class,
         ];
+    }
+
+    #[On('refresh')]
+    public function refresh() {
+        $this->loadTable();
     }
 }

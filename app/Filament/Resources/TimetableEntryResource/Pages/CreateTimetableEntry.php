@@ -4,18 +4,20 @@ namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
+use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
 use App\Models\TimetableEntry;
 use Carbon\Carbon;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Facades\Log;
+use Filament\Support\Enums\Alignment;
+use Illuminate\Database\Eloquent\Model;
+use Saade\FilamentFullCalendar\Actions\CreateAction;
 
 class CreateTimetableEntry extends CreateRecord
 {
@@ -31,7 +33,28 @@ class CreateTimetableEntry extends CreateRecord
         return $form->schema(self::getSchema());
     }
 
+    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): CreateAction|\Filament\Tables\Actions\CreateAction {
+        return $action
+            ->model(TimetableEntry::class)
+            ->fillForm(function(array $arguments, ?Model $record) {
+                return [
+                   'sig_event_id' => $record?->id ?? $arguments['sig_location_id'] ?? null,
+                   'sig_location_id' => $arguments['resource']['id'] ?? null,
+                   'entries' => [
+                       [
+                           'start' => $model?->start ?? $arguments['start'] ?? now()->addHour()->setMinute(0)->setSecond(0),
+                           'end' => $model?->end ?? $arguments['end'] ?? now()->addHours(3)->setMinute(0)->setSecond(0),
+                       ]
+                   ],
+                ];
+            })
+            ->mutateFormDataUsing(fn($data) => CreateTimetableEntry::mutateData($data))
+            ->modalFooterActionsAlignment(Alignment::End)
+            ->createAnother(false)
+            ->form(CreateTimetableEntry::getSchema())
+            ->after(fn($livewire) => ($livewire->dispatch("refresh")));
 
+}
     public static function mutateData(array $data): array {
         // read "entries" and remove them from $data array
         // entries => Filament Repeater for multiple event creation at once
@@ -68,12 +91,12 @@ class CreateTimetableEntry extends CreateRecord
             TimetableEntryResource::getSigLocationField(),
             Repeater::make("entries")
                 ->columns(2)
+                ->reorderable(false)
                 ->schema([
                     DateTimePicker::make('start')
                         ->label('Beginning')
                         ->translateLabel()
                         ->format('Y-m-d\TH:i')
-                        ->default(now()->addHour()->setMinutes(0)->setSeconds(0))
                         ->seconds(false)
                         ->columns(1)
                         ->required(),
@@ -81,12 +104,12 @@ class CreateTimetableEntry extends CreateRecord
                         ->label('End')
                         ->translateLabel()
                         ->format('Y-m-d\TH:i')
-                        ->default(now()->addHours(3)->setMinutes(0)->setSeconds(0))
                         ->seconds(false)
                         ->columns(1)
                         ->required(),
                 ])
                 ->addAction(function(Action $action) {
+                    // duplicate last Repeater entry and add one day for bulk event creation
                     // TODO: das muss doch auch einfacher gehen, oder...?
                     $action->after(function(Set $set, Get $get, $state) {
                         array_pop($state);
@@ -100,10 +123,6 @@ class CreateTimetableEntry extends CreateRecord
                         $set('entries', $state);
                     });
                 })
-//                ->dehydrated(false)
-//                ->dehydrateStateUsing(function($state) {
-//                    return end($state);
-//                })
                 ->columnSpan("full")
                 ->defaultItems(1),
                 Fieldset::make("Event Settings")
@@ -118,9 +137,7 @@ class CreateTimetableEntry extends CreateRecord
                     ->schema([
                         TimetableEntryResource::getSendUpdateField(),
                     ])
-                    ->hidden(fn(string $operation): bool => $operation == "create")
-            ,
-
+                    ->hidden(fn(string $operation): bool => $operation == "create"),
         ];
 }
 }

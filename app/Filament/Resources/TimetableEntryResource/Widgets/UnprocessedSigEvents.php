@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
 use App\Filament\Resources\SigEventResource;
-use App\Filament\Resources\TimetableEntryResource;
+use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
-use App\Models\TimetableEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Actions\Action;
@@ -19,7 +18,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class UnprocessedSigEvents extends TableWidget
 {
-//    protected static string $view = 'filament.resources.timetable-entry-resource.widgets.unprocessed-sig-events';
     protected int | string | array $columnSpan = "full";
 
     /**
@@ -47,21 +45,7 @@ class UnprocessedSigEvents extends TableWidget
                     ->badge(),
             ])
             ->actions([
-                CreateAction::make()
-                    ->model(TimetableEntry::class)
-                    ->modelLabel(__("Timetable Entry"))
-                    ->translateLabel()
-                    ->form(
-                        TimetableEntryResource\Pages\CreateTimetableEntry::getSchema()
-                    )
-                    ->createAnother(false)
-                    ->fillForm(function(Model $record) {
-                        return [
-                            'sig_event_id' => $record->id,
-                            'start' => now()->setMinute(0)->setSecond(0),
-                            'end' => now()->addHours(2)->setMinute(0)->setSecond(0),
-                        ];
-                    })
+                CreateTimetableEntry::getCreateAction(CreateAction::make())
                     ->button(),
                 Action::make("edit")
                     ->model(SigEvent::class)

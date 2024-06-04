@@ -2,20 +2,15 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
-use App\Filament\Resources\TimetableEntryResource;
+use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
+use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\On;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 use Saade\FilamentFullCalendar\Actions\DeleteAction;
 use Saade\FilamentFullCalendar\Actions\EditAction;
@@ -28,9 +23,9 @@ class SigPlannerWidget extends FullCalendarWidget
 
     protected static string $view = "vendor.filament-fullcalendar.sig-planner";
 
-    public $resources = [];
+    public array $resources = [];
 
-    public function mount() {
+    public function mount(): void {
         $this->resources = SigLocation::select(["id", "name AS title", "description"])->orderBy("name")->get()->toArray();
     }
 
@@ -74,31 +69,24 @@ class SigPlannerWidget extends FullCalendarWidget
 
     protected function headerActions(): array {
         return [
-            CreateAction::make()
-                ->mountUsing(function(Form $form, array $arguments) {
-                    $form->fill([
-                        'entries' => [
-                            [
-                                'start' => $arguments['start'] ?? null,
-                                'end' => $arguments['end'] ?? null,
-                            ]
-                        ],
-                        'sig_location_id' => $arguments['resource']['id'] ?? null,
-                    ]);
-                })
-                ->mutateFormDataUsing(fn($data) => TimetableEntryResource\Pages\CreateTimetableEntry::mutateData($data))
-                ->modalFooterActionsAlignment(Alignment::End)
-                ->createAnother(false)
-                ->form(TimetableEntryResource\Pages\CreateTimetableEntry::getSchema())
-            ,
+            CreateTimetableEntry::getCreateAction(CreateAction::make()),
         ];
+    }
+
+    #[On('refresh')]
+    public function refresh(): void {
+        $this->refreshRecords();
+    }
+
+    public function getFormSchema(): array {
+        return EditTimetableEntry::getSchema();
     }
 
     protected function modalActions(): array {
         return [
             EditAction::make("edit")
                 ->using(function(Model $record, array $data) {
-                    return TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data);
+                    return EditTimetableEntry::handleUpdate($record, $data);
                 })
                 ->mountUsing(function(TimetableEntry $entry, Form $form, array $arguments) {
                     $entry->start             = $arguments['event']['start'] ?? $entry->start;
@@ -119,7 +107,7 @@ class SigPlannerWidget extends FullCalendarWidget
             ,
             EditAction::make("view")
                 ->using(function(Model $record, array $data) {
-                    return TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data);
+                    return EditTimetableEntry::handleUpdate($record, $data);
                 })
                 ->modalFooterActions([
                     Action::make(__("Save"))
@@ -167,11 +155,11 @@ class SigPlannerWidget extends FullCalendarWidget
     }
 
 
-    /**
-     * Override from InteractsWithEvents to set the default clickAction to "edit"
-     * @param array $event
-     * @return void
-     */
+//    /**
+//     * Override from InteractsWithEvents to set the default clickAction to "edit"
+//     * @param array $event
+//     * @return void
+//     */
 //    public function onEventClick(array $event): void {
 //        if ($this->getModel()) {
 //            $this->record = $this->resolveRecord($event['id']);
@@ -183,48 +171,5 @@ class SigPlannerWidget extends FullCalendarWidget
 //            'event' => $event,
 //        ]);
 //    }
-
-//    public function getFormSchema(): array {
-//        return [
-//            Grid::make()
-//            ->columns(2)
-//            ->schema(TimetableEntryResource::getSchema())
-//        ];
-//    }
-
-    public function getFormSchema(): array {
-        return //TimetableEntryResource::getSchema();
-            [
-
-            Grid::make()
-                ->columns(2)
-                ->schema([
-                    Select::make('sig_event_id')
-                          ->relationship('sigEvent', 'name')
-                          ->prefix(__("SIG"))
-                          ->hiddenLabel()
-                          ->searchable()
-                          ->preload()
-                          ->required(),
-                    Select::make('sig_location_id')
-                          ->prefix(__("Location"))
-                          ->hiddenLabel()
-                          ->relationship('sigLocation', 'name'),
-
-                    DateTimePicker::make('start')
-                                  ->seconds(false)
-                                  ->required()
-                                  ->prefix(__("Start"))
-                                  ->hiddenLabel(true),
-                    DateTimePicker::make('end')
-                                  ->seconds(false)
-                                  ->required()
-                                  ->prefix(__("End"))
-                                  ->hiddenLabel(true),
-                ])
-            ->columns(2)
-            ->schema(TimetableEntryResource::getSchema())
-        ];
-    }
 
 }
