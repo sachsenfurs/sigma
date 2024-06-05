@@ -24,6 +24,8 @@ return new class extends Migration
             $table->dateTime('reg_end')->nullable();
             $table->text('description')->nullable();
 
+            $table->text('notes')->nullable();
+
             $table->timestamps();
         });
     }
