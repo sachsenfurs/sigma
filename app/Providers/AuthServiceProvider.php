@@ -29,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\Ddas\ArtshowPickup::class   => \App\Policies\ArtshowPickupPolicy::class,
         \App\Models\Ddas\Dealer::class          => \App\Policies\DealerPolicy::class,
         \App\Models\Ddas\DealerTag::class       => \App\Policies\DealerTagPolicy::class,
+        \App\Models\LostFoundItem::class        => \App\Policies\LostFoundItemPolicy::class,
     ];
 
     /**

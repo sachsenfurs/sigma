@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Ddas;
 use App\Enums\Approval;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
+use App\Settings\ArtShowSettings;
+use App\Settings\DealerSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,6 +29,10 @@ class DealerResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_dealers_den');
+    }
+
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }
 
     public static function getPluralLabel(): ?string {

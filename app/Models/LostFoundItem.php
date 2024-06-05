@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Settings\AppSettings;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LostFoundItem extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
     public $timestamps = false;
@@ -34,10 +32,11 @@ class LostFoundItem extends Model
     }
 
     public static function syncFromApi() {
+        // https://wiki.furcom.org/bin/view/L.A.S.S.I.E./System%20Information/API%20V2.0/
         $client = new Client();
         $response = $client->post("https://api.lassie.online/v2.0", [
             'form_params' => [
-                'apikey' => config('app.lassieApiKey'),
+                'apikey' => app(AppSettings::class)->lassie_api_key,
                 'request' => 'lostandfounddb',
             ]
         ]);

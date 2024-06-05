@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\Settings;
 use App\Filament\Resources\SocialResource\Pages;
 use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,10 +18,9 @@ class SocialResource extends Resource
 {
     protected static ?string $model = Social::class;
 
-    protected static ?string $navigationGroup = "System";
-
-    protected static ?int $navigationSort = 1500;
-
+    protected static ?string $cluster = Settings::class;
+    protected static ?int $navigationSort = 100;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
     public static function can(string $action, ?Model $record = null): bool {

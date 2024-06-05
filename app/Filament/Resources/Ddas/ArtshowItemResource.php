@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Ddas;
 use App\Enums\Approval;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Models\Ddas\ArtshowItem;
+use App\Settings\ArtShowSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -25,6 +26,10 @@ class ArtshowItemResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
+    }
+
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
 
     public static function getPluralLabel(): ?string {

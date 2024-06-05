@@ -26,7 +26,7 @@
                         <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
                     </div>
                     <div class="col-10 col-md-4 mx-auto">
-                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ config("services.telegram-bot-api.name") }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
+                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
                     </div>
                 </div>
             @endif

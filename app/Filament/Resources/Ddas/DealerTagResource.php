@@ -6,6 +6,7 @@ use App\Filament\Resources\Ddas\DealerTagResource\Pages;
 use App\Filament\Resources\Ddas\DealerTagResource\RelationManagers\DealerTagRelationManager;
 use App\Filament\Resources\DealerResource\RelationManagers\DealerTagResourceRelationManager;
 use App\Models\Ddas\DealerTag;
+use App\Settings\DealerSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -25,6 +26,10 @@ class DealerTagResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_dealers_den');
+    }
+
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }
 
     public static function getPluralLabel(): ?string {

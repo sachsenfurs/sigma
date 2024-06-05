@@ -8,6 +8,8 @@ return [
      */
     'settings' => [
         \App\Settings\AppSettings::class,
+        \App\Settings\DealerSettings::class,
+        \App\Settings\ArtShowSettings::class,
     ],
 
     /*

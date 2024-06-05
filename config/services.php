@@ -32,8 +32,8 @@ return [
     ],
 
     'telegram-bot-api' => [
-        'token' => env('TELEGRAM_BOT_TOKEN', null),
-        'name' => env('TELEGRAM_BOT_NAME', 'Telegram Bot')
+        'token' => "GETS-REPLACED-IN-TELEGRAM-SERVICE-PROVIDER",
+        'name' =>  "GETS-REPLACED-IN-TELEGRAM-SERVICE-PROVIDER"
     ],
 
 ];

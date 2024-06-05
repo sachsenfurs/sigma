@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Filament\Clusters\Settings;
 use App\Filament\Resources\Ddas\ArtshowArtistResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowItemRelationManager;
 use App\Models\Ddas\ArtshowArtist;
 use App\Models\User;
+use App\Settings\ArtShowSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,6 +29,10 @@ class ArtshowArtistResource extends Resource
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
+    }
+
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
 
     public static function getPluralLabel(): ?string {
