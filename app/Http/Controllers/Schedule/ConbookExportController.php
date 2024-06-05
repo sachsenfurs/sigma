@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Public;
+namespace App\Http\Controllers\Schedule;
 
 use App\Http\Controllers\Controller;
 use App\Models\TimetableEntry;
-use Illuminate\Database\Eloquent\Collection;
 
 class ConbookExportController extends Controller
 {

@@ -55,7 +55,7 @@ class SigFavoriteReminder extends Notification
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
             ->line(__("your favorite event ") . $this->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
-            ->button(__("View Event") , route("public.timeslot-show", ['entry' => $this->timetableEntry]));
+            ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->timetableEntry]));
     }
 
     /**

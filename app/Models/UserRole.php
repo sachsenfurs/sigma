@@ -2,27 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class UserRole extends Model
 {
-    use HasFactory;
 
-    /**
-     * Protected fields in this model.
-     *
-     * @var array
-     */
     protected $guarded = [];
     protected $with = [
         'permissions'
     ];
 
-    public function users(): HasManyThrough
-    {
+    public function users(): HasManyThrough {
         return $this->hasManyThrough(
             User::class,
             UserUserRole::class,
@@ -33,8 +25,7 @@ class UserRole extends Model
         );
     }
 
-    public function permissions(): BelongsToMany
-    {
+    public function permissions(): BelongsToMany {
         return $this->belongsToMany(
             Permission::class,
             'user_role_permissions'

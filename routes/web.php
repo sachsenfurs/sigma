@@ -4,29 +4,26 @@ use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
+use App\Http\Controllers\Ddas\ArtshowController;
+use App\Http\Controllers\Ddas\DealersDenController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\TranslateController;
-use App\Http\Controllers\Public\ConbookExportController;
-use App\Http\Controllers\Public\ListViewController;
-use App\Http\Controllers\Public\TableViewController;
-use App\Http\Controllers\Public\TimeslotShowController;
+use App\Http\Controllers\Schedule\ConbookExportController;
+use App\Http\Controllers\Schedule\TimetableEntryController;
 use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\Sig\MySigController;
 use App\Http\Controllers\Sig\SigEventController;
+use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigFormController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
-use App\Http\Controllers\Sig\SigTimeslotController;
-use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigReminderController;
+use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\TelegramController;
-use App\Http\Controllers\TimetableController;
-use App\Http\Controllers\Ddas\DealersDenController;
-use App\Http\Controllers\Ddas\ArtshowController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -53,12 +50,11 @@ Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name(
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
 // Schedule
-Route::get("/schedule", [ListViewController::class, 'index'])->name("public.listview");
-Route::get("/schedule/index", [ListViewController::class, 'timetableIndex'])->name("public.listview-index");
-Route::get("/show/{entry}", [TimeslotShowController::class, 'index'])->name("public.timeslot-show");
+Route::get("/schedule", [TimetableEntryController::class, 'index'])->name("schedule.listview");
+Route::get("/schedule/index", [TimetableEntryController::class, 'timetableIndex'])->name("schedule.listview-index");
+Route::get("/show/{entry}", [TimetableEntryController::class, 'show'])->name("timetable-entry.show");
 
-Route::get("/table", [TableViewController::class, 'index'])->name("public.tableview");
-Route::get("/table-old", [TableViewController::class, 'indexOld'])->name("public.tableview-old");
+Route::get("/table", [TimetableEntryController::class, 'table'])->name("schedule.tableview");
 
 // Host list
 Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");
@@ -124,13 +120,6 @@ Route::group(['middleware' => "auth"], function() {
     Route::post("/timeslotReminders/update", [SigTimeslotReminderController::class, 'update'])->name('timeslotReminders.update');
     Route::delete("/timeslotReminders/delete", [SigTimeslotReminderController::class, 'delete'])->name('timeslotReminders.delete');
 
-    // Timetable
-    Route::get("/timetable", [TimetableController::class, 'index'])->name("timetable.index");
-    Route::post("/timetable", [TimetableController::class, 'store'])->name("timetable.store");
-    Route::get("/timetable/{entry}/edit", [TimetableController::class, "edit"])->name("timetable.edit");
-    Route::put("/timetable/{entry}", [TimetableController::class, 'update'])->name("timetable.update");
-    Route::delete("/timetable/{entry}", [TimetableController::class, 'destroy'])->name("timetable.destroy");
-
     // Telegram auth
     Route::get("/telegram/auth", [TelegramController::class, 'connect'])->name('telegram.connect');
 
@@ -145,10 +134,14 @@ Route::group(['middleware' => "auth"], function() {
     });
 
     // Dealers Den
-    Route::resource('/dealers', DealersDenController::class)->names("dealers");
+    Route::resource('/dealers', DealersDenController::class)
+         ->only(['index', 'create'])
+         ->names("dealers");
 
     //Artshow
-    Route::resource('/artshow', ArtshowController::class)->parameters(['artshow' => 'artshowItem']);
+    Route::resource('/artshow', ArtshowController::class)
+         ->parameters(['artshow' => 'artshowItem'])
+         ->only(['index', 'create', 'show']);
 
     // Lost and found
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");

@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers\Sig;
 
-use App\Enums\Approval;
 use App\Http\Controllers\Controller;
-use App\Livewire\Sig\Forms\SigHostForm;
 use App\Models\SigEvent;
-use App\Models\SigHost;
-use App\Models\SigLocation;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

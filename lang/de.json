@@ -145,6 +145,9 @@
     "Time slots": "Time Slots",
     "Actions": "Aktionen",
     "Cancel": "Abbrechen",
+    "SIG Planning": "SIG Planung",
+    "Planner View": "Planungsansicht",
+    "Unprocessed SIG Events": "SIGs ohne Zuordnung",
 
     "Form": "Formular",
     "Forms": "Formulare",
@@ -382,17 +385,26 @@
     "Dealer": "Händler",
     "Dealer Name": "Händler Name",
     "Art-Channle/-Group": "Art-Channle/-Gruppe",
-    "Contact Ways": "Kontaktmöglichkeiten",
     "Contact": "Kontakt",
     "Telegram": "Telegram",
     "Website": "Webseite",
-    "Phone": "Telefon",
-    "Email": "E-Mail",
     "Show All": "Zeige alle",
     "Image (optional)": "Bild (optional)",
     "Dealer Information (What do you offer, ..?)": "Dealer Informationen (Was bietest du an, ..?)",
 
     "Leave Admin Interface": "Administration verlassen",
-    "Sign out": "Abmelden"
+    "Sign out": "Abmelden",
 
+    "The Schedule is not published yet": "Der Programmplan wurde noch nicht veröffentlicht",
+    "Dealers are not published yet": "Die Liste der Händler wurde noch nicht veröffentlicht",
+    "Art Show Items are not published yet": "Art Show Gegenstände wurden noch nicht veröffentlicht",
+
+    "Unconfirmed SIGs": "Unbestätigte SIGs",
+    "Unconfirmed Dealer Registrations": "Unbestätigte Dealer Anmeldungen",
+    "Unconfirmed Art Show Items": "Unbestätigte Art Show Gegenstände",
+    "Total Events: :count": "Events gesamt: :count",
+    "Total Dealers: :count": "Dealer gesamt: :count",
+    "Total Art Show Items: :count": "Art Show Gegenstände gesamt: :count",
+
+    "Settings": "Einstellungen"
 }

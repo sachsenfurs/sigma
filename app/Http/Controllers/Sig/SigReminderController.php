@@ -5,16 +5,15 @@ namespace App\Http\Controllers\Sig;
 use App\Http\Controllers\Controller;
 use App\Models\SigReminder;
 use App\Models\TimetableEntry;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SigReminderController extends Controller
 {
     /**
      * Sets a reminder on an event.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -37,10 +36,10 @@ class SigReminderController extends Controller
             return redirect()->back()->withErrors(__('This reminder already exists!'));
         }
     }
-    
+
     /**
      * Sets a reminder on an event.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -57,7 +56,7 @@ class SigReminderController extends Controller
 
         $attributes['send_at'] = strtotime($timetableEntry->start) - ($attributes['minutes_before'] * 60);
 
-        
+
 
         if (SigReminder::where('user_id', auth()->user()->id)->where('timetable_entry_id', $attributes['timetable_entry_id'])->exists()) {
             $reminder = SigReminder::where('user_id', auth()->user()->id)->where('timetable_entry_id', $attributes['timetable_entry_id'])->first();

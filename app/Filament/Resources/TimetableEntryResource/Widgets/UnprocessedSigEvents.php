@@ -20,6 +20,8 @@ class UnprocessedSigEvents extends TableWidget
 {
     protected int | string | array $columnSpan = "full";
 
+    protected static ?string $heading = "Unprocessed SIG Events";
+
     /**
      * Conditionally show/hide widget
      * @return bool

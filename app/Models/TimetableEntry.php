@@ -46,20 +46,10 @@ class TimetableEntry extends Model
         'sigLocation',
     ];
 
-    /**
-     * Define the relationship between timetable-entries and their favorites.
-     *
-     * @return HasMany
-     */
     public function favorites(): HasMany {
         return $this->hasMany(SigFavorite::class);
     }
 
-    /**
-     * Define the relationship between timetable-entries and their reminders.
-     *
-     * @return HasMany
-     */
     public function reminders(): HasMany {
         return $this->hasMany(SigReminder::class);
     }

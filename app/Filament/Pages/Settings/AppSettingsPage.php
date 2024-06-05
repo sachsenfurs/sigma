@@ -8,7 +8,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Panel;
 use Illuminate\Contracts\Support\Htmlable;
 
 class AppSettingsPage extends SettingsPage
@@ -39,6 +38,11 @@ class AppSettingsPage extends SettingsPage
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                         Forms\Components\DateTimePicker::make("event_end")
+                            ->seconds(false)
+                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                        Forms\Components\DateTimePicker::make("show_schedule_date")
+                            ->label("Show Schedule from")
+                            ->translateLabel()
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                     ]),

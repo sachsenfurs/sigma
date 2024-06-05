@@ -55,7 +55,7 @@ class SigTimeslotReminder extends Notification
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
             ->line(__("your timeslot from the event ") . $this->sigTimeslot->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
-            ->button(__("View Event") , route("public.timeslot-show", ['entry' => $this->sigTimeslot->id]));
+            ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->sigTimeslot->id]));
 
     }
 

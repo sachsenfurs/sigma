@@ -4,8 +4,8 @@
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route("public.listview") }}">{{ __("Event Schedule") }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ route("public.listview") }}">{{ $entry->start->dayName }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route("schedule.listview") }}">{{ __("Event Schedule") }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route("schedule.listview") }}">{{ $entry->start->dayName }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($entry->sigEvent->name, 20) }}</li>
             </ol>
         </nav>

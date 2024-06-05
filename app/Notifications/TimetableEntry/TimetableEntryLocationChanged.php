@@ -51,7 +51,7 @@ class TimetableEntryLocationChanged extends Notification
             ->line(__('[CHANGE]'))
             ->line(__('The location for the event ') . $this->timetableEntry->sigEvent->name_localized . ' has changed!')
             ->line(__('New location: ') . $this->timetableEntry->sigLocation->name)
-            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+            ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

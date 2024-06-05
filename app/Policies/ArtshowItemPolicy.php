@@ -5,8 +5,8 @@ namespace App\Policies;
 use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
-use App\Observers\ArtshowItemObserver;
 use App\Settings\ArtShowSettings;
+use Illuminate\Auth\Access\Response;
 
 class ArtshowItemPolicy
 {
@@ -15,7 +15,10 @@ class ArtshowItemPolicy
      * Overrides
      */
 
-    public function before(User $user): bool|null {
+    public function before(User $user): bool|null|Response {
+        if(!app(ArtShowSettings::class)->enabled)
+            return Response::denyAsNotFound();
+
         // admin can do everything
         if($user->permissions()->contains('manage_artshow'))
             return true;
@@ -43,7 +46,7 @@ class ArtshowItemPolicy
      */
 
     public function viewAny(User $user): bool {
-        return false;
+        return true;
     }
 
     public function view(User $user, ArtshowItem $artshowItem): bool {

@@ -6,6 +6,7 @@ use App\Enums\Approval;
 use App\Models\Ddas\Dealer;
 use App\Models\User;
 use App\Settings\DealerSettings;
+use Illuminate\Auth\Access\Response;
 
 class DealerPolicy
 {
@@ -13,7 +14,9 @@ class DealerPolicy
      * Overrides
      */
 
-    public function before(User $user): bool|null {
+    public function before(User $user): bool|null|Response {
+        if(!app(DealerSettings::class)->enabled)
+            return Response::denyAsNotFound();
         if($user->permissions()->contains('manage_dealers_den'))
             return true;
 

@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SigTimeslot extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
     protected $casts = [
@@ -17,15 +15,15 @@ class SigTimeslot extends Model
         'reg_end' => 'datetime',
     ];
 
-    public function timetableEntry() {
+    public function timetableEntry(): BelongsTo {
         return $this->belongsTo(TimetableEntry::class);
     }
 
-    public function sigAttendees() {
+    public function sigAttendees(): HasMany {
         return $this->hasMany(SigAttendee::class);
     }
 
-    public function getAttendeeNames() {
+    public function getAttendeeNames(): array {
         $attendees = [];
         foreach ($this->sigAttendees as $attendee) {
             $user = [

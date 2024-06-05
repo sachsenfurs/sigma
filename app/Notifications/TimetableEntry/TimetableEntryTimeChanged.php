@@ -52,7 +52,7 @@ class TimetableEntryTimeChanged extends Notification
             ->line(__('[CHANGE]'))
             ->line(__('The times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
             ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))
-            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+            ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

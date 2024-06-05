@@ -23,11 +23,10 @@ use Ramsey\Uuid\Type\Time;
 class TimetableEntryResource extends Resource
 {
     protected static ?string $model = TimetableEntry::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     protected static ?string $cluster = SigPlanning::class;
     protected static ?int $navigationSort = 10;
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function can(string $action, ?Model $record = null): bool {

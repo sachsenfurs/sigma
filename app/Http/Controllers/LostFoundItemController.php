@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Policies\LostFoundItemPolicy;
-use Illuminate\Http\Request;
+
+use App\Models\LostFoundItem;
 
 class LostFoundItemController extends Controller
 {

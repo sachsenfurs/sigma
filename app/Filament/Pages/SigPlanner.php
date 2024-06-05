@@ -10,10 +10,10 @@ use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Contracts\Support\Htmlable;
 
 class SigPlanner extends Page
 {
-    protected static ?string $title = "Planner View";
 
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
@@ -22,6 +22,13 @@ class SigPlanner extends Page
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     protected static ?string $cluster = SigPlanning::class;
+
+    public function getHeading(): string|Htmlable {
+        return __("Planner View");
+    }
+    public static function getNavigationLabel(): string {
+        return __("Planner View");
+    }
 
     public function __construct() {
         // registering here instead of AdminPanelProvider because otherwise all fullcalendar-related queries get executed on every other page as well...

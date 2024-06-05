@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Scopes\SigFormAccessScope;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,15 +12,13 @@ use Illuminate\Support\Facades\App;
 
 class SigForm extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
     protected $casts = [
         'form_definition' => 'array'
     ];
 
-    protected static function booted() {
+    protected static function booted(): void {
         static::addGlobalScope(new SigFormAccessScope);
     }
 
@@ -45,7 +42,7 @@ class SigForm extends Model
         return $this->belongsToMany(UserRole::class, 'sig_form_user_roles');
     }
 
-    public function resolveRouteBinding($value, $field = null) {
+    public function resolveRouteBinding($value, $field = null): SigForm|null {
         $parts = explode('-', $value);
         $id = end($parts);
 

@@ -7,7 +7,6 @@ use App\Settings\AppSettings;
 use DeepL\DeepLException;
 use DeepL\Translator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class TranslateController extends Controller
 {

@@ -18,7 +18,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('public.listview')]) href="{{ route('public.listview') }}">
+                        <a @class(['nav-link px-3', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
                             <i class="bi bi-calendar-week"></i> {{ __('Event Schedule') }}
                         </a>
                     </li>
@@ -63,7 +63,7 @@
                     @if($items->count() > 0)
                         <li class="nav-item dropdown">
                             <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-palette"></i> {{ $items->join("&") }}
+                                <i class="bi bi-palette"></i> {{ $items->join(" & ") }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="artMenu">
                                 @if(app(\App\Settings\DealerSettings::class)->enabled)
