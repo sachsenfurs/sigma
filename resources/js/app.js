@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // Vue
 import EntryList from "./components/TimetableEntries/EntryList.vue";
+import SIGCalendar from "./components/SIGCalendar.vue";
 
 import {i18nVue} from 'laravel-vue-i18n'
 import {createApp} from "vue";
@@ -19,6 +20,7 @@ const addVueApp = (id, component) => {
 }
 
 addVueApp("app", EntryList);
+addVueApp("calendar", SIGCalendar);
 
 
 // DONT INJECT ALPINE HERE!
