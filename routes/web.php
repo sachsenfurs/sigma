@@ -55,6 +55,9 @@ Route::get("/schedule/index", [TimetableEntryController::class, 'timetableIndex'
 Route::get("/show/{entry}", [TimetableEntryController::class, 'show'])->name("timetable-entry.show");
 
 Route::get("/table", [TimetableEntryController::class, 'table'])->name("schedule.tableview");
+Route::get("/calendar", [TimetableEntryController::class, 'calendar'])->name("schedule.calendarview");
+Route::get("/calendar/events", [TimetableEntryController::class, 'calendarEvents'])->name("schedule.calendarview-index");
+Route::get("/calendar/resources", [TimetableEntryController::class, 'calendarResources'])->name("schedule.calendarview-resources");
 
 // Host list
 Route::get("/hosts", [SigHostController::class, 'index'])->name("hosts.index");

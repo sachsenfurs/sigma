@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Schedule;
 
 use App\Http\Controllers\Controller;
+use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 
 class TimetableEntryController extends Controller
@@ -49,5 +50,33 @@ class TimetableEntryController extends Controller
 
     public function table() {
         return view("schedule.tableview");
+    }
+
+    public function calendar() {
+        return view("schedule.calendarview");
+    }
+
+    public function calendarResources() {
+        $locations = SigLocation::withCount("sigEvents")
+            ->having('sig_events_count', '>', 0)
+            ->groupBy('name')
+            ->orderByRaw('FIELD(sig_locations.id, 27,13,11,22,10,5,15,14,2,21,20,19,18,7,6,25,1) DESC')
+            ->get([
+                'id',
+                'name',
+            ]);
+        $locations->each(function($location) {
+            $location->title = $location->name;
+        });
+        return collect($locations);
+    }
+
+    public function calendarEvents() {
+        $entries = TimetableEntry::public()->orderBy("start")->get();
+        $entries->each(function($timetableEntry) {
+            $timetableEntry->title = $timetableEntry->sigEvent->name_localized;
+            $timetableEntry->resourceId = $timetableEntry->sig_location_id;
+        });
+        return collect($entries);
     }
 }

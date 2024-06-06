@@ -1,7 +1,7 @@
 <template>
-    <div class="modal fade" :id="id" tabindex="-1" role="dialog" :aria-labelledby="'eventInfoLabel' + entry.id" aria-hidden="true">
+    <div class="modal fade" :id="id" tabindex="-1" role="dialog" :aria-labelledby="'eventInfoLabel' + entry?.id" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div v-if="entry" class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title w-100" :id="'eventInfoLabel' + entry.id">
                         {{ entry.sig_event.name_localized }}
