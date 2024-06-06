@@ -57,26 +57,45 @@ class TimetableEntryController extends Controller
     }
 
     public function calendarResources() {
+        $this->authorize("viewAny",SigLocation::class);
+
         $locations = SigLocation::withCount("sigEvents")
             ->having('sig_events_count', '>', 0)
             ->groupBy('name')
             ->orderByRaw('FIELD(sig_locations.id, 27,13,11,22,10,5,15,14,2,21,20,19,18,7,6,25,1) DESC')
-            ->get([
-                'id',
-                'name',
-            ]);
+            ->get();
         $locations->each(function($location) {
             $location->title = $location->name;
         });
+        // Show only necessary information
+        $locations->setVisible([
+            'id',
+            'title',
+        ]);
         return collect($locations);
     }
 
     public function calendarEvents() {
+        $this->authorize("viewAny",TimetableEntry::class);
+
         $entries = TimetableEntry::public()->orderBy("start")->get();
         $entries->each(function($timetableEntry) {
             $timetableEntry->title = $timetableEntry->sigEvent->name_localized;
             $timetableEntry->resourceId = $timetableEntry->sig_location_id;
+            $timetableEntry->sig_event = [
+                'name_localized' => $timetableEntry->sigEvent->name_localized,
+                'description_localized' => $timetableEntry->sigEvent->description_localized,
+            ];
         });
+        // Show only necessary information
+        $entries->setVisible([
+            'id',
+            'resourceId',
+            'title',
+            'start',
+            'sig_event',
+            'end'
+        ]);
         return collect($entries);
     }
 }
