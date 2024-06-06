@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ArtshowItemRelationManager extends RelationManager
 {
@@ -15,6 +16,10 @@ class ArtshowItemRelationManager extends RelationManager
 
     public function form(Form $form): Form {
         return ArtshowItemResource::form($form);
+    }
+
+    protected function getTableHeading(): string|Htmlable|null {
+        return __("Art Show Items");
     }
 
     public function table(Table $table): Table {

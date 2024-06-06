@@ -13,6 +13,17 @@ class DealersRelationManager extends RelationManager
 {
     protected static string $relationship = 'dealers';
 
+    /**
+     * @return string
+     */
+    /**
+     * @param Model $ownerRecord
+     * @param string $pageClass
+     * @return string
+     */
+    public static function getTitle(Model $ownerRecord, string $pageClass): string {
+        return __("Dealers");
+    }
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
         return $ownerRecord->dealers()->count();
     }

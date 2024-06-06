@@ -13,6 +13,14 @@ class ArtistsRelationManager extends RelationManager
 {
     protected static string $relationship = 'artists';
 
+    /**
+     * @param Model $ownerRecord
+     * @param string $pageClass
+     * @return string
+     */
+    public static function getTitle(Model $ownerRecord, string $pageClass): string {
+        return __("Artists");
+    }
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
         return $ownerRecord->artists()->count();
     }

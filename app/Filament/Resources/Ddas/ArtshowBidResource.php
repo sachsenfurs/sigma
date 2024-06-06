@@ -25,12 +25,18 @@ class ArtshowBidResource extends Resource
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function canAccess(): bool {
-        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string {
+        return __("Bid");
+    }
+    public static function getPluralLabel(): ?string {
+        return __('Bids');
     }
 
-    public static function getPluralLabel(): ?string {
-        return __('Art Show Bids');
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
 
     public static function form(Form $form): Form {

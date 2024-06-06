@@ -40,11 +40,11 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->helperText("This field is overwritten with every user logon")
+                    ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('reg_id')
-                    ->helperText("This field is overwritten with every user logon")
+                    ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
                     ->numeric(),
             ]);

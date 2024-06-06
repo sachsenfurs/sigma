@@ -28,12 +28,19 @@ class ArtshowItemResource extends Resource
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function canAccess(): bool {
-        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    public static function getLabel(): ?string {
+        return __("Item");
     }
 
     public static function getPluralLabel(): ?string {
-        return __('Art Show Items');
+        return __('Items');
+    }
+    public static function getNavigationLabel(): string {
+        return __("Items");
+    }
+
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
 
     public static function getNavigationBadge(): ?string {
@@ -56,7 +63,7 @@ class ArtshowItemResource extends Resource
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description_en')
-                    ->label('Description (EN)')
+                    ->label('Description (English)')
                     ->translateLabel()
                     ->maxLength(65535)
                     ->columnSpanFull(),
@@ -73,7 +80,7 @@ class ArtshowItemResource extends Resource
                     ->numeric()
                     ->default(0),
                 Forms\Components\Textarea::make('additional_info')
-                    ->label('Additional Informationen')
+                    ->label('Additional Information')
                     ->translateLabel()
                     ->maxLength(65535)
                     ->columnSpanFull(),

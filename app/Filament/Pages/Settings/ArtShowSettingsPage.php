@@ -34,7 +34,9 @@ class ArtShowSettingsPage extends SettingsPage
                 Section::make(__("General"))
                     ->collapsible()
                     ->schema([
-                        Toggle::make("enabled"),
+                        Toggle::make("enabled")
+                            ->label("Enabled")
+                            ->translateLabel(),
                         DateTimePicker::make("item_deadline")
                             ->label("Item Submission Deadline")
                             ->translateLabel()

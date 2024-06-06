@@ -30,13 +30,11 @@ class SigEventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sigs');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
@@ -49,8 +47,7 @@ class SigEventResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('timetable_entries_count', 'desc')
@@ -76,8 +73,7 @@ class SigEventResource extends Resource
         return SigEvent::whereApproval(Approval::PENDING)->count() ?: false;
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListSigEvents::route('/'),
             'create' => Pages\CreateSigEvent::route('/create'),
@@ -91,8 +87,7 @@ class SigEventResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
-    {
+    private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
@@ -122,8 +117,7 @@ class SigEventResource extends Resource
         ];
     }
 
-    private static function getSigNameFieldSet(): Forms\Components\Component
-    {
+    private static function getSigNameFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('name')
             ->label('SIG Name')
@@ -149,8 +143,7 @@ class SigEventResource extends Resource
             ->columnSpan(1);
     }
 
-    private static function getSigTagsFieldSet(): Forms\Components\Component
-    {
+    private static function getSigTagsFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('tags')
                 ->label('Tags')
@@ -205,8 +198,7 @@ class SigEventResource extends Resource
                 ->visible(auth()->user()->can('manage_sigs'));
     }
 
-    private static function getSigLanguageFieldSet(): Forms\Components\Component
-    {
+    private static function getSigLanguageFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('languages')
                 ->label('Languages')
@@ -226,8 +218,7 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostFieldSet(): Forms\Components\Component
-    {
+    private static function getSigHostFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('host')
             ->label('SIG Host')
@@ -277,8 +268,7 @@ class SigEventResource extends Resource
             ->visible(auth()->user()->can('manage_sigs'));
     }
 
-    private static function getSigRegistrationFieldSet(): Forms\Components\Component
-    {
+    private static function getSigRegistrationFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('registration')
                 ->label('Registration')
@@ -302,57 +292,41 @@ class SigEventResource extends Resource
                 ->visible(auth()->user()->can('manage_sigs'));
     }
 
-    private static function getSigDescriptionFieldSet(): Forms\Components\Component
-    {
+    private static function getSigDescriptionFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('description')
                 ->label('Description')
                 ->translateLabel()
+                ->columns(2)
                 ->schema([
                     Forms\Components\Textarea::make('description')
                         ->label('German')
                         ->translateLabel()
+                        ->columnSpan(["2xl" => 1, "default" => 2])
                         //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
-                        ->rows(4)
-                        ->columnSpanFull(),
+                        ->rows(8),
                     Forms\Components\Textarea::make('description_en')
                         ->label('English')
                         ->translateLabel()
+                        ->columnSpan(["2xl" => 1, "default" => 2])
                         //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
-                        ->rows(4)
-                        ->columnSpanFull(),
+                        ->rows(8),
                 ]);
     }
 
     private static function getAdditionalInfosFieldSet(): Forms\Components\Component
     {
         return
-            Forms\Components\Fieldset::make('infos')
-                ->label('Additional Informations')
-                ->translateLabel()
-                ->schema([
-//                    Forms\Components\Checkbox::make('fursuit_support')
-//                        ->label('Furry Support')
-//                        ->translateLabel()
-//                        ->live(),
-//                    Forms\Components\Checkbox::make('medic')
-//                        ->label('Medic')
-//                        ->translateLabel()
-//                        ->live(),
-//                    Forms\Components\Checkbox::make('security')
-//                        ->label('Security')
-//                        ->translateLabel()
-//                        ->live(),
-//                    Forms\Components\Checkbox::make('other_stuff')
-//                        ->label('Other Stuff')
-//                        ->translateLabel()
-//                        ->live(),
+//            Forms\Components\Fieldset::make('infos')
+//                ->label('Additional Information')
+//                ->translateLabel()
+//                ->schema([
                     Forms\Components\Textarea::make('additional_info')
                         ->label(__("Additional Information"))
                         ->translateLabel()
                         //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
                         ->rows(4)
-                        ->columnSpanFull(),
-                ]);
+                        ->columnSpanFull();
+//                ]);
     }
 }

@@ -27,6 +27,13 @@ class DealerResource extends Resource
 
     protected static ?int $navigationSort = 300;
 
+    public static function getPluralLabel(): ?string {
+        return __('Dealers');
+    }
+    public static function getLabel(): ?string {
+        return __("Dealer");
+    }
+
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_dealers_den');
     }
@@ -35,9 +42,6 @@ class DealerResource extends Resource
         return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }
 
-    public static function getPluralLabel(): ?string {
-        return __('Dealers');
-    }
 
     public static function getNavigationBadge(): ?string {
         if(!Route::is("filament.*") AND !Route::is("livewire.*"))
@@ -65,7 +69,8 @@ class DealerResource extends Resource
                             ->options(Approval::class)
                             ->required(),
                     ]),
-                Forms\Components\Fieldset::make("Dealer Details")
+                Forms\Components\Fieldset::make("Dealer Details")#
+                    ->translateLabel()
                     ->columns(3)
                     ->schema([
                         Forms\Components\TextInput::make('name')
@@ -96,7 +101,7 @@ class DealerResource extends Resource
                                         '2xl' => 1
                                     ]),
                                 Forms\Components\Textarea::make('info_en')
-                                    ->label('Dealer Info (EN)')
+                                    ->label('Dealer Info (English)')
                                     ->rows(8)
                                     ->translateLabel()
                                     ->maxLength(65535)

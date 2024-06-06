@@ -134,6 +134,7 @@ class CreateTimetableEntry extends CreateRecord
                     ->columns(3),
 
                 Fieldset::make("Communication Settings")
+                    ->translateLabel()
                     ->schema([
                         TimetableEntryResource::getSendUpdateField(),
                     ])

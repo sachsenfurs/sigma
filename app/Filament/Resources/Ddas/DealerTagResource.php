@@ -24,6 +24,14 @@ class DealerTagResource extends Resource
 
     protected static ?int $navigationSort = 320;
 
+    public static function getPluralLabel(): ?string {
+        return __('Tags');
+    }
+
+    public static function getLabel(): ?string {
+        return __("Tag");
+    }
+
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_dealers_den');
     }
@@ -32,18 +40,17 @@ class DealerTagResource extends Resource
         return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }
 
-    public static function getPluralLabel(): ?string {
-        return __('Dealer Tags');
-    }
 
     public static function getSchema() {
         return [
             Forms\Components\TextInput::make('name')
                   ->label('Tag Name')
+                  ->translateLabel()
                   ->required()
                   ->maxLength(255),
             Forms\Components\TextInput::make('name_en')
-                  ->label('Tag Name (EN)')
+                  ->label('Tag Name (English)')
+                  ->translateLabel()
                   ->required()
                   ->maxLength(255),
         ];

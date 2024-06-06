@@ -13,6 +13,11 @@ class SigHostsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigHosts';
 
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string {
+        return __("SIG Hosts");
+    }
+
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
         return $ownerRecord->sigHosts()->count();
     }

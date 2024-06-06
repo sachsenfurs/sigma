@@ -32,21 +32,30 @@ class SocialResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('description')
+                    ->label("Description")
+                    ->translateLabel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('description_en')
+                    ->label("Description (English)")
+                    ->translateLabel()
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('link_name')
+                    ->label("Link Name")
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('link')
+                    ->label("Link")
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('link_name_en')
+                    ->label("Link Name (English)")
+                    ->translateLabel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('link_en')
+                    ->label("Link (English)")
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('icon')
@@ -63,9 +72,13 @@ class SocialResource extends Resource
                             ->translateLabel(),
                     ]),
                 Forms\Components\TextInput::make('order')
+                    ->label("Order")
+                    ->translateLabel()
                     ->integer()
                     ->default(0),
                 Forms\Components\CheckboxList::make("show_on")
+                    ->label("Show on..")
+                    ->translateLabel()
                     ->options(ShowMode::class),
             ]);
     }
@@ -75,8 +88,11 @@ class SocialResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('description')
+                    ->label("Description")
+                    ->translateLabel()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('link_name')
+                    ->label("Link Name")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('link')
                     ->searchable(),

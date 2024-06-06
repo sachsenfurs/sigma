@@ -62,6 +62,7 @@ class TimetableEntryResource extends Resource
                 ->columns(3),
 
             Forms\Components\Fieldset::make("Communication Settings")
+                ->translateLabel()
                 ->schema([
                     self::getSendUpdateField(),
                 ])

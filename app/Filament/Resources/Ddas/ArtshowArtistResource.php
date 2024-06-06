@@ -31,14 +31,24 @@ class ArtshowArtistResource extends Resource
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function canAccess(): bool {
-        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    public static function getModelLabel(): string {
+        return __("Artist");
+    }
+    public static function getPluralModelLabel(): string {
+        return __("Artists");
+    }
+
+    public static function getLabel(): ?string {
+        return __("Artist");
     }
 
     public static function getPluralLabel(): ?string {
-        return __('Art Show Artists');
+        return __('Artists');
     }
 
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    }
     public static function form(Form $form): Form {
         return $form
             ->schema([

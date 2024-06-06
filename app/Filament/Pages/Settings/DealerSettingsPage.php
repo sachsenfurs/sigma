@@ -35,7 +35,9 @@ class DealerSettingsPage extends SettingsPage
                 Section::make(__("General"))
                        ->collapsible()
                        ->schema([
-                           Toggle::make("enabled"),
+                           Toggle::make("enabled")
+                                ->label("Enabled")
+                                ->translateLabel(),
                            DateTimePicker::make("signup_deadline")
                                 ->label("Dealer Signup Deadline")
                                 ->translateLabel()

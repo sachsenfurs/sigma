@@ -14,13 +14,23 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
 class UnprocessedSigEvents extends TableWidget
 {
     protected int | string | array $columnSpan = "full";
 
-    protected static ?string $heading = "Unprocessed SIG Events";
+    protected function getTableHeading(): string|Htmlable|null {
+        return __("Unprocessed SIG Events");
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getHeading(): ?string {
+        return "AAAA";
+    }
 
     /**
      * Conditionally show/hide widget
@@ -42,8 +52,12 @@ class UnprocessedSigEvents extends TableWidget
                 TextColumn::make("name")
                     ->label("SIG Name")
                     ->translateLabel(),
-                TextColumn::make("duration_hours"),
+                TextColumn::make("duration_hours")
+                    ->label("Duration (Hours)")
+                    ->translateLabel(),
                 TextColumn::make("sigTags.description_localized")
+                    ->label("Tags")
+                    ->translateLabel()
                     ->badge(),
             ])
             ->actions([
@@ -51,6 +65,8 @@ class UnprocessedSigEvents extends TableWidget
                     ->button(),
                 Action::make("edit")
                     ->model(SigEvent::class)
+                    ->label("Edit")
+                    ->translateLabel()
                     ->url(fn(?Model $record) => SigEventResource::getUrl("edit", ['record' => $record])),
                 ViewAction::make()
                     ->model(SigEvent::class)

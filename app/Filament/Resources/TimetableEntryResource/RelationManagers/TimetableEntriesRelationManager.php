@@ -15,6 +15,17 @@ class TimetableEntriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'timetableEntries';
 
+    public static function getPluralModelLabel(): ?string {
+        return TimetableEntryResource::getPluralModelLabel();
+    }
+
+    public static function getModelLabel(): ?string {
+        return TimetableEntryResource::getModelLabel();
+    }
+    public static function getTitle(Model $ownerRecord, string $pageClass): string {
+        return __("In Schedule");
+    }
+
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
         // Filament needs to know if the user can view the relation manager for the given record.
         return auth()->user()->can('manage_sigs');
