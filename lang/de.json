@@ -235,7 +235,7 @@
     "Reg Time span": "Reg Zeitraum",
     "Registrations for this event are disabled": "Registrierungen für dieses Event sind deaktiviert",
     "Delete Entry": "Eintrag löschen",
-
+    "Entries": "Einträge",
     "Time Slot": "Timeslot",
     "Time": "Uhrzeit",
     "Create new time slot": "Neuen Timeslot erstellen",
@@ -244,6 +244,7 @@
     "Close": "Schließen",
     "Delete Time Slot?": "Timeslot löschen?",
     "Delete": "Löschen",
+    "Event Settings": "Event Einstellungen",
 
     "Add Entry": "Eintrag Hinzufügen",
     "New Item": "Neuer Gegenstand",

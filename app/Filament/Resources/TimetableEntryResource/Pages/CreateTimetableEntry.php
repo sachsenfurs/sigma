@@ -90,6 +90,8 @@ class CreateTimetableEntry extends CreateRecord
             TimetableEntryResource::getSigEventField(),
             TimetableEntryResource::getSigLocationField(),
             Repeater::make("entries")
+                ->label("Entries")
+                ->translateLabel()
                 ->columns(2)
                 ->reorderable(false)
                 ->schema([
@@ -111,21 +113,24 @@ class CreateTimetableEntry extends CreateRecord
                 ->addAction(function(Action $action) {
                     // duplicate last Repeater entry and add one day for bulk event creation
                     // TODO: das muss doch auch einfacher gehen, oder...?
-                    $action->after(function(Set $set, Get $get, $state) {
-                        array_pop($state);
-                        $current = end($state);
-                        $set('start', $current['start']);
-                        $set('end', $current['end']);
-                        $state[] = [
-                            'start' => Carbon::parse($current['start'])->addDay()->toDateTimeString('minute'),
-                            'end' => Carbon::parse($current['end'])->addDay()->toDateTimeString('minute'),
-                        ];
-                        $set('entries', $state);
-                    });
+                    $action->label("Add Entry")
+                        ->translateLabel()
+                        ->after(function(Set $set, Get $get, $state) {
+                            array_pop($state);
+                            $current = end($state);
+                            $set('start', $current['start']);
+                            $set('end', $current['end']);
+                            $state[] = [
+                                'start' => Carbon::parse($current['start'])->addDay()->toDateTimeString('minute'),
+                                'end' => Carbon::parse($current['end'])->addDay()->toDateTimeString('minute'),
+                            ];
+                            $set('entries', $state);
+                        });
                 })
                 ->columnSpan("full")
                 ->defaultItems(1),
                 Fieldset::make("Event Settings")
+                    ->translateLabel()
                     ->schema([
                         TimetableEntryResource::getSigNewField(),
                         TimetableEntryResource::getSigHideField(),

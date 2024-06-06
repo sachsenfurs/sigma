@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use App\Filament\Resources\TimetableEntryResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
 use App\Models\SigLocation;
@@ -69,7 +70,8 @@ class SigPlannerWidget extends FullCalendarWidget
 
     protected function headerActions(): array {
         return [
-            CreateTimetableEntry::getCreateAction(CreateAction::make()),
+            CreateTimetableEntry::getCreateAction(CreateAction::make())
+                ->modelLabel(TimetableEntryResource::getModelLabel()),
         ];
     }
 
@@ -103,6 +105,7 @@ class SigPlannerWidget extends FullCalendarWidget
                         ->color("gray")
                         ->close(),
                 ])
+                ->modelLabel(TimetableEntryResource::getModelLabel())
                 ->modalFooterActionsAlignment(Alignment::End)
             ,
             EditAction::make("view")
@@ -119,6 +122,7 @@ class SigPlannerWidget extends FullCalendarWidget
                     DeleteAction::make()
                         ->outlined()
                 ])
+                ->modelLabel(TimetableEntryResource::getModelLabel())
                 ->modalFooterActionsAlignment(Alignment::End)
         ];
     }
