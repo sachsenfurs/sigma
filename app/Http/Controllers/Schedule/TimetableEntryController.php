@@ -60,9 +60,8 @@ class TimetableEntryController extends Controller
         $this->authorize("viewAny",SigLocation::class);
 
         $locations = SigLocation::withCount("sigEvents")
-            ->having('sig_events_count', '>', 0)
-            ->groupBy('name')
-            ->orderByRaw('FIELD(sig_locations.id, 27,13,11,22,10,5,15,14,2,21,20,19,18,7,6,25,1) DESC')
+            ->used()
+            ->where('essential', false)
             ->get();
         $locations->each(function($location) {
             $location->title = $location->name;
