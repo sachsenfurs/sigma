@@ -219,6 +219,7 @@ class SigEventResource extends Resource
                     ->label("Approval")
                     ->translateLabel()
                     ->required()
+                    ->default(Approval::PENDING)
                     ->columnSpanFull()
                     ->options(Approval::class),
             ])
