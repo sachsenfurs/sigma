@@ -249,7 +249,7 @@ class TimetableEntryResource extends Resource
             ->formatStateUsing(function(?Model $record) {
                 // automatically prefill to "true" when con (in this case the first event) has started
                 if(!$record) // only prefill when a new record is created (current $record == null)
-                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()?->start ?? now());
                 return (bool)$record->new;
             });
     }
