@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserRoleResource\Pages;
+use App\Filament\Resources\UserRoleResource\RelationManagers\UserResourceRelationManager;
 use App\Models\Permission;
 use App\Models\UserRole;
 use Filament\Forms;
@@ -23,23 +24,19 @@ class UserRoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_users');
     }
 
-    public static function getLabel(): ?string
-    {
+    public static function getLabel(): ?string {
         return __('User Role');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('User Roles');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 Forms\Components\Fieldset::make("details")
@@ -62,8 +59,7 @@ class UserRoleResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->actions([
@@ -76,15 +72,13 @@ class UserRoleResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
-            //
+            UserResourceRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListUserRoles::route('/'),
             'create' => Pages\CreateUserRole::route('/create'),
@@ -92,8 +86,7 @@ class UserRoleResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
-    {
+    private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('title')
                 ->label('User Role')
@@ -107,15 +100,13 @@ class UserRoleResource extends Resource
                 ->sortable(),
             Tables\Columns\TextColumn::make("registration_system_key")
                 ->label("Reg Group ID")
-//                ->formatStateUsing(fn(?string $state) => explode(",", $state))
                 ->badge()
                 ->separator()
                 ->translateLabel(),
         ];
     }
 
-    private static function getTitleField(): Forms\Components\Component
-    {
+    private static function getTitleField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('title')
             ->label('User Role')
             ->translateLabel()
@@ -123,8 +114,7 @@ class UserRoleResource extends Resource
             ->maxLength(255);
     }
 
-    private static function getRegistrationSystemKeyField(): Forms\Components\Component
-    {
+    private static function getRegistrationSystemKeyField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('registration_system_key')
             ->label('Group keys')
             ->translateLabel()
@@ -132,8 +122,7 @@ class UserRoleResource extends Resource
             ->maxLength(255);
     }
 
-    private static function getForegroundColorField(): Forms\Components\Component
-    {
+    private static function getForegroundColorField(): Forms\Components\Component {
         return Forms\Components\ColorPicker::make('fore_color')
             ->label('Foreground Color')
             ->translateLabel()
@@ -141,8 +130,7 @@ class UserRoleResource extends Resource
             ->default('#333333');
     }
 
-    private static function getBorderColorField(): Forms\Components\Component
-    {
+    private static function getBorderColorField(): Forms\Components\Component {
         return Forms\Components\ColorPicker::make('border_color')
             ->label('Border Color')
             ->translateLabel()
@@ -150,8 +138,7 @@ class UserRoleResource extends Resource
             ->default('#666666');
     }
 
-    private static function getBackgroundColorField(): Forms\Components\Component
-    {
+    private static function getBackgroundColorField(): Forms\Components\Component {
         return Forms\Components\ColorPicker::make('background_color')
             ->label('Background Color')
             ->translateLabel()
@@ -159,8 +146,7 @@ class UserRoleResource extends Resource
             ->default('#E6E6E6');
     }
 
-    private static function getPermissionListField(): Forms\Components\Component
-    {
+    private static function getPermissionListField(): Forms\Components\Component {
         return Forms\Components\Section::make()
             ->heading(__('Permissions'))
             ->collapsible()
