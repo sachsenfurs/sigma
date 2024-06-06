@@ -42,7 +42,6 @@ class SigEventResource extends Resource
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigRegistrationFieldSet(),
-                self::getDurationFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfosFieldSet(),
             ]);
@@ -57,11 +56,8 @@ class SigEventResource extends Resource
                 Tables\Filters\SelectFilter::make("approval")
                     ->options(Approval::class),
                 Tables\Filters\SelectFilter::make("tags")
-//                    ->options(SigTag::all()->pluck('name','id')->toArray())
-//                    ->query(fn (Builder $query): Builder => $query->)
                     ->relationship("sigTags", "name")
-                    ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized)
-                ,
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -131,7 +127,7 @@ class SigEventResource extends Resource
     private static function getSigNameFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('name')
-            ->label('SIG Name')
+            ->label('SIG Details')
             ->translateLabel()
             ->schema([
                 Forms\Components\TextInput::make('name')
@@ -150,6 +146,12 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
+                Forms\Components\Select::make("duration")
+                    ->label("Duration (Hours)")
+                    ->translateLabel()
+                    ->inlineLabel()
+                    ->columnSpanFull()
+                    ->options(collect(range(30, 360, 30))->mapWithKeys(fn($r) => [$r => $r / 60]))
             ])
             ->columnSpan(1);
     }
@@ -167,43 +169,8 @@ class SigEventResource extends Resource
                         ->preload()
                         ->multiple()
                         ->columnSpanFull()
-                        ->live()
-                        ->default(function () {
-                            // Try to prefill the tag (passed when creating a new SIG from the tag detail page)
-                            $tagId = request()->input('tag_id') ?? null;
-                            if (SigTag::find($tagId)) {
-                                return [$tagId];
-                            }
-                            return null;
-                        })
                         ->createOptionModalHeading(__('Create Tag'))
-                        ->createOptionForm([
-                            Forms\Components\TextInput::make('name')
-                                ->label('Name')
-                                ->translateLabel()
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\Fieldset::make('description')
-                                ->label('Description')
-                                ->translateLabel()
-                                ->schema([
-                                    Forms\Components\Textarea::make('description')
-                                        ->label('German')
-                                        ->translateLabel()
-                                        ->rows(4),
-                                    Forms\Components\Textarea::make('description_en')
-                                        ->label('English')
-                                        ->translateLabel()
-                                        ->rows(4),
-                                ]),
-                        ])
-                        ->createOptionUsing(function ($data) {
-                            return SigTag::create([
-                                'name' => $data['name'],
-                                'description' => $data['description'] ?? null,
-                                'description_en' => $data['description_en'] ?? null,
-                            ])->id ?? null;
-                        }),
+                        ->createOptionForm(fn($form) => SigTagResource::form($form)),
                 ])
                 ->columnSpan(1)
                 ->visible(auth()->user()->can('manage_sigs'));
@@ -242,38 +209,18 @@ class SigEventResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required()
-                    ->default(function () {
-                        // Try to prefill the host (passed when creating a new SIG from the host's detail page)
-                        $hostId = request()->input('host_id') ?? null;
-                        if (SigHost::find($hostId)) {
-                            return $hostId;
-                        }
-                        return null;
-                    })
                     ->getOptionLabelFromRecordUsing(function (Model $record) {
                         $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
                         return $record->name . $regNr;
                     })
-                    ->createOptionUsing(function ($data) {
-                        return SigHost::create([
-                            'name' => $data['name'],
-                            'reg_id' => $data['reg_id'] ?? null,
-                        ])->id ?? null;
-                    })
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Name')
-                            ->translateLabel()
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('reg_id')
-                            ->label('Reg Number')
-                            ->translateLabel()
-                            ->type('number')
-                            ->minValue(1)
-                            ->maxLength(10),
-                    ])
+                    ->createOptionForm(fn($form) => SigHostResource::form($form))
                     ->columnSpanFull(),
+                Forms\Components\Select::make("approval")
+                    ->label("Approval")
+                    ->translateLabel()
+                    ->required()
+                    ->columnSpanFull()
+                    ->options(Approval::class),
             ])
             ->columnSpan(1)
             ->visible(auth()->user()->can('manage_sigs'));
@@ -301,20 +248,6 @@ class SigEventResource extends Resource
                 ])
                 ->columnSpan(1)
                 ->visible(auth()->user()->can('manage_sigs'));
-    }
-
-    private static function getDurationFieldSet(): Forms\Components\Component {
-        return
-            Forms\Components\Fieldset::make('duration')
-                ->label("Duration")
-                ->translateLabel()
-                ->columnSpan(1)
-                ->schema([
-                    Forms\Components\Select::make("duration")
-                        ->label("Duration (Hours)")
-                        ->translateLabel()
-                        ->options(collect(range(30, 360, 30))->mapWithKeys(fn($r) => [$r => $r / 60]))
-                ]);
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component {
