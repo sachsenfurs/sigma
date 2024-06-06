@@ -128,7 +128,6 @@ class SigHostResource extends Resource
             Forms\Components\Textarea::make('description')
                 ->label('Description')
                 ->translateLabel()
-                ->required()
                 ->rows(5)
                 ->maxLength(65535);
     }

@@ -12,10 +12,10 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 class SigEventResource extends Resource
@@ -38,10 +38,11 @@ class SigEventResource extends Resource
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
-                self::getSigTagsFieldSet(),
-                self::getSigLanguageFieldSet(),
                 self::getSigHostFieldSet(),
+                self::getSigLanguageFieldSet(),
+                self::getSigTagsFieldSet(),
                 self::getSigRegistrationFieldSet(),
+                self::getDurationFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfosFieldSet(),
             ]);
@@ -50,10 +51,17 @@ class SigEventResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
-            ->defaultSort('timetable_entries_count', 'desc')
+            ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make("approval")
+                    ->options(Approval::class),
+                Tables\Filters\SelectFilter::make("tags")
+//                    ->options(SigTag::all()->pluck('name','id')->toArray())
+//                    ->query(fn (Builder $query): Builder => $query->)
+                    ->relationship("sigTags", "name")
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized)
+                ,
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -89,6 +97,9 @@ class SigEventResource extends Resource
 
     private static function getTableColumns(): array {
         return [
+            IconColumn::make("approval")
+                 ->translateLabel()
+                 ->width(1),
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
@@ -290,6 +301,20 @@ class SigEventResource extends Resource
                 ])
                 ->columnSpan(1)
                 ->visible(auth()->user()->can('manage_sigs'));
+    }
+
+    private static function getDurationFieldSet(): Forms\Components\Component {
+        return
+            Forms\Components\Fieldset::make('duration')
+                ->label("Duration")
+                ->translateLabel()
+                ->columnSpan(1)
+                ->schema([
+                    Forms\Components\Select::make("duration")
+                        ->label("Duration (Hours)")
+                        ->translateLabel()
+                        ->options(collect(range(30, 360, 30))->mapWithKeys(fn($r) => [$r => $r / 60]))
+                ]);
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component {
