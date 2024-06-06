@@ -22,7 +22,7 @@ class ProductionSeeder extends Seeder
         (new PermissionSeeder())->run(); // Needs to be run before user role seeder
         (new UserRoleSeeder())->run();
 
-        User::factory()->create([
+        User::create([
             'name' => "Kidran",
             'email' => "mail@kidran.de",
             'reg_id' => 1,
