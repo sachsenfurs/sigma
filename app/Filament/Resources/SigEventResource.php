@@ -3,13 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Approval;
+use App\Filament\Actions\ServiceAction;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
+use App\Services\Translator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
@@ -143,6 +146,9 @@ class SigEventResource extends Resource
                     ->translateLabel()
                     ->required()
                     //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
+                    ->suffixAction(
+                        ServiceAction::translateComponent('name', 'name_en')
+                    )
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
@@ -191,9 +197,7 @@ class SigEventResource extends Resource
                             'de' => __('German'),
                             'en' => __('English'),
                         ])
-                        ->bulkToggleable()
-                        ->required()
-                        ->live(),
+                        ->bulkToggleable(),
                 ])
                 ->columnSpan(1);
     }
@@ -270,6 +274,9 @@ class SigEventResource extends Resource
                         ->label('English')
                         ->translateLabel()
                         ->columnSpan(["2xl" => 1, "default" => 2])
+                        ->hintAction(
+                            ServiceAction::translateComponent('description', 'description_en')
+                        )
                         //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
                         ->rows(8),
                 ]);

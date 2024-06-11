@@ -129,8 +129,6 @@ Route::group(['middleware' => "auth"], function() {
         Route::post("/", [PostController::class, 'store'])->name("store");
         Route::get("/create", [PostController::class, "create"])->name("create");
         Route::delete("/{post}", [PostController::class, 'destroy'])->name("destroy");
-
-        Route::post("/translate", TranslateController::class)->name("translate");
     });
 
     // Dealers Den
