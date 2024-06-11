@@ -151,6 +151,8 @@ class SigEventResource extends Resource
                     ->translateLabel()
                     ->inlineLabel()
                     ->columnSpanFull()
+                    ->required()
+                    ->default(60)
                     ->options(collect(range(30, 360, 30))->mapWithKeys(fn($r) => [$r => $r / 60]))
             ])
             ->columnSpan(1);
