@@ -20,8 +20,8 @@ return new class extends SettingsMigration
             $blueprint->add("telegram_bot_name", env("TELEGRAM_BOT_TOKEN", ""));
             $blueprint->add("telegram_bot_token", env("TELEGRAM_BOT_NAME", ""));
 
-            $blueprint->add("deepl_api_key", "");
-            $blueprint->add("deepl_source_lang", "de-DE");
+            $blueprint->add("deepl_api_key", env("DEEPL_API_KEY"));
+            $blueprint->add("deepl_source_lang", "de"); // https://developers.deepl.com/docs/v/de/resources/supported-languages#source-languages
             $blueprint->add("deepl_target_lang", "en-US");
         });
     }
