@@ -6,13 +6,10 @@ use App\Enums\Approval;
 use App\Filament\Actions\ServiceAction;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
-use App\Models\SigHost;
 use App\Models\SigTag;
-use App\Services\Translator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
@@ -243,6 +240,10 @@ class SigEventResource extends Resource
                         ->label('Allow Registrations for this Event')
                         ->translateLabel()
                         ->columnSpanFull()
+                        ->afterStateUpdated(function(Forms\Set $set, Get $get, $state) {
+                            if($state)
+                                $set('sigTags', array_merge($get('sigTags'), [3]));
+                        })
                         ->live(),
                     Forms\Components\TextInput::make('max_regs_per_day')
                         ->label('Registrations per day')
