@@ -36,7 +36,8 @@ class SigLocation extends Model
             'id',
             'id',
             'sig_event_id'
-        );
+        )
+        ->distinct();
     }
 
     public function dealers(): HasMany {

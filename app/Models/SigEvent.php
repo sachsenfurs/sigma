@@ -102,7 +102,10 @@ class SigEvent extends Model
 
     public function scopePublic($query) {
         return $query->whereHas("timetableEntries", function ($query) {
-            $query->where("hide", false);
+            $query
+                ->where("hide", false)
+                ->whereRaw("start != end")
+            ;
         });
     }
 
