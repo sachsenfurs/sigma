@@ -3,9 +3,11 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Filament\Clusters\Settings;
+use App\Services\Translator;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
@@ -86,6 +88,31 @@ class AppSettingsPage extends SettingsPage
                             ->label("Telegram Bot Token")
                             ->nullable()
                             ->string(),
+                    ]),
+                Forms\Components\Section::make(__("DeepL Settings"))
+                    ->collapsible()
+                    ->collapsed()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make("deepl_api_key")
+                            ->label("DeepL API Key")
+                            ->nullable()
+                            ->string(),
+                        Forms\Components\TextInput::make("deepl_usage")
+                            ->label("DeepL Usage")
+                            ->formatStateUsing(function() {
+                                $used = app(Translator::class)->getUsage()?->character?->count ?? "?";
+                                $max  = app(Translator::class)->getUsage()?->character?->limit ?? "?";
+                                return $used . " / " . $max . " (" . number_format($used/$max*100, 2) . "%)";
+                            })
+                            ->readOnly()
+                            ->dehydrated(false),
+                        Forms\Components\TextInput::make("deepl_source_lang")
+                            ->string()
+                            ->required(),
+                        Forms\Components\TextInput::make("deepl_target_lang")
+                            ->string()
+                            ->required(),
                     ]),
             ]);
     }

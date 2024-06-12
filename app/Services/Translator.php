@@ -24,6 +24,10 @@ class Translator
         }
     }
 
+    public function getUsage() {
+        return $this->translator->getUsage();
+    }
+
     public function translate($text, $sourceLang = null, $targetLang = null) {
         // source language MUST BE be a 2 character language code!
         // https://developers.deepl.com/docs/v/de/resources/supported-languages#source-languages
