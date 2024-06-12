@@ -209,7 +209,7 @@
                                     <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
                                 </li>
                                 <li>
-                                    Icons by Zita
+                                    <a href="https://www.cheetagonzita.com/" class="text-decoration-none" target="_blank">Artworks by Zita</a>
                                 </li>
                             </ul>
 
