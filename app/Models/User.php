@@ -67,7 +67,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     }
 
     public function sigHosts(): HasMany {
-        return $this->hasMany(SigHost::class, "reg_id");
+        return $this->hasMany(SigHost::class, "reg_id", "reg_id");
     }
 
     public function isSigHost(): bool {
