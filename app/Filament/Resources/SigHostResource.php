@@ -154,7 +154,7 @@ class SigHostResource extends Resource
             Forms\Components\ColorPicker::make('color')
                 ->label('Color in Schedule')
                 ->default("#cccccc")
-                ->formatStateUsing(fn($record) => $record->color) // somehow the color isnt fetched from the db so we have to do it manually
+                ->formatStateUsing(fn(?Model $record) => $record?->color) // somehow the color isnt fetched from the db so we have to do it manually
                 ->translateLabel();
     }
 }
