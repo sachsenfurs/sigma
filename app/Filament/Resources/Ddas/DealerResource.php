@@ -3,10 +3,9 @@
 namespace App\Filament\Resources\Ddas;
 
 use App\Enums\Approval;
-use App\Filament\Actions\ServiceAction;
+use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
-use App\Settings\ArtShowSettings;
 use App\Settings\DealerSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -97,6 +96,9 @@ class DealerResource extends Resource
                                     ->rows(8)
                                     ->translateLabel()
                                     ->maxLength(65535)
+                                    ->hintAction(
+                                        TranslateAction::translateToPrimary('info_en', 'info')
+                                    )
                                     ->columnSpan([
                                         'lg' => 2,
                                         '2xl' => 1
@@ -107,7 +109,7 @@ class DealerResource extends Resource
                                     ->translateLabel()
                                     ->maxLength(65535)
                                     ->hintAction(
-                                        ServiceAction::translateComponent('info', 'info_en')
+                                        TranslateAction::translateToSecondary('info', 'info_en')
                                     )
                                     ->columnSpan([
                                         'lg' => 2,

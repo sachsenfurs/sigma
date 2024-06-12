@@ -43,18 +43,20 @@ class CreateTimetableEntry extends CreateRecord
                    'entries' => [
                        [
                            'start' => $model?->start ?? $arguments['start'] ?? now()->addHour()->setMinute(0)->setSecond(0),
-                           'end' => $model?->end ?? $arguments['end'] ?? now()->addHours(3)->setMinute(0)->setSecond(0),
+                           'end' => $model?->end ?? $arguments['end'] ?? now()->addHour()->setMinute(0)->setSecond(0)->addMinutes($record?->duration ?? 120),
                        ]
                    ],
                 ];
             })
-            ->mutateFormDataUsing(fn($data) => CreateTimetableEntry::mutateData($data))
             ->modalFooterActionsAlignment(Alignment::End)
             ->createAnother(false)
+            ->mutateFormDataUsing(fn($data) => self::mutateData($data))
             ->form(CreateTimetableEntry::getSchema())
-            ->after(fn($livewire) => ($livewire->dispatch("refresh")));
+            ->after(fn($livewire) => ($livewire->dispatch("refresh")))
+            ->modelLabel(__("Timetable Entry"));
 
-}
+    }
+
     public static function mutateData(array $data): array {
         // read "entries" and remove them from $data array
         // entries => Filament Repeater for multiple event creation at once
@@ -98,14 +100,19 @@ class CreateTimetableEntry extends CreateRecord
                     DateTimePicker::make('start')
                         ->label('Beginning')
                         ->translateLabel()
-                        ->format('Y-m-d\TH:i')
                         ->seconds(false)
                         ->columns(1)
+                        ->live()
+                        ->afterStateUpdated(function(Set $set, $state, ?Model $record) {
+                            if(filled($state) AND $record) {
+                                $set('end', Carbon::parse($state)->addMinutes($record?->duration ?? 60)->toDateTimeLocalString());
+                            }
+                        })
                         ->required(),
                     DateTimePicker::make('end')
                         ->label('End')
                         ->translateLabel()
-                        ->format('Y-m-d\TH:i')
+                        ->after('start')
                         ->seconds(false)
                         ->columns(1)
                         ->required(),
@@ -118,11 +125,11 @@ class CreateTimetableEntry extends CreateRecord
                         ->after(function(Set $set, Get $get, $state) {
                             array_pop($state);
                             $current = end($state);
-                            $set('start', $current['start']);
-                            $set('end', $current['end']);
+                            $set('start', $current['start'] ?? now());
+                            $set('end', $current['end'] ?? now());
                             $state[] = [
-                                'start' => Carbon::parse($current['start'])->addDay()->toDateTimeString('minute'),
-                                'end' => Carbon::parse($current['end'])->addDay()->toDateTimeString('minute'),
+                                'start' => Carbon::parse($current['start'] ?? now())->addDay()->toDateTimeString('minute'),
+                                'end' => Carbon::parse($current['end'] ?? now())->addDay()->toDateTimeString('minute'),
                             ];
                             $set('entries', $state);
                         });

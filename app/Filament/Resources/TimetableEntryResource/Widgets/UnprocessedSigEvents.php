@@ -48,13 +48,17 @@ class UnprocessedSigEvents extends TableWidget
             ->columns([
                 IconColumn::make("approval")
                     ->translateLabel()
+                    ->sortable()
                     ->width(1),
                 TextColumn::make("name")
                     ->label("SIG Name")
-                    ->translateLabel(),
-                TextColumn::make("duration_hours")
+                    ->translateLabel()
+                    ->sortable(),
+                TextColumn::make("duration")
                     ->label("Duration (Hours)")
-                    ->translateLabel(),
+                    ->translateLabel()
+                    ->formatStateUsing(fn($state) => $state/60)
+                    ->sortable(),
                 TextColumn::make("sigTags.description_localized")
                     ->label("Tags")
                     ->translateLabel()
@@ -88,13 +92,17 @@ class UnprocessedSigEvents extends TableWidget
                         TextEntry::make("description_localized")
                             ->label("Description")
                             ->translateLabel(),
+                        TextEntry::make("additional_info"),
                         TextEntry::make("sigTags.description_localized")
+                            ->label("Tags")
+                            ->translateLabel()
                             ->badge(),
                     ]),
             ])
             ->recordAction(
                 ViewAction::class
             )
+            ->defaultPaginationPageOption(10)
             ;
     }
 

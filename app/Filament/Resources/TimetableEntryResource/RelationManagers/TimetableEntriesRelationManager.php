@@ -54,15 +54,17 @@ class TimetableEntriesRelationManager extends RelationManager
 
     protected function getTableHeaderActions(): array {
         return [
-            Tables\Actions\CreateAction::make()
-                ->form(TimetableEntryResource::getSchema())
-                ->fillForm(fn() => [
-                    'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null,
-                    'sig_event_id' => ($this->ownerRecord instanceof  SigEvent) ? $this->ownerRecord->id : null,
+            TimetableEntryResource\Pages\CreateTimetableEntry::getCreateAction(
+                Tables\Actions\CreateAction::make()
+            )
+            ->fillForm(fn() => [
+                'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null,
+                'sig_event_id' => ($this->ownerRecord instanceof  SigEvent) ? $this->ownerRecord->id : null,
+                'entries' => [[
                     'start' => now()->addHour()->setMinutes(0),
                     'end' => now()->addHours(2)->setMinutes(0),
-                ])
-            ,
+                ]]
+            ])
         ];
     }
 
