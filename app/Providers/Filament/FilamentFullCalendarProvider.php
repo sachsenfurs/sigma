@@ -37,7 +37,7 @@ class FilamentFullCalendarProvider {
                   ],
                   'nowIndicator' => true,
                   'slotMinTime' => "08:00:00",
-                  'slotMaxTime' => "28:00:00",
+                  'slotMaxTime' => "32:00:00",
                   'eventResizableFromStart' => true,
                   'allDaySlot' => false,
                   'showNonCurrentDates' => true,
