@@ -92,13 +92,17 @@ class UnprocessedSigEvents extends TableWidget
                         TextEntry::make("description_localized")
                             ->label("Description")
                             ->translateLabel(),
+                        TextEntry::make("additional_info"),
                         TextEntry::make("sigTags.description_localized")
+                            ->label("Tags")
+                            ->translateLabel()
                             ->badge(),
                     ]),
             ])
             ->recordAction(
                 ViewAction::class
             )
+            ->defaultPaginationPageOption(10)
             ;
     }
 

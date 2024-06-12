@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Ddas;
 
 use App\Enums\Approval;
-use App\Filament\Actions\ServiceAction;
+use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
@@ -62,13 +62,16 @@ class ArtshowItemResource extends Resource
                     ->label('Description')
                     ->translateLabel()
                     ->maxLength(65535)
+                    ->hintAction(
+                        TranslateAction::translateToPrimary('description_en', 'description')
+                    )
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description_en')
                     ->label('Description (English)')
                     ->translateLabel()
                     ->maxLength(65535)
                     ->hintAction(
-                        ServiceAction::translateComponent('description', 'description_en')
+                        TranslateAction::translateToSecondary('description', 'description_en')
                     )
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('starting_bid')

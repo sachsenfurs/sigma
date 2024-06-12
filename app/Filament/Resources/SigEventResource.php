@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Approval;
-use App\Filament\Actions\ServiceAction;
+use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
 use App\Models\SigTag;
@@ -43,7 +43,7 @@ class SigEventResource extends Resource
                 self::getSigTagsFieldSet(),
                 self::getSigRegistrationFieldSet(),
                 self::getSigDescriptionFieldSet(),
-                self::getAdditionalInfosFieldSet(),
+                self::getAdditionalInfoFieldSet(),
             ]);
     }
 
@@ -54,6 +54,8 @@ class SigEventResource extends Resource
             ->emptyStateHeading(__('No SIGs available'))
             ->filters([
                 Tables\Filters\SelectFilter::make("approval")
+                    ->label("Approval")
+                    ->translateLabel()
                     ->options(Approval::class),
                 Tables\Filters\SelectFilter::make("tags")
                     ->relationship("sigTags", "name")
@@ -134,7 +136,9 @@ class SigEventResource extends Resource
                     ->label('German')
                     ->translateLabel()
                     ->required()
-                    //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
+                    ->suffixAction(
+                        TranslateAction::translateToPrimary('name_en', 'name')
+                    )
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
@@ -142,9 +146,8 @@ class SigEventResource extends Resource
                     ->label('English')
                     ->translateLabel()
                     ->required()
-                    //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
                     ->suffixAction(
-                        ServiceAction::translateComponent('name', 'name_en')
+                        TranslateAction::translateToSecondary('name', 'name_en')
                     )
                     ->maxLength(255)
                     ->inlineLabel()
@@ -268,34 +271,27 @@ class SigEventResource extends Resource
                     Forms\Components\Textarea::make('description')
                         ->label('German')
                         ->translateLabel()
+                        ->hintAction(
+                            TranslateAction::translateToPrimary('description_en', 'description')
+                        )
                         ->columnSpan(["2xl" => 1, "default" => 2])
-                        //->required(fn (Get $get) => in_array('de', $get('languages')) ?? false)
                         ->rows(8),
                     Forms\Components\Textarea::make('description_en')
                         ->label('English')
                         ->translateLabel()
-                        ->columnSpan(["2xl" => 1, "default" => 2])
                         ->hintAction(
-                            ServiceAction::translateComponent('description', 'description_en')
+                            TranslateAction::translateToSecondary('description', 'description_en')
                         )
-                        //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
+                        ->columnSpan(["2xl" => 1, "default" => 2])
                         ->rows(8),
                 ]);
     }
 
-    private static function getAdditionalInfosFieldSet(): Forms\Components\Component
-    {
-        return
-//            Forms\Components\Fieldset::make('infos')
-//                ->label('Additional Information')
-//                ->translateLabel()
-//                ->schema([
-                    Forms\Components\Textarea::make('additional_info')
-                        ->label(__("Additional Information"))
-                        ->translateLabel()
-                        //->required(fn (Get $get) => in_array('en', $get('languages')) ?? false)
-                        ->rows(4)
-                        ->columnSpanFull();
-//                ]);
+    private static function getAdditionalInfoFieldSet(): Forms\Components\Component {
+        return Forms\Components\Textarea::make('additional_info')
+            ->label(__("Additional Information"))
+            ->translateLabel()
+            ->rows(4)
+            ->columnSpanFull();
     }
 }
