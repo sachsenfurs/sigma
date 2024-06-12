@@ -3,10 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
+use App\Filament\Resources\SigEventResource\Pages\EditSigEvent;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
+use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -201,6 +204,17 @@ class TimetableEntryResource extends Resource
             ->getOptionLabelFromRecordUsing(function (Model $record) {
                 return $record->name . ' - ' . $record->sigHost->name;
             })
+            ->live()
+            ->hintAction(
+                function($state) {
+                    if(filled($state)) {
+                        return Forms\Components\Actions\Action::make("edit")
+                            ->label("Edit")
+                            ->translateLabel()
+                            ->url(SigEventResource::getUrl("edit", ['record' => $state]));
+                    }
+                }
+            )
             ->required()
             ->searchable()
             ->preload();

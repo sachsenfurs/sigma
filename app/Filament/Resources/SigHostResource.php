@@ -42,6 +42,7 @@ class SigHostResource extends Resource
                     ]),
                 self::getDescriptionField(),
                 self::getDescriptionEnField(),
+                self::getColorField(),
             ]);
     }
 
@@ -146,6 +147,14 @@ class SigHostResource extends Resource
             Forms\Components\Toggle::make('hide')
                 ->label('Hide name on schedule')
                 ->inline(false)
+                ->translateLabel();
+    }
+    private static function getColorField(): Forms\Components\Component {
+        return
+            Forms\Components\ColorPicker::make('color')
+                ->label('Color in Schedule')
+                ->default("#cccccc")
+                ->formatStateUsing(fn($record) => $record->color) // somehow the color isnt fetched from the db so we have to do it manually
                 ->translateLabel();
     }
 }

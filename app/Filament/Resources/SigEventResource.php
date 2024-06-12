@@ -220,6 +220,17 @@ class SigEventResource extends Resource
                         return $record->name . $regNr;
                     })
                     ->createOptionForm(fn($form) => SigHostResource::form($form))
+                    ->live()
+                    ->hintAction(
+                        function($state) {
+                            if(filled($state)) {
+                                return Forms\Components\Actions\Action::make("edit")
+                                    ->label("Edit")
+                                    ->translateLabel()
+                                    ->url(SigHostResource::getUrl("edit", ['record' => $state]));
+                            }
+                        }
+                    )
                     ->columnSpanFull(),
                 Forms\Components\Select::make("approval")
                     ->label("Approval")

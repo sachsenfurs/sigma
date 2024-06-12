@@ -37,6 +37,8 @@ class SigPlannerWidget extends FullCalendarWidget
                        ->where('start', '<=', $info['end']);
              })
              ->orWhere('end', '>=', $info['start'])
+             ->with("sigEvent")
+             ->with("sigEvent.sigHost")
              ->get()
              ->map(
                 fn (TimetableEntry $entry) => EventData::make()
@@ -52,6 +54,10 @@ class SigPlannerWidget extends FullCalendarWidget
                           return "#756d6a";
                       if($entry->has_time_changed || $entry->has_location_changed)
                           return "#ff0000";
+
+                      if($entry->sigEvent->sigHost->color)
+                        return "#ffffff00";
+
                       return "";
                   })())
                   ->extraProperties([
@@ -60,6 +66,9 @@ class SigPlannerWidget extends FullCalendarWidget
                               return "#eb8060";
                           if($entry->hide)
                               return "#948e8a";
+
+                          if($entry->sigEvent->sigHost->color)
+                              return $entry->sigEvent->sigHost->color;
 
                           return "";
                       })(),
