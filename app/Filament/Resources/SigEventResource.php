@@ -302,7 +302,8 @@ class SigEventResource extends Resource
         return Forms\Components\Textarea::make('additional_info')
             ->label(__("Additional Information"))
             ->translateLabel()
-            ->rows(4)
+            ->rows(6)
+            ->autosize()
             ->columnSpanFull();
     }
 }
