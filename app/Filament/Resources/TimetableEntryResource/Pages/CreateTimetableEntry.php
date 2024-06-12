@@ -112,7 +112,7 @@ class CreateTimetableEntry extends CreateRecord
                     DateTimePicker::make('end')
                         ->label('End')
                         ->translateLabel()
-                        ->after('start')
+                        ->afterOrEqual('start')
                         ->seconds(false)
                         ->columns(1)
                         ->required(),
