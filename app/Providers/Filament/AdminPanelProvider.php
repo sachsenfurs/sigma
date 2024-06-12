@@ -71,7 +71,6 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
 //            ->breadcrumbs(false)
-            ->viteTheme('resources/css/filament/admin/theme.css')
             ->userMenuItems([
                 MenuItem::make()
                         ->label(__("Leave Admin Interface"))
