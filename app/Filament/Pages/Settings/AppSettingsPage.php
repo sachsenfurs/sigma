@@ -11,6 +11,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 
 class AppSettingsPage extends SettingsPage
 {
@@ -101,14 +102,18 @@ class AppSettingsPage extends SettingsPage
                         Forms\Components\TextInput::make("deepl_usage")
                             ->label("DeepL Usage")
                             ->formatStateUsing(function() {
-                                $used = app(Translator::class)->getUsage()?->character?->count ?? "?";
-                                $max  = app(Translator::class)->getUsage()?->character?->limit ?? "?";
+                                $usage = app(Translator::class)->getUsage();
+                                $used = $usage?->character?->count ?? 1;
+                                $max  = $usage?->character?->limit ?? 1;
                                 return $used . " / " . $max . " (" . number_format($used/$max*100, 2) . "%)";
                             })
                             ->readOnly()
                             ->dehydrated(false),
                         Forms\Components\TextInput::make("deepl_source_lang")
                             ->string()
+                            ->helperText(
+                                new HtmlString('<a href="https://developers.deepl.com/docs/v/de/resources/supported-languages" target="_blank">'.__("Supported languages").'</a>')
+                            )
                             ->required(),
                         Forms\Components\TextInput::make("deepl_target_lang")
                             ->string()
