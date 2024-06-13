@@ -6,6 +6,7 @@ use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
+use App\Models\SigHost;
 use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,7 +15,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +38,7 @@ class SigEventResource extends Resource
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
-                self::getSigHostFieldSet(),
+                self::getSigHostsFieldSet(),
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigHostsFieldSet(),
@@ -197,7 +197,7 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostFieldSet(): Forms\Components\Component
+    private static function getSigHostsFieldSet(): Forms\Components\Component
     {
         return
             Forms\Components\Fieldset::make('hosts')
@@ -234,16 +234,6 @@ class SigEventResource extends Resource
                                 return $sigHost->id ?? null;
                             })
                             ->live()
-                            ->hintAction(
-                                function($state) {
-                                    if(filled($state)) {
-                                        return Forms\Components\Actions\Action::make("edit")
-                                            ->label("Edit")
-                                            ->translateLabel()
-                                            ->url(SigHostResource::getUrl("edit", ['record' => $state]));
-                                    }
-                                }
-                            )
                             ->columnSpanFull(),
                         Forms\Components\Select::make("approval")
                             ->label("Approval")
