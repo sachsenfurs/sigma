@@ -184,18 +184,7 @@ class DealerResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make("approval")
-                        ->translateLabel()
-                        ->form([
-                            Forms\Components\Radio::make("approval")
-                            ->options(Approval::class)
-                            ->default(1),
-                        ])
-                        ->action(
-                            function(array $data, Collection $records) {
-                                $records->each->update($data);
-                            }
-                        ),
+                    Approval::getBulkAction(),
                     Tables\Actions\BulkAction::make("sigLocation")
                         ->translateLabel()
                         ->form([

@@ -7,10 +7,14 @@ use App\Enums\Attributes\Style;
 use App\Enums\Attributes\Icon;
 use App\Enums\Attributes\Name;
 use App\Enums\Traits\AttributableEnum;
+use Filament\Forms\Components\Radio;
 use Filament\Support\Colors\Color as FilamentColor;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
 
 enum Approval: int implements HasLabel, HasColor, HasIcon
 {
@@ -34,6 +38,7 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
     #[Style('bg-danger')]
     case REJECTED = 2;
 
+
     /**
      * Filament translation
      * @return string|null
@@ -56,5 +61,20 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
      */
     public function getIcon(): ?string {
         return $this->icon();
+    }
+
+    /**
+     * Filament Bulk Action
+     * @return Action
+     */
+    public static function getBulkAction(): BulkAction {
+        return BulkAction::make("approval")
+            ->translateLabel()
+            ->form([
+                Radio::make("approval")
+                    ->options(Approval::class)
+                    ->default(1),
+            ])
+            ->action(fn(array $data, Collection $records) =>$records->each->update($data));
     }
 }

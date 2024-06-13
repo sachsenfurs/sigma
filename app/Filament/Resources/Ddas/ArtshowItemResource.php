@@ -156,6 +156,7 @@ class ArtshowItemResource extends Resource
             ->headerActions([])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Approval::getBulkAction(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

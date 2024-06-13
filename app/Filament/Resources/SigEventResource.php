@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -62,13 +63,10 @@ class SigEventResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                ]),
+                //
             ])
             ->bulkActions([
-                //
+                Approval::getBulkAction(),
             ]);
     }
 
@@ -122,7 +120,20 @@ class SigEventResource extends Resource
                 ->label('In Schedule')
                 ->translateLabel()
                 ->counts('timetableEntries')
-                ->sortable(),
+                ->sortable()
+                ->toggleable(),
+            IconColumn::make("description")
+                ->boolean()
+                ->label("Text")
+                ->sortable()
+                ->toggleable()
+                ->getStateUsing(fn(Model $record) => filled($record->description)),
+            IconColumn::make("description_en")
+                ->boolean()
+                ->label("Text (EN)")
+                ->sortable()
+                ->toggleable()
+                ->getStateUsing(fn(Model $record) => filled($record->description_en)),
         ];
     }
 
@@ -135,6 +146,7 @@ class SigEventResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('German')
                     ->translateLabel()
+                    ->maxLength(255)
                     ->required()
                     ->suffixAction(
                         TranslateAction::translateToPrimary('name_en', 'name')
@@ -145,6 +157,7 @@ class SigEventResource extends Resource
                 Forms\Components\TextInput::make('name_en')
                     ->label('English')
                     ->translateLabel()
+                    ->maxLength(255)
                     ->required()
                     ->suffixAction(
                         TranslateAction::translateToSecondary('name', 'name_en')
@@ -279,22 +292,22 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->columns(2)
                 ->schema([
-                    Forms\Components\Textarea::make('description')
+                    Forms\Components\MarkdownEditor::make('description')
                         ->label('German')
                         ->translateLabel()
+                        ->maxLength(65535)
                         ->hintAction(
                             TranslateAction::translateToPrimary('description_en', 'description')
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->rows(8),
-                    Forms\Components\Textarea::make('description_en')
+                        ->columnSpan(["2xl" => 1, "default" => 2]),
+                    Forms\Components\MarkdownEditor::make('description_en')
                         ->label('English')
                         ->translateLabel()
+                        ->maxLength(65535)
                         ->hintAction(
                             TranslateAction::translateToSecondary('description', 'description_en')
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->rows(8),
+                        ->columnSpan(["2xl" => 1, "default" => 2]),
                 ]);
     }
 
@@ -303,6 +316,7 @@ class SigEventResource extends Resource
             ->label(__("Additional Information"))
             ->translateLabel()
             ->rows(6)
+            ->maxLength(65535)
             ->autosize()
             ->columnSpanFull();
     }
