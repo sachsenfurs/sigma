@@ -49,11 +49,15 @@
                                     {{ $item->name }}
                                 </div>
                                 <div class="col text-end">
-                                        <span @class(['badge text-uppercase', 'bg-success' => ($item->sold OR $item->approved), 'bg-warning text-black' => !$item->approved])>
+                                        <span @class([
+                                            'badge text-uppercase',
+                                            'bg-success' => $item->sold,
+                                            $item->approval->style(),
+                                        ])>
                                             @if($item->sold)
                                                 {{ __("Sold") }}
                                             @else
-                                                {{ $item->approved ? __("Approved") : __("Pending Approval") }}
+                                                {{ $item->approval->name() }}
                                             @endif
                                         </span>
                                     @canany(['edit', 'delete'], $item)
@@ -177,7 +181,7 @@
                             <span class="small">{{ __('Visible for everyone') }}</span>
                         </div>
                         <div class="col-12" style="height: 100%">
-                            <x-form.livewire-input type="textarea" name="form.additional_info" label="Additional Information" rows="5" required/>
+                            <x-form.livewire-input type="textarea" name="form.additional_info" :label="__('Additional Information')" rows="5" required/>
                             <span class="small">{{ __('Only visible for staff. Here you can put some details or fun facts for the auction!') }}</span>
                         </div>
                     </div>

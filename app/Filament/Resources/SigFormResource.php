@@ -16,41 +16,39 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class SigFormResource extends Resource
 {
     protected static ?string $model = SigForm::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'SIG';
 
     protected static ?int $navigationSort = 110;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_forms');
     }
 
-    public static function getLabel(): ?string
-    {
+    public static function getLabel(): ?string {
         return __('Form');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Forms');
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        $count = SigFilledForm::where('approved', 0)->count();
-        return ($count > 0) ? $count : "";
+    public static function getNavigationBadge(): ?string {
+        if(!Route::is("filament.*"))
+            return null;
+
+        return SigFilledForm::where('approved', 0)->count() ?: null;
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 self::getNameFieldSet(),
@@ -62,8 +60,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->actions([
@@ -76,8 +73,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListSigForms::route('/'),
             'create' => Pages\CreateSigForm::route('/create'),
@@ -85,15 +81,13 @@ class SigFormResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
+    public static function getWidgets(): array {
         return [
             FilledForms::class,
         ];
     }
 
-    private static function getTableColumns(): array
-    {
+    private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('slug')
                 ->label('Slug')
@@ -125,8 +119,7 @@ class SigFormResource extends Resource
         ];
     }
 
-    private static function getNameFieldSet(): Forms\Components\Component
-    {
+    private static function getNameFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('name')
                 ->label('Name')
@@ -156,8 +149,7 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSlugFieldSet(): Forms\Components\Component
-    {
+    private static function getSlugFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('slug')
                 ->label('Slug')
@@ -174,8 +166,7 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getRolesFieldSet(): Forms\Components\Component
-    {
+    private static function getRolesFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('roles')
                 ->label('User Roles')
@@ -199,8 +190,7 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getFormClosedFieldSet(): Forms\Components\Component
-    {
+    private static function getFormClosedFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('form_closed')
                 ->label('Close form')
@@ -215,8 +205,7 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getSigEventFieldSet(): Forms\Components\Component
-    {
+    private static function getSigEventFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('assigned_sig')
                 ->label('Assigned SIG')
@@ -234,8 +223,7 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getFormDefinitionFieldSet(): Forms\Components\Component
-    {
+    private static function getFormDefinitionFieldSet(): Forms\Components\Component {
         return Forms\Components\Fieldset::make('form_definition')
             ->label('Form definition')
             ->translateLabel()
@@ -257,8 +245,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockTextInput(): Forms\Components\Builder\Block
-    {
+    private static function getBlockTextInput(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('text')
             ->icon('heroicon-o-chat-bubble-oval-left-ellipsis')
             ->label(function (?array $state): string {
@@ -297,8 +284,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockTextarea(): Forms\Components\Builder\Block
-    {
+    private static function getBlockTextarea(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('textarea')
             ->icon('heroicon-o-bars-3-bottom-left')
             ->label(function (?array $state): string {
@@ -337,8 +323,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockFileUpload(): Forms\Components\Builder\Block
-    {
+    private static function getBlockFileUpload(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('file_upload')
             ->icon('heroicon-o-document')
             ->label(function (?array $state): string {
@@ -377,8 +362,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockCheckbox(): Forms\Components\Builder\Block
-    {
+    private static function getBlockCheckbox(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('checkbox')
             ->icon('heroicon-o-check-circle')
             ->label(function (?array $state): string {
@@ -417,8 +401,7 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockSelect(): Forms\Components\Builder\Block
-    {
+    private static function getBlockSelect(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('select')
             ->icon('heroicon-o-queue-list')
             ->label(function (?array $state): string {

@@ -3,10 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\SigEvent;
-use App\Models\SigLocation;
-use App\Models\TimetableEntry;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Cache;
 
 trait HasSigEvents {

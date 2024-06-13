@@ -18,7 +18,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('public.listview')]) href="{{ route('public.listview') }}">
+                        <a @class(['nav-link px-3', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
                             <i class="bi bi-calendar-week"></i> {{ __('Event Schedule') }}
                         </a>
                     </li>
@@ -45,29 +45,44 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
-                            <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
-                        </a>
-                    </li>
+                    @can("viewAny", \App\Models\LostFoundItem::class)
+                        <li>
+                            <a @class(['nav-link px-3', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
+                                <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
+                            </a>
+                        </li>
+                    @endcan
 
-                    <li class="nav-item dropdown">
-                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-palette"></i> {{ __("Dealers Den & Art Show")}}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="artMenu">
-                            <li>
-                                <a @class(['dropdown-item', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
-                                    <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
-                                </a>
-                            </li>
-                            <li>
-                                <a @class(['dropdown-item', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
-                                    <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @php(
+                        $items = collect([
+                            app(\App\Settings\DealerSettings::class)->enabled ? __("Dealer's Den") : null,
+                            app(\App\Settings\ArtShowSettings::class)->enabled ? __("Art Show") : null,
+                        ])
+                        ->filter(fn($e) => $e != null)
+                    )
+                    @if($items->count() > 0)
+                        <li class="nav-item dropdown">
+                            <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-palette"></i> {{ $items->join(" & ") }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="artMenu">
+                                @if(app(\App\Settings\DealerSettings::class)->enabled)
+                                    <li>
+                                        <a @class(['dropdown-item', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
+                                            <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
+                                        </a>
+                                    </li>
+                                @endif
+                                @if(app(\App\Settings\ArtShowSettings::class)->enabled)
+                                    <li>
+                                        <a @class(['dropdown-item', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
+                                            <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -178,7 +193,7 @@
             @endcache
         </footer>
         <!-- Modal -->
-        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModallLabel" aria-hidden="true">
+        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
             <div class="modal-dialog  modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
@@ -193,7 +208,12 @@
                                     <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
                                     <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
                                 </li>
+                                <li>
+                                    <a href="https://www.cheetagonzita.com/" class="text-decoration-none" target="_blank">Artworks by Zita</a>
+                                </li>
                             </ul>
+
+
 
 
                         </div>

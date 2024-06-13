@@ -82,7 +82,7 @@ class SigLocationResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigEventsRelationManager::class,
+            TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
         ];
     }
 
@@ -161,7 +161,7 @@ class SigLocationResource extends Resource
     }
 
     private static function getRenderIdField(): Forms\Components\Component {
-        return Forms\Components\TextInput::make('render_ids');
+        return Forms\Components\TagsInput::make('render_ids');
     }
 
     private static function getFloorField(): Forms\Components\Component {

@@ -38,16 +38,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'roles'
     ];
 
-    public function roles(): BelongsToMany
-    {
+    public function roles(): BelongsToMany {
         return $this->belongsToMany(
             UserRole::class,
             'user_user_roles'
         );
     }
 
-    public function permissions(): Collection
-    {
+    public function permissions(): Collection {
         return $this->roles->map->permissions->flatten()->pluck('name')->unique();
     }
 
@@ -69,15 +67,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     }
 
     public function sigHosts(): HasMany {
-        return $this->hasMany(SigHost::class, "reg_id");
+        return $this->hasMany(SigHost::class, "reg_id", "reg_id");
     }
 
     public function isSigHost(): bool {
         return $this->sigHosts()->count() > 0;
     }
 
-    public function hasGroup(string $name): bool
-    {
+    public function hasGroup(string $name): bool {
         return in_array($name, $this->groups);
     }
 

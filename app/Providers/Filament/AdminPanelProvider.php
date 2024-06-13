@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\SigEventResource\Widgets\OverviewStatsWidget;
+use App\Http\Middleware\SetLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -19,6 +21,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -29,6 +32,8 @@ class AdminPanelProvider extends PanelProvider
         Table::configureUsing(function(Table $table): void {
             $table->defaultPaginationPageOption(50);
         });
+        Table::$defaultDateTimeDisplayFormat = "l, d.m.Y - H:i";
+        Table::$defaultDateDisplayFormat = "l, d.m.Y";
 
         return $panel
             ->default()
@@ -48,15 +53,14 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-//                SigPlannerWidget::class,
+                OverviewStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
+                SetLocale::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
@@ -66,14 +70,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->breadcrumbs(false)
-            ->viteTheme('resources/css/filament/admin/theme.css')
-            ->bootUsing(function() use ($panel) {
-                // this has to be inside the "bootUsing" function since we are using database queries
-                // which are not always available when the AdminPanelProvider is registered!
-                // ServiceProviders otherwise are registered in an early state of the application, even in artisan commands!
-                FilamentFullCalendarProvider::registerPlugin($panel);
-            })
+//            ->breadcrumbs(false)
             ->userMenuItems([
                 MenuItem::make()
                         ->label(__("Leave Admin Interface"))

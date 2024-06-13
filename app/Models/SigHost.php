@@ -36,8 +36,7 @@ class SigHost extends Model
         'sigEvents',
     ];
 
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
     }
 

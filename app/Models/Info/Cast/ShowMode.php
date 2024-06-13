@@ -14,11 +14,11 @@ class ShowMode implements Castable {
         return new class implements CastsAttributes {
             public function get(Model $model, string $key, mixed $value, array $attributes): array {
                 $modes = is_array($value) ? $value : json_decode($value);
-                return collect($modes)->map(fn($m) => \App\Models\Info\Enum\ShowMode::tryFrom($m))->toArray();
+                return collect($modes)->map(fn($m) => \App\Models\Info\Enums\ShowMode::tryFrom($m))->toArray();
             }
 
             public function set(Model $model, string $key, mixed $value, array $attributes): array {
-                $modes = collect($value)->map(fn($m) => $m instanceof \App\Models\Info\Enum\ShowMode ? $m : \App\Models\Info\Enum\ShowMode::tryFrom($m));
+                $modes = collect($value)->map(fn($m) => $m instanceof \App\Models\Info\Enums\ShowMode ? $m : \App\Models\Info\Enums\ShowMode::tryFrom($m));
                 return [
                     $key => $modes->pluck("value")->toArray()
                 ];

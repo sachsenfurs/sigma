@@ -11,12 +11,17 @@ use App\Models\SigTag;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\RealData\EASTSeeder;
+use Database\Seeders\RealData\PermissionSeeder;
+use Database\Seeders\RealData\RingbergSeeder;
+use Database\Seeders\RealData\SigTagSeeder;
+use Database\Seeders\RealData\UserRoleSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Seed the application's database with TESTING DATA
      *
      * @return void
      */
@@ -78,5 +83,30 @@ class DatabaseSeeder extends Seeder
         });
 
         ArtshowItem::factory(10)->create();
+
+        DealerTag::insert([
+            [
+                'name' => "NSFW",
+                'name_en' => "NSFW",
+            ],
+            [
+                'name' => "Merch",
+                'name_en' => "Merch",
+            ],
+            [
+                'name' => "Prints",
+                'name_en' => "Prints",
+            ],
+            [
+                'name' => "Plushies",
+                'name_en' => "Plushies",
+            ]
+        ]);
+
+        Dealer::factory(15)->create();
+
+        foreach(Dealer::all() AS $dealer) {
+            $dealer->tags()->sync(DealerTag::inRandomOrder()->limit(rand(0,3))->get());
+        }
     }
 }

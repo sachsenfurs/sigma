@@ -3,8 +3,12 @@
 
 @section('content')
     <div class="container">
-        <h2 class="pb-3">
-            {{ __('Art Show Item List') }}
-        </h2>
+        @if(app(\App\Settings\ArtShowSettings::class)->show_items_date->isAfter(now()))
+            <div class="card p-4 fs-1 text-center">
+                {{ __("Art Show Items are not published yet") }}
+            </div>
+        @else
+
+        @endif
     </div>
 @endsection

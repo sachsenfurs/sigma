@@ -5,6 +5,9 @@ namespace App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,21 +17,18 @@ class EditTimetableEntry extends EditRecord
 
     protected static ?string $cluster = SigPlanning::class;
 
-    protected function getHeaderActions(): array
-    {
+    protected function getHeaderActions(): array {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 
-    public function getHeading(): string
-    {
+    public function getHeading(): string {
         return __('Manage Event Schedule');
 
     }
 
-    protected function getFooterWidgets(): array
-    {
+    protected function getFooterWidgets(): array {
         if ($this->record->sigEvent->reg_possible) {
             // Only show the TimeslotTable widget if the event allows registration
             return [
@@ -38,8 +38,7 @@ class EditTimetableEntry extends EditRecord
         return [];
     }
 
-    protected function handleRecordUpdate(Model $record, array $data): Model
-    {
+    protected function handleRecordUpdate(Model $record, array $data): Model {
         return self::handleUpdate($record, $data);
     }
 
@@ -60,5 +59,38 @@ class EditTimetableEntry extends EditRecord
         $record->update($data);
 
         return $record;
+    }
+
+    public static function getSchema() {
+        return [
+            Grid::make()
+                ->columns(2)
+                ->schema([
+                    Select::make('sig_event_id')
+                          ->relationship('sigEvent', 'name')
+                          ->prefix(__("SIG"))
+                          ->hiddenLabel()
+                          ->searchable()
+                          ->preload()
+                          ->required(),
+                    Select::make('sig_location_id')
+                          ->prefix(__("Location"))
+                          ->hiddenLabel()
+                          ->relationship('sigLocation', 'name'),
+
+                    DateTimePicker::make('start')
+                                  ->seconds(false)
+                                  ->required()
+                                  ->prefix(__("Start"))
+                                  ->hiddenLabel(true),
+                    DateTimePicker::make('end')
+                                  ->seconds(false)
+                                  ->required()
+                                  ->prefix(__("End"))
+                                  ->hiddenLabel(true),
+                ])
+                ->columns(2)
+                ->schema(TimetableEntryResource::getSchema())
+        ];
     }
 }

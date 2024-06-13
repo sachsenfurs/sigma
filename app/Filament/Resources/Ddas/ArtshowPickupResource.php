@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Ddas;
 
 use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages;
 use App\Models\Ddas\ArtshowPickup;
+use App\Settings\ArtShowSettings;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,32 +15,34 @@ class ArtshowPickupResource extends Resource
 {
     protected static ?string $model = ArtshowPickup::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-gift';
 
     protected static ?string $navigationGroup = 'Artshow';
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    protected static ?int $navigationSort = 240;
+
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function getPluralLabel(): ?string
-    {
-        return __('Art Show Pickups');
+    public static function getPluralLabel(): ?string {
+        return __('Pickups');
     }
 
-    protected static ?int $navigationSort = 240;
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    }
 
-    public static function form(Form $form): Form
-    {
+
+
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 //
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
                 //
@@ -57,15 +60,13 @@ class ArtshowPickupResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowPickups::route('/'),
             'create' => Pages\CreateArtshowPickup::route('/create'),

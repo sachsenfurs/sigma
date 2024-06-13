@@ -26,7 +26,7 @@ class LassieExportEndpoint extends Controller
                 'start' => $timetableEntry->start->toDateTimeString(), //start	datetime	NO	current_timestamp()	 ISO-Format, UTC time (i.e. "2019-08-01 11:30:00" for an event at 13:30 in Berlin in summer GMT+2)
                 'end' => $timetableEntry->end->toDateTimeString(), //end	datetime	NO	current_timestamp()	 ISO-Format, UTC time (i.e. "2019-08-01 11:30:00" for an event at 13:30 in Berlin in summer GMT+2)
                 'location' => $timetableEntry->sigLocation->name, //location	varchar(250)	YES	NULL	 Location of the event
-                'url' => route("public.timeslot-show", $timetableEntry), //url	varchar(250)	YES	NULL	 An URL for the event
+                'url' => route("timetable-entry.show", $timetableEntry), //url	varchar(250)	YES	NULL	 An URL for the event
                 'allDay' => intval($timetableEntry->start->diffInHours($timetableEntry->end) >= 24), // allDay	int(1)	YES	NULL	 If the event lasts all day, then "1"
                 'color' => "rgb(204, 204, 204)", //color	varchar(20)	NO	rgb(204, 204, 204)	 Color for the event in the planner. Can be decimal rgb(r, g, b) or hexadecimal #rrggbb
                 'con_id' => 10, //con_id	int(11)	NO	5	Your Convention's ID. Ask Dingo.

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\Schedule\TimetableEntryController;
 use App\Models\SigAttendee;
-use App\Models\TimeTableEntry;
 use App\Models\SigTimeslot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -60,7 +59,7 @@ class SigTimeslotController extends Controller
         $validated['slot_end'] = Carbon::parse($request->get('slot_end'));
 
         $timeslot->update($validated);
-        return redirect()->action([TimetableController::class, 'edit'], ['entry' => $timeslot->timetableEntry->id])->withSuccess("Änderungen gespeichert!");
+        return redirect()->action([TimetableEntryController::class, 'edit'], ['entry' => $timeslot->timetableEntry->id])->withSuccess("Änderungen gespeichert!");
     }
 
     public function destroy(SigTimeslot $timeslot) {
@@ -88,7 +87,7 @@ class SigTimeslotController extends Controller
         ]);
 
         $timeslot->update($validated);
-        
+
         return redirect(route("sigs.show", $timeslot->timetableEntry->sigEvent->id))->withSuccess("Notiz aktualisiert!");
     }
 }

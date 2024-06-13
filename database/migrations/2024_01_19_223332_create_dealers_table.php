@@ -28,13 +28,13 @@ return new class extends Migration
             // Link zur Galerie o.ä.
             $table->string("gallery_link")->nullable();
 
-            //Kontaktmöglichkeiten
-            $table->string("contact")->nullable();
+            // Organisatorische Infos
+            $table->string("additional_info")->nullable();
 
             // Icon fürs Conbook (relativer Pfad, local storage)
             $table->string("icon_file")->nullable();
 
-            $table->boolean("approved")->default(false);
+            $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
 
             // in welchem Raum sitzt der Künstler später?
             $table->foreignId("sig_location_id")->nullable()->constrained()->nullOnDelete();

@@ -2,12 +2,11 @@
 
 namespace App\Models\Info;
 
-use App\Models\Info\Enum\ShowMode;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
+use App\Models\Info\Enums\ShowMode;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 
 class Social extends Model
 {
@@ -41,10 +40,24 @@ class Social extends Model
             get: fn() => App::getLocale() == "en" ? $this->link_name_en : $this->link_name
         );
     }
+
     public function linkLocalized(): Attribute {
         return Attribute::make(
             get: fn() => App::getLocale() == "en" ? $this->link_en : $this->link
         );
     }
+
+    public function imageUrl(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->image ? Storage::disk("public")->url($this->image) : null
+        );
+    }
+
+    public function imageUrlEn(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->image_en ? Storage::disk("public")->url($this->image_en) : null
+        );
+    }
+
 
 }

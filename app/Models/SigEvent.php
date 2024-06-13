@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Approval;
 use App\Models\Traits\HasTimetableEntries;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +17,7 @@ class SigEvent extends Model
 
     protected $casts = [
         'languages' => 'array',
+        'approval' => Approval::class
     ];
 
     protected $guarded = [];
@@ -33,11 +36,21 @@ class SigEvent extends Model
         'timetableEntries'
     ];
 
+    public function scopeUnprocessed(Builder $query) {
+        $query->withCount("timetableEntries")->having("timetable_entries_count", 0);
+    }
+
+    public function approved(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->approval == Approval::APPROVED
+        );
+    }
+
     public function sigHosts(): BelongsToMany {
         return $this->belongsToMany(SigHost::class, 'sig_host_sig_events');
     }
 
-    public function timetableCout(): Attribute {
+    public function timetableCount(): Attribute {
         return Attribute::make(
             get: fn() => $this->timetableEntries()->count()
         );
@@ -65,9 +78,16 @@ class SigEvent extends Model
             get: fn() => App::getLocale() == "en" ? ($this->description_en ?? $this->description) : $this->description
         );
     }
+
     public function descriptionLocalizedOther(): Attribute {
         return Attribute::make(
             get: fn() => App::getLocale() == "de" ? $this->description_en : $this->description
+        );
+    }
+
+    public function durationHours(): Attribute {
+        return Attribute::make(
+            get: fn() => number_format($this->duration / 60, 1)
         );
     }
 
@@ -82,7 +102,10 @@ class SigEvent extends Model
 
     public function scopePublic($query) {
         return $query->whereHas("timetableEntries", function ($query) {
-            $query->where("hide", false);
+            $query
+                ->where("hide", false)
+                ->whereRaw("start != end")
+            ;
         });
     }
 

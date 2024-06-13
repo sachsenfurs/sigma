@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string("link_name")->nullable();
             $table->string("link_name_en")->nullable();
             $table->string("icon")->nullable();
-            $table->text("qr")->nullable();
-            $table->text("qr_en")->nullable();
+            $table->text("image")->nullable();
+            $table->text("image_en")->nullable();
             $table->json("show_on")->default(json_encode([]));
             $table->integer("order")->default(0);
         });

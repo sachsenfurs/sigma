@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SigFilledForm extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
     protected $casts = [
@@ -21,7 +19,7 @@ class SigFilledForm extends Model
         'sigForm'
     ];
 
-    protected static function booted() {
+    protected static function booted(): void {
         static::addGlobalScope(new SigFormAccessScope);
     }
 

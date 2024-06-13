@@ -14,25 +14,30 @@ class RoleRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
 
-    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
-    {
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string {
+        return __("User Roles");
+    }
+
+    protected function getTableHeading(): string|Htmlable|null {
+        return __('User Roles');
+    }
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
+        return $ownerRecord->roles()->count();
+    }
+
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
         // Filament needs to know if the user can view the relation manager for the given record.
         return auth()->user()->can('manage_users');
     }
 
-    protected function can(string $action, ?Model $record = null): bool
-    {
+    protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
         return auth()->user()->can('manage_users');
     }
 
-    protected function getTableHeading(): string|Htmlable|null
-    {
-        return __('User Roles');
-    }
-
-    public function table(Table $table): Table
-    {
+    public function table(Table $table): Table {
         return $table
             ->recordTitleAttribute('title')
             ->columns([

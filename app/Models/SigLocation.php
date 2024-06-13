@@ -6,6 +6,7 @@ use App\Models\Ddas\Dealer;
 use App\Models\Traits\HasSigEvents;
 use App\Models\Traits\HasTimetableEntries;
 use App\Models\Traits\NameIdAsSlug;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,8 +28,7 @@ class SigLocation extends Model
         'essential' => "boolean"
     ];
 
-    public function sigEvents(): HasManyThrough
-    {
+    public function sigEvents(): HasManyThrough {
         return $this->hasManyThrough(
             SigEvent::class,
             TimetableEntry::class,
@@ -36,11 +36,20 @@ class SigLocation extends Model
             'id',
             'id',
             'sig_event_id'
-        );
+        )
+        ->distinct();
     }
 
     public function dealers(): HasMany {
         return $this->hasMany(Dealer::class);
+    }
+
+    /**
+     * Scopes to SigLocation which are assigned to at least one event
+     * @return void
+     */
+    public function scopeUsed(Builder $query) {
+        $query->withCount("timetableEntries")->having("timetable_entries_count",">", 0);
     }
 
     public function description(): Attribute {
