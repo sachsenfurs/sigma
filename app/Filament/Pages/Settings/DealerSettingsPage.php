@@ -33,23 +33,24 @@ class DealerSettingsPage extends SettingsPage
         return $form
             ->schema([
                 Section::make(__("General"))
-                       ->collapsible()
-                       ->schema([
-                           Toggle::make("enabled")
-                                ->label("Enabled")
-                                ->translateLabel(),
-                           DateTimePicker::make("signup_deadline")
-                                ->label("Dealer Signup Deadline")
-                                ->translateLabel()
-                                ->seconds(false)
-                                ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
-                           DateTimePicker::make("show_dealers_date")
-                                ->label("Show Dealers on public page")
-                                ->translateLabel()
-                                ->seconds(false)
-                                ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
-
-                       ])
+                   ->collapsible()
+                   ->schema([
+                       Toggle::make("enabled")
+                            ->label("Enabled")
+                            ->translateLabel(),
+                       DateTimePicker::make("signup_deadline")
+                            ->label("Dealer Signup Deadline")
+                            ->translateLabel()
+                            ->native(false)
+                            ->seconds(false)
+                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                       DateTimePicker::make("show_dealers_date")
+                            ->label("Show Dealers on public page")
+                            ->translateLabel()
+                            ->native(false)
+                            ->seconds(false)
+                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                   ])
             ]);
     }
 }

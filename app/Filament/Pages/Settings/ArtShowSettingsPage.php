@@ -6,7 +6,9 @@ use App\Filament\Clusters\Settings;
 use App\Settings\ArtShowSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
@@ -37,17 +39,52 @@ class ArtShowSettingsPage extends SettingsPage
                         Toggle::make("enabled")
                             ->label("Enabled")
                             ->translateLabel(),
-                        DateTimePicker::make("item_deadline")
-                            ->label("Item Submission Deadline")
+                        Fieldset::make("Artshow Items Signup")
                             ->translateLabel()
-                            ->seconds(false)
-                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
-                        DateTimePicker::make("show_items_date")
-                            ->label("Show Items on public page")
-                            ->translateLabel()
-                            ->seconds(false)
-                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
-
+                            ->columns(3)
+                            ->schema([
+                                DateTimePicker::make("item_deadline")
+                                    ->label("Item Submission Deadline")
+                                    ->translateLabel()
+                                    ->required()
+                                    ->native(false)
+                                    ->seconds(false)
+                                    ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                                DateTimePicker::make("show_items_date")
+                                    ->label("Show Items on public page")
+                                    ->translateLabel()
+                                    ->required()
+                                    ->native(false)
+                                    ->seconds(false)
+                                    ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                                TextInput::make("charity_min_percentage")
+                                     ->required()
+                                     ->minValue(0)
+                                     ->maxValue(100)
+                                     ->numeric(),
+                            ]),
+                        Fieldset::make("Bids")
+                                ->translateLabel()
+                                ->schema([
+                                    DateTimePicker::make("bid_start_date")
+                                        ->label("Bidding enabled from")
+                                        ->translateLabel()
+                                        ->required()
+                                        ->native(false)
+                                        ->seconds(false)
+                                        ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                                    DateTimePicker::make("bid_end_date")
+                                        ->label("Bidding enabled to")
+                                        ->translateLabel()
+                                        ->required()
+                                        ->native(false)
+                                        ->seconds(false)
+                                        ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                                    TextInput::make("max_bids_per_item")
+                                         ->required()
+                                         ->minValue(0)
+                                         ->numeric(),
+                                ]),
                     ])
             ]);
     }

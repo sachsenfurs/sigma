@@ -115,6 +115,11 @@ class DealerResource extends Resource
                                         'lg' => 2,
                                         '2xl' => 1
                                     ]),
+                                Forms\Components\Textarea::make("additional_info")
+                                    ->label("Additional Information")
+                                    ->translateLabel()
+                                    ->autosize()
+                                    ->columnSpanFull(),
                                 Forms\Components\FileUpload::make('icon_file')
                                     ->label('Logo')
                                     ->translateLabel()
