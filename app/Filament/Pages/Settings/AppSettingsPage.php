@@ -6,11 +6,12 @@ use App\Filament\Clusters\Settings;
 use App\Services\Translator;
 use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 
 class AppSettingsPage extends SettingsPage
@@ -75,6 +76,13 @@ class AppSettingsPage extends SettingsPage
                         Forms\Components\Toggle::make("lost_found_enabled")
                             ->label("Lost & Found Enabled")
                             ->translateLabel(),
+                        Forms\Components\Placeholder::make("export")
+                            ->label("LASSIE Export")
+                            ->hintAction(
+                                Action::make("open")
+                                    ->url(URL::temporarySignedRoute("lassie-export.index", now()->addHours(24)))
+                                    ->openUrlInNewTab()
+                            ),
                     ]),
                 Forms\Components\Section::make(__("Telegram Settings"))
                     ->collapsible()
