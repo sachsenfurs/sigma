@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\UserRoleObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy(UserRoleObserver::class)]
 class UserRole extends Model
 {
-
     protected $guarded = [];
     protected $with = [
         'permissions'

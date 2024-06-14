@@ -2,18 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\SigAttendeeObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(SigAttendeeObserver::class)]
 class SigAttendee extends Model
 {
-    use HasFactory;
-
-    /**
-     * Protected fields in this model.
-     * 
-     * @var array
-     */
     protected $guarded = [];
 
     public function user() {

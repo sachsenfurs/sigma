@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Scopes\SigFormAccessScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\SigFilledFormObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(SigFilledFormObserver::class)]
 class SigFilledForm extends Model
 {
     protected $guarded = [];
