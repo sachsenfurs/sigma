@@ -55,6 +55,59 @@ class AppSettingsPage extends SettingsPage
                             ->translateLabel()
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                        Forms\Components\Fieldset::make("api_endpoints")
+                            ->label("API Endpoints")
+                            ->translateLabel()
+                            ->schema([
+                                Forms\Components\TextInput::make("event_api")
+                                    ->label("Signage Event API")
+                                    ->translateLabel()
+                                    ->readOnly()
+                                    ->dehydrated(false)
+                                    ->formatStateUsing(fn() => URL::signedRoute("api.events"))
+                                    ->columnSpanFull()
+                                    ->hintAction(function($state) {
+                                        return Action::make("open")
+                                              ->url($state)
+                                              ->openUrlInNewTab();
+                                    }),
+                                Forms\Components\TextInput::make("location_api")
+                                    ->label("Signage Location API")
+                                    ->translateLabel()
+                                    ->readOnly()
+                                    ->dehydrated(false)
+                                    ->formatStateUsing(fn() => route("api.locations"))
+                                    ->columnSpanFull()
+                                    ->hintAction(function($state) {
+                                        return Action::make("open")
+                                              ->url($state)
+                                              ->openUrlInNewTab();
+                                    }),
+                                Forms\Components\TextInput::make("essentials_api")
+                                    ->label("Signage Event API")
+                                    ->translateLabel()
+                                    ->readOnly()
+                                    ->dehydrated(false)
+                                    ->formatStateUsing(fn() => route("api.essentials"))
+                                    ->columnSpanFull()
+                                    ->hintAction(function($state) {
+                                        return Action::make("open")
+                                              ->url($state)
+                                              ->openUrlInNewTab();
+                                    }),
+                                Forms\Components\TextInput::make("socials_api")
+                                    ->label("Signage Socials API")
+                                    ->translateLabel()
+                                    ->readOnly()
+                                    ->dehydrated(false)
+                                    ->formatStateUsing(fn() => route("api.socials"))
+                                    ->columnSpanFull()
+                                    ->hintAction(function($state) {
+                                        return Action::make("open")
+                                              ->url($state)
+                                              ->openUrlInNewTab();
+                                    }),
+                            ]),
                     ]),
                 Forms\Components\Section::make(__("LASSIE Settings"))
                     ->collapsible()
