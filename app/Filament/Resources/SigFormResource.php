@@ -27,7 +27,7 @@ class SigFormResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
 
-    protected static ?int $navigationSort = 110;
+    protected static ?int $navigationSort = 10;
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_forms');

@@ -21,8 +21,6 @@ class ArtshowItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 210;
 
     public static function can(string $action, ?Model $record = null): bool {
@@ -38,6 +36,9 @@ class ArtshowItemResource extends Resource
     }
     public static function getNavigationLabel(): string {
         return __("Items");
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
     }
 
     public static function canAccess(): bool {

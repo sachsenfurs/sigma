@@ -23,8 +23,6 @@ class ArtshowArtistResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 200;
 
     public static function can(string $action, ?Model $record = null): bool {
@@ -44,6 +42,9 @@ class ArtshowArtistResource extends Resource
 
     public static function getPluralLabel(): ?string {
         return __('Artists');
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
     }
 
     public static function canAccess(): bool {

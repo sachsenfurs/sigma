@@ -19,7 +19,7 @@ class SigLocationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationGroup = 'SIG';
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 60;
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sig_base_data');

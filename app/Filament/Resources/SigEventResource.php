@@ -29,7 +29,7 @@ class SigEventResource extends Resource
 
     protected static ?string $label = 'SIGs';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
     public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sigs');

@@ -19,7 +19,7 @@ class SocialResource extends Resource
     protected static ?string $model = Social::class;
 
     protected static ?string $cluster = Settings::class;
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 1900;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-share';
 

@@ -17,8 +17,6 @@ class ArtshowBidResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-euro';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 220;
 
     public static function can(string $action, ?Model $record = null): bool {
@@ -33,6 +31,9 @@ class ArtshowBidResource extends Resource
     }
     public static function getPluralLabel(): ?string {
         return __('Bids');
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
     }
 
     public static function canAccess(): bool {

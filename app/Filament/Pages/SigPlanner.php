@@ -15,7 +15,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class SigPlanner extends Page
 {
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
     protected static string $view = 'filament.resources.timetable-entry-resource.pages.sig-planner';
