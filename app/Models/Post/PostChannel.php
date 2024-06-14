@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Post;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Storage;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -12,7 +13,18 @@ class PostChannel extends Model
     public $timestamps = false;
     protected $table = "post_channels";
 
-    public function sendMessage(Post $post) {
+    public function posts(): HasManyThrough {
+        return $this->hasManyThrough(
+            Post::class,
+            PostChannelMessage::class,
+            "post_channel_id",
+            "id",
+            "id",
+            "post_id"
+        );
+    }
+
+    public function sendMessage(Post $post): void {
         $text = $post->getTranslatedText($this->language);
 
         if($post->image) {
@@ -42,7 +54,7 @@ class PostChannel extends Model
         }
     }
 
-    public function deleteMessage(PostChannelMessage $message) {
+    public function deleteMessage(PostChannelMessage $message): void {
         Telegram::deleteMessage([
             'chat_id' => $this->channel_identifier,
             'message_id' => $message->message_id,

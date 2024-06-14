@@ -1,26 +1,31 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Post;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Observers\PostObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy(PostObserver::class)]
 class Post extends Model
 {
     protected $guarded = [];
 
-    public function user() {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
-    public function getTranslatedText($language="de") {
+    public function getTranslatedText($language="de"): string {
         return match($language) {
             'en' => $this->text_en,
-            'de' => $this->text_de,
+            default => $this->text,
         };
     }
 
-    public function messages() {
+    public function messages(): BelongsToMany {
         return $this->belongsToMany(PostChannel::class, "post_channel_messages")
             ->using(PostChannelMessage::class)
             ->as('postChannelMessage')
@@ -28,8 +33,7 @@ class Post extends Model
     }
 
 
-
-    public function delete() {
+    public function delete(): void {
         foreach($this->messages->pluck("postChannelMessage") AS $message) {
             $message->delete();
         }
