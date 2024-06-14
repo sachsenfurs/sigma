@@ -19,7 +19,7 @@ return new class extends Migration
             // base data
             $table->string("name");
             $table->string("name_en")->nullable();
-            $table->string("description")->default("");
+            $table->string("description")->nullable()->default("");
             $table->string('description_en')->nullable()->default("");
 
             // physical data
