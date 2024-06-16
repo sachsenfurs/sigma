@@ -10,6 +10,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use function Filament\Support\format_money;
 
 class TimetableEntriesRelationManager extends RelationManager
 {
@@ -71,7 +72,8 @@ class TimetableEntriesRelationManager extends RelationManager
     protected function getTableEntryActions(): array {
         return [
             Tables\Actions\EditAction::make()
-                ->url(fn(Model $record) => SigEventResource::getUrl('edit', ['record' => $record->sigEvent])),
+                ->form(TimetableEntryResource\Pages\EditTimetableEntry::getSchema())
+                ->using(fn(Model $record, array $data) => TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data)),
         ];
     }
 }
