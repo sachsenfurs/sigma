@@ -46,6 +46,7 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('reg_id')
                     ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
+                    ->unique()
                     ->numeric(),
             ]);
     }
