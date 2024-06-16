@@ -61,7 +61,7 @@ class DealerResource extends Resource
                             ->label('User')
                             ->searchable()
                             ->preload()
-                            ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->id . " - " . $record->name)
+                            ->getOptionLabelFromRecordUsing(fn(Model $record) => ($record?->reg_id ? $record->reg_id . " - " : "") . $record->name)
                             ->translateLabel()
                             ->relationship('user', 'name'),
                         Forms\Components\Radio::make('approval')
