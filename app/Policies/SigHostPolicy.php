@@ -10,25 +10,39 @@ class SigHostPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user): ?bool {
-        if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sig_base_data'))
-            return true;
+    /**
+     * Overrides
+     */
+    public function before(?User $user): ?bool {
+        if($user)
+            if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sig_base_data'))
+                return true;
 
         return null;
     }
 
-    public function viewAny(User $user): bool {
-        return false;
+    /**
+     * Default abilities
+     */
+
+    public function viewAny(?User $user): bool {
+        if(!TimetableEntryPolicy::isSchedulePublic())
+            return false;
+
+        return true;
     }
 
-    public function view(User $user, SigHost $sigHost): bool {
+    public function view(?User $user, SigHost $sigHost): bool {
+        if(!TimetableEntryPolicy::isSchedulePublic())
+            return false;
+
         if($sigHost->hide)
             return false;
 
-        if($sigHost->reg_id === $user->reg_id)
+        if($sigHost->reg_id === $user?->reg_id)
             return true;
 
-        return false;
+        return true;
     }
 
     public function create(User $user, $sigHostRegId=null): bool {

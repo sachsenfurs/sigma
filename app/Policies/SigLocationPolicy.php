@@ -11,26 +11,36 @@ class SigLocationPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user): ?bool {
-        if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sig_base_data'))
-            return true;
+    /**
+     * Overrides
+     */
+    public function before(?User $user): ?bool {
+        if($user)
+            if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sig_base_data'))
+                return true;
 
         return null;
     }
 
-    public function viewAny(User $user): bool {
-        if(app(AppSettings::class)->show_schedule_date->isAfter(now()))
+
+    /**
+     * Default abilities
+     */
+
+    public function viewAny(?User $user): bool {
+        if(!TimetableEntryPolicy::isSchedulePublic())
             return false;
 
         return true;
     }
 
-    public function view(User $user, SigLocation $sigLocation): bool {
-        if(app(AppSettings::class)->show_schedule_date->isAfter(now()))
+    public function view(?User $user, SigLocation $sigLocation): bool {
+        if(!TimetableEntryPolicy::isSchedulePublic())
             return false;
 
         return true;
     }
+
 
     public function create(User $user): bool {
         return false;

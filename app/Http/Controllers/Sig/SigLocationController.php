@@ -10,12 +10,9 @@ use Illuminate\Http\Request;
 class SigLocationController extends Controller
 {
     public function index() {
-        $this->authorize("viewAny", SigLocation::class);
-
-        $locations = SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->get();
-
-        if(!Gate::authorize("manage_locations"))
-            $locations = [];
+        $locations = [];
+        if(Gate::allows("viewAny", SigLocation::class))
+            $locations = SigLocation::withCount("sigEvents")->having("sig_events_count", ">", 0)->get();
 
         return view("locations.index", compact("locations"));
     }

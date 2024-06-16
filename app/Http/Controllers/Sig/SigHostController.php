@@ -12,9 +12,9 @@ use Illuminate\Support\Collection;
 class SigHostController extends Controller
 {
     public function index() {
-        $this->authorize("viewAny", SigHost::class);
-
-        $hosts = SigHost::public()->get();
+        $hosts = [];
+        if(Gate::allows("viewAny", SigHost::class))
+            $hosts = SigHost::public()->get();
 
         return view("hosts.index", compact("hosts"));
     }

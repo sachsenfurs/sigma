@@ -5,9 +5,9 @@
     <div class="container">
 
         @if(app(\App\Settings\DealerSettings::class)->show_dealers_date->isAfter(now()))
-            <div class="card p-4 fs-1 text-center">
+            <x-infocard>
                 {{ __("Dealers are not published yet") }}
-            </div>
+            </x-infocard>
         @else
             <script>
                 document.addEventListener('alpine:init', () => {

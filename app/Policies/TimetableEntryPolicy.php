@@ -15,10 +15,10 @@ class TimetableEntryPolicy
      * Overrides
      */
 
-    public function before(User $user): bool|null {
-        if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs'))
-            return true;
-
+    public function before(?User $user): bool|null {
+        if($user)
+            if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs'))
+                return true;
         return null;
     }
 
@@ -27,7 +27,7 @@ class TimetableEntryPolicy
      * Helper functions
      */
 
-    private function isSchedulePublic(): bool {
+    public static function isSchedulePublic(): bool {
         return app(AppSettings::class)->show_schedule_date->isBefore(now());
     }
 
@@ -35,19 +35,20 @@ class TimetableEntryPolicy
      * Default abilities
      */
 
-    public function viewAny(User $user): bool {
-        if($this->isSchedulePublic())
-            return true;
-        return false;
+    public function viewAny(?User $user): bool {
+        if(!self::isSchedulePublic())
+            return false;
+
+        return true;
     }
 
-    public function view(User $user, TimetableEntry $timetableEntry): bool {
-        if(!$this->isSchedulePublic())
+    public function view(?User $user, TimetableEntry $timetableEntry): bool {
+        if(!self::isSchedulePublic())
             return false;
         if($timetableEntry->hide)
             return false;
 
-        return false;
+        return true;
     }
 
     public function create(User $user): bool {
