@@ -229,8 +229,6 @@ class SigEventResource extends Resource
                                     'reg_id' => $data['reg_id'] ?? null,
                                 ]);
 
-                                // TODO: update timestamps
-
                                 return $sigHost->id ?? null;
                             })
                             ->live()
