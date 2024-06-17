@@ -18,7 +18,8 @@ class UserNotificationChannelController extends Controller
             'sig_timeslot_reminder'            => UserNotificationChannel::get('sig_timeslot_reminder', 'email'),
             'timetable_entry_cancelled'        => UserNotificationChannel::get('timetable_entry_cancelled', 'email'),
             'timetable_entry_location_changed' => UserNotificationChannel::get('timetable_entry_location_changed', 'email'),
-            'timetable_entry_time_changed'     => UserNotificationChannel::get('timetable_entry_time_changed', 'email')
+            'timetable_entry_time_changed'     => UserNotificationChannel::get('timetable_entry_time_changed', 'email'),
+            'chat_new_message'                 => UserNotificationChannel::get('chat_new_message', 'email')
         ];
 
         return view('user-settings.edit', compact('notificationType'));

@@ -115,16 +115,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     }
 
     public function unreadChats(): bool {
-        return true;
+        return false;
     }
 
     public function unreadNotifications(): bool {
-        return true;
+        return false;
     }
 
     public function chats()
     {
-        return $this->belongsToMany(Chat::class);
+        return $this->hasMany(Chat::class);
     }
 
     public function isAdmin(): bool {

@@ -28,8 +28,6 @@ use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserRoleController;
-use App\Http\Controllers\DDAS\DealersDenController;
-use App\Http\Controllers\DDAS\ArtshowController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserNotificationChannelController;
@@ -193,10 +191,11 @@ Route::group(['middleware' => "auth"], function() {
     
     // Chats
     Route::get("/chats", [ChatController::class, "index"])->name("chats.index");
+    Route::post("/chats/new", [ChatController::class, "create"])->name("chats.create");
+    Route::post("/chats/{chat}", [ChatController::class, "store"])->name("chats.store");
 
     // Messages
-    Route::get("/chats/{chat_id}/", [MessageController::class, "get"])->name("chat.getMessages");
-    Route::post("/chats/{chat_id}/message/new", [MessageController::class, "index"])->name("chat.index");
-
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+    Route::post('/message', [MessageController::class, 'store'])->name('message');
 
 });

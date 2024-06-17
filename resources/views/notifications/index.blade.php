@@ -10,8 +10,8 @@
                 </div>
                 <div class="col-10 p-3" style="justify-content: center; align-items: center;">
                     <p>
-                        <h2 class="p-none m-none">{{ $notification->data['title'] }}</h2>
-                        <p class="p-none m-none">{{ $notification->data['message'] }}</p>
+                        <h2 class="p-none m-none">{{ $notification->data['Title'] }}</h2>
+                        <p class="p-none m-none">{{ $notification->data['Message'] }}</p>
                     </p>
                 </div>
             </div>
