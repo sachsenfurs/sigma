@@ -38,14 +38,14 @@
                         <span class="badge bg-warning">{{ __("Changed") }}</span>
                     @endif
                 </h3>
-                @if(!$entry->sigEvent->sigHost->hide)
                     <h5>
-                        <i class="bi bi-person-circle align-self-center"></i>
-                        <a href="{{ route("hosts.show", $entry->sigEvent->sigHost) }}" class="text-decoration-none">
-                            {{ $entry->sigEvent->sigHost->name }}
-                        </a>
+                        @foreach($entry->sigEvent->sigHosts as $host)
+                            <i class="bi bi-person-circle align-self-center"></i>
+                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
+                                {{ $host->name }}
+                            </a>
+                        @endforeach
                     </h5>
-                @endif
             </div>
         </div>
 
