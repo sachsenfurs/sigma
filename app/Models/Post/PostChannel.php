@@ -5,6 +5,8 @@ namespace App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\Parser\MarkdownParser;
+use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -12,6 +14,8 @@ class PostChannel extends Model
 {
     public $timestamps = false;
     protected $table = "post_channels";
+
+    protected $guarded = [];
 
     public function posts(): HasManyThrough {
         return $this->hasManyThrough(
@@ -30,34 +34,26 @@ class PostChannel extends Model
         if($post->image) {
             $response = Telegram::sendPhoto([
                 'chat_id' => $this->channel_identifier,
-                'photo' => InputFile::create(Storage::path("") . $post->image),
+                'photo' => InputFile::create(Storage::disk("public")->path($post->image)),
                 'caption' => $text,
-                'parse_mode' => "HTML"
+                'parse_mode' => "MarkdownV2"
             ]);
         } else {
             $response = Telegram::sendMessage([
                 'chat_id' => $this->channel_identifier,
                 'text' => $text,
-                'parse_mode' => "HTML"
+                'parse_mode' => "MarkdownV2"
             ]);
         }
 
 
         if(!$response->isError()) {
-            $post->messages()->attach([
-                1 => [
-                    'post_id' => $post->id,
+            $post->channels()->attach([
+                [
                     'post_channel_id' => $this->id,
                     'message_id' => $response->getMessageId(),
                 ]
             ]);
         }
-    }
-
-    public function deleteMessage(PostChannelMessage $message): void {
-        Telegram::deleteMessage([
-            'chat_id' => $this->channel_identifier,
-            'message_id' => $message->message_id,
-        ]);
     }
 }

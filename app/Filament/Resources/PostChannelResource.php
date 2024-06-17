@@ -42,6 +42,8 @@ class PostChannelResource extends Resource
                 Forms\Components\Fieldset::make("Details")
                     ->translateLabel()
                     ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
                         Forms\Components\TextInput::make('channel_identifier')
                             ->label("Channel ID")
                             ->translateLabel()

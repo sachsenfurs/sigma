@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
+use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Actions;
 use Filament\Forms\Get;
@@ -17,13 +18,11 @@ class ManagePosts extends ManageRecords
             Actions\CreateAction::make()
                 ->label("New Post")
                 ->translateLabel()
-                ->mutateFormDataUsing(function($data) {
-                    $channels = PostChannel::find($data['channels'] ?? []);
+                ->after(function($livewire, Post $record) {
+                    $channels = PostChannel::find($livewire->mountedActionsData[0] ?? []);
                     foreach($channels AS $channel) {
-//                        $channel->sendMessage(... post);
+                        $channel->sendMessage($record);
                     }
-                    unset($data['channels']);
-                    return $data;
                 })
             ,
         ];

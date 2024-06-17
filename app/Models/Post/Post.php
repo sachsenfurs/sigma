@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy(PostObserver::class)]
 class Post extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     public function user(): BelongsTo {
@@ -20,23 +24,19 @@ class Post extends Model
 
     public function getTranslatedText($language="de"): string {
         return match($language) {
-            'en' => $this->text_en,
-            default => $this->text,
+            'en' => $this->text_en ?? $this->text ?? "",
+            default => $this->text ?? "",
         };
     }
 
-    public function messages(): BelongsToMany {
+    public function channels(): BelongsToMany {
         return $this->belongsToMany(PostChannel::class, "post_channel_messages")
             ->using(PostChannelMessage::class)
             ->as('postChannelMessage')
             ->withPivot('message_id');
     }
 
-
-    public function delete(): void {
-        foreach($this->messages->pluck("postChannelMessage") AS $message) {
-            $message->delete();
-        }
-        parent::delete();
+    public function messages(): HasMany {
+        return $this->hasMany(PostChannelMessage::class);
     }
 }

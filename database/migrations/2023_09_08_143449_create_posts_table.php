@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId("user_id")->nullable()->constrained()->nullOnDelete();
             $table->string("image")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
