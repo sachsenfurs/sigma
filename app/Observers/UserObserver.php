@@ -23,7 +23,7 @@ class UserObserver
 
     private function createUpdate(User $user) {
         $userRoles = UserRole::all()->pluck('registration_system_key', 'id')->map(function($item) {
-            return $item != null ? explode(',', $item) : null;
+            return $item != null ? explode(',', $item) : [];
         });
 
         $userGroups = $user->groups;
