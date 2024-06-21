@@ -28,6 +28,8 @@ class NewChatMessage extends Notification
      */
     public function __construct(String $department, User $sender, Chat $chat)
     {
+        App::setLocale($sender->language);
+
         $this->department = $department;
         $this->sender = $sender;
         $this->chat = $chat;
@@ -52,7 +54,6 @@ class NewChatMessage extends Notification
      */
     public function toTelegram($notifiable)
     {
-        App::setLocale($notifiable->language);
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
@@ -65,7 +66,6 @@ class NewChatMessage extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        App::setLocale($notifiable->language);
         return (new MailMessage)
             ->subject(__('New Message in the Chat with the  ') . $this->department . __(' department!'))
             ->line(__("Hi ") . $notifiable->name . ",")
