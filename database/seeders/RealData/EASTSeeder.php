@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\RealData;
 
-use App\Models\Info\Enum\ShowMode;
+use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;

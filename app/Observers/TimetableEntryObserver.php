@@ -8,7 +8,7 @@ use App\Models\TimetableEntry;
 use App\Notifications\TimetableEntry\TimetableEntryTimeChanged;
 use App\Notifications\TimetableEntry\TimetableEntryCancelled;
 use App\Notifications\TimetableEntry\TimetableEntryLocationChanged;
-use Carbon\Carbon;
+use App\Settings\AppSettings;
 use Notification;
 
 class TimetableEntryObserver
@@ -23,7 +23,7 @@ class TimetableEntryObserver
     {
         $users = User::where('telegram_user_id', '!=', null)->get();
 
-        if ($timetableEntry->hide == false && config()->has("services.telegram-bot-api.name") != null) {
+        if (!$timetableEntry->hide && app(AppSettings::class)->telegram_bot_name != "") {
             if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
                 Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
                 foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
@@ -33,14 +33,14 @@ class TimetableEntryObserver
                     $reminder->save();
                 }
             }
-    
+
             if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
                 Notification::send($users, new TimetableEntryCancelled($timetableEntry));
             }
-    
+
             if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
                 Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
-            }   
+            }
         }
     }
 }

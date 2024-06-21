@@ -29,7 +29,7 @@
                     <div class="col-auto d-flex">
                         <i class="bi bi-clock align-self-center"></i>
                     </div>
-                    <a href="{{ route("public.timeslot-show", $entry) }}" class="text-decoration-none" style="flex: content">
+                    <a href="{{ route("timetable-entry.show", $entry) }}" class="text-decoration-none" style="flex: content">
                     <div class="col-auto">
                         <b>{{ $entry->start->dayName }}</b> <i class="text-muted"> {{ $entry->start->format("d.m.y") }}</i>
                         <div class="text-muted">
@@ -43,7 +43,7 @@
                                 <h2><span class="badge bg-danger">{{ __("Cancelled") }}</span></h2>
                             @else
                                 @if($entry->sigEvent->reg_possible)
-                                    <a href="{{ route("public.timeslot-show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
+                                    <a href="{{ route("timetable-entry.show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged)
                                     <h2>

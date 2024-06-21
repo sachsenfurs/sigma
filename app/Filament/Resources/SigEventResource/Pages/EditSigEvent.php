@@ -21,7 +21,7 @@ class EditSigEvent extends EditRecord
     protected function getFooterWidgets(): array
     {
         return [
-            SigEventResource\Widgets\TimetableEntriesTable::class,
+            //SigEventResource\Widgets\TimetableEntriesTable::class,
         ];
     }
 }

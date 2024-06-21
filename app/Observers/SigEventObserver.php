@@ -9,19 +9,6 @@ use App\Models\User;
 
 class SigEventObserver
 {
-    public function created(SigEvent $sig)
-    {
-        // auto assign corresponding tags
-        // mit absicht nur beim create, dass man die Möglichkeit hat
-        // das auch wieder rauszunehmen, FALLS es mal doch nicht angezeigt werden soll
-        foreach(SigTag::all() AS $tag) {
-            if($tag->name == "signup") {
-                if($sig->reg_possible)
-                    $sig->sigTags()->syncWithoutDetaching($tag->id); // attach würde ausreichen. hatte es nur vorher in der update-Methode drin...
-            }
-        }
-    }
-
     public function updated(SigEvent $sig)
     {
         // If the event is approved, create a new chat for better communication

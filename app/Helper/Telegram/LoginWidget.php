@@ -4,6 +4,7 @@ namespace App\Helper\Telegram;
 use App\Exceptions\Telegram\LoginWidget\HashValidationException;
 use App\Exceptions\Telegram\LoginWidget\ResponseOutdatedException;
 use App\Exceptions\Telegram\TelegramException;
+use App\Settings\AppSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -60,7 +61,7 @@ class LoginWidget
      */
     private function checkHash(Collection $collection): Collection
     {
-        $secret_key = hash('sha256', config('services.telegram-bot-api.token'), true);
+        $secret_key = hash('sha256', app(AppSettings::class)->telegram_bot_token, true);
 
         $data = $collection->except('hash');
 

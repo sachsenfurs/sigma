@@ -7,7 +7,6 @@ use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
-use Illuminate\Http\Request;
 
 class MySigController extends Controller
 {

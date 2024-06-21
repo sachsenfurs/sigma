@@ -51,7 +51,7 @@ class TimetableEntryCancelled extends Notification
             ->to($notifiable->telegram_user_id)
             ->line('[INFO]')
             ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
-            ->button(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
+            ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**

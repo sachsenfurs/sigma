@@ -4,8 +4,8 @@
     'id' => "modal",
     'action' => null,
 ])
-<div wire:ignore.self id="{{ $id }}" tabindex="-1" {{ $attributes->class(['modal fade']) }} aria-modal="true" role="dialog">
-    <div class="modal-dialog">
+<div wire:ignore.self id="{{ $id }}" tabindex="-1" class="modal fade" aria-modal="true" role="dialog">
+    <div {{ $attributes->class(['modal-dialog']) }}>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ $title }}</h5>

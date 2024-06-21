@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Ddas;
 
 use App\Filament\Resources\Ddas\ArtshowBidResource\Pages;
 use App\Models\Ddas\ArtshowBid;
+use App\Settings\ArtShowSettings;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,32 +15,38 @@ class ArtshowBidResource extends Resource
 {
     protected static ?string $model = ArtshowBid::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-euro';
 
     protected static ?string $navigationGroup = 'Artshow';
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    protected static ?int $navigationSort = 220;
+
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_artshow');
     }
 
-    public static function getPluralLabel(): ?string
-    {
-        return __('Art Show Bids');
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string {
+        return __("Bid");
+    }
+    public static function getPluralLabel(): ?string {
+        return __('Bids');
     }
 
-    protected static ?int $navigationSort = 220;
+    public static function canAccess(): bool {
+        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+    }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 //
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
                 //
@@ -57,15 +64,13 @@ class ArtshowBidResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowBids::route('/'),
             'create' => Pages\CreateArtshowBid::route('/create'),

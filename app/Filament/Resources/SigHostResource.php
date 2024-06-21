@@ -21,29 +21,32 @@ class SigHostResource extends Resource
     protected static ?string $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 20;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sig_base_data');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Hosts');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
-                self::getNameField(),
-                self::getRegIdField(),
+                Forms\Components\Grid::make()
+                    ->columns(4)
+                    ->schema([
+                        self::getNameField()
+                            ->columnSpan(2),
+                        self::getRegIdField(),
+                        self::getHideField(),
+                    ]),
                 self::getDescriptionField(),
-                self::getHideField(),
+                self::getDescriptionEnField(),
+                self::getColorField(),
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
             ->defaultSort('reg_id')
@@ -60,15 +63,13 @@ class SigHostResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             RelationManagers\SigEventsRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListSigHosts::route('/'),
             'create' => Pages\CreateSigHost::route('/create'),
@@ -76,8 +77,7 @@ class SigHostResource extends Resource
         ];
     }
 
-    private static function getTableColumns(): array
-    {
+    private static function getTableColumns(): array {
         return [
             Tables\Columns\ViewColumn::make('name')
                 ->label('Name')
@@ -91,25 +91,20 @@ class SigHostResource extends Resource
                 ->numeric()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('description')
-                ->label('Description')
-                ->translateLabel()
-                ->searchable()
-                ->limit(50),
             Tables\Columns\TextColumn::make('publicSigEventCount')
                 ->label('Event count')
                 ->translateLabel()
                 ->getStateUsing(fn (SigHost $record) => $record->getPublicSigEventCount()),
             Tables\Columns\IconColumn::make('hide')
-                ->label('Hidden')
+                ->label('Show Name on Schedule')
                 ->translateLabel()
+                ->getStateUsing(fn(SigHost $record) => !$record->hide)
                 ->boolean()
                 ->sortable(),
         ];
     }
 
-    private static function getNameField(): Forms\Components\Component
-    {
+    private static function getNameField(): Forms\Components\Component {
         return
             Forms\Components\TextInput::make('name')
                 ->label('Name')
@@ -117,8 +112,7 @@ class SigHostResource extends Resource
                 ->required()->maxLength(255);
     }
 
-    private static function getRegIdField(): Forms\Components\Component
-    {
+    private static function getRegIdField(): Forms\Components\Component {
         return
             Forms\Components\TextInput::make('reg_id')
                 ->label('Reg Number')
@@ -130,22 +124,37 @@ class SigHostResource extends Resource
                 ->numeric();
     }
 
-    private static function getDescriptionField(): Forms\Components\Component
-    {
+    private static function getDescriptionField(): Forms\Components\Component {
         return
             Forms\Components\Textarea::make('description')
-                ->label('Description (German)')
+                ->label('Description')
                 ->translateLabel()
-                ->required()
-                ->maxLength(65535)
-                ->columnSpanFull();
+                ->rows(5)
+                ->maxLength(65535);
     }
 
-    private static function getHideField(): Forms\Components\Component
-    {
+    private static function getDescriptionEnField(): Forms\Components\Component {
+        return
+            Forms\Components\Textarea::make('description_en')
+                ->label('Description (English)')
+                ->translateLabel()
+                ->rows(5)
+                ->maxLength(65535);
+    }
+
+    private static function getHideField(): Forms\Components\Component {
         return
             Forms\Components\Toggle::make('hide')
                 ->label('Hide name on schedule')
+                ->inline(false)
+                ->translateLabel();
+    }
+    private static function getColorField(): Forms\Components\Component {
+        return
+            Forms\Components\ColorPicker::make('color')
+                ->label('Color in Schedule')
+                ->default("#cccccc")
+                ->formatStateUsing(fn(?Model $record) => $record?->color) // somehow the color isnt fetched from the db so we have to do it manually
                 ->translateLabel();
     }
 }

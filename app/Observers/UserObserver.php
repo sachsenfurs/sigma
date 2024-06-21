@@ -13,13 +13,11 @@ class UserObserver
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function created(User $user)
-    {
+    public function created(User $user) {
         $this->createUpdate($user);
     }
 
-    public function updated(User $user)
-    {
+    public function updated(User $user) {
         $this->createUpdate($user);
     }
 
@@ -39,15 +37,15 @@ class UserObserver
             $userRole = $userRoles->search(function ($item) use ($userGroup) {
                 return in_array($userGroup, $item);
             });
+
             if ($userRole) {
-                $user->role()->associate($userRole);
+                $user->roles()->attach($userRole);
                 $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
             }
         }
     }
 
-    public function deleted(User $user)
-    {
+    public function deleted(User $user) {
         //
     }
 }

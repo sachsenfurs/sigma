@@ -26,7 +26,8 @@ return new class extends Migration
             $table->text("description_en")->nullable();
 
             $table->integer("duration")->default(0);
-            $table->boolean('approved')->default(1);
+            $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
+
             $table->text('additional_info')->nullable();
             $table->json('requirements')->nullable();
             $table->boolean("reg_possible")->default(false);

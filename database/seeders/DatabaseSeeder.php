@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Ddas\ArtshowItem;
+use App\Models\Ddas\Dealer;
+use App\Models\Ddas\DealerTag;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -80,5 +82,30 @@ class DatabaseSeeder extends Seeder
         });
 
         ArtshowItem::factory(10)->create();
+
+        DealerTag::insert([
+            [
+                'name' => "NSFW",
+                'name_en' => "NSFW",
+            ],
+            [
+                'name' => "Merch",
+                'name_en' => "Merch",
+            ],
+            [
+                'name' => "Prints",
+                'name_en' => "Prints",
+            ],
+            [
+                'name' => "Plushies",
+                'name_en' => "Plushies",
+            ]
+        ]);
+
+        Dealer::factory(15)->create();
+
+        foreach(Dealer::all() AS $dealer) {
+            $dealer->tags()->sync(DealerTag::inRandomOrder()->limit(rand(0,3))->get());
+        }
     }
 }

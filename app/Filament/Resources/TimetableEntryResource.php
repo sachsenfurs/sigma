@@ -3,10 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
+use App\Filament\Resources\SigEventResource\Pages\EditSigEvent;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
+use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -18,40 +21,35 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Type\Time;
 
 class TimetableEntryResource extends Resource
 {
     protected static ?string $model = TimetableEntry::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     protected static ?string $cluster = SigPlanning::class;
     protected static ?int $navigationSort = 10;
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    public static function can(string $action, ?Model $record = null): bool
-    {
+    public static function can(string $action, ?Model $record = null): bool {
         return auth()->user()->permissions()->contains('manage_sigs');
     }
 
-    public static function getLabel(): ?string
-    {
+    public static function getLabel(): ?string {
         return __('Event Schedule');
     }
 
-    public static function getPluralLabel(): ?string
-    {
+    public static function getPluralLabel(): ?string {
         return __('Event Schedule');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema(self::getSchema());
     }
 
-    public static function getSchema(): array
-    {
+    public static function getSchema(): array {
         return [
             self::getSigEventField(),
             self::getSigLocationField(),
@@ -67,6 +65,7 @@ class TimetableEntryResource extends Resource
                 ->columns(3),
 
             Forms\Components\Fieldset::make("Communication Settings")
+                ->translateLabel()
                 ->schema([
                     self::getSendUpdateField(),
                 ])
@@ -77,8 +76,7 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns(static::getTableColumns())
             ->defaultPaginationPageOption('all')
@@ -101,15 +99,13 @@ class TimetableEntryResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListTimetableEntries::route('/'),
             'create' => Pages\CreateTimetableEntry::route('/create'),
@@ -117,15 +113,13 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
+    public static function getWidgets(): array {
         return [
             TimeslotTable::class,
         ];
     }
 
-    public static function getTableColumns(): array
-    {
+    public static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('timestamp')
                 ->getStateUsing(function ($record) {
@@ -177,8 +171,7 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    private static function getLocationFilter(): Tables\Filters\SelectFilter
-    {
+    private static function getLocationFilter(): Tables\Filters\SelectFilter {
         return Tables\Filters\SelectFilter::make('sigLocation')
             ->label('Location')
             ->translateLabel()
@@ -201,26 +194,38 @@ class TimetableEntryResource extends Resource
             ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'));
     }
 
-    private static function getSigEventField(): Forms\Components\Component
-    {
+    public static function getSigEventField(): Forms\Components\Component {
         return Forms\Components\Select::make('sig_event_id')
             ->label('Event')
             ->translateLabel()
+            ->autofocus(fn($state) => $state == null)
+            ->model(TimetableEntry::class)
             ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHost'))
             ->getOptionLabelFromRecordUsing(function (Model $record) {
                 return $record->name . ' - ' . $record->sigHost->name;
             })
+            ->live()
+            ->hintAction(
+                function($state) {
+                    if(filled($state)) {
+                        return Forms\Components\Actions\Action::make("edit")
+                            ->label("Edit")
+                            ->translateLabel()
+                            ->url(SigEventResource::getUrl("edit", ['record' => $state]));
+                    }
+                }
+            )
             ->required()
             ->searchable()
             ->preload();
     }
 
-    private static function getSigLocationField(): Forms\Components\Component
-    {
+    public static function getSigLocationField(): Forms\Components\Component {
         return Forms\Components\Select::make('sig_location_id')
             ->label('Location')
             ->translateLabel()
             ->relationship('sigLocation', 'name')
+            ->model(TimetableEntry::class)
             ->options(function(): array {
                 return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
                     $name = $sigLocation->description ? $sigLocation->name . " - " . $sigLocation->description : $sigLocation->name;
@@ -232,8 +237,7 @@ class TimetableEntryResource extends Resource
             ->preload();
     }
 
-    private static function getSigStartField(): Forms\Components\Component
-    {
+    public static function getSigStartField(): Forms\Components\Component {
         return Forms\Components\DateTimePicker::make('start')
             ->label('Beginning')
             ->translateLabel()
@@ -242,56 +246,52 @@ class TimetableEntryResource extends Resource
             ->required();
     }
 
-    private static function getSigEndField(): Forms\Components\Component
-    {
+    public static function getSigEndField(): Forms\Components\Component {
         return Forms\Components\DateTimePicker::make('end')
             ->label('End')
             ->translateLabel()
             ->format('Y-m-d\TH:i')
             ->seconds(false)
+            ->columns(1)
             ->required();
     }
 
-    private static function getSigNewField(): Forms\Components\Component
-    {
+    public static function getSigNewField(): Forms\Components\Component {
         return Forms\Components\Toggle::make('new')
             ->label('New Event')
             ->translateLabel()
             ->formatStateUsing(function(?Model $record) {
                 // automatically prefill to "true" when con (in this case the first event) has started
                 if(!$record) // only prefill when a new record is created (current $record == null)
-                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()->start);
+                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()?->start ?? now());
                 return (bool)$record->new;
             });
     }
 
-    private static function getSigCancelledField(): Forms\Components\Component
-    {
+    public static function getSigCancelledField(): Forms\Components\Component {
         return Forms\Components\Toggle::make('cancelled')
             ->label('Event Cancelled')
             ->onColor("danger")
-            ->visible(fn(?Model $record): bool => $record !== null)
+            ->visible(fn(?Model $record): bool => $record !== null AND ($record instanceof TimetableEntry))
             ->translateLabel();
     }
 
-    private static function getSigHideField(): Forms\Components\Component
-    {
+    public static function getSigHideField(): Forms\Components\Component {
         return Forms\Components\Toggle::make('hide')
             ->label('Internal Event')
             ->translateLabel();
     }
 
-    private static function getResetUpdateField(): Forms\Components\Component
-    {
+    public static function getResetUpdateField(): Forms\Components\Component {
         return Forms\Components\Checkbox::make('reset_update')
+            ->model(TimetableEntry::class)
             ->label('Reset \'Changed\'-flag')
             ->translateLabel()
             ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false))
             ;
     }
 
-    private static function getSendUpdateField(): Forms\Components\Component
-    {
+    public static function getSendUpdateField(): Forms\Components\Component {
         return Forms\Components\Checkbox::make('send_update')
             ->label('Announce Changes')
             ->translateLabel()

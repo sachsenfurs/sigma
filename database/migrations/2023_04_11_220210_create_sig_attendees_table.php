@@ -17,12 +17,11 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('sig_timeslot_id');
+            $table->foreignId('sig_timeslot_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('sig_timeslot_id')->references('id')->on('sig_timeslots');
         });
     }
 

@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
 use App\Models\SigFavorite;
-use App\Models\SigReminder;
-use App\Models\TimetableEntry;
-use Redirect;
 
 class AjaxController extends Controller
 {
     /**
      * Sets a favorite on an event.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function setFavorite(Request $request)
     {
