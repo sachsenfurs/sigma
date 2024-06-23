@@ -10,8 +10,6 @@ class ChatController extends Controller
 {
     public function index(Request $request)
     {
-        // 
-
         $chats    = auth()->user()->chats;
         $currChat = null;
         $currChatDepartments = [];
@@ -30,6 +28,7 @@ class ChatController extends Controller
         if ($chats->count() > 0) {
           if (isset($request['chat_id'])) {
                 $currChat = Chat::findOrFail($request['chat_id']);
+                $this->authorize('view', $currChat);
             } else {
                 $currChat = $chats->first();
             }
