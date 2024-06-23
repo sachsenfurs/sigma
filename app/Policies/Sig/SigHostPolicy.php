@@ -15,9 +15,9 @@ class SigHostPolicy extends ManageEventPolicy
      */
 
     public function viewAny(?User $user): bool {
-        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
+        if($user?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
             return true;
-        if($user->hasPermission(Permission::MANAGE_HOSTS, PermissionLevel::READ))
+        if($user?->hasPermission(Permission::MANAGE_HOSTS, PermissionLevel::READ))
             return true;
 
         if(!TimetableEntryPolicy::isSchedulePublic())
@@ -27,9 +27,9 @@ class SigHostPolicy extends ManageEventPolicy
     }
 
     public function view(?User $user, SigHost $sigHost): bool {
-        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
+        if($user?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
             return true;
-        if($user->hasPermission(Permission::MANAGE_HOSTS, PermissionLevel::READ))
+        if($user?->hasPermission(Permission::MANAGE_HOSTS, PermissionLevel::READ))
             return true;
         if(!TimetableEntryPolicy::isSchedulePublic())
             return false;
