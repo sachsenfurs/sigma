@@ -23,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\User::class                 => \App\Policies\UserPolicy::class,
         \App\Models\UserRole::class             => \App\Policies\UserRolePolicy::class,
         \App\Models\UserUserRole::class         => \App\Policies\UserUserRolePolicy::class,
+        \App\Models\Chat::class                 => \App\Policies\ChatPolicy::class,
         \App\Models\Ddas\ArtshowArtist::class   => \App\Policies\ArtshowArtistPolicy::class,
         \App\Models\Ddas\ArtshowBid::class      => \App\Policies\ArtshowBidPolicy::class,
         \App\Models\Ddas\ArtshowItem::class     => \App\Policies\ArtshowItemPolicy::class,
