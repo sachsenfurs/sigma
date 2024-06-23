@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
@@ -31,8 +32,6 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserNotificationChannelController;
-use App\Http\Controllers\Ddas\DealersDenController;
-use App\Http\Controllers\Ddas\ArtshowController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Mime\MessageConverter;
@@ -191,8 +190,11 @@ Route::group(['middleware' => "auth"], function() {
     Route::post("/chats/new", [ChatController::class, "create"])->name("chats.create");
     Route::post("/chats/{chat}", [ChatController::class, "store"])->name("chats.store");
 
+    // Chats Ajax
+    Route::get('/chats/refresh/{chat}', [AjaxController::class, "refreshChat"])->name('chats.refresh');
+
     // Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('messages');
-    Route::post('/message', [MessageController::class, 'store'])->name('message');
+    Route::post('/messages/store', [MessageController::class, 'store'])->name('messages.store');
 
 });
