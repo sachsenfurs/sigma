@@ -17,13 +17,13 @@
                         </div>
                         <div class="col-5 col-md-5">
                             <div class="row">
-                                <div class="col-4 col-md-4">
+                                <div class="col-6 col-md-6">
                                     <i class="bi bi-envelope" title="{{ __("Email Notifications") }}"></i>
                                 </div>
-                                <div class="col-4 col-md-4">
+                                <div class="col-6 col-md-6">
                                     <i class="bi bi-telegram" title="{{ __("Telegram Notifications") }}"></i>
                                 </div>
-                                <div class="col-4 col-md-4">
+                                <div class="col-4 col-md-4 d-none">
                                     <i class="bi bi-database" title="{{ __("Database Notifications") }}"></i>
                                 </div>
                             </div>
@@ -36,14 +36,14 @@
                             </div>
                             <div class="col-5 col-md-5">
                                 <div class="row">
-                                    <div class="col-4 col-md-4">
+                                    <div class="col-6 col-md-6">
                                         <input class="form-check-input" type="checkbox" name="notification-mail-{{ $notification }}" value="1" @if (in_array('mail', $value)) checked @endif>
                                     </div>
-                                    <div class="col-4 col-md-4">
+                                    <div class="col-6 col-md-6">
                                         <input class="form-check-input" type="checkbox" name="notification-telegram-{{ $notification }}" value="1" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->telegram_user_id) disabled @endif>
                                     </div>
-                                    <div class="col-4 col-md-4">
-                                        <input class="form-check-input" type="checkbox" name="notification-db-{{ $notification }}" value="1" @if (in_array('db', $value)) checked @endif>
+                                    <div class="col-4 col-md-4 d-none">
+                                        <input class="form-check-input" type="checkbox" name="notification-db-{{ $notification }}" value="1" checked>
                                     </div>
                                 </div>
                                 <!--
