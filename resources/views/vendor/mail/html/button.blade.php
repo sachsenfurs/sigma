@@ -1,7 +1,7 @@
 @props([
     'url',
     'color' => 'primary',
-    'align' => 'center',
+    'align' => 'left',
 ])
 <table class="action" align="{{ $align }}" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
