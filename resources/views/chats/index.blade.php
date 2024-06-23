@@ -21,7 +21,7 @@
                         <div class="col-12 p-3">
                             <a class="btn border border-secondary rounded p-2 w-75"
                                 href="{{ route('chats.index') }}?chat_id={{ $chat->id }}">
-                                <p class="m-0">{{ $chat->department }}</p>
+                                <p class="m-0">{{ __($chat->department) }}</p>
                             </a>
                         </div>
                     @empty
