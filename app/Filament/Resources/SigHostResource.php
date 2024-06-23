@@ -21,10 +21,6 @@ class SigHostResource extends Resource
     protected static ?string $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 20;
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sig_base_data');
-    }
-
     public static function getPluralLabel(): ?string {
         return __('Hosts');
     }

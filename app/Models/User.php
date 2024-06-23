@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\Dealer;
@@ -50,8 +52,21 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     }
 
     public function permissions(): Collection {
-        return $this->roles->map->permissions->flatten()->pluck('name')->unique();
+        return $this->roles->map->permissions->flatten();
     }
+
+    public function hasPermission(Permission $checkPermission, PermissionLevel $level = PermissionLevel::READ): bool {
+        /**
+         * @var $userRolePermission UserRolePermission
+         */
+        foreach($this->permissions() AS $userRolePermission) {
+            if($checkPermission == $userRolePermission->permission AND $userRolePermission->level->value >= $level->value)
+                return true;
+        }
+        return false;
+    }
+
+
 
     public function attendeeEvents(): HasMany {
         return $this->hasMany(SigAttendee::class);
@@ -112,7 +127,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     }
 
     public function isAdmin(): bool {
-        // The permission 'manage_sig_base_data' is used to determine if the user is an admin
-        return $this->permissions()->contains('manage_sig_base_data');
+        return $this->hasPermission(Permission::MANAGE_ADMIN, PermissionLevel::ADMIN);
     }
 }

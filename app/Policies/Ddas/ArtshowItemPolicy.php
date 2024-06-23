@@ -1,30 +1,16 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Ddas;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 use App\Settings\ArtShowSettings;
-use Illuminate\Auth\Access\Response;
 
-class ArtshowItemPolicy
+class ArtshowItemPolicy extends ManageArtshowPolicy
 {
-
-    /**
-     * Overrides
-     */
-
-    public function before(User $user): bool|null|Response {
-        if(!app(ArtShowSettings::class)->enabled)
-            return Response::denyAsNotFound();
-
-        // admin can do everything
-        if($user->permissions()->contains('manage_artshow'))
-            return true;
-
-        return null;
-    }
 
     /**
      * Helper functions
@@ -46,29 +32,51 @@ class ArtshowItemPolicy
      */
 
     public function viewAny(User $user): bool {
-        return true;
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ))
+            return true;
+
+        return false;
     }
 
     public function view(User $user, ArtshowItem $artshowItem): bool {
-        return $this->isOwnItem($user, $artshowItem);
+        if($this->isOwnItem($user, $artshowItem))
+            return true;
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ))
+            return true;
+
+        return false;
     }
 
     public function create(User $user, ?ArtshowArtist $artshowArtist=null): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         if(!$this->isWithinDeadline())
             return false;
+        if($artshowArtist?->user_id == auth()->user()->id)
+            return true;
 
-        return $artshowArtist?->user_id == auth()->user()->id;
+        return false;
     }
 
     public function update(User $user, ArtshowItem $artshowItem): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         if(!$this->isWithinDeadline())
             return false;
 
         // allow as long as item is not yet in auction
-        return $this->isOwnItem($user, $artshowItem) AND !$this->isItemInAuction($artshowItem);
+        if($this->isOwnItem($user, $artshowItem) AND !$this->isItemInAuction($artshowItem))
+            return true;
+
+        return false;
     }
 
     public function delete(User $user, ArtshowItem $artshowItem): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::DELETE))
+            return true;
+
         if(!$this->isWithinDeadline())
             return false;
 
@@ -90,30 +98,51 @@ class ArtshowItemPolicy
     }
 
     public function associate(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function attach(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function deleteAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function detach(User $user, ArtshowItem $artshowItem): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function detachAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function disassociate(User $user, ArtshowItem $artshowItem): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function disassociateAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 

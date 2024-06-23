@@ -32,10 +32,6 @@ class DealerTagResource extends Resource
         return __("Tag");
     }
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_dealers_den');
-    }
-
     public static function canAccess(): bool {
         return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }

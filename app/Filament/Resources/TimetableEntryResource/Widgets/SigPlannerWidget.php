@@ -96,6 +96,7 @@ class SigPlannerWidget extends FullCalendarWidget
     protected function modalActions(): array {
         return [
             EditAction::make("edit")
+                ->authorize("update", TimetableEntry::class)
                 ->using(function(Model $record, array $data) {
                     return EditTimetableEntry::handleUpdate($record, $data);
                 })
@@ -118,6 +119,7 @@ class SigPlannerWidget extends FullCalendarWidget
                 ->modalFooterActionsAlignment(Alignment::End)
             ,
             EditAction::make("view")
+                ->authorize("update", TimetableEntry::class)
                 ->using(function(Model $record, array $data) {
                     return EditTimetableEntry::handleUpdate($record, $data);
                 })

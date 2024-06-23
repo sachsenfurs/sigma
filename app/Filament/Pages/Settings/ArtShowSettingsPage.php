@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Enums\Permission;
 use App\Filament\Clusters\Settings;
 use App\Settings\ArtShowSettings;
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Gate;
 
 class ArtShowSettingsPage extends SettingsPage
 {
@@ -27,6 +29,10 @@ class ArtShowSettingsPage extends SettingsPage
     }
     public function getTitle(): string|Htmlable {
         return self::getNavigationLabel();
+    }
+
+    public static function canAccess(): bool {
+        return Gate::allows("artshowSettings", self::$settings);
     }
 
     public function form(Form $form): Form

@@ -293,6 +293,7 @@
     "Reminder successfully updated!": "Erinnerung erfolgreich aktualisiert!",
     "Telegram Connected!": "Telegram Verknüpft!",
     "An error occured while connecting Telegram!": "Es ist ein Fehler beim Verbinden mit Telegram aufgetreten!",
+    "If you lost or found something, please reach out to Con Ops (Leitstelle)!": "Wenn du etwas verloren oder gefunden hast, melde dich bitte bei der Leitstelle!",
 
     "Changed": "Geändert",
     "Moved": "Verschoben",
@@ -391,8 +392,8 @@
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",
-    "Dealers Den Sign Up": "Dealers Den Anmeldung",
-    "Dealers Den Overview": "Dealers Den Übersicht",
+    "Dealers' Den Sign Up": "Dealers Den Anmeldung",
+    "Dealer's Den Overview": "Dealers Den Übersicht",
     "Dealer List": "Händlerliste",
     "Dealer Logo": "Händler-Logo",
     "Show Dealer": "Händler anzeigen",

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserRoleResource\RelationManagers;
 
 use App\Filament\Resources\UserResource;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -56,6 +57,7 @@ class UserResourceRelationManager extends RelationManager
                    ->successNotificationTitle(__('User Assigned')),
             ])
             ->actions([
+                Tables\Actions\EditAction::make()->url(fn(User $record) => UserResource::getUrl("edit", ['record' => $record])),
                 Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([

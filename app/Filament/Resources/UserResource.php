@@ -23,10 +23,6 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_users');
-    }
-
     public static function getLabel(): ?string {
         return __('User');
     }

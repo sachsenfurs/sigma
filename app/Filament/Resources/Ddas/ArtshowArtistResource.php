@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Ddas;
 
-use App\Filament\Clusters\Settings;
 use App\Filament\Resources\Ddas\ArtshowArtistResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowItemRelationManager;
 use App\Models\Ddas\ArtshowArtist;
@@ -15,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class ArtshowArtistResource extends Resource
 {
@@ -24,10 +22,6 @@ class ArtshowArtistResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
 
     protected static ?int $navigationSort = 200;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_artshow');
-    }
 
     public static function getModelLabel(): string {
         return __("Artist");

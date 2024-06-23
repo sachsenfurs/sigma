@@ -5,12 +5,14 @@ namespace App\Filament\Pages;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
 use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
+use App\Models\TimetableEntry;
 use App\Providers\Filament\FilamentFullCalendarProvider;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Gate;
 
 class SigPlanner extends Page
 {
@@ -36,7 +38,7 @@ class SigPlanner extends Page
     }
 
     public static function canAccess(): bool {
-        return auth()->user()->permissions()->contains('manage_sigs');
+        return Gate::allows("viewAny", TimetableEntry::class);
     }
 
     protected function getHeaderWidgets(): array {

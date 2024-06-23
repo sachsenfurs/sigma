@@ -6,6 +6,7 @@ use App\Models\SigFilledForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Gate;
 
 class SigFormAccessScope implements Scope
 {
@@ -15,7 +16,7 @@ class SigFormAccessScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         // Filter query to only show forms that the user has access to
-        if(auth()->user()?->isAdmin())
+        if(Gate::allows("view", $model))
             return;
 
         $roleIds = auth()->user()?->roles->pluck('id') ?? null;

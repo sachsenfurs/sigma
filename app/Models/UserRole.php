@@ -6,11 +6,13 @@ use App\Observers\UserRoleObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ObservedBy(UserRoleObserver::class)]
 class UserRole extends Model
 {
     protected $guarded = [];
+    public $timestamps = false;
     protected $with = [
         'permissions'
     ];
@@ -22,10 +24,7 @@ class UserRole extends Model
         );
     }
 
-    public function permissions(): BelongsToMany {
-        return $this->belongsToMany(
-            Permission::class,
-            'user_role_permissions'
-        );
+    public function permissions(): HasMany {
+       return $this->hasMany(UserRolePermission::class);
     }
 }

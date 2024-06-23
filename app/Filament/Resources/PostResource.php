@@ -37,10 +37,6 @@ class PostResource extends Resource
         return __("posts");
     }
 
-    public static function canAccess(): bool {
-        return auth()->user()->permissions()->contains("post");
-    }
-
     public static function form(Form $form): Form {
         $channels = PostChannel::all();
 

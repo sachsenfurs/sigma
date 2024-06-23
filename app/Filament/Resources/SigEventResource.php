@@ -30,10 +30,6 @@ class SigEventResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sigs');
-    }
-
     public static function form(Form $form): Form {
         return $form
             ->schema([
@@ -192,8 +188,7 @@ class SigEventResource extends Resource
                         ->createOptionModalHeading(__('Create Tag'))
                         ->createOptionForm(fn($form) => SigTagResource::form($form)),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component {
@@ -252,8 +247,7 @@ class SigEventResource extends Resource
                     ->columnSpanFull()
                     ->options(Approval::class),
             ])
-            ->columnSpan(1)
-            ->visible(auth()->user()->can('manage_sigs'));
+            ->columnSpan(1);
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component {
@@ -280,8 +274,7 @@ class SigEventResource extends Resource
                         ->visible(fn (Get $get) => $get('reg_possible') === true)
                         ->columnSpanFull(),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component {

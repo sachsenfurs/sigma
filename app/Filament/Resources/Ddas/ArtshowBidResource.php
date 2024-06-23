@@ -19,10 +19,6 @@ class ArtshowBidResource extends Resource
 
     protected static ?int $navigationSort = 220;
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_artshow');
-    }
-
     /**
      * @return string|null
      */

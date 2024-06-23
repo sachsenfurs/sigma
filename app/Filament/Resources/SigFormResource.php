@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -28,10 +29,6 @@ class SigFormResource extends Resource
     protected static ?string $navigationGroup = 'SIG';
 
     protected static ?int $navigationSort = 10;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_forms');
-    }
 
     public static function getLabel(): ?string {
         return __('Form');
@@ -158,6 +155,7 @@ class SigFormResource extends Resource
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
+                        ->unique()
                         ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
@@ -176,7 +174,7 @@ class SigFormResource extends Resource
                         ->relationship('userRoles')
                         ->label('')
                         ->options(function () {
-                            if (auth()->user()->isAdmin()) {
+                            if (Gate::allows("update", UserRole::class)) {
                                 return UserRole::all()->pluck('title', 'id');
                             } else {
                                 return auth()->user()->roles()->pluck('title', 'user_roles.id');

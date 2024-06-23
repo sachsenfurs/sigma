@@ -23,10 +23,6 @@ class SocialResource extends Resource
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->isAdmin();
-    }
-
     public static function form(Form $form): Form
     {
         return $form

@@ -1,27 +1,16 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Sig;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use App\Settings\AppSettings;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TimetableEntryPolicy
+class TimetableEntryPolicy extends ManageEventPolicy
 {
-    use HandlesAuthorization;
-
-    /**
-     * Overrides
-     */
-
-    public function before(?User $user): bool|null {
-        if($user)
-            if($user->permissions()->contains('manage_events') || $user->permissions()->contains('manage_sigs'))
-                return true;
-        return null;
-    }
-
 
     /**
      * Helper functions
@@ -36,6 +25,9 @@ class TimetableEntryPolicy
      */
 
     public function viewAny(?User $user): bool {
+        if($user?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
+            return true;
+
         if(!self::isSchedulePublic())
             return false;
 
@@ -43,6 +35,9 @@ class TimetableEntryPolicy
     }
 
     public function view(?User $user, TimetableEntry $timetableEntry): bool {
+        if($user?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
+            return true;
+
         if(!self::isSchedulePublic())
             return false;
         if($timetableEntry->hide)
@@ -52,14 +47,23 @@ class TimetableEntryPolicy
     }
 
     public function create(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function update(User $user, TimetableEntry $timetableEntry): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function delete(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::DELETE))
+            return true;
+
         return false;
     }
 
@@ -72,34 +76,58 @@ class TimetableEntryPolicy
     }
 
     public function associate(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function attach(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function deleteAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::DELETE))
+            return true;
+
         return false;
     }
 
     public function detach(User $user, TimetableEntry $timetableEntry): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function detachAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function disassociate(User $user, TimetableEntry $timetableEntry): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function disassociateAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
+            return true;
+
         return false;
     }
 
     public function forceDeleteAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::DELETE))
+            return true;
+
         return false;
     }
 

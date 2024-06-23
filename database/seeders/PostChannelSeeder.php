@@ -37,16 +37,16 @@ class PostChannelSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        $post->messages()->attach([
-            1 => [
+        $post->channels()->attach([
+            [
                 'post_id' => $post->id,
                 'post_channel_id' => $channel1->id,
                 'message_id' => 123123123,
             ]
         ]);
 
-        $post->messages()->attach([
-            1 => [
+        $post->channels()->attach([
+            [
                 'post_id' => $post->id,
                 'post_channel_id' => $channel2->id,
                 'message_id' => 124124124,

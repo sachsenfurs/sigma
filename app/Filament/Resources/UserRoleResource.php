@@ -2,16 +2,15 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\PermissionLevel;
 use App\Filament\Resources\UserRoleResource\Pages;
 use App\Filament\Resources\UserRoleResource\RelationManagers\UserResourceRelationManager;
-use App\Models\Permission;
 use App\Models\UserRole;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class UserRoleResource extends Resource
 {
@@ -22,10 +21,6 @@ class UserRoleResource extends Resource
     protected static ?int $navigationSort = 1200;
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_users');
-    }
 
     public static function getLabel(): ?string {
         return __('User Role');
@@ -151,14 +146,22 @@ class UserRoleResource extends Resource
             ->collapsible()
             ->collapsed()
             ->schema([
-                Forms\Components\CheckboxList::make('permissions')
-                    ->label('')
-                    ->columns(4)
-                    ->columnSpanFull()
-                    ->bulkToggleable()
-                    ->relationship('permissions', 'name')
-                    ->options(fn() => collect(Permission::all()->pluck('name', 'id')))
-                    ->descriptions(fn() => collect(Permission::all()->pluck('friendly_name', 'id'))),
+                Forms\Components\Repeater::make("permissions")
+                    ->grid(2)
+                    ->columns()
+                    ->relationship()
+                    ->schema([
+                        Forms\Components\Select::make("permission")
+                            ->options(\App\Enums\Permission::class)
+                            ->required()
+                            ->fixIndistinctState()
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+                        Forms\Components\Select::make("level")
+                            ->options(PermissionLevel::class)
+                            ->default(PermissionLevel::NO)
+                            ->selectablePlaceholder(false)
+                            ->required(),
+                    ])
             ]);
     }
 }

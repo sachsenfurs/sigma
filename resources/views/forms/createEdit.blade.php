@@ -50,7 +50,7 @@
                             <strong>SIG</strong>
                         </div>
                         <div class="card-body">
-                            @can('manage_events')
+                            @can("update", $form->sigEvent)
                                 <a href="{{ route('sigs.show', ['sig' => $form->sig_event_id]) }}">
                                     {{ $form->sigEvent->name_localized }}
                                 </a>
