@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
 use App\Models\SigFavorite;
+use App\Models\Chat;
 
 class AjaxController extends Controller
 {
@@ -38,6 +39,19 @@ class AjaxController extends Controller
 
         $response = [
             'status' => $result
+        ];
+
+        return response()->json($response);
+    }
+
+    public function refreshChat(Request $request, Chat $chat) {
+        if (!$request->ajax()) {
+            throw new UnauthorizedException();
+        }
+
+        $response = [
+            'status'   => 'success',
+            'messages' => $chat->messages()->count()
         ];
 
         return response()->json($response);
