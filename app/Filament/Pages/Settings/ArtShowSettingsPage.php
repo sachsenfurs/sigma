@@ -64,6 +64,8 @@ class ArtShowSettingsPage extends SettingsPage
                                     ->seconds(false)
                                     ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                                 TextInput::make("charity_min_percentage")
+                                     ->label("Min. Charity Percentage")
+                                     ->translateLabel()
                                      ->required()
                                      ->minValue(0)
                                      ->maxValue(100)
@@ -87,6 +89,9 @@ class ArtShowSettingsPage extends SettingsPage
                                         ->seconds(false)
                                         ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                                     TextInput::make("max_bids_per_item")
+                                         ->label("Max. Bids per Item")
+                                         ->translateLabel()
+                                         ->helperText(__("Set how many bids are possible before the item goes up for auction"))
                                          ->required()
                                          ->minValue(0)
                                          ->numeric(),
