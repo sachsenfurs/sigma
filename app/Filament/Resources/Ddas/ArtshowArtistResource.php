@@ -51,13 +51,13 @@ class ArtshowArtistResource extends Resource
                     ->label('User')
                     ->translateLabel()
                     ->searchable()
-                    ->formatStateUsing(fn(?Model $record) => $record != null ? $record->user_id . " - " . $record->user->name : "") // formatting when user already present
+                    ->formatStateUsing(fn(?Model $record) => $record?->user != null ? $record->user->reg_id . " - " . $record->user->name : "") // formatting when user already present
                     ->getSearchResultsUsing(function (string $search) {
                         return User::where('name', 'like', "%{$search}%")
-                            ->orWhere('id', $search)
+                            ->orWhere('reg_id', $search)
                             ->limit(10)
                             ->get()
-                            ->map(fn($u) => [$u->id => $u->id . " - " . $u->name]) // formatting when searching for new user
+                            ->map(fn($u) => [$u->id => $u->reg_id . " - " . $u->name]) // formatting when searching for new user
                             ->toArray();
                     })
                     ->searchDebounce(250),
