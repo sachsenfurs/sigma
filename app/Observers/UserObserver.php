@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\UserRole;
+use Illuminate\Support\Str;
 
 class UserObserver
 {
@@ -23,7 +24,7 @@ class UserObserver
 
     private function createUpdate(User $user) {
         $userRoles = UserRole::all()->pluck('registration_system_key', 'id')->map(function($item) {
-            return $item != null ? explode(',', $item) : [];
+            return $item != null ? explode(',', Str::lower($item)) : [];
         });
 
         $userGroups = $user->groups;
