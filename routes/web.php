@@ -184,7 +184,8 @@ Route::group(['middleware' => "auth"], function() {
 
     // Notifications
     Route::get("/notifications", [NotificationController::class, "index"])->name("notifications.index");
-    
+    Route::patch('/notifications', [NotificationController::class, 'update'])->name('notifications.update');
+
     // Chats
     Route::get("/chats", [ChatController::class, "index"])->name("chats.index");
     Route::post("/chats/new", [ChatController::class, "create"])->name("chats.create");
