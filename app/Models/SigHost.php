@@ -40,6 +40,11 @@ class SigHost extends Model
         return $this->belongsTo(User::class, "reg_id", "reg_id");
     }
 
+    public function sigEvents()
+    {
+        return $this->belongsToMany(SigEvent::class, 'sig_host_sig_events', 'sig_host_id', 'sig_event_id');
+    }
+
     public function scopePublic($query) {
         return $query->where('hide', false)
             ->whereHas("sigEvents", function($query) {
