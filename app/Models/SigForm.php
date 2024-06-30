@@ -41,13 +41,7 @@ class SigForm extends Model
     {
         return $this->belongsToMany(UserRole::class, 'sig_form_user_roles');
     }
-
-    public function resolveRouteBinding($value, $field = null): SigForm|null {
-        $parts = explode('-', $value);
-        $id = end($parts);
-
-        $instances = self::where($this->getTable() . '.id', $id)->orWhere($this->getTable() . '.slug', $value);
-
-        return $instances->first();
+    public function getRouteKeyName() {
+        return 'slug';
     }
 }

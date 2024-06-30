@@ -67,6 +67,9 @@ class LassieExportEndpoint extends Controller
 
                 //ric	int(7) unsigned	NO	0	Only used if the event is a Security shift that should be available as alertable unit (i.e. §S: ODS) and a Pager system is in use.
                 'ric' => 0,
+
+                // expected_status  Status the Operatives scheduled into this shift are expected to be in (e.g.: 4 for regular door duties). 0 if any or event.
+                'expected_status' => 0
             ];
             if($first)
                 fputcsv($csvStream, array_keys($entry), ";");

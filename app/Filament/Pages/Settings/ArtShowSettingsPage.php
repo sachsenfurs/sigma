@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Enums\Permission;
 use App\Filament\Clusters\Settings;
 use App\Settings\ArtShowSettings;
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Gate;
 
 class ArtShowSettingsPage extends SettingsPage
 {
@@ -27,6 +29,10 @@ class ArtShowSettingsPage extends SettingsPage
     }
     public function getTitle(): string|Htmlable {
         return self::getNavigationLabel();
+    }
+
+    public static function canAccess(): bool {
+        return Gate::allows("artshowSettings", self::$settings);
     }
 
     public function form(Form $form): Form
@@ -58,6 +64,8 @@ class ArtShowSettingsPage extends SettingsPage
                                     ->seconds(false)
                                     ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                                 TextInput::make("charity_min_percentage")
+                                     ->label("Min. Charity Percentage")
+                                     ->translateLabel()
                                      ->required()
                                      ->minValue(0)
                                      ->maxValue(100)
@@ -81,6 +89,9 @@ class ArtShowSettingsPage extends SettingsPage
                                         ->seconds(false)
                                         ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                                     TextInput::make("max_bids_per_item")
+                                         ->label("Max. Bids per Item")
+                                         ->translateLabel()
+                                         ->helperText(__("Set how many bids are possible before the item goes up for auction"))
                                          ->required()
                                          ->minValue(0)
                                          ->numeric(),

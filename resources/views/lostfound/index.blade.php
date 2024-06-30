@@ -2,6 +2,10 @@
 @section('title', "Lost & Found")
 @section('content')
     <div class="container">
+        <div class="alert alert-info">
+            <i class="bi bi-exclamation-lg"></i>
+            {{ __("If you lost or found something, please reach out to Con Ops (Leitstelle)!") }}
+        </div>
         <div class="sticky-top container-fluid p-0 z-1">
             <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap" id="lostfoundTab" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
@@ -22,7 +26,9 @@
                 @forelse(\App\Models\LostFoundItem::lost()->get() AS $item)
                     <x-lostfound.card :item="$item"></x-lostfound.card>
                 @empty
-                    {{ __("Nothing has been lost yet") }}
+                    <div class="p-3">
+                        {{ __("Nothing has been lost yet") }}
+                    </div>
                 @endforelse
             </div>
 
@@ -30,7 +36,9 @@
                 @forelse(\App\Models\LostFoundItem::found()->get() AS $item)
                     <x-lostfound.card :item="$item"></x-lostfound.card>
                 @empty
-                    {{ __("Nothing has been found yet") }}
+                    <div class="p-3">
+                        {{ __("Nothing has been found yet") }}
+                    </div>
                 @endforelse
             </div>
         </div>

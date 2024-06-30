@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Gate;
 
 class DealerSettingsPage extends SettingsPage
 {
@@ -26,6 +27,10 @@ class DealerSettingsPage extends SettingsPage
     }
     public function getTitle(): string|Htmlable {
         return self::getNavigationLabel();
+    }
+
+    public static function canAccess(): bool {
+        return Gate::allows("dealerSettings", self::$settings);
     }
 
     public function form(Form $form): Form

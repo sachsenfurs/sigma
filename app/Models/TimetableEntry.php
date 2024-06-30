@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\HasSigEvents;
+use App\Observers\TimetableEntryObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+#[ObservedBy(TimetableEntryObserver::class)]
 class TimetableEntry extends Model
 {
     use HasFactory, HasSigEvents;

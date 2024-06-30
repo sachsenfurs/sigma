@@ -15,7 +15,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -29,11 +28,7 @@ class SigEventResource extends Resource
 
     protected static ?string $label = 'SIGs';
 
-    protected static ?int $navigationSort = 1;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sigs');
-    }
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form {
         return $form
@@ -193,8 +188,7 @@ class SigEventResource extends Resource
                         ->createOptionModalHeading(__('Create Tag'))
                         ->createOptionForm(fn($form) => SigTagResource::form($form)),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component {
@@ -253,8 +247,7 @@ class SigEventResource extends Resource
                     ->columnSpanFull()
                     ->options(Approval::class),
             ])
-            ->columnSpan(1)
-            ->visible(auth()->user()->can('manage_sigs'));
+            ->columnSpan(1);
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component {
@@ -281,8 +274,7 @@ class SigEventResource extends Resource
                         ->visible(fn (Get $get) => $get('reg_possible') === true)
                         ->columnSpanFull(),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component {

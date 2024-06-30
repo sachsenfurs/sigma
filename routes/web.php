@@ -11,7 +11,6 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\Post\PostController;
-use App\Http\Controllers\Post\TranslateController;
 use App\Http\Controllers\Schedule\ConbookExportController;
 use App\Http\Controllers\Schedule\TimetableEntryController;
 use App\Http\Controllers\SetLocaleController;

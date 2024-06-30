@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Ddas\ArtshowItem;
+use App\Models\Post\Post;
 use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
@@ -33,40 +34,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
+        //
     ];
 
     protected $observers = [
-        User::class => [
-            UserObserver::class,
-        ],
-        UserRole::class => [
-            UserRoleObserver::class,
-        ],
-        SigEvent::class => [
-            SigEventObserver::class
-        ],
-        SigFavorite::class => [
-            SigFavoriteObserver::class
-        ],
-        SigFilledForm::class => [
-            SigFilledFormObserver::class
-        ],
-        SigAttendee::class => [
-            SigAttendeeObserver::class
-        ],
-        SigReminder::class => [
-            SigReminderObserver::class
-        ],
-        TimetableEntry::class => [
-            TimetableEntryObserver::class
-        ],
-
-        ArtshowItem::class => [
-            ArtshowItemObserver::class
-        ],
+        //
     ];
 
     /**

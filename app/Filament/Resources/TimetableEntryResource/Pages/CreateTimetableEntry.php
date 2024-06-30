@@ -36,6 +36,7 @@ class CreateTimetableEntry extends CreateRecord
     public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): CreateAction|\Filament\Tables\Actions\CreateAction {
         return $action
             ->model(TimetableEntry::class)
+            ->authorize("create", TimetableEntry::class)
             ->fillForm(function(array $arguments, ?Model $record) {
                 return [
                    'sig_event_id' => $record?->id ?? $arguments['sig_location_id'] ?? null,

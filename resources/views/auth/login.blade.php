@@ -2,109 +2,104 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 mt-2">
-                <h3>{{ __("Welcome to the SIG-Manager, here you can:") }}</h3>
-
-                <div class="list-group mt-4">
-                    <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-calendar-week"></i> {{ __("Access the event schedule") }}</h5>
-                        <small><a href="{{ route("schedule.listview") }}">{{ __("View Schedule") }}</a></small>
-                    </li>
-                    <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-list-check"></i> {{ __("Sign up for specific SIGs") }}</h5>
-                    </li>
-                    <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-gear"></i> {{ __("Manage your own SIGs") }}</h5>
-                    </li>
-                    <li class="list-group-item">
-                        <h5 class="mb-1"><i class="bi bi-alarm"></i> {{ __("Set up reminder Notifications") }}</h5>
-                    </li>
+        <div class="col-12 mx-auto mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {{ __("Login") }}
                 </div>
-
-                <div class="card mt-4">
-                    <div class="card-header">
-                        {{ __("Login") }}
-                    </div>
-                    <div class="card-body">
-                        <div class="row mt-3">
-                            <div class="col-12 text-center">
-                                <a class="btn btn-success" href="{{ route('oauthlogin_regsys') }}">
-                                    {{ __('Login with your existing con-registration') }}
+                <div class="card-body">
+                    <div class="row mt-3 flex">
+                        <div class="col-12 text-center align-items-center">
+                            <a class="btn btn-success btn-lg" href="{{ route('oauthlogin_regsys') }}">
+                                {{ __('Login with your existing con-registration') }}
+                            </a>
+                            <small class="d-flex w-100 justify-content-end mt-4">
+                                <a class="justify-content-end text-decoration-none"  href="{{ route('oauthlogin') }}">
+                                    {{ __('SF Staff-Login') }}
                                 </a>
-                                <small class="d-flex w-100 justify-content-end mt-4">
-                                    <a class="justify-content-end text-decoration-none"  href="{{ route('oauthlogin') }}">
-                                        {{ __('SF Staff-Login') }}
+                            </small>
+                            @if(\Illuminate\Support\Facades\App::environment("local"))
+                                <small class="d-flex w-100 justify-content-end mt-1">
+                                    <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">
+                                        {{ __('Dev-Login ID 1') }}
                                     </a>
                                 </small>
-                                @if(\Illuminate\Support\Facades\App::environment("local"))
-                                    <small class="d-flex w-100 justify-content-end mt-1">
-                                        <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">
-                                            {{ __('Dev-Login ID 1') }}
-                                        </a>
-                                    </small>
-                                @endif
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
-
-                {{--
-                <hr>
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-
-                    <div class="row mb-3">
-                        <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                        <div class="col-md-6">
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                            @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                        <div class="col-md-6">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                            @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6 offset-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-0">
-                        <div class="col-md-8 offset-md-4">
-                            <button type="submit" class="btn btn-primary">
-                                {{ __('Login') }}
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                --}}
-
             </div>
         </div>
+
+        <h3>{{ __("Welcome to the SIG-Manager, here you can:") }}</h3>
+        <div class="row g-3 mt-3 align-items-stretch">
+            <x-home.overview icon="bi-calendar-week">
+                {{ __("Access the event schedule") }}
+                <x-slot:subtitle>
+                    <a href="{{ route("schedule.listview") }}" class="btn btn-sm btn-secondary m-1">{{ __("View Schedule") }}</a>
+                    <a href="{{ route("schedule.calendarview") }}" class="btn btn-sm btn-secondary m-1">{{ __("View Schedule (Calendar View)") }}</a>
+                </x-slot:subtitle>
+            </x-home.overview>
+
+            <x-home.overview icon="bi-gear">
+                {{ __("Manage your own SIGs") }}
+                <x-slot:subtitle>
+                    {{ __("Submit a new SIG or register for specific events during the convetion") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+
+            <x-home.overview icon="bi-alarm">
+                {{ __("Notifications") }}
+                <x-slot:subtitle>
+                    {{ __("Set up reminder Notifications") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+        </div>
+        <div class="row g-3 mt-3 align-items-stretch">
+            <x-home.overview icon="bi-easel">
+                {{ __("Art Show Item Sign Up") }}
+                <x-slot:subtitle>
+                    {{ __("Submit Items for the art show and auction") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+
+            <x-home.overview icon="bi-cash-coin">
+                {{ __("Art Show Bidding") }}
+                <x-slot:subtitle>
+                    {{ __("View and submit bids for all art show items") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+        </div>
+        <div class="row g-3 mt-3 align-items-stretch">
+            <x-home.overview icon="bi-cart">
+                {{ __("Dealer's Den Sign Up") }}
+                <x-slot:subtitle>
+                    {{ __("Sign up and manage your Dealer's Den application") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+
+            <x-home.overview icon="bi-cart">
+                {{ __("Dealer's Den Overview") }}
+                <x-slot:subtitle>
+                    {{ __("List all attending dealers") }}
+                </x-slot:subtitle>
+            </x-home.overview>
+
+        </div>
+
+        @if(app(\App\Settings\AppSettings::class)->lost_found_enabled)
+            <div class="row g-3 mt-3 align-items-stretch">
+                <x-home.overview icon="bi-box2">
+                    {{ __("Lost & Found") }}
+                    <x-slot:subtitle>
+                        {{ __("Have you lost something at the venue?") }}
+                    </x-slot:subtitle>
+                </x-home.overview>
+            </div>
+        @endif
+
+
+
     </div>
+
 @endsection

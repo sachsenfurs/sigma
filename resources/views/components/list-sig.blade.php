@@ -8,7 +8,7 @@
             {{ $sig->name_localized }}
         </h4>
 
-        @can("manage_events")
+        @can("update", $sig)
             <a href="{{ \App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $sig]) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
     </div>
@@ -19,10 +19,7 @@
         </x-markdown>
     </div>
 
-    @forelse($sig->timetableEntries AS $entry)
-        @if($entry->hide AND !auth()?->user()?->can("manage_events"))
-            @continue
-        @endif
+    @forelse($sig->timetableEntries()->public()->get() AS $entry)
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <div class="row">

@@ -2,7 +2,7 @@
 @section('title', "Hosts")
 @section('content')
     <div class="container">
-        @foreach($hosts AS $host)
+        @forelse($hosts AS $host)
             <x-list-host-location
                 :instance="$host"
                 :link="route('hosts.show', $host)"
@@ -13,7 +13,11 @@
             >
                 {{ $host->description }}
             </x-list-host-location>
-        @endforeach
+        @empty
+            <x-infocard>
+                {{ __("The Schedule is not published yet") }}
+            </x-infocard>
+        @endforelse
 
     </div>
 @endsection

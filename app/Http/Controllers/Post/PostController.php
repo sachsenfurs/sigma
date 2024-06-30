@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
-use App\Models\PostChannel;
+use App\Models\Post\Post;
+use App\Models\Post\PostChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;

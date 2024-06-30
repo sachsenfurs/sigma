@@ -4,6 +4,7 @@ namespace App\Filament\Pages\Settings;
 
 use App\Filament\Clusters\Settings;
 use App\Services\Translator;
+use App\Settings\AppSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
@@ -11,12 +12,13 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 
 class AppSettingsPage extends SettingsPage
 {
-    protected static string $settings = \App\Settings\AppSettings::class;
+    protected static string $settings = AppSettings::class;
     protected static ?string $cluster = Settings::class;
     protected static ?string $navigationIcon = "heroicon-o-cog-6-tooth";
     protected static ?string $slug = "system";
@@ -24,10 +26,14 @@ class AppSettingsPage extends SettingsPage
     public static function getNavigationLabel(): string {
         return __("System Settings");
     }
+
     public function getTitle(): string|Htmlable {
         return self::getNavigationLabel();
     }
 
+    public static function canAccess(): bool {
+        return Gate::allows("appSettings", self::$settings);
+    }
 
     public function form(Form $form): Form {
         return $form

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigLocationResource\Pages;
-use App\Filament\Resources\SigLocationResource\RelationManagers;
 use App\Models\SigLocation;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,11 +18,7 @@ class SigLocationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationGroup = 'SIG';
-    protected static ?int $navigationSort = 100;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sig_base_data');
-    }
+    protected static ?int $navigationSort = 60;
 
     public static function getLabel(): ?string {
         return __('Location');

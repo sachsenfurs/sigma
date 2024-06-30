@@ -10,6 +10,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use function Filament\Support\format_money;
 
 class TimetableEntriesRelationManager extends RelationManager
 {
@@ -28,12 +29,12 @@ class TimetableEntriesRelationManager extends RelationManager
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
         // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->can("view", $ownerRecord);
     }
 
     protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->can("viewAny", $record);
     }
 
     public function table(Table $table): Table {
@@ -71,7 +72,8 @@ class TimetableEntriesRelationManager extends RelationManager
     protected function getTableEntryActions(): array {
         return [
             Tables\Actions\EditAction::make()
-                ->url(fn(Model $record) => SigEventResource::getUrl('edit', ['record' => $record->sigEvent])),
+                ->form(TimetableEntryResource\Pages\EditTimetableEntry::getSchema())
+                ->using(fn(Model $record, array $data) => TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data)),
         ];
     }
 }

@@ -14,13 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('post_channel_messages', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("post_id")->constrained()->cascadeOnDelete();
             $table->foreignId("post_channel_id")->constrained()->cascadeOnDelete();
             $table->bigInteger('message_id');
-            $table->primary([
-                'post_id',
-                'post_channel_id',
-            ]);
         });
     }
 
