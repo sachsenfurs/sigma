@@ -43,7 +43,7 @@
                                         <input class="form-check-input" type="checkbox" name="notification-telegram-{{ $notification }}" value="1" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->telegram_user_id) disabled @endif>
                                     </div>
                                     <div class="col-4 col-md-4 d-none">
-                                        <input class="form-check-input" type="checkbox" name="notification-db-{{ $notification }}" value="1" checked>
+                                        <input class="form-check-input" type="checkbox" name="notification-database-{{ $notification }}" value="1" checked>
                                     </div>
                                 </div>
                                 <!--
