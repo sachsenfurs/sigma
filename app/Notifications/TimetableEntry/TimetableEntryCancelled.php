@@ -64,7 +64,7 @@ class TimetableEntryCancelled extends Notification
         return (new MailMessage)
             ->subject('[INFO] ' . __('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->line('[INFO]')
-            ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->line(__('The event :event was cancelled!', $this->timetableEntry->sigEvent->name_localized))
             ->action(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
@@ -78,6 +78,7 @@ class TimetableEntryCancelled extends Notification
     {
         return [
             'type' => 'timetable_entry_cancelled',
-            'timetableEntry' => $this->timetableEntry->id
+            'timetableEntryId' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized
         ];
 }

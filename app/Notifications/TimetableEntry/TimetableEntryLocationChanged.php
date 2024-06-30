@@ -51,7 +51,7 @@ class TimetableEntryLocationChanged extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
-            ->line(__('The location for the event ') . $this->timetableEntry->sigEvent->name_localized . ' has changed!')
+            ->line(__('The location for the event :event has changed!', ["event" => $this->timetableEntry->sigEvent->name_localized]))
             ->line(__('New location: ') . $this->timetableEntry->sigLocation->name)
             ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
@@ -66,7 +66,9 @@ class TimetableEntryLocationChanged extends Notification
     {
         return [
             'type' => 'timetable_entry_location_changed',
-            'timetableEntry' => $this->timetableEntry->id
+            'timetableEntryId' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized,
+            'newLocation' => $this->timetableEntry->sigLocation->name
         ];
     }
 }

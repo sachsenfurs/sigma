@@ -56,7 +56,7 @@ class SigTimeslotReminder extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
-            ->line(__("your timeslot from the event ") . $this->sigTimeslot->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
+            ->line(__('your booked timeslot of the event :event starts in :minutes_before minutes!', ["event" => $this->sigTimeslot->timetableEntry->sigEvent->name_localized, "minutes_before" => $this->reminder->minutes_before]))
             ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->sigTimeslot->id]));
 
     }
@@ -71,7 +71,9 @@ class SigTimeslotReminder extends Notification
     {
         return [
             'type' => 'sig_timeslot_reminder',
-            'sigTimeslot' => $this->sigTimeslot->id
+            'sigTimeslotId' => $this->sigTimeslot->id,
+            'eventName' => $this->sigTimeslot->timetableEntry->sigEvent->name_localized,
+            'minutes_before' => $this->reminder->minutes_before
         ];
     }
 }
