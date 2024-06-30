@@ -90,7 +90,7 @@
                     @auth
                         <li class="nav-link px-3">
                             <a href="{{ route('notifications.index') }}">
-                                @if (auth()->user()->unreadNotifications())
+                                @if (auth()->user()->unreadNotifications->count() > 0)
                                     <i class="bi bi-bell-fill"></i>
                                 @else
                                     <i class="bi bi-bell"></i>
@@ -99,7 +99,7 @@
                         </li>
                         <li class="nav-link px-3 ">
                             <a href="{{ route('chats.index') }}">
-                                @if (auth()->user()->unreadChats())
+                                @if (auth()->user()->unreadNotifications->count() > 0)
                                     <i class="bi bi-mailbox2-flag"></i>
                                 @else
                                     <i class="bi bi-mailbox2"></i>
