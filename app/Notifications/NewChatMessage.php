@@ -83,8 +83,9 @@ class NewChatMessage extends Notification
     public function toArray($notifiable)
     {
         return [
-            'type' => 'chat_new_message',
-            'data' => $this->chat->id
+            'type'       => 'chat_new_message',
+            'department' => $this->chat->department,
+            'id'         => $this->chat->id
         ];
     }
 }
