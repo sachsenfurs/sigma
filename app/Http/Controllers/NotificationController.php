@@ -6,37 +6,22 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function index() {
-        $notifications = [
-            [
-                'Title' => 'Test1',
-                'Message' => 'Message1',
-            ],
-            [
-                'Title' => 'Test2',
-                'Message' => 'Message2',
-            ],
-            [
-                'Title' => 'Test3',
-                'Message' => 'Message3',
-            ],
-            [
-                'Title' => 'Test4',
-                'Message' => 'Message4',
-            ],
-            [
-                'Title' => 'Test5',
-                'Message' => 'Message5',
-            ],
-        ];
+    public function index()
+    {
+        $notifications = auth()->user()->unreadNotifications;
+        
         return view("notifications.index", compact("notifications"));
     }
 
-    public function store() {
+    /**
+     * Update the specified resources in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
 
-    }
-
-    public function update() {
-    
+        return redirect()->back()->with('success', __('Notifications marked as read'));
     }
 }
