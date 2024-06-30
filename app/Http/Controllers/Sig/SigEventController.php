@@ -35,6 +35,7 @@ class SigEventController extends Controller
 
         $sigEvent = new SigEvent($validated);
         $sigEvent->save();
+        $sigEvent->sigHosts()->attach($validated["sig_host_id"]);
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));
     }
