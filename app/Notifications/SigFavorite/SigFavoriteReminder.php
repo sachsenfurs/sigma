@@ -68,8 +68,8 @@ class SigFavoriteReminder extends Notification
     public function toArray($notifiable)
     {
         return [
-            'type' => 'sigFavoriteReminder',
-            'data' => $this->timetableEntry->id
+            'type' => 'sig_favorite_reminder',
+            'timetableEntry' => $this->timetableEntry->id
         ];
     }
 }

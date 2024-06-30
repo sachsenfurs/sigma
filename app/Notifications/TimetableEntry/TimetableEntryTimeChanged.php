@@ -36,7 +36,9 @@ class TimetableEntryTimeChanged extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_time_changed')->first()->channel;
+        //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_time_changed')->first()->channel;
+        return UserNotificationChannel::list('timetable_entry_time_changed', $notifiable->id, 'mail');
+
     }
 
     /**
@@ -65,7 +67,8 @@ class TimetableEntryTimeChanged extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'timetable_entry_time_changed',
+            'timetableEntry' => $this->timetableEntry->id
         ];
     }
 }
