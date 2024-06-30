@@ -62,7 +62,7 @@
                                     <a class="btn p-2 w-75" href="{{ route('chats.index') }}?chat_id={{ $notification->data['id'] }}">
                                         <h2 class="p-none m-none">{{ __('Event time changed') }}</h2>
                                         <p class="p-none m-none">{{ __('The time of the event :event has changed!', ["event" => $notification->data['eventName']]) }}</p>
-                                        <p class="p-none m-none">{{ __('New time: :startTime - :endTime', ["startTime" => Carbon::parse($notification->data['newStartTime'])->format("H:i"), "endTime" => Carbon::parse($notification->data['newEndTime']])->format("H:i")) }}</p>
+                                        <p class="p-none m-none">{{ __('New time: :startTime - :endTime', ["startTime" => Carbon::parse($notification->data['newStartTime'])->format("H:i"), "endTime" => Carbon::parse($notification->data['newEndTime'])->format("H:i")]) }}</p>
                                     </a>
                                     @break
                                 @default
