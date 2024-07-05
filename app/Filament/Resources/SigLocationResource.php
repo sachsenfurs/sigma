@@ -89,8 +89,8 @@ class SigLocationResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigLocations::route('/'),
-            'view' => Pages\ViewSigLocation::route('/{record}'),
             'create' => Pages\CreateSigLocation::route('/create'),
+            'view' => Pages\ViewSigLocation::route('/{record}'),
             'edit' => Pages\EditSigLocation::route('/{record}/edit'),
         ];
     }

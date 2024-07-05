@@ -59,8 +59,8 @@ class SigTagResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigTags::route('/'),
-            'view' => Pages\ViewSigTag::route('/{record}'),
             'create' => Pages\CreateSigTag::route('/create'),
+            'view' => Pages\ViewSigTag::route('/{record}'),
             'edit' => Pages\EditSigTag::route('/{record}/edit'),
         ];
     }

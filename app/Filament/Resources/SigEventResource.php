@@ -80,8 +80,8 @@ class SigEventResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigEvents::route('/'),
-            'view' => Pages\ViewSigEvent::route('/{record}'),
             'create' => Pages\CreateSigEvent::route('/create'),
+            'view' => Pages\ViewSigEvent::route('/{record}'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
         ];
     }
