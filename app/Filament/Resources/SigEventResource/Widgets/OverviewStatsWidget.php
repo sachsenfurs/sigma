@@ -16,15 +16,15 @@ class OverviewStatsWidget extends BaseWidget
 {
     protected function getStats(): array {
         return [
-            Stat::make(__('Unconfirmed SIGs'), SigEventResource::getNavigationBadge())
+            Stat::make(__('Unconfirmed SIGs'), SigEventResource::getNavigationBadge() ?? 0)
                 ->description(__("Total Events: :count", ['count' => SigEvent::count()]))
                 ->icon(SigEventResource::getNavigationIcon())
                 ->url(SigEventResource::getUrl()),
-            Stat::make(__("Unconfirmed Dealer Registrations"), DealerResource::getNavigationBadge())
+            Stat::make(__("Unconfirmed Dealer Registrations"), DealerResource::getNavigationBadge() ?? 0)
                 ->description(__("Total Dealers: :count", ['count' => Dealer::count()]))
                 ->icon(DealerResource::getNavigationIcon())
                 ->url(DealerResource::getUrl()),
-            Stat::make(__("Unconfirmed Art Show Items"), ArtshowItemResource::getNavigationBadge())
+            Stat::make(__("Unconfirmed Art Show Items"), ArtshowItemResource::getNavigationBadge() ?? 0)
                 ->description(__("Total Art Show Items: :count", ['count' => ArtshowItem::count()]))
                 ->icon(ArtshowItemResource::getNavigationIcon())
                 ->url(ArtshowItemResource::getUrl()),
