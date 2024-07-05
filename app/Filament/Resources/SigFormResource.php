@@ -74,7 +74,7 @@ class SigFormResource extends Resource
         return [
             'index' => Pages\ListSigForms::route('/'),
             'create' => Pages\CreateSigForm::route('/create'),
-            'edit' => Pages\EditSigForm::route('/{record}/edit'),
+            'edit' => Pages\EditSigForm::route('/{record?}/edit'),
         ];
     }
 
@@ -155,10 +155,14 @@ class SigFormResource extends Resource
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
-                        ->unique()
+                        ->unique(ignoreRecord: true)
                         ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
+                        ->afterStateUpdated(function($state, $record) {
+                            if($state != $record->slug)
+                                redirect(self::getUrl("edit", ['record' => $state]));
+                        })
                         ->columnSpanFull(),
                 ])
                 ->columnSpan(1);
