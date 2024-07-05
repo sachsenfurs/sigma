@@ -47,6 +47,7 @@ class TimetableEntry extends Model
     protected $with = [
         'favorites',
         'sigLocation',
+        'parentEntry',
     ];
 
     public function favorites(): HasMany {
