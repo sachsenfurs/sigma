@@ -124,6 +124,7 @@ class DealerResource extends Resource
                                     ->imageCropAspectRatio("1:1")
                                     ->image()
                                     ->imageEditor()
+                                    ->downloadable()
                                     ->maxFiles(1)
                                     ->maxSize(5120),
                                 Forms\Components\Select::make("tags")

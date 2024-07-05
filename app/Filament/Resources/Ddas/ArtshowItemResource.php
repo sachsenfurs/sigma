@@ -102,6 +102,7 @@ class ArtshowItemResource extends Resource
                     ->preserveFilenames(false)
                     ->disk('public')
                     ->image()
+                    ->downloadable()
                     ->imageEditor()
                     ->maxFiles(1)
                     ->maxSize(5120),
