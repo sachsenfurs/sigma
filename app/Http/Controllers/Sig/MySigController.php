@@ -63,9 +63,7 @@ class MySigController extends Controller
 
     public function toggleAttendeeList(SigEvent $sig) {
         // This check needs improvement
-        if ($sig->sigHost->reg_id != auth()->user()->reg_id || !Gate::authorize('manage_events')) {
-            return redirect()->back()->withErrors("Du kannst dieses Event nicht bearbeiten!");
-        }
+        $this->authorize("update", $sig);
 
         if ($sig->attendees_public) {
             $sig->attendees_public = false;

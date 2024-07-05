@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\SigEvent;
-use App\Models\SigHost;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -19,7 +18,7 @@ class SigEventPolicy
     public function view(User $user, SigEvent $sigEvent): bool {
         return $user->permissions()->contains('manage_events')
             || $user->permissions()->contains('manage_sigs')
-            || $sigEvent->sigHost->reg_id === $user->reg_id;
+            || $sigEvent->sigHosts->pluck("reg_id")->contains($user->reg_id);
     }
 
     public function create(User $user, $sigHostId = null): bool {
@@ -31,14 +30,14 @@ class SigEventPolicy
     public function update(User $user, SigEvent $sigEvent): bool {
         return $user->permissions()->contains('manage_events')
             || $user->permissions()->contains('manage_sigs')
-            || $sigEvent->sigHost->reg_id === $user->reg_id;
+            || $sigEvent->sigHosts->pluck("reg_id")->contains($user->reg_id);
     }
 
     public function delete(User $user, SigEvent $sigEvent): bool {
         return $user->permissions()->contains('manage_events')
             || $user->permissions()->contains('manage_sigs')
             || (
-                $sigEvent->sigHost->reg_id == $user->reg_id
+                $sigEvent->sigHosts->pluck("reg_id")->contains($user->reg_id)
                 && !$sigEvent->approved
             );
     }

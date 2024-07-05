@@ -213,9 +213,9 @@ class SigFormResource extends Resource
                 ->schema([
                     Forms\Components\Select::make('sig_event_id')
                         ->label('')
-                        ->relationship('sigEvent', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHost'))
+                        ->relationship('sigEvent', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
-                            return $record->name . ' - ' . $record->sigHost->name;
+                            return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
                         })
                         ->searchable()
                         ->preload(),

@@ -41,13 +41,12 @@ class SigTagsRelationManager extends RelationManager
                 ->translateLabel()
                 ->sortable()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
+            Tables\Columns\TextColumn::make('sigHosts.name')
                 ->label('Host')
                 ->translateLabel()
                 ->searchable()
                 ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
+                    return $record->sigHosts->map(fn($host) => $host->name . ($host->reg_id ? " (# ".$host->reg_id . ")" : ""))->join(", ");
                 })
                 ->sortable(),
             Tables\Columns\ImageColumn::make('languages')
