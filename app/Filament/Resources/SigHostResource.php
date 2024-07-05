@@ -68,6 +68,7 @@ class SigHostResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigHosts::route('/'),
+            'view' => Pages\ViewSigHost::route('/{record}'),
             'create' => Pages\CreateSigHost::route('/create'),
             'edit' => Pages\EditSigHost::route('/{record}/edit'),
         ];

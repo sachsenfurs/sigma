@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\RelationManagers;
 
-use App\Filament\Resources\SigEventResource;
+use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
+use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use function Filament\Support\format_money;
 
 class TimetableEntriesRelationManager extends RelationManager
 {
@@ -71,6 +71,9 @@ class TimetableEntriesRelationManager extends RelationManager
 
     protected function getTableEntryActions(): array {
         return [
+            Tables\Actions\ViewAction::make()
+                 ->infolist(fn($record) => (new Infolist())->schema(ViewSigEvent::getInfolistSchema())->record($record->sigEvent))
+                ->hidden(fn(TimetableEntriesRelationManager $livewire) => $livewire->pageClass == ViewSigEvent::class),
             Tables\Actions\EditAction::make()
                 ->form(TimetableEntryResource\Pages\EditTimetableEntry::getSchema())
                 ->using(fn(Model $record, array $data) => TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data)),

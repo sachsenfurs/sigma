@@ -31,35 +31,40 @@ class SigLocationResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                self::getNameField(),
-                self::getNameEnField(),
-                self::getDescriptionField(),
-                self::getDescriptionEnField(),
+                Forms\Components\Section::make(__("Location Details"))
+                    ->collapsible()
+                    ->collapsed(fn($operation) => $operation == "view")
+                    ->schema([
+                    self::getNameField(),
+                    self::getNameEnField(),
+                    self::getDescriptionField(),
+                    self::getDescriptionEnField(),
 
-                Forms\Components\Fieldset::make()
-                    ->label("Physical Information")
-                    ->translateLabel()
-                    ->columns(4)
-                    ->schema([
-                        self::getFloorField(),
-                        self::getRoomField(),
-                        self::getRoomSizeField(),
-                        self::getSeatsField(),
-                    ]),
-                Forms\Components\Fieldset::make()
-                    ->columns(4)
-                    ->label("Signage Info")
-                    ->translateLabel()
-                    ->schema([
-                        self::getRenderIdField()->columnSpan(2),
-                        self::getInfodisplayField(),
-                        self::getEssentialField(),
-                        Forms\Components\Grid::make()
-                             ->schema([
-                                 self::getEssentialDescriptionField(),
-                                 self::getEssentialDescriptionEnField(),
-                             ])
-                    ]),
+                    Forms\Components\Fieldset::make()
+                        ->label("Physical Information")
+                        ->translateLabel()
+                        ->columns(4)
+                        ->schema([
+                            self::getFloorField(),
+                            self::getRoomField(),
+                            self::getRoomSizeField(),
+                            self::getSeatsField(),
+                        ]),
+                    Forms\Components\Fieldset::make()
+                        ->columns(4)
+                        ->label("Signage Info")
+                        ->translateLabel()
+                        ->schema([
+                            self::getRenderIdField()->columnSpan(2),
+                            self::getInfodisplayField(),
+                            self::getEssentialField(),
+                            Forms\Components\Grid::make()
+                                 ->schema([
+                                     self::getEssentialDescriptionField(),
+                                     self::getEssentialDescriptionEnField(),
+                                 ])
+                        ]),
+                ]),
 
             ]);
     }
@@ -84,6 +89,7 @@ class SigLocationResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigLocations::route('/'),
+            'view' => Pages\ViewSigLocation::route('/{record}'),
             'create' => Pages\CreateSigLocation::route('/create'),
             'edit' => Pages\EditSigLocation::route('/{record}/edit'),
         ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\App;
 
 class SigTag extends Model
@@ -15,7 +16,7 @@ class SigTag extends Model
 
     public $timestamps = false;
 
-    public function sigEvent(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
+    public function sigEvents(): BelongsToMany {
         return $this->belongsToMany(SigEvent::class);
     }
 

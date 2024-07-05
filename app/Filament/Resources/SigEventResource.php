@@ -57,6 +57,11 @@ class SigEventResource extends Resource
                     ->relationship("sigTags", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
             ])
+            ->recordUrl(fn(Model $record) =>
+                auth()->user()->can("update", $record)
+                ? SigEventResource::getUrl("edit", ['record' => $record])
+                : SigEventResource::getUrl('view', ['record' => $record])
+            )
             ->actions([
                 //
             ])
@@ -75,6 +80,7 @@ class SigEventResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigEvents::route('/'),
+            'view' => Pages\ViewSigEvent::route('/{record}'),
             'create' => Pages\CreateSigEvent::route('/create'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
         ];
@@ -120,12 +126,14 @@ class SigEventResource extends Resource
             IconColumn::make("description")
                 ->boolean()
                 ->label("Text")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => filled($record->description)),
             IconColumn::make("description_en")
                 ->boolean()
                 ->label("Text (EN)")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => filled($record->description_en)),

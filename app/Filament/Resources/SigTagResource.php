@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
 use App\Filament\Resources\SigTagResource\RelationManagers;
 use App\Models\SigTag;
@@ -51,13 +52,14 @@ class SigTagResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigTagsRelationManager::class,
+            SigEventsRelationManager::class,
         ];
     }
 
     public static function getPages(): array {
         return [
             'index' => Pages\ListSigTags::route('/'),
+            'view' => Pages\ViewSigTag::route('/{record}'),
             'create' => Pages\CreateSigTag::route('/create'),
             'edit' => Pages\EditSigTag::route('/{record}/edit'),
         ];
