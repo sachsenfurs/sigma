@@ -6,10 +6,10 @@
                 <x-list-host-location
                     :instance="$location"
                     :link="route('locations.show', $location)"
-                    :title="$location->name"
+                    :title="$location->name_localized"
                     :edit_link="\App\Filament\Resources\SigLocationResource::getUrl('edit', [ 'record' => $location ])"
                 >
-                    {{ $location->description }}
+                    {{ $location->description_localized }}
                 </x-list-host-location>
         @empty
             <x-infocard>

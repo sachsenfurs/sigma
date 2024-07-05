@@ -9,9 +9,9 @@
                     <div class="w-100 ms-3 align-self-center">
                         <h2>
                             <i class="bi bi-geo-alt"></i>
-                            {{ $location->name }}
+                            {{ $location->name_localized }}
                         </h2>
-                        <p class="text-muted">{{ $location->description }}</p>
+                        <p class="text-muted">{{ $location->description_localized }}</p>
                         @can("update", $location)
                             <a href="{{ \App\Filament\Resources\SigLocationResource::getUrl('edit', ['record' => $location]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan

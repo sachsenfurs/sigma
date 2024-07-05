@@ -12,12 +12,13 @@
             <a href="{{ \App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $sig]) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
     </div>
-
-    <div class="card-body">
-        <x-markdown>
-            {{ $sig->description_localized }}
-        </x-markdown>
-    </div>
+    @if($sig->description_localized)
+        <div class="card-body">
+            <x-markdown>
+                {{ $sig->description_localized }}
+            </x-markdown>
+        </div>
+    @endif
 
     @forelse($sig->timetableEntries()->public()->get() AS $entry)
         <ul class="list-group list-group-flush">
