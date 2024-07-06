@@ -36,8 +36,7 @@
             <x-home.overview icon="bi-calendar-week">
                 {{ __("Access the event schedule") }}
                 <x-slot:subtitle>
-                    <a href="{{ route("schedule.listview") }}" class="btn btn-sm btn-secondary m-1">{{ __("View Schedule") }}</a>
-                    <a href="{{ route("schedule.calendarview") }}" class="btn btn-sm btn-secondary m-1">{{ __("View Schedule (Calendar View)") }}</a>
+                    {{ __("View our schedule and don't miss anything!") }}
                 </x-slot:subtitle>
             </x-home.overview>
 
@@ -59,7 +58,7 @@
             <x-home.overview icon="bi-easel">
                 {{ __("Art Show Item Sign Up") }}
                 <x-slot:subtitle>
-                    {{ __("Submit Items for the art show and auction") }}
+                    {{ __("Submit items for the art show and auction") }}
                 </x-slot:subtitle>
             </x-home.overview>
 

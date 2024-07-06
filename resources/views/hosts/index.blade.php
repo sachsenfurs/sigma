@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Hosts")
+@section('title', __("Hosts"))
 @section('content')
     <div class="container">
         @forelse($hosts AS $host)

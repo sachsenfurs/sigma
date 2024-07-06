@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Locations")
+@section('title', __("Locations"))
 @section('content')
     <div class="container">
         @forelse($locations AS $location)

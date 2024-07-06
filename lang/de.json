@@ -8,6 +8,7 @@
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
+    "Home": "Startseite",
 
     "Administration": "Administration",
     "Manage Event Schedule": "Programmplan bearbeiten",
@@ -104,12 +105,18 @@
 
     "Welcome to the SIG-Manager, here you can:": "Herzlich Willkommen beim SIG-Manager, hier kannst du:",
     "Access the event schedule": "Den Programmplan abrufen",
+    "View our schedule and don't miss anything!": "Schau dir unseren Programmplan an, um nichts zu verpassen!",
     "View Schedule": "Zum Programmplan",
-    "Sign up for specific SIGs": "Dich für bestimmte SIGs anmelden",
+    "Submit a new SIG or register for specific events during the convetion": "Melde neue SIGs an oder registriere dich für vorhandene",
     "Program planning": "Programmplanung",
     "Manage your own SIGs": "Deine eigenen SIGs verwalten",
     "Set up reminder Notifications": "Erinnerungen für SIGs einrichten",
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
+    "Submit items for the art show and auction": "Reiche Gegenstände für die Art Show oder Auktion ein",
+    "View and submit bids for all art show items": "Durchstöbere unsere Art Show und biete für die Auktion",
+    "Sign up and manage your Dealer's Den application": "Melde dich für den Dealers Den an und verwalte deine Anmeldung",
+    "List all attending dealers": "Sieh dir unsere Künstler bzw. Händler an",
+    "Have you lost something at the venue?": "Hast du während der Veranstaltung etwas verloren oder gefunden?",
 
     "View": "Anzeigen",
     "Edit": "Bearbeiten",
@@ -351,7 +358,7 @@
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",
-    "tem List": "Gegenstandsliste",
+    "Item List": "Gegenstandsliste",
     "Item": "Gegenstand",
     "Items": "Gegenstände",
     "Art Show Artist": "Art Show Künstler",
@@ -393,7 +400,7 @@
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",
-    "Dealers' Den Sign Up": "Dealers Den Anmeldung",
+    "Dealer's Den Sign Up": "Dealers Den Anmeldung",
     "Dealer's Den Overview": "Dealers Den Übersicht",
     "Dealer List": "Händlerliste",
     "Dealer Logo": "Händler-Logo",
