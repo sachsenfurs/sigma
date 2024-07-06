@@ -91,9 +91,10 @@ main {
 .btn-toggle-nav a:focus {
     background-color: var(--bs-dark-border-subtle);
 }
-.btn-toggle-nav .active {
+.btn-toggle-nav .active, .btn-nav.active {
     background-color: var(--bs-dark-border-subtle);
 }
+
 
 .scrollarea {
     overflow-y: auto;

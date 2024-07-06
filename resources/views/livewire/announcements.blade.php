@@ -1,7 +1,5 @@
 <div>
-    @foreach($posts AS $post)
-
-
+    @forelse($posts AS $post)
         <div class="card mb-3">
             <div class="row g-0">
                 @if($post->image)
@@ -12,7 +10,7 @@
                 @endif
                 <div class="col">
                     <div class="card-body h-100 d-flex flex-column justify-content-between">
-                        <p class="card-text fs-4">{{ $post->text }}</p>
+                        <p class="card-text fs-4">{{ $post->text_localized }}</p>
                         <p class="card-text text-end">
                             <small class="text-body-secondary">{{ $post->created_at->diffForHumans() }}</small>
                         </p>
@@ -20,11 +18,12 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @empty
+        {{ __("Nothing has been announced yet") }}
+    @endforelse
 
-    @if($limit != -1)
-        <button class="btn btn-secondary" wire:click="showAll">
-            {{ __("Show All") }}
-        </button>
-    @endif
+    <div class="container">
+        {{ $posts->links() }}
+    </div>
+
 </div>

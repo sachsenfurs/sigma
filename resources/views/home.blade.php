@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Home")
+@section('title', __("Home"))
 @section('content')
 <div class="container">
 {{--    <h2>{{ __("Before the convention") }}</h2>--}}
@@ -8,7 +8,7 @@
             {{ __("Submit your Events, Workshops, Presentations and more!") }}
         </x-home-signup-card>
         @if(app(\App\Settings\DealerSettings::class)->enabled)
-            <x-home-signup-card :title="__('Dealers Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
+            <x-home-signup-card :title="__('Dealer\'s Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
                 {{ __("Would you like to sell your art at the con?") }}
             </x-home-signup-card>
         @endif
@@ -18,7 +18,10 @@
             </x-home-signup-card>
         @endif
     </div>
+
 </div>
+
+
 
 
 {{--    <h2 class="mt-3">{{ __("At the convention") }}</h2>--}}

@@ -95,6 +95,19 @@
                             @endif
 
                             <li class="py-2">
+                                <a @class(['btn btn-nav rounded d-flex', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
+                                    <i class="bi bi-megaphone"></i> {{ __('Announcements') }}
+                                    @cache('announcements_count', 300)
+                                        @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
+                                        @if($count)
+                                            <div class="text-end w-100"><span class="badge bg-dark">{{ $count }}</span></div>
+                                        @endif
+                                    @endcache
+                                </a>
+                            </li>
+
+
+                            <li class="py-2">
                                 <a @class(['btn btn-nav', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
                                     <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                                 </a>
