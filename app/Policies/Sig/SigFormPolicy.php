@@ -31,6 +31,8 @@ class SigFormPolicy extends ManageEventPolicy
     public function update(User $user, SigForm $sigForm): bool {
         if($user->hasPermission(Permission::MANAGE_FORMS, PermissionLevel::WRITE))
             return true;
+        if($sigForm->form_closed)
+            return false;
 
         return false;
     }

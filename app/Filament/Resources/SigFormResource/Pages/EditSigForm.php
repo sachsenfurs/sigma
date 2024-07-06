@@ -21,10 +21,4 @@ class EditSigForm extends EditRecord
         ];
     }
 
-    protected function getFooterWidgets(): array
-    {
-        return [
-            SigFormResource\Widgets\FilledForms::class
-        ];
-    }
 }

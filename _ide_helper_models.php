@@ -77,6 +77,7 @@ namespace App\Models\Ddas{
  * @property string|null $additional_info only visible for adminstration/auctioner
  * @property string|null $image
  * @property bool $auction
+ * @property int $locked
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property bool $sold
  * @property bool $paid
@@ -104,6 +105,7 @@ namespace App\Models\Ddas{
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereLocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereSold($value)
@@ -474,17 +476,18 @@ namespace App\Models{
  * @property int $id
  * @property int $sig_form_id
  * @property int $user_id
- * @property int $approved
+ * @property int $approval
  * @property string|null $rejection_reason
  * @property array|null $form_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Enums\Approval $approved
  * @property-read \App\Models\SigForm $sigForm
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm query()
- * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereFormData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereId($value)
@@ -609,6 +612,8 @@ namespace App\Models{
  * @property bool $show_default Show in calendar view (resource view) by default?
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
+ * @property-read mixed $description_localized
+ * @property-read mixed $name_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -679,8 +684,8 @@ namespace App\Models{
  * @property string|null $description_en
  * @property string|null $icon
  * @property-read string $description_localized
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvent
- * @property-read int|null $sig_event_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag query()

@@ -18,9 +18,9 @@ class SigForm extends Model
         'form_definition' => 'array'
     ];
 
-    protected static function booted(): void {
-        static::addGlobalScope(new SigFormAccessScope);
-    }
+//    protected static function booted(): void {
+//        static::addGlobalScope(new SigFormAccessScope);
+//    }
 
     public function getNameLocalizedAttribute()
     {

@@ -12,35 +12,25 @@
             </div>
         @endif
         @if($filledForm)
-            @switch($filledForm->approved)
-                @case(0)
-                    <div class="row justify-content-center mb-4">
-                        <div class="col-md-6">
-                            <div class="alert alert-warning">
-                                {{ __('This form has not been approved yet.') }}
-                            </div>
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-6">
+                        <div @class(["alert",
+                                "alert-warning" => $filledForm->approval == \App\Enums\Approval::PENDING,
+                                "alert-success" => $filledForm->approval == \App\Enums\Approval::APPROVED,
+                                "alert-danger" => $filledForm->approval == \App\Enums\Approval::REJECTED,
+                             ])>
+
+                            {{
+                                match($filledForm->approval) {
+                                 \App\Enums\Approval::PENDING => __('This form has not been approved yet.'),
+                                 \App\Enums\Approval::APPROVED => __('This form has been approved.'),
+                                 \App\Enums\Approval::REJECTED => __('This form has been rejected. Reason for rejection: ') . ($filledForm->rejection_reason ?? __('No reason available')),
+                                 default => "",
+                                }
+                            }}
                         </div>
                     </div>
-                @break
-                @case(1)
-                    <div class="row justify-content-center mb-4">
-                        <div class="col-md-6">
-                            <div class="alert alert-success">
-                                {{ __('This form has been approved.') }}
-                            </div>
-                        </div>
-                    </div>
-                @break
-                @case(2)
-                    <div class="row justify-content-center mb-4">
-                        <div class="col-md-6">
-                            <div class="alert alert-danger">
-                                {{ __('This form has been rejected. Reason for rejection: ') . ($filledForm->rejection_reason ?? __('No reason available')) }}
-                            </div>
-                        </div>
-                    </div>
-                @break
-            @endswitch
+                </div>
         @endif
         @if($form->sig_event_id)
             <div class="row justify-content-center mb-4">
