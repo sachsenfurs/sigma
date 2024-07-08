@@ -65,6 +65,9 @@ class TimetableEntryController extends Controller
             ->get();
         $locations->each(function($location) {
             $location->title = $location->name;
+            if ($location->description != $location->name) {
+                $location->title .= " - $location->description";
+            }
         });
         // Show only necessary information
         $locations->setVisible([

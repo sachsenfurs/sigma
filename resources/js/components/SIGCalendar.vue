@@ -1,6 +1,8 @@
 <script>
 import FullCalendar from '@fullcalendar/vue3'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
+import interactionPlugin from '@fullcalendar/interaction'
 import scrollGridPlugin from '@fullcalendar/scrollgrid'
 import localeEn from '@fullcalendar/core/locales/en-gb'
 import localeDe from '@fullcalendar/core/locales/de'
@@ -53,14 +55,18 @@ export default {
         let self = this;
         return {
             currentEvent: null,
+            currentView: 'resourceTimeGridDay',
             calendarOptions: {
-                plugins: [ resourceTimeGridPlugin, scrollGridPlugin ],
+                plugins: [ resourceTimeGridPlugin, resourceTimelinePlugin, scrollGridPlugin, interactionPlugin ],
                 schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                 initialView: 'resourceTimeGridDay',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: ''
+                },
+                footerToolbar: {
+                    left: 'toggleView',
                 },
                 titleFormat: {
                     day: 'numeric',
@@ -89,7 +95,15 @@ export default {
                 },
                 initialDate: new Date(), // Is set when events are fetched
                 eventClick: this.handleEventClick,
-                customButtons: [],
+                customButtons: {
+                    toggleView: {
+                        text: getActiveLanguage() === 'de' ? 'Ansicht wechseln' : 'Toggle View',
+                        click: () => {
+                            this.currentView = this.currentView === 'resourceTimeGridDay' ? 'resourceTimelineDay' : 'resourceTimeGridDay';
+                            this.$refs.fullCalendar.getApi().changeView(this.currentView, this.$refs.fullCalendar.getApi().currentDate);
+                        },
+                    }
+                },
             }
         }
     },
@@ -108,8 +122,6 @@ export default {
 
         this.calendarOptions.initialDate = calEvents[0].start;
 
-        console.log("Calendar", this.$refs.fullCalendar.getApi());
-
         const daysInMSecs = 1000 * 60 * 60 * 24;
         const days = Math.round((endDate - startDate) / daysInMSecs) + 1;
         const calendarApi = this.$refs.fullCalendar.getApi();
@@ -118,7 +130,7 @@ export default {
             this.calendarOptions.customButtons[`day${i + 1}`] = {
                 text: new Intl.DateTimeFormat(getActiveLanguage(), { weekday: 'short' }).format(day),
                 click: () => {
-                    calendarApi.changeView('resourceTimeGridDay', day);
+                    calendarApi.changeView(this.currentView, day);
                 }
             }
             this.calendarOptions.headerToolbar.right += `day${i + 1},`;
@@ -142,19 +154,34 @@ export default {
     background: var(--bs-body-bg);
 }
 
+.fc-timeline .fc-scrollgrid,
+.fc-timeline th,
+.fc-timeline td,
 .fc-timegrid .fc-scrollgrid,
 .fc-timegrid th,
 .fc-timegrid td {
     border: 1px solid #3F3F3F;
+    font-weight: normal;
 }
 
+.fc-timeline .fc-scrollgrid,
 .fc-timegrid .fc-scrollgrid {
     border-right: none;
     border-bottom: none;
 }
 
-.fc-v-event {
+.fc-timeline-slot-frame a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+.fc-v-event,
+.fc-timeline-event {
     background-color: #2C3D4F;
+}
+
+.fc-timeline-event {
+    border-radius: 3px;
 }
 
 .fc-day-today {
