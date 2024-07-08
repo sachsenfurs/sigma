@@ -1,18 +1,28 @@
 <?php
 
-namespace App\Filament\Resources\SigHostResource\RelationManagers;
+namespace App\Filament\Resources\SigTagResource\RelationManagers;
 
-use App\Filament\Resources\SigEventResource;
 use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class SigEventsRelationManager extends RelationManager
+class SigTagsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'sigEvents';
+    protected static string $relationship = 'sigEvent';
 
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        // Filament needs to know if the user can view the relation manager for the given record.
+        return auth()->user()->can('manage_sigs');
+    }
+
+    protected function can(string $action, ?Model $record = null): bool
+    {
+        // Filament needs to know if the user can perform the given action on the relation manager.
+        return auth()->user()->can('manage_sigs');
+    }
     public function table(Table $table): Table
     {
         return $table
@@ -53,7 +63,10 @@ class SigEventsRelationManager extends RelationManager
     protected function getTableHeaderActions(): array
     {
         return [
-            //
+            Tables\Actions\CreateAction::make()
+                ->url(route('filament.admin.resources.sig-events.create', [
+                    'tag_id' => $this->getOwnerRecord()->id,
+                ])),
         ];
     }
 
@@ -61,10 +74,7 @@ class SigEventsRelationManager extends RelationManager
     {
         return [
             Tables\Actions\EditAction::make()
-                 ->url(fn(SigEvent $entry) => SigEventResource::getUrl("edit", ['record' => $entry])),
-            Tables\Actions\ViewAction::make()
-                ->url(fn(SigEvent $entry) => SigEventResource::getUrl('view', ['record' => $entry]))
-                ->hidden(fn(Model $record) => auth()->user()->can("update", $record)),
+                ->url(fn(SigEvent $entry) => route('filament.admin.resources.sig-events.edit', $entry)),
         ];
     }
 }

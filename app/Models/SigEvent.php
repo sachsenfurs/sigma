@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
 
 #[ObservedBy(SigEventObserver::class)]
@@ -36,7 +37,7 @@ class SigEvent extends Model
     ];
 
     protected $with = [
-        'timetableEntries'
+        'timetableEntries',
     ];
 
     public function scopeUnprocessed(Builder $query) {
@@ -50,7 +51,19 @@ class SigEvent extends Model
     }
 
     public function sigHosts(): BelongsToMany {
-        return $this->belongsToMany(SigHost::class, 'sig_host_sig_events');
+        return $this->belongsToMany(SigHost::class, 'sig_host_sig_events')->withTimestamps();
+    }
+
+    public function primaryHost(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigHosts()->oldest()->first()
+        );
+    }
+
+    public function publicHosts(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigHosts->filter(fn($host) => !$host->hide)
+        );
     }
 
     public function timetableCount(): Attribute {

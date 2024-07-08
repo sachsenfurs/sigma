@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
 use App\Models\SigEvent;
+use App\Models\SigHost;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -33,9 +34,7 @@ class SigEventController extends Controller
             ],
         ]);
 
-        $sigEvent = new SigEvent($validated);
-        $sigEvent->save();
-        $sigEvent->sigHosts()->attach($validated["sig_host_id"]);
+        SigHost::find($request->get("sig_host_id"))->sigEvents()->create($validated);
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));
     }

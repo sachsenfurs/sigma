@@ -86,7 +86,7 @@ class UnprocessedSigEvents extends TableWidget
                                 TextEntry::make("name_localized")
                                     ->label("SIG Name")
                                     ->translateLabel(),
-                                TextEntry::make("sigHost.name")
+                                TextEntry::make("sigHosts.name")
                                     ->label("SIG Host")
                                     ->translateLabel(),
                                 TextEntry::make("duration_hours"),
