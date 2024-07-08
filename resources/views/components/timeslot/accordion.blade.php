@@ -29,10 +29,10 @@
                         <div class="col-lg-4 col-6 align-self-center p-1 my-1">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
                             <span class="text-nowrap">{{ __("Slots taken") }}</span>
-                            @if ($timeslot->sigAttendees->count() > 0 && auth()->check()) 
+                            @if ($timeslot->sigAttendees->count() > 0 && auth()->check())
                                 <br>
-                                <i class="bi bi-people-fill"></i> 
-                                {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}    
+                                <i class="bi bi-people-fill"></i>
+                                {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}
                             @endif
                             </div>
 
@@ -46,7 +46,7 @@
                             </x-timeslot.button>
                         @else
                             @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                @can("manage_events")
+                                @can("update", $timeslot)
                                     <x-timeslot.button
                                         class="btn-primary"
                                         onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"

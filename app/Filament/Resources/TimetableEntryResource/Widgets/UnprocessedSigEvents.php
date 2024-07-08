@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
+use App\Models\TimetableEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Actions\Action;
@@ -68,6 +69,7 @@ class UnprocessedSigEvents extends TableWidget
                 CreateTimetableEntry::getCreateAction(CreateAction::make())
                     ->button(),
                 Action::make("edit")
+                    ->authorize("edit", SigEvent::class)
                     ->model(SigEvent::class)
                     ->label("Edit")
                     ->translateLabel()

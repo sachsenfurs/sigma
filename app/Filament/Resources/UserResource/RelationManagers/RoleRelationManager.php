@@ -29,12 +29,12 @@ class RoleRelationManager extends RelationManager
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
         // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can('manage_users');
+        return auth()->user()->can('view', $ownerRecord);
     }
 
     protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('manage_users');
+        return auth()->user()->can('viewAny', $record);
     }
 
     public function table(Table $table): Table {

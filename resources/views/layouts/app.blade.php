@@ -4,95 +4,155 @@
 @include('layouts/head')
 
 <body>
-    <nav class="navbar navbar-expand-md shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="/images/logo.png" alt="{{ config('app.name') }}">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <div class="container-fluid">
+        <div class="row flex-nowrap navbar2-wrapper">
+            <div class="col-auto navbar2 collapse collapse-horizontal bg-dark-subtle h-100" id="navbarSupportedContent">
+                <div class="d-flex flex-column flex-row flex-nowrap h-100 navbar2-items">
+                    <div class="h-100 d-flex flex-column navbar2-padding">
+                        <div class="navbar-brand">
+                            <a href="{{ url('/') }}" class="d-flex align-items-center p-3 text-decoration-none">
+                                <img src="/images/logo.png" alt="{{ config('app.name') }}">
+                            </a>
+                        </div>
+                        <ul class="list-unstyled mb-auto nav-ul">
+                            <li class="py-2">
+                                <a @class(['btn btn-nav rounded', 'active' => Route::is('home')]) href="{{ route('home') }}">
+                                    <i class="bi bi-house"></i> {{ __('Home') }}
+                                </a>
+                            </li>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
-                    <li>
-                        <a @class(['nav-link px-3', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
-                            <i class="bi bi-calendar-week"></i> {{ __('Event Schedule') }}
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*")]) href="#" id="sigMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-view-list"></i> {{ __("Events")}}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="sigMenu">
-                            <li>
-                                <a @class(['dropdown-item', 'active' => Route::is("hosts.index")]) href="{{ route("hosts.index")}}">
-                                    <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
+                            <li class="py-2">
+                                <a @class(['btn btn-nav rounded', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
+                                    <i class="bi bi-calendar2-range"></i> {{ __('Event Schedule') }}
+                                </a>
+                                <a @class(['btn btn-nav rounded', 'active' => Route::is('schedule.calendarview')]) href="{{ route('schedule.calendarview') }}">
+                                    <i class="bi bi-calendar-week"></i> {{ __("Calendar View") }}
                                 </a>
                             </li>
+
                             <li>
-                                <a @class(['dropdown-item', 'active' => Route::is("locations.index")]) href="{{ route("locations.index") }}">
-                                    <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
+                                <button @class(["btn btn-toggle align-items-center rounded", 'collapsed' => !Route::is("sigs.*") && !Route::is("hosts.*") && !Route::is("locations.*")])
+                                        data-bs-toggle="collapse" data-bs-target="#events-collapse" aria-expanded="{{ Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*") ? "true":"false" }}">
+                                    <i class="bi bi-view-list"></i>
+                                    {{ __("Events")}}
+                                </button>
+                                <div @class(["collapse", 'show' => Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*")]) id="events-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal">
+                                        <li>
+                                            <a @class(['rounded', 'active' => Route::is("hosts.index")]) href="{{ route("hosts.index")}}">
+                                                <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a @class(['rounded', 'active' => Route::is("locations.index")]) href="{{ route("locations.index") }}">
+                                                <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a @class(['rounded', 'active' => Route::is("sigs.index")]) href="{{ route("sigs.index") }}">
+                                                <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            @php(
+                                $items = collect([
+                                    app(\App\Settings\DealerSettings::class)->enabled ? __("Dealer's Den") : null,
+                                    app(\App\Settings\ArtShowSettings::class)->enabled ? __("Art Show") : null,
+                                ])
+                                ->filter(fn($e) => $e != null)
+                            )
+
+                            @if($items->count() > 0)
+                                <li class="py-2">
+                                    <button @class(["btn btn-toggle rounded", 'collapsed' => !Route::is("artshow.*") && !Route::is("dealers.*")])
+                                            data-bs-toggle="collapse" data-bs-target="#ddas-collapse" aria-expanded="{{ Route::is("artshow.*") || Route::is("dealers.*") ? "true":"false" }}">
+                                        <i class="bi bi-palette"></i>
+                                        {{ $items->join(" & ") }}
+                                    </button>
+
+                                    <div @class(["collapse", 'show' => Route::is("artshow.*") || Route::is("dealers.*") ]) id="ddas-collapse">
+                                        <ul class="btn-toggle-nav list-unstyled fw-normal">
+                                            @if(app(\App\Settings\DealerSettings::class)->enabled)
+                                                <li>
+                                                    <a @class(['btn btn-nav', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
+                                                        <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @if(app(\App\Settings\ArtShowSettings::class)->enabled)
+                                                <li>
+                                                    <a @class(['btn btn-nav', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
+                                                        <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </li>
+                            @endif
+
+                            <li class="py-2">
+                                <a @class(['btn btn-nav rounded d-flex', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
+                                    <i class="bi bi-megaphone"></i> {{ __('Announcements') }}
+                                    @cache('announcements_count', 300)
+                                        @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
+                                        @if($count)
+                                            <div class="text-end w-100"><span class="badge bg-dark">{{ $count }}</span></div>
+                                        @endif
+                                    @endcache
                                 </a>
                             </li>
-                            <li>
-                                <a @class(['dropdown-item', 'active' => Route::is("sigs.index")]) href="{{ route("sigs.index") }}">
-                                    <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
+
+
+                            <li class="py-2">
+                                <a @class(['btn btn-nav', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
+                                    <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                                 </a>
                             </li>
                         </ul>
-                    </li>
 
-                    @can("viewAny", \App\Models\LostFoundItem::class)
-                        <li>
-                            <a @class(['nav-link px-3', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
-                                <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
-                            </a>
-                        </li>
-                    @endcan
+                        @guest
+                            <a class="p-3 fs-5" href="/login">Login</a>
+                        @else
+                            <div class="dropdown m-3">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if(Auth::user()->avatar_thumb)
+                                        <img src="{{ Auth::user()->avatar_thumb }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    @endif
+                                    <strong>{{ Auth::user()->name }}</strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
 
-                    @php(
-                        $items = collect([
-                            app(\App\Settings\DealerSettings::class)->enabled ? __("Dealer's Den") : null,
-                            app(\App\Settings\ArtShowSettings::class)->enabled ? __("Art Show") : null,
-                        ])
-                        ->filter(fn($e) => $e != null)
-                    )
-                    @if($items->count() > 0)
-                        <li class="nav-item dropdown">
-                            <a @class(["nav-link dropdown-toggle px-3", 'active' => Route::is("artshow.*")]) href="#" id="artMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-palette"></i> {{ $items->join(" & ") }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="artMenu">
-                                @if(app(\App\Settings\DealerSettings::class)->enabled)
+                                    @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
+                                        <li>
+                                            <a class="dropdown-item" href="{{ \Filament\Facades\Filament::getUrl() }}">
+                                                {{ __('Administration') }}
+                                            </a>
+                                        </li>
+                                    @endif
+
                                     <li>
-                                        <a @class(['dropdown-item', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
-                                            <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
                                         </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
                                     </li>
-                                @endif
-                                @if(app(\App\Settings\ArtShowSettings::class)->enabled)
-                                    <li>
-                                        <a @class(['dropdown-item', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
-                                            <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </li>
-                    @endif
-                </ul>
+                                </ul>
+                            </div>
+                        @endguest
 
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+
+                        <button class="p-3 nav-link dropdown-toggle rounded collapsed text-start" data-bs-toggle="dropdown" data-bs-target="#home-collapse" aria-expanded="false">
                             <img class="align-middle me-2" style="height: 1em; margin-top: -4px"
-                                src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
-                        </a>
+                                 src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
+                        </button>
+
                         <ul class="dropdown-menu">
                             @foreach (config('app.locales') as $locale => $name)
                                 @if (App::getLocale() != $locale)
@@ -107,167 +167,59 @@
                                 @endif
                             @endforeach
                         </ul>
-                    </li>
 
+                    </div>
 
-                    <!-- Authentication Links -->
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle align-self-center" href="#"
-                                role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li>
-                                    @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
-                                        <a class="dropdown-item" href="{{ \Filament\Facades\Filament::getUrl() }}">
-                                            {{ __('Administration') }}
-                                        </a>
-                                    @endif
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @endguest
-                </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <main class="py-4">
-        @if (!$noerror AND $errors->any())
-            @foreach ($errors->all() as $error)
+            <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-flex flex-column">
+                <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
+                    <div class="container-fluid">
+                        <a class="navbar-brand m-0" href="{{ url('/') }}">
+                            <img src="/images/logo.png" alt="{{ config('app.name') }}">
+                        </a>
+                        @yield('title')
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </nav>
+                <main class="d-block py-4 px-lg-3 mb-auto">
+                    @if (!$noerror AND $errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="container">
+                                <div class="alert alert-danger" role="alert">
+                                    <h4>{{ $error }}</h4>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                    @if (session('error'))
+                        <div class="container">
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-title">{{ session()->get('error') }}</h4>
+                            </div>
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="container">
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-title">{{ session()->get('success') }}</h4>
+                            </div>
+                        </div>
+                    @endif
+                    @yield('content')
+                </main>
                 <div class="container">
-                    <div class="alert alert-danger" role="alert">
-                        <h4>{{ $error }}</h4>
-                    </div>
-                </div>
-            @endforeach
-        @endif
-        @if (session('error'))
-            <div class="container">
-                <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-title">{{ session()->get('error') }}</h4>
-                </div>
-            </div>
-        @endif
-        @if (session('success'))
-            <div class="container">
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-title">{{ session()->get('success') }}</h4>
-                </div>
-            </div>
-        @endif
-        @yield('content')
-    </main>
-
-    <div class="container">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <p class="col-4 mb-0 text-body-secondary">
-                <span style="cursor: pointer; font-size:0.75em" data-bs-toggle="modal" data-bs-target="#creditsModal">&Sigma; - made by awesome people</span>
-            </p>
-
-            @cache('footer')
-                @foreach(\App\Models\Info\Social::footerText()->get() AS $social)
-                    <a href="{{ $social->link_localized }}" class="col-4 text-center text-body text-decoration-none">
-                        {{ $social->link_name_localized }}
-                    </a>
-                @endforeach
-
-                <ul class="nav col-4 justify-content-end list-unstyled d-flex">
-                    @foreach(\App\Models\Info\Social::footerIcon()->get() AS $social)
-                        <li class="ms-3"><a class="text-body-secondary" target="_blank" href="{{ $social->link_localized }}"><x-social-icon :icon="$social->icon" /></a></li>
-                    @endforeach
-                </ul>
-            @endcache
-        </footer>
-        <!-- Modal -->
-        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header border-bottom-0">
-                        <h1 class="modal-title fs-5" id="creditsModalLabel">Credits</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <a class="icon-link" href="https://github.com/sachsenfurs/sigma" target="_blank"><i class="bi bi-github"></i> SIGMA on GitHub</a>
-                            <ul>
-                                <li>
-                                    <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
-                                    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
-                                </li>
-                                <li>
-                                    <a href="https://www.cheetagonzita.com/" class="text-decoration-none" target="_blank">Artworks by Zita</a>
-                                </li>
-                            </ul>
-
-
-
-
-                        </div>
-                        <h5>Contributors</h5>
-                        <div class="d-flex flex-wrap pb-3 gap-2">
-                            <a href="https://github.com/Kidran" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/63103731?s=24" loading="lazy" alt="">
-                                    Kidran
-                                </span>
-                            </a>
-
-                            <a href="https://github.com/Lytrox" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/9468383?s=24" loading="lazy" alt="">
-                                    Lytrox
-                                </span>
-                            </a>
-
-                            <a href="https://github.com/CyberSpaceDragon" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/58507164?s=24" loading="lazy" alt="">
-                                    CyberSpaceDragon
-                                </span>
-                            </a>
-
-                            <a href="https://github.com/kacecfox" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/30048300?s=24" loading="lazy" alt="">
-                                    Kacec
-                                </span>
-                            </a>
-
-                            <a href="https://github.com/d3xter-dev" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/62628584?s=24" loading="lazy" alt="">
-                                    Dexter
-                                </span>
-                            </a>
-                            <a href="https://github.com/Kenthanar" target="_blank" class="text-decoration-none">
-                                <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                    <img class="rounded-circle me-1" width="24" height="24" src="https://avatars.githubusercontent.com/u/100375107?s=24" loading="lazy" alt="">
-                                    Kenthanar
-                                </span>
-                            </a>
-
-                        </div>
-                    </div>
+                    <x-footer.footer/>
+                    <x-footer.credits-modal />
                 </div>
             </div>
         </div>
-        <!-- End Modal -->
-
     </div>
+
+
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -276,3 +228,22 @@
 </body>
 
 </html>
+
+
+{{--            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" >--}}
+{{--                <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">--}}
+{{--                    <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>--}}
+{{--                    <span class="fs-5 fw-semibold">List group</span>--}}
+{{--                </a>--}}
+{{--                <div class="list-group list-group-flush border-bottom scrollarea">--}}
+{{--                    @for($i=0;$i<10;$i++)--}}
+{{--                        <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">--}}
+{{--                            <div class="d-flex w-100 align-items-center justify-content-between">--}}
+{{--                                <strong class="mb-1">List group item heading</strong>--}}
+{{--                                <small>Wed</small>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>--}}
+{{--                        </a>--}}
+{{--                    @endfor--}}
+{{--                </div>--}}
+{{--            </div>--}}

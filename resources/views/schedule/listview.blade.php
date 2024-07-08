@@ -2,12 +2,10 @@
 @section('title', __("Event Schedule"))
 
 @section('content')
-    @if(app(\App\Settings\AppSettings::class)->show_schedule_date->isAfter(now()))
-        <div class="container text-center">
-            <div class="card p-4 fs-1">
-                {{ __("The Schedule is not published yet") }}
-            </div>
-        </div>
+    @if(app(\App\Settings\AppSettings::class)->show_schedule_date->isAfter(now()) AND \Illuminate\Support\Facades\Gate::denies("viewAny", \App\Models\TimetableEntry::class))
+        <x-infocard>
+            {{ __("The Schedule is not published yet") }}
+        </x-infocard>
     @else
         <div id="app">
             <entry-list></entry-list>

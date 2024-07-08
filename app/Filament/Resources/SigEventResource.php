@@ -28,11 +28,7 @@ class SigEventResource extends Resource
 
     protected static ?string $label = 'SIGs';
 
-    protected static ?int $navigationSort = 1;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sigs');
-    }
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form {
         return $form
@@ -62,14 +58,16 @@ class SigEventResource extends Resource
                     ->relationship("sigTags", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
             ])
+            ->recordUrl(fn(Model $record) =>
+                auth()->user()->can("update", $record)
+                ? SigEventResource::getUrl("edit", ['record' => $record])
+                : SigEventResource::getUrl('view', ['record' => $record])
+            )
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                ]),
+                //
             ])
             ->bulkActions([
-                //
+                Approval::getBulkAction(),
             ]);
     }
 
@@ -84,6 +82,7 @@ class SigEventResource extends Resource
         return [
             'index' => Pages\ListSigEvents::route('/'),
             'create' => Pages\CreateSigEvent::route('/create'),
+            'view' => Pages\ViewSigEvent::route('/{record}'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
         ];
     }
@@ -117,7 +116,22 @@ class SigEventResource extends Resource
                 ->label('In Schedule')
                 ->translateLabel()
                 ->counts('timetableEntries')
-                ->sortable(),
+                ->sortable()
+                ->toggleable(),
+            IconColumn::make("description")
+                ->boolean()
+                ->label("Text")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
+                ->sortable()
+                ->toggleable()
+                ->getStateUsing(fn(Model $record) => filled($record->description)),
+            IconColumn::make("description_en")
+                ->boolean()
+                ->label("Text (EN)")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
+                ->sortable()
+                ->toggleable()
+                ->getStateUsing(fn(Model $record) => filled($record->description_en)),
         ];
     }
 
@@ -130,6 +144,7 @@ class SigEventResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('German')
                     ->translateLabel()
+                    ->maxLength(255)
                     ->required()
                     ->suffixAction(
                         TranslateAction::translateToPrimary('name_en', 'name')
@@ -140,6 +155,7 @@ class SigEventResource extends Resource
                 Forms\Components\TextInput::make('name_en')
                     ->label('English')
                     ->translateLabel()
+                    ->maxLength(255)
                     ->required()
                     ->suffixAction(
                         TranslateAction::translateToSecondary('name', 'name_en')
@@ -175,8 +191,7 @@ class SigEventResource extends Resource
                         ->createOptionModalHeading(__('Create Tag'))
                         ->createOptionForm(fn($form) => SigTagResource::form($form)),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigLanguageFieldSet(): Forms\Components\Component {
@@ -271,8 +286,7 @@ class SigEventResource extends Resource
                         ->visible(fn (Get $get) => $get('reg_possible') === true)
                         ->columnSpanFull(),
                 ])
-                ->columnSpan(1)
-                ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigDescriptionFieldSet(): Forms\Components\Component {
@@ -282,22 +296,22 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->columns(2)
                 ->schema([
-                    Forms\Components\Textarea::make('description')
+                    Forms\Components\MarkdownEditor::make('description')
                         ->label('German')
                         ->translateLabel()
+                        ->maxLength(65535)
                         ->hintAction(
                             TranslateAction::translateToPrimary('description_en', 'description')
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->rows(8),
-                    Forms\Components\Textarea::make('description_en')
+                        ->columnSpan(["2xl" => 1, "default" => 2]),
+                    Forms\Components\MarkdownEditor::make('description_en')
                         ->label('English')
                         ->translateLabel()
+                        ->maxLength(65535)
                         ->hintAction(
                             TranslateAction::translateToSecondary('description', 'description_en')
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->rows(8),
+                        ->columnSpan(["2xl" => 1, "default" => 2]),
                 ]);
     }
 
@@ -306,6 +320,7 @@ class SigEventResource extends Resource
             ->label(__("Additional Information"))
             ->translateLabel()
             ->rows(6)
+            ->maxLength(65535)
             ->autosize()
             ->columnSpanFull();
     }

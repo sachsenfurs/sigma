@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Approval;
 use App\Filament\Resources\SigFormResource\Pages;
-use App\Filament\Resources\SigFormResource\Widgets\FilledForms;
+use App\Filament\Resources\SigFormResource\RelationManagers\SigFilledFormsRelationManager;
 use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use App\Models\UserRole;
@@ -16,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -27,11 +29,7 @@ class SigFormResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
 
-    protected static ?int $navigationSort = 110;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_forms');
-    }
+    protected static ?int $navigationSort = 10;
 
     public static function getLabel(): ?string {
         return __('Form');
@@ -45,7 +43,7 @@ class SigFormResource extends Resource
         if(!Route::is("filament.*"))
             return null;
 
-        return SigFilledForm::where('approved', 0)->count() ?: null;
+        return SigFilledForm::where('approval', Approval::PENDING)->count() ?: null;
     }
 
     public static function form(Form $form): Form {
@@ -64,6 +62,7 @@ class SigFormResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -77,13 +76,8 @@ class SigFormResource extends Resource
         return [
             'index' => Pages\ListSigForms::route('/'),
             'create' => Pages\CreateSigForm::route('/create'),
-            'edit' => Pages\EditSigForm::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getWidgets(): array {
-        return [
-            FilledForms::class,
+            'view' => Pages\ViewSigForm::route('/{record}'),
+            'edit' => Pages\EditSigForm::route('/{record?}/edit'),
         ];
     }
 
@@ -114,7 +108,7 @@ class SigFormResource extends Resource
                 ->label('To be approved')
                 ->translateLabel()
                 ->getStateUsing(function (SigForm $record) {
-                    return $record->sigFilledForms->where('approved', 0)->count();
+                    return $record->sigFilledForms->where('approval', Approval::PENDING)->count();
                 }),
         ];
     }
@@ -158,9 +152,14 @@ class SigFormResource extends Resource
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
+                        ->unique(ignoreRecord: true)
                         ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
+                        ->afterStateUpdated(function($state, $record) {
+                            if($state != $record->slug)
+                                redirect(self::getUrl("edit", ['record' => $state]));
+                        })
                         ->columnSpanFull(),
                 ])
                 ->columnSpan(1);
@@ -176,7 +175,7 @@ class SigFormResource extends Resource
                         ->relationship('userRoles')
                         ->label('')
                         ->options(function () {
-                            if (auth()->user()->isAdmin()) {
+                            if (Gate::allows("update", UserRole::class)) {
                                 return UserRole::all()->pluck('title', 'id');
                             } else {
                                 return auth()->user()->roles()->pluck('title', 'user_roles.id');
@@ -479,5 +478,11 @@ class SigFormResource extends Resource
                             ]),
                     ]),
             ]);
+    }
+
+    public static function getRelations(): array {
+        return [
+            SigFilledFormsRelationManager::class,
+        ];
     }
 }

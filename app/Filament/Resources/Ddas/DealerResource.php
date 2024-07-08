@@ -34,10 +34,6 @@ class DealerResource extends Resource
         return __("Dealer");
     }
 
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_dealers_den');
-    }
-
     public static function canAccess(): bool {
         return parent::canAccess() AND app(DealerSettings::class)->enabled;
     }
@@ -61,7 +57,7 @@ class DealerResource extends Resource
                             ->label('User')
                             ->searchable()
                             ->preload()
-                            ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->id . " - " . $record->name)
+                            ->getOptionLabelFromRecordUsing(fn(Model $record) => ($record?->reg_id ? $record->reg_id . " - " : "") . $record->name)
                             ->translateLabel()
                             ->relationship('user', 'name'),
                         Forms\Components\Radio::make('approval')
@@ -115,6 +111,11 @@ class DealerResource extends Resource
                                         'lg' => 2,
                                         '2xl' => 1
                                     ]),
+                                Forms\Components\Textarea::make("additional_info")
+                                    ->label("Additional Information")
+                                    ->translateLabel()
+                                    ->autosize()
+                                    ->columnSpanFull(),
                                 Forms\Components\FileUpload::make('icon_file')
                                     ->label('Logo')
                                     ->translateLabel()
@@ -123,6 +124,7 @@ class DealerResource extends Resource
                                     ->imageCropAspectRatio("1:1")
                                     ->image()
                                     ->imageEditor()
+                                    ->downloadable()
                                     ->maxFiles(1)
                                     ->maxSize(5120),
                                 Forms\Components\Select::make("tags")
@@ -184,18 +186,7 @@ class DealerResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make("approval")
-                        ->translateLabel()
-                        ->form([
-                            Forms\Components\Radio::make("approval")
-                            ->options(Approval::class)
-                            ->default(1),
-                        ])
-                        ->action(
-                            function(array $data, Collection $records) {
-                                $records->each->update($data);
-                            }
-                        ),
+                    Approval::getBulkAction(),
                     Tables\Actions\BulkAction::make("sigLocation")
                         ->translateLabel()
                         ->form([

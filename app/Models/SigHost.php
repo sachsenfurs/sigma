@@ -34,6 +34,7 @@ class SigHost extends Model
 
     protected $with = [
         'sigEvents',
+        'user',
     ];
 
     public function user(): BelongsTo {

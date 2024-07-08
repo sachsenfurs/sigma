@@ -3,13 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
-use App\Filament\Resources\SigEventResource\Pages\EditSigEvent;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
-use App\Models\SigEvent;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
-use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -21,7 +18,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Type\Time;
 
 class TimetableEntryResource extends Resource
 {
@@ -31,10 +27,6 @@ class TimetableEntryResource extends Resource
     protected static ?int $navigationSort = 10;
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sigs');
-    }
 
     public static function getLabel(): ?string {
         return __('Event Schedule');

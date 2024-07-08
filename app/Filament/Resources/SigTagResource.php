@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
 use App\Filament\Resources\SigTagResource\RelationManagers;
 use App\Models\SigTag;
@@ -19,10 +20,6 @@ class SigTagResource extends Resource
     protected static ?string $navigationGroup = 'SIG';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?int $navigationSort = 50;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sig_base_data');
-    }
 
     public static function getPluralLabel(): ?string {
         return __('Tags');
@@ -55,7 +52,7 @@ class SigTagResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigTagsRelationManager::class,
+            SigEventsRelationManager::class,
         ];
     }
 
@@ -63,6 +60,7 @@ class SigTagResource extends Resource
         return [
             'index' => Pages\ListSigTags::route('/'),
             'create' => Pages\CreateSigTag::route('/create'),
+            'view' => Pages\ViewSigTag::route('/{record}'),
             'edit' => Pages\EditSigTag::route('/{record}/edit'),
         ];
     }

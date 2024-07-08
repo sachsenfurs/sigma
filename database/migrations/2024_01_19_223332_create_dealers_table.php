@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string("gallery_link")->nullable();
 
             // Organisatorische Infos
-            $table->string("additional_info")->nullable();
+            $table->text("additional_info")->nullable();
 
             // Icon fürs Conbook (relativer Pfad, local storage)
             $table->string("icon_file")->nullable();

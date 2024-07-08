@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigLocationResource\Pages;
-use App\Filament\Resources\SigLocationResource\RelationManagers;
 use App\Models\SigLocation;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,11 +18,7 @@ class SigLocationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationGroup = 'SIG';
-    protected static ?int $navigationSort = 100;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_sig_base_data');
-    }
+    protected static ?int $navigationSort = 60;
 
     public static function getLabel(): ?string {
         return __('Location');
@@ -36,35 +31,40 @@ class SigLocationResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                self::getNameField(),
-                self::getNameEnField(),
-                self::getDescriptionField(),
-                self::getDescriptionEnField(),
+                Forms\Components\Section::make(__("Location Details"))
+                    ->collapsible()
+                    ->collapsed(fn($operation) => $operation == "view")
+                    ->schema([
+                    self::getNameField(),
+                    self::getNameEnField(),
+                    self::getDescriptionField(),
+                    self::getDescriptionEnField(),
 
-                Forms\Components\Fieldset::make()
-                    ->label("Physical Information")
-                    ->translateLabel()
-                    ->columns(4)
-                    ->schema([
-                        self::getFloorField(),
-                        self::getRoomField(),
-                        self::getRoomSizeField(),
-                        self::getSeatsField(),
-                    ]),
-                Forms\Components\Fieldset::make()
-                    ->columns(4)
-                    ->label("Signage Info")
-                    ->translateLabel()
-                    ->schema([
-                        self::getRenderIdField()->columnSpan(2),
-                        self::getInfodisplayField(),
-                        self::getEssentialField(),
-                        Forms\Components\Grid::make()
-                             ->schema([
-                                 self::getEssentialDescriptionField(),
-                                 self::getEssentialDescriptionEnField(),
-                             ])
-                    ]),
+                    Forms\Components\Fieldset::make()
+                        ->label("Physical Information")
+                        ->translateLabel()
+                        ->columns(4)
+                        ->schema([
+                            self::getFloorField(),
+                            self::getRoomField(),
+                            self::getRoomSizeField(),
+                            self::getSeatsField(),
+                        ]),
+                    Forms\Components\Fieldset::make()
+                        ->columns(4)
+                        ->label("Signage Info")
+                        ->translateLabel()
+                        ->schema([
+                            self::getRenderIdField()->columnSpan(2),
+                            self::getInfodisplayField(),
+                            self::getEssentialField(),
+                            Forms\Components\Grid::make()
+                                 ->schema([
+                                     self::getEssentialDescriptionField(),
+                                     self::getEssentialDescriptionEnField(),
+                                 ])
+                        ]),
+                ]),
 
             ]);
     }
@@ -90,6 +90,7 @@ class SigLocationResource extends Resource
         return [
             'index' => Pages\ListSigLocations::route('/'),
             'create' => Pages\CreateSigLocation::route('/create'),
+            'view' => Pages\ViewSigLocation::route('/{record}'),
             'edit' => Pages\EditSigLocation::route('/{record}/edit'),
         ];
     }

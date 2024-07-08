@@ -55,7 +55,7 @@
                     {{ $entry->sigEvent->description_localized }}
                 </x-markdown>
 
-                @can("manage_events")
+                @can("update", $entry->sigEvent)
                     <div class="text-end">
                         <a href="{{ App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $entry->sigEvent]) }}">
                             <i class="bi bi-pencil"></i>
@@ -87,7 +87,7 @@
                                     {{ $e->start->format("d.m.Y") }}
                                 </p>
 
-                                @can("manage_events")
+                                @can("update", $e)
                                     <div class="text-end">
                                         <a href="{{ \App\Filament\Resources\TimetableEntryResource::getUrl('edit', ['record' => $e]) }}">
                                             <i class="bi bi-pencil"></i>
@@ -121,7 +121,7 @@
                         <h5 class="modal-title w-100" id="registerModalLabel">Registrieren</h5>
                     </div>
                     <div class="modal-body">
-                        @can("manage_events")
+                        @can("update", $entry)
                             <p>Wen möchtest du für dieses Event registrieren?</p>
                             <p><a href=""></a></p>
                             <div class="row">
@@ -129,7 +129,7 @@
                                     <p>Reg-Nummer</p>
                                 </div>
                                 <div class="col-8">
-                                    <input type="text" class="form-control" name="regId" placeholder="Reg-ID" value="{{ Auth::user()->reg_id }}">
+                                    <input type="text" class="form-control" name="regId" placeholder="Reg-ID" value="{{ auth()->user()->reg_id }}">
                                 </div>
                             </div>
                         @else

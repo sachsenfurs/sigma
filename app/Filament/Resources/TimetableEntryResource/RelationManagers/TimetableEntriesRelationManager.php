@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\RelationManagers;
 
-use App\Filament\Resources\SigEventResource;
+use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
+use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,12 +29,12 @@ class TimetableEntriesRelationManager extends RelationManager
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
         // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->can("view", $ownerRecord);
     }
 
     protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('manage_sigs');
+        return auth()->user()->can("viewAny", $record);
     }
 
     public function table(Table $table): Table {
@@ -70,8 +71,12 @@ class TimetableEntriesRelationManager extends RelationManager
 
     protected function getTableEntryActions(): array {
         return [
+            Tables\Actions\ViewAction::make()
+                 ->infolist(fn($record) => (new Infolist())->schema(ViewSigEvent::getInfolistSchema())->record($record->sigEvent))
+                ->hidden(fn(TimetableEntriesRelationManager $livewire) => $livewire->pageClass == ViewSigEvent::class),
             Tables\Actions\EditAction::make()
-                ->url(fn(Model $record) => SigEventResource::getUrl('edit', ['record' => $record->sigEvent])),
+                ->form(TimetableEntryResource\Pages\EditTimetableEntry::getSchema())
+                ->using(fn(Model $record, array $data) => TimetableEntryResource\Pages\EditTimetableEntry::handleUpdate($record, $data)),
         ];
     }
 }

@@ -18,7 +18,7 @@ class AppSettings extends Settings
     public ?int $lassie_con_event_id;
     public bool $lost_found_enabled;
 
-    public string $deepl_api_key;
+    public ?string $deepl_api_key;
     public string $deepl_source_lang;
     public string $deepl_target_lang;
 

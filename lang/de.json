@@ -8,7 +8,9 @@
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
-
+    "Home": "Startseite",
+    "Announcements": "Ankündigungen",
+    "Nothing has been announced yet": "Noch keine Ankündigungen vorhanden",
     "Administration": "Administration",
     "Manage Event Schedule": "Programmplan bearbeiten",
     "Manage Events": "Events verwalten",
@@ -104,12 +106,18 @@
 
     "Welcome to the SIG-Manager, here you can:": "Herzlich Willkommen beim SIG-Manager, hier kannst du:",
     "Access the event schedule": "Den Programmplan abrufen",
+    "View our schedule and don't miss anything!": "Schau dir unseren Programmplan an, um nichts zu verpassen!",
     "View Schedule": "Zum Programmplan",
-    "Sign up for specific SIGs": "Dich für bestimmte SIGs anmelden",
+    "Submit a new SIG or register for specific events during the convetion": "Melde neue SIGs an oder registriere dich für vorhandene",
     "Program planning": "Programmplanung",
     "Manage your own SIGs": "Deine eigenen SIGs verwalten",
     "Set up reminder Notifications": "Erinnerungen für SIGs einrichten",
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
+    "Submit items for the art show and auction": "Reiche Gegenstände für die Art Show oder Auktion ein",
+    "View and submit bids for all art show items": "Durchstöbere unsere Art Show und biete für die Auktion",
+    "Sign up and manage your Dealer's Den application": "Melde dich für den Dealers Den an und verwalte deine Anmeldung",
+    "List all attending dealers": "Sieh dir unsere Künstler bzw. Händler an",
+    "Have you lost something at the venue?": "Hast du während der Veranstaltung etwas verloren oder gefunden?",
 
     "View": "Anzeigen",
     "Edit": "Bearbeiten",
@@ -160,6 +168,7 @@
     "Functional Description (\"Main Stage\", ..)": "Funktionale Beschreibung (\"Main Stage\", ..)",
     "Functional Description (English)": "Funktionale Beschreibung (Englisch)",
     "Physical Information": "Physische Informationen",
+    "Location Details": "Details zur Räumlichkeit",
 
     "Form": "Formular",
     "Forms": "Formulare",
@@ -293,6 +302,7 @@
     "Reminder successfully updated!": "Erinnerung erfolgreich aktualisiert!",
     "Telegram Connected!": "Telegram Verknüpft!",
     "An error occured while connecting Telegram!": "Es ist ein Fehler beim Verbinden mit Telegram aufgetreten!",
+    "If you lost or found something, please reach out to Con Ops (Leitstelle)!": "Wenn du etwas verloren oder gefunden hast, melde dich bitte bei der Leitstelle!",
 
     "Changed": "Geändert",
     "Moved": "Verschoben",
@@ -349,7 +359,7 @@
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",
-    "tem List": "Gegenstandsliste",
+    "Item List": "Gegenstandsliste",
     "Item": "Gegenstand",
     "Items": "Gegenstände",
     "Art Show Artist": "Art Show Künstler",
@@ -391,8 +401,8 @@
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",
-    "Dealers Den Sign Up": "Dealers Den Anmeldung",
-    "Dealers Den Overview": "Dealers Den Übersicht",
+    "Dealer's Den Sign Up": "Dealers Den Anmeldung",
+    "Dealer's Den Overview": "Dealers Den Übersicht",
     "Dealer List": "Händlerliste",
     "Dealer Logo": "Händler-Logo",
     "Show Dealer": "Händler anzeigen",
@@ -452,5 +462,12 @@
     "Show on..": "Zeige auf..",
     "Show on Signage": "Zeige auf Signage",
     "Show on page footer (Text)": "Zeige auf Page Footer (Text)",
-    "Show on page footer (Icon only)": "Zeige auf Page Footer (Nur Icon)"
+    "Show on page footer (Icon only)": "Zeige auf Page Footer (Nur Icon)",
+
+    "Channel": "Kanal",
+    "Channels": "Kanäle",
+    "post": "Post",
+    "posts": "Posts",
+    "New Post": "Neuer Post",
+    "Text (English)": "Text (Englisch)"
 }

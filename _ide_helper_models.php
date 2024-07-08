@@ -13,7 +13,7 @@
 
 namespace App\Models\Ddas{
 /**
- * Model für die ArtshowArtist Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
+ * 
  *
  * @property int $id
  * @property int|null $user_id
@@ -40,7 +40,7 @@ namespace App\Models\Ddas{
 
 namespace App\Models\Ddas{
 /**
- * Model für die ArtshowBid Tabelle damit diese sauber aufgebaut und mit anderen Tabelle verknüpft werden kann.
+ * 
  *
  * @property int $id
  * @property int $artshow_item_id
@@ -77,6 +77,7 @@ namespace App\Models\Ddas{
  * @property string|null $additional_info only visible for adminstration/auctioner
  * @property string|null $image
  * @property bool $auction
+ * @property int $locked
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property bool $sold
  * @property bool $paid
@@ -104,6 +105,7 @@ namespace App\Models\Ddas{
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereLocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereSold($value)
@@ -280,67 +282,52 @@ namespace App\Models{
 	class LostFoundItem extends \Eloquent {}
 }
 
-namespace App\Models{
-/**
- * 
- *
- * @method static where(string $string, mixed $permissionName)
- * @method static create(array $array)
- * @property int $id
- * @property string $name
- * @property string $friendly_name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $roles
- * @property-read int|null $roles_count
- * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
- */
-	class Permission extends \Eloquent {}
-}
-
-namespace App\Models{
+namespace App\Models\Post{
 /**
  * 
  *
  * @property int $id
- * @property string $text_de
- * @property string $text_en
+ * @property string|null $text
+ * @property string|null $text_en
  * @property int|null $user_id
- * @property string $image
+ * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PostChannel> $messages
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\PostChannel> $channels
+ * @property-read int|null $channels_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\PostChannelMessage> $messages
  * @property-read int|null $messages_count
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Post query()
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Post whereTextDe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereTextEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post withoutTrashed()
  */
 	class Post extends \Eloquent {}
 }
 
-namespace App\Models{
+namespace App\Models\Post{
 /**
  * 
  *
  * @property int $id
  * @property int $channel_identifier
+ * @property string|null $name
  * @property string $language
  * @property string $implementation
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
+ * @property-read int|null $posts_count
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel query()
@@ -348,19 +335,28 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereImplementation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereLanguage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereName($value)
  */
 	class PostChannel extends \Eloquent {}
 }
 
-namespace App\Models{
+namespace App\Models\Post{
 /**
  * 
  *
- * @property-read \App\Models\Post|null $post
- * @property-read \App\Models\PostChannel|null $postChannel
+ * @property int $id
+ * @property int $post_id
+ * @property int $post_channel_id
+ * @property int $message_id
+ * @property-read \App\Models\Post\Post $post
+ * @property-read \App\Models\Post\PostChannel $postChannel
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereMessageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostId($value)
  */
 	class PostChannelMessage extends \Eloquent {}
 }
@@ -411,6 +407,7 @@ namespace App\Models{
  * @property-read mixed $approved
  * @property-read mixed $description_localized
  * @property-read mixed $description_localized_other
+ * @property-read mixed $duration_hours
  * @property-read mixed $favorite_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigForm> $forms
  * @property-read int|null $forms_count
@@ -479,17 +476,18 @@ namespace App\Models{
  * @property int $id
  * @property int $sig_form_id
  * @property int $user_id
- * @property int $approved
+ * @property int $approval
  * @property string|null $rejection_reason
  * @property array|null $form_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Enums\Approval $approved
  * @property-read \App\Models\SigForm $sigForm
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm query()
- * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereFormData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereId($value)
@@ -569,6 +567,7 @@ namespace App\Models{
  * @property string|null $description
  * @property string|null $description_en
  * @property bool $hide
+ * @property string|null $color
  * @property-read mixed $avatar
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -581,6 +580,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost public()
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigHost whereHide($value)
@@ -598,7 +598,7 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property-read string|null $name_en
- * @property-read string $description
+ * @property-read string|null $description
  * @property-read string|null $description_en
  * @property string|null $floor
  * @property string|null $room
@@ -612,6 +612,8 @@ namespace App\Models{
  * @property bool $show_default Show in calendar view (resource view) by default?
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
+ * @property-read mixed $description_localized
+ * @property-read mixed $name_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -682,8 +684,8 @@ namespace App\Models{
  * @property string|null $description_en
  * @property string|null $icon
  * @property-read string $description_localized
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvent
- * @property-read int|null $sig_event_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag query()
@@ -708,9 +710,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $reg_start
  * @property \Illuminate\Support\Carbon|null $reg_end
  * @property string|null $description
+ * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $notes
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $sigAttendees
  * @property-read int|null $sig_attendees_count
  * @property-read \App\Models\TimetableEntry $timetableEntry
@@ -846,7 +848,7 @@ namespace App\Models{
  * @property-read int|null $favorites_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
  * @property-read int|null $posts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigReminder> $reminders
  * @property-read int|null $reminders_count
@@ -890,9 +892,7 @@ namespace App\Models{
  * @property string $border_color
  * @property string $background_color
  * @property string|null $registration_system_key
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRolePermission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
@@ -901,12 +901,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole query()
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereBackgroundColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereBorderColor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereForeColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereRegistrationSystemKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereUpdatedAt($value)
  */
 	class UserRole extends \Eloquent {}
 }
@@ -916,18 +914,34 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $user_role_id
+ * @property \App\Enums\Permission $permission
+ * @property \App\Enums\PermissionLevel $level
+ * @property-read \App\Models\UserRole|null $role
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission wherePermission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserRolePermission whereUserRoleId($value)
+ */
+	class UserRolePermission extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $user_id
  * @property int $user_role_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\UserRole|null $role
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole query()
- * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserUserRole whereUserRoleId($value)
  */

@@ -9,7 +9,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class SigPlanning extends Cluster
 {
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static ?int $navigationSort = -1;
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationGroup = 'SIG';
 
     public static function getNavigationLabel(): string {

@@ -21,13 +21,7 @@ class ArtshowItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 210;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_artshow');
-    }
 
     public static function getLabel(): ?string {
         return __("Item");
@@ -38,6 +32,9 @@ class ArtshowItemResource extends Resource
     }
     public static function getNavigationLabel(): string {
         return __("Items");
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
     }
 
     public static function canAccess(): bool {
@@ -58,22 +55,30 @@ class ArtshowItemResource extends Resource
                     ->label('Item Name')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->label('Description')
+                Forms\Components\Radio::make('approval')
+                    ->label('Approval')
                     ->translateLabel()
-                    ->maxLength(65535)
-                    ->hintAction(
-                        TranslateAction::translateToPrimary('description_en', 'description')
-                    )
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('description_en')
-                    ->label('Description (English)')
-                    ->translateLabel()
-                    ->maxLength(65535)
-                    ->hintAction(
-                        TranslateAction::translateToSecondary('description', 'description_en')
-                    )
-                    ->columnSpanFull(),
+                    ->default(Approval::PENDING)
+                    ->options(Approval::class)
+                    ->required(),
+                Forms\Components\Grid::make()
+                     ->columns(1)
+                     ->schema([
+                            Forms\Components\RichEditor::make('description')
+                                ->label('Description')
+                                ->translateLabel()
+                                ->maxLength(65535)
+                                ->hintAction(
+                                    TranslateAction::translateToPrimary('description_en', 'description')
+                                ),
+                            Forms\Components\RichEditor::make('description_en')
+                                ->label('Description (English)')
+                                ->translateLabel()
+                                ->maxLength(65535)
+                                ->hintAction(
+                                    TranslateAction::translateToSecondary('description', 'description_en')
+                                ),
+                     ]),
                 Forms\Components\TextInput::make('starting_bid')
                     ->label('Starting Bid')
                     ->translateLabel()
@@ -97,25 +102,31 @@ class ArtshowItemResource extends Resource
                     ->preserveFilenames(false)
                     ->disk('public')
                     ->image()
+                    ->downloadable()
                     ->imageEditor()
                     ->maxFiles(1)
                     ->maxSize(5120),
-                Forms\Components\Radio::make('approval')
-                    ->label('Approval')
-                    ->translateLabel()
-                    ->default(Approval::PENDING)
-                    ->options(Approval::class)
-                    ->required(),
+                Forms\Components\Checkbox::make('locked')
+                    ->label('Locked')
+                    ->translateLabel(),
             ]);
     }
 
     public static function table(Table $table): Table {
         return $table
             ->columns([
+                Tables\Columns\IconColumn::make('approval')
+                    ->label('Approval')
+                    ->translateLabel()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('artist.name')
                     ->label('Artist Name')
                     ->translateLabel()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Image')
+                    ->translateLabel()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Item Name')
                     ->translateLabel()
@@ -130,13 +141,10 @@ class ArtshowItemResource extends Resource
                     ->translateLabel()
                     ->formatStateUsing(fn(string $state): string => (int)$state . " %")
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
+                Tables\Columns\IconColumn::make('auction')
+                    ->label('Auction')
                     ->translateLabel()
-                    ->toggleable(),
-                Tables\Columns\IconColumn::make('approval')
-                    ->label('Approval')
-                    ->translateLabel()
+                    ->boolean()
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('sold')
                     ->label('Sold')
@@ -150,12 +158,16 @@ class ArtshowItemResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make("approval")
+                   ->label("Approval")
+                   ->translateLabel()
+                   ->options(Approval::class),
             ])
             ->actions([])
             ->headerActions([])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Approval::getBulkAction(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

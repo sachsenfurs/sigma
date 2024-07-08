@@ -2,6 +2,7 @@
 
 namespace App\Filament\Actions;
 
+use App\Models\SigEvent;
 use App\Services\Translator;
 use App\Settings\AppSettings;
 use Filament\Forms\Components\Actions\Action;
@@ -56,6 +57,7 @@ class TranslateAction extends ServiceAction
                          $toLang
                      )
                  );
-             });
+             })
+            ->authorize("update");
     }
 }

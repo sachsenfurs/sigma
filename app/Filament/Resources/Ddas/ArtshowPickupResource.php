@@ -17,22 +17,18 @@ class ArtshowPickupResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-gift';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 240;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_artshow');
-    }
 
     public static function getPluralLabel(): ?string {
         return __('Pickups');
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
     }
 
     public static function canAccess(): bool {
         return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
-
 
 
     public static function form(Form $form): Form {

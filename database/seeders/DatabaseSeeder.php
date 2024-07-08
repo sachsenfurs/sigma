@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        (new PermissionSeeder())->run(); // Needs to be run before user role seeder
+//        (new PermissionSeeder())->run(); // Needs to be run before user role seeder
         (new UserRoleSeeder())->run();
 
         User::factory()->create([

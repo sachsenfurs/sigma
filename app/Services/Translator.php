@@ -11,21 +11,25 @@ class Translator
 {
     private ?\DeepL\Translator $translator = null;
 
-    public function __construct(private readonly string $authKey,
+    public function __construct(private readonly ?string $authKey,
                                 private string $sourceLang = "de",
                                 private string $targetLang = "en-US") {
 
         $this->sourceLang = $this->parseLanguage($this->sourceLang);
 
         try {
-            $this->translator = new \DeepL\Translator($this->authKey);
+            $this->translator = new \DeepL\Translator($this->authKey ?? "");
         } catch(DeepLException $e) {
 
         }
     }
 
     public function getUsage() {
-        return $this->translator->getUsage();
+        try {
+            return $this->translator?->getUsage();
+        } catch(DeepLException $e) {
+
+        }
     }
 
     public function translate($text, $sourceLang = null, $targetLang = null) {

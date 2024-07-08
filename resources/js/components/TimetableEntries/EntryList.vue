@@ -7,7 +7,7 @@
                                 @scroll-to-day="(n) => scrollToDay(n)"
             />
         </div>
-        <div class="container">
+        <div class="container-md">
             <div v-for="(date, dateIndex) in Array.from(uniqueWeekdays.values())" class="entrySlot">
                 <hr>
                 <h1 :ref="dateIndex" class="text-center">
@@ -84,15 +84,21 @@ export default {
             this.scrollActive = true;
             let firstDayEvent = this.$refs[dateIndex][0];
             let top = firstDayEvent.nextElementSibling.offsetTop;
-            let margin = this.$refs['dayTabs'].offsetHeight;
-            window.scrollTo(0, top-margin-15);
+            let margin = (this.$refs['dayTabs'].offsetHeight*2)+35;
+            // this.scrollElement.scrollTo(0, top-margin-15);
+            this.scrollElement.scrollTo({
+                top: top-margin-15,
+                left: 0,
+                behavior: "smooth",
+            });
         },
         handleScroll(event) {
             let lastEl = null;
-            let margin = this.$refs['dayTabs'].offsetHeight;
+            let margin = (this.$refs['dayTabs'].offsetHeight*2)+25;
+            let scrollElement = this.scrollElement;
             this.$refs['entrySlot'].forEach(function(entry) {
                 let marginHeading = entry.$el.previousElementSibling?.offsetHeight;
-                if(window.scrollY > entry.$el.offsetTop - margin - marginHeading) {
+                if(scrollElement.scrollTop > entry.$el.offsetTop - margin - marginHeading) {
                     lastEl = entry.$el;
                 }
             });
@@ -125,6 +131,7 @@ export default {
             scrollActive: false,
             lastRefresh: new Date(),
             alert: "",
+            scrollElement: document.querySelector(".main-col"),
         };
     },
     mounted() {
@@ -139,9 +146,9 @@ export default {
             }
         })
 
-        window.addEventListener("scroll", this.handleScroll);
-        window.addEventListener("scrollend", this.handleScrollEnd);
-        window.addEventListener("focus", this.checkRefreshEntries);
+        this.scrollElement.addEventListener("scroll", this.handleScroll);
+        this.scrollElement.addEventListener("scrollend", this.handleScrollEnd);
+        this.scrollElement.addEventListener("focus", this.checkRefreshEntries);
     }
 };
 </script>

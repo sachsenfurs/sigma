@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Enums\Approval;
 use App\Models\Scopes\SigFormAccessScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\SigFilledFormObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(SigFilledFormObserver::class)]
 class SigFilledForm extends Model
 {
     protected $guarded = [];
 
     protected $casts = [
-        'form_data' => 'array'
+        'form_data' => 'array',
+        'approval' => Approval::class,
     ];
 
     protected $with = [
@@ -23,13 +27,11 @@ class SigFilledForm extends Model
         static::addGlobalScope(new SigFormAccessScope);
     }
 
-    public function sigForm(): BelongsTo
-    {
+    public function sigForm(): BelongsTo {
         return $this->belongsTo(SigForm::class);
     }
 
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 }

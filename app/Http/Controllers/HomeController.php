@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post\Post;
+
 class HomeController extends Controller
 {
     /**
@@ -19,15 +21,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
+    public function index() {
         $registrations  = auth()->user()->attendeeEvents;
         $favorites      = auth()->user()->favorites()->upcoming()->with("timetableEntry")->get()->sortBy(function($query) {
             return $query->timetableEntry->start;
         })->all();
+
+        $posts      = Post::latest()->limit(6)->get();
+
         return view('home', compact([
             'registrations',
-            'favorites'
+            'favorites',
+            'posts'
         ]));
     }
 }

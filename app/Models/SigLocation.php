@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\App;
 
 class SigLocation extends Model
 {
@@ -58,12 +59,22 @@ class SigLocation extends Model
         );
     }
 
+    public function descriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->description_en : $this->description
+        );
+    }
     public function descriptionEn(): Attribute {
         return Attribute::make(
             get: fn($description_en="") => $description_en != "" ? $description_en : ($this->name_en ?? $this->name)
         );
     }
 
+    public function nameLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->name_en : $this->name
+        );
+    }
     public function nameEn(): Attribute {
         return Attribute::make(
             get: fn($name_en="") => $name_en ?? $this->name

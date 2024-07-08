@@ -1,18 +1,21 @@
 @extends('layouts.app')
-@section('title', "Locations")
+@section('title', __("Locations"))
 @section('content')
     <div class="container">
-        @foreach($locations AS $location)
+        @forelse($locations AS $location)
                 <x-list-host-location
                     :instance="$location"
                     :link="route('locations.show', $location)"
-                    :title="$location->name"
+                    :title="$location->name_localized"
                     :edit_link="\App\Filament\Resources\SigLocationResource::getUrl('edit', [ 'record' => $location ])"
                 >
-                    {{ $location->description }}
+                    {{ $location->description_localized }}
                 </x-list-host-location>
-
-        @endforeach
+        @empty
+            <x-infocard>
+                {{ __("The Schedule is not published yet") }}
+            </x-infocard>
+        @endforelse
 
     </div>
 @endsection

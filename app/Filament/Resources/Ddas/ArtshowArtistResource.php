@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Ddas;
 
-use App\Filament\Clusters\Settings;
 use App\Filament\Resources\Ddas\ArtshowArtistResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowItemRelationManager;
 use App\Models\Ddas\ArtshowArtist;
@@ -15,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class ArtshowArtistResource extends Resource
 {
@@ -23,13 +21,7 @@ class ArtshowArtistResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
 
-    protected static ?string $navigationGroup = 'Artshow';
-
     protected static ?int $navigationSort = 200;
-
-    public static function can(string $action, ?Model $record = null): bool {
-        return auth()->user()->permissions()->contains('manage_artshow');
-    }
 
     public static function getModelLabel(): string {
         return __("Artist");
@@ -45,6 +37,9 @@ class ArtshowArtistResource extends Resource
     public static function getPluralLabel(): ?string {
         return __('Artists');
     }
+    public static function getNavigationGroup(): ?string {
+        return __("Art Show");
+    }
 
     public static function canAccess(): bool {
         return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
@@ -56,13 +51,13 @@ class ArtshowArtistResource extends Resource
                     ->label('User')
                     ->translateLabel()
                     ->searchable()
-                    ->formatStateUsing(fn(?Model $record) => $record != null ? $record->user_id . " - " . $record->user->name : "") // formatting when user already present
+                    ->formatStateUsing(fn(?Model $record) => $record?->user != null ? $record->user->reg_id . " - " . $record->user->name : "") // formatting when user already present
                     ->getSearchResultsUsing(function (string $search) {
                         return User::where('name', 'like', "%{$search}%")
-                            ->orWhere('id', $search)
+                            ->orWhere('reg_id', $search)
                             ->limit(10)
                             ->get()
-                            ->map(fn($u) => [$u->id => $u->id . " - " . $u->name]) // formatting when searching for new user
+                            ->map(fn($u) => [$u->id => $u->reg_id . " - " . $u->name]) // formatting when searching for new user
                             ->toArray();
                     })
                     ->searchDebounce(250),

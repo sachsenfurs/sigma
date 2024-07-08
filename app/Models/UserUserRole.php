@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserUserRole extends Model
 {
     protected $guarded = [];
+    public $timestamps = false;
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
