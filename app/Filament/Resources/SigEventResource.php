@@ -48,6 +48,7 @@ class SigEventResource extends Resource
             ->columns(self::getTableColumns())
             ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
+            ->persistSortInSession()
             ->filters([
                 Tables\Filters\SelectFilter::make("approval")
                     ->label("Approval")
