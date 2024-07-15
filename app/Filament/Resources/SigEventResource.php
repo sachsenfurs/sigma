@@ -48,6 +48,7 @@ class SigEventResource extends Resource
             ->columns(self::getTableColumns())
             ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
+            ->persistSortInSession()
             ->filters([
                 Tables\Filters\SelectFilter::make("approval")
                     ->label("Approval")
@@ -187,7 +188,7 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('sigTags')
-                        ->label('')
+                        ->label('Tags')
                         ->options(SigTag::all()->pluck('description', 'id'))
                         ->relationship('sigTags', 'description')
                         ->preload()

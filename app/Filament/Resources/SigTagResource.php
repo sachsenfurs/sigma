@@ -96,7 +96,8 @@ class SigTagResource extends Resource
 
     private static function getDescriptionField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description')
-            ->label('German')
+            ->label('Description')
+            ->required()
             ->translateLabel()
             ->rows(4)
             ->columnSpanFull();
@@ -104,7 +105,7 @@ class SigTagResource extends Resource
 
     private static function getDescriptionENField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description_en')
-            ->label('English')
+            ->label('Description (English)')
             ->translateLabel()
             ->rows(4)
             ->columnSpanFull();

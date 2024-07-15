@@ -19,10 +19,6 @@ class ViewSigTag extends ViewRecord
     public function infolist(Infolist $infolist): Infolist {
         return $infolist->schema([
             TextEntry::make("name"),
-            TextEntry::make("description")
-                ->label("Description")
-                ->translateLabel()
-                ->placeholder(__("None")),
         ]);
     }
 }
