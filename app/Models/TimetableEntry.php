@@ -47,6 +47,7 @@ class TimetableEntry extends Model
     protected $with = [
         'favorites',
         'sigLocation',
+//        'sigEvent', << i dont know why this isnt working..
         'parentEntry',
     ];
 
