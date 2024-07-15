@@ -52,7 +52,6 @@ export default {
         },
     },
     data() {
-        let self = this;
         return {
             currentEvent: null,
             currentView: 'resourceTimeGridDay',
@@ -123,7 +122,7 @@ export default {
         this.calendarOptions.initialDate = calEvents[0].start;
 
         const daysInMSecs = 1000 * 60 * 60 * 24;
-        const days = Math.round((endDate - startDate) / daysInMSecs) + 1;
+        const days = Math.round((endDate - startDate) / daysInMSecs);
         const calendarApi = this.$refs.fullCalendar.getApi();
         for (let i = 0; i < days; i++) {
             const day = new Date(startDate + (i * daysInMSecs));
@@ -143,7 +142,7 @@ export default {
 }
 </script>
 <template>
-    <div class="container">
+    <div class="container-lg">
         <FullCalendar ref="fullCalendar" :options="calendarOptions" />
         <entry-modal :entry="currentEvent" :id="'eventInfo'" />
     </div>
@@ -152,6 +151,9 @@ export default {
 <style>
 .fc .fc-scrollgrid-section-sticky > * {
     background: var(--bs-body-bg);
+}
+.fc {
+    user-select: none;
 }
 
 .fc-timeline .fc-scrollgrid,
@@ -192,5 +194,6 @@ export default {
 .fc-timegrid-event.fc-event-mirror,
 .fc-timegrid-more-link {
     box-shadow: none;
+    cursor: pointer;
 }
 </style>

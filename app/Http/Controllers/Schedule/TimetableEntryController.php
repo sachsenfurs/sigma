@@ -59,7 +59,7 @@ class TimetableEntryController extends Controller
     public function calendarResources() {
         $this->authorize("viewAny",SigLocation::class);
 
-        $locations = SigLocation::withCount("sigEvents")
+        $locations = SigLocation::used()->withCount("sigEvents")
             ->used()
             ->where('essential', false)
             ->get();
@@ -80,7 +80,7 @@ class TimetableEntryController extends Controller
     public function calendarEvents() {
         $this->authorize("viewAny",TimetableEntry::class);
 
-        $entries = TimetableEntry::public()->orderBy("start")->get();
+        $entries = TimetableEntry::public()->with("sigEvent")->orderBy("start")->get();
         $entries->each(function($timetableEntry) {
             $timetableEntry->title = $timetableEntry->sigEvent->name_localized;
             $timetableEntry->resourceId = $timetableEntry->sig_location_id;
