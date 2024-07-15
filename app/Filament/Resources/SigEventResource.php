@@ -6,6 +6,7 @@ use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Models\SigEvent;
+use App\Models\SigHost;
 use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,7 +15,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -34,9 +34,10 @@ class SigEventResource extends Resource
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
-                self::getSigHostFieldSet(),
+                self::getSigHostsFieldSet(),
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
+                self::getSigHostsFieldSet(),
                 self::getSigRegistrationFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfoFieldSet(),
@@ -101,15 +102,9 @@ class SigEventResource extends Resource
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
-                ->label('Host')
-                ->translateLabel()
-                ->searchable()
-                ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
-                })
-                ->sortable(),
+            Tables\Columns\TextColumn::make('sigHosts.name')
+                ->label('Hosts')
+                ->translateLabel(),
             Tables\Columns\ImageColumn::make('languages')
                 ->label('Languages')
                 ->translateLabel()
@@ -218,45 +213,54 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostFieldSet(): Forms\Components\Component {
+    private static function getSigHostsFieldSet(): Forms\Components\Component
+    {
         return
-            Forms\Components\Fieldset::make('host')
-            ->label('SIG Host')
-            ->translateLabel()
-            ->schema([
-                Forms\Components\Select::make('sig_host_id')
-                    ->label('Host')
-                    ->translateLabel()
-                    ->relationship('sigHost', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
-                        return $record->name . $regNr;
-                    })
-                    ->createOptionForm(fn($form) => SigHostResource::form($form))
-                    ->live()
-                    ->hintAction(
-                        function($state) {
-                            if(filled($state)) {
-                                return Forms\Components\Actions\Action::make("edit")
-                                    ->label("Edit")
+            Forms\Components\Fieldset::make('hosts')
+                ->label('SIG Hosts')
+                ->schema(
+                    [
+                        Forms\Components\Select::make('sigHosts')
+                            ->label('')
+                            ->options(SigHost::all()->pluck('name', 'id'))
+                            ->relationship('sigHosts', 'name')
+                            ->preload()
+                            ->multiple()
+                            ->columnSpanFull()
+                            ->createOptionModalHeading(__('Create Host'))
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Name')
                                     ->translateLabel()
-                                    ->url(SigHostResource::getUrl("edit", ['record' => $state]));
-                            }
-                        }
-                    )
-                    ->columnSpanFull(),
-                Forms\Components\Select::make("approval")
-                    ->label("Approval")
-                    ->translateLabel()
-                    ->required()
-                    ->default(Approval::PENDING)
-                    ->columnSpanFull()
-                    ->options(Approval::class),
-            ])
-            ->columnSpan(1);
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('reg_id')
+                                    ->label('Reg ID')
+                                    ->translateLabel()
+                                    ->numeric(),
+                            ])
+                            ->createOptionUsing(function ($data) {
+                                $sigHost = SigHost::create([
+                                    'name' => $data['name'],
+                                    'reg_id' => $data['reg_id'] ?? null,
+                                ]);
+
+                                return $sigHost->id ?? null;
+                            })
+                            ->live()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make("approval")
+                            ->label("Approval")
+                            ->translateLabel()
+                            ->required()
+                            ->default(Approval::PENDING)
+                            ->columnSpanFull()
+                            ->options(Approval::class),
+                    ]
+                )
+                ->translateLabel()
+                ->columnSpan(1)
+            ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component {

@@ -62,6 +62,7 @@ class DatabaseSeeder extends Seeder
             $sig->sigTags()->attach(SigTag::inRandomOrder()->limit(rand(0,3))->get());
         });
 
+        (new SigHostSigEventsTableSeeder())->run();
 
         TimetableEntry::factory()->count(50)->create();
         $entries = TimetableEntry::inRandomOrder()->limit(15)->get();

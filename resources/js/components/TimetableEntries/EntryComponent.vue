@@ -34,9 +34,9 @@
                             {{ entry.sig_event.name_localized }}
                         </h1>
 
-                        <p v-if="!entry.sig_event.sig_host.hide" class="card-text">
+                        <p v-if="sigHosts" class="card-text">
                             <i class="bi bi-person-circle"></i>
-                            {{ entry.sig_event.sig_host.name }}
+                            {{ sigHosts.join(', ') }}
                         </p>
                         <p>
                             <i class="bi bi-geo-alt"></i>
@@ -116,9 +116,7 @@ export default {
             sig_event: {
                 name: "",
                 name_localized: "",
-                sig_host: {
-                    name: "",
-                },
+                sig_hosts: [],
                 sig_location: {
                     name: "",
                 },
@@ -143,6 +141,18 @@ export default {
         blinkFadeInOut(true);
     },
     computed: {
+        sigHosts() {
+            let filteredHosts = [];
+
+            for (let i of Object.keys(this.entry.sig_event.sig_hosts)) {
+                let host = this.entry.sig_event.sig_hosts[i];
+                if (!host.hide) {
+                    filteredHosts.push(host.name);
+                }
+            }
+
+            return filteredHosts;
+        },
         eventRunning() {
             return !this.entry.cancelled && this.now >= new Date(this.entry.start) && !this.eventPassed;
         },

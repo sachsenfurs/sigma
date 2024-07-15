@@ -144,14 +144,15 @@ class TimetableEntryResource extends Resource
                 ->label('Event')
                 ->translateLabel()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('sigEvent.sigHost.name')
+            Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
                  ->label('Host')
                  ->translateLabel()
                  ->searchable()
-                 ->formatStateUsing(function (Model $record) {
-                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
-                     return $record->sigEvent->sigHost->name . $regNr;
-                 }),
+//                 ->formatStateUsing(function (Model $record) {
+//                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
+//                     return $record->sigEvent->sigHost->name . $regNr;
+//                 })
+            ,
             Tables\Columns\TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')
@@ -192,9 +193,9 @@ class TimetableEntryResource extends Resource
             ->translateLabel()
             ->autofocus(fn($state) => $state == null)
             ->model(TimetableEntry::class)
-            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHost'))
+            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHosts'))
             ->getOptionLabelFromRecordUsing(function (Model $record) {
-                return $record->name . ' - ' . $record->sigHost->name;
+                return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
             })
             ->live()
             ->hintAction(
