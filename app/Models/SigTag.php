@@ -21,7 +21,7 @@ class SigTag extends Model
     }
 
     public function getDescriptionLocalizedAttribute(): string {
-        return App::getLocale() == "en" ? $this->description_en : $this->description;
+        return App::getLocale() == "en" ? $this->description_en : $this->description ?? $this->name;
     }
 
 }

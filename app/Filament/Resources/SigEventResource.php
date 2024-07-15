@@ -187,7 +187,7 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('sigTags')
-                        ->label('')
+                        ->label('Tags')
                         ->options(SigTag::all()->pluck('description', 'id'))
                         ->relationship('sigTags', 'description')
                         ->preload()
