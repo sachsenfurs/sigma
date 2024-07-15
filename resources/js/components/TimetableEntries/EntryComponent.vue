@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-7 d-flex">
-                    <div class="card-body px-1 pe-0 align-self-center ">
+                    <div class="card-body px-1 pe-0 align-self-center" style="word-wrap: anywhere">
                         <h1>
                             {{ entry.sig_event.name_localized }}
                         </h1>
