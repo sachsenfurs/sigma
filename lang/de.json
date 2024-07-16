@@ -359,7 +359,6 @@
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",
-    "Item List": "Gegenstandsliste",
     "Item": "Gegenstand",
     "Items": "Gegenstände",
     "Art Show Artist": "Art Show Künstler",
@@ -426,6 +425,7 @@
     "This field is overwritten with every user logon": "Dieses Feld wird bei jeder Anmeldung überschrieben",
     "Leave Admin Interface": "Administration verlassen",
     "Sign out": "Abmelden",
+    "Set Location": "Raum festlegen",
 
     "The Schedule is not published yet": "Der Programmplan wurde noch nicht veröffentlicht",
     "Dealers are not published yet": "Die Liste der Händler wurde noch nicht veröffentlicht",
@@ -469,5 +469,6 @@
     "post": "Post",
     "posts": "Posts",
     "New Post": "Neuer Post",
-    "Text (English)": "Text (Englisch)"
+    "Text (English)": "Text (Englisch)",
+    "You have to be logged in": "Du musst eingeloggt sein!"
 }

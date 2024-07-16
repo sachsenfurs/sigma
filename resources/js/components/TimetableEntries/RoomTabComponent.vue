@@ -24,9 +24,7 @@ export default {
             sig_event: {
                 name: "",
                 name_localized: "",
-                sig_host: {
-                    name: "",
-                },
+                sig_hosts: [],
                 sig_location: {
                     name: "",
                 },

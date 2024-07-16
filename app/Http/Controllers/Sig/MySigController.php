@@ -7,7 +7,6 @@ use App\Models\SigAttendee;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
-use Illuminate\Support\Facades\Gate;
 
 class MySigController extends Controller
 {
@@ -63,6 +62,7 @@ class MySigController extends Controller
     }
 
     public function toggleAttendeeList(SigEvent $sig) {
+        // This check needs improvement
         $this->authorize("update", $sig);
 
         if ($sig->attendees_public) {

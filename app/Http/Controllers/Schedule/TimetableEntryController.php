@@ -21,7 +21,7 @@ class TimetableEntryController extends Controller
         $entries = TimetableEntry::public()
              ->with("sigLocation")
              ->with("sigEvent", function($query) {
-                 return $query->with("sigHost")
+                 return $query->with("sigHosts")
                      ->with("sigTags");
              })
              ->orderBy("start")

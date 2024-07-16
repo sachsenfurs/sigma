@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowArtistResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowItemRelationManager;
 use App\Models\Ddas\ArtshowArtist;
@@ -13,7 +14,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class ArtshowArtistResource extends Resource
 {
@@ -47,19 +47,13 @@ class ArtshowArtistResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
+                Forms\Components\Select::make('user')
                     ->label('User')
+                    ->relationship('user', 'name')
                     ->translateLabel()
                     ->searchable()
-                    ->formatStateUsing(fn(?Model $record) => $record?->user != null ? $record->user->reg_id . " - " . $record->user->name : "") // formatting when user already present
-                    ->getSearchResultsUsing(function (string $search) {
-                        return User::where('name', 'like', "%{$search}%")
-                            ->orWhere('reg_id', $search)
-                            ->limit(10)
-                            ->get()
-                            ->map(fn($u) => [$u->id => $u->reg_id . " - " . $u->name]) // formatting when searching for new user
-                            ->toArray();
-                    })
+                    ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()) // formatting when user already present
+                    ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
                     ->searchDebounce(250),
                 Forms\Components\TextInput::make('name')
                     ->label('Artist Name')
