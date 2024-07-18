@@ -37,7 +37,6 @@ class SigEventResource extends Resource
                 self::getSigHostsFieldSet(),
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
-                self::getSigHostsFieldSet(),
                 self::getSigRegistrationFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfoFieldSet(),
