@@ -81,7 +81,6 @@ export default {
             return firstEvent || this.entries[0];
         },
         scrollToDay(dateIndex) {
-            this.scrollActive = true;
             let firstDayEvent = this.$refs[dateIndex][0];
             let top = firstDayEvent.nextElementSibling.offsetTop;
             let margin = (this.$refs['dayTabs'].offsetHeight*2)+35;
@@ -102,11 +101,8 @@ export default {
                     lastEl = entry.$el;
                 }
             });
-            if(!this.scrollActive) // debounce
-                this.activeDayIndex = lastEl?.dataset.dateIndex || 0;
-        },
-        handleScrollEnd() {
-            this.scrollActive = false;
+
+            this.activeDayIndex = lastEl?.dataset.dateIndex || 0;
         },
         showAlert(message) {
             alert(message);
@@ -128,7 +124,6 @@ export default {
         return {
             entries: [],
             activeDayIndex: location.hash.replace("#day", "") || 0,
-            scrollActive: false,
             lastRefresh: new Date(),
             alert: "",
             scrollElement: document.querySelector(".main-col"),
@@ -147,7 +142,6 @@ export default {
         })
 
         this.scrollElement.addEventListener("scroll", this.handleScroll);
-        this.scrollElement.addEventListener("scrollend", this.handleScrollEnd);
         this.scrollElement.addEventListener("focus", this.checkRefreshEntries);
     }
 };

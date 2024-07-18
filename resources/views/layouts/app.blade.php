@@ -172,7 +172,7 @@
 
                 </div>
             </div>
-            <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-flex flex-column">
+            <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-grid">
                 <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
                     <div class="container-fluid">
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
