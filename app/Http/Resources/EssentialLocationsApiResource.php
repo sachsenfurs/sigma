@@ -16,8 +16,8 @@ class EssentialLocationsApiResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->description,
-            'name_en' => $this->description_en,
+            'name' => $this->name,
+            'name_en' => $this->name_en,
             'location_ids' => $this->render_ids,
             'description' => $this->essential_description,
             'description_en' => $this->essential_description_en,
