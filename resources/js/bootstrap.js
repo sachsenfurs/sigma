@@ -46,7 +46,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     document.querySelector("body").addEventListener("touchstart", function(event) {
         touchStart = event.touches[0];
     });
-    document.querySelector("main").addEventListener("touchstart", function(event) {
+    document.querySelector(".main-col").addEventListener("touchstart", function(event) {
         if(isNavVisible()) {
             hideNav();
             event.preventDefault();

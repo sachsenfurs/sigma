@@ -211,7 +211,7 @@
                     @endif
                     @yield('content')
                 </main>
-                <div class="container">
+                <div class="container align-content-end">
                     <x-footer.footer/>
                     <x-footer.credits-modal />
                 </div>

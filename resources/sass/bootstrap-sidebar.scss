@@ -10,11 +10,6 @@ html {
 main {
     display: flex;
     flex-wrap: nowrap;
-    //height: 100vh;
-    //height: -webkit-fill-available;
-    //max-height: 100vh;
-    //overflow-x: auto;
-    //overflow-y: hidden;
 }
 
 .b-example-divider {
@@ -114,7 +109,6 @@ main {
 }
 .navbar2 {
     z-index: 100;
-    //position: absolute !important;
     height: 100vh !important;
     overflow: auto;
     background: var(--bs-dark-bg-subtle);
@@ -145,8 +139,7 @@ body {
 }
 .main-col {
     background: var(--bs-dark);
-    height: 100vh;
-    overflow: auto;
+    min-height: 100dvh;
 }
 
 @include media-breakpoint-up(lg) {
@@ -174,7 +167,7 @@ body {
     }
     .navbar {
         position: fixed !important;
-        width: 100% !important;
+        width: 100vw !important;
         z-index: 1200;
         left: 0;
         top: 0;
@@ -184,9 +177,9 @@ body {
         clip-path: inset(0px -10px 0px 0px);
         height: 100%;
         z-index: 100;
-        //position: fixed;
-
+        position: fixed;
     }
+
     .navbar2-padding {
         padding-top: 5em;
         padding-bottom: 1em;
@@ -197,7 +190,6 @@ body {
     }
     main {
         margin-top: 3.6em;
-        //position: relative !important;
         width: 100vw;
     }
 }

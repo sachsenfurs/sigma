@@ -84,7 +84,6 @@ export default {
             let firstDayEvent = this.$refs[dateIndex][0];
             let top = firstDayEvent.nextElementSibling.offsetTop;
             let margin = (this.$refs['dayTabs'].offsetHeight*2)+35;
-            // this.scrollElement.scrollTo(0, top-margin-15);
             this.scrollElement.scrollTo({
                 top: top-margin-15,
                 left: 0,
@@ -97,7 +96,7 @@ export default {
             let scrollElement = this.scrollElement;
             this.$refs['entrySlot'].forEach(function(entry) {
                 let marginHeading = entry.$el.previousElementSibling?.offsetHeight;
-                if(scrollElement.scrollTop > entry.$el.offsetTop - margin - marginHeading) {
+                if(scrollElement.scrollTop ?? scrollElement.scrollY > entry.$el.offsetTop - margin - marginHeading) {
                     lastEl = entry.$el;
                 }
             });
@@ -126,7 +125,7 @@ export default {
             activeDayIndex: location.hash.replace("#day", "") || 0,
             lastRefresh: new Date(),
             alert: "",
-            scrollElement: document.querySelector(".main-col"),
+            scrollElement: window,
         };
     },
     mounted() {
