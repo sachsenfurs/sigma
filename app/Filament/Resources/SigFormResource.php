@@ -156,8 +156,8 @@ class SigFormResource extends Resource
                         ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
-                        ->afterStateUpdated(function($state, $record) {
-                            if($state != $record->slug)
+                        ->afterStateUpdated(function($state, ?Model $record) {
+                            if($record AND $state != $record?->slug)
                                 redirect(self::getUrl("edit", ['record' => $state]));
                         })
                         ->columnSpanFull(),
