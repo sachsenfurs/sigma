@@ -1,6 +1,26 @@
 import _ from 'lodash';
 window._ = _;
 
+import $ from 'jquery';
+window.$ = $;
+
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
+function defineJQueryPlugin(plugin) {
+    const name = plugin.NAME;
+    const JQUERY_NO_CONFLICT = $.fn[name];
+    $.fn[name] = plugin.jQueryInterface;
+    $.fn[name].Constructor = plugin;
+    $.fn[name].noConflict = () => {
+        $.fn[name] = JQUERY_NO_CONFLICT;
+        return plugin.jQueryInterface;
+    }
+}
+
+defineJQueryPlugin(bootstrap.Modal);
+defineJQueryPlugin(bootstrap.Tooltip);
+defineJQueryPlugin(bootstrap.Popover);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -9,8 +29,6 @@ window._ = _;
  */
 
 import axios from 'axios';
-import getDocumentElement from "@popperjs/core/lib/dom-utils/getDocumentElement.js";
-import {hide} from "@popperjs/core";
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
