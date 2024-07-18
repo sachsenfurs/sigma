@@ -298,6 +298,7 @@ namespace App\Models\Post{
  * @property-read int|null $channels_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\PostChannelMessage> $messages
  * @property-read int|null $messages_count
+ * @property-read mixed $text_localized
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
@@ -344,7 +345,6 @@ namespace App\Models\Post{
 /**
  * 
  *
- * @property int $id
  * @property int $post_id
  * @property int $post_channel_id
  * @property int $message_id
@@ -353,7 +353,6 @@ namespace App\Models\Post{
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage query()
- * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereMessageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostChannelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostId($value)
@@ -413,7 +412,10 @@ namespace App\Models{
  * @property-read int|null $forms_count
  * @property-read mixed $name_localized
  * @property-read mixed $name_localized_other
- * @property-read \App\Models\SigHost|null $sigHost
+ * @property-read mixed $primary_host
+ * @property-read mixed $public_hosts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
+ * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
  * @property-read mixed $timetable_count
@@ -476,12 +478,11 @@ namespace App\Models{
  * @property int $id
  * @property int $sig_form_id
  * @property int $user_id
- * @property int $approval
+ * @property \App\Enums\Approval $approval
  * @property string|null $rejection_reason
  * @property array|null $form_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Enums\Approval $approved
  * @property-read \App\Models\SigForm $sigForm
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newModelQuery()
@@ -680,8 +681,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name Internal name, used for internal automation (eg. 'signup')
- * @property string|null $description
- * @property string|null $description_en
+ * @property string $description
+ * @property string $description_en
  * @property string|null $icon
  * @property-read string $description_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
@@ -854,6 +855,8 @@ namespace App\Models{
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForm> $sigFilledForms
+ * @property-read int|null $sig_filled_forms_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
  * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
