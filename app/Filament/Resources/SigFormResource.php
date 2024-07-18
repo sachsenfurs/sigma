@@ -53,7 +53,7 @@ class SigFormResource extends Resource
                 self::getSlugFieldSet(),
                 self::getRolesFieldSet(),
                 self::getFormClosedFieldSet(),
-                self::getSigEventFieldSet(),
+                self::getSigEventsFieldSet(),
                 self::getFormDefinitionFieldSet(),
             ]);
     }
@@ -204,20 +204,20 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getSigEventFieldSet(): Forms\Components\Component {
+    private static function getSigEventsFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('assigned_sig')
                 ->label('Assigned SIG')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Select::make('sig_event_id')
+                    Forms\Components\Select::make('sig_events')
                         ->label('')
-                        ->relationship('sigEvent', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
+                        ->multiple()
+                        ->relationship('sigEvents', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
                             return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
                         })
                         ->searchable()
-                        ->preload(),
                 ])
                 ->columnSpanFull();
     }

@@ -32,7 +32,8 @@
                     </div>
                 </div>
         @endif
-        @if($form->sig_event_id)
+
+        @if($form->sigEvents)
             <div class="row justify-content-center mb-4">
                 <div class="col-md-6">
                     <div class="card">
@@ -40,18 +41,25 @@
                             <strong>SIG</strong>
                         </div>
                         <div class="card-body">
-                            @can("update", $form->sigEvent)
-                                <a href="{{ route('sigs.show', ['sig' => $form->sig_event_id]) }}">
-                                    {{ $form->sigEvent->name_localized }}
-                                </a>
-                            @else
-                                {{ $form->sigEvent->name_localized }}
-                            @endcan
+                            <ul>
+                                @foreach($form->sigEvents AS $sig)
+                                    <li>
+                                        @if($sig->timetableEntries->count() > 0)
+                                            <a href="{{ route("timetable-entry.show", $sig->timetableEntries->first()) }}">
+                                                {{ $sig->name_localized }}
+                                            </a>
+                                        @else
+                                            {{ $sig->name_localized }}
+                                        @endcan
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         @endif
+
         <div class="row justify-content-center">
             <div class="col-md-6">
                 @if(!$form->form_closed)

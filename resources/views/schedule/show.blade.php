@@ -66,10 +66,23 @@
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-12 text-center mb-2 mt-1">
-                <h2>{{ $entry->sigEvent->reg_possible ? __("Sign up") : __("Scheduled") }}</h2>
+        <div class="col-12 text-center mb-2 mt-4">
+            <h2>{{ $entry->sigEvent->reg_possible ? __("Sign up") : __("Scheduled") }}</h2>
+        </div>
+
+        @if($entry->sigEvent->forms->count() > 0)
+            <div class="alert alert-info mt-3">
+                <p>
+                    {{ __("There is a sign up form for this event:") }}
+                </p>
+                @foreach($entry->sigEvent->forms AS $form)
+                    <a href="{{ route("forms.show", $form) }}">
+                        <button type="button" class="btn btn-info">{{ $form->name_localized }}</button>
+                    </a>
+                @endforeach
             </div>
+        @endif
+        <div class="row mt-4">
 
             @forelse($entry->sigEvent->timetableEntries AS $e)
                 @if ($e->sigTimeslots->count() > 0)

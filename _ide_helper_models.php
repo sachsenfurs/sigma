@@ -345,6 +345,7 @@ namespace App\Models\Post{
 /**
  * 
  *
+ * @property int $id
  * @property int $post_id
  * @property int $post_channel_id
  * @property int $message_id
@@ -353,6 +354,7 @@ namespace App\Models\Post{
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage whereMessageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostChannelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannelMessage wherePostId($value)
@@ -508,13 +510,13 @@ namespace App\Models{
  * @property string $slug
  * @property string $name
  * @property string $name_en
- * @property int|null $sig_event_id
  * @property array|null $form_definition
  * @property int $form_closed
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $name_localized
- * @property-read \App\Models\SigEvent|null $sigEvent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForm> $sigFilledForms
  * @property-read int|null $sig_filled_forms_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $userRoles
@@ -528,7 +530,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereNameEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSigEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereUpdatedAt($value)
  */

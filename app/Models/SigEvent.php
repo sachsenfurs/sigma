@@ -125,7 +125,7 @@ class SigEvent extends Model
         });
     }
 
-    public function forms(): HasMany {
-        return $this->hasMany(SigForm::class);
+    public function forms(): BelongsToMany {
+        return $this->belongsToMany(SigForm::class);
     }
 }
