@@ -112,6 +112,8 @@ main {
     height: 100vh !important;
     overflow: auto;
     background: var(--bs-dark-bg-subtle);
+    position: sticky;
+    top: 0;
 }
 .navbar2-items {
     min-width: 18em;
@@ -177,7 +179,11 @@ body {
         clip-path: inset(0px -10px 0px 0px);
         height: 100%;
         z-index: 100;
-        position: fixed;
+        overflow-x: hidden;
+    }
+
+    .collapse.show + .main-col, .collapsing + .main-col {
+        overflow: hidden;
     }
 
     .navbar2-padding {

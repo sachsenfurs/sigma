@@ -76,6 +76,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     document.querySelector("body").addEventListener("touchmove", function (event) {
         if(touchStart === null)
             return;
+        if(window.innerWidth >= 992)
+            return;
 
         let touch = event.touches[0];
         if((touchStart.clientX - touch.clientX) > 45 && Math.abs(touchStart.clientY - touch.clientY) < 30)
