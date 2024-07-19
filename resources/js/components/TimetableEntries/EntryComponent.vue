@@ -34,7 +34,7 @@
                             {{ entry.sig_event.name_localized }}
                         </h1>
 
-                        <p v-if="sigHosts" class="card-text">
+                        <p v-if="sigHosts.length > 0" class="card-text">
                             <i class="bi bi-person-circle"></i>
                             {{ sigHosts.join(', ') }}
                         </p>
@@ -142,16 +142,7 @@ export default {
     },
     computed: {
         sigHosts() {
-            let filteredHosts = [];
-
-            for (let i of Object.keys(this.entry.sig_event.sig_hosts)) {
-                let host = this.entry.sig_event.sig_hosts[i];
-                if (!host.hide) {
-                    filteredHosts.push(host.name);
-                }
-            }
-
-            return filteredHosts;
+            return this.entry.sig_event.sig_hosts.filter(host => !host.hide).map(host => host.name);
         },
         eventRunning() {
             return !this.entry.cancelled && this.now >= new Date(this.entry.start) && !this.eventPassed;
