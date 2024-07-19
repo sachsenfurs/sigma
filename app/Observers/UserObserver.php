@@ -39,7 +39,7 @@ class UserObserver
                 return in_array($userGroup, $item);
             });
 
-            if ($userRole) {
+            if ($userRole AND !$user->roles->contains($userRole)) {
                 $user->roles()->attach($userRole);
                 $user->saveQuietly(); // save() würde in nem endlos loop enden... hab ich gehört... >.>
             }
