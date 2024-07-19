@@ -8,7 +8,7 @@ use App\Models\Ddas\ArtshowItem;
 class ArtshowController extends Controller
 {
     public function index() {
-        $this->authorize("viewAny", ArtshowItem::class);
+//        $this->authorize("viewAny", ArtshowItem::class);
         return view('ddas.artshow.index');
     }
 
