@@ -115,7 +115,7 @@
                         </ul>
 
                         @guest
-                            <a class="p-3 fs-5" href="/login">Login</a>
+                            <a class="p-3 fs-5" href="{{ route('oauthlogin_regsys') }}">Login</a>
                         @else
                             <div class="dropdown m-3">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
