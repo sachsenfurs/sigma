@@ -13,11 +13,11 @@
                             <a class="btn btn-success btn-lg" href="{{ route('oauthlogin_regsys') }}">
                                 {{ __('Login with your existing con-registration') }}
                             </a>
-                            <small class="d-flex w-100 justify-content-end mt-4">
-                                <a class="justify-content-end text-decoration-none"  href="{{ route('oauthlogin') }}">
-                                    {{ __('SF Staff-Login') }}
-                                </a>
-                            </small>
+{{--                            <small class="d-flex w-100 justify-content-end mt-4">--}}
+{{--                                <a class="justify-content-end text-decoration-none"  href="{{ route('oauthlogin') }}">--}}
+{{--                                    {{ __('SF Staff-Login') }}--}}
+{{--                                </a>--}}
+{{--                            </small>--}}
                             @if(\Illuminate\Support\Facades\App::environment("local"))
                                 <small class="d-flex w-100 justify-content-end mt-1">
                                     <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">
