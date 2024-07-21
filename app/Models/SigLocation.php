@@ -34,11 +34,6 @@ class SigLocation extends Model
         'description_localized',
     ];
 
-    protected $visible = [
-        'name_localized',
-        'description_localized',
-    ];
-
     public function sigEvents(): HasManyThrough {
         return $this->hasManyThrough(
             SigEvent::class,
