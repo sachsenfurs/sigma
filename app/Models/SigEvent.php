@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\App;
 
 #[ObservedBy(SigEventObserver::class)]
@@ -28,12 +29,7 @@ class SigEvent extends Model
 
     protected $appends = [
         'name_localized',
-        'description_localized'
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at'
+        'description_localized',
     ];
 
     protected $with = [
@@ -127,5 +123,9 @@ class SigEvent extends Model
 
     public function forms(): BelongsToMany {
         return $this->belongsToMany(SigForm::class);
+    }
+
+    public function sigTimeslots(): HasManyThrough {
+        return $this->hasManyThrough(SigTimeslot::class, TimetableEntry::class);
     }
 }

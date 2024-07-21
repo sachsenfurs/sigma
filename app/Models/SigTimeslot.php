@@ -13,6 +13,8 @@ class SigTimeslot extends Model
     protected $casts = [
         'reg_start' => 'datetime',
         'reg_end' => 'datetime',
+        'slot_start' => 'datetime',
+        'slot_end' => 'datetime',
     ];
 
     public function timetableEntry(): BelongsTo {

@@ -4,6 +4,12 @@
 @section('content')
     <div class="container">
 
+        @if(app(\App\Settings\AppSettings::class)->sig_application_deadline->isBefore(now()))
+            <div class="alert alert-warning">
+                {{ __("SIG application deadline was: :date. We cannot guarantee that your application will still be considered!", ['date' => app(\App\Settings\AppSettings::class)->sig_application_deadline->translatedFormat("l, d.m.Y")]) }}
+            </div>
+        @endif
+
         <h2 class="py-2">{{ __('SIG Sign Up') }}</h2>
 
         @if(auth()->user()->sigHosts->count() == 0)

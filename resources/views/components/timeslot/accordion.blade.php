@@ -8,10 +8,6 @@
                <x-timeslot.accordion-button :entry="$entry">
                    {{ $entry->getAvailableSlotCount() }} {{ __("Slots available") }}
                </x-timeslot.accordion-button>
-            @elseif($entry->end->addHours(12)->isAfter(now()))
-                <x-timeslot.accordion-button :entry="$entry">
-                    {{ __("Event already took place") }}
-                </x-timeslot.accordion-button>
             @else
                 <x-timeslot.accordion-button :entry="$entry">
                     {{ __("Event already took place") }}
@@ -24,7 +20,7 @@
                 @foreach($entry->sigTimeslots as $timeslot)
                     <div @class(['row mb-3 mb-md-0 border p-1', 'bg-secondary text-white' => $timeslot->max_users <= $timeslot->sigAttendees->count()])>
                         <div class="col-lg-4 col-6 align-self-center p-1 my-1">
-                            {{ \Illuminate\Support\Carbon::parse($timeslot->slot_start)->format("H:i") }} - {{ \Illuminate\Support\Carbon::parse($timeslot->slot_end)->format("H:i")  }}
+                            {{ $timeslot->slot_start->format("H:i") }} - {{ $timeslot->slot_end->format("H:i")  }}
                         </div>
                         <div class="col-lg-4 col-6 align-self-center p-1 my-1">
                             <span>{{ $timeslot->sigAttendees->count() }}/{{$timeslot->max_users}}</span>
@@ -35,27 +31,24 @@
                                 {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}
                             @endif
                             </div>
-
-                        @if ($timeslot->reg_start?->isAfter(now()))
-                            <x-timeslot.button :disabled="true" class="btn-warning">
-                                {{ __("Registration opens") }}: {{ $timeslot->reg_start->diffForHumans() }}
-                            </x-timeslot.button>
-                        @elseif ($timeslot->reg_end?->isBefore(now()))
-                            <x-timeslot.button :disabled="true" class="btn-secondary">
-                                {{ __("Expired") }}
-                            </x-timeslot.button>
-                        @else
-                            @if ($timeslot->max_users > $timeslot->sigAttendees->count())
-                                @can("update", $timeslot)
-                                    <x-timeslot.button
-                                        class="btn-primary"
-                                        onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
-                                    >
-                                        {{ __("Sign up someone") }}
-                                    </x-timeslot.button>
-                                @else
+                        @if($timeslot->self_register)
+                            @if ($timeslot->reg_start?->isAfter(now()))
+                                <x-timeslot.button :disabled="true" class="btn-warning">
+                                    {{ __("Registration opens") }}: {{ $timeslot->reg_start->diffForHumans() }}
+                                </x-timeslot.button>
+                            @elseif ($timeslot->reg_end?->isBefore(now()))
+                                <x-timeslot.button :disabled="true" class="btn-secondary">
+                                    {{ __("Expired") }}
+                                </x-timeslot.button>
+                            @else
+                                @if ($timeslot->max_users > $timeslot->sigAttendees->count())
                                     @if (auth()->user()?->sigTimeslots?->find($timeslot))
-                                        <x-timeslot.button :disabled="true" class="btn-success">
+                                        <x-timeslot.button
+                                            class="btn-success"
+                                            onclick="$('#registerModal').modal('show')
+                                            .find('#registerForm')
+                                            .attr('action', '{{route('registration.cancel', $timeslot)}}')"
+                                        >
                                             {{ __("Already signed up") }}
                                         </x-timeslot.button>
                                     @elseif ($timeslot->timetableEntry->maxUserRegsExeeded())
@@ -65,17 +58,22 @@
                                     @else
                                         <x-timeslot.button
                                                 class="btn-primary"
-                                                onclick="$('#registerModal').modal('show'); $('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
+                                                onclick="$('#registerModal').modal('show')
+                                                .find('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
                                         >
                                             {{ __("Sign up") }}
                                         </x-timeslot.button>
                                     @endif
-                                @endcan
-                            @else
-                                <x-timeslot.button :disabled="true" class="btn-secondary">
-                                    {{ __("Sold out") }}
-                                </x-timeslot.button>
+                                @else
+                                    <x-timeslot.button :disabled="true" class="btn-secondary">
+                                        {{ __("Sold out") }}
+                                    </x-timeslot.button>
+                                @endif
                             @endif
+                        @else
+                            <x-timeslot.button>
+                                {{ __("Please register via Con-Ops") }}
+                            </x-timeslot.button>
                         @endif
                     </div>
                 @endforeach

@@ -40,7 +40,7 @@
                         </p>
                         <p>
                             <i class="bi bi-geo-alt"></i>
-                            {{ entry.sig_location.name }}
+                            {{ entry.sig_location.name_localized }}
                             <span v-if="entry.hasLocationChanged" class="badge bg-danger">{{  $t("Changed") }}</span>
                         </p>
 
@@ -118,7 +118,7 @@ export default {
                 name_localized: "",
                 sig_hosts: [],
                 sig_location: {
-                    name: "",
+                    name_localized: "",
                 },
                 sig_tags: {
                     description_localized: "",

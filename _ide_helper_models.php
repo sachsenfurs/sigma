@@ -420,6 +420,8 @@ namespace App\Models{
  * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
+ * @property-read int|null $sig_timeslots_count
  * @property-read mixed $timetable_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
@@ -707,14 +709,15 @@ namespace App\Models{
  * @property int $id
  * @property int $timetable_entry_id
  * @property int $max_users
- * @property string $slot_start
- * @property string $slot_end
+ * @property \Illuminate\Support\Carbon $slot_start
+ * @property \Illuminate\Support\Carbon $slot_end
  * @property \Illuminate\Support\Carbon|null $reg_start
  * @property \Illuminate\Support\Carbon|null $reg_end
  * @property string|null $description
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $self_register
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $sigAttendees
  * @property-read int|null $sig_attendees_count
  * @property-read \App\Models\TimetableEntry $timetableEntry
@@ -728,6 +731,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSelfRegister($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereTimetableEntryId($value)

@@ -26,11 +26,8 @@ class SigHost extends Model
         'hide' => "boolean",
     ];
 
-    protected $visible = [
-        'id',
-        'name',
-        'description',
-        'hide',
+    protected $appends = [
+        'avatar',
     ];
 
     protected $with = [

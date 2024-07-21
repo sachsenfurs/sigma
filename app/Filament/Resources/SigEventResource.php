@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -12,9 +13,12 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +53,7 @@ class SigEventResource extends Resource
             ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
             ->persistSortInSession()
+            ->persistFiltersInSession()
             ->filters([
                 Tables\Filters\SelectFilter::make("approval")
                     ->label("Approval")
@@ -57,6 +62,17 @@ class SigEventResource extends Resource
                 Tables\Filters\SelectFilter::make("tags")
                     ->relationship("sigTags", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
+                Tables\Filters\Filter::make("Timeslots")
+                    ->query(fn(Builder $query) => $query->has("sigTimeslots", ">", 0)),
+                Tables\Filters\Filter::make("Text Missing")
+                    ->translateLabel()
+                    ->query(fn(Builder $query) => $query
+                        ->where(function(Builder $query) {
+                            $query->where("description", "")
+                                ->orWhere("description_en", "")
+                                ->orWhereNull(["description", "description_en"]);
+                        })
+                    )
             ])
             ->recordUrl(fn(Model $record) =>
                 auth()->user()->can("update", $record)
@@ -90,14 +106,19 @@ class SigEventResource extends Resource
     public static function getRelations(): array {
         return [
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
+            SigTimeslotsRelationManager::class,
         ];
     }
 
     private static function getTableColumns(): array {
         return [
             IconColumn::make("approval")
-                 ->translateLabel()
-                 ->width(1),
+                ->translateLabel()
+                ->width(1)
+                ->action(
+                    Tables\Actions\EditAction::make()
+                        ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ),
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
@@ -132,6 +153,14 @@ class SigEventResource extends Resource
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => filled($record->description_en)),
+            Tables\Columns\TextColumn::make("sig_timeslots_count")
+                ->label(__("Time Slots"))
+                ->translateLabel()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->counts("sigTimeslots")
+                ->badge()
+                ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray),
         ];
     }
 
@@ -146,9 +175,7 @@ class SigEventResource extends Resource
                     ->translateLabel()
                     ->maxLength(255)
                     ->required()
-                    ->suffixAction(
-                        TranslateAction::translateToPrimary('name_en', 'name')
-                    )
+                    ->suffixAction(fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('name_en', 'name') : null)
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
@@ -158,7 +185,7 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->required()
                     ->suffixAction(
-                        TranslateAction::translateToSecondary('name', 'name_en')
+                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('name', 'name_en') : null
                     )
                     ->maxLength(255)
                     ->inlineLabel()
@@ -301,7 +328,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            TranslateAction::translateToPrimary('description_en', 'description')
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description') : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                     Forms\Components\MarkdownEditor::make('description_en')
@@ -309,7 +336,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            TranslateAction::translateToSecondary('description', 'description_en')
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en') : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                 ]);

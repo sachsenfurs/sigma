@@ -6,11 +6,13 @@ use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
+use Closure;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class TimetableEntriesRelationManager extends RelationManager
 {
@@ -40,6 +42,7 @@ class TimetableEntriesRelationManager extends RelationManager
     public function table(Table $table): Table {
         $table = TimetableEntryResource::table($table)
             ->headerActions($this->getTableHeaderActions())
+            ->recordUrl(fn($record) => Gate::allows("edit", $record) ? TimetableEntryResource::getUrl("edit", ['record' => $record]) : null)
             ->actions($this->getTableEntryActions());
 
         $cols = $table->getColumns();
@@ -72,7 +75,7 @@ class TimetableEntriesRelationManager extends RelationManager
     protected function getTableEntryActions(): array {
         return [
             Tables\Actions\ViewAction::make()
-                 ->infolist(fn($record) => (new Infolist())->schema(ViewSigEvent::getInfolistSchema())->record($record->sigEvent))
+                ->infolist(fn($record) => (new Infolist())->schema(ViewSigEvent::getInfolistSchema())->record($record->sigEvent))
                 ->hidden(fn(TimetableEntriesRelationManager $livewire) => $livewire->pageClass == ViewSigEvent::class),
             Tables\Actions\EditAction::make()
                 ->form(TimetableEntryResource\Pages\EditTimetableEntry::getSchema())

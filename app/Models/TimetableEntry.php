@@ -41,7 +41,8 @@ class TimetableEntry extends Model
         'created_at',
         'updated_at',
         'replaced_by_id',
-        'parentEntry'
+        'parentEntry',
+        'favorites'
     ];
 
     protected $with = [

@@ -145,6 +145,7 @@
     "Registration": "Registrierung",
     "Allow Registrations for this Event": "Registrierungen für dieses Event erlauben",
     "Registrations per day": "Registrierungen pro Tag",
+    "Would you like to register for this event?": "Möchtest du dich für dieses Event registrieren?",
     "Other": "Sonstiges",
     "Hide Event on Schedule": "Nicht auf Programmplan zeigen (Internes Event)",
     "Define time spans": "Zeiten festlegen",
@@ -169,6 +170,9 @@
     "Functional Description (English)": "Funktionale Beschreibung (Englisch)",
     "Physical Information": "Physische Informationen",
     "Location Details": "Details zur Räumlichkeit",
+    "Attendee Count": "Teilnehmeranzahl",
+    "SIG applications are no longer possible": "SIG Anmeldungen sind nicht mehr möglich",
+    "SIG application deadline was: :date. We cannot guarantee that your application will still be considered!": "Anmeldeschluss für SIG Anmeldungen war am :date. Wir können nicht garantieren, dass deine Anmeldung noch berücksichtigt wird!",
 
     "Form": "Formular",
     "Forms": "Formulare",
@@ -233,6 +237,7 @@
     "Max. Attendees": "Max. Teilnehmer",
     "Update Time Slot": "Timeslot aktualisieren",
     "Notes": "Anmerkungen",
+    "Add": "Hinzufügen",
 
     "Event Cancelled": "Event Abgesagt",
     "Internal Event": "Internes Event",
@@ -246,6 +251,7 @@
     "Delete Entry": "Eintrag löschen",
     "Entries": "Einträge",
     "Time Slot": "Timeslot",
+    "Time Slots": "Timeslots",
     "Time": "Uhrzeit",
     "Create new time slot": "Neuen Timeslot erstellen",
     "Create Time Slot": "Timeslot erstellen",
@@ -260,6 +266,7 @@
     "Add Item": "Werk einreichen",
     "Item List": "Gegenstandsliste",
     "Add Time Slot": "Timeslot hinzufügen",
+    "Timeslot Count": "Anzahl Timeslots",
 
     "Edit Role :role": ":role bearbeiten",
     "Title": "Titel",
@@ -335,6 +342,10 @@
     "Sold out": "Ausgebucht",
     "Show Event": "Zum Event",
     "Sign up someone": "Melde jemanden an",
+    "Already signed up": "Bereits angemeldet",
+    "Registered at": "Angemeldet am",
+    "Registration opens": "Registrierung öffnet",
+    "Please register via Con-Ops": "Bitte registriere dich über die Leitstelle",
 
     "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)",
     "We have enhanced our schedule view": "Wir haben unsere Programmplan-Ansicht überarbeitet!",

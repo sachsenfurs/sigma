@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditSigEvent extends EditRecord
 {
@@ -18,10 +19,14 @@ class EditSigEvent extends EditRecord
         ];
     }
 
-    protected function getFooterWidgets(): array
-    {
-        return [
-            //SigEventResource\Widgets\TimetableEntriesTable::class,
-        ];
+    public function getHeading(): string|Htmlable {
+        return $this->record->name_localized;
+    }
+
+    /**
+     * @return string|Htmlable
+     */
+    public function getTitle(): string|Htmlable {
+        return __("SIG") . " - " . $this->record->name_localized . " - " . __("Edit");
     }
 }

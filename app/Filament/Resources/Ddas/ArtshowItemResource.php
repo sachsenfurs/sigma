@@ -69,14 +69,14 @@ class ArtshowItemResource extends Resource
                                 ->translateLabel()
                                 ->maxLength(65535)
                                 ->hintAction(
-                                    TranslateAction::translateToPrimary('description_en', 'description')
+                                    fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description') : null
                                 ),
                             Forms\Components\RichEditor::make('description_en')
                                 ->label('Description (English)')
                                 ->translateLabel()
                                 ->maxLength(65535)
                                 ->hintAction(
-                                    TranslateAction::translateToSecondary('description', 'description_en')
+                                    fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en') : null
                                 ),
                      ]),
                 Forms\Components\TextInput::make('starting_bid')

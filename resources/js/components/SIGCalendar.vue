@@ -17,7 +17,7 @@ export default {
     },
     methods: {
         async getEvents() {
-            const res = await fetch('/calendar/events', {
+            const res = await fetch('/schedule/index', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,19 +34,10 @@ export default {
                     'Accept': 'application/json'
                 }
             })
-                return await res.json();
+            return await res.json();
         },
         handleEventClick: function(event) {
-            const eventId = event.event.id;
-            const eventTitle = event.event.title;
-            const eventDescription = event.event.extendedProps.sig_event.description_localized;
-            this.currentEvent = {
-                id: eventId,
-                sig_event: {
-                    name_localized: eventTitle,
-                    description_localized: eventDescription
-                }
-            };
+            this.currentEvent = event.event.extendedProps;
             const modal = new Modal('#eventInfo');
             modal.show();
         },
@@ -84,7 +75,6 @@ export default {
                 scrollTimeReset: false,
                 stickyHeaderDates: true,
                 dayMinWidth: 150,
-                height: '80vh', // So that the calendar is not too big
                 stickyFooterScrollbar: true,
                 resources: [],
                 events: [],
@@ -108,7 +98,20 @@ export default {
     },
     async mounted() {
         const calResources = await this.getResources();
+        calResources.map(function(res) {
+            res.title           = res.name_localized;
+            if(res.description_localized != res.name_localized)
+                res.title       = res.name_localized + " - " + res.description_localized;
+
+            return res;
+        });
         const calEvents = await this.getEvents();
+        calEvents.map(function(event) {
+            event.resourceId    = event.sig_location.id;
+            event.title         = event.sig_event.name_localized;
+            return event;
+        });
+
         this.calendarOptions.resources = calResources;
         this.calendarOptions.events = calEvents;
 
@@ -118,8 +121,7 @@ export default {
         // Events come back ordered by start date
         this.calendarOptions.validRange.start = startDate;
         this.calendarOptions.validRange.end = endDate;
-
-        this.calendarOptions.initialDate = calEvents[0].start;
+        this.$refs.fullCalendar.getApi().gotoDate(new Date(calEvents[0].start));
 
         const daysInMSecs = 1000 * 60 * 60 * 24;
         const days = Math.round((endDate - startDate) / daysInMSecs);
@@ -142,10 +144,8 @@ export default {
 }
 </script>
 <template>
-    <div class="container-lg">
-        <FullCalendar ref="fullCalendar" :options="calendarOptions" />
-        <entry-modal :entry="currentEvent" :id="'eventInfo'" />
-    </div>
+    <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+    <entry-modal :entry="currentEvent" :id="'eventInfo'" />
 </template>
 
 <style>
