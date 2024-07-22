@@ -57,7 +57,6 @@ class TranslateAction extends ServiceAction
                          $toLang
                      )
                  );
-             })
-            ->authorize("update");
+             });
     }
 }
