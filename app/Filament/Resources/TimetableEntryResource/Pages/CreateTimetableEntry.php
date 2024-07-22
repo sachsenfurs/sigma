@@ -4,7 +4,7 @@ namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
-use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
+use App\Models\SigEvent;
 use App\Models\TimetableEntry;
 use Carbon\Carbon;
 use Filament\Forms\Components\Actions\Action;
@@ -104,8 +104,9 @@ class CreateTimetableEntry extends CreateRecord
                         ->seconds(false)
                         ->columns(1)
                         ->live()
-                        ->afterStateUpdated(function(Set $set, $state, ?Model $record) {
-                            if(filled($state) AND $record) {
+                        ->afterStateUpdated(function(Set $set, $state, Get $get) {
+                            $record = SigEvent::find($get('../../sig_event_id'));
+                            if(filled($state)) {
                                 $set('end', Carbon::parse($state)->addMinutes($record?->duration ?? 60)->toDateTimeLocalString());
                             }
                         })

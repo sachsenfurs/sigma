@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Pages;
-use App\Filament\Resources\TimetableEntryResource\Widgets\TimeslotTable;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Forms;
@@ -17,7 +16,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 class TimetableEntryResource extends Resource
 {
@@ -76,7 +74,7 @@ class TimetableEntryResource extends Resource
                 Group::make('start')
                     ->label('')
                     ->collapsible()
-                    ->getTitleFromRecordUsing(fn (Model $record) => Str::upper($record->start->dayName) . ', ' . $record->start->format('d.m.Y'))
+                    ->date()
             )
             ->filters([
                 self::getLocationFilter(),
@@ -102,12 +100,6 @@ class TimetableEntryResource extends Resource
             'index' => Pages\ListTimetableEntries::route('/'),
             'create' => Pages\CreateTimetableEntry::route('/create'),
             'edit' => Pages\EditTimetableEntry::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getWidgets(): array {
-        return [
-            TimeslotTable::class,
         ];
     }
 
@@ -144,14 +136,15 @@ class TimetableEntryResource extends Resource
                 ->label('Event')
                 ->translateLabel()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('sigEvent.sigHost.name')
+            Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
                  ->label('Host')
                  ->translateLabel()
                  ->searchable()
-                 ->formatStateUsing(function (Model $record) {
-                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
-                     return $record->sigEvent->sigHost->name . $regNr;
-                 }),
+//                 ->formatStateUsing(function (Model $record) {
+//                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
+//                     return $record->sigEvent->sigHost->name . $regNr;
+//                 })
+            ,
             Tables\Columns\TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')
@@ -160,6 +153,10 @@ class TimetableEntryResource extends Resource
                 ->label('Languages')
                 ->translateLabel()
                 ->view('filament.tables.columns.sig-event.flag-icon'),
+            Tables\Columns\TextColumn::make("sig_timeslots_count")
+                ->label("Timeslot Count")
+                ->translateLabel()
+                ->counts("sigTimeslots"),
         ];
     }
 
@@ -192,9 +189,9 @@ class TimetableEntryResource extends Resource
             ->translateLabel()
             ->autofocus(fn($state) => $state == null)
             ->model(TimetableEntry::class)
-            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHost'))
+            ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHosts'))
             ->getOptionLabelFromRecordUsing(function (Model $record) {
-                return $record->name . ' - ' . $record->sigHost->name;
+                return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
             })
             ->live()
             ->hintAction(

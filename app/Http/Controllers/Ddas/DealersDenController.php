@@ -8,7 +8,7 @@ use App\Models\Ddas\Dealer;
 class DealersDenController extends Controller
 {
     public function index() {
-        $this->authorize("viewAny", Dealer::class);
+//        $this->authorize("viewAny", Dealer::class);
 
         return view('ddas.dealers.index');
     }

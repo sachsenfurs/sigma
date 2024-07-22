@@ -61,6 +61,15 @@ class AppSettingsPage extends SettingsPage
                             ->translateLabel()
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                        Forms\Components\DateTimePicker::make("sig_application_deadline")
+                            ->label("SIG Application Deadline")
+                            ->translateLabel()
+                            ->seconds(false)
+                            ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                        Forms\Components\Toggle::make("accept_sigs_after_deadline")
+                            ->label("Accept SIG applications after deadline")
+                            ->translateLabel()
+                            ->inline(false),
                         Forms\Components\Fieldset::make("api_endpoints")
                             ->label("API Endpoints")
                             ->translateLabel()

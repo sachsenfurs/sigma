@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EssentialLocationsApiResource;
-use App\Http\Resources\EventApiResource;
-use App\Http\Resources\LocationApiResource;
-use App\Http\Resources\SocialApiResource;
-use App\Models\Info\Enums\ShowMode;
+use App\Http\Resources\Api\EssentialLocationsApiResource;
+use App\Http\Resources\Api\EventApiResource;
+use App\Http\Resources\Api\LocationApiResource;
+use App\Http\Resources\Api\SocialApiResource;
 use App\Models\Info\Social;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;

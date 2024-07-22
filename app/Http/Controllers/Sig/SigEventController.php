@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
 use App\Models\SigEvent;
+use App\Models\SigHost;
+use App\Settings\AppSettings;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +13,9 @@ class SigEventController extends Controller
 {
 
     public function create() {
+        if(app(AppSettings::class)->sig_application_deadline->isBefore(now()) && !app(AppSettings::class)->accept_sigs_after_deadline) {
+            return redirect()->back()->withError(__("SIG applications are no longer possible"));
+        }
         return view("sigs.create");
     }
 
@@ -33,8 +38,7 @@ class SigEventController extends Controller
             ],
         ]);
 
-        $sigEvent = new SigEvent($validated);
-        $sigEvent->save();
+        SigHost::find($request->get("sig_host_id"))->sigEvents()->create($validated);
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));
     }

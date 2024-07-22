@@ -24,7 +24,12 @@ class FilamentFullCalendarProvider {
               ])
               ->config([
                   'initialView' => "resourceTimeGridDay",
-                  'resources' => SigLocation::select(["id", "name AS title"])->used()->get()->toArray(),
+                  'resources' => SigLocation::used()->get()->map(function($l) {
+                      $l->title = $l->description_localized;
+//                      if($l->description != $l->name)
+//                          $l->title .= " (" . $l->description_localized . ")";
+                      return $l;
+                  })->toArray(),
                   'headerToolbar' => [
                       'left' => 'prev,next,today',
                       'center' => 'title',

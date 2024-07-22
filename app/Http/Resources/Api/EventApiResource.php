@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Api;
 
 use App\Models\TimetableEntry;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class EventApiResource extends JsonResource
             'id'                    => $this->id,
             'name'                  => $this->sigEvent->name,
             'name_en'               => $this->sigEvent->name_en,
-            'host'                  => $this->sigEvent->sigHost->hide ? false : $this->sigEvent->sigHost,
+            'hosts'                 => $this->sigEvent->sigHosts,
             'start'                 => Carbon::parse($this->start)->toW3cString(),
             'end'                   => Carbon::parse($this->end)->toW3cString(),
             'description'           => $this->sigEvent->description,

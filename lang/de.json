@@ -8,7 +8,9 @@
     "Attendees": "Teilnehmer",
     "Attendee": "Teilnehmer",
     "Favorites": "Favoriten",
-
+    "Home": "Startseite",
+    "Announcements": "Ankündigungen",
+    "Nothing has been announced yet": "Noch keine Ankündigungen vorhanden",
     "Administration": "Administration",
     "Manage Event Schedule": "Programmplan bearbeiten",
     "Manage Events": "Events verwalten",
@@ -105,12 +107,18 @@
 
     "Welcome to the SIG-Manager, here you can:": "Herzlich Willkommen beim SIG-Manager, hier kannst du:",
     "Access the event schedule": "Den Programmplan abrufen",
+    "View our schedule and don't miss anything!": "Schau dir unseren Programmplan an, um nichts zu verpassen!",
     "View Schedule": "Zum Programmplan",
-    "Sign up for specific SIGs": "Dich für bestimmte SIGs anmelden",
+    "Submit a new SIG or register for specific events during the convetion": "Melde neue SIGs an oder registriere dich für vorhandene",
     "Program planning": "Programmplanung",
     "Manage your own SIGs": "Deine eigenen SIGs verwalten",
     "Set up reminder Notifications": "Erinnerungen für SIGs einrichten",
     "Login with your existing con-registration": "Melde dich mit deinem Account aus dem Regsystem an",
+    "Submit items for the art show and auction": "Reiche Gegenstände für die Art Show oder Auktion ein",
+    "View and submit bids for all art show items": "Durchstöbere unsere Art Show und biete für die Auktion",
+    "Sign up and manage your Dealer's Den application": "Melde dich für den Dealers Den an und verwalte deine Anmeldung",
+    "List all attending dealers": "Sieh dir unsere Künstler bzw. Händler an",
+    "Have you lost something at the venue?": "Hast du während der Veranstaltung etwas verloren oder gefunden?",
 
     "View": "Anzeigen",
     "Edit": "Bearbeiten",
@@ -138,6 +146,7 @@
     "Registration": "Registrierung",
     "Allow Registrations for this Event": "Registrierungen für dieses Event erlauben",
     "Registrations per day": "Registrierungen pro Tag",
+    "Would you like to register for this event?": "Möchtest du dich für dieses Event registrieren?",
     "Other": "Sonstiges",
     "Hide Event on Schedule": "Nicht auf Programmplan zeigen (Internes Event)",
     "Define time spans": "Zeiten festlegen",
@@ -161,6 +170,10 @@
     "Functional Description (\"Main Stage\", ..)": "Funktionale Beschreibung (\"Main Stage\", ..)",
     "Functional Description (English)": "Funktionale Beschreibung (Englisch)",
     "Physical Information": "Physische Informationen",
+    "Location Details": "Details zur Räumlichkeit",
+    "Attendee Count": "Teilnehmeranzahl",
+    "SIG applications are no longer possible": "SIG Anmeldungen sind nicht mehr möglich",
+    "SIG application deadline was: :date. We cannot guarantee that your application will still be considered!": "Anmeldeschluss für SIG Anmeldungen war am :date. Wir können nicht garantieren, dass deine Anmeldung noch berücksichtigt wird!",
 
     "Form": "Formular",
     "Forms": "Formulare",
@@ -225,6 +238,7 @@
     "Max. Attendees": "Max. Teilnehmer",
     "Update Time Slot": "Timeslot aktualisieren",
     "Notes": "Anmerkungen",
+    "Add": "Hinzufügen",
 
     "Event Cancelled": "Event Abgesagt",
     "Internal Event": "Internes Event",
@@ -238,6 +252,7 @@
     "Delete Entry": "Eintrag löschen",
     "Entries": "Einträge",
     "Time Slot": "Timeslot",
+    "Time Slots": "Timeslots",
     "Time": "Uhrzeit",
     "Create new time slot": "Neuen Timeslot erstellen",
     "Create Time Slot": "Timeslot erstellen",
@@ -252,6 +267,7 @@
     "Add Item": "Werk einreichen",
     "Item List": "Gegenstandsliste",
     "Add Time Slot": "Timeslot hinzufügen",
+    "Timeslot Count": "Anzahl Timeslots",
 
     "Edit Role :role": ":role bearbeiten",
     "Title": "Titel",
@@ -322,6 +338,10 @@
     "Sold out": "Ausgebucht",
     "Show Event": "Zum Event",
     "Sign up someone": "Melde jemanden an",
+    "Already signed up": "Bereits angemeldet",
+    "Registered at": "Angemeldet am",
+    "Registration opens": "Registrierung öffnet",
+    "Please register via Con-Ops": "Bitte registriere dich über die Leitstelle",
 
     "Login not available yet! Please try again in a few days :)": "Login noch nicht verfügbar! Bitte versuche es in wenigen Tagen erneut! :)",
     "We have enhanced our schedule view": "Wir haben unsere Programmplan-Ansicht überarbeitet!",
@@ -346,7 +366,6 @@
 
     "Art Show Item Sign Up": "Art Show Anmeldung",
     "Art Show Overview": "Art Show Übersicht",
-    "tem List": "Gegenstandsliste",
     "Item": "Gegenstand",
     "Items": "Gegenstände",
     "Art Show Artist": "Art Show Künstler",
@@ -388,7 +407,7 @@
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",
-    "Dealers' Den Sign Up": "Dealers Den Anmeldung",
+    "Dealer's Den Sign Up": "Dealers Den Anmeldung",
     "Dealer's Den Overview": "Dealers Den Übersicht",
     "Dealer List": "Händlerliste",
     "Dealer Logo": "Händler-Logo",
@@ -413,6 +432,7 @@
     "This field is overwritten with every user logon": "Dieses Feld wird bei jeder Anmeldung überschrieben",
     "Leave Admin Interface": "Administration verlassen",
     "Sign out": "Abmelden",
+    "Set Location": "Raum festlegen",
 
     "The Schedule is not published yet": "Der Programmplan wurde noch nicht veröffentlicht",
     "Dealers are not published yet": "Die Liste der Händler wurde noch nicht veröffentlicht",
@@ -501,5 +521,7 @@
     "post": "Post",
     "posts": "Posts",
     "New Post": "Neuer Post",
-    "Text (English)": "Text (Englisch)"
+    "Text (English)": "Text (Englisch)",
+    "You have to be logged in": "Du musst eingeloggt sein!",
+    "There is a sign up form for this event:": "Es gibt ein Anmeldeformular für dieses Event:"
 }

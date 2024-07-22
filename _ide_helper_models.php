@@ -77,6 +77,7 @@ namespace App\Models\Ddas{
  * @property string|null $additional_info only visible for adminstration/auctioner
  * @property string|null $image
  * @property bool $auction
+ * @property int $locked
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property bool $sold
  * @property bool $paid
@@ -104,6 +105,7 @@ namespace App\Models\Ddas{
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereLocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArtshowItem whereSold($value)
@@ -296,6 +298,7 @@ namespace App\Models\Post{
  * @property-read int|null $channels_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\PostChannelMessage> $messages
  * @property-read int|null $messages_count
+ * @property-read mixed $text_localized
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
@@ -411,9 +414,14 @@ namespace App\Models{
  * @property-read int|null $forms_count
  * @property-read mixed $name_localized
  * @property-read mixed $name_localized_other
- * @property-read \App\Models\SigHost|null $sigHost
+ * @property-read mixed $primary_host
+ * @property-read mixed $public_hosts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
+ * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTag> $sigTags
  * @property-read int|null $sig_tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots
+ * @property-read int|null $sig_timeslots_count
  * @property-read mixed $timetable_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimetableEntry> $timetableEntries
  * @property-read int|null $timetable_entries_count
@@ -474,7 +482,7 @@ namespace App\Models{
  * @property int $id
  * @property int $sig_form_id
  * @property int $user_id
- * @property int $approved
+ * @property \App\Enums\Approval $approval
  * @property string|null $rejection_reason
  * @property array|null $form_data
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -484,7 +492,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm query()
- * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereFormData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigFilledForm whereId($value)
@@ -504,13 +512,13 @@ namespace App\Models{
  * @property string $slug
  * @property string $name
  * @property string $name_en
- * @property int|null $sig_event_id
  * @property array|null $form_definition
  * @property int $form_closed
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $name_localized
- * @property-read \App\Models\SigEvent|null $sigEvent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForm> $sigFilledForms
  * @property-read int|null $sig_filled_forms_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $userRoles
@@ -524,7 +532,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereNameEn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSigEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigForm whereUpdatedAt($value)
  */
@@ -609,6 +616,8 @@ namespace App\Models{
  * @property bool $show_default Show in calendar view (resource view) by default?
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\Dealer> $dealers
  * @property-read int|null $dealers_count
+ * @property-read mixed $description_localized
+ * @property-read mixed $name_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -675,12 +684,12 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name Internal name, used for internal automation (eg. 'signup')
- * @property string|null $description
- * @property string|null $description_en
+ * @property string $description
+ * @property string $description_en
  * @property string|null $icon
  * @property-read string $description_localized
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvent
- * @property-read int|null $sig_event_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
+ * @property-read int|null $sig_events_count
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SigTag query()
@@ -700,14 +709,15 @@ namespace App\Models{
  * @property int $id
  * @property int $timetable_entry_id
  * @property int $max_users
- * @property string $slot_start
- * @property string $slot_end
+ * @property \Illuminate\Support\Carbon $slot_start
+ * @property \Illuminate\Support\Carbon $slot_end
  * @property \Illuminate\Support\Carbon|null $reg_start
  * @property \Illuminate\Support\Carbon|null $reg_end
  * @property string|null $description
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $self_register
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigAttendee> $sigAttendees
  * @property-read int|null $sig_attendees_count
  * @property-read \App\Models\TimetableEntry $timetableEntry
@@ -721,6 +731,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereRegStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSelfRegister($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereSlotStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigTimeslot whereTimetableEntryId($value)
@@ -849,6 +860,8 @@ namespace App\Models{
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRole> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFilledForm> $sigFilledForms
+ * @property-read int|null $sig_filled_forms_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigHost> $sigHosts
  * @property-read int|null $sig_hosts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslot> $sigTimeslots

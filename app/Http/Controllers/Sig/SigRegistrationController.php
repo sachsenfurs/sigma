@@ -10,11 +10,6 @@ use Illuminate\Support\Carbon;
 
 class SigRegistrationController extends Controller
 {
-    public function index() {
-        $sigs = auth()->user()->attendeeEvents->all();
-
-        return view("registration.index", compact("sigs"));
-    }
 
     public function register(SigTimeslot $timeslot) {
         $regId = request()->input('regId', auth()->user()->reg_id);
@@ -28,11 +23,20 @@ class SigRegistrationController extends Controller
         $regStart = strtotime($timeslot->reg_start);
         $regEnd = strtotime($timeslot->reg_end);
 
+        /*
+         *  ToDo:
+         * - Add Possibility to Event to register more users per timeslot for master attendee
+         * -
+         *
+         */
+
         if ($timeslot->timetableEntry->maxUserRegsExeeded($user)) {
             // Check if max registrations per day limit is reached
             return redirect()->back()->with('error', 'Maximale Anzahl an Registrierungen für diesen Tag für dieses Event erreicht!');
         }
 
+        if(!$timeslot->self_register)
+            return redirect()->back();
         if ($timeslot->max_users <= $timeslot->sigAttendees->count()) {
             // Check if registration slots are available
             return redirect()->back()->with('error', 'Dieser Timeslot ist bereits voll!');
@@ -64,7 +68,7 @@ class SigRegistrationController extends Controller
         if (!$user) {
             return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
         }
-        
+
         SigAttendee::where(['user_id' => $user->id, 'sig_timeslot_id' => $timeslot->id])->first()->delete();
 
         return redirect()->back()->with('success', 'Registrierung erfolgreich gelöscht!');

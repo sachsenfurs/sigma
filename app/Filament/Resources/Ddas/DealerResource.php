@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Ddas;
 
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
 use App\Settings\DealerSettings;
@@ -56,8 +57,8 @@ class DealerResource extends Resource
                         Forms\Components\Select::make('user_id')
                             ->label('User')
                             ->searchable()
-                            ->preload()
-                            ->getOptionLabelFromRecordUsing(fn(Model $record) => ($record?->reg_id ? $record->reg_id . " - " : "") . $record->name)
+//                            ->preload()
+                            ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                             ->translateLabel()
                             ->relationship('user', 'name'),
                         Forms\Components\Radio::make('approval')
@@ -82,7 +83,7 @@ class DealerResource extends Resource
                             ->label('Location')
                             ->translateLabel()
                             ->relationship('sigLocation')
-                            ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->name . " - " . $record->description),
+                            ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
 
                         Forms\Components\Grid::make()
                             ->columns(2)
@@ -93,7 +94,7 @@ class DealerResource extends Resource
                                     ->translateLabel()
                                     ->maxLength(65535)
                                     ->hintAction(
-                                        TranslateAction::translateToPrimary('info_en', 'info')
+                                        fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('info_en', 'info') : null
                                     )
                                     ->columnSpan([
                                         'lg' => 2,
@@ -105,7 +106,7 @@ class DealerResource extends Resource
                                     ->translateLabel()
                                     ->maxLength(65535)
                                     ->hintAction(
-                                        TranslateAction::translateToSecondary('info', 'info_en')
+                                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('info', 'info_en') : null
                                     )
                                     ->columnSpan([
                                         'lg' => 2,
@@ -124,6 +125,7 @@ class DealerResource extends Resource
                                     ->imageCropAspectRatio("1:1")
                                     ->image()
                                     ->imageEditor()
+                                    ->downloadable()
                                     ->maxFiles(1)
                                     ->maxSize(5120),
                                 Forms\Components\Select::make("tags")
@@ -131,7 +133,7 @@ class DealerResource extends Resource
                                     ->columns(1)
                                     ->translateLabel()
                                     ->relationship("tags")
-                                    ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->name_localized)
+                                    ->getOptionLabelFromRecordUsing(FormHelper::dealerTagLocalized())
                                     ->multiple()
                                     ->searchable()
                                     ->preload()
@@ -187,11 +189,14 @@ class DealerResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     Approval::getBulkAction(),
                     Tables\Actions\BulkAction::make("sigLocation")
+                        ->label("Set Location")
                         ->translateLabel()
                         ->form([
                             Forms\Components\Select::make("sig_location_id")
+                                ->label("Location")
+                                ->translateLabel()
                                 ->relationship("sigLocation", "name")
-                                ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->name . " - " . $record->description),
+                                ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
                         ])
                         ->action(
                             function(array $data, Collection $records) {

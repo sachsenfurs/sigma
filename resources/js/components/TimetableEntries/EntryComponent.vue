@@ -29,18 +29,18 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-7 d-flex">
-                    <div class="card-body px-1 pe-0 align-self-center ">
+                    <div class="card-body px-1 pe-0 align-self-center" style="word-wrap: anywhere">
                         <h1>
                             {{ entry.sig_event.name_localized }}
                         </h1>
 
-                        <p v-if="!entry.sig_event.sig_host.hide" class="card-text">
+                        <p v-if="sigHosts.length > 0" class="card-text">
                             <i class="bi bi-person-circle"></i>
-                            {{ entry.sig_event.sig_host.name }}
+                            {{ sigHosts.join(', ') }}
                         </p>
                         <p>
                             <i class="bi bi-geo-alt"></i>
-                            {{ entry.sig_location.name }}
+                            {{ entry.sig_location.name_localized }}
                             <span v-if="entry.hasLocationChanged" class="badge bg-danger">{{  $t("Changed") }}</span>
                         </p>
 
@@ -116,11 +116,9 @@ export default {
             sig_event: {
                 name: "",
                 name_localized: "",
-                sig_host: {
-                    name: "",
-                },
+                sig_hosts: [],
                 sig_location: {
-                    name: "",
+                    name_localized: "",
                 },
                 sig_tags: {
                     description_localized: "",
@@ -143,6 +141,9 @@ export default {
         blinkFadeInOut(true);
     },
     computed: {
+        sigHosts() {
+            return this.entry.sig_event.sig_hosts.filter(host => !host.hide).map(host => host.name);
+        },
         eventRunning() {
             return !this.entry.cancelled && this.now >= new Date(this.entry.start) && !this.eventPassed;
         },

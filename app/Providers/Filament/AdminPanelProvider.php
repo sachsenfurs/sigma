@@ -8,6 +8,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Infolists\Infolist;
 use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
@@ -33,6 +34,9 @@ class AdminPanelProvider extends PanelProvider
         });
         Table::$defaultDateTimeDisplayFormat = "l, d.m.Y - H:i";
         Table::$defaultDateDisplayFormat = "l, d.m.Y";
+
+        Infolist::$defaultDateTimeDisplayFormat = Table::$defaultDateTimeDisplayFormat;
+        Infolist::$defaultDateDisplayFormat     = Table::$defaultDateDisplayFormat;
 
         DateTimePicker::configureUsing(function(DateTimePicker $datePicker) {
             $datePicker->displayFormat(Table::$defaultDateTimeDisplayFormat);

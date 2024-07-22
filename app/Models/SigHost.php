@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SigHost extends Model
 {
@@ -25,19 +26,21 @@ class SigHost extends Model
         'hide' => "boolean",
     ];
 
-    protected $visible = [
-        'id',
-        'name',
-        'description',
-        'hide',
+    protected $appends = [
+        'avatar',
     ];
 
     protected $with = [
         'sigEvents',
+        'user',
     ];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
+    }
+
+    public function sigEvents(): BelongsToMany {
+        return $this->belongsToMany(SigEvent::class, 'sig_host_sig_events', 'sig_host_id', 'sig_event_id')->withTimestamps();
     }
 
     public function scopePublic($query) {

@@ -49,7 +49,7 @@ class PostResource extends Resource
                 Forms\Components\Textarea::make('text_en')
                     ->rows(10)
                     ->hintAction(
-                        TranslateAction::translateToSecondary("text", "text_en")
+                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary("text", "text_en") : null
                     )
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')

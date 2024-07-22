@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
 use App\Filament\Clusters\SigPlanning;
+use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
 use Filament\Forms\Components\DateTimePicker;
@@ -28,14 +29,10 @@ class EditTimetableEntry extends EditRecord
 
     }
 
-    protected function getFooterWidgets(): array {
-        if ($this->record->sigEvent->reg_possible) {
-            // Only show the TimeslotTable widget if the event allows registration
-            return [
-                TimetableEntryResource\Widgets\TimeslotTable::class,
-            ];
-        }
-        return [];
+    public function getRelationManagers(): array {
+        return $this->record->sigEvent->reg_possible ? [
+            SigTimeslotsRelationManager::class,
+        ] : [];
     }
 
     protected function handleRecordUpdate(Model $record, array $data): Model {

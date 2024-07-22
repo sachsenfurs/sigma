@@ -69,6 +69,7 @@ class SigHostResource extends Resource
         return [
             'index' => Pages\ListSigHosts::route('/'),
             'create' => Pages\CreateSigHost::route('/create'),
+            'view' => Pages\ViewSigHost::route('/{record}'),
             'edit' => Pages\EditSigHost::route('/{record}/edit'),
         ];
     }

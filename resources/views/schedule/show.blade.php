@@ -38,14 +38,14 @@
                         <span class="badge bg-warning">{{ __("Changed") }}</span>
                     @endif
                 </h3>
-                @if(!$entry->sigEvent->sigHost->hide)
                     <h5>
-                        <i class="bi bi-person-circle align-self-center"></i>
-                        <a href="{{ route("hosts.show", $entry->sigEvent->sigHost) }}" class="text-decoration-none">
-                            {{ $entry->sigEvent->sigHost->name }}
-                        </a>
+                        @foreach($entry->sigEvent->public_hosts as $host)
+                            <i class="bi bi-person-circle align-self-center"></i>
+                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
+                                {{ $host->name }}
+                            </a>
+                        @endforeach
                     </h5>
-                @endif
             </div>
         </div>
 
@@ -66,10 +66,23 @@
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-12 text-center mb-2 mt-1">
-                <h2>{{ $entry->sigEvent->reg_possible ? __("Sign up") : __("Scheduled") }}</h2>
+        <div class="col-12 text-center mb-2 mt-4">
+            <h2>{{ $entry->sigEvent->reg_possible ? __("Sign up") : __("Scheduled") }}</h2>
+        </div>
+
+        @if($entry->sigEvent->forms->count() > 0)
+            <div class="alert alert-info mt-3">
+                <p>
+                    {{ __("There is a sign up form for this event:") }}
+                </p>
+                @foreach($entry->sigEvent->forms AS $form)
+                    <a href="{{ route("forms.show", $form) }}">
+                        <button type="button" class="btn btn-info">{{ $form->name_localized }}</button>
+                    </a>
+                @endforeach
             </div>
+        @endif
+        <div class="row mt-4">
 
             @forelse($entry->sigEvent->timetableEntries AS $e)
                 @if ($e->sigTimeslots->count() > 0)
@@ -108,7 +121,7 @@
                 @endif
 
             @empty
-                Nicht im Programmplan
+            {{ __("Not listed in schedule") }}
             @endforelse
         </div>
     </div>
@@ -117,29 +130,16 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content text-center">
                 <form class="w-100" id="registerForm" action="" method="POST">
+                    @csrf
                     <div class="modal-header text-center">
-                        <h5 class="modal-title w-100" id="registerModalLabel">Registrieren</h5>
+                        <h5 class="modal-title w-100" id="registerModalLabel">{{ __("Register") }}</h5>
                     </div>
                     <div class="modal-body">
-                        @can("update", $entry)
-                            <p>Wen möchtest du für dieses Event registrieren?</p>
-                            <p><a href=""></a></p>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p>Reg-Nummer</p>
-                                </div>
-                                <div class="col-8">
-                                    <input type="text" class="form-control" name="regId" placeholder="Reg-ID" value="{{ auth()->user()->reg_id }}">
-                                </div>
-                            </div>
-                        @else
-                            <p>Möchtest du dich für dieses Event registrieren?</p>
-                        @endcan
+                        <p>{{ __("Would you like to register for this event?") }}</p>
                     </div>
                     <div class="modal-footer">
-                        @csrf
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary m-1">Registrieren</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Close") }}</button>
+                        <button type="submit" class="btn btn-primary m-1">{{ __("Yes") }}</button>
                     </div>
                 </form>
             </div>

@@ -26,7 +26,7 @@
  * File Uploader
  */
 .filepond--file-info-main {
-    display: none;
+    color: rgba(0,0,0,0);
 }
 .filepond--file-info-sub {
     opacity: 0.8;

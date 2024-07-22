@@ -12,12 +12,13 @@
             <a href="{{ \App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $sig]) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
         @endcan
     </div>
-
-    <div class="card-body">
-        <x-markdown>
-            {{ $sig->description_localized }}
-        </x-markdown>
-    </div>
+    @if($sig->description_localized)
+        <div class="card-body">
+            <x-markdown>
+                {{ $sig->description_localized }}
+            </x-markdown>
+        </div>
+    @endif
 
     @forelse($sig->timetableEntries()->public()->get() AS $entry)
         <ul class="list-group list-group-flush">
@@ -53,14 +54,16 @@
                 </div>
 
                 <div class="row mt-2">
-                    @if(Route::is("locations.*") AND !$entry->sigEvent->sigHost->hide)
+                    @if(Route::is("locations.*") AND !$entry->sigEvent->primaryHost->hide)
                         <div class="col-auto d-flex">
                             <i class="bi bi-person-circle align-self-center"></i>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route("hosts.show", $entry->sigEvent->sigHost) }}" class="text-decoration-none">
-                                <b>{{ $entry->sigEvent->sigHost->name }}</b>
-                            </a>
+                            @foreach($entry->sigEvent->publicHosts AS $host)
+                                <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
+                                    <b>{{ $host->name }}</b>@if(!$loop->last), @endif
+                                </a>
+                            @endforeach
                         </div>
                     @endif
                     @if(Route::is("hosts.*"))

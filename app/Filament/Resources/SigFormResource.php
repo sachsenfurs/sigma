@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Approval;
 use App\Filament\Resources\SigFormResource\Pages;
-use App\Filament\Resources\SigFormResource\Widgets\FilledForms;
+use App\Filament\Resources\SigFormResource\RelationManagers\SigFilledFormsRelationManager;
 use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use App\Models\UserRole;
@@ -42,7 +43,7 @@ class SigFormResource extends Resource
         if(!Route::is("filament.*"))
             return null;
 
-        return SigFilledForm::where('approved', 0)->count() ?: null;
+        return SigFilledForm::where('approval', Approval::PENDING)->count() ?: null;
     }
 
     public static function form(Form $form): Form {
@@ -52,7 +53,7 @@ class SigFormResource extends Resource
                 self::getSlugFieldSet(),
                 self::getRolesFieldSet(),
                 self::getFormClosedFieldSet(),
-                self::getSigEventFieldSet(),
+                self::getSigEventsFieldSet(),
                 self::getFormDefinitionFieldSet(),
             ]);
     }
@@ -61,6 +62,7 @@ class SigFormResource extends Resource
         return $table
             ->columns(self::getTableColumns())
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -74,13 +76,8 @@ class SigFormResource extends Resource
         return [
             'index' => Pages\ListSigForms::route('/'),
             'create' => Pages\CreateSigForm::route('/create'),
-            'edit' => Pages\EditSigForm::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getWidgets(): array {
-        return [
-            FilledForms::class,
+            'view' => Pages\ViewSigForm::route('/{record}'),
+            'edit' => Pages\EditSigForm::route('/{record?}/edit'),
         ];
     }
 
@@ -111,7 +108,7 @@ class SigFormResource extends Resource
                 ->label('To be approved')
                 ->translateLabel()
                 ->getStateUsing(function (SigForm $record) {
-                    return $record->sigFilledForms->where('approved', 0)->count();
+                    return $record->sigFilledForms->where('approval', Approval::PENDING)->count();
                 }),
         ];
     }
@@ -155,10 +152,14 @@ class SigFormResource extends Resource
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
-                        ->unique()
+                        ->unique(ignoreRecord: true)
                         ->alphaDash()
                         ->maxLength(255)
                         ->inlineLabel()
+                        ->afterStateUpdated(function($state, ?Model $record) {
+                            if($record AND $state != $record?->slug)
+                                redirect(self::getUrl("edit", ['record' => $state]));
+                        })
                         ->columnSpanFull(),
                 ])
                 ->columnSpan(1);
@@ -203,20 +204,20 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getSigEventFieldSet(): Forms\Components\Component {
+    private static function getSigEventsFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('assigned_sig')
                 ->label('Assigned SIG')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Select::make('sig_event_id')
+                    Forms\Components\Select::make('sig_events')
                         ->label('')
-                        ->relationship('sigEvent', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHost'))
+                        ->multiple()
+                        ->relationship('sigEvents', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
-                            return $record->name . ' - ' . $record->sigHost->name;
+                            return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
                         })
                         ->searchable()
-                        ->preload(),
                 ])
                 ->columnSpanFull();
     }
@@ -477,5 +478,11 @@ class SigFormResource extends Resource
                             ]),
                     ]),
             ]);
+    }
+
+    public static function getRelations(): array {
+        return [
+            SigFilledFormsRelationManager::class,
+        ];
     }
 }

@@ -12,6 +12,17 @@ class SigTagsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigEvent';
 
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        // Filament needs to know if the user can view the relation manager for the given record.
+        return auth()->user()->can('manage_sigs');
+    }
+
+    protected function can(string $action, ?Model $record = null): bool
+    {
+        // Filament needs to know if the user can perform the given action on the relation manager.
+        return auth()->user()->can('manage_sigs');
+    }
     public function table(Table $table): Table
     {
         return $table
@@ -30,13 +41,12 @@ class SigTagsRelationManager extends RelationManager
                 ->translateLabel()
                 ->sortable()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
+            Tables\Columns\TextColumn::make('sigHosts.name')
                 ->label('Host')
                 ->translateLabel()
                 ->searchable()
                 ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
+                    return $record->sigHosts->map(fn($host) => $host->name . ($host->reg_id ? " (# ".$host->reg_id . ")" : ""))->join(", ");
                 })
                 ->sortable(),
             Tables\Columns\ImageColumn::make('languages')

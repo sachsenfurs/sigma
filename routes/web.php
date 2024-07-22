@@ -10,7 +10,7 @@ use App\Http\Controllers\Ddas\DealersDenController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
-use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\Schedule\ConbookExportController;
 use App\Http\Controllers\Schedule\TimetableEntryController;
 use App\Http\Controllers\SetLocaleController;
@@ -72,6 +72,8 @@ Route::get("/oauth", [OAuthLoginController::class, 'redirect']);
 Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name("oauthlogin_regsys");
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect']);
 
+// Announcements
+Route::get("/announcements", [AnnouncementsController::class, 'index'])->name("announcements");
 // Schedule
 Route::get("/schedule", [TimetableEntryController::class, 'index'])->name("schedule.listview");
 Route::get("/schedule/index", [TimetableEntryController::class, 'timetableIndex'])->name("schedule.listview-index");
@@ -151,10 +153,10 @@ Route::group(['middleware' => "auth"], function() {
 
     // SF Post
     Route::prefix("post")->name("posts.")->group(function() {
-        Route::get("/", [PostController::class, 'index'])->name("index");
-        Route::post("/", [PostController::class, 'store'])->name("store");
-        Route::get("/create", [PostController::class, "create"])->name("create");
-        Route::delete("/{post}", [PostController::class, 'destroy'])->name("destroy");
+        Route::get("/", [AnnouncementsController::class, 'index'])->name("index");
+        Route::post("/", [AnnouncementsController::class, 'store'])->name("store");
+        Route::get("/create", [AnnouncementsController::class, "create"])->name("create");
+        Route::delete("/{post}", [AnnouncementsController::class, 'destroy'])->name("destroy");
     });
 
     // Dealers Den

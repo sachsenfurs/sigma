@@ -137,4 +137,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function isAdmin(): bool {
         return $this->hasPermission(Permission::MANAGE_ADMIN, PermissionLevel::ADMIN);
     }
+
+    public function sigFilledForms(): HasMany {
+        return $this->hasMany(SigFilledForm::class);
+    }
 }

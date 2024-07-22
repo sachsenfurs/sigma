@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\App;
 
 #[ObservedBy(SigEventObserver::class)]
@@ -27,16 +29,11 @@ class SigEvent extends Model
 
     protected $appends = [
         'name_localized',
-        'description_localized'
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at'
+        'description_localized',
     ];
 
     protected $with = [
-        'timetableEntries'
+        'timetableEntries',
     ];
 
     public function scopeUnprocessed(Builder $query) {
@@ -49,8 +46,20 @@ class SigEvent extends Model
         );
     }
 
-    public function sigHost(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo(SigHost::class);
+    public function sigHosts(): BelongsToMany {
+        return $this->belongsToMany(SigHost::class, 'sig_host_sig_events')->withTimestamps();
+    }
+
+    public function primaryHost(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigHosts()->oldest()->first()
+        );
+    }
+
+    public function publicHosts(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigHosts->filter(fn($host) => !$host->hide)
+        );
     }
 
     public function timetableCount(): Attribute {
@@ -99,7 +108,7 @@ class SigEvent extends Model
         return ($entries->count() == $entries->where("hide", 1)->count());
     }
 
-    public function sigTags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
+    public function sigTags(): BelongsToMany {
         return $this->belongsToMany(SigTag::class);
     }
 
@@ -112,7 +121,11 @@ class SigEvent extends Model
         });
     }
 
-    public function forms(): HasMany {
-        return $this->hasMany(SigForm::class);
+    public function forms(): BelongsToMany {
+        return $this->belongsToMany(SigForm::class);
+    }
+
+    public function sigTimeslots(): HasManyThrough {
+        return $this->hasManyThrough(SigTimeslot::class, TimetableEntry::class);
     }
 }

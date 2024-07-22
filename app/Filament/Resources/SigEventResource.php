@@ -5,12 +5,16 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Models\SigEvent;
+use App\Models\SigHost;
 use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
@@ -34,7 +38,7 @@ class SigEventResource extends Resource
         return $form
             ->schema([
                 self::getSigNameFieldSet(),
-                self::getSigHostFieldSet(),
+                self::getSigHostsFieldSet(),
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigRegistrationFieldSet(),
@@ -48,6 +52,8 @@ class SigEventResource extends Resource
             ->columns(self::getTableColumns())
             ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
+            ->persistSortInSession()
+            ->persistFiltersInSession()
             ->filters([
                 Tables\Filters\SelectFilter::make("approval")
                     ->label("Approval")
@@ -56,7 +62,23 @@ class SigEventResource extends Resource
                 Tables\Filters\SelectFilter::make("tags")
                     ->relationship("sigTags", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
+                Tables\Filters\Filter::make("Timeslots")
+                    ->query(fn(Builder $query) => $query->has("sigTimeslots", ">", 0)),
+                Tables\Filters\Filter::make("Text Missing")
+                    ->translateLabel()
+                    ->query(fn(Builder $query) => $query
+                        ->where(function(Builder $query) {
+                            $query->where("description", "")
+                                ->orWhere("description_en", "")
+                                ->orWhereNull(["description", "description_en"]);
+                        })
+                    )
             ])
+            ->recordUrl(fn(Model $record) =>
+                auth()->user()->can("update", $record)
+                ? SigEventResource::getUrl("edit", ['record' => $record])
+                : SigEventResource::getUrl('view', ['record' => $record])
+            )
             ->actions([
                 //
             ])
@@ -76,6 +98,7 @@ class SigEventResource extends Resource
         return [
             'index' => Pages\ListSigEvents::route('/'),
             'create' => Pages\CreateSigEvent::route('/create'),
+            'view' => Pages\ViewSigEvent::route('/{record}'),
             'edit' => Pages\EditSigEvent::route('/{record}/edit'),
         ];
     }
@@ -83,26 +106,25 @@ class SigEventResource extends Resource
     public static function getRelations(): array {
         return [
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
+            SigTimeslotsRelationManager::class,
         ];
     }
 
     private static function getTableColumns(): array {
         return [
             IconColumn::make("approval")
-                 ->translateLabel()
-                 ->width(1),
+                ->translateLabel()
+                ->width(1)
+                ->action(
+                    Tables\Actions\EditAction::make()
+                        ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ),
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
-                ->label('Host')
-                ->translateLabel()
-                ->searchable()
-                ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
-                })
-                ->sortable(),
+            Tables\Columns\TextColumn::make('sigHosts.name')
+                ->label('Hosts')
+                ->translateLabel(),
             Tables\Columns\ImageColumn::make('languages')
                 ->label('Languages')
                 ->translateLabel()
@@ -120,15 +142,25 @@ class SigEventResource extends Resource
             IconColumn::make("description")
                 ->boolean()
                 ->label("Text")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => filled($record->description)),
             IconColumn::make("description_en")
                 ->boolean()
                 ->label("Text (EN)")
+                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => filled($record->description_en)),
+            Tables\Columns\TextColumn::make("sig_timeslots_count")
+                ->label(__("Time Slots"))
+                ->translateLabel()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->counts("sigTimeslots")
+                ->badge()
+                ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray),
         ];
     }
 
@@ -143,9 +175,7 @@ class SigEventResource extends Resource
                     ->translateLabel()
                     ->maxLength(255)
                     ->required()
-                    ->suffixAction(
-                        TranslateAction::translateToPrimary('name_en', 'name')
-                    )
+                    ->suffixAction(fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('name_en', 'name') : null)
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
@@ -155,7 +185,7 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->required()
                     ->suffixAction(
-                        TranslateAction::translateToSecondary('name', 'name_en')
+                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('name', 'name_en') : null
                     )
                     ->maxLength(255)
                     ->inlineLabel()
@@ -179,7 +209,7 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('sigTags')
-                        ->label('')
+                        ->label('Tags')
                         ->options(SigTag::all()->pluck('description', 'id'))
                         ->relationship('sigTags', 'description')
                         ->preload()
@@ -209,45 +239,54 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostFieldSet(): Forms\Components\Component {
+    private static function getSigHostsFieldSet(): Forms\Components\Component
+    {
         return
-            Forms\Components\Fieldset::make('host')
-            ->label('SIG Host')
-            ->translateLabel()
-            ->schema([
-                Forms\Components\Select::make('sig_host_id')
-                    ->label('Host')
-                    ->translateLabel()
-                    ->relationship('sigHost', 'name', fn (Builder $query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->getOptionLabelFromRecordUsing(function (Model $record) {
-                        $regNr = $record->reg_id ? " (" . __('Reg Number') . ": $record->reg_id)" : '';
-                        return $record->name . $regNr;
-                    })
-                    ->createOptionForm(fn($form) => SigHostResource::form($form))
-                    ->live()
-                    ->hintAction(
-                        function($state) {
-                            if(filled($state)) {
-                                return Forms\Components\Actions\Action::make("edit")
-                                    ->label("Edit")
+            Forms\Components\Fieldset::make('hosts')
+                ->label('SIG Hosts')
+                ->schema(
+                    [
+                        Forms\Components\Select::make('sigHosts')
+                            ->label('')
+                            ->options(SigHost::all()->pluck('name', 'id'))
+                            ->relationship('sigHosts', 'name')
+                            ->preload()
+                            ->multiple()
+                            ->columnSpanFull()
+                            ->createOptionModalHeading(__('Create Host'))
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Name')
                                     ->translateLabel()
-                                    ->url(SigHostResource::getUrl("edit", ['record' => $state]));
-                            }
-                        }
-                    )
-                    ->columnSpanFull(),
-                Forms\Components\Select::make("approval")
-                    ->label("Approval")
-                    ->translateLabel()
-                    ->required()
-                    ->default(Approval::PENDING)
-                    ->columnSpanFull()
-                    ->options(Approval::class),
-            ])
-            ->columnSpan(1);
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('reg_id')
+                                    ->label('Reg ID')
+                                    ->translateLabel()
+                                    ->numeric(),
+                            ])
+                            ->createOptionUsing(function ($data) {
+                                $sigHost = SigHost::create([
+                                    'name' => $data['name'],
+                                    'reg_id' => $data['reg_id'] ?? null,
+                                ]);
+
+                                return $sigHost->id ?? null;
+                            })
+                            ->live()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make("approval")
+                            ->label("Approval")
+                            ->translateLabel()
+                            ->required()
+                            ->default(Approval::PENDING)
+                            ->columnSpanFull()
+                            ->options(Approval::class),
+                    ]
+                )
+                ->translateLabel()
+                ->columnSpan(1)
+            ->visible(auth()->user()->can('manage_sigs'));
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component {
@@ -289,7 +328,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            TranslateAction::translateToPrimary('description_en', 'description')
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description') : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                     Forms\Components\MarkdownEditor::make('description_en')
@@ -297,7 +336,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            TranslateAction::translateToSecondary('description', 'description_en')
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en') : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                 ]);

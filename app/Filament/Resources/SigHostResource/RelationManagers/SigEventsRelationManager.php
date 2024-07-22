@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigHostResource\RelationManagers;
 
+use App\Filament\Resources\SigEventResource;
 use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -30,13 +31,12 @@ class SigEventsRelationManager extends RelationManager
                 ->translateLabel()
                 ->sortable()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('sigHost.name')
+            Tables\Columns\TextColumn::make('sigHosts.name')
                 ->label('Host')
                 ->translateLabel()
                 ->searchable()
                 ->formatStateUsing(function (Model $record) {
-                    $regNr = $record->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigHost->reg_id . ')' : '';
-                    return $record->sigHost->name . $regNr;
+                    return $record->sigHosts->map(fn($host) => $host->name . ($host->reg_id ? " (# ".$host->reg_id . ")" : ""))->join(", ");
                 })
                 ->sortable(),
             Tables\Columns\ImageColumn::make('languages')
@@ -53,10 +53,7 @@ class SigEventsRelationManager extends RelationManager
     protected function getTableHeaderActions(): array
     {
         return [
-            Tables\Actions\CreateAction::make()
-                ->url(route('filament.admin.resources.sig-events.create', [
-                    'host_id' => $this->getOwnerRecord()->id,
-                ])),
+            //
         ];
     }
 
@@ -64,7 +61,10 @@ class SigEventsRelationManager extends RelationManager
     {
         return [
             Tables\Actions\EditAction::make()
-                ->url(fn(SigEvent $entry) => route('filament.admin.resources.sig-events.edit', $entry)),
+                 ->url(fn(SigEvent $entry) => SigEventResource::getUrl("edit", ['record' => $entry])),
+            Tables\Actions\ViewAction::make()
+                ->url(fn(SigEvent $entry) => SigEventResource::getUrl('view', ['record' => $entry]))
+                ->hidden(fn(Model $record) => auth()->user()->can("update", $record)),
         ];
     }
 }

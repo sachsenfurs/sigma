@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
 use App\Filament\Resources\SigTagResource\RelationManagers;
 use App\Models\SigTag;
@@ -51,7 +52,7 @@ class SigTagResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigTagsRelationManager::class,
+            SigEventsRelationManager::class,
         ];
     }
 
@@ -59,6 +60,7 @@ class SigTagResource extends Resource
         return [
             'index' => Pages\ListSigTags::route('/'),
             'create' => Pages\CreateSigTag::route('/create'),
+            'view' => Pages\ViewSigTag::route('/{record}'),
             'edit' => Pages\EditSigTag::route('/{record}/edit'),
         ];
     }
@@ -94,7 +96,8 @@ class SigTagResource extends Resource
 
     private static function getDescriptionField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description')
-            ->label('German')
+            ->label('Description')
+            ->required()
             ->translateLabel()
             ->rows(4)
             ->columnSpanFull();
@@ -102,7 +105,8 @@ class SigTagResource extends Resource
 
     private static function getDescriptionENField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('description_en')
-            ->label('English')
+            ->label('Description (English)')
+            ->required()
             ->translateLabel()
             ->rows(4)
             ->columnSpanFull();

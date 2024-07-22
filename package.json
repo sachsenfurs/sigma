@@ -27,12 +27,15 @@
     },
     "dependencies": {
         "@fullcalendar/core": "^6.1.14",
+        "@fullcalendar/interaction": "^6.1.14",
         "@fullcalendar/resource": "^6.1.14",
         "@fullcalendar/resource-timegrid": "^6.1.14",
+        "@fullcalendar/resource-timeline": "^6.1.14",
         "@fullcalendar/scrollgrid": "^6.1.14",
         "@fullcalendar/vue3": "^6.1.14",
         "alpinejs": "^3.13.10",
         "bootstrap-icons": "^1.9.0",
+        "jquery": "^3.7.1",
         "laravel-vue-i18n": "^2.7.1",
         "marked": "^7.0.5",
         "vue": "^3.3.4"

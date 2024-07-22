@@ -41,12 +41,15 @@ class TimetableEntry extends Model
         'created_at',
         'updated_at',
         'replaced_by_id',
-        'parentEntry'
+        'parentEntry',
+        'favorites'
     ];
 
     protected $with = [
         'favorites',
         'sigLocation',
+//        'sigEvent', << i dont know why this isnt working..
+        'parentEntry',
     ];
 
     public function favorites(): HasMany {

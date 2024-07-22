@@ -3,13 +3,7 @@
 use App\Http\Controllers\Api\AuctionEndpoint;
 use App\Http\Controllers\Api\SignageEndpointController;
 use App\Http\Controllers\Api\SocialsEndpoint;
-use App\Http\Resources\EssentialLocationsApiResource;
-use App\Http\Resources\EventApiResource;
-use App\Http\Resources\LocationApiResource;
-use App\Models\SigLocation;
-use App\Models\TimetableEntry;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
 
 /*
