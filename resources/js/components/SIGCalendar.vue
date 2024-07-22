@@ -37,7 +37,7 @@ export default {
             return await res.json();
         },
         handleEventClick: function(event) {
-            this.currentEvent = event.event.extendedProps;
+            this.currentEvent = {id: event.event.id, ...event.event.extendedProps};
             const modal = new Modal('#eventInfo');
             modal.show();
         },
