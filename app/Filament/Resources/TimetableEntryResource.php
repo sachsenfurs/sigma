@@ -6,6 +6,7 @@ use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use App\Settings\AppSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -252,7 +253,7 @@ class TimetableEntryResource extends Resource
             ->formatStateUsing(function(?Model $record) {
                 // automatically prefill to "true" when con (in this case the first event) has started
                 if(!$record) // only prefill when a new record is created (current $record == null)
-                    return  Carbon::now()->isAfter(TimetableEntry::orderBy('start')->first()?->start ?? now());
+                    return Carbon::now()->isAfter(app(AppSettings::class)->event_start);
                 return (bool)$record->new;
             });
     }
@@ -273,17 +274,16 @@ class TimetableEntryResource extends Resource
 
     public static function getResetUpdateField(): Forms\Components\Component {
         return Forms\Components\Checkbox::make('reset_update')
-            ->model(TimetableEntry::class)
             ->label('Reset \'Changed\'-flag')
             ->translateLabel()
-            ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false))
-            ;
+            ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false));
     }
 
     public static function getSendUpdateField(): Forms\Components\Component {
         return Forms\Components\Checkbox::make('send_update')
             ->label('Announce Changes')
             ->translateLabel()
+            ->formatStateUsing(fn() => app(AppSettings::class)->show_schedule_date->isBefore(now()))
             ->helperText(__('This needs to be checked if the event should be marked as changed!'));
     }
 }
