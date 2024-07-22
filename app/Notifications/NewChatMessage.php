@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Chat;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,6 +20,7 @@ class NewChatMessage extends Notification
     protected $department;
     protected $sender;
     protected $chat;
+    protected $message;
 
     /**
      * Create a new notification instance.
@@ -27,13 +29,14 @@ class NewChatMessage extends Notification
      * @param Chat $chat
      * @return void
      */
-    public function __construct(String $department, User $sender, Chat $chat)
+    public function __construct(String $department, User $sender, Chat $chat, String $message)
     {
         App::setLocale($sender->language);
 
         $this->department = $department;
         $this->sender = $sender;
         $this->chat = $chat;
+        $this->message = $message;
     }
 
     /**
@@ -59,7 +62,8 @@ class NewChatMessage extends Notification
             ->to($notifiable->telegram_user_id)
             ->line(__("Hello ") . $notifiable->name . ",")
             ->line(__("the user ") . $this->sender->nickname . __(" has posted a new message in the chat with the ")  . $this->department . __(" department!"))
-            ->button(__("View Message") , route("chats.index") . "?chat_id={{ $this->chat()->id }}");
+            ->line(__('Message: :message', ["message" => $this->message]))
+            ->button(__("View Chat") , route("chats.index") . "?chat_id={{ $this->chat()->id }}");
     }
 
     /**
@@ -71,6 +75,7 @@ class NewChatMessage extends Notification
             ->subject(__('New Message in the Chat with the  ') . $this->department . __(' department!'))
             ->line(__("Hello ") . $notifiable->name . ",")
             ->line(__("the user ") . $this->sender->name . __(" has posted a new message in the chat with the ")  . $this->department . __(" department."))
+            ->line(__('Message: :message', ["message" => $this->message]))
             ->action(__("View Message") , route("chats.index") . "?chat_id=" . $this->chat->id);
     }
 
