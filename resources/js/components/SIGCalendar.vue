@@ -112,6 +112,9 @@ export default {
         this.calendarOptions.resources = calResources;
         this.calendarOptions.events = calEvents;
 
+        // Filter resources not used (must be done, after the events have been loaded)
+        this.calendarOptions.filterResourcesWithEvents = true;
+
         const startDate = Date.parse(calEvents[0].start);
         const endDate = Date.parse(calEvents[calEvents.length - 1].end);
 
