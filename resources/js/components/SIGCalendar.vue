@@ -8,7 +8,7 @@ import localeEn from '@fullcalendar/core/locales/en-gb'
 import localeDe from '@fullcalendar/core/locales/de'
 import EntryModal from './TimetableEntries/EntryModal.vue';
 import {Modal} from 'bootstrap';
-import {getActiveLanguage} from "laravel-vue-i18n";
+import {getActiveLanguage, wTrans} from "laravel-vue-i18n";
 
 export default {
     components: {
@@ -100,7 +100,7 @@ export default {
                 eventClick: this.handleEventClick,
                 customButtons: {
                     toggleView: {
-                        text: getActiveLanguage() === 'de' ? 'Ansicht wechseln' : 'Toggle View',
+                        text: wTrans('Toggle View'),
                         click: () => {
                             this.currentView = this.currentView === 'resourceTimeGridDay' ? 'resourceTimelineDay' : 'resourceTimeGridDay';
                             this.$refs.fullCalendar.getApi().changeView(this.currentView, this.$refs.fullCalendar.getApi().currentDate);
