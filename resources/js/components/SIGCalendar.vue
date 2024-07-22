@@ -82,6 +82,7 @@ export default {
                 stickyFooterScrollbar: true,
                 resources: [],
                 events: [],
+                resourceAreaHeaderContent: wTrans('Location'),
                 validRange: {
                     start: '', // Is set when events are fetched
                     end: '' // Is set when events are fetched
@@ -199,7 +200,8 @@ export default {
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .fc-timegrid-event.fc-event-mirror,
-.fc-timegrid-more-link {
+.fc-timegrid-more-link,
+.fc-timeline-event {
     box-shadow: none;
     cursor: pointer;
 }
