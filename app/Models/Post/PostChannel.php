@@ -29,31 +29,39 @@ class PostChannel extends Model
     }
 
     public function sendMessage(Post $post): void {
+        if($messageId = $this->sendPostToChannel($post, $this->channel_identifier)) {
+            $post->channels()->attach([
+                [
+                    'post_channel_id' => $this->id,
+                    'message_id' => $messageId,
+                ]
+            ]);
+        }
+    }
+
+    public function sendTestMessage(Post $post): void {
+        if($this->test_channel_identifier)
+            $this->sendPostToChannel($post,$this->test_channel_identifier);
+    }
+
+    public function sendPostToChannel(Post $post, int $channel_identifier): int|false {
         $text = $post->getTranslatedText($this->language);
 
         if($post->image) {
             $response = Telegram::sendPhoto([
-                'chat_id' => $this->channel_identifier,
+                'chat_id' => $channel_identifier,
                 'photo' => InputFile::create(Storage::disk("public")->path($post->image)),
                 'caption' => $text,
                 'parse_mode' => "MarkdownV2"
             ]);
         } else {
             $response = Telegram::sendMessage([
-                'chat_id' => $this->channel_identifier,
+                'chat_id' => $channel_identifier,
                 'text' => $text,
                 'parse_mode' => "MarkdownV2"
             ]);
         }
 
-
-        if(!$response->isError()) {
-            $post->channels()->attach([
-                [
-                    'post_channel_id' => $this->id,
-                    'message_id' => $response->getMessageId(),
-                ]
-            ]);
-        }
+        return $response->isError() ? false : $response->getMessageId();
     }
 }

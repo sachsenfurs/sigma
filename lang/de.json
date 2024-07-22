@@ -20,6 +20,7 @@
     "Manage Roles": "Rollen verwalten",
     "Manage Settings": "Einstellungen verwalten",
     "Manage Users": "Benutzer verwalten",
+    "None": "Keine",
 
     "User Count": "Benutzeranzahl",
     "User Role": "Benutzerrolle",
@@ -481,6 +482,7 @@
     "post": "Post",
     "posts": "Posts",
     "New Post": "Neuer Post",
+    "Test Message sent!": "Testnachricht gesendet!",
     "Text (English)": "Text (Englisch)",
     "You have to be logged in": "Du musst eingeloggt sein!",
     "There is a sign up form for this event:": "Es gibt ein Anmeldeformular für dieses Event:"
