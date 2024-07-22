@@ -8,7 +8,7 @@ import localeEn from '@fullcalendar/core/locales/en-gb'
 import localeDe from '@fullcalendar/core/locales/de'
 import EntryModal from './TimetableEntries/EntryModal.vue';
 import {Modal} from 'bootstrap';
-import {getActiveLanguage} from "laravel-vue-i18n";
+import {getActiveLanguage, wTrans} from "laravel-vue-i18n";
 
 export default {
     components: {
@@ -58,11 +58,15 @@ export default {
                 footerToolbar: {
                     left: 'toggleView',
                 },
-                titleFormat: {
-                    day: 'numeric',
-                    month: 'long',
-                    weekday: 'long'
-                },
+                titleFormat: (info) => new Date(info.date.marker)
+                    .toLocaleDateString(
+                        getActiveLanguage(),
+                        {
+                            day: 'numeric',
+                            month: 'long',
+                            weekday: 'long'
+                        }
+                    ),
                 locales: [ localeDe, localeEn ],
                 locale: getActiveLanguage(),
                 slotMinTime: '08:00:00',
@@ -86,7 +90,7 @@ export default {
                 eventClick: this.handleEventClick,
                 customButtons: {
                     toggleView: {
-                        text: getActiveLanguage() === 'de' ? 'Ansicht wechseln' : 'Toggle View',
+                        text: wTrans('Toggle View'),
                         click: () => {
                             this.currentView = this.currentView === 'resourceTimeGridDay' ? 'resourceTimelineDay' : 'resourceTimeGridDay';
                             this.$refs.fullCalendar.getApi().changeView(this.currentView, this.$refs.fullCalendar.getApi().currentDate);
@@ -114,6 +118,9 @@ export default {
 
         this.calendarOptions.resources = calResources;
         this.calendarOptions.events = calEvents;
+
+        // Filter resources not used (must be done, after the events have been loaded)
+        this.calendarOptions.filterResourcesWithEvents = true;
 
         const startDate = Date.parse(calEvents[0].start);
         const endDate = Date.parse(calEvents[calEvents.length - 1].end);
