@@ -16,7 +16,7 @@ class MessageObserver
         $department = $message->chat->department;
         $sender = $message->user;
         foreach ($toBeNotifiedUsers as $user) {
-            $user->notify(new NewChatMessage($department, $sender, $message->chat));
+            $user->notify(new NewChatMessage($department, $sender, $message->chat, $message->text));
         }
 
     }
