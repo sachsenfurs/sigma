@@ -67,11 +67,15 @@ export default {
                 footerToolbar: {
                     left: 'toggleView',
                 },
-                titleFormat: {
-                    day: 'numeric',
-                    month: 'long',
-                    weekday: 'long'
-                },
+                titleFormat: (info) => new Date(info.date.marker)
+                    .toLocaleDateString(
+                        getActiveLanguage(),
+                        {
+                            day: 'numeric',
+                            month: 'long',
+                            weekday: 'long'
+                        }
+                    ),
                 locales: [ localeDe, localeEn ],
                 locale: getActiveLanguage(),
                 slotMinTime: '08:00:00',
