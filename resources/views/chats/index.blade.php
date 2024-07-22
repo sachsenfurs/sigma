@@ -15,7 +15,7 @@
                     @endif
                 </div>
             </div>
-            <div class="row p-0 mx-md-none mx-1" style="min-height: 60vh !important;">
+            <div class="row p-0 mx-md-none mx-1" style="min-height: 30vh !important;">
                 <div class="col-12 col-md-3 text-center m-0 p-0 rounded-left" style="background-color:#ffffff11;">
                     @forelse($chats AS $chat)
                         <div class="col-12 p-3">
@@ -31,7 +31,7 @@
                     @endforelse
                 </div>
                 <div class="col-12 col-md-9 border border-secondary border-left-0 bg-dark rounded-right">
-                    <div id="chat" className="card-body p-1 pt-3" style="height: 500px; min-height: 500px; max-height: 500px; overflow: auto !important;">
+                    <div id="chat" className="card-body p-1 pt-3" style="height: 375px; min-height: 375px; max-height: 500px; overflow: auto !important;">
                         @forelse ($currChat->messages as $message)
                             @if (auth()->user()->id == $message->user_id)
                                 <div class="d-flex flex-row justify-content-end mt-2">

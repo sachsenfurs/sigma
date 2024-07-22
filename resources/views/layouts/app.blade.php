@@ -112,6 +112,25 @@
                                     <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                                 </a>
                             </li>
+
+                            <li class="py-2">
+                                <a @class(['btn btn-nav', 'active' => Route::is("notifications.index")]) href="{{ route('notifications.index') }}">
+                                    @if (auth()->user()->unreadNotifications->count() > 0)
+                                        <i class="bi bi-bell-fill"></i> {{ __('Notifications') }}
+                                    @else
+                                        <i class="bi bi-bell"></i> {{ __('Notifications') }}
+                                    @endif
+                                </a>
+                            </li>
+                            <li class="py-2">
+                                <a  @class(['btn btn-nav', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
+                                    @if (auth()->user()->unreadNotifications->count() > 0)
+                                        <i class="bi bi-mailbox2-flag"></i> {{ __('Chats') }}
+                                    @else
+                                        <i class="bi bi-mailbox2"></i> {{ __('Chats') }}
+                                    @endif
+                                </a>
+                            </li>
                         </ul>
 
                         @guest
