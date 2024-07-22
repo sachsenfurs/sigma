@@ -199,7 +199,8 @@ export default {
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .fc-timegrid-event.fc-event-mirror,
-.fc-timegrid-more-link {
+.fc-timegrid-more-link,
+.fc-timeline-event {
     box-shadow: none;
     cursor: pointer;
 }
