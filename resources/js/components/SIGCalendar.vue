@@ -82,6 +82,7 @@ export default {
                 stickyFooterScrollbar: true,
                 resources: [],
                 events: [],
+                resourceAreaHeaderContent: wTrans('Location'),
                 validRange: {
                     start: '', // Is set when events are fetched
                     end: '' // Is set when events are fetched
