@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Chat;
+use App\Models\UserRole;
+use App\Notifications\NewChatMessage;
 
 class ChatObserver
 {
@@ -29,6 +31,30 @@ class ChatObserver
         }
         $chat->messages()->create($attribudes);
         */
+
+        $department = $chat->department;
+        $sender = $message->user;
+
+        switch($chat->department) {
+            case "dealersden":
+                $toBeNotifiedUsers = UserRole::get()->where("name", "=", "dealersden")->all();
+                break;
+            case "artshow":
+                $toBeNotifiedUsers = UserRole::get()->where("name", "=", "artshow")->all();
+                break;
+            case "events":
+                $toBeNotifiedUsers = UserRole::get()->where("name", "=", "events")->all();
+                break;
+        }
+        if(!empty($toBeNotifiedUsers)) {
+            foreach($toBeNotifiedUsers as $user) {
+                $user->notify(new NewChatMessage($department, $sender, $chat, "*New Chat opened*"));
+            }
+        }
+        
+
+
+            
     }
 
     /**
