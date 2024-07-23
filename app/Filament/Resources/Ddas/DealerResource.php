@@ -94,7 +94,7 @@ class DealerResource extends Resource
                                     ->translateLabel()
                                     ->maxLength(65535)
                                     ->hintAction(
-                                        fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('info_en', 'info') : null
+                                        fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('info_en', 'info')->authorize("create", Dealer::class) : null
                                     )
                                     ->columnSpan([
                                         'lg' => 2,
@@ -106,7 +106,7 @@ class DealerResource extends Resource
                                     ->translateLabel()
                                     ->maxLength(65535)
                                     ->hintAction(
-                                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('info', 'info_en') : null
+                                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('info', 'info_en')->authorize("create", Dealer::class) : null
                                     )
                                     ->columnSpan([
                                         'lg' => 2,

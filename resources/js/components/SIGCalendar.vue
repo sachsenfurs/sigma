@@ -8,7 +8,7 @@ import localeEn from '@fullcalendar/core/locales/en-gb'
 import localeDe from '@fullcalendar/core/locales/de'
 import EntryModal from './TimetableEntries/EntryModal.vue';
 import {Modal} from 'bootstrap';
-import {getActiveLanguage} from "laravel-vue-i18n";
+import {getActiveLanguage, wTrans} from "laravel-vue-i18n";
 
 export default {
     components: {
@@ -37,7 +37,7 @@ export default {
             return await res.json();
         },
         handleEventClick: function(event) {
-            this.currentEvent = event.event.extendedProps;
+            this.currentEvent = {id: event.event.id, ...event.event.extendedProps};
             const modal = new Modal('#eventInfo');
             modal.show();
         },
@@ -58,11 +58,15 @@ export default {
                 footerToolbar: {
                     left: 'toggleView',
                 },
-                titleFormat: {
-                    day: 'numeric',
-                    month: 'long',
-                    weekday: 'long'
-                },
+                titleFormat: (info) => new Date(info.date.marker)
+                    .toLocaleDateString(
+                        getActiveLanguage(),
+                        {
+                            day: 'numeric',
+                            month: 'long',
+                            weekday: 'long'
+                        }
+                    ),
                 locales: [ localeDe, localeEn ],
                 locale: getActiveLanguage(),
                 slotMinTime: '08:00:00',
@@ -78,6 +82,7 @@ export default {
                 stickyFooterScrollbar: true,
                 resources: [],
                 events: [],
+                resourceAreaHeaderContent: wTrans('Location'),
                 validRange: {
                     start: '', // Is set when events are fetched
                     end: '' // Is set when events are fetched
@@ -86,7 +91,7 @@ export default {
                 eventClick: this.handleEventClick,
                 customButtons: {
                     toggleView: {
-                        text: getActiveLanguage() === 'de' ? 'Ansicht wechseln' : 'Toggle View',
+                        text: wTrans('Toggle View'),
                         click: () => {
                             this.currentView = this.currentView === 'resourceTimeGridDay' ? 'resourceTimelineDay' : 'resourceTimeGridDay';
                             this.$refs.fullCalendar.getApi().changeView(this.currentView, this.$refs.fullCalendar.getApi().currentDate);
@@ -114,6 +119,9 @@ export default {
 
         this.calendarOptions.resources = calResources;
         this.calendarOptions.events = calEvents;
+
+        // Filter resources not used (must be done, after the events have been loaded)
+        this.calendarOptions.filterResourcesWithEvents = true;
 
         const startDate = Date.parse(calEvents[0].start);
         const endDate = Date.parse(calEvents[calEvents.length - 1].end);
@@ -192,7 +200,8 @@ export default {
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .fc-timegrid-event.fc-event-mirror,
-.fc-timegrid-more-link {
+.fc-timegrid-more-link,
+.fc-timeline-event {
     box-shadow: none;
     cursor: pointer;
 }
