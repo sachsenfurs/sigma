@@ -1,8 +1,21 @@
 @extends('layouts.app')
 @section('title', "Benutzer Einstellungen bearbeiten")
 @section('content')
-<div class="col-12 col-md-3 mx-auto">
-    <div class="card">
+<div class="col-12 col-md-4 mx-auto">
+    <div class="card m-3">
+        @if (!auth()->user()->telegram_user_id)
+            <div class="row m-3">
+                <div class="col-12 col-md-12 text-center">
+                    <h2>{{ __("Notifications") }}</h2>
+                    <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
+                </div>
+                <div class="col-10 col-md-4 mx-auto">
+                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
+                </div>
+            </div>
+        @endif
+    </div>
+    <div class="card m-3">
         <form action="{{ route('user-settings.update') }}" method="POST">
             @method('PATCH')
             @csrf
