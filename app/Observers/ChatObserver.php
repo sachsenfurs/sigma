@@ -33,7 +33,7 @@ class ChatObserver
         */
 
         $department = $chat->department;
-        $sender = $message->user;
+        $sender = $chat->user;
 
         switch($chat->department) {
             case "dealersden":

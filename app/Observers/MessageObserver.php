@@ -18,7 +18,6 @@ class MessageObserver
         foreach ($toBeNotifiedUsers as $user) {
             $user->notify(new NewChatMessage($department, $sender, $message->chat, $message->text));
         }
-
     }
 
     /**
