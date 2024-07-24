@@ -205,6 +205,19 @@ namespace App\Models\Ddas{
 	class DealerTag extends \Eloquent {}
 }
 
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\SigEvent|null $sigEvent
+ * @property-read \App\Models\UserRole|null $userRole
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo query()
+ */
+	class DepartmentInfo extends \Eloquent {}
+}
+
 namespace App\Models\Info{
 /**
  * 
@@ -324,9 +337,11 @@ namespace App\Models\Post{
  *
  * @property int $id
  * @property int $channel_identifier
+ * @property int|null $test_channel_identifier
  * @property string|null $name
  * @property string $language
  * @property string $implementation
+ * @property string|null $info
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
  * @property-read int|null $posts_count
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel newModelQuery()
@@ -335,8 +350,10 @@ namespace App\Models\Post{
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereChannelIdentifier($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereImplementation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereTestChannelIdentifier($value)
  */
 	class PostChannel extends \Eloquent {}
 }
@@ -406,6 +423,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $approved
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentInfo> $departmentInfos
+ * @property-read int|null $department_infos_count
  * @property-read mixed $description_localized
  * @property-read mixed $description_localized_other
  * @property-read mixed $duration_hours
@@ -900,6 +919,8 @@ namespace App\Models{
  * @property string $border_color
  * @property string $background_color
  * @property string|null $registration_system_key
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentInfo> $departmentInfos
+ * @property-read int|null $department_infos_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRolePermission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users

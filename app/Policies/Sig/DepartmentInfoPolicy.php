@@ -24,7 +24,7 @@ class DepartmentInfoPolicy extends ManageEventPolicy
     public function view(User $user, DepartmentInfo $departmentInfo): bool {
         if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
             return true;
-        if($departmentInfo->sigEvent->sigHost->reg_id === $user->reg_id)
+        if($departmentInfo->sigEvent->sigHosts->intersect($user->sigHosts)->count() > 0)
             return true;
 
         return false;
@@ -42,7 +42,7 @@ class DepartmentInfoPolicy extends ManageEventPolicy
     public function update(User $user, DepartmentInfo $departmentInfo): bool {
         if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
             return true;
-        if($departmentInfo->sigEvent->sigHost->reg_id === $user->reg_id && !$departmentInfo->sigEvent->approved)
+        if($departmentInfo->sigEvent->sigHosts->intersect($user->sigHosts)->count() && !$departmentInfo->sigEvent->approved)
             return true;
 
         return false;
@@ -51,7 +51,7 @@ class DepartmentInfoPolicy extends ManageEventPolicy
     public function delete(User $user, DepartmentInfo $departmentInfo): bool {
         if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::DELETE))
             return true;
-        if($departmentInfo->sigEvent->sigHost->reg_id == $user->reg_id && !$departmentInfo->sigEvent->approved)
+        if($departmentInfo->sigEvent->sigHosts->intersect($user->sigHosts)->count() && !$departmentInfo->sigEvent->approved)
             return true;
 
         return false;
