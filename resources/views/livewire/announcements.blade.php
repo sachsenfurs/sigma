@@ -12,7 +12,9 @@
                     <div class="card-body h-100 d-flex flex-column justify-content-between">
                         <p class="card-text fs-4">{!! $post->getSafeHTML() !!}</p>
                         <p class="card-text text-end">
-                            <small class="text-body-secondary">{{ $post->created_at->diffForHumans() }}</small>
+                            <small class="text-body-secondary" title="{{ $post->created_at->translatedFormat("l, d.m.Y H:i") }}">
+                                {{ $post->created_at->diffForHumans() }}
+                            </small>
                         </p>
                     </div>
                 </div>
