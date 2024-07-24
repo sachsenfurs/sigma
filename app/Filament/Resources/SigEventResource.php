@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Models\SigEvent;
 use App\Models\SigHost;
@@ -107,6 +108,7 @@ class SigEventResource extends Resource
         return [
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
             SigTimeslotsRelationManager::class,
+            DepartmentInfosRelationManager::class,
         ];
     }
 
