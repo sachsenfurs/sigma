@@ -45,6 +45,7 @@ class PostResource extends Resource
                 Forms\Components\Textarea::make('text')
                     ->label("Text")
                     ->hint(__("Telegram Markdown Syntax supported"))
+                    ->helperText(__("Markdown Syntax: *bold*  _italic_  `monospace`"))
                     ->required()
                     ->rows(10)
                     ->columnSpanFull(),

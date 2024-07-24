@@ -5,8 +5,6 @@ namespace App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Storage;
-use League\CommonMark\Parser\MarkdownParser;
-use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -52,13 +50,13 @@ class PostChannel extends Model
                 'chat_id' => $channel_identifier,
                 'photo' => InputFile::create(Storage::disk("public")->path($post->image)),
                 'caption' => $text,
-                'parse_mode' => "MarkdownV2"
+                'parse_mode' => "markdown"
             ]);
         } else {
             $response = Telegram::sendMessage([
                 'chat_id' => $channel_identifier,
                 'text' => $text,
-                'parse_mode' => "MarkdownV2"
+                'parse_mode' => "markdown"
             ]);
         }
 

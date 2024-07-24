@@ -31,7 +31,9 @@ class TelegramServiceProvider extends ServiceProvider
         // overwrite config and re-registering service provider
         try {
             config([
+                'telegram.bots.default.name' => app(AppSettings::class)->telegram_bot_name,
                 'services.telegram-bot-api.name' => app(AppSettings::class)->telegram_bot_name,
+                'telegram.bots.default.token' => app(AppSettings::class)->telegram_bot_token,
                 'services.telegram-bot-api.token' => app(AppSettings::class)->telegram_bot_token,
             ]);
             (new \NotificationChannels\Telegram\TelegramServiceProvider(app()))->register();
