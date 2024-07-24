@@ -177,7 +177,7 @@ class SigEventResource extends Resource
                     ->translateLabel()
                     ->maxLength(255)
                     ->required()
-                    ->suffixAction(fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('name_en', 'name') : null)
+                    ->suffixAction(fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('name_en', 'name')->authorize("create", SigEvent::class) : null)
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
@@ -187,7 +187,7 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->required()
                     ->suffixAction(
-                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('name', 'name_en') : null
+                        fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('name', 'name_en')->authorize("create", SigEvent::class) : null
                     )
                     ->maxLength(255)
                     ->inlineLabel()
@@ -330,7 +330,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description') : null
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description')->authorize("attach", SigEvent::class) : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                     Forms\Components\MarkdownEditor::make('description_en')
@@ -338,7 +338,7 @@ class SigEventResource extends Resource
                         ->translateLabel()
                         ->maxLength(65535)
                         ->hintAction(
-                            fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en') : null
+                            fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en')->authorize("attach", SigEvent::class) : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2]),
                 ]);

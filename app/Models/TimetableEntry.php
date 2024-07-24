@@ -151,7 +151,7 @@ class TimetableEntry extends Model
                 return "";
             if($mins < 60)
                 return $mins." min";
-            return round($this->start->floatDiffInHours($this->end), 1). " h";
+            return $this->start->diff($this->end)->format("%h:%I") . " h";
         });
     }
 

@@ -33,7 +33,7 @@
 
         <h3>{{ __("Welcome to the SIG-Manager, here you can:") }}</h3>
         <div class="row g-3 mt-3 align-items-stretch">
-            <x-home.overview icon="bi-calendar-week">
+            <x-home.overview icon="bi-calendar-week" :href="route('schedule.listview')">
                 {{ __("Access the event schedule") }}
                 <x-slot:subtitle>
                     {{ __("View our schedule and don't miss anything!") }}

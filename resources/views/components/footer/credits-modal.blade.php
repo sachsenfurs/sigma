@@ -12,7 +12,7 @@
                     <ul>
                         <li>
                             <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
-                            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercian License</a>
+                            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="text-decoration-none">Non-Commercial License</a>
                         </li>
                         <li>
                             <a href="https://www.cheetagonzita.com/" class="text-decoration-none" target="_blank">Artworks by Zita</a>

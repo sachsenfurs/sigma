@@ -43,26 +43,35 @@ class PostResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Textarea::make('text')
+                    ->label("Text")
+                    ->hint(__("Telegram Markdown Syntax supported"))
+                    ->helperText(__("Markdown Syntax: *bold*  _italic_  `monospace`"))
                     ->required()
                     ->rows(10)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('text_en')
+                    ->label("Text (English)")
+                    ->translateLabel()
                     ->rows(10)
                     ->hintAction(
                         fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary("text", "text_en") : null
                     )
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
+                    ->label("Image")
+                    ->translateLabel()
                     ->hidden(fn($operation, ?Model $record) => $operation == "edit" AND !$record?->image)
                     ->image()
                     ->preserveFilenames(false)
                     ->disk("public")
                     ->nullable(),
                 Forms\Components\CheckboxList::make("channels")
+                    ->label("Channels")
+                    ->translateLabel()
                     ->visibleOn('create')
                     ->options($channels->pluck("name", "id"))
                     ->formatStateUsing(fn(?Model $record) => $record?->channels?->pluck("id")?->toArray() ?? $channels->pluck("id")->toArray())
-                    ->dehydrated(false)
+//                    ->dehydrated(false)
             ]);
     }
 

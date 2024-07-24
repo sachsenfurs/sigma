@@ -53,8 +53,8 @@
                     </div>
                 </div>
 
-                <div class="row mt-2">
-                    @if(Route::is("locations.*") AND !$entry->sigEvent->primaryHost->hide)
+                @if((Route::is("locations.*") OR $entry->sigEvent->publicHosts->count() > 1) AND !$entry->sigEvent->primaryHost->hide)
+                    <div class="row mt-2">
                         <div class="col-auto d-flex">
                             <i class="bi bi-person-circle align-self-center"></i>
                         </div>
@@ -65,8 +65,10 @@
                                 </a>
                             @endforeach
                         </div>
-                    @endif
-                    @if(Route::is("hosts.*"))
+                    </div>
+                @endif
+                @if(Route::is("hosts.*"))
+                    <div class="row mt-2">
                         <div class="col-auto d-flex">
                             <i class="bi bi-geo-alt align-self-center"></i>
                         </div>
@@ -75,9 +77,10 @@
                                 <b>{{ $entry->sigLocation->name }}</b>
                             </a>
                         </div>
-                    @endif
+                    </div>
+                @endif
 
-
+                <div class="row">
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->hasLocationChanged)
