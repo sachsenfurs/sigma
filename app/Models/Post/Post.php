@@ -47,4 +47,14 @@ class Post extends Model
     public function messages(): HasMany {
         return $this->hasMany(PostChannelMessage::class);
     }
+
+    public function getSafeHTML() {
+        $rawText = preg_replace(
+            "#(^|[\n ])([\w]+?://[\w\#$%&~/.\-;:=,?@\[\]+]*)#is",
+            "\\1<a href=\"\\2\" target=\"_blank\" rel=\"nofollow\">\\2</a>",
+            e($this->text_localized)
+        );
+
+        return nl2br($rawText, false);
+    }
 }

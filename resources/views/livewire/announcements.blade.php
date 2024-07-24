@@ -10,7 +10,7 @@
                 @endif
                 <div class="col">
                     <div class="card-body h-100 d-flex flex-column justify-content-between">
-                        <p class="card-text fs-4">{{ $post->text_localized }}</p>
+                        <p class="card-text fs-4">{!! $post->getSafeHTML() !!}</p>
                         <p class="card-text text-end">
                             <small class="text-body-secondary">{{ $post->created_at->diffForHumans() }}</small>
                         </p>
