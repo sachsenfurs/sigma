@@ -20,21 +20,6 @@
             @endif
         </div>
     @else
-        <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch justify-content-center" style="max-width: 970px">
-            <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
-                {{ __("Submit your Events, Workshops, Presentations and more!") }}
-            </x-home-signup-card>
-            @if(app(\App\Settings\ArtShowSettings::class)->enabled)
-                <x-home-signup-card :title="__('Explore Artshow')" img="/images/signup/artshowfox.png" :href="route('artshow.index')">
-                    {{ __("Explore which items are in the this years artshow!") }}
-                </x-home-signup-card>
-            @endif
-            {{--
-            <x-home-signup-card :title="__('Lost & Found')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
-                {{ __("Did you lose something on the convention? Click here to see which items were found.") }}
-            </x-home-signup-card>
-            --}}
-        </div>
         <div class="row mt-5">
             <div class="col-12 col-md-8">
                 <div class="container">
@@ -87,12 +72,27 @@
                             <x-modal.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
                         @endforeach
                     @endif
+                    <div class="row row-cols-1 row-cols-md-3 mt-4 mx-auto align-items-stretch justify-content-center" style="max-width: 970px">
+                        <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
+                            {{ __("Submit your Events, Workshops, Presentations and more!") }}
+                        </x-home-signup-card>
+                        @if(app(\App\Settings\ArtShowSettings::class)->enabled)
+                            <x-home-signup-card :title="__('Explore Artshow')" img="/images/signup/artshowfox.png" :href="route('artshow.index')">
+                                {{ __("Explore which items are in the this years artshow!") }}
+                            </x-home-signup-card>
+                        @endif
+                        {{--
+                        <x-home-signup-card :title="__('Lost & Found')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
+                            {{ __("Did you lose something on the convention? Click here to see which items were found.") }}
+                        </x-home-signup-card>
+                        --}}
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-md-4 mt-2 mt-md-0">
                 @if (!auth()->user()->telegram_user_id)
                     <div class="container">
-                        <h2 class="p-2"><h3><i class="bi bi-telegram"></i> - {{ __("Telegram Connection") }}</h2>
+                        <h2 class="p-2"><i class="bi bi-telegram"></i> - {{ __("Telegram Connection") }}</h2>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
                         <a class="btn btn-primary btn-lg mx-auto" href="{{ route("user-settings.edit") }}" role="button">
                             {{ __("Connect it now") }}
