@@ -25,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
 
+        Gate::policy(\App\Models\DepartmentInfo::class          , \App\Policies\Sig\DepartmentInfoPolicy::class);
         Gate::policy(\App\Models\SigEvent::class                , \App\Policies\Sig\SigEventPolicy::class);
         Gate::policy(\App\Models\SigFilledForm::class           , \App\Policies\Sig\SigFilledFormPolicy::class);
         Gate::policy(\App\Models\SigForm::class                 , \App\Policies\Sig\SigFormPolicy::class);
