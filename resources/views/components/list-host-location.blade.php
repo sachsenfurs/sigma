@@ -11,8 +11,8 @@
         <div @class(['row g-0', 'bg-secondary' => $hide])>
             @if($avatar)
                 <div class="col-md-4" style="max-height: 100%">
-                    <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded-start d-none d-md-block placeholder" style="object-fit: cover; max-height: 15em" alt="" loading="lazy">
-                    <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded-top d-md-none placeholder" style="object-fit: cover; max-height: 12em" alt="" loading="lazy">
+                    <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded-start d-none d-md-block" style="object-fit: cover; max-height: 15em" alt="" loading="lazy">
+                    <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded-top d-md-none" style="object-fit: cover; max-height: 12em" alt="" loading="lazy">
                 </div>
             @endif
             <div class="@if($avatar)col-md-6 @else col-md-10 @endif">
