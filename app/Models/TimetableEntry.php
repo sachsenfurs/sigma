@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Traits\HasSigEvents;
 use App\Observers\TimetableEntryObserver;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -162,5 +164,18 @@ class TimetableEntry extends Model
             }
             return false;
         });
+    }
+
+    public function qrCode(): string {
+        $qrCode = new QRCode(
+            new QROptions([
+                'version'    => 3, // use the smallest possible version for the data
+                'outputType' => 'png',
+                'scale' => 4,
+                'quietzoneSize' => 1, // the white box around the qr code
+            ])
+        );
+
+        return $qrCode->render('https://sigma.sachsenfurs.de/show/' . $this->id);
     }
 }
