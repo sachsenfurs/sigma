@@ -13,6 +13,9 @@ use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
@@ -22,6 +25,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
 {
@@ -163,6 +167,36 @@ class SigEventResource extends Resource
                 ->counts("sigTimeslots")
                 ->badge()
                 ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray),
+            Tables\Columns\TextColumn::make("department_infos_count")
+                ->label("Department Requirements")
+                ->translateLabel()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->counts("departmentInfos")
+                ->badge()
+                ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray)
+                ->action(
+                    Tables\Actions\ViewAction::make()
+                        ->infolist([
+                            TextEntry::make("additional_info")
+                                ->label("Additional Information")
+                                ->translateLabel(),
+                            RepeatableEntry::make("departmentInfos")
+                                ->label("Linked Departments")
+                                ->translateLabel()
+                                ->schema([
+                                    TextEntry::make("userRole.title")
+                                        ->label("")
+                                        ->hintIcon("heroicon-o-pencil-square")
+                                        ->hintAction(fn($record) => Action::make("edit")->url(DepartmentInfoResource::getUrl("edit", ['record' => $record]))),
+                                    TextEntry::make("additional_info")
+                                        ->listWithLineBreaks()
+                                        ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
+                                        ->label(""),
+                                ])
+                        ])
+                        ->modalWidth(MaxWidth::SevenExtraLarge),
+                ),
         ];
     }
 
