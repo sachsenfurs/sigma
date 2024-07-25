@@ -27,4 +27,8 @@ class UserRole extends Model
     public function permissions(): HasMany {
        return $this->hasMany(UserRolePermission::class);
     }
+
+    public function departmentInfos(): HasMany {
+        return $this->hasMany(DepartmentInfo::class);
+    }
 }

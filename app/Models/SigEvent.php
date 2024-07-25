@@ -128,4 +128,8 @@ class SigEvent extends Model
     public function sigTimeslots(): HasManyThrough {
         return $this->hasManyThrough(SigTimeslot::class, TimetableEntry::class);
     }
+
+    public function departmentInfos(): HasMany {
+        return $this->hasMany(DepartmentInfo::class);
+    }
 }
