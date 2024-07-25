@@ -34,10 +34,10 @@ class LassieExportEndpoint extends Controller
                 'title' => $timetableEntry->sigEvent->name,
 
                 //start	datetime	NO	current_timestamp()	 ISO-Format, UTC time (i.e. "2019-08-01 11:30:00" for an event at 13:30 in Berlin in summer GMT+2)
-                'start' => $timetableEntry->start->toDateTimeString(),
+                'start' => $timetableEntry->start->timezone("UTC")->toDateTimeString(),
 
                 //end	datetime	NO	current_timestamp()	 ISO-Format, UTC time (i.e. "2019-08-01 11:30:00" for an event at 13:30 in Berlin in summer GMT+2)
-                'end' => $timetableEntry->end->toDateTimeString(),
+                'end' => $timetableEntry->end->timezone("UTC")->toDateTimeString(),
 
                 //location	varchar(250)	YES	NULL	 Location of the event
                 'location' => $timetableEntry->sigLocation->name,
@@ -72,8 +72,8 @@ class LassieExportEndpoint extends Controller
                 //ric	int(7) unsigned	NO	0	Only used if the event is a Security shift that should be available as alertable unit (i.e. §S: ODS) and a Pager system is in use.
                 'ric' => 0,
 
-                // expected_status  Status the Operatives scheduled into this shift are expected to be in (e.g.: 4 for regular door duties). 0 if any or event.
-                'expected_status' => 0
+                // exp_status  Status the Operatives scheduled into this shift are expected to be in (e.g.: 4 for regular door duties). 0 if any or event.
+                'exp_status' => 0
             ];
             if($first)
                 fputcsv($csvStream, array_keys($entry), ";");
