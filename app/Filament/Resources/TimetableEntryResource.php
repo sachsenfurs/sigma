@@ -9,6 +9,8 @@ use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,6 +19,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\HtmlString;
 
 class TimetableEntryResource extends Resource
 {
@@ -79,10 +82,38 @@ class TimetableEntryResource extends Resource
             )
             ->filters([
                 self::getLocationFilter(),
+                Tables\Filters\SelectFilter::make("department")
+                    ->label("SIG Requirements")
+                    ->translateLabel()
+                    ->searchable()
+                    ->preload()
+                    ->relationship("sigEvent.departmentInfos.userRole", "title"),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make("requirements")
+                    ->infolist([
+                        TextEntry::make("sigEvent.additional_info")
+                            ->label("")
+                            ->listWithLineBreaks()
+                            ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
+                        RepeatableEntry::make("sigEvent.departmentInfos")
+                            ->label("SIG Requirements")
+                            ->translateLabel()
+                            ->schema([
+                                TextEntry::make("userRole.title")
+                                    ->label(""),
+                                TextEntry::make("additional_info")
+                                    ->label("")
+                                    ->listWithLineBreaks()
+                                    ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
+                            ])
+                    ])
+                    ->modal(),
+                Tables\Actions\EditAction::make()
+                    ->url(null),
             ])
+            ->recordUrl(null)
+            ->recordAction("requirements")
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
