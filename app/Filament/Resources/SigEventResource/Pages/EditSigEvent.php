@@ -23,6 +23,10 @@ class EditSigEvent extends EditRecord
         return $this->record->name_localized;
     }
 
+    protected function getRedirectUrl(): ?string {
+        return $this->previousUrl ?? self::getUrl("index");
+    }
+
     /**
      * @return string|Htmlable
      */
