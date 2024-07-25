@@ -22,6 +22,10 @@ class LassieExportEndpoint extends Controller
             /**
              * @var $timetableEntry TimetableEntry
              */
+            // skip "empty" info entries (FSL opens, etc.)
+            if($timetableEntry->start->diffInMinutes($timetableEntry->end) == 0)
+                continue;
+
             $entry = [
                 //id	int(11)	NO	Auto-Increment	 Do include but leave empty!
                 'id' => null,
