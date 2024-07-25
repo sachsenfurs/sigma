@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -89,6 +90,11 @@ class DepartmentInfoResource extends Resource
 
                             ]),
                     ]),
+                Tables\Actions\EditAction::make()
+                    ->label("Edit SIG")
+                    ->translateLabel()
+                    ->color(Color::Gray)
+                    ->url(fn(Model $record) => SigEventResource::getUrl("edit", ['record' => $record->sigEvent])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

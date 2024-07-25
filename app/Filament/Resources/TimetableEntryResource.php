@@ -13,6 +13,7 @@ use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -82,18 +83,18 @@ class TimetableEntryResource extends Resource
             )
             ->filters([
                 self::getLocationFilter(),
-                Tables\Filters\SelectFilter::make("department")
-                    ->label("SIG Requirements")
-                    ->translateLabel()
-                    ->searchable()
-                    ->preload()
-                    ->relationship("sigEvent.departmentInfos.userRole", "title"),
+                self::getDepartmentFilter(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make("requirements")
                     ->infolist([
+                        TextEntry::make("sigEvent.description_localized")
+                            ->label("Description")
+                            ->translateLabel()
+                            ->inlineLabel(),
                         TextEntry::make("sigEvent.additional_info")
-                            ->label("")
+                            ->label("Additional Information")
+                            ->translateLabel()
                             ->listWithLineBreaks()
                             ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
                         RepeatableEntry::make("sigEvent.departmentInfos")
@@ -167,6 +168,8 @@ class TimetableEntryResource extends Resource
             Tables\Columns\TextColumn::make('sigEvent.name')
                 ->label('Event')
                 ->translateLabel()
+                ->color(fn(Model $record) => $record->hide ? Color::Gray : null)
+                ->badge(fn(Model $record) => $record->hide)
                 ->searchable(),
             Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
                  ->label('Host')
@@ -316,5 +319,14 @@ class TimetableEntryResource extends Resource
             ->translateLabel()
             ->formatStateUsing(fn() => app(AppSettings::class)->show_schedule_date->isBefore(now()))
             ->helperText(__('This needs to be checked if the event should be marked as changed!'));
+    }
+
+    private static function getDepartmentFilter(): Tables\Filters\SelectFilter {
+        return Tables\Filters\SelectFilter::make("department")
+              ->label("SIG Requirements")
+              ->translateLabel()
+              ->searchable()
+              ->preload()
+              ->relationship("sigEvent.departmentInfos.userRole", "title");
     }
 }
