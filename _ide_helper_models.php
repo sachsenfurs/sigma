@@ -209,11 +209,23 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\SigEvent|null $sigEvent
- * @property-read \App\Models\UserRole|null $userRole
+ * @property int $id
+ * @property int $sig_event_id
+ * @property int $user_role_id
+ * @property string|null $additional_info
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigEvent $sigEvent
+ * @property-read \App\Models\UserRole $userRole
  * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereAdditionalInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereSigEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereUserRoleId($value)
  */
 	class DepartmentInfo extends \Eloquent {}
 }
@@ -413,6 +425,8 @@ namespace App\Models{
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
+ * @property int $text_confirmed
+ * @property int $no_text
  * @property int $duration
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property string|null $additional_info
@@ -462,9 +476,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNoText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigHostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereTextConfirmed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereUpdatedAt($value)
  */
 	class SigEvent extends \Eloquent {}

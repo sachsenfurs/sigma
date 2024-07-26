@@ -97,6 +97,14 @@ class SigEvent extends Model
         );
     }
 
+    public function isDescriptionPresent(): bool {
+        return $this->no_text ?: filled($this->description);
+    }
+
+    public function isDescriptionEnPresent(): bool {
+        return $this->no_text ?: filled($this->description_en);
+    }
+
     public function durationHours(): Attribute {
         return Attribute::make(
             get: fn() => number_format($this->duration / 60, 1)
