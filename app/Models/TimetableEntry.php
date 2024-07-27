@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Traits\HasSigEvents;
 use App\Observers\TimetableEntryObserver;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy(TimetableEntryObserver::class)]
 class TimetableEntry extends Model
@@ -162,5 +166,23 @@ class TimetableEntry extends Model
             }
             return false;
         });
+    }
+
+    public function qrCode(): string {
+        return Cache::remember(
+            "qrcode-entry-".$this->id,
+            3600 * 4,
+            function(): string {
+                $qrCode = new QRCode(
+                    new QROptions([
+//                        'version'    => 3, // use the smallest possible version for the data
+                        'outputType' => 'png',
+                        'scale' => 20,
+                        'quietzoneSize' => 1, // the white box around the qr code
+                    ])
+                );
+                return $qrCode->render(route("timetable-entry.show", $this));
+            }
+        );
     }
 }

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "chillerlan/php-qrcode": "^5.0",
         "deeplcom/deepl-php": "^1.5",
         "doctrine/dbal": "^3.6",
         "filament/filament": "^3.2",
