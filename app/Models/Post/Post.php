@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 #[ObservedBy(PostObserver::class)]
 class Post extends Model
@@ -19,6 +22,8 @@ class Post extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public static $parseMode = "markdown";
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
@@ -56,5 +61,26 @@ class Post extends Model
         );
 
         return nl2br($rawText, false);
+    }
+
+    public function sendToChannel(PostChannel $channel): int|false {
+        $text = $this->getTranslatedText($channel->language);
+
+        if($this->image) {
+            $response = Telegram::sendPhoto([
+                'chat_id' => $channel->channel_identifier,
+                'photo' => InputFile::create(Storage::disk("public")->path($this->image)),
+                'caption' => $text,
+                'parse_mode' => self::$parseMode
+            ]);
+        } else {
+            $response = Telegram::sendMessage([
+                'chat_id' => $channel->channel_identifier,
+                'text' => $text,
+                'parse_mode' => self::$parseMode
+            ]);
+        }
+
+        return $response->isError() ? false : $response->getMessageId();
     }
 }

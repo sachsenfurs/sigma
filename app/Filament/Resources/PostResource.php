@@ -4,22 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use Nette\Utils\Html;
 
 class PostResource extends Resource
 {
@@ -71,19 +65,21 @@ class PostResource extends Resource
                     ->visibleOn('create')
                     ->options($channels->pluck("name", "id"))
                     ->formatStateUsing(fn(?Model $record) => $record?->channels?->pluck("id")?->toArray() ?? $channels->pluck("id")->toArray())
-//                    ->dehydrated(false)
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
+                Tables\Columns\IconColumn::make("deleted_at")
+                    ->label("")
+                    ->boolean()
+                    ->visible(fn(Table $table) => $table->getFilters()['trashed']->getActiveCount())
+                    ->getStateUsing(fn(Model $record) => $record->deleted_at == null),
                 Tables\Columns\TextColumn::make('text')
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
-                    ->limit(100)
-                ,
+                    ->limit(100),
                 Tables\Columns\TextColumn::make('text_en')
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
@@ -98,7 +94,7 @@ class PostResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -114,8 +110,7 @@ class PostResource extends Resource
             ]);
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ManagePosts::route('/'),
         ];
