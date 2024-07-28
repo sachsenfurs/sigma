@@ -6,6 +6,7 @@ use App\Observers\SigFavoriteObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 
 #[ObservedBy(SigFavoriteObserver::class)]
 class SigFavorite extends Model
@@ -27,5 +28,13 @@ class SigFavorite extends Model
 
     public function reminders() {
         return auth()?->user()->reminders()->where("timetable_entry_id", $this->timetableEntry->id);
+    }
+
+    public static function getMaxLikes() {
+        return Cache::remember(
+            "timetable-max-likes",
+            500,
+            fn() => TimetableEntry::withCount("favorites")->orderBy("favorites_count", "desc")->first()?->favorites_count ?? 0
+        );
     }
 }

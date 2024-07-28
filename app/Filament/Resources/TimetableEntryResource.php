@@ -4,11 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Pages;
+use App\Models\SigFavorite;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SubNavigationPosition;
@@ -72,14 +75,18 @@ class TimetableEntryResource extends Resource
     }
 
     public static function table(Table $table): Table {
+
         return $table
             ->columns(static::getTableColumns())
             ->defaultPaginationPageOption('all')
             ->defaultGroup(
-                Group::make('start')
-                    ->label('')
-                    ->collapsible()
-                    ->date()
+                $table->getSortColumn()
+                    ? null
+                    : Group::make('start')
+                     ->label(__("Day"))
+                     ->collapsible()
+                     ->date()
+                     ->titlePrefixedWithLabel(false)
             )
             ->filters([
                 self::getLocationFilter(),
@@ -184,14 +191,43 @@ class TimetableEntryResource extends Resource
                 ->badge()
                 ->label('Location')
                 ->translateLabel(),
-            Tables\Columns\ImageColumn::make('sigEvent.languages')
-                ->label('Languages')
-                ->translateLabel()
-                ->view('filament.tables.columns.sig-event.flag-icon'),
             Tables\Columns\TextColumn::make("sig_timeslots_count")
                 ->label("Timeslot Count")
                 ->translateLabel()
-                ->counts("sigTimeslots"),
+                ->counts("sigTimeslots")
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make("favorites_count")
+                ->label("Favorites")
+                ->translateLabel()
+                ->counts("favorites")
+                ->icon("heroicon-s-heart")
+                ->badge()
+                ->color(function($state) {
+                    $max = SigFavorite::getMaxLikes();
+                    if($state > 0.95 * $max)
+                        return Color::Pink;
+                    if($state > 0.75 * $max)
+                        return Color::Fuchsia;
+                    if($state > 0.5 * $max)
+                        return Color::Purple;
+                    if($state > 0.3 * $max)
+                        return Color::Indigo;
+                    return Color::Gray;
+                })
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->sortable()
+                ->action(
+                    Tables\Actions\ViewAction::make()
+                        ->infolist([
+                            RepeatableEntry::make("favorites")
+                                ->schema([
+                                    TextEntry::make("user")
+                                        ->label("")
+                                        ->formatStateUsing(fn($state) => $state->name . " (#" . $state->reg_id . ")"),
+                                ])
+                        ]),
+
+                ),
         ];
     }
 
