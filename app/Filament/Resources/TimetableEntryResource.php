@@ -258,6 +258,7 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Select::make('sig_event_id')
             ->label('Event')
             ->translateLabel()
+            ->createOptionForm(fn($form) => SigEventResource::form($form))
             ->autofocus(fn($state) => $state == null)
             ->model(TimetableEntry::class)
             ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHosts'))
