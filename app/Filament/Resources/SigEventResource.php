@@ -435,9 +435,10 @@ class SigEventResource extends Resource
             ->label("Last Modified")
             ->translateLabel()
             ->inlineLabel()
-            ->content(fn(Model $record) => $record->updated_at->diffForHumans())
-            ->extraAttributes(fn(Model $record) => [
-                'title' => $record->updated_at->toDateTimeString()
+            ->visible(fn(?Model $record) => $record)
+            ->content(fn(?Model $record) => $record?->updated_at?->diffForHumans() ?? "")
+            ->extraAttributes(fn(?Model $record) => [
+                'title' => $record?->updated_at?->toDateTimeString() ?? ""
             ]);
     }
 
