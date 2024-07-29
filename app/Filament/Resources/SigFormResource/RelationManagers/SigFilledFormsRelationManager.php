@@ -113,7 +113,7 @@ class SigFilledFormsRelationManager extends RelationManager
                                 $data = $option['data'] ?? [];
 //                                dd($option);
 //                                dd($formData['name'] ,$record->form_data['form_data'][$formData['name']]);
-                                if (($data['value'] ?? null) === $record->form_data['form_data'][$formData['name']]) {
+                                if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
                                     return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
                                 }
                             }

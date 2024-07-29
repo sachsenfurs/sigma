@@ -277,6 +277,14 @@ class SigFormResource extends Resource
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('help_text')
+                    ->label('Help text')
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text_en')
+                    ->label('Help text (English)')
+                    ->translateLabel()
+                    ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
@@ -315,6 +323,14 @@ class SigFormResource extends Resource
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text')
+                    ->label('Help text')
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text_en')
+                    ->label('Help text (English)')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
                     ->label('Required')
@@ -355,6 +371,14 @@ class SigFormResource extends Resource
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('help_text')
+                    ->label('Help text')
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text_en')
+                    ->label('Help text (English)')
+                    ->translateLabel()
+                    ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
@@ -393,6 +417,14 @@ class SigFormResource extends Resource
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text')
+                    ->label('Help text')
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text_en')
+                    ->label('Help text (English)')
+                    ->translateLabel()
                     ->maxLength(255),
                 Forms\Components\Checkbox::make('required')
                     ->label('Required')
@@ -436,6 +468,14 @@ class SigFormResource extends Resource
                 Forms\Components\Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
+                Forms\Components\TextInput::make('help_text')
+                    ->label('Help text')
+                    ->translateLabel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('help_text_en')
+                    ->label('Help text (English)')
+                    ->translateLabel()
+                    ->maxLength(255),
                 Forms\Components\Builder::make('options')
                     ->label('Options')
                     ->translateLabel()
