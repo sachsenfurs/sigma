@@ -206,6 +206,8 @@
     "Label": "Beschriftung",
     "Label (English)": "Beschriftung (Englisch)",
     "Required": "Erforderlich",
+    "Help text": "Hilfetext",
+    "Help text (English)": "Hilfetext (English)",
     "Really delete form data?": "Formulardaten wirklich löschen?",
     "Form data deleted": "Formulardaten entfernt",
     "Couldn't delete form data": "Formulardaten konnten nicht entfernt werden",

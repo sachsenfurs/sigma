@@ -155,6 +155,9 @@
                                             </select>
                                             @break
                                     @endswitch
+                                    @if(Arr::has($formData, 'help_text') || Arr::has($formData, 'help_text_en'))
+                                        <small class="form-text text-muted">{{ App::getLocale() == 'en' ? $formData['help_text_en'] : $formData['help_text'] }}</small>
+                                    @endif
                                 </div>
                             @endforeach
                             <div class="mt-4">
