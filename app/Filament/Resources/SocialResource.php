@@ -12,7 +12,6 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Cache;
 
 class SocialResource extends Resource
 {
@@ -111,7 +110,7 @@ class SocialResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->after(fn() => Cache::forget("footer")),
+                        ->after(fn() => Social::clearCache()),
                 ]),
             ]);
     }

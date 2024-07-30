@@ -3,7 +3,7 @@
         <span style="cursor: pointer; font-size:0.75em" data-bs-toggle="modal" data-bs-target="#creditsModal">&Sigma; - Credits</span>
     </p>
 
-    @cache('footer')
+    @cache('footer_' . app()->currentLocale())
     @foreach(\App\Models\Info\Social::footerText()->get() AS $social)
         <a href="{{ $social->link_localized }}" class="col text-center text-body text-nowrap text-muted text-decoration-none p-1" style="font-size: 0.9em">
             {{ $social->link_name_localized }}

@@ -61,4 +61,9 @@ class Social extends Model
     }
 
 
+    public static function clearCache() {
+        Cache::forget("footer_de");
+        Cache::forget("footer_en");
+    }
+
 }
