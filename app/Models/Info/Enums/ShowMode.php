@@ -13,10 +13,9 @@ enum ShowMode: int implements HasLabel
 
     #[Name('Show on Signage')]
     case SIGNAGE = 0;
-    #[Name('Show on page footer (Text)')]
-    case FOOTER_ICON = 1;
-
     #[Name('Show on page footer (Icon only)')]
+    case FOOTER_ICON = 1;
+    #[Name('Show on page footer (Text)')]
     case FOOTER_TEXT = 2;
 
     public function getLabel(): ?string {

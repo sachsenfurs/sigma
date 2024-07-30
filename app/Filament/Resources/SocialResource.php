@@ -12,7 +12,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class SocialResource extends Resource
 {
@@ -27,46 +27,55 @@ class SocialResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('description')
-                    ->label("Description")
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description_en')
-                    ->label("Description (English)")
-                    ->translateLabel()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('link_name')
-                    ->label("Link Name")
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('link')
-                    ->label("Link")
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('link_name_en')
-                    ->label("Link Name (English)")
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('link_en')
-                    ->label("Link (English)")
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('icon')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\Grid::make()
-                    ->columns(2)
+                Forms\Components\Fieldset::make()
                     ->schema([
-                        Forms\Components\FileUpload::make('image')
-                            ->label("Image")
-                            ->translateLabel(),
-                        Forms\Components\FileUpload::make('image_en')
-                            ->label("Image (English)")
-                            ->translateLabel(),
+                        Forms\Components\TextInput::make('description')
+                            ->label("Description")
+                            ->translateLabel()
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('description_en')
+                            ->label("Description (English)")
+                            ->translateLabel()
+                            ->maxLength(255)
+                            ->default(null),
                     ]),
+                Forms\Components\Fieldset::make()
+                    ->schema([
+                            Forms\Components\TextInput::make('link_name')
+                                ->label("Link Name")
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('link')
+                                ->label("Link")
+                                ->maxLength(255)
+                                ->default(null),
+                            Forms\Components\TextInput::make('link_name_en')
+                                ->label("Link Name (English)")
+                                ->translateLabel()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('link_en')
+                                ->label("Link (English)")
+                                ->maxLength(255)
+                                ->default(null),
+                ]),
+                Forms\Components\Fieldset::make()
+                     ->schema([
+                           Forms\Components\TextInput::make('icon')
+                               ->maxLength(255)
+                               ->default(null),
+                           Forms\Components\Grid::make()
+                               ->columns(2)
+                               ->schema([
+                                   Forms\Components\FileUpload::make('image')
+                                       ->label("Image")
+                                       ->translateLabel(),
+                                   Forms\Components\FileUpload::make('image_en')
+                                       ->label("Image (English)")
+                                       ->translateLabel(),
+                           ]),
+                ]),
                 Forms\Components\TextInput::make('order')
                     ->label("Order")
                     ->translateLabel()
@@ -101,7 +110,8 @@ class SocialResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->after(fn() => Cache::forget("footer")),
                 ]),
             ]);
     }
