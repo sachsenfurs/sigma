@@ -6,6 +6,7 @@ use App;
 use App\Models\SigFavorite;
 use App\Models\SigReminder;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -39,7 +40,7 @@ class SigFavoriteReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, 'mail');
     }
 
     /**
@@ -54,7 +55,7 @@ class SigFavoriteReminder extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
-            ->line(__("your favorite event ") . $this->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
+            ->line(__('your favorite event :event starts in :minutes_before minutes!', ["event" => $this->timetableEntry->sigEvent->name_localized, "minutes_before" => $this->reminder->minutes_before]))
             ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->timetableEntry]));
     }
 
@@ -67,7 +68,10 @@ class SigFavoriteReminder extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'sig_favorite_reminder',
+            'timetableEntryid' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized,
+            'minutes_before' => $this->reminder->minutes_before
         ];
     }
 }

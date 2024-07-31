@@ -95,12 +95,12 @@
                             @endif
 
                             <li class="py-2">
-                                <a @class(['btn btn-nav rounded d-flex', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
+                                <a @class(['btn btn-nav', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
                                     <i class="bi bi-megaphone"></i> {{ __('Announcements') }}
                                     @cache('announcements_count', 300)
                                         @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
                                         @if($count)
-                                            <div class="text-end w-100"><span class="badge bg-dark">{{ $count }}</span></div>
+                                            <div class="text-end d-inline-flex"><span class="badge bg-dark">{{ $count }}</span></div>
                                         @endif
                                     @endcache
                                 </a>
@@ -112,6 +112,29 @@
                                     <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
                                 </a>
                             </li>
+
+                            @auth
+                                <li class="py-2">
+                                    <a @class(['btn btn-nav', 'active' => Route::is("notifications.index")]) href="{{ route('notifications.index') }}">
+                                        @if (auth()->user()->unreadNotifications->count() > 0)
+                                            <i class="bi bi-bell-fill"></i> {{ __('Notifications') }}
+                                        @else
+                                            <i class="bi bi-bell"></i> {{ __('Notifications') }}
+                                        @endif
+                                    </a>
+                                </li>
+                                @if(app(\App\Settings\ChatSettings::class)->enabled)
+                                    <li class="py-2">
+                                        <a  @class(['btn btn-nav', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
+                                            @if (auth()->user()->unreadNotifications->count() > 0)
+                                                <i class="bi bi-mailbox2-flag"></i> {{ __('Chats') }}
+                                            @else
+                                                <i class="bi bi-mailbox2"></i> {{ __('Chats') }}
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
                         </ul>
 
                         @guest
@@ -133,6 +156,12 @@
                                             </a>
                                         </li>
                                     @endif
+
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('user-settings.edit') }}">
+                                            {{ __('User Settings') }}
+                                        </a>
+                                    </li>
 
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"

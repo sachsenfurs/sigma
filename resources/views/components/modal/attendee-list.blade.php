@@ -10,26 +10,26 @@
         <div class="modal-body">
           @if ($timeslot->sigAttendees->first()->reg_id = auth()->user()->reg_id)
               <div>
-                <h2>Teilnehmer hinzufügen</h2>
+                <h2>{{ __('Add attendee') }}</h2>
                 <form class="w-100" id="attendeeForm" action="{{ route('registration.register', $timeslot->id) }}" method="POST">
                   @csrf
-                  <p>Wen möchtest zu deinem Timeslot hinzufügen?</p>
+                  <p>{{ __('Who would you like to add to your timeslot?') }}</p>
                   <p><a href=""></a></p>
                   <div class="row">
                       <div class="col-4">
-                          <p>Reg-Nummer</p>
+                          <p>{{ __('Reg-Number') }}</p>
                       </div>
                       <div class="col-8">
                         <input type="text" class="form-control" name="regId" placeholder="Reg-ID" value="{{ Auth::user()->reg_id }}">
                       </div>
                   </div>
-                  <button type="submit" class="btn btn-primary m-1 mt-3">Teilnehmer hinzufügen</button>
+                  <button type="submit" class="btn btn-primary m-1 mt-3">{{ __('Add attendee') }}</button>
                 </form>
               </div>
             @endif
             <hr>
           <div>
-            <h2>Teilnehmer</h2>
+            <h2>{{ __('Attendees') }}</h2>
             @foreach ($timeslot->sigAttendees as $attendee)
               <x-list-attendee-item
                 :name="$attendee->user->name"

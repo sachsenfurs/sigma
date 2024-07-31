@@ -12,3 +12,17 @@
 input, label {
     user-select: none;
 }
+
+.rounded-left {
+    border-top-left-radius: .25rem !important;
+    border-bottom-left-radius: .25rem !important;
+}
+
+.rounded-right {
+    border-top-right-radius: .25rem !important;
+    border-bottom-right-radius: .25rem !important;
+}
+
+.border-left-0 {
+    border-left: 0 !important;
+}

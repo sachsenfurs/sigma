@@ -68,6 +68,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
 
 
+    public function notificationChannels(): HasMany {
+        return $this->hasMany(UserNotificationChannel::class);
+    }
+
     public function attendeeEvents(): HasMany {
         return $this->hasMany(SigAttendee::class);
     }
@@ -124,6 +128,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function artshowBids(): HasMany {
         return $this->hasMany(ArtshowBid::class);
+    }
+
+    public function chats() {
+        return $this->hasMany(Chat::class);
     }
 
     public function isAdmin(): bool {

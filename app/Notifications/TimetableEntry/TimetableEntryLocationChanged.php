@@ -4,6 +4,7 @@ namespace App\Notifications\TimetableEntry;
 
 use App;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -34,7 +35,8 @@ class TimetableEntryLocationChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_location_changed')->first()->channel;
+        return UserNotificationChannel::list('timetable_entry_location_changed', $notifiable->id, 'mail');
     }
 
     /**
@@ -49,7 +51,7 @@ class TimetableEntryLocationChanged extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
-            ->line(__('The location for the event ') . $this->timetableEntry->sigEvent->name_localized . ' has changed!')
+            ->line(__('The location for the event :event has changed!', ["event" => $this->timetableEntry->sigEvent->name_localized]))
             ->line(__('New location: ') . $this->timetableEntry->sigLocation->name)
             ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
@@ -63,7 +65,10 @@ class TimetableEntryLocationChanged extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'timetable_entry_location_changed',
+            'timetableEntryId' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized,
+            'newLocation' => $this->timetableEntry->sigLocation->name
         ];
     }
 }

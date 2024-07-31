@@ -4,6 +4,7 @@ namespace App\Notifications\TimetableEntry;
 
 use App;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +36,9 @@ class TimetableEntryTimeChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_time_changed')->first()->channel;
+        return UserNotificationChannel::list('timetable_entry_time_changed', $notifiable->id, 'mail');
+
     }
 
     /**
@@ -50,7 +53,7 @@ class TimetableEntryTimeChanged extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
-            ->line(__('The times for the event ') . $this->timetableEntry->sigEvent->name_localized . __(' have changed!'))
+            ->line(__('The time of the event :event has changed!', ["event" => $this->timetableEntry->sigEvent->name_localized]))
             ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))
             ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
@@ -64,7 +67,11 @@ class TimetableEntryTimeChanged extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'timetable_entry_time_changed',
+            'timetableEntryId' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized,
+            'newStartTime' => $this->timetableEntry->start,
+            'newEndTime' => $this->timetableEntry->end
         ];
     }
 }

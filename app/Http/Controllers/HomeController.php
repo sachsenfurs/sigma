@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post\Post;
+use App\Settings\AppSettings;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class HomeController extends Controller
 {
@@ -28,11 +31,19 @@ class HomeController extends Controller
         })->all();
 
         $posts      = Post::latest()->limit(6)->get();
+        
+        $preConMode = false;
+        $preConStartDate = strtotime(app(AppSettings::class)->event_start->subDays(3));
+        $currentDate = strtotime(Carbon::now()->toDateString());
+        if ($preConStartDate > $currentDate) {
+            $preConMode = true;
+        }
 
         return view('home', compact([
             'registrations',
             'favorites',
-            'posts'
+            'posts',
+            'preConMode'
         ]));
     }
 }

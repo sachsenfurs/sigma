@@ -4,6 +4,7 @@ namespace App\Notifications\TimetableEntry;
 
 use App;
 use App\Models\TimetableEntry;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -34,7 +35,8 @@ class TimetableEntryCancelled extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_cancelled')->first()->channel;
+        return UserNotificationChannel::list('timetable_entry_cancelled', $notifiable->id, 'mail');
     }
 
     /**
@@ -43,7 +45,7 @@ class TimetableEntryCancelled extends Notification
      * @param  mixed  $notifiable
      * @return \NotificationChannels\Telegram\TelegramMessage;
      */
-    public function toTelegram($notifiable)
+    public function toTelegram($notifiable): TelegramMessage
     {
         App::setLocale($notifiable->language);
         return TelegramMessage::create()
@@ -51,6 +53,19 @@ class TimetableEntryCancelled extends Notification
             ->line('[INFO]')
             ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        App::setLocale($notifiable->language);
+        return (new MailMessage)
+            ->subject('[INFO] ' . __('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
+            ->line('[INFO]')
+            ->line(__('The event :event was cancelled!', $this->timetableEntry->sigEvent->name_localized))
+            ->action(__('View Event'), route('public.timeslot-show', ['entry' => $this->timetableEntry->id]));
     }
 
     /**
@@ -62,7 +77,8 @@ class TimetableEntryCancelled extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'timetable_entry_cancelled',
+            'timetableEntryId' => $this->timetableEntry->id,
+            'eventName' => $this->timetableEntry->sigEvent->name_localized
         ];
-    }
 }

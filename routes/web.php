@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthLoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\Ddas\ArtshowController;
 use App\Http\Controllers\Ddas\DealersDenController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\AnnouncementsController;
@@ -23,8 +25,15 @@ use App\Http\Controllers\Sig\SigReminderController;
 use App\Http\Controllers\Sig\SigTimeslotController;
 use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\UserNotificationChannelController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Mime\MessageConverter;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +45,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/test', function () {
+    // $user = App\Models\User::find(1);
+    // $timetableEntry = App\Models\TimetableEntry::find(15);
+    // \Notification::send($user, new App\Notifications\TimetableEntry\TimetableEntryCancelled($timetableEntry));
+    
+    dd(\App\Models\UserNotificationChannel::list('sig_favorite_reminder', 1, 'mail'));
+});
+
+Route::get("/devlogin/{id?}", function($id=1) {
+   if(App::environment("local") OR App::environment("development")) {
+       Auth::loginUsingId($id);
+       return redirect(\App\Providers\RouteServiceProvider::HOME);
+   }
+})->name("devlogin");
 
 
 // Auth
@@ -154,4 +178,25 @@ Route::group(['middleware' => "auth"], function() {
         Route::post('/{form}', [SigFormController::class, 'store'])->name('store');
         Route::delete('/{form}', [SigFormController::class, 'destroy'])->name('destroy');
     });
+
+    // User Settings
+    Route::get("/settings", [UserNotificationChannelController::class, "edit"])->name("user-settings.edit");
+    Route::patch("/settings", [UserNotificationChannelController::class, "update"])->name("user-settings.update");
+
+    // Notifications
+    Route::get("/notifications", [NotificationController::class, "index"])->name("notifications.index");
+    Route::patch('/notifications', [NotificationController::class, 'update'])->name('notifications.update');
+
+    // Chats
+    Route::get("/chats", [ChatController::class, "index"])->name("chats.index");
+    Route::post("/chats/new", [ChatController::class, "create"])->name("chats.create");
+    Route::post("/chats/{chat}", [ChatController::class, "store"])->name("chats.store");
+
+    // Chats Ajax
+    Route::get('/chats/refresh/{chat}', [AjaxController::class, "refreshChat"])->name('chats.refresh');
+
+    // Messages
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+    Route::post('/messages/store', [MessageController::class, 'store'])->name('messages.store');
+
 });

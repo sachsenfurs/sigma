@@ -6,6 +6,7 @@ use App;
 use App\Models\SigTimeslot;
 use App\Models\SigFavoriteReminder;
 use App\Models\SigTimeslotReminder as SigTimeSlotReminderModel;
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -39,7 +40,8 @@ class SigTimeslotReminder extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'sig_timeslot_reminder')->first()->channel;
+        return UserNotificationChannel::list('sig_timeslot_reminder', $notifiable->id, 'mail');
     }
 
     /**
@@ -54,7 +56,7 @@ class SigTimeslotReminder extends Notification
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
-            ->line(__("your timeslot from the event ") . $this->sigTimeslot->timetableEntry->sigEvent->name . __(" starts in ")  . $this->reminder->minutes_before . __(" minutes!"))
+            ->line(__('your booked timeslot of the event :event starts in :minutes_before minutes!', ["event" => $this->sigTimeslot->timetableEntry->sigEvent->name_localized, "minutes_before" => $this->reminder->minutes_before]))
             ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->sigTimeslot->id]));
 
     }
@@ -68,7 +70,10 @@ class SigTimeslotReminder extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'sig_timeslot_reminder',
+            'sigTimeslotId' => $this->sigTimeslot->id,
+            'eventName' => $this->sigTimeslot->timetableEntry->sigEvent->name_localized,
+            'minutes_before' => $this->reminder->minutes_before
         ];
     }
 }
