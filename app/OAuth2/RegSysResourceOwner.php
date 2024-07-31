@@ -25,6 +25,10 @@ class RegSysResourceOwner implements ResourceOwnerInterface
         return $this->getValueByKey($this->response, "nickname");
     }
 
+    public function getEmail() {
+        return $this->getValueByKey($this->response, "email", "");
+    }
+
     public function getLanguage() {
         return $this->getValueByKey($this->response, "language", "en");
     }

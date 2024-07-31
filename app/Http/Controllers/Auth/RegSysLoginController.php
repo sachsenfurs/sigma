@@ -54,6 +54,7 @@ class RegSysLoginController extends Controller
 
             $userData = [
                 'name' => $resourceOwner->getNickname(),
+                'email' => $resourceOwner->getEmail(),
                 'reg_id' => $resourceOwner->getId(),
                 'language' => $resourceOwner->getLanguage(),
                 'telegram_id' => $resourceOwner->getTelegramId(),
