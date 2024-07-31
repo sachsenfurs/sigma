@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 {{--    <h2>{{ __("Before the convention") }}</h2>--}}
-    @if ($preConMode)
+    @if(true)
         <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch justify-content-center" style="max-width: 970px">
             <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                 {{ __("Submit your Events, Workshops, Presentations and more!") }}
