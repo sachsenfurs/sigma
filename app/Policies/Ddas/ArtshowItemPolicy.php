@@ -19,9 +19,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
     private function isWithinDeadline() {
         return app(ArtShowSettings::class)->item_deadline->isAfter(now());
     }
-    private function isItemInAuction(ArtshowItem $artshowItem) {
-        return ($artshowItem->approved || $artshowItem->sold || $artshowItem->paid || $artshowItem->artshowBids()->count() > 0);
-    }
+
     private function isOwnItem(User $user, ArtshowItem $artshowItem) {
         return $artshowItem?->artist()->first()?->user_id === $user->id;
     }
@@ -67,7 +65,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
             return false;
 
         // allow as long as item is not yet in auction
-        if($this->isOwnItem($user, $artshowItem) AND !$this->isItemInAuction($artshowItem))
+        if($this->isOwnItem($user, $artshowItem) AND !$artshowItem->isInAuction())
             return true;
 
         return false;
@@ -83,7 +81,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         // otherwise scope to own items:
         if($this->isOwnItem($user, $artshowItem)) {
             // allow as long as item is not yet in auction
-            return !$this->isItemInAuction($artshowItem);
+            return !$artshowItem->isInAuction();
         }
 
         return false;

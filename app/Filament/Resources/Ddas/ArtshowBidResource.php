@@ -2,10 +2,16 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowBidResource\Pages;
 use App\Models\Ddas\ArtshowBid;
 use App\Settings\ArtShowSettings;
+use Filament\Forms\Components\Field;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -39,15 +45,36 @@ class ArtshowBidResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                //
+                Select::make("artshow_item_id")
+                    ->relationship("artshowItem", "name")
+                    ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->id . " - " . $record->name)
+                    ->columnSpanFull()
+                    ->searchable(['id', 'name'])
+                    ->preload()
+                    ->live()
+                    ->required(),
+                Select::make("user_id")
+                    ->relationship("user", "name")
+                    ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
+                    ->searchable(['reg_id', 'name']),
+                TextInput::make("value")
+                    ->numeric()
+                    ->required(),
+
             ]);
     }
 
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make("user")
+                    ->formatStateUsing(fn(Model $record) => $record->user->name . " #" . $record->user->reg_id),
+                Tables\Columns\TextColumn::make("artshowItem.name"),
+                Tables\Columns\TextColumn::make("value"),
+                Tables\Columns\TextColumn::make("created_at")
+                    ->dateTime(),
             ])
+            ->defaultSort("created_at", "desc")
             ->filters([
                 //
             ])
@@ -70,7 +97,7 @@ class ArtshowBidResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowBids::route('/'),
-            'create' => Pages\CreateArtshowBid::route('/create'),
+//            'create' => Pages\CreateArtshowBid::route('/create'),
             'edit' => Pages\EditArtshowBid::route('/{record}/edit'),
         ];
     }

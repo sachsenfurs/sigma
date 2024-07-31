@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Ddas;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
+use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBidsRelationManager;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms;
@@ -115,6 +116,8 @@ class ArtshowItemResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make("id")
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('approval')
                     ->label('Approval')
                     ->translateLabel()
@@ -141,6 +144,20 @@ class ArtshowItemResource extends Resource
                     ->translateLabel()
                     ->formatStateUsing(fn(string $state): string => (int)$state . " %")
                     ->sortable(),
+                Tables\Columns\TextColumn::make("artshow_bids_count")
+                    ->label("Bid Count")
+                    ->translateLabel()
+                    ->counts("artshowBids")
+                    ->sortable(),
+                Tables\Columns\TextColumn::make("highestBid.value")
+                    ->label("Current Bid")
+                    ->money("EUR")
+                    ->sortable()
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make("highestBid.user.name")
+                    ->label("Highest Bidder")
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->translateLabel(),
                 Tables\Columns\IconColumn::make('auction')
                     ->label('Auction')
                     ->translateLabel()
@@ -175,7 +192,7 @@ class ArtshowItemResource extends Resource
 
     public static function getRelations(): array {
         return [
-            //
+            ArtshowBidsRelationManager::class,
         ];
     }
 

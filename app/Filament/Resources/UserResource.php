@@ -98,6 +98,7 @@ class UserResource extends Resource
             RelationManagers\DealersRelationManager::class,
             RelationManagers\SigHostsRelationManager::class,
             RelationManagers\FavoritesRelationManager::class,
+            RelationManagers\ArtshowBidsRelationManager::class,
         ];
     }
 

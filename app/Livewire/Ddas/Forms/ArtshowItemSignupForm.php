@@ -2,12 +2,11 @@
 
 namespace App\Livewire\Ddas\Forms;
 
-use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class ArtshowItemForm extends Form
+class ArtshowItemSignupForm extends Form
 {
     #[Validate('required|min:3|max:255')]
     public $name = "";

@@ -171,6 +171,7 @@ return [
         'available'             => 'verfügbar',
         'size'                  => 'Größe',
         'files.*'               => "Datei",
+        'value'                 => "Wert",
 
         'charity_percentage' => "Charityanteil",
         'starting_bid' => "Startgebot",

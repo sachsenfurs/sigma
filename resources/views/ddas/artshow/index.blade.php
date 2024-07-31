@@ -8,7 +8,7 @@
                 {{ __("Art Show Items are not published yet") }}
             </x-infocard>
         @else
-
+            <livewire:ddas.artshow-items />
         @endif
     </div>
 @endsection

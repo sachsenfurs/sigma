@@ -3,6 +3,7 @@
 namespace App\Models\Ddas;
 
 use App\Enums\Approval;
+use App\Models\User;
 use App\Observers\ArtshowItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +30,9 @@ class ArtshowItem extends Model
     ];
 
     protected $with = [
-        'artist'
+        'artist',
+        'artshowBids',
+        'highestBid'
     ];
 
     public function scopeOwn(Builder $query) {
@@ -38,13 +41,30 @@ class ArtshowItem extends Model
         });
     }
 
-    public function scopeApproved(Builder $query) {
+    public function scopeApprovedItems(Builder $query) {
         $query->where("approval", "=", Approval::APPROVED->value);
+    }
+    public function scopeAuctionableItems(Builder $query) {
+        $query->where("auction", 1)->where("sold", 0);
+    }
+
+    public function bidPossible(): bool {
+        return $this->auction AND !$this->locked AND !$this->sold;
+    }
+
+    public function isInAuction(): bool {
+        return ($this->approved || $this->sold || $this->paid || $this->artshowBids()->count() > 0);
     }
 
     public function approved(): Attribute {
         return Attribute::make(
             get: fn() => $this->approval == Approval::APPROVED
+        );
+    }
+
+    public function descriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => app()->getLocale() == "en" ? $this->description_en : $this->description
         );
     }
 
@@ -54,6 +74,36 @@ class ArtshowItem extends Model
 
     public function artshowBids(): HasMany {
         return $this->hasMany(ArtshowBid::class);
+    }
+
+    public function latestBids(): HasMany {
+        return $this->artshowBids()->latest()->limit(5);
+    }
+
+    public function highestBid(): HasOne {
+        return $this->hasOne(ArtshowBid::class)->orderBy("value", "desc")->limit(1);
+    }
+
+    public function isHighestBidder(User $user = null): bool {
+        if(!$user)
+            $user = auth()->user();
+        return $this->highestBid?->user_id == $user->id;
+    }
+
+    public function userBidOnce(User $user = null) {
+        if(!$user)
+            $user = auth()->user();
+        return $this->artshowBids->intersect($user->artshowBids)->count() > 0;
+    }
+
+    public function minBidValue(): int {
+        return $this->highestBid ? $this->highestBid->value+1 : $this->starting_bid;
+    }
+
+    public function userOutbid(User $user = null): bool {
+        if(!$user)
+            $user = auth()->user();
+        return $this->userBidOnce() AND !$this->isHighestBidder();
     }
 
     public function artshowPickup(): HasOne {

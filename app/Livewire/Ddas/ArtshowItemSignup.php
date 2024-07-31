@@ -3,7 +3,7 @@
 namespace App\Livewire\Ddas;
 
 use App\Livewire\Ddas\Forms\ArtshowArtistForm;
-use App\Livewire\Ddas\Forms\ArtshowItemForm;
+use App\Livewire\Ddas\Forms\ArtshowItemSignupForm;
 use App\Livewire\Traits\HasModal;
 use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowItem;
@@ -17,7 +17,7 @@ class ArtshowItemSignup extends Component
     use WithFileUploads, HasModal;
 
     public ?ArtshowItem $editArtshowItem = null;
-    public ArtshowItemForm $form;
+    public ArtshowItemSignupForm $form;
     public ArtshowArtistForm $artistForm;
     public Collection $artists;
     public ?ArtshowArtist $artistProfile = null;

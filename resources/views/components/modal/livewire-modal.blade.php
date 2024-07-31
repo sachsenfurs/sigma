@@ -3,8 +3,9 @@
     'type' => "submit",
     'id' => "modal",
     'action' => null,
+    'buttonTextOk' => "OK",
 ])
-<div wire:ignore.self id="{{ $id }}" tabindex="-1" class="modal fade" aria-modal="true" role="dialog">
+<div wire:ignore.self id="{{ $id }}" tabindex="-1" class="modal fade" aria-modal="true" role="dialog" {{ $attributes->except("class") }}>
     <div {{ $attributes->class(['modal-dialog']) }}>
         <div class="modal-content">
             <div class="modal-header">
@@ -22,7 +23,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('No') }}</button>
                     <button type="button" class="btn btn-primary" wire:click.debounce="{{$action}}">{{ __('Yes') }}</button>
                 @elseif($type == "alert")
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __('OK') }}</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __($buttonTextOk) }}</button>
                 @endif
             </div>
         </div>

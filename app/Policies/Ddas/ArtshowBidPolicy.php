@@ -3,6 +3,7 @@
 namespace App\Policies\Ddas;
 
 use App\Models\Ddas\ArtshowBid;
+use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 
 class ArtshowBidPolicy extends ManageArtshowPolicy
@@ -20,8 +21,8 @@ class ArtshowBidPolicy extends ManageArtshowPolicy
         return false;
     }
 
-    public function create(User $user): bool {
-        return false;
+    public function create(User $user, ArtshowItem $artshowItem): bool {
+        return $artshowItem->isInAuction() AND $artshowItem->bidPossible();
     }
 
     public function update(User $user, ArtshowBid $artshowBid): bool {
