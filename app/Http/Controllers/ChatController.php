@@ -3,11 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Notifications\NewChatMessage;
+use App\Notifications\SigUpdated;
+use App\Settings\ChatSettings;
 use Illuminate\Http\Request;
 #use App\Helper\Chat\ChatHelper;
 
 class ChatController extends Controller
 {
+
+    public function __construct() {
+        if(!app(ChatSettings::class)->enabled)
+            abort(403);
+    }
+
     public function index(Request $request)
     {
         $chats    = auth()->user()->chats;
@@ -38,11 +47,11 @@ class ChatController extends Controller
     }
 
     public function create(Request $request)
-    {   
+    {
         $attributes = $request->validate([
             'department' => 'required'
         ]);
-        
+
         $requestDepartment = $attributes['department'];
 
         if ($this->validateDepartment($requestDepartment)) {
@@ -52,7 +61,7 @@ class ChatController extends Controller
 
             return redirect()->back();
         }
-        redirect()->back()->error(__('You have entered an invalid department!'));        
+        redirect()->back()->error(__('You have entered an invalid department!'));
     }
 
     public function store(Request $request, Chat $chat)

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ChatResource\Pages;
 use App\Filament\Resources\ChatResource\RelationManagers;
 use App\Models\Chat;
+use App\Settings\ChatSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,6 +29,10 @@ class ChatResource extends Resource
             ]);
     }
 
+    public static function canAccess(): bool {
+        return app(ChatSettings::class)->enabled;
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -36,7 +41,7 @@ class ChatResource extends Resource
                 TextColumn::make('department'),
                 TextColumn::make('created_at')
                     ->date(),
-                
+
             ])
             ->filters([
                 //
