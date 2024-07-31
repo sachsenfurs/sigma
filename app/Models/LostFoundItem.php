@@ -48,18 +48,26 @@ class LostFoundItem extends Model
             if(!$json OR !is_object($json) OR isset($json->error))
                 return;
 
+            // remove old entries
+            $delete = LostFoundItem::all()->pluck("lassie_id")->diff(collect($json->data)->pluck("id"));
+            LostFoundItem::whereIn("lassie_id", $delete)->delete();
+
             foreach($json->data AS $apiEntry) {
-                LostFoundItem::updateOrCreate([
-                    'lassie_id' => $apiEntry->id,
-                    'image_url' => $apiEntry->image,
-                    'thumb_url' => $apiEntry->thumb,
-                    'title' => $apiEntry->title,
-                    'description' => $apiEntry->description,
-                    'status' => $apiEntry->status,
-                    'lost_at' => $apiEntry->lost_timestamp,
-                    'found_at' => $apiEntry->found_timestamp,
-                    'returned_at' => $apiEntry->return_timestamp,
-                ]);
+                LostFoundItem::updateOrCreate(
+                    [
+                        'lassie_id' => $apiEntry->id
+                    ],
+                    [
+                        'image_url' => $apiEntry->image,
+                        'thumb_url' => $apiEntry->thumb,
+                        'title' => $apiEntry->title,
+                        'description' => $apiEntry->description,
+                        'status' => $apiEntry->status,
+                        'lost_at' => $apiEntry->lost_timestamp,
+                        'found_at' => $apiEntry->found_timestamp,
+                        'returned_at' => $apiEntry->return_timestamp,
+                    ]
+                );
             }
         }
     }
