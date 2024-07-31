@@ -152,6 +152,7 @@ class SigHostResource extends Resource
                 ->label('Color in Schedule')
                 ->default("#cccccc")
                 ->formatStateUsing(fn(?Model $record) => $record?->color) // somehow the color isnt fetched from the db so we have to do it manually
-                ->translateLabel();
+                ->translateLabel()
+                ->visible(fn(?Model $record) => self::can("delete")); // only allow admins to change color
     }
 }

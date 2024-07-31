@@ -17,11 +17,9 @@ class ShowMode implements Castable {
                 return collect($modes)->map(fn($m) => \App\Models\Info\Enums\ShowMode::tryFrom($m))->toArray();
             }
 
-            public function set(Model $model, string $key, mixed $value, array $attributes): array {
+            public function set(Model $model, string $key, mixed $value, array $attributes): string {
                 $modes = collect($value)->map(fn($m) => $m instanceof \App\Models\Info\Enums\ShowMode ? $m : \App\Models\Info\Enums\ShowMode::tryFrom($m));
-                return [
-                    $key => $modes->pluck("value")->toArray()
-                ];
+                return $modes->pluck("value")->toJson();
             }
         };
     }

@@ -8,10 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@hasSection("title")@yield("title") - @endif{{ config('app.name') }}</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <link rel="shortcut icon" href="/images/favicon.png">
 
     <link rel="apple-touch-icon" href="/icons/east_sigma_appicon.png">

@@ -69,12 +69,13 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
      */
     public static function getBulkAction(): BulkAction {
         return BulkAction::make("approval")
+            ->icon("heroicon-o-question-mark-circle")
             ->translateLabel()
             ->form([
                 Radio::make("approval")
                     ->options(Approval::class)
                     ->default(1),
             ])
-            ->action(fn(array $data, Collection $records) =>$records->each->update($data));
+            ->action(fn(array $data, Collection $records) => $records->each->update($data));
     }
 }

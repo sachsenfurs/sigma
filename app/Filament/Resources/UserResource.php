@@ -84,6 +84,10 @@ class UserResource extends Resource
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make("favorites_count")
+                ->counts("favorites")
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
     }
 
@@ -93,6 +97,7 @@ class UserResource extends Resource
             RelationManagers\ArtistsRelationManager::class,
             RelationManagers\DealersRelationManager::class,
             RelationManagers\SigHostsRelationManager::class,
+            RelationManagers\FavoritesRelationManager::class,
         ];
     }
 

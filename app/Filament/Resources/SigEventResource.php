@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\SigEventResource\Pages;
+use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Models\SigEvent;
 use App\Models\SigHost;
@@ -12,15 +13,21 @@ use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
 {
@@ -42,8 +49,10 @@ class SigEventResource extends Resource
                 self::getSigLanguageFieldSet(),
                 self::getSigTagsFieldSet(),
                 self::getSigRegistrationFieldSet(),
+                self::getTextMandatoryFieldSet(),
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfoFieldSet(),
+                self::getLastModifiedField(),
             ]);
     }
 
@@ -72,7 +81,16 @@ class SigEventResource extends Resource
                                 ->orWhere("description_en", "")
                                 ->orWhereNull(["description", "description_en"]);
                         })
-                    )
+                    ),
+                Tables\Filters\SelectFilter::make("proof_read")
+                    ->label("Proof-Read")
+                    ->translateLabel()
+                    ->options([
+                        true => __("Yes"),
+                        false => __("No"),
+                    ])
+                    ->default(null)
+                    ->query(fn(Builder $query, $state) => ($state['value'] ?? null) != null ? $query->where("text_confirmed", $state['value'])->where("no_text", false) : $query),
             ])
             ->recordUrl(fn(Model $record) =>
                 auth()->user()->can("update", $record)
@@ -83,7 +101,22 @@ class SigEventResource extends Resource
                 //
             ])
             ->bulkActions([
-                Approval::getBulkAction(),
+                Tables\Actions\BulkActionGroup::make([
+                    Approval::getBulkAction(),
+                    BulkAction::make("text")
+                        ->label("Text...")
+                        ->icon("heroicon-o-document-text")
+                        ->translateLabel()
+                        ->form([
+                            Forms\Components\Checkbox::make("text_confirmed")
+                                ->label("Proof-Read")
+                                ->translateLabel(),
+                            Forms\Components\Checkbox::make("no_text")
+                                ->label("Text not mandatory")
+                                ->translateLabel(),
+                        ])
+                        ->action(fn(array $data, Collection $records) => $records->each->update($data))
+                ])
             ]);
     }
 
@@ -107,6 +140,7 @@ class SigEventResource extends Resource
         return [
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
             SigTimeslotsRelationManager::class,
+            DepartmentInfosRelationManager::class,
         ];
     }
 
@@ -145,14 +179,21 @@ class SigEventResource extends Resource
                 ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
-                ->getStateUsing(fn(Model $record) => filled($record->description)),
+                ->getStateUsing(fn(Model $record) => $record->isDescriptionPresent()),
             IconColumn::make("description_en")
                 ->boolean()
                 ->label("Text (EN)")
                 ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
                 ->sortable()
                 ->toggleable()
-                ->getStateUsing(fn(Model $record) => filled($record->description_en)),
+                ->getStateUsing(fn(Model $record) => $record->isDescriptionEnPresent()),
+            IconColumn::make("text_confirmed")
+                ->boolean()
+                ->label("Proof-Read")
+                ->translateLabel()
+                ->getStateUsing(fn(Model $record) => $record->no_text ? true : $record->text_confirmed)
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make("sig_timeslots_count")
                 ->label(__("Time Slots"))
                 ->translateLabel()
@@ -161,6 +202,36 @@ class SigEventResource extends Resource
                 ->counts("sigTimeslots")
                 ->badge()
                 ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray),
+            Tables\Columns\TextColumn::make("department_infos_count")
+                ->label("Department Requirements")
+                ->translateLabel()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->counts("departmentInfos")
+                ->badge()
+                ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray)
+                ->action(
+                    Tables\Actions\ViewAction::make()
+                        ->infolist([
+                            TextEntry::make("additional_info")
+                                ->label("Additional Information")
+                                ->translateLabel(),
+                            RepeatableEntry::make("departmentInfos")
+                                ->label("Linked Departments")
+                                ->translateLabel()
+                                ->schema([
+                                    TextEntry::make("userRole.title")
+                                        ->label("")
+                                        ->hintIcon("heroicon-o-pencil-square")
+                                        ->hintAction(fn($record) => Action::make("edit")->url(DepartmentInfoResource::getUrl("edit", ['record' => $record]))),
+                                    TextEntry::make("additional_info")
+                                        ->listWithLineBreaks()
+                                        ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
+                                        ->label(""),
+                                ])
+                        ])
+                        ->modalWidth(MaxWidth::SevenExtraLarge),
+                ),
         ];
     }
 
@@ -321,6 +392,8 @@ class SigEventResource extends Resource
             Forms\Components\Fieldset::make('description')
                 ->label('Description')
                 ->translateLabel()
+                ->live()
+                ->visible(fn(Get $get) => !$get('no_text'))
                 ->columns(2)
                 ->schema([
                     Forms\Components\MarkdownEditor::make('description')
@@ -330,7 +403,8 @@ class SigEventResource extends Resource
                         ->hintAction(
                             fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description')->authorize("attach", SigEvent::class) : null
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2]),
+                        ->columnSpan(["2xl" => 1, "default" => 2])
+                        ->afterStateUpdated(fn(Forms\Set $set) => $set('text_confirmed', false)),
                     Forms\Components\MarkdownEditor::make('description_en')
                         ->label('English')
                         ->translateLabel()
@@ -338,7 +412,11 @@ class SigEventResource extends Resource
                         ->hintAction(
                             fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en')->authorize("attach", SigEvent::class) : null
                         )
-                        ->columnSpan(["2xl" => 1, "default" => 2]),
+                        ->columnSpan(["2xl" => 1, "default" => 2])
+                        ->afterStateUpdated(fn(Forms\Set $set) => $set('text_confirmed', false)),
+                    Forms\Components\Checkbox::make("text_confirmed")
+                        ->label("Proof-Read")
+                        ->translateLabel(),
                 ]);
     }
 
@@ -350,5 +428,30 @@ class SigEventResource extends Resource
             ->maxLength(65535)
             ->autosize()
             ->columnSpanFull();
+    }
+
+    private static function getLastModifiedField(): Forms\Components\Placeholder {
+        return Forms\Components\Placeholder::make("updated_at")
+            ->label("Last Modified")
+            ->translateLabel()
+            ->inlineLabel()
+            ->visible(fn(?Model $record) => $record)
+            ->content(fn(?Model $record) => $record?->updated_at?->diffForHumans() ?? "")
+            ->extraAttributes(fn(?Model $record) => [
+                'title' => $record?->updated_at?->toDateTimeString() ?? ""
+            ]);
+    }
+
+    private static function getTextMandatoryFieldSet() {
+        return Forms\Components\Fieldset::make("text")
+            ->label("Text")
+            ->translateLabel()
+            ->schema([
+                Forms\Components\Checkbox::make("no_text")
+                     ->label("Text not mandatory")
+                     ->live()
+                     ->translateLabel(),
+            ])
+            ->columnSpan(1);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Info\Enums\ShowMode;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class Social extends Model
@@ -59,5 +60,10 @@ class Social extends Model
         );
     }
 
+
+    public static function clearCache() {
+        Cache::forget("footer_de");
+        Cache::forget("footer_en");
+    }
 
 }

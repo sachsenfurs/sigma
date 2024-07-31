@@ -80,7 +80,8 @@ class SigFilledFormsRelationManager extends RelationManager
                         ->getStateUsing(function ($record) use ($formData) {
                             return $record->form_data['form_data'][$formData['name']] ?? '';
                         })
-                        ->limit(50);
+                        ->listWithLineBreaks(true)
+                        ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))));
                     break;
                 case 'file_upload':
                     $tableColumns[] = Tables\Columns\ImageColumn::make($formData['name'])
@@ -112,7 +113,7 @@ class SigFilledFormsRelationManager extends RelationManager
                                 $data = $option['data'] ?? [];
 //                                dd($option);
 //                                dd($formData['name'] ,$record->form_data['form_data'][$formData['name']]);
-                                if (($data['value'] ?? null) === $record->form_data['form_data'][$formData['name']]) {
+                                if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
                                     return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
                                 }
                             }

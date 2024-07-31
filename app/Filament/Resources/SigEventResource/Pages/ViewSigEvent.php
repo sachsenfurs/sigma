@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SigEventResource\Pages;
 
 use App\Filament\Resources\SigEventResource;
+use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -11,6 +12,12 @@ use Illuminate\Contracts\Support\Htmlable;
 class ViewSigEvent extends ViewRecord
 {
     protected static string $resource = SigEventResource::class;
+
+    protected function getHeaderActions(): array {
+        return [
+            EditAction::make(),
+        ];
+    }
 
     public function getHeading(): string|Htmlable {
         return $this->record->name_localized;

@@ -31,15 +31,15 @@ return [
     |             ]
     */
     'bots' => [
-        'postbot' => [
-            'token' => env('TELEGRAM_BOT_TOKEN', ""),
-            'username'            => env('TELEGRAM_BOT_USERNAME', ""),
-            'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', null),
-            'webhook_url' => env('TELEGRAM_WEBHOOK_URL', null),
-            'commands' => [
-                //Acme\Project\Commands\MyTelegramBot\BotCommand::class
-            ],
-        ],
+//        'postbot' => [
+//            'token' => env('TELEGRAM_BOT_TOKEN', ""),
+//            'username'            => env('TELEGRAM_BOT_USERNAME', ""),
+//            'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', null),
+//            'webhook_url' => env('TELEGRAM_WEBHOOK_URL', null),
+//            'commands' => [
+//                //Acme\Project\Commands\MyTelegramBot\BotCommand::class
+//            ],
+//        ],
 
         //        'mySecondBot' => [
         //            'token' => '123456:abc',
@@ -55,7 +55,7 @@ return [
     | your default bot for regular use.
     |
     */
-    'default' => 'postbot',
+    'default' => 'default',
 
     /*
     |--------------------------------------------------------------------------

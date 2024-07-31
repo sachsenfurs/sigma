@@ -205,6 +205,31 @@ namespace App\Models\Ddas{
 	class DealerTag extends \Eloquent {}
 }
 
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $sig_event_id
+ * @property int $user_role_id
+ * @property string|null $additional_info
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SigEvent $sigEvent
+ * @property-read \App\Models\UserRole $userRole
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereAdditionalInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereSigEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DepartmentInfo whereUserRoleId($value)
+ */
+	class DepartmentInfo extends \Eloquent {}
+}
+
 namespace App\Models\Info{
 /**
  * 
@@ -324,9 +349,11 @@ namespace App\Models\Post{
  *
  * @property int $id
  * @property int $channel_identifier
+ * @property int|null $test_channel_identifier
  * @property string|null $name
  * @property string $language
  * @property string $implementation
+ * @property string|null $info
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
  * @property-read int|null $posts_count
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel newModelQuery()
@@ -335,8 +362,10 @@ namespace App\Models\Post{
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereChannelIdentifier($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereImplementation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostChannel whereTestChannelIdentifier($value)
  */
 	class PostChannel extends \Eloquent {}
 }
@@ -396,6 +425,8 @@ namespace App\Models{
  * @property array $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
+ * @property int $text_confirmed
+ * @property int $no_text
  * @property int $duration
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property string|null $additional_info
@@ -406,6 +437,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $approved
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentInfo> $departmentInfos
+ * @property-read int|null $department_infos_count
  * @property-read mixed $description_localized
  * @property-read mixed $description_localized_other
  * @property-read mixed $duration_hours
@@ -443,9 +476,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereMaxRegsPerDay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereNoText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRegPossible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereSigHostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereTextConfirmed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SigEvent whereUpdatedAt($value)
  */
 	class SigEvent extends \Eloquent {}
@@ -900,6 +935,8 @@ namespace App\Models{
  * @property string $border_color
  * @property string $background_color
  * @property string|null $registration_system_key
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentInfo> $departmentInfos
+ * @property-read int|null $department_infos_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRolePermission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
