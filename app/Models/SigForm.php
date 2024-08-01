@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SigFormAccessScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,9 +16,9 @@ class SigForm extends Model
         'form_definition' => 'array'
     ];
 
-//    protected static function booted(): void {
-//        static::addGlobalScope(new SigFormAccessScope);
-//    }
+    protected static function booted(): void {
+        static::addGlobalScope(new SigFormAccessScope());
+    }
 
     public function getNameLocalizedAttribute()
     {
