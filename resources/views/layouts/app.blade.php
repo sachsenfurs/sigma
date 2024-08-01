@@ -127,9 +127,9 @@
                                     <li class="py-2">
                                         <a  @class(['btn btn-nav', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
                                             @if (auth()->user()->unreadNotifications->count() > 0)
-                                                <i class="bi bi-mailbox2-flag"></i> {{ __('Chats') }}
+                                                <i class="bi bi-mailbox2-flag"></i> {{ __('Messages') }}
                                             @else
-                                                <i class="bi bi-mailbox2"></i> {{ __('Chats') }}
+                                                <i class="bi bi-mailbox2"></i> {{ __('Messages') }}
                                             @endif
                                         </a>
                                     </li>
