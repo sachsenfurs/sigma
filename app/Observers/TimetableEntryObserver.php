@@ -19,28 +19,27 @@ class TimetableEntryObserver
      * @param  \App\Models\TimetableEntry  $timetableEntry
      * @return void
      */
-    public function updated(TimetableEntry $timetableEntry)
-    {
-        $users = User::where('telegram_user_id', '!=', null)->get();
-
-        if (!$timetableEntry->hide && app(AppSettings::class)->telegram_bot_name != "") {
-            if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
-                Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
-                foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
-                    $reminder->update([
-                        'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
-                    ]);
-                    $reminder->save();
-                }
-            }
-
-            if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
-                Notification::send($users, new TimetableEntryCancelled($timetableEntry));
-            }
-
-            if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
-                Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
-            }
-        }
+    public function updated(TimetableEntry $timetableEntry) {
+//        $users = User::where('telegram_user_id', '!=', null)->get();
+//
+//        if (!$timetableEntry->hide && app(AppSettings::class)->telegram_bot_name != "") {
+//            if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
+//                Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
+//                foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
+//                    $reminder->update([
+//                        'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
+//                    ]);
+//                    $reminder->save();
+//                }
+//            }
+//
+//            if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
+//                Notification::send($users, new TimetableEntryCancelled($timetableEntry));
+//            }
+//
+//            if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
+//                Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
+//            }
+//        }
     }
 }

@@ -95,6 +95,10 @@ class ArtShowSettingsPage extends SettingsPage
                                          ->required()
                                          ->minValue(0)
                                          ->numeric(),
+                                    Toggle::make("require_checkin")
+                                        ->label("Require Checkin")
+                                        ->translateLabel()
+                                        ->helperText(__("Requires user to be checked in at the convention site before bidding is availabel")),
                                 ]),
                     ])
             ]);

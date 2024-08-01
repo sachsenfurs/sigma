@@ -78,7 +78,7 @@
                                             @if(app(\App\Settings\DealerSettings::class)->enabled)
                                                 <li>
                                                     <a @class(['btn btn-nav', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
-                                                        <i class="bi bi-cart"></i> {{ __("Dealers Den Overview")}}
+                                                        <i class="bi bi-cart"></i> {{ __("Dealer's Den Overview")}}
                                                     </a>
                                                 </li>
                                             @endif
