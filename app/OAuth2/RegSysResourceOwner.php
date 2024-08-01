@@ -21,6 +21,10 @@ class RegSysResourceOwner implements ResourceOwnerInterface
         return $this->getValueByKey($this->response, "id");
     }
 
+    public function getCheckedIn() {
+        return $this->getValueByKey($this->response, "checkedin", false);
+    }
+
     public function getNickname() {
         return $this->getValueByKey($this->response, "nickname");
     }
