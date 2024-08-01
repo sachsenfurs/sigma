@@ -101,48 +101,38 @@
                     </div>
                 @endif
                 <div class="container mt-2">
+                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> - {{ __("Notifications") }}</h2>
+                    <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
+                    <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
+                        {{ __("Modify them here") }}
+                    </a>
+                </div>
+                <div class="container mt-2">
                     <h2 class="p-2"><i class="bi bi-heart-fill"></i> - {{ __("Favorite Events") }}</h2>
                     @forelse ($favorites as $fav)
                         <div class="card my-1">
-                            <div class="card-body p-1 m-0">
-                                <div class="row m-0 p-0">
-                                    <div class="col-10 p-0">
-                                        <p class="p-0 m-0" style="font-weight: bold; font-size: 1.35rem; margin-left: 5px;">{{ $fav->timetableEntry->sigEvent->name_localized }}</p>
-                                        <hr style="margin: 2px 0 2px 0;">
-                                        <table>
-                                            {{--
-                                            <tr>
-                                                <td><strong>{{ __("Location") }}</strong></td>
-                                                <td style="padding-left: 15px">{{ $fav->timetableEntry->sigLocation->name }}</td>
-                                            </tr>
-                                            --}}
-                                            <tr>
-                                                <td><strong>{{ __("Date") }}</strong></td>
-                                                <td style="padding-left: 15px">{{ date('l', strtotime($fav->timetableEntry->start)) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>{{ __("Time span") }}</strong></td>
-                                                <td style="padding-left: 15px">{{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}</td>
-                                            </tr>
-                                        </table>
+                            <div class="card-body p-2 m-0">
+                                <p class="p-0 m-0" style="font-weight: bold; font-size: 1.35rem; margin-left: 5px;">{{ $fav->timetableEntry->sigEvent->name_localized }}</p>
+                                <hr style="margin: 2px 0 2px 0;">
+                                <div class="row m-0 py-1">
+                                    <div class="col-4 p-0 d-flex align-items-center">
+                                        <i class="bi bi-calendar4" style="padding-right: 5px;"></i> {{ __(date('D', strtotime($fav->timetableEntry->start))) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})
                                     </div>
-                                    <div class="col-2 p-0">
-                                        <div class="d-flex justify-content-center align-items-center p-1">
-                                            <div class="row m-0">
-                                                <div class="col-12 p-0 m-0">
-                                                    <x-buttons.notification-edit :fav="$fav" :small="true"/>
-                                                </div>
-                                                <div class="col-12 p-0 m-0">
-                                                    <button type="button" class="btn btn-danger text-white btn"
+                                    <div class="col-4 p-0 d-flex align-items-center">
+                                        <i class="bi bi-clock" style="padding-right: 5px;"></i> {{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}
+                                    </div>
+                                    <div class="col-4 p-0">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                                <x-buttons.notification-edit :fav="$fav" :small="true"/>
+                                                <button type="button" class="btn btn-danger text-white btn"
+                                                    style="margin-left: 5px;"
                                                     data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
                                                     data-bs-entryid="{{ $fav->timetableEntry->id }}"
                                                     data-bs-toggle="modal" data-bs-target="#deleteFavModal"
                                                     @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
                                                     >
-                                                        <span class="bi bi-x"></span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                                    <span class="bi bi-x"></span>
+                                                </button>
                                         </div>
                                     </div>
                                 </div>
@@ -152,13 +142,6 @@
                     @empty
                         <p>{{ __("You currently don't have any favorite events") }}</p>
                     @endforelse
-                </div>
-                <div class="container mt-2">
-                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> - {{ __("Notifications") }}</h2>
-                    <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
-                    <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
-                        {{ __("Modify them here") }}
-                    </a>
                 </div>
             </div>
         </div>
