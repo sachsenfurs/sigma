@@ -536,6 +536,7 @@
     " has posted a new message in the chat with the ": " hat eine neue Nachticht in dem Chat mit dem ",
     " department!": " Department!",
     "View Chat": "Chat anzeigen",
+    "Messages": "Nachrichten",
     "Message: :message": "Nachricht: :message",
     "Create": "Erstellen",
     "You have entered an invalid department!": "Du hast ein ungüliges Department angegeben!",
@@ -546,6 +547,7 @@
     "Click the \"New Chat\" button to start a chat with a department": "Click auf den \"Neuer Chat\" Button um einen Chat mit einem Department zu starten",
     "dealersden": "Dealers Den",
     "artshow": "Art Show",
+    "You have successfully connected your Telegram account": "Du hast deinen Telegram Account erfolgreich verbunden",
     "No new Notifications": "Keine neuen Benachrichtigungen",
     "in the chat with the :department department": "in dem Chat mit dem :department Department",
     "Mark as read": "Als gelesen markieren",
@@ -564,5 +566,13 @@
     "Test Message sent!": "Testnachricht gesendet!",
     "Text (English)": "Text (Englisch)",
     "You have to be logged in": "Du musst eingeloggt sein!",
-    "There is a sign up form for this event:": "Es gibt ein Anmeldeformular für dieses Event:"
+    "There is a sign up form for this event:": "Es gibt ein Anmeldeformular für dieses Event:",
+
+    "Mon": "Mo",
+    "Tue": "Di",
+    "Wed": "Mi",
+    "Thu": "Do",
+    "Fri": "Fr",
+    "Sat": "Sa",
+    "Sun": "So"
 }
