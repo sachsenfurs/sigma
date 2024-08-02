@@ -8,7 +8,13 @@
                 {{ __("Art Show Items are not published yet") }}
             </x-infocard>
         @else
-            <livewire:ddas.artshow-items />
+            @if($error)
+                <x-infocard>
+                    {{ $error }}
+                </x-infocard>
+            @else
+                <livewire:ddas.artshow-items />
+            @endif
         @endif
     </div>
 @endsection

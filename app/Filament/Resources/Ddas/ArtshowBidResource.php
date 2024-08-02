@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Ddas;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowBidResource\Pages;
 use App\Models\Ddas\ArtshowBid;
+use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Placeholder;
@@ -52,7 +53,8 @@ class ArtshowBidResource extends Resource
                     ->searchable(['id', 'name'])
                     ->preload()
                     ->live()
-                    ->required(),
+                    ->required()
+                    ->helperText(fn(Get $get) => __("Current Bid") . ": " . (ArtshowItem::find($get("artshow_item_id"))?->highestBid->value ?? 0)),
                 Select::make("user_id")
                     ->relationship("user", "name")
                     ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())

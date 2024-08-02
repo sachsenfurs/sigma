@@ -90,7 +90,7 @@
                             <div class="row d-flex justify-content-between">
                                 <div class="col-md col-12">
                                     <p class="card-text">
-                                        {{ $item->description }}
+                                        {!!  $item->description !!}
                                     </p>
                                 </div>
                                 <div class="col-12 col-md-auto align-top px-2 text-center">
@@ -117,7 +117,7 @@
                                         <div class="fw-bold">
                                             {{ __("Current Bid") }}:
                                         </div>
-                                        <i class="bi bi-currency-euro"></i> {{ $item->artshow_bids_count ?? "-"}}
+                                        <i class="bi bi-currency-euro"></i> {{ $item->highestBid ? $item->highestBid->value . " (" . $item->artshowBids->count() . ")" : "-" }}
                                     </li>
                                 </ul>
                             </div>

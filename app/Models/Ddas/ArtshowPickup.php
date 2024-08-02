@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ArtshowPickup extends Model
 {
+
+    protected $guarded = [];
+
     public function artshowItem(): BelongsTo {
         return $this->belongsTo(ArtshowItem::class);
     }

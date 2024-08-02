@@ -437,11 +437,12 @@
     "Submit Bid": "Gebot abgeben",
     "You are currently the highest bidder!": "Du bist aktuell höchstbietender!",
     "You have been outbid!": "Du wurdest überboten!",
-    "No more bids are currently being accepted for this item": "Für diesen Gegenstand werden aktuell keine Gebote mehr angenommen",
+    "No bids are currently being accepted for this item": "Aktuell werden keine Gebote für diesen Gegenstand angenommen",
     "Highest Bidder": "Höchstbietender",
     "Auction": "Auktion",
     "Bid Count": "Anzahl Gebote",
     "Locked": "Gesperrt",
+    "You have to be checked in at convention site to view the art show. Please visit registration or con-ops and get your badge first": "Um die Artshow zu sehen, musst du eingecheckt sein. Bitte gehe zur Reg/Leitstelle und hole dir dein Badge ab!",
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",

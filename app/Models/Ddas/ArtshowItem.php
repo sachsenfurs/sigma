@@ -5,6 +5,7 @@ namespace App\Models\Ddas;
 use App\Enums\Approval;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
+use App\Settings\ArtShowSettings;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy(ArtshowItemObserver::class)]
@@ -49,11 +51,11 @@ class ArtshowItem extends Model
     }
 
     public function bidPossible(): bool {
-        return $this->auction AND !$this->locked AND !$this->sold;
+        return Gate::allows("create", [ArtshowBid::class, $this]);
     }
 
     public function isInAuction(): bool {
-        return ($this->approved || $this->sold || $this->paid || $this->artshowBids()->count() > 0);
+        return $this->auction AND $this->artshowBids()->count() > 0;
     }
 
     public function approved(): Attribute {
