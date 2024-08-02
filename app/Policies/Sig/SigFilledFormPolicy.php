@@ -11,7 +11,7 @@ use App\Models\User;
 class SigFilledFormPolicy extends ManageEventPolicy
 {
     public function viewAny(User $user): bool {
-        return false;
+        return true;
     }
 
 
@@ -25,8 +25,8 @@ class SigFilledFormPolicy extends ManageEventPolicy
         return false;
     }
 
-    public function create(User $user, SigForm $form): bool {
-        if($form->form_closed)
+    public function create(User $user, SigForm $form=null): bool {
+        if($form?->form_closed)
             return false;
 
         if($user->hasPermission(Permission::MANAGE_FORMS, PermissionLevel::WRITE))
