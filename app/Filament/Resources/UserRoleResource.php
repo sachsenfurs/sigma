@@ -39,6 +39,7 @@ class UserRoleResource extends Resource
                     ->schema([
                         self::getTitleField(),
                         self::getRegistrationSystemKeyField(),
+                        self::getChatActivatedField(),
                     ]),
                 Forms\Components\Fieldset::make("colors")
                     ->label("Colors")
@@ -114,6 +115,13 @@ class UserRoleResource extends Resource
             ->translateLabel()
             ->helperText(__('Group keys from registration system (seperated with a comma)'))
             ->maxLength(255);
+    }
+
+    private static function getChatActivatedField(): Forms\Components\Component {
+        return Forms\Components\Checkbox::make('chat_activated')
+            ->label('Chat activated')
+            ->translateLabel()
+            ->helperText(__('If a UserRole (Department) is available for Chats'));
     }
 
     private static function getForegroundColorField(): Forms\Components\Component {

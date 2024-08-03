@@ -535,6 +535,8 @@
     "Reg-Number": "Reg-Nummer",
     "-- Select Department --": "-- Department auswählen --",
     "New Chat": "Neuer Chat",
+    "Chat activated": "Chat aktiviert",
+    "If a UserRole (Department) is available for Chats": "Ob eine UserRole (Department) für Chats verfügbar ist", 
     "No chats available": "Keine Chats verfügbar",
     "No Messages": "Keine Nachrichten",
     "the user ": "der Benutzer ",
