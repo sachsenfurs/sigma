@@ -8,7 +8,7 @@
           <h5 class="modal-title" id="attendeeListModalLabel">{{ __("Attendee List") }}</h5>
         </div>
         <div class="modal-body">
-          @if ($timeslot->sigAttendees->first()->reg_id = auth()->user()->reg_id)
+          @if ($timeslot->timetableEntry->sigEvent->group_registration_enabled && $timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first())
               <div>
                 <h2>{{ __('Add attendee') }}</h2>
                 <form class="w-100" id="attendeeForm" action="{{ route('registration.register', $timeslot->id) }}" method="POST">
@@ -26,8 +26,8 @@
                   <button type="submit" class="btn btn-primary m-1 mt-3">{{ __('Add attendee') }}</button>
                 </form>
               </div>
-            @endif
-            <hr>
+              <hr>
+            @endif 
           <div>
             <h2>{{ __('Attendees') }}</h2>
             @foreach ($timeslot->sigAttendees as $attendee)
@@ -35,6 +35,8 @@
                 :name="$attendee->user->name"
                 :avatar="$attendee->user->avatar"
                 :attendee="$attendee"
+                :canManageSigAttendees="$timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first()"
+                :groupRegistrationEnabled="$timeslot->timetableEntry->sigEvent->group_registration_enabled"
               />
               @if ($attendee->user->id != auth()->user()->id)
                 <x-modal.attendee-remove :sigAttendee="$attendee" />

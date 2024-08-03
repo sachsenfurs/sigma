@@ -2,6 +2,8 @@
     'name' => "",
     'avatar' => null,
     'attendee',
+    'canManageSigAttendees',
+    'groupRegistrationEnabled',
 ])
 <div class="row mb-3">
     @if($avatar)
@@ -20,14 +22,16 @@
     </div>
     <div class="col-2 col-md-4" style="display: flex; justify-content: center; align-items: center;">
         <div>
-            @if($attendee->user->id == auth()->user()->id)
-                <a type="button" class="btn btn-warning text-black">
-                    <span class="bi bi-award-fill"></span>
-                </a>
-            @else
-                <a type="button" class="btn btn-danger text-white" onclick="$('#removeAttendeeModal{{$attendee->id}}').modal('toggle'); $('#removeAttendeeForm{{ $attendee->id }}').attr('action', '/cancel/{{ $attendee->sigTimeslot->id }}')" data-toggle="modal" data-target="#removeAttendeeModal{{$attendee->id}}">
-                    <span class="bi bi-x"></span>
-                </a>
+            @if ($groupRegistrationEnabled)
+                @if($attendee->timeslot_owner == true)
+                    <a type="button" class="btn btn-warning text-black">
+                        <span class="bi bi-award-fill"></span>
+                    </a>
+                @elseif ($canManageSigAttendees)
+                    <a type="button" class="btn btn-danger text-white" onclick="$('#removeAttendeeModal{{$attendee->id}}').modal('toggle'); $('#removeAttendeeForm{{ $attendee->id }}').attr('action', '/cancel/{{ $attendee->sigTimeslot->id }}')" data-toggle="modal" data-target="#removeAttendeeModal{{$attendee->id}}">
+                        <span class="bi bi-x"></span>
+                    </a>
+                @endif
             @endif
         </div>
     </div>

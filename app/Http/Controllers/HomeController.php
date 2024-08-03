@@ -39,6 +39,8 @@ class HomeController extends Controller
             $preConMode = true;
         }
 
+        //dd($registrations->first()->sigEvent()->attendees());
+
         return view('home', compact([
             'registrations',
             'favorites',

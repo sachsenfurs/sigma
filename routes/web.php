@@ -123,7 +123,7 @@ Route::group(['middleware' => "auth"], function() {
 
     // SIG Registration
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
-    Route::post('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
+    Route::DELETE('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
 
     // SIG Reminders
