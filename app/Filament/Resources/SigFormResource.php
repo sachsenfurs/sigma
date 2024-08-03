@@ -172,15 +172,8 @@ class SigFormResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('userRoles')
-                        ->relationship('userRoles')
+                        ->relationship('userRoles', "title")
                         ->label('')
-                        ->options(function () {
-                            if (Gate::allows("update", UserRole::class)) {
-                                return UserRole::all()->pluck('title', 'id');
-                            } else {
-                                return auth()->user()->roles()->pluck('title', 'user_roles.id');
-                            }
-                        })
                         ->preload()
                         ->multiple()
                         ->columnSpanFull()
