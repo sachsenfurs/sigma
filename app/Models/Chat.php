@@ -22,4 +22,9 @@ class Chat extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function userRole(): BelongsTo
+    {
+        return $this->belongsTo(UserRole::class);
+    }
 }

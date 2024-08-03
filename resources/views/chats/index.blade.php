@@ -24,7 +24,7 @@
                                     btn-primary
                                 @endif"
                                 href="{{ route('chats.index') }}?chat_id={{ $chat->id }}">
-                                <p class="m-0">{{ __($chat->department) }}</p>
+                                <p class="m-0">{{ __($chat->userRole->title) }}</p>
                             </a>
                         </div>
                     @empty
@@ -119,7 +119,7 @@
             </div>
         </div>
     @endif
-    <x-modal.chat-new :userChatDepartments="$currChatDepartments" />
+    <x-modal.chat-new :userChatDepartments="$currChatDepartments" :departments="$departments" />
     @if (isset($currChat))
         <script>
             // Scroll to bottom of the chat
