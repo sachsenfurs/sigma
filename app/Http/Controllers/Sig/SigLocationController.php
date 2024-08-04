@@ -12,7 +12,7 @@ class SigLocationController extends Controller
     public function index() {
         $locations = [];
         if(Gate::allows("viewAny", SigLocation::class))
-            $locations = SigLocation::withCount("sigEvents")->with("sigEvents")->having("sig_events_count", ">", 0)->get();
+            $locations = SigLocation::withCount("sigEvents")->with("sigEvents")->orderBy("name")->get();
 
         return view("locations.index", compact("locations"));
     }

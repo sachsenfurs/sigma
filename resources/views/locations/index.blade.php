@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
 
-        <div class="sticky-top container-fluid p-0 pt-2">
-            <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap" id="locationTab" role="tablist">
+        <div class="sticky-top container-fluid p-0">
+            <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap pt-2" id="locationTab" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
                     <button class="nav-link w-100 active" id="location-tab" data-bs-toggle="tab" data-bs-target="#location-2-tab-pane" type="button" role="tab" aria-controls="location-2-tab-pane" aria-selected="false">
                         <h3>{{ __("Rooms") }}</h3>
@@ -43,7 +43,7 @@
                 @endforeach
             </div>
             <div class="tab-pane fade show active" id="location-2-tab-pane" role="tabpanel" aria-labelledby="location-2" tabindex="0">
-                @forelse($locations AS $location)
+                @forelse($locations->filter(fn($l) => $l->sig_events_count > 0) AS $location)
                     <x-list-host-location
                         :instance="$location"
                         :link="route('locations.show', $location)"
