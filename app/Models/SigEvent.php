@@ -123,6 +123,14 @@ class SigEvent extends Model
         return ($entries->count() == $entries->where("hide", 1)->count());
     }
 
+    /**
+     * Determines if the event is just for information purpose on the signage (start time == end time)
+     * @return bool
+     */
+    public function isInfoEvent(): bool {
+        return $this->timetableEntries->count() > 0 AND $this->timetableEntries->filter(fn($e) => $e->duration > 0)->count() == 0;
+    }
+
     public function sigTags(): BelongsToMany {
         return $this->belongsToMany(SigTag::class);
     }
@@ -131,7 +139,6 @@ class SigEvent extends Model
         return $query->whereHas("timetableEntries", function ($query) {
             $query
                 ->where("hide", false)
-                ->whereRaw("start != end")
             ;
         });
     }

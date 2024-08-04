@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 #[ObservedBy(TimetableEntryObserver::class)]
 class TimetableEntry extends Model
 {
-    use HasFactory, HasSigEvents;
+    use HasFactory;
 
     protected $guarded = [];
 
@@ -52,8 +52,8 @@ class TimetableEntry extends Model
     protected $with = [
 //        'favorites',
         'sigLocation',
-//        'sigEvent', << i dont know why this isnt working..
-        'parentEntry',
+//        'sigEvent', // << i dont know why this isnt working..
+//        'parentEntry',
     ];
 
     public function favorites(): HasMany {
@@ -112,7 +112,7 @@ class TimetableEntry extends Model
 
     public function duration(): Attribute {
         return Attribute::make(
-            get: fn() => $this->end->diffInMinutes($this->start)
+            get: fn() => $this->start->diffInMinutes($this->end)
         );
     }
 

@@ -15,7 +15,7 @@
                     <img src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded-top d-md-none" style="object-fit: cover; max-height: 12em" alt="" loading="lazy">
                 </div>
             @endif
-            <div class="@if($avatar)col-md-6 @else col-md-10 @endif">
+            <div @class(["col-md-6" => $avatar, "col-md-10" => !$avatar])>
                 <div class="card-body">
                     <h2 class="card-title">
                         @if($instance instanceof \App\Models\SigHost)
@@ -28,30 +28,35 @@
                     </h2>
                     <p class="card-text">
                         <x-markdown>
-                            {{ $slot }}
+                            {{ $slot != $title ? $slot : "" }}
                         </x-markdown>
                     </p>
                     <a href="{{ $link }}" class="stretched-link"> </a>
                 </div>
-
             </div>
-            <div class="col-md-2 align-middle">
-                <div class="container d-flex h-100 w-100">
-                    <div class="align-self-center w-100 m-3" style="text-align: right">
-                        <div class="display-6">{{ $instance?->getPublicSigEventCount() }}</div>
-                        {{ Str::plural("Event", $instance?->getPublicSigEventCount()) }}
+            @if(!$instance?->essential)
+                <div class="col-md-2 align-middle">
+                    <div class="container d-flex h-100 w-100">
+                        <div class="align-self-center w-100 m-3" style="text-align: right">
+                            <div class="display-6">{{ $instance?->getPublicSigEventCount() }}</div>
+                            {{ Str::plural("Event", $instance?->getPublicSigEventCount()) }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
+
     @can("update", $instance)
-        <div class="card-footer">
-            <div class="w-100 container p-2">
-                <a href="{{ $edit_link }}" class="">
-                    <i class="bi bi-pen"></i> {{ __("Edit") }}
-                </a>
+        @if($edit_link)
+            <div class="card-footer">
+                <div class="w-100 container p-2">
+                    <a href="{{ $edit_link }}" class="">
+                        <i class="bi bi-pen"></i> {{ __("Edit") }}
+                    </a>
+                </div>
             </div>
-        </div>
+        @endif
     @endcan
+
 @endif

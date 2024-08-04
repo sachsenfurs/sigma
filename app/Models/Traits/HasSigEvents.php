@@ -39,7 +39,7 @@ trait HasSigEvents {
         return Cache::remember('getPublicSigEventCount'.static::class.$this->id, 120, function() {
             return $this->sigEvents
                  ->filter(function($sigEvent) {
-                     return !$sigEvent->isCompletelyPrivate();
+                     return !$sigEvent->isCompletelyPrivate() AND !$sigEvent->isInfoEvent();
                  })
                  ->count();
         });

@@ -69,6 +69,13 @@ class SigLocation extends Model
             get: fn() => App::getLocale() == "en" ? $this->description_en : $this->description
         );
     }
+
+    public function essentialDescriptionLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => App::getLocale() == "en" ? $this->essential_description_en : $this->essential_description
+        );
+    }
+
     public function descriptionEn(): Attribute {
         return Attribute::make(
             get: fn($description_en="") => $description_en != "" ? $description_en : ($this->name_en ?? $this->name)
