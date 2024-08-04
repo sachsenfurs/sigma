@@ -27,6 +27,7 @@
         </div>
         <div class="tab-content" id="locationTabContent">
             <div class="tab-pane fade" id="location-1-tab-pane" role="tabpanel" aria-labelledby="location-1" tabindex="0">
+                {{-- Essentials --}}
                 @foreach($locations->filter(fn($l) => $l->essential) AS $location)
                     <x-list-host-location
                         :instance="$location"
@@ -43,7 +44,8 @@
                 @endforeach
             </div>
             <div class="tab-pane fade show active" id="location-2-tab-pane" role="tabpanel" aria-labelledby="location-2" tabindex="0">
-                @forelse($locations->filter(fn($l) => $l->sig_events_count > 0) AS $location)
+                {{-- Rooms --}}
+                @forelse($locations->filter(fn($l) => $l->sig_events_count > 0 AND $l->hasAnyPublicEvents()) AS $location)
                     <x-list-host-location
                         :instance="$location"
                         :link="route('locations.show', $location)"

@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class SigLocationResource extends Resource
 {
@@ -98,34 +97,40 @@ class SigLocationResource extends Resource
     private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('name')
-                                     ->label('Name')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Name')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('description')
-                                     ->label('Description')
-                                     ->translateLabel()
-                                     ->searchable(),
+                 ->label('Description')
+                 ->translateLabel()
+                 ->searchable(),
             Tables\Columns\TextColumn::make('floor')
-                                     ->label('Floor')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Floor')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('room')
-                                     ->label('Room')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Room')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('sig_events_count')
-                                     ->label('Event count')
-                                     ->translateLabel()
-                                     ->counts('sigEvents')
-                                     ->sortable(),
+                 ->label('Event count')
+                 ->translateLabel()
+                 ->counts('sigEvents')
+                 ->sortable(),
+            Tables\Columns\IconColumn::make("essential")
+                ->label("Essential")
+                ->translateLabel()
+                ->boolean()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\IconColumn::make('infodisplay')
-                                     ->label('Infodisplay')
-                                     ->translateLabel()
-                                     ->boolean()
-                                     ->sortable(),
+                 ->label('Infodisplay')
+                 ->translateLabel()
+                 ->boolean()
+                 ->sortable(),
         ];
     }
 

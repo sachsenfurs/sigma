@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\App;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class SigLocation extends Model
 {
@@ -91,5 +92,9 @@ class SigLocation extends Model
         return Attribute::make(
             get: fn($name_en="") => $name_en ?? $this->name
         );
+    }
+
+    public function hasAnyPublicEvents(): bool {
+        return $this->sigEvents->filter(fn($event) => !$event->hide)->count() > 0;
     }
 }
