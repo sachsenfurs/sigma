@@ -30,7 +30,7 @@ class DealerPolicy
      * Helper functions
      */
 
-    private function isWithinDeadline(): bool {
+    public static function isWithinDeadline(): bool {
         return app(DealerSettings::class)->signup_deadline->isAfter(now());
     }
 
@@ -57,7 +57,7 @@ class DealerPolicy
     public function create(User $user): bool {
         if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::WRITE))
             return true;
-        if(!$this->isWithinDeadline())
+        if(!self::isWithinDeadline())
             return false;
         if($user->dealers()->count() == 0)
             return true;
