@@ -11,7 +11,13 @@
                             <i class="bi bi-geo-alt"></i>
                             {{ $location->name_localized }}
                         </h2>
-                        <p class="text-muted">{{ $location->description_localized }}</p>
+                        <p class="text-muted">
+                            @if($location->essential)
+                                {{ $location->essential_description_localized }}
+                            @else
+                                {{ $location->description_localized }}
+                            @endif
+                        </p>
                         @can("update", $location)
                             <a href="{{ \App\Filament\Resources\SigLocationResource::getUrl('edit', ['record' => $location]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
                         @endcan
@@ -28,6 +34,5 @@
                 {{ __("No SIGs assigned") }}
             </div>
         @endforelse
-
     </div>
 @endsection

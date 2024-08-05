@@ -35,6 +35,11 @@ class EditTimetableEntry extends EditRecord
         ] : [];
     }
 
+    public static function getEditAction(): \Closure {
+        return function (Model $record, array $data) {
+            return self::handleUpdate($record, $data);
+        };
+    }
     protected function handleRecordUpdate(Model $record, array $data): Model {
         return self::handleUpdate($record, $data);
     }

@@ -2,10 +2,16 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages;
 use App\Models\Ddas\ArtshowPickup;
+use App\Models\User;
 use App\Settings\ArtShowSettings;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -34,7 +40,11 @@ class ArtshowPickupResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                //
+                Select::make("user")
+                    ->relationship("user", "name")
+                    ->searchable(["reg_id", "name"])
+                    ->columnSpanFull()
+                    ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()),
             ]);
     }
 

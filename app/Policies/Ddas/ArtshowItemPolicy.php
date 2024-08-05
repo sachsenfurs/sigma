@@ -8,6 +8,7 @@ use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 use App\Settings\ArtShowSettings;
+use Illuminate\Auth\Access\Response;
 
 class ArtshowItemPolicy extends ManageArtshowPolicy
 {
@@ -24,25 +25,38 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         return $artshowItem?->artist()->first()?->user_id === $user->id;
     }
 
+    public static function isArtshowPublic(): bool {
+        return app(ArtShowSettings::class)->show_items_date->isBefore(now());
+    }
+
 
     /**
      * Default abilities
      */
 
-    public function viewAny(User $user): bool {
+    public function viewAny(User $user): Response {
         if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ))
-            return true;
+            return Response::allow();
 
-        return false;
+        if(app(ArtShowSettings::class)->require_checkin AND !$user->checkedin)
+            return Response::deny(__("You have to be checked in at convention site to view the art show. Please visit registration or con-ops and get your badge first"));
+
+        return self::isArtshowPublic()
+            ? Response::allow()
+            : Response::deny();
     }
 
-    public function view(User $user, ArtshowItem $artshowItem): bool {
+    public function view(User $user, ArtshowItem $artshowItem): Response {
         if($this->isOwnItem($user, $artshowItem))
-            return true;
+            return Response::allow();
         if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ))
-            return true;
+            return Response::allow();
 
-        return false;
+        if(self::isArtshowPublic()) {
+            if($artshowItem->approved)
+                return Response::allow();
+        }
+        return Response::deny();
     }
 
     public function create(User $user, ?ArtshowArtist $artshowArtist=null): bool {
@@ -71,20 +85,26 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         return false;
     }
 
-    public function delete(User $user, ArtshowItem $artshowItem): bool {
+    public function delete(User $user, ArtshowItem $artshowItem): Response {
         if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::DELETE))
-            return true;
+            return Response::deny();
 
         if(!$this->isWithinDeadline())
-            return false;
+            return Response::deny();
 
         // otherwise scope to own items:
         if($this->isOwnItem($user, $artshowItem)) {
-            // allow as long as item is not yet in auction
-            return !$artshowItem->isInAuction();
+            // allow as long as item is not yet in auction or approved
+
+            if($artshowItem->approved)
+                return Response::deny();
+
+            return $artshowItem->isInAuction()
+                ? Response::deny(__("Item is already in auction"))
+                : Response::allow();
         }
 
-        return false;
+        return Response::deny();
     }
 
     public function restore(User $user, ArtshowItem $artshowItem): bool {

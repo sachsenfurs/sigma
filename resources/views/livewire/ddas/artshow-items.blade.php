@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-auto text-center">
                         <div class="align-self-start justify-content-end p-3">
-                            <img src="{{ $item->image_url }}" class="img-fluid" style="max-height: 10em" alt="">
+                            <img src="{{ $item->image_url }}" class=" rounded img-fluid" style="max-height: 10em" alt="">
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <div class="align-self-start justify-content-end p-3">
-                            <img src="{{ $currentItem->image_url }}" class="img-fluid" style="max-height: 40%" alt="">
+                            <img src="{{ $currentItem->image_url }}" class="rounded img-fluid" style="max-height: 40%" alt="">
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
@@ -93,7 +93,7 @@
                             @endif
                             @if(!$currentItem->bidPossible())
                                 <div class="text-danger text-center p-1 my-2 fs-5">
-                                    {{ __("No more bids are currently being accepted for this item") }}
+                                    {{ __("No bids are currently being accepted for this item") }}
                                 </div>
                             @else
                                 <div class="row p-2 align-items-baseline">

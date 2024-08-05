@@ -6,7 +6,7 @@
             <i class="bi bi-exclamation-lg"></i>
             {{ __("If you lost or found something, please reach out to Con Ops (Leitstelle)!") }}
         </div>
-        <div class="sticky-top container-fluid p-0 z-1">
+        <div class="sticky-top container-fluid p-0">
             <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap" id="lostfoundTab" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
                     <button class="nav-link w-100 active" id="found-tab" data-bs-toggle="tab" data-bs-target="#found-tab-pane" type="button" role="tab" aria-controls="found-tab-pane" aria-selected="true">
@@ -42,7 +42,6 @@
                 @endforelse
             </div>
         </div>
-
     </div>
 
 @endsection

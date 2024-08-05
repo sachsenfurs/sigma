@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class SigLocationResource extends Resource
 {
@@ -98,67 +97,73 @@ class SigLocationResource extends Resource
     private static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('name')
-                                     ->label('Name')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Name')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('description')
-                                     ->label('Description')
-                                     ->translateLabel()
-                                     ->searchable(),
+                 ->label('Description')
+                 ->translateLabel()
+                 ->searchable(),
             Tables\Columns\TextColumn::make('floor')
-                                     ->label('Floor')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Floor')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('room')
-                                     ->label('Room')
-                                     ->translateLabel()
-                                     ->searchable()
-                                     ->sortable(),
+                 ->label('Room')
+                 ->translateLabel()
+                 ->searchable()
+                 ->sortable(),
             Tables\Columns\TextColumn::make('sig_events_count')
-                                     ->label('Event count')
-                                     ->translateLabel()
-                                     ->counts('sigEvents')
-                                     ->sortable(),
+                 ->label('Event count')
+                 ->translateLabel()
+                 ->counts('sigEvents')
+                 ->sortable(),
+            Tables\Columns\IconColumn::make("essential")
+                ->label("Essential")
+                ->translateLabel()
+                ->boolean()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\IconColumn::make('infodisplay')
-                                     ->label('Infodisplay')
-                                     ->translateLabel()
-                                     ->boolean()
-                                     ->sortable(),
+                 ->label('Infodisplay')
+                 ->translateLabel()
+                 ->boolean()
+                 ->sortable(),
         ];
     }
 
     private static function getNameField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('name')
-                                         ->label('Name')
-                                         ->translateLabel()
-                                         ->required()
-                                         ->maxLength(255);
+             ->label('Name')
+             ->translateLabel()
+             ->required()
+             ->maxLength(255);
     }
 
     private static function getNameEnField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('name_en')
-                                         ->label('Name (English) (optional, defaults to Name)')
-                                         ->translateLabel()
-                                         ->nullable()
-                                         ->maxLength(255);
+             ->label('Name (English) (optional, defaults to Name)')
+             ->translateLabel()
+             ->nullable()
+             ->maxLength(255);
     }
 
     private static function getDescriptionField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('description')
-                                         ->label('Functional Description ("Main Stage", ..)')
-                                         ->nullable()
-                                         ->translateLabel()
-                                         ->maxLength(255);
+             ->label('Functional Description ("Main Stage", ..) used for Signage etc.')
+             ->nullable()
+             ->translateLabel()
+             ->maxLength(255);
     }
 
     private static function getDescriptionEnField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('description_en')
-                                         ->label('Functional Description (English)')
-                                         ->nullable()
-                                         ->translateLabel()
-                                         ->maxLength(255);
+             ->label('Functional Description (English)')
+             ->nullable()
+             ->translateLabel()
+             ->maxLength(255);
     }
 
     private static function getRenderIdField(): Forms\Components\Component {
@@ -167,64 +172,64 @@ class SigLocationResource extends Resource
 
     private static function getFloorField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('floor')
-                                         ->label('Floor')
-                                         ->translateLabel()
-                                         ->nullable()
-                                         ->maxLength(255);
+             ->label('Floor')
+             ->translateLabel()
+             ->nullable()
+             ->maxLength(255);
     }
 
     private static function getRoomField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('room')
-                                         ->label('Room')
-                                         ->translateLabel()
-                                         ->nullable()
-                                         ->maxLength(255);
+             ->label('Room')
+             ->translateLabel()
+             ->nullable()
+             ->maxLength(255);
     }
 
     private static function getInfodisplayField(): Forms\Components\Component {
         return Forms\Components\Toggle::make('infodisplay')
-                                      ->label('Digital display in front of the door?')
-                                      ->translateLabel()
-                                      ->inline(false);
+             ->label('Digital display in front of the door?')
+             ->translateLabel()
+             ->inline(false);
     }
 
     private static function getRoomSizeField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('roomsize')
-                                         ->label('Room Size')
-                                         ->translateLabel()
-                                         ->nullable()
-                                         ->maxLength(255);
+            ->label('Room Size')
+            ->translateLabel()
+            ->nullable()
+            ->maxLength(255);
     }
 
     private static function getSeatsField(): Forms\Components\Component {
         return Forms\Components\TextInput::make('seats')
-                                         ->label('Seats')
-                                         ->translateLabel()
-                                         ->nullable()
-                                         ->maxLength(255);
+            ->label('Seats')
+            ->translateLabel()
+            ->nullable()
+            ->maxLength(255);
     }
 
     private static function getEssentialDescriptionField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('essential_description')
-                                        ->label('Essential Description')
-                                        ->translateLabel()
-                                        ->nullable()
-                                        ->rows(5);
+            ->label('Essential Description')
+            ->translateLabel()
+            ->nullable()
+            ->rows(5);
     }
 
     private static function getEssentialDescriptionEnField(): Forms\Components\Component {
         return Forms\Components\Textarea::make('essential_description_en')
-                                        ->label('Essential Description (English)')
-                                        ->translateLabel()
-                                        ->nullable()
-                                        ->rows(5);
+            ->label('Essential Description (English)')
+            ->translateLabel()
+            ->nullable()
+            ->rows(5);
     }
 
     private static function getEssentialField(): Forms\Components\Component {
         return Forms\Components\Toggle::make("essential")
-                                      ->label("Show in Essentials (Signage)")
-                                      ->translateLabel()
-                                      ->inline(false)
-                                      ->default(false);
+            ->label("Show in Essentials (Signage)")
+            ->translateLabel()
+            ->inline(false)
+            ->default(false);
     }
 }

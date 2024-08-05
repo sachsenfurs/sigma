@@ -118,6 +118,7 @@ class TimetableEntryResource extends Resource
                     ])
                     ->modal(),
                 Tables\Actions\EditAction::make()
+                    ->using(Pages\EditTimetableEntry::getEditAction())
                     ->url(null),
             ])
             ->recordUrl(null)

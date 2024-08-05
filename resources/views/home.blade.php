@@ -8,7 +8,7 @@
             <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                 {{ __("Submit your Events, Workshops, Presentations and more!") }}
             </x-home-signup-card>
-            @if(app(\App\Settings\DealerSettings::class)->enabled)
+            @if(app(\App\Settings\DealerSettings::class)->enabled AND auth()->user()->can("create", \App\Models\Ddas\Dealer::class))
                 <x-home-signup-card :title="__('Dealer\'s Den Sign Up')" img="/images/signup/dealerfox.png" :href="route('dealers.create')">
                     {{ __("Would you like to sell your art at the con?") }}
                 </x-home-signup-card>
