@@ -23,7 +23,7 @@
         <div class="row mt-5">
             <div class="col-12 col-md-8">
                 <div class="container">
-                    <h2 class="p-2"><i class="bi bi-calendar-week"></i> - {{ __("Your Upcoming Events") }}</h2>
+                    <h2 class="p-2"><i class="bi bi-calendar-week"></i> {{ __("Your Upcoming Events") }}</h2>
                     @if (auth()->user()->attendeeEvents()->count() == 0)
                         <p>{{ __("You haven't signed up for any event yet!") }}</p>
                         <a class="btn btn-primary btn-lg" href="{{ route("schedule.listview") }}" role="button">
@@ -93,7 +93,7 @@
             <div class="col-12 col-md-4 mt-2 mt-md-0">
                 @if (!auth()->user()->telegram_user_id)
                     <div class="container">
-                        <h2 class="p-2"><i class="bi bi-telegram"></i> - {{ __("Telegram Connection") }}</h2>
+                        <h2 class="p-2"><i class="bi bi-telegram"></i> {{ __("Telegram Connection") }}</h2>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
                         <a class="btn btn-primary btn-lg mx-auto" href="{{ route("user-settings.edit") }}" role="button">
                             {{ __("Connect it now") }}
@@ -101,15 +101,19 @@
                     </div>
                 @endif
                 <div class="container mt-2">
-                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> - {{ __("Notifications") }}</h2>
+                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> {{ __("Notifications") }}</h2>
                     <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
                     <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
                         {{ __("Modify them here") }}
                     </a>
                 </div>
-                <div class="container mt-2">
-                    <h2 class="p-2"><i class="bi bi-heart-fill"></i> - {{ __("Favorite Events") }}</h2>
-                    @forelse ($favorites as $fav)
+            </div>
+        </div>
+        <div class="container mt-2">
+            <h2 class="p-2"><i class="bi bi-heart-fill"></i> {{ __("Favorite Events") }}</h2>
+            <div class="row">
+                @forelse ($favorites as $fav)
+                    <div class="col-12 col-md-4">
                         <div class="card my-1">
                             <div class="card-body p-2 m-0">
                                 <p class="p-0 m-0" style="font-weight: bold; font-size: 1.35rem; margin-left: 5px;">{{ $fav->timetableEntry->sigEvent->name_localized }}</p>
@@ -123,26 +127,26 @@
                                     </div>
                                     <div class="col-4 p-0">
                                         <div class="d-flex align-items-center justify-content-center">
-                                                <x-buttons.notification-edit :fav="$fav" :small="true"/>
-                                                <button type="button" class="btn btn-danger text-white btn"
-                                                    style="margin-left: 5px;"
-                                                    data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
-                                                    data-bs-entryid="{{ $fav->timetableEntry->id }}"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteFavModal"
-                                                    @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                                    >
-                                                    <span class="bi bi-x"></span>
-                                                </button>
+                                            <x-buttons.notification-edit :fav="$fav" :small="true"/>
+                                            <button type="button" class="btn btn-danger text-white btn"
+                                                style="margin-left: 5px;"
+                                                data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
+                                                data-bs-entryid="{{ $fav->timetableEntry->id }}"
+                                                data-bs-toggle="modal" data-bs-target="#deleteFavModal"
+                                                @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
+                                                >
+                                                <span class="bi bi-x"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <x-modal.reminder-selector :timetableEntry="$fav->timetableEntry" />
-                    @empty
-                        <p>{{ __("You currently don't have any favorite events") }}</p>
-                    @endforelse
-                </div>
+                    </div>
+                @empty
+                    <p>{{ __("You currently don't have any favorite events") }}</p>
+                @endforelse
             </div>
         </div>
     @endif
