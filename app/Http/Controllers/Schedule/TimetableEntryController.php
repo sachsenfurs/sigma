@@ -7,6 +7,7 @@ use App\Http\Resources\ScheduleResource;
 use App\Http\Resources\SigLocationResource;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use Illuminate\Support\Facades\Auth;
 
 class TimetableEntryController extends Controller
 {
@@ -20,8 +21,12 @@ class TimetableEntryController extends Controller
     public function timetableIndex() {
         $this->authorize("viewAny",TimetableEntry::class);
 
-        $entries = TimetableEntry::public()
-             ->with("sigLocation")
+        $entries = TimetableEntry::public();
+        if (!Auth::guest() && Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel())) {
+            $entries = TimetableEntry::withoutGlobalScope('public');
+        }
+
+        $entries = $entries->with("sigLocation")
              ->with("sigEvent", function($query) {
                  return $query->with("sigHosts")
                  ->with("sigTags");

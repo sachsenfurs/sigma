@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :class="['card mt-3', { 'opacity-50': eventPassed }]" :id="'event' + entry.id" @click="showInfoModal()" >
+        <div :class="['card mt-3', { 'opacity-50': eventPassed }, { 'bg-dark': eventInternal }]" :id="'event' + entry.id" @click="showInfoModal()" >
             <div class="row g-0 flex-nowrap d-flex">
                 <div class="col-lg-2 col-4 d-flex">
                     <div class="card-body align-self-center text-center">
@@ -14,6 +14,9 @@
                             }}
                         </h3>
                         <h6 class="text-muted">{{ entry.formatted_length }}</h6>
+                        <h3 v-if="eventInternal">
+                            <span class="badge bg-secondary d-block text-uppercase">{{  $t("Internal") }}</span>
+                        </h3>
                         <h3 v-if="entry.new">
                             <span class="badge bg-info d-block text-uppercase">{{ $t("New") }}</span>
                         </h3>
@@ -149,6 +152,9 @@ export default {
         },
         eventPassed() {
             return this.now >= new Date(this.entry.end);
+        },
+        eventInternal() {
+            return this.entry.hide;
         }
     },
     data() {

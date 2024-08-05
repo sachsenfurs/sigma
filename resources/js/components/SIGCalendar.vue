@@ -114,6 +114,7 @@ export default {
         calEvents.map(function(event) {
             event.resourceId    = event.sig_location.id;
             event.title         = event.sig_event.name_localized;
+            event.color         = event.eventColor;
             return event;
         });
 

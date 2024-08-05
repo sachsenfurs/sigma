@@ -185,4 +185,16 @@ class TimetableEntry extends Model
             }
         );
     }
+
+    public function eventColor(): Attribute {
+        return Attribute::make(
+            get: function() {
+                if ($this->hide)
+                    return '#948E8A';
+                if ($this->cancelled)
+                    return '#EB8060';
+                return '#2C3D4F';
+            }
+        );
+    }
 }
