@@ -17,7 +17,7 @@ class SigRegistrationController extends Controller
         $timeslotOwner = false;
 
         if (!$user) {
-            return redirect()->back()->with('error', 'Ungültige Registrierungsnummer!');
+            return redirect()->back()->with('error', __('Invalid registration number! Has the attendee ever logged into Sigma?'));
         }
 
         $currentTime = strtotime(Carbon::now()->toDateTimeString());

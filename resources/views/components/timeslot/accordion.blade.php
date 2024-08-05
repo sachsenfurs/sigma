@@ -63,7 +63,11 @@
                                                 onclick="$('#registerModal').modal('show')
                                                 .find('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
                                         >
-                                            {{ __("Sign up") }}
+                                            @if($timeslot->timetableEntry->SigEvent->group_registration_enabled)
+                                                {{ __("Sign up your group") }}
+                                            @else
+                                                {{ __("Sign up") }}
+                                            @endif
                                         </x-timeslot.button>
                                     @endif
                                 @else

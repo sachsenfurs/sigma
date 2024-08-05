@@ -356,6 +356,7 @@
     "Do you really want to remove :attendee from your booking?": "Möchtest du wirklich :attendee aus deiner Buchung entfernen?",
 
     "Sign up": "Melde dich an",
+    "Sign up your group": "Melde deine Gruppe an",
     "Schedule": "Programmplan",
     "Scheduled": "Im Programmplan",
     "In Schedule": "Im Programmplan",
@@ -529,6 +530,7 @@
     "Database Notifications": "Datenbank Benachrichtigungen",
     "All Notifications": "Alle Benachrichtigungen",
     "Send": "Senden",
+    "Invalid registration number! Has the attendee ever logged into Sigma?": "Ungültige Registrierungsnummer! Hat sich der Attendee schonmal in Sigma angemeldet?",
 
     "Add attendee": "Teilnehmer hinzufügen",
     "Who would you like to add to your timeslot?": "Wen möchtest zu deinem Timeslot hinzufügen?",
