@@ -36,6 +36,6 @@ class PostChannel extends Model
 
     public function sendTestMessage(Post $post): void {
         if($this->test_channel_identifier)
-            $post->sendToChannel($this);
+            $post->sendToChannel($this, true);
     }
 }
