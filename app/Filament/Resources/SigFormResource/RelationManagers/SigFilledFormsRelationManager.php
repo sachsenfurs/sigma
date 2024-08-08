@@ -128,7 +128,7 @@ class SigFilledFormsRelationManager extends RelationManager
     protected function getTableEntryActions(): array {
         return [
             Tables\Actions\EditAction::make()
-                ->authorize("edit")
+                ->authorize("update")
                 ->modalHeading(__('Approve or reject form'))
                 ->modalDescription(function ($record) {
                     if (($record->approval === Approval::REJECTED) && ($record->rejection_reason)) {
