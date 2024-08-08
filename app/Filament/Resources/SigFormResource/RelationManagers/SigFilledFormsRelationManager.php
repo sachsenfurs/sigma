@@ -3,22 +3,16 @@
 namespace App\Filament\Resources\SigFormResource\RelationManagers;
 
 use App\Enums\Approval;
-use App\Filament\Resources\SigFormResource\Pages\ViewSigForm;
-use App\Models\SigFilledForm;
-use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\App;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 class SigFilledFormsRelationManager extends RelationManager
@@ -47,7 +41,7 @@ class SigFilledFormsRelationManager extends RelationManager
                 self::getApprovalFilter(),
             ])
             ->bulkActions([
-                Approval::getBulkAction(),
+                Approval::getBulkAction([self::getRejectComponent()]),
             ])
             ->columns($this->getTableColumns())
             ->actions($this->getTableEntryActions())
@@ -144,25 +138,25 @@ class SigFilledFormsRelationManager extends RelationManager
                               ->required()
                               ->options(Approval::class)
                               ->live(),
-                    Textarea::make('rejection_reason')
-                            ->label('Rejection reason')
-                            ->translateLabel()
-                            ->visible(fn (Get $get) => $get('approval') == Approval::REJECTED->value)
-                            ->required(fn (Get $get) => $get('approval') == Approval::REJECTED->value)
-                            ->live()
-                            ->rows(3),
-                ])
-//                ->action(fn($data, $record) => $record->update(['approval' => Approval::from($data['approval'] ?? 0)]))
-            ,
+                    self::getRejectComponent()
+                ]),
 
             DeleteAction::make('delete')
                 ->label('Delete')
                 ->translateLabel()
                 ->modalHeading(__('Really delete form data?')),
-//            EditAction::make(),
         ];
     }
 
+    private static function getRejectComponent(): Forms\Components\Component {
+        return Textarea::make('rejection_reason')
+                ->label('Rejection reason')
+                ->translateLabel()
+                ->visible(fn (Get $get) => $get('approval') == Approval::REJECTED->value)
+                ->required(fn (Get $get) => $get('approval') == Approval::REJECTED->value)
+                ->live()
+                ->rows(3);
+    }
     private static function getApprovalFilter(): Tables\Filters\SelectFilter {
         return Tables\Filters\SelectFilter::make('approval')
             ->label('Approval')

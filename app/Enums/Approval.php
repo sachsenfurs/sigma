@@ -67,15 +67,21 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
      * Filament Bulk Action
      * @return Action
      */
-    public static function getBulkAction(): BulkAction {
+    public static function getBulkAction($extraComponents=[]): BulkAction {
         return BulkAction::make("approval")
             ->icon("heroicon-o-question-mark-circle")
             ->translateLabel()
-            ->form([
-                Radio::make("approval")
-                    ->options(Approval::class)
-                    ->default(1),
-            ])
+            ->form(
+                array_merge(
+                    [
+                        Radio::make("approval")
+                            ->live()
+                            ->options(Approval::class)
+                            ->default(1),
+                    ],
+                    $extraComponents
+                )
+            )
             ->action(fn(array $data, Collection $records) => $records->each->update($data));
     }
 }
