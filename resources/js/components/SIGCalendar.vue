@@ -162,6 +162,7 @@ export default {
 }
 .fc {
     user-select: none;
+    height: 100vh;
 }
 
 .fc-timeline .fc-scrollgrid,

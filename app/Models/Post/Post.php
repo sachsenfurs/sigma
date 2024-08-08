@@ -63,19 +63,21 @@ class Post extends Model
         return nl2br($rawText, false);
     }
 
-    public function sendToChannel(PostChannel $channel): int|false {
+    public function sendToChannel(PostChannel $channel, bool $test=false): int|false {
         $text = $this->getTranslatedText($channel->language);
+
+        $target_chat_id = $test ? $channel->test_channel_identifier : $channel->channel_identifier;
 
         if($this->image) {
             $response = Telegram::sendPhoto([
-                'chat_id' => $channel->channel_identifier,
+                'chat_id' => $target_chat_id,
                 'photo' => InputFile::create(Storage::disk("public")->path($this->image)),
                 'caption' => $text,
                 'parse_mode' => self::$parseMode
             ]);
         } else {
             $response = Telegram::sendMessage([
-                'chat_id' => $channel->channel_identifier,
+                'chat_id' => $target_chat_id,
                 'text' => $text,
                 'parse_mode' => self::$parseMode
             ]);
