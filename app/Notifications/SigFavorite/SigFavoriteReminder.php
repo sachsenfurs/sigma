@@ -40,7 +40,7 @@ class SigFavoriteReminder extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, 'mail');
+        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, 'telegram');
     }
 
     /**
