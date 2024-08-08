@@ -38,6 +38,8 @@ class ScheduleResource extends JsonResource
             'sig_location'          => SigLocationResource::make($this->sigLocation),
 
             'sig_event'             => SigEventResource::make($this->sigEvent),
+
+            'eventColor'            => $this->eventColor,
         ];
     }
 }
