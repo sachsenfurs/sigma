@@ -1,10 +1,10 @@
 @props([
     'fav' => null,
-    'small',
+    'small' => false,
     'route'
 ])
 
-@php($reminderExists = auth()->user()->reminders->contains('timetable_entry_id', $fav?->timetableEntry->id))
+@php($reminderExists = $fav->timetableEntry->reminders->where("user_id", auth()->id()))
 
 <button type="button"
     @class([
@@ -18,7 +18,10 @@
     @disabled($fav?->timetableEntry->start < \Carbon\Carbon::now())
 >
     @if($reminderExists)
-        <span class="bi bi-bell"></span> @if (!$small) {{ $fav?->reminders->first()->minutes_before }}min @endif
+        <span class="bi bi-bell"></span>
+        <span @class(['small' => $small])>
+            {{ $fav->timetableEntry->reminders->where("user_id", auth()->id())->first()->minutes_before }}min
+        </span>
     @else
         <span class="bi bi-clock"></span>
     @endif
