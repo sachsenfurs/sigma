@@ -36,6 +36,9 @@ class SigFilledFormPolicy extends ManageEventPolicy
     }
 
     public function update(User $user, SigFilledForm $sigFilledForm): bool {
+        if($user->hasPermission(Permission::MANAGE_FORMS, PermissionLevel::WRITE))
+            return true;
+
         if($sigFilledForm->sigForm->form_closed)
             return false;
         if($sigFilledForm->user_id === $user->id)
