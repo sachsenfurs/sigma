@@ -63,6 +63,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     let touchStart = null;
     document.querySelector("body").addEventListener("touchstart", function(event) {
         touchStart = event.touches[0];
+        touchStart.timeStamp = event.timeStamp;
     });
     document.querySelector(".main-col").addEventListener("touchstart", function(event) {
         if(isNavVisible()) {
@@ -77,6 +78,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         if(touchStart === null)
             return;
         if(window.innerWidth >= 992)
+            return;
+        if(event.timeStamp - touchStart.timeStamp > 80)
+            return;
+        if(touchStart.clientX > 60)
             return;
 
         let touch = event.touches[0];
