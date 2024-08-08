@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 {{--    <h2>{{ __("Before the convention") }}</h2>--}}
-    @if(true)
+    @if($preConMode)
         <div class="row row-cols-1 row-cols-md-3 mx-auto align-items-stretch justify-content-center" style="max-width: 970px">
             <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                 {{ __("Submit your Events, Workshops, Presentations and more!") }}
@@ -23,7 +23,7 @@
         <div class="row mt-5">
             <div class="col-12 col-md-8">
                 <div class="container">
-                    <h2 class="p-2"><i class="bi bi-calendar-week"></i> - {{ __("Your Upcoming Events") }}</h2>
+                    <h2 class="p-2"><i class="bi bi-calendar-week"></i> {{ __("Your Upcoming Events") }}</h2>
                     @if (auth()->user()->attendeeEvents()->count() == 0)
                         <p>{{ __("You haven't signed up for any event yet!") }}</p>
                         <a class="btn btn-primary btn-lg" href="{{ route("schedule.listview") }}" role="button">
@@ -72,6 +72,7 @@
                             <x-modal.timeslotReminder-selector :sigTimeslot="$registration->sigTimeslot" />
                         @endforeach
                     @endif
+                    {{--
                     <div class="row row-cols-1 row-cols-md-3 mt-4 mx-auto align-items-stretch justify-content-center" style="max-width: 970px">
                         <x-home-signup-card :title="__('SIG Sign Up')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                             {{ __("Submit your Events, Workshops, Presentations and more!") }}
@@ -81,18 +82,18 @@
                                 {{ __("Explore which items are in the this years artshow!") }}
                             </x-home-signup-card>
                         @endif
-                        {{--
+                            
                         <x-home-signup-card :title="__('Lost & Found')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                             {{ __("Did you lose something on the convention? Click here to see which items were found.") }}
                         </x-home-signup-card>
-                        --}}
-                    </div>
+                        
+                    </div>--}}
                 </div>
             </div>
             <div class="col-12 col-md-4 mt-2 mt-md-0">
                 @if (!auth()->user()->telegram_user_id)
                     <div class="container">
-                        <h2 class="p-2"><i class="bi bi-telegram"></i> - {{ __("Telegram Connection") }}</h2>
+                        <h2 class="p-2"><i class="bi bi-telegram"></i> {{ __("Telegram Connection") }}</h2>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
                         <a class="btn btn-primary btn-lg mx-auto" href="{{ route("user-settings.edit") }}" role="button">
                             {{ __("Connect it now") }}
@@ -100,52 +101,52 @@
                     </div>
                 @endif
                 <div class="container mt-2">
-                    <h2 class="p-2"><i class="bi bi-heart-fill"></i> - {{ __("Favorite Events") }}</h2>
-                    @forelse ($favorites as $fav)
-                        <div class="card">
-                            <div class="card-body">
-                                <h3>{{ $fav->timetableEntry->sigEvent->name_localized }}</h3>
-                                <hr>
-                                <table>
-                                    <tr>
-                                        <td><strong>{{ __("Location") }}</strong></td>
-                                        <td style="padding-left: 15px">{{ $fav->timetableEntry->sigLocation->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>{{ __("Date") }}</strong></td>
-                                        <td style="padding-left: 15px">{{ date('l', strtotime($fav->timetableEntry->start)) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>{{ __("Time span") }}</strong></td>
-                                        <td style="padding-left: 15px">{{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="card-footer d-flex justify-content-center">
-                                <x-buttons.notification-edit :fav="$fav" />
-                                <button type="button" class="btn btn-danger text-white btn"
-                                        style="margin-left: 5px"
-                                        data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
-                                        data-bs-entryid="{{ $fav->timetableEntry->id }}"
-                                        data-bs-toggle="modal" data-bs-target="#deleteFavModal"
-                                        @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
-                                >
-                                    <span class="bi bi-x"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <x-modal.reminder-selector :timetableEntry="$fav->timetableEntry" />
-                    @empty
-                        <p>{{ __("You currently don't have any favorite events") }}</p>
-                    @endforelse
-                </div>
-                <div class="container mt-2">
-                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> - {{ __("Notifications") }}</h2>
+                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> {{ __("Notifications") }}</h2>
                     <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
                     <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
                         {{ __("Modify them here") }}
                     </a>
                 </div>
+            </div>
+        </div>
+        <div class="container mt-2">
+            <h2 class="p-2"><i class="bi bi-heart-fill"></i> {{ __("Favorite Events") }}</h2>
+            <div class="row">
+                @forelse ($favorites as $fav)
+                    <div class="col-12 col-md-4">
+                        <div class="card my-1">
+                            <div class="card-body p-2 m-0">
+                                <p class="p-0 m-0" style="font-weight: bold; font-size: 1.35rem; margin-left: 5px;">{{ $fav->timetableEntry->sigEvent->name_localized }}</p>
+                                <hr style="margin: 2px 0 2px 0;">
+                                <div class="row m-0 py-1">
+                                    <div class="col-4 p-0 d-flex align-items-center">
+                                        <i class="bi bi-calendar4" style="padding-right: 5px;"></i> {{ __(date('D', strtotime($fav->timetableEntry->start))) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})
+                                    </div>
+                                    <div class="col-4 p-0 d-flex align-items-center">
+                                        <i class="bi bi-clock" style="padding-right: 5px;"></i> {{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}
+                                    </div>
+                                    <div class="col-4 p-0">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <x-buttons.notification-edit :fav="$fav" :small="true"/>
+                                            <button type="button" class="btn btn-danger text-white btn"
+                                                style="margin-left: 5px;"
+                                                data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
+                                                data-bs-entryid="{{ $fav->timetableEntry->id }}"
+                                                data-bs-toggle="modal" data-bs-target="#deleteFavModal"
+                                                @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
+                                                >
+                                                <span class="bi bi-x"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <x-modal.reminder-selector :timetableEntry="$fav->timetableEntry" />
+                    </div>
+                @empty
+                    <p>{{ __("You currently don't have any favorite events") }}</p>
+                @endforelse
             </div>
         </div>
     @endif

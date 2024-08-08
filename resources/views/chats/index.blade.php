@@ -19,9 +19,12 @@
                 <div class="col-12 col-md-3 text-center m-0 p-0 rounded-left" style="background-color:#ffffff11;">
                     @forelse($chats AS $chat)
                         <div class="col-12 p-3">
-                            <a class="btn border border-secondary rounded p-2 w-75"
+                            <a class="btn border border-secondary rounded p-2 w-75
+                                @if ($currChat->id == $chat->id)
+                                    btn-primary
+                                @endif"
                                 href="{{ route('chats.index') }}?chat_id={{ $chat->id }}">
-                                <p class="m-0">{{ __($chat->department) }}</p>
+                                <p class="m-0">{{ __($chat->userRole->title) }}</p>
                             </a>
                         </div>
                     @empty
@@ -116,7 +119,7 @@
             </div>
         </div>
     @endif
-    <x-modal.chat-new :userChatDepartments="$currChatDepartments" />
+    <x-modal.chat-new :userChatDepartments="$currChatDepartments" :departments="$departments" />
     @if (isset($currChat))
         <script>
             // Scroll to bottom of the chat

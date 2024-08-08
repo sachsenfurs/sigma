@@ -1,5 +1,6 @@
 @props([
     'fav' => null,
+    'small',
     'route'
 ])
 
@@ -17,7 +18,7 @@
     @disabled($fav?->timetableEntry->start < \Carbon\Carbon::now())
 >
     @if($reminderExists)
-        <span class="bi bi-bell"></span> {{ $fav?->reminders->first()->minutes_before }}min
+        <span class="bi bi-bell"></span> @if (!$small) {{ $fav?->reminders->first()->minutes_before }}min @endif
     @else
         <span class="bi bi-clock"></span>
     @endif
