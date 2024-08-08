@@ -39,7 +39,7 @@ class SigRegistrationController extends Controller
             // Check if user already attends event
             return redirect()->back()->with('error', 'Du nimmst bereits an diesem Timeslot teil!');
 
-        } elseif($timeslot->timetableEntry->sigEvent->group_registration_enabled && $timeslot->sigAttendees->count() > 0) {
+        } elseif($timeslot->timetableEntry->sigEvent->group_registration_enabled && $timeslot->sigAttendees->count() > 0 &! $timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first()) {
             // Check if group_registration is enabled and a user has already joined the slot
             return redirect()->back()->with('error', __("Group Registration is enabled for this timeslot!"));
 
