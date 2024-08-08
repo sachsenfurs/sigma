@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Benutzer Einstellungen bearbeiten")
+@section('title', __("Edit User Settings"))
 @section('content')
 <div class="col-12 col-md-4 mx-auto">
     @if (!auth()->user()->telegram_user_id)
@@ -13,7 +13,7 @@
                     <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
                 </div>
             </div>
-        </div>   
+        </div>
     @else
         <div class="card m-3">
             <div class="row m-3">
@@ -38,7 +38,7 @@
                 <div class="col-12">
                     <div class="row m-2">
                         <div class="col-7 col-md-7 text-center text-md-start pb-md-0 pb-3 my-auto">
-                            
+
                         </div>
                         <div class="col-5 col-md-5">
                             <div class="row">
@@ -79,8 +79,8 @@
                                 -->
                             </div>
                         </div>
-                    @endforeach                    
-                </div>        
+                    @endforeach
+                </div>
             </div>
             <div class="card-footer text-center">
                 <button type="submit" class="btn btn-primary m-1">{{ __("Save") }}</button>

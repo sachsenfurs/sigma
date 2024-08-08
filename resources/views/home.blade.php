@@ -33,7 +33,10 @@
                         @foreach ($registrations as $registration)
                             <div class="card">
                                 <div class="card-body">
-                                    <h3>{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}</h3>
+                                    <a class="text-decoration-none" href="{{ route("timetable-entry.show", $registration->sigTimeslot->timetableEntry) }}">
+                                        <h3>{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}</h3>
+                                    </a>
+
                                     <hr>
                                     <table>
                                         <tr>
@@ -42,7 +45,7 @@
                                         </tr>
                                         <tr>
                                             <td><strong>{{ __("Date") }}</strong></td>
-                                            <td style="padding-left: 15px">{{ date('l', strtotime($registration->sigTimeslot->timetableEntry->start)) }} ({{ date('d.m', strtotime($registration->sigTimeslot->timetableEntry->start)) }})</td>
+                                            <td style="padding-left: 15px">{{ $registration->sigTimeslot->timetableEntry->start->translatedFormat("l (d.m.)") }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>{{ __("Time span") }}</strong></td>
@@ -56,13 +59,11 @@
                                         <span class="bi bi-people-fill"></span>
                                     </a>
                                     <button type="button"
-                                            class="btn btn-danger text-white"
+                                            class="btn btn-secondary text-white"
                                             style="margin-left: 5px"
                                             onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
                                             data-toggle="modal" data-target="#deleteModal"
-                                            @if ($registration->sigTimeslot->reg_end < \Carbon\Carbon::now())
-                                                disabled
-                                            @endif
+                                            @disabled($registration->sigTimeslot->reg_end->isBefore(now()))
                                     >
                                         <span class="bi bi-x"></span>
                                     </button>
@@ -82,11 +83,11 @@
                                 {{ __("Explore which items are in the this years artshow!") }}
                             </x-home-signup-card>
                         @endif
-                            
+
                         <x-home-signup-card :title="__('Lost & Found')" img="/images/signup/sigfox.png" :href="route('sigs.create')">
                             {{ __("Did you lose something on the convention? Click here to see which items were found.") }}
                         </x-home-signup-card>
-                        
+
                     </div>--}}
                 </div>
             </div>
@@ -111,24 +112,27 @@
         </div>
         <div class="container mt-2">
             <h2 class="p-2"><i class="bi bi-heart-fill"></i> {{ __("Favorite Events") }}</h2>
-            <div class="row">
+            <div class="row g-3">
                 @forelse ($favorites as $fav)
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-xl-6 col-">
                         <div class="card my-1">
-                            <div class="card-body p-2 m-0">
-                                <p class="p-0 m-0" style="font-weight: bold; font-size: 1.35rem; margin-left: 5px;">{{ $fav->timetableEntry->sigEvent->name_localized }}</p>
-                                <hr style="margin: 2px 0 2px 0;">
-                                <div class="row m-0 py-1">
-                                    <div class="col-4 p-0 d-flex align-items-center">
-                                        <i class="bi bi-calendar4" style="padding-right: 5px;"></i> {{ __(date('D', strtotime($fav->timetableEntry->start))) }} ({{ date('d.m', strtotime($fav->timetableEntry->start)) }})
+                            <div class="card-header">
+                                <a class="text-decoration-none" href="{{ route("timetable-entry.show", $fav->timetableEntry) }}">
+                                    {{ $fav->timetableEntry->sigEvent->name_localized }}
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row m-0 py-1 align-items-center">
+                                    <div class="col-5">
+                                        <i class="bi bi-calendar4 align-baseline"></i> {{ $fav->timetableEntry->start->translatedFormat("l") }}
                                     </div>
-                                    <div class="col-4 p-0 d-flex align-items-center">
-                                        <i class="bi bi-clock" style="padding-right: 5px;"></i> {{ $fav->timetableEntry->start->format("H:i") }} - {{ $fav->timetableEntry->end->format("H:i") }}
+                                    <div class="col-4">
+                                        <i class="bi bi-clock align-baseline"></i> {{ $fav->timetableEntry->start->format("H:i") }}
                                     </div>
-                                    <div class="col-4 p-0">
-                                        <div class="d-flex align-items-center justify-content-center">
+                                    <div class="col-2 p-0">
+                                        <div class="d-flex justify-content-center">
                                             <x-buttons.notification-edit :fav="$fav" :small="true"/>
-                                            <button type="button" class="btn btn-danger text-white btn"
+                                            <button type="button" class="btn btn-secondary text-white btn"
                                                 style="margin-left: 5px;"
                                                 data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
                                                 data-bs-entryid="{{ $fav->timetableEntry->id }}"

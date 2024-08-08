@@ -8,7 +8,7 @@
 <div class="row mb-3">
     @if($avatar)
         <div class="col-4 col-md-2" style="max-height: 100%;">
-            <img class="mx-auto" src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded" style="object-fit: cover; max-height: 30vw" alt="">
+            <img class="mx-auto img-fluid rounded-circle" src="{{ $avatar }}" class="img-fluid h-100 w-100 rounded" style="object-fit: cover; max-height: 30vw" alt="">
         </div>
     @else
         <div class="col-4 col-md-2" style="max-height: 100%;">

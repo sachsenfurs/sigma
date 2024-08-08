@@ -27,13 +27,13 @@
                 </form>
               </div>
               <hr>
-            @endif 
+            @endif
           <div>
             <h2>{{ __('Attendees') }}</h2>
             @foreach ($timeslot->sigAttendees as $attendee)
               <x-list-attendee-item
                 :name="$attendee->user->name"
-                :avatar="$attendee->user->avatar"
+                :avatar="$attendee->user->avatar_thumb"
                 :attendee="$attendee"
                 :canManageSigAttendees="$timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first()"
                 :groupRegistrationEnabled="$timeslot->timetableEntry->sigEvent->group_registration_enabled"

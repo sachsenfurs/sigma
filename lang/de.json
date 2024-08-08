@@ -346,7 +346,7 @@
     "Moved": "Verschoben",
 
     "Hi ": "Hallo ",
-    "your favorite event :event starts in :minutes_before minutes!": "dein favorites Event :event startet in :minutes_before Minuten!",
+    "*:event* starts in :minutes_before minutes!": "*:event* startet in :minutes_before Minuten",
     "View Event": "Event Anzeigen",
     "the event :event was cancelled!": "Das Event :event wurde abgesagt!",
     "The location for the event :event has changed!": "die Location für das Event :event hat sich geändert!",
@@ -358,6 +358,12 @@
     "Remove Attendee": "Telnehmer entfernen",
     "Do you really want to remove :attendee from your booking?": "Möchtest du wirklich :attendee aus deiner Buchung entfernen?",
 
+    ":event starting soon": ":event beginnt in Kürze",
+    "\uD83D\uDD57 *Event Time:* :start - :end": "\uD83D\uDD57 *Zeit:* :start - :end",
+    "\uD83D\uDCCD *Location:* :location": "\uD83D\uDCCD *Raum:* :location",
+
+    "Edit User Settings": "Benutzereinstellungen bearbeiten",
+    "Settings saved!": "Einstellungen gespeichert!",
     "Sign up": "Melde dich an",
     "Sign up your group": "Melde deine Gruppe an",
     "Schedule": "Programmplan",
@@ -543,7 +549,7 @@
     "-- Select Department --": "-- Department auswählen --",
     "New Chat": "Neuer Chat",
     "Chat activated": "Chat aktiviert",
-    "If a UserRole (Department) is available for Chats": "Ob eine UserRole (Department) für Chats verfügbar ist", 
+    "If a UserRole (Department) is available for Chats": "Ob eine UserRole (Department) für Chats verfügbar ist",
     "No chats available": "Keine Chats verfügbar",
     "No Messages": "Keine Nachrichten",
     "the user ": "der Benutzer ",

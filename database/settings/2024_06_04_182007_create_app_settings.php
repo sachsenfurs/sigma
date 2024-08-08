@@ -17,8 +17,8 @@ return new class extends SettingsMigration
             $blueprint->add("lassie_con_event_id", null);
             $blueprint->add("lost_found_enabled", true);
 
-            $blueprint->add("telegram_bot_name", env("TELEGRAM_BOT_TOKEN", ""));
-            $blueprint->add("telegram_bot_token", env("TELEGRAM_BOT_NAME", ""));
+            $blueprint->add("telegram_bot_name", env("TELEGRAM_BOT_NAME", ""));
+            $blueprint->add("telegram_bot_token", env("TELEGRAM_BOT_TOKEN", ""));
 
             $blueprint->add("deepl_api_key", env("DEEPL_API_KEY"));
             $blueprint->add("deepl_source_lang", "de"); // https://developers.deepl.com/docs/v/de/resources/supported-languages#source-languages
