@@ -8,10 +8,9 @@ use App\Models\SigFavorite;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
-use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SubNavigationPosition;
@@ -109,11 +108,18 @@ class TimetableEntryResource extends Resource
                             ->translateLabel()
                             ->schema([
                                 TextEntry::make("userRole.title")
-                                    ->label(""),
+                                    ->label("")
+                                    ->prefixAction(
+                                        Action::make("edit")
+                                            ->url(function(Model $record) {
+                                                return DepartmentInfoResource::getUrl("edit", ['record' => $record]);
+                                            })
+                                            ->icon("heroicon-o-pencil-square")
+                                    ),
                                 TextEntry::make("additional_info")
                                     ->label("")
                                     ->listWithLineBreaks()
-                                    ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
+                                    ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
                             ])
                     ])
                     ->modal(),

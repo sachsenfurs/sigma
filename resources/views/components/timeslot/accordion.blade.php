@@ -44,10 +44,8 @@
                                 @if ($timeslot->max_users > $timeslot->sigAttendees->count())
                                     @if (auth()->user()?->sigTimeslots?->find($timeslot))
                                         <x-timeslot.button
+                                            :disabled="true"
                                             class="btn-success"
-                                            onclick="$('#registerModal').modal('show')
-                                            .find('#registerForm')
-                                            .attr('action', '{{route('registration.cancel', $timeslot)}}')"
                                         >
                                             {{ __("Already signed up") }}
                                         </x-timeslot.button>
@@ -55,13 +53,21 @@
                                         <x-timeslot.button :disabled="true" class="btn-secondary">
                                             {{ __("Daily limit reached") }}
                                         </x-timeslot.button>
+                                    @elseif ($timeslot->timetableEntry->SigEvent->group_registration_enabled && $timeslot->sigAttendees->count() != 0)
+                                        <x-timeslot.button :disabled="true" class="btn-secondary">
+                                            {{ __("Group Slot active") }}
+                                        </x-timeslot.button>
                                     @else
                                         <x-timeslot.button
                                                 class="btn-primary"
                                                 onclick="$('#registerModal').modal('show')
                                                 .find('#registerForm').attr('action', '{{route('registration.register', $timeslot)}}')"
                                         >
-                                            {{ __("Sign up") }}
+                                            @if($timeslot->timetableEntry->SigEvent->group_registration_enabled)
+                                                {{ __("Sign up your group") }}
+                                            @else
+                                                {{ __("Sign up") }}
+                                            @endif
                                         </x-timeslot.button>
                                     @endif
                                 @else

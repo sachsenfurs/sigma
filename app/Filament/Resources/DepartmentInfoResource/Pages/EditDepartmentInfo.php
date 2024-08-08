@@ -10,10 +10,12 @@ class EditDepartmentInfo extends EditRecord
 {
     protected static string $resource = DepartmentInfoResource::class;
 
-    protected function getHeaderActions(): array
-    {
+    protected function getHeaderActions(): array {
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+    protected function getRedirectUrl(): ?string {
+        return $this->previousUrl;
     }
 }

@@ -53,13 +53,13 @@ class UserNotificationChannel extends Model
 
     /**
      * Returns an array with all selected channels for the given notification.
-     * 
+     *
      * @param  string  $key
      * @param  int  $userId
      * @param  string $default
      * @return array
      */
-    public static function list(string $key, int $userId, string $default): ?array
+    public static function list(string $key, int $userId, string $default=""): ?array
     {
         $notification = self::where('user_id', $userId)->where('notification', $key)->get('channel')->first();
 

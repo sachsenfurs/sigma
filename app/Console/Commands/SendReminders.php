@@ -32,13 +32,13 @@ class SendReminders extends Command
      *
      * @return int
      */
-    public function handle()
-    {
+    public function handle() {
         $upcomingReminders = SigReminder::where('executed_at', null)->where('send_at', '<=', time())->get();
 
         foreach ($upcomingReminders as $reminder) {
             if ($reminder->user->telegram_user_id) {
                 try {
+                    app()->setLocale($reminder->user->language);
                     $reminder->user->notify(new SigFavoriteReminder($reminder->timetableEntry, $reminder));
                     $reminder->executed_at = strtotime(Carbon::now());
                     $reminder->save();
@@ -55,6 +55,7 @@ class SendReminders extends Command
         foreach ($upcomingTimeslotReminders as $reminder) {
             if ($reminder->user->telegram_user_id && $reminder->send_at <= strtotime('-1 hour')) {
                 try {
+                    app()->setLocale($reminder->user->language);
                     $reminder->user->notify(new SigTimeslotReminderNotification($reminder->timeslot, $reminder));
                     $reminder->executed_at = strtotime(Carbon::now());
                     $reminder->save();

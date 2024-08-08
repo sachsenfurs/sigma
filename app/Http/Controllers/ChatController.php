@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\UserRole;
 use App\Notifications\NewChatMessage;
 use App\Notifications\SigUpdated;
 use App\Settings\ChatSettings;
@@ -25,15 +26,6 @@ class ChatController extends Controller
         $depCounter = 0;
         $showNewChatButton = true;
 
-        foreach ($chats as $chat) {
-            array_push($currChatDepartments, $chat->department);
-            $depCounter++;
-        }
-
-        if($depCounter == 3) {
-            $showNewChatButton = false;
-        }
-
         if ($chats->count() > 0) {
           if (isset($request['chat_id'])) {
                 $currChat = Chat::findOrFail($request['chat_id']);
@@ -43,25 +35,49 @@ class ChatController extends Controller
             }
         }
 
-        return view("chats.index", compact("chats", "currChat", "currChatDepartments", "showNewChatButton"));
+        /*
+         * Department handling
+         */
+
+        $departments = UserRole::Get()->where("chat_activated", "1");
+
+        // Get Current Chats
+        foreach ($chats as $chat) {
+            array_push($currChatDepartments, $chat->userRole->id);
+            $depCounter++;
+        }
+
+        if($depCounter == $departments->count()) {
+            $showNewChatButton = false;
+        }
+
+        return view("chats.index", 
+            compact("chats", 
+                    "currChat", 
+                    "currChatDepartments",
+                    "showNewChatButton",
+                    "departments"
+                )
+            );
     }
 
     public function create(Request $request)
     {
         $attributes = $request->validate([
-            'department' => 'required'
+            'departmentId' => 'required'
         ]);
 
-        $requestDepartment = $attributes['department'];
-
-        if ($this->validateDepartment($requestDepartment)) {
-            $department = $requestDepartment;
-
-            Chat::create(['user_id' => auth()->user()->id, 'department' => $department, 'status' => 'new']);
-
-            return redirect()->back();
-        }
-        redirect()->back()->error(__('You have entered an invalid department!'));
+        $department = UserRole::Get()->where("chat_activated", "1")->where("id", $attributes['departmentId'])->first();
+        if ($department && !Chat::get()->where('user_id', auth()->user()->id)->where('user_role_id', $department->id)->first()) {
+            $chat = Chat::create([
+                'user_id' => auth()->user()->id,
+                'user_role_id' => $department->id,
+                'status' => 'new'
+            ]);
+            return redirect(route("chats.index", ['chat_id' => $chat->id]))->withSuccess(__("Chat Created"));    
+        } else {
+            return redirect()->back()->withError(__('You have entered an invalid department!'));
+        }      
     }
 
     public function store(Request $request, Chat $chat)
@@ -80,25 +96,5 @@ class ChatController extends Controller
     public function destroy()
     {
 
-    }
-
-    /**
-     * @param string $response
-     * @return bool|Collection
-     */
-    private function validateDepartment($value)
-    {
-        $departments = [
-            'artshow',
-            'dealersden',
-            'events',
-        ];
-
-        foreach ($departments as $department) {
-            if (str_contains($value, $department)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

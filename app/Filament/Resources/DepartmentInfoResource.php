@@ -95,7 +95,9 @@ class DepartmentInfoResource extends Resource
                     ->translateLabel()
                     ->color(Color::Gray)
                     ->url(fn(Model $record) => SigEventResource::getUrl("edit", ['record' => $record->sigEvent])),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->modal()
+                    ->url(null),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->recordUrl(null)

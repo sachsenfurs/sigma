@@ -8,28 +8,21 @@ use \Str;
 
 class UserNotificationChannelController extends Controller
 {
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
+
+    public function edit() {
         $notificationType = [
             'sig_favorite_reminder'            => UserNotificationChannel::get('sig_favorite_reminder', 'email'),
             'sig_timeslot_reminder'            => UserNotificationChannel::get('sig_timeslot_reminder', 'email'),
             'timetable_entry_cancelled'        => UserNotificationChannel::get('timetable_entry_cancelled', 'email'),
             'timetable_entry_location_changed' => UserNotificationChannel::get('timetable_entry_location_changed', 'email'),
             'timetable_entry_time_changed'     => UserNotificationChannel::get('timetable_entry_time_changed', 'email'),
-            'chat_new_message'                 => UserNotificationChannel::get('chat_new_message', 'email')
+//            'chat_new_message'                 => UserNotificationChannel::get('chat_new_message', 'email')
         ];
 
         return view('user-settings.edit', compact('notificationType'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $notifications = [];
 
         foreach ($request->all() as $key => $value) {
@@ -47,6 +40,6 @@ class UserNotificationChannelController extends Controller
             UserNotificationChannel::set($notification, json_encode($value));
         }
 
-        return redirect()->back()->with('success', 'Setting saved!');
+        return redirect()->back()->with('success', __('Settings saved!'));
     }
 }

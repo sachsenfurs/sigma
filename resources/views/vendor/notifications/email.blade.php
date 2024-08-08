@@ -20,17 +20,8 @@
 
 {{-- Outro Lines --}}
 @foreach ($outroLines as $line)
-{{ $line }}
-
+    {{ $line }}
 @endforeach
-
-{{-- Salutation --}}
-@if (! empty($salutation))
-{{ $salutation }}
-@else
-@lang('Regards'),<br>
-{{ config('app.name') }} Team
-@endif
 
 {{-- Subcopy --}}
 @isset($actionText)

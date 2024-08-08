@@ -34,9 +34,7 @@ class ScheduleResource extends JsonResource
             'hasTimeChanged'        => $this->has_time_changed,
             'hasLocationChanged'    => $this->has_location_changed,
             'is_favorite'           => $this->is_favorite,
-
             'sig_location'          => SigLocationResource::make($this->sigLocation),
-
             'sig_event'             => SigEventResource::make($this->sigEvent),
         ];
     }
