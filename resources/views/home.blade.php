@@ -204,4 +204,17 @@
     </div>
 </div>
 <!-- END Favorites Modal -->
+<script>
+    document.querySelectorAll("#deleteModal,#deleteFavModal").forEach((modal) => {
+        modal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            let button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            let name = button.getAttribute('data-bs-signame');
+            let id = button.getAttribute('data-bs-entryid');
+            modal.querySelector("form").action = "/favorites/" + id;
+            modal.querySelector('.modal-body p').textContent = name;
+        });
+    });
+</script>
 @endsection
