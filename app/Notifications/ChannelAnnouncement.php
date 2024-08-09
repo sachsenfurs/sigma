@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\UserNotificationChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -30,7 +31,7 @@ class ChannelAnnouncement extends Notification
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return UserNotificationChannel::list('sig_timeslot_reminder', $notifiable->id, ['telegram', 'email']);
     }
 
     /**

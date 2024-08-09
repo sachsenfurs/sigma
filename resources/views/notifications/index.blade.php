@@ -27,14 +27,14 @@
                             <i class="bi bi-bell"></i>
                         </div>
                         <div class="col-8 col-md-10">
-                                @switch($notification->data['type'])
-                                    @case('chat_new_message')
+                                @switch($notification->type)
+                                    @case(\App\Notifications\NewChatMessage::class)
                                         <a class="btn p-2 w-75" href="{{ route('chats.index') }}?chat_id={{ $notification->data['id'] }}">
                                             <h2 class="p-none m-none">{{ __('New Chat Message') }}</h2>
                                             <p class="p-none m-none">{{ __('in the chat with the :department department', ["department" => __($notification->data['department'])]) }}</p>
                                         </a>
                                         @break
-                                    @case('sig_favorite_reminder')
+                                    @case(\App\Notifications\SigFavorite\SigFavoriteReminder::class)
                                         <a class="btn p-2 w-75" href="{{ route("timetable-entry.show", ['entry' => $notification->data['timetableEntryid']]) }}">
                                             <h2 class="p-none m-none">{{ __('Event starts soon') }}</h2>
                                             <x-markdown>
@@ -47,31 +47,44 @@
                                             </x-markdown>
                                         </a>
                                         @break
-                                    @case('sig_timeslot_reminder')
+                                    @case(\App\Notifications\SigTimeslot\SigTimeslotReminder::class)
                                         <a class="btn p-2 w-75" href="{{ route("timetable-entry.show", ['entry' => $notification->data['sigTimeslotId']]) }}">
                                             <h2 class="p-none m-none">{{ __('Booked timeslot reminder') }}</h2>
                                             <p class="p-none m-none">{{ __('your booked timeslot of the event :event starts in :minutes_before minutes!', ["event" => $notification->data['eventName'], "minutes_before" => $notification->data['minutes_before']]) }}</p>
                                         </a>
                                         @break
-                                    @case('timetable_entry_cancelled')
+                                    @case(\App\Notifications\TimetableEntry\TimetableEntryCancelled::class)
                                         <a class="btn p-2 w-75" href="{{ route('public.timeslot-show', ['entry' => $data['timetableEntryId']]) }}">
                                             <h2 class="p-none m-none">{{ __('Event cancelled') }}</h2>
                                             <p class="p-none m-none">{{ __('The event :event was cancelled!', ["event" => $notification->data['eventName']]) }}</p>
                                         </a>
                                         @break
-                                    @case('timetable_entry_location_changed')
+                                    @case(\App\Notifications\TimetableEntry\TimetableEntryLocationChanged::class)
                                         <a class="btn p-2 w-75" href="{{ route('chats.index') }}?chat_id={{ $notification->data['id'] }}">
                                             <h2 class="p-none m-none">{{ __('Event new location') }}</h2>
                                             <p class="p-none m-none">{{ __('The location for the event :event has changed!', ["event" => $notification->data['eventName']]) }}</p>
                                             <p class="p-none m-none">{{ __('New location: ') . $notification->data['newLocation'] }}</p>
                                         </a>
                                         @break
-                                    @case('timetable_entry_time_changed')
+                                    @case(\App\Notifications\TimetableEntry\TimetableEntryTimeChanged::class)
                                         <a class="btn p-2 w-75" href="{{ route('chats.index') }}?chat_id={{ $notification->data['id'] }}">
                                             <h2 class="p-none m-none">{{ __('Event time changed') }}</h2>
                                             <p class="p-none m-none">{{ __('The time of the event :event has changed!', ["event" => $notification->data['eventName']]) }}</p>
                                             <p class="p-none m-none">{{ __('New time: :startTime - :endTime', ["startTime" => Carbon::parse($notification->data['newStartTime'])->format("H:i"), "endTime" => Carbon::parse($notification->data['newEndTime'])->format("H:i")]) }}</p>
                                         </a>
+                                        @break
+                                    @case(\App\Notifications\Ddas\ArtshowWinnerNotification::class)
+                                        <p>
+                                            {{ __("You have won the following items in the art show:") }}
+                                        </p>
+                                        <p>
+                                            @foreach(\App\Models\Ddas\ArtshowItem::find($notification->data['artshowItems'] ?? 0) AS $item)
+                                                {{ $item->name }}, {{ $item->highestBid->value }} EUR<br>
+                                            @endforeach
+                                        </p>
+                                        <p>
+                                            {{ __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)") }}
+                                        </p>
                                         @break
                                     @default
                                 @endswitch

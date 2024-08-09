@@ -20,8 +20,7 @@ class UserNotificationChannel extends Model
      * @param  string  $default
      * @return array
      */
-    public static function get(string $key, string $default = null): array
-    {
+    public static function get(string $key, string $default = null): array {
         $notification = self::where('user_id', auth()->user()->id)->where('notification', $key)->first();
         if (!$notification) {
             return [$default];
@@ -38,8 +37,7 @@ class UserNotificationChannel extends Model
      * @param  null|string  $value
      * @return string|bool
      */
-    public static function set(string $key, ?string $value): ?string
-    {
+    public static function set(string $key, ?string $value): ?string {
         if ($notification = self::where('user_id', auth()->user()->id)->where('notification', $key)->first()) {
             return $notification->update(['channel' => $value]) ? $value : false;
         }
@@ -54,17 +52,16 @@ class UserNotificationChannel extends Model
     /**
      * Returns an array with all selected channels for the given notification.
      *
-     * @param  string  $key
-     * @param  int  $userId
-     * @param  string $default
-     * @return array
+     * @param string $key
+     * @param int $userId
+     * @param array $default
+     * @return array|null
      */
-    public static function list(string $key, int $userId, string $default=""): ?array
-    {
+    public static function list(string $key, int $userId, array $default=[]): ?array {
         $notification = self::where('user_id', $userId)->where('notification', $key)->get('channel')->first();
 
         if (!$notification) {
-            return [$default];
+            return $default;
         }
 
         return json_decode($notification->channel, true);

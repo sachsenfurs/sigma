@@ -46,14 +46,6 @@ use Symfony\Component\Mime\MessageConverter;
 |
 */
 
-Route::get('/test', function () {
-    // $user = App\Models\User::find(1);
-    // $timetableEntry = App\Models\TimetableEntry::find(15);
-    // \Notification::send($user, new App\Notifications\TimetableEntry\TimetableEntryCancelled($timetableEntry));
-    
-    dd(\App\Models\UserNotificationChannel::list('sig_favorite_reminder', 1, 'mail'));
-});
-
 Route::get("/devlogin/{id?}", function($id=1) {
    if(App::environment("local") OR App::environment("development")) {
        Auth::loginUsingId($id);

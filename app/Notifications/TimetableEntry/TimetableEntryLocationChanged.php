@@ -36,7 +36,7 @@ class TimetableEntryLocationChanged extends Notification
     public function via($notifiable)
     {
         //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_location_changed')->first()->channel;
-        return UserNotificationChannel::list('timetable_entry_location_changed', $notifiable->id, 'mail');
+        return UserNotificationChannel::list('timetable_entry_location_changed', $notifiable->id, ['mail']);
     }
 
     /**

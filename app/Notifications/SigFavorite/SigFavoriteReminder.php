@@ -29,9 +29,8 @@ class SigFavoriteReminder extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
-    {
-        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, 'telegram');
+    public function via($notifiable) {
+        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, ['telegram']);
     }
 
     public function toTelegram($notifiable) {

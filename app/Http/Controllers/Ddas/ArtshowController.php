@@ -26,7 +26,7 @@ class ArtshowController extends Controller
     public function show(ArtshowItem $artshowItem) {
         $this->authorize('view', $artshowItem);
 
-        return $artshowItem;
+//        return $artshowItem;
     }
 
 }

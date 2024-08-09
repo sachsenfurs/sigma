@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class NotificationController extends Controller
 {
     public function index()
     {
         $notifications = auth()->user()->unreadNotifications;
-        
+
         return view("notifications.index", compact("notifications"));
     }
 
     /**
      * Update the specified resources in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update()
     {

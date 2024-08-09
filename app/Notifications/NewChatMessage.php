@@ -47,7 +47,7 @@ class NewChatMessage extends Notification
      */
     public function via($notifiable)
     {
-        return UserNotificationChannel::list('chat_new_message', $notifiable->id, 'mail');
+        return UserNotificationChannel::list('chat_new_message', $notifiable->id, ['mail']);
     }
 
     /**

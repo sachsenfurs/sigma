@@ -7,7 +7,7 @@ use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 use App\Settings\ArtShowSettings;
 
-class ArtshowBidPolicy extends ManageArtshowPolicy
+class ArtshowBidPolicy //extends ManageArtshowPolicy
 {
 
     private static function isBiddingOpen(): bool {

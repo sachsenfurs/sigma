@@ -459,6 +459,10 @@
     "Bid Count": "Anzahl Gebote",
     "Locked": "Gesperrt",
     "You have to be checked in at convention site to view the art show. Please visit registration or con-ops and get your badge first": "Um die Artshow zu sehen, musst du eingecheckt sein. Bitte gehe zur Reg/Leitstelle und hole dir dein Badge ab!",
+    "Art Show Winner Notification": "Artshow Gewinner Mitteilung",
+    "You have won the following items in the art show:": "Du hast folgende Gegenstände in der Art Show ersteigert:",
+    "Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)": "Bitte hole alle Gegenstände beim Dealers' Den ab. Die Öffnungszeiten kannst du dem Conbook entnehmen",
+    ":item by :artist, :value EUR": ":item von :artist, :value EUR",
 
     "User Details": "Benutzerdetails",
     "Dealer Details": "Händlerdetails",

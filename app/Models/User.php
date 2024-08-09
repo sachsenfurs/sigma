@@ -12,6 +12,7 @@ use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,7 +22,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
 #[ObservedBy(UserObserver::class)]
-class User extends Authenticatable implements FilamentUser, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocalePreference
 {
     use HasFactory;
     use Notifiable;
@@ -140,5 +141,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function sigFilledForms(): HasMany {
         return $this->hasMany(SigFilledForm::class);
+    }
+
+    public function preferredLocale() {
+        return $this->language;
     }
 }

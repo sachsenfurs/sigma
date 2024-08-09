@@ -130,7 +130,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
     }
 
     public function deleteAny(User $user): bool {
-        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::DELETE))
             return true;
 
         return false;
@@ -144,7 +144,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
     }
 
     public function detachAny(User $user): bool {
-        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
+        if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::DELETE))
             return true;
 
         return false;

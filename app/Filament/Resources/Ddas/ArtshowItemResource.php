@@ -4,17 +4,26 @@ namespace App\Filament\Resources\Ddas;
 
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBidsRelationManager;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 class ArtshowItemResource extends Resource
 {
@@ -179,6 +188,15 @@ class ArtshowItemResource extends Resource
                    ->label("Approval")
                    ->translateLabel()
                    ->options(Approval::class),
+                Tables\Filters\SelectFilter::make("highestBid")
+                    ->label("Highest Bidder")
+                    ->translateLabel()
+                    ->relationship("highestBid.user", "name")
+                    ->searchable()
+                    ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId()),
+                Tables\Filters\TernaryFilter::make("paid")
+                    ->label("Paid")
+                    ->translateLabel(),
             ])
             ->actions([])
             ->headerActions([])
@@ -187,8 +205,48 @@ class ArtshowItemResource extends Resource
                     Approval::getBulkAction(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\BulkAction::make("pickup")
+                    ->infolist(function(Collection $records) {
+                        $entries = [];
+                        foreach($records AS $record) {
+                            $entries[] = Fieldset::make("item_info")
+                                ->label($record->name)
+                                ->schema([
+                                    TextEntry::make("id")
+                                        ->state($record->id)
+                                        ->inlineLabel()
+                                        ->columns(6),
+                                    TextEntry::make("paid")
+                                        ->state($record->paid ? "THIS ITEM IS ALREADY PAID!" : "Not paid")
+                                        ->color($record->paid ? Color::Red : Color::Neutral)
+                                        ->inlineLabel()
+                                        ->columns(6),
+                                    TextEntry::make("artist")
+                                         ->state($record->artist->name)
+                                         ->inlineLabel(),
+                                    TextEntry::make("Current Bid")
+                                         ->state($record->highestBid?->value ?? 0)
+                                         ->money("EUR")
+                                         ->inlineLabel()
+                                ]);
+                        }
+                        $entries[] = TextEntry::make("sum")
+                            ->state($records->sum("highestBid.value"))
+                            ->money("EUR")
+                            ->size(TextEntry\TextEntrySize::Large)
+                            ->inlineLabel();
+                        return $entries;
+                    })
+                    ->action(function(Tables\Actions\BulkAction $action, Collection $records) {
+                        $records->each->update([
+                            'paid' => true,
+                            'sold' => true,
+                        ]);
+                    }),
+
             ]);
     }
+
 
     public static function getRelations(): array {
         return [

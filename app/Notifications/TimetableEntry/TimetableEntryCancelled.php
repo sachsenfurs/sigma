@@ -34,7 +34,7 @@ class TimetableEntryCancelled extends Notification
      */
     public function via($notifiable) {
         //return UserNotificationChannel::where('user_id', $notifiable->id)->where('notification', 'timetable_entry_cancelled')->first()->channel;
-        return UserNotificationChannel::list('timetable_entry_cancelled', $notifiable->id, 'mail');
+        return UserNotificationChannel::list('timetable_entry_cancelled', $notifiable->id, ['mail']);
     }
 
     /**
