@@ -50,10 +50,10 @@ class TimetableEntry extends Model
     ];
 
     protected $with = [
-//        'favorites',
+        'favorites',
         'sigLocation',
 //        'sigEvent', // << i dont know why this isnt working..
-//        'parentEntry',
+        'parentEntry',
     ];
 
     public function favorites(): HasMany {
@@ -188,12 +188,15 @@ class TimetableEntry extends Model
 
     public function eventColor(): Attribute {
         return Attribute::make(
+            // returns array [ <backgroundColor>, <borderColor> ]
             get: function() {
                 if ($this->hide)
-                    return '#948E8A';
+                    return ['#948E8A'];
                 if ($this->cancelled)
-                    return '#EB8060';
-                return '#2C3D4F';
+                    return ['#EB8060'];
+                if ($this->is_favorite)
+                    return ['#2C4F31', 'rgb(64, 115, 72)'];
+                return [ '#2C3D4F' ];
             }
         );
     }

@@ -114,8 +114,8 @@ export default {
         calEvents.map(function(event) {
             event.resourceId        = event.sig_location.id;
             event.title             = (event.is_favorite ? "❤ " : "") + event.sig_event.name_localized;
-            event.backgroundColor   = event.is_favorite ? "#2C4F31" : event.eventColor;
-            event.borderColor       = event.is_favorite ? "rgb(64, 115, 72)" : null;
+            event.backgroundColor   = event.eventColor[0] ?? null;
+            event.borderColor       = event.eventColor[1] ?? null;
             return event;
         });
 
