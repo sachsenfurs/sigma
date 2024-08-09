@@ -71,6 +71,10 @@ class ArtshowItemSignup extends Component
     }
 
     public function submit() {
+        // set default
+        if(!$this->form->starting_bid)
+            $this->form->starting_bid = 0;
+
         $validated = $this->form->validate();
 
         // update image?
