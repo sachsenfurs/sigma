@@ -50,7 +50,7 @@ class TimetableEntry extends Model
     ];
 
     protected $with = [
-        'favorites',
+//        'favorites', // this results in an unknown 500 error :|
         'sigLocation',
 //        'sigEvent', // << i dont know why this isnt working..
         'parentEntry',
