@@ -15,7 +15,7 @@
                         </div>
                         <div v-if="entry.sig_event" class="col-auto align-items-center mt-1">
                             <span v-for="(host) in entry.sig_event.sig_hosts" class="d-flex align-items-center p-1 pe-2">
-                                <img v-if="host.avatar" class="rounded-circle me-2" width="40" height="40" :src="host.avatar" loading="lazy" alt="">
+                                <img v-if="host.avatar_thumb" class="rounded-circle me-2" width="40" height="40" :src="host.avatar_thumb" loading="lazy" alt="">
                                 <div v-else>
                                     <i class="bi bi-person-circle fs-4 me-2"></i>
                                 </div>
