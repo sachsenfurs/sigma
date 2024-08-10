@@ -39,6 +39,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
     protected $hidden = [
         'password',
         'remember_token',
+        'email',
+        'telegram_id',
+        'telegram_user_id',
     ];
 
     protected $with = [

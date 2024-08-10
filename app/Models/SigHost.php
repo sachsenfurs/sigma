@@ -28,6 +28,7 @@ class SigHost extends Model
 
     protected $appends = [
         'avatar',
+        'avatar_thumb',
     ];
 
     protected $with = [
@@ -55,6 +56,12 @@ class SigHost extends Model
     public function avatar() : Attribute {
         return Attribute::make(
             get: fn() => ($this->user?->avatar ?? "")
+        );
+    }
+
+    public function avatarThumb() : Attribute {
+        return Attribute::make(
+            get: fn() => ($this->user?->avatar_thumb ?? "")
         );
     }
 
