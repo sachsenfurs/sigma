@@ -3,8 +3,8 @@
 
 @section('content')
     <div class="container">
-        <div class="card my-3 bg-info-subtle">
-            @can("create", \App\Models\Ddas\ArtshowItem::class)
+        @can("create", \App\Models\Ddas\ArtshowItem::class)
+            <div class="card my-3 bg-info-subtle">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
@@ -19,8 +19,8 @@
                         </div>
                     </div>
                 </div>
-            @endcan
-        </div>
+            </div>
+        @endcan
         @if(app(\App\Settings\ArtShowSettings::class)->show_items_date->isAfter(now()))
             <x-infocard>
                 {{ __("Art Show Items are not published yet") }}
