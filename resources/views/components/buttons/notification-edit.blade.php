@@ -20,7 +20,7 @@
     @if($reminderExists)
         <span class="bi bi-bell"></span>
         <span @class(['small' => $small])>
-            {{ $fav->timetableEntry->reminders->where("user_id", auth()->id())->first()->minutes_before }}min
+            {{ $fav->timetableEntry->reminders->where("user_id", auth()->id())->first()?->minutes_before }}min
         </span>
     @else
         <span class="bi bi-clock"></span>
