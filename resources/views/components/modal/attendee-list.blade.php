@@ -8,7 +8,7 @@
           <h5 class="modal-title" id="attendeeListModalLabel">{{ __("Attendee List") }}</h5>
         </div>
         <div class="modal-body">
-          @if ($timeslot->timetableEntry->sigEvent->group_registration_enabled && $timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first())
+          @if ($timeslot->timetableEntry->sigEvent->group_registration_enabled && $timeslot->sigAttendees->where('user_id', auth()->user()->id)->where('timeslot_owner', true)->first())
               <div>
                 <h2>{{ __('Add attendee') }}</h2>
                 <form class="w-100" id="attendeeForm" action="{{ route('registration.register', $timeslot->id) }}" method="POST">
@@ -35,7 +35,7 @@
                 :name="$attendee->user->name"
                 :avatar="$attendee->user->avatar_thumb"
                 :attendee="$attendee"
-                :canManageSigAttendees="$timeslot->sigAttendees->where('timeslot_owner', auth()->user()->id)->first()"
+                :canManageSigAttendees="$timeslot->sigAttendees->where('user_id', auth()->user()->id)->where('timeslot_owner', true)->first()"
                 :groupRegistrationEnabled="$timeslot->timetableEntry->sigEvent->group_registration_enabled"
               />
               @if ($attendee->user->id != auth()->user()->id)
