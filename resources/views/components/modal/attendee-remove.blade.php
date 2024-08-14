@@ -6,6 +6,7 @@
       <div class="modal-content">
         <form id="removeAttendeeForm{{ $sigAttendee->id }}" action="" method="POST">
             @csrf
+            @method('delete')
             <div class="modal-header">
                 <h5 class="modal-title" id="removeAttendeeModalLabel">{{ __("Remove Attendee") }}</h5>
             </div>
