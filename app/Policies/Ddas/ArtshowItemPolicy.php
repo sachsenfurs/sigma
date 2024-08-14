@@ -68,7 +68,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         if($artshowArtist?->user_id == auth()->user()->id)
             return true;
 
-        return false;
+        return true;
     }
 
     public function update(User $user, ArtshowItem $artshowItem): bool {
