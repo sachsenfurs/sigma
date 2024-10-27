@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\RealData\EASTSeeder;
-use Database\Seeders\RealData\PermissionSeeder;
 use Database\Seeders\RealData\RingbergSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
 use Database\Seeders\RealData\UserRoleSeeder;
@@ -19,7 +18,6 @@ class ProductionSeeder extends Seeder
      */
     public function run()
     {
-        (new PermissionSeeder())->run(); // Needs to be run before user role seeder
         (new UserRoleSeeder())->run();
 
         User::create([
