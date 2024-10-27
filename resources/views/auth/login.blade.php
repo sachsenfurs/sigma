@@ -54,38 +54,41 @@
                 </x-slot:subtitle>
             </x-home.overview>
         </div>
-        <div class="row g-3 mt-3 align-items-stretch">
-            <x-home.overview icon="bi-easel">
-                {{ __("Art Show Item Sign Up") }}
-                <x-slot:subtitle>
-                    {{ __("Submit items for the art show and auction") }}
-                </x-slot:subtitle>
-            </x-home.overview>
+        @if(app(\App\Settings\ArtShowSettings::class)->enabled)
+            <div class="row g-3 mt-3 align-items-stretch">
+                <x-home.overview icon="bi-easel">
+                    {{ __("Art Show Item Sign Up") }}
+                    <x-slot:subtitle>
+                        {{ __("Submit items for the art show and auction") }}
+                    </x-slot:subtitle>
+                </x-home.overview>
 
-            <x-home.overview icon="bi-cash-coin">
-                {{ __("Art Show Bidding") }}
-                <x-slot:subtitle>
-                    {{ __("View and submit bids for all art show items") }}
-                </x-slot:subtitle>
-            </x-home.overview>
-        </div>
-        <div class="row g-3 mt-3 align-items-stretch">
-            <x-home.overview icon="bi-cart">
-                {{ __("Dealer's Den Sign Up") }}
-                <x-slot:subtitle>
-                    {{ __("Sign up and manage your Dealer's Den application") }}
-                </x-slot:subtitle>
-            </x-home.overview>
+                <x-home.overview icon="bi-cash-coin">
+                    {{ __("Art Show Bidding") }}
+                    <x-slot:subtitle>
+                        {{ __("View and submit bids for all art show items") }}
+                    </x-slot:subtitle>
+                </x-home.overview>
+            </div>
+        @endif
+        @if(app(\App\Settings\DealerSettings::class)->enabled)
+            <div class="row g-3 mt-3 align-items-stretch">
+                <x-home.overview icon="bi-cart">
+                    {{ __("Dealer's Den Sign Up") }}
+                    <x-slot:subtitle>
+                        {{ __("Sign up and manage your Dealer's Den application") }}
+                    </x-slot:subtitle>
+                </x-home.overview>
 
-            <x-home.overview icon="bi-cart">
-                {{ __("Dealer's Den Overview") }}
-                <x-slot:subtitle>
-                    {{ __("List all attending dealers") }}
-                </x-slot:subtitle>
-            </x-home.overview>
+                <x-home.overview icon="bi-cart">
+                    {{ __("Dealer's Den Overview") }}
+                    <x-slot:subtitle>
+                        {{ __("List all attending dealers") }}
+                    </x-slot:subtitle>
+                </x-home.overview>
 
-        </div>
-
+            </div>
+        @endif
         @if(app(\App\Settings\AppSettings::class)->lost_found_enabled)
             <div class="row g-3 mt-3 align-items-stretch">
                 <x-home.overview icon="bi-box2">

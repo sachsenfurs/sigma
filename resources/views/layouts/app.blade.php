@@ -106,12 +106,13 @@
                                 </a>
                             </li>
 
-
-                            <li class="py-2">
-                                <a @class(['btn btn-nav', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
-                                    <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
-                                </a>
-                            </li>
+                            @if(app(\App\Settings\AppSettings::class)->lost_found_enabled)
+                                <li class="py-2">
+                                    <a @class(['btn btn-nav', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
+                                        <i class="bi bi-box2"></i> {{ __('Lost & Found') }}
+                                    </a>
+                                </li>
+                           @endif
 
                             @auth
                                 <li class="py-2">
