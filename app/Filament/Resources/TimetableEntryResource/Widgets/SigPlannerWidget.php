@@ -164,8 +164,8 @@ class SigPlannerWidget extends FullCalendarWidget
      * @param bool $shouldCancelParentActions
      * @return void
      */
-    public function unmountAction(bool $shouldCancelParentActions = true): void {
-        parent::unmountAction($shouldCancelParentActions);
+    public function unmountAction(bool $shouldCancelParentActions = true, bool $shouldCloseModal = true): void {
+        parent::unmountAction($shouldCancelParentActions, $shouldCloseModal);
         $this->refreshRecords();
     }
 
