@@ -53,6 +53,7 @@ class SigEventResource extends Resource
                 self::getSigDescriptionFieldSet(),
                 self::getAdditionalInfoFieldSet(),
                 self::getLastModifiedField(),
+                self::getAttributeSection(),
             ]);
     }
 
@@ -458,5 +459,17 @@ class SigEventResource extends Resource
                      ->translateLabel(),
             ])
             ->columnSpan(1);
+    }
+
+    private static function getAttributeSection() {
+        return Forms\Components\Section::make(__("Attributes"))
+            ->schema([
+                Forms\Components\KeyValue::make("attributes")
+                    ->nullable()
+                    ->label(__("API Metadata")),
+            ])
+            ->collapsed()
+            ->columns(1)
+            ->columnSpan(false);
     }
 }

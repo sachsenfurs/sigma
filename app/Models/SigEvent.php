@@ -22,7 +22,8 @@ class SigEvent extends Model
 
     protected $casts = [
         'languages' => 'array',
-        'approval' => Approval::class
+        'approval' => Approval::class,
+        'attributes' => 'array',
     ];
 
     protected $guarded = [];

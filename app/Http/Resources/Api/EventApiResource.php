@@ -40,6 +40,8 @@ class EventApiResource extends JsonResource
             'location_changed'      => $this->hasLocationChanged,
             'cancelled'             => $this->cancelled,
             'tags'                  => SigTagApiResource::collection($this->sigEvent->sigTags),
+            'hide'                  => $this->hide,
+            'attributes'            => $this->sigEvent->attributes,
         ];
     }
 }
