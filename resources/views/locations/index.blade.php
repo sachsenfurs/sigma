@@ -10,19 +10,18 @@
                         <h3>{{ __("Rooms") }}</h3>
                     </button>
                 </li>
-
-                <li class="nav-item flex-fill" role="presentation">
-                    <button class="nav-link w-100" id="location-1-tab" data-bs-toggle="tab" data-bs-target="#location-1-tab-pane" type="button" role="tab" aria-controls="location-1-tab-pane" aria-selected="true">
-                        <h3>{{ __("Essentials") }}</h3>
-                    </button>
-                </li>
-
+                @if($locations->filter(fn($l) => $l->essential)->count() > 0)
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100" id="location-1-tab" data-bs-toggle="tab" data-bs-target="#location-1-tab-pane" type="button" role="tab" aria-controls="location-1-tab-pane" aria-selected="true">
+                            <h3>{{ __("Essentials") }}</h3>
+                        </button>
+                    </li>
+                @endif
                 <li class="nav-item flex-fill" role="presentation">
                     <button class="nav-link w-100" id="location-3-tab" data-bs-toggle="tab" data-bs-target="#location-3-tab-pane" type="button" role="tab" aria-controls="location-3-tab-pane" aria-selected="true">
                         <h3>{{ __("Map") }}</h3>
                     </button>
                 </li>
-
             </ul>
         </div>
         <div class="tab-content" id="locationTabContent">
