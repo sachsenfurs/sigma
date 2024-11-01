@@ -29,8 +29,8 @@
                     </div>
                     <a href="{{ route("timetable-entry.show", $entry) }}" class="text-decoration-none" style="flex: content">
                     <div class="col-auto">
-                        <b>{{ $entry->start->dayName }}</b> <i class="text-muted"> {{ $entry->start->format("d.m.y") }}</i>
-                        <div class="text-muted">
+                        <span class="fw-bold">{{ $entry->start->dayName }}</span><span class="text-muted fw-light"> &mdash; {{ $entry->start->format("d.m.y") }}</span>
+                        <div class="text-muted fw-light">
                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                         <div class="col-auto">
                             @foreach($entry->sigEvent->publicHosts AS $host)
                                 <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
-                                    <b>{{ $host->name }}</b>@if(!$loop->last), @endif
+                                    <span class="fw-light">{{ $host->name }}</span>@if(!$loop->last), @endif
                                 </a>
                             @endforeach
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                         <div class="col-auto">
                             <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
-                                <b>{{ $entry->sigLocation->name }}</b>
+                                <span class="fw-light">{{ $entry->sigLocation->name_localized }}</span>
                             </a>
                         </div>
                     </div>

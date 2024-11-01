@@ -10,8 +10,11 @@
                 <div class="d-flex flex-column flex-row flex-nowrap h-100 navbar2-items">
                     <div class="h-100 d-flex flex-column navbar2-padding">
                         <div class="navbar-brand">
-                            <a href="{{ url('/') }}" class="d-flex align-items-center p-3 text-decoration-none">
+                            <a href="{{ url('/') }}" class="d-flex align-items-center p-2 text-decoration-none">
                                 <img src="/images/logo.png" alt="{{ config('app.name') }}">
+                                <span class="text-light w-100 text-center fs-5 px-2 text-wrap fw-bold" style="word-wrap: anywhere">
+                                    {{ app(\App\Settings\AppSettings::class)->event_name }}
+                                </span>
                             </a>
                         </div>
                         <ul class="list-unstyled mb-auto nav-ul">
@@ -204,11 +207,11 @@
             </div>
             <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-grid">
                 <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
-                    <div class="container-fluid">
+                    <div class="container-fluid fs-5">
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
                             <img src="/images/logo.png" alt="{{ config('app.name') }}">
                         </a>
-                        @yield('title')
+                        @yield('title') - {{ app(\App\Settings\AppSettings::class)->event_name }}
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                             <span class="navbar-toggler-icon"></span>
