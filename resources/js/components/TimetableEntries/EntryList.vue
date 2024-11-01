@@ -19,7 +19,6 @@
                     :key="entry.id"
                     ref="entrySlot"
                     :data-date-index="dateIndex"
-                    @alert="showAlert"
                 ></entry-component>
             </div>
         </div>
@@ -102,9 +101,6 @@ export default {
             });
 
             this.activeDayIndex = lastEl?.dataset.dateIndex || 0;
-        },
-        showAlert(message) {
-            alert(message);
         }
     },
     computed: {

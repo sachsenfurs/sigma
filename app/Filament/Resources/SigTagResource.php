@@ -31,6 +31,7 @@ class SigTagResource extends Resource
                 self::getNameField(),
                 self::getDescriptionField(),
                 self::getDescriptionENField(),
+                self::getIconField(),
             ]);
     }
 
@@ -109,6 +110,13 @@ class SigTagResource extends Resource
             ->required()
             ->translateLabel()
             ->rows(4)
+            ->columnSpanFull();
+    }
+
+    private static function getIconField(): Forms\Components\Component {
+        return Forms\Components\TextInput::make("icon")
+            ->nullable()
+            ->helperText("Bootstrap Icon Class")
             ->columnSpanFull();
     }
 }
