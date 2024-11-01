@@ -2,9 +2,9 @@
     <div>
         <div :class="['card mt-3', { 'opacity-50': eventPassed }, { 'bg-dark': eventInternal }]" :id="'event' + entry.id" @click="showInfoModal()" >
             <div class="row g-0 flex-nowrap d-flex">
-                <div class="col-lg-2 col-4 d-flex">
+                <div class="col-lg-2 col-3 d-flex">
                     <div class="card-body align-self-center text-center">
-                        <h3 class="text-muted">
+                        <h3 class="">
                             <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                             {{
                                 new Date(entry.start).toLocaleTimeString(getActiveLanguage(), {
@@ -13,7 +13,7 @@
                                 })
                             }}
                         </h3>
-                        <h6 class="text-muted">{{ entry.formatted_length }}</h6>
+                        <h6 class="text-secondary">{{ entry.formatted_length }}</h6>
                         <h3 v-if="eventInternal">
                             <span class="badge bg-secondary d-block text-uppercase">{{  $t("Internal") }}</span>
                         </h3>
@@ -31,29 +31,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9 col-7 d-flex">
+                <div class="col-lg-9 col-8 d-flex">
                     <div class="card-body px-1 pe-0 align-self-center" style="word-wrap: anywhere">
                         <h1>
                             {{ entry.sig_event.name_localized }}
                         </h1>
 
-                        <p v-if="sigHosts.length > 0" class="card-text">
-                            <i class="bi bi-person-circle"></i>
+                        <p v-if="sigHosts.length > 0" class="card-text d-flex opacity-75">
+                            <i class="bi bi-person-circle pe-2 align-self-center"></i>
                             {{ sigHosts.join(', ') }}
                         </p>
-                        <p>
-                            <i class="bi bi-geo-alt"></i>
+                        <p class="card-text d-flex opacity-75">
+                            <i class="bi bi-geo-alt pe-2 align-self-center"></i>
                             {{ entry.sig_location.name_localized }}
                             <span v-if="entry.hasLocationChanged" class="badge bg-danger">{{  $t("Changed") }}</span>
                         </p>
 
-                        <h4 v-for="tag in entry.sig_event.sig_tags" class="d-inline m-1">
-                            <span class="badge my-1 bg-secondary">{{ tag.description_localized }}</span>
-                        </h4>
+                        <div class="row d-flex align-items-stretch">
+                            <div v-for="tag in entry.sig_event.sig_tags"
+                                 class="col-auto fs-6 m-1 badge border border-secondary fw-semibold text-muted d-flex py-1 align-items-center">
+                                <i class="bi fs-6 pe-2" v-if="tag.icon" :class="['bi-'+tag.icon]"></i>
+                                <span class="py-1">{{ tag.description_localized }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body col-lg-1 col-1 d-flex flex-column justify-content-center text-end ps-0">
-                    <a href="#" class="fav-btn text-secondary w-100 justify-content-center" :data-event="entry.id" @click.stop.prevent="toggleFavorite()">
+                    <a href="#" class="fav-btn text-secondary w-100 justify-content-center" :data-event="entry.id" @click.stop.prevent="entry.toggleFavorite()">
                         <i :class="['fav bi', {'text-danger bi-heart-fill pop': entry.is_favorite, 'bi-heart': !entry.is_favorite}]"></i>
                     </a>
                 </div>
@@ -66,41 +70,12 @@
 import EntryModal from "./EntryModal.vue";
 import {getActiveLanguage} from "laravel-vue-i18n";
 import {Modal} from "bootstrap";
-import {trans} from "laravel-vue-i18n";
+import Entry from "@/components/TimetableEntries/Entry.js";
+import {reactive} from "vue";
 export default {
     name: "EntryComponent",
     methods: {
         getActiveLanguage,
-        toggleFavorite() {
-            if(!this.favoriteUpdating) {
-                let self = this;
-                this.favoriteUpdating = true;
-                let request;
-
-                if(this.entry.is_favorite) {
-                    request = axios.delete("/favorites/" + this.entry.id);
-                } else {
-                    request = axios.post("/favorites", {
-                        timetable_entry_id: this.entry.id
-                    });
-                }
-
-
-                request.then((response) => {
-                    this.entry.is_favorite = !this.entry.is_favorite;
-                    self.favoriteUpdating = false;
-                })
-                .catch((error) => {
-                    if(error.response.status == 401) {
-                        this.$emit("alert", trans("You have to be logged in"));
-                    }
-                })
-                .finally(() => {
-                    // alert(trans("You have to be logged in"));
-                    self.favoriteUpdating = false;
-                });
-            }
-        },
         showInfoModal() {
             let m = new Modal('#eventInfo' + this.entry.id);
             m.show();
@@ -110,25 +85,9 @@ export default {
     props: {
         id :"",
         entry: {
-            id: 0,
-            start: "",
-            formatted_length: "",
-            hasLocationChanged: false,
-            hasTimeChanged: false,
-            cancelled: false,
-            sig_event: {
-                name: "",
-                name_localized: "",
-                sig_hosts: [],
-                sig_location: {
-                    name_localized: "",
-                },
-                sig_tags: {
-                    description_localized: "",
-                },
-            },
-            is_favorite: false
-        }
+            type: Object,
+            required: true,
+        },
     },
     mounted() {
         let self = this;
@@ -155,12 +114,14 @@ export default {
         },
         eventInternal() {
             return this.entry.hide;
+        },
+        entry() {
+            return reactive(new Entry(this.entry));
         }
     },
     data() {
         return {
-            now: Date.now(),
-            favoriteUpdating: false
+            now: Date.now()
         }
     }
 };

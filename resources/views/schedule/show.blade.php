@@ -1,14 +1,7 @@
 @extends('layouts.app')
 @section('title', "{$entry->sigEvent->name}")
 @section('content')
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route("schedule.listview") }}">{{ __("Event Schedule") }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ route("schedule.listview") }}">{{ $entry->start->dayName }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($entry->sigEvent->name, 20) }}</li>
-            </ol>
-        </nav>
+    <div class="container pt-3">
 
         @if($entry->cancelled)
             <h1 class="d-grid mb-4">
@@ -29,8 +22,8 @@
                 @endif
             </div>
             <div class="col-6 text-center align-self-center">
-                <h3 class="">
-                    <i class="bi bi-geo-alt align-self-center"></i>
+                <h3 class="d-flex justify-content-center py-2">
+                    <i class="bi bi-geo-alt align-self-center pe-1"></i>
                     <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
                         {{ $entry->sigLocation->name }}
                     </a>
@@ -38,14 +31,17 @@
                         <span class="badge bg-warning">{{ __("Changed") }}</span>
                     @endif
                 </h3>
-                    <h5>
-                        @foreach($entry->sigEvent->public_hosts as $host)
-                            <i class="bi bi-person-circle align-self-center"></i>
-                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
+
+                <div class="d-flex flex-wrap justify-content-center">
+                    @foreach($entry->sigEvent->public_hosts as $host)
+                        <div class="text-nowrap d-flex">
+                            <i class="bi bi-person-circle fs-6 px-1 ps-3"></i>
+                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none fs-6">
                                 {{ $host->name }}
                             </a>
-                        @endforeach
-                    </h5>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
 

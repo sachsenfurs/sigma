@@ -10,8 +10,15 @@
                 </div>
                 <div class="modal-body" v-if="description_markdown">
                     <div class="row g-3">
-                        <div class="col-12">
-                            <p v-html="description_markdown" />
+                        <div class="col-11 no-p mb-2" v-html="description_markdown">
+
+                        </div>
+                        <div class="col-1 text-center align-self-center">
+                            <a href="#" class="fav-btn text-secondary w-100 justify-content-center fs-2"
+                               :data-event="entry.id"
+                               @click.stop.prevent="entry.toggleFavorite(); $emit('updatefavs')">
+                                <i :class="['fav bi', {'text-danger bi-heart-fill pop': entry.is_favorite, 'bi-heart': !entry.is_favorite}]"></i>
+                            </a>
                         </div>
                         <div v-if="entry.sig_event" class="col-auto align-items-center mt-1">
                             <span v-for="(host) in entry.sig_event.sig_hosts" class="d-flex align-items-center p-1 pe-2">
@@ -55,5 +62,18 @@ export default {
 </script>
 
 <style scoped>
+.no-p >>> p {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.pop::before {
+    animation: pop 0.2s ease-in;
+}
+
+@keyframes pop{
+    75%  {transform: scale(1.2);}
+    70%  {transform: scale(0.8);}
+}
 
 </style>

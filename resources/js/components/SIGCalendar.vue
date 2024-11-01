@@ -9,6 +9,8 @@ import localeDe from '@fullcalendar/core/locales/de'
 import EntryModal from './TimetableEntries/EntryModal.vue';
 import {Modal} from 'bootstrap';
 import {getActiveLanguage, wTrans} from "laravel-vue-i18n";
+import {reactive} from "vue";
+import Entry from "./TimetableEntries/Entry.js";
 
 export default {
     components: {
@@ -24,7 +26,7 @@ export default {
                     'Accept': 'application/json'
                 }
             })
-            return await res.json();
+            return (await res.json()).map(e => new Entry(e));
         },
         async getResources() {
             const res = await fetch('/calendar/resources', {
@@ -36,10 +38,27 @@ export default {
             })
             return await res.json();
         },
-        handleEventClick: function(event) {
-            this.currentEvent = {id: event.event.id, ...event.event.extendedProps};
+        handleEventClick: function(eventClickInfo) {
+            this.currentEvent = {id: eventClickInfo.event.id, ...eventClickInfo.event.extendedProps};
             const modal = new Modal('#eventInfo');
             modal.show();
+        },
+
+        async updateEvents() {
+            const calEvents = await this.getEvents();
+
+            calEvents.map(function(event) {
+                event.resourceId        = event.sig_location.id;
+                event.title             = (event.is_favorite ? "❤ " : "") + event.sig_event.name_localized;
+                event.backgroundColor   = event.eventColor[0] ?? null;
+                event.borderColor       = event.eventColor[1] ?? null;
+                event.toggleFavorite    = event.toggleFavorite;
+
+                return event;
+            });
+
+            this.calendarOptions.events = reactive(calEvents);
+            return calEvents;
         },
     },
     data() {
@@ -105,22 +124,15 @@ export default {
         const calResources = await this.getResources();
         calResources.map(function(res) {
             res.title           = res.name_localized;
-            if(res.description_localized != res.name_localized)
+            if(res.description_localized !== res.name_localized)
                 res.title       = res.name_localized + " - " + res.description_localized;
 
             return res;
         });
-        const calEvents = await this.getEvents();
-        calEvents.map(function(event) {
-            event.resourceId        = event.sig_location.id;
-            event.title             = (event.is_favorite ? "❤ " : "") + event.sig_event.name_localized;
-            event.backgroundColor   = event.eventColor[0] ?? null;
-            event.borderColor       = event.eventColor[1] ?? null;
-            return event;
-        });
 
         this.calendarOptions.resources = calResources;
-        this.calendarOptions.events = calEvents;
+
+        let calEvents = await this.updateEvents();
 
         // Filter resources not used (must be done, after the events have been loaded)
         this.calendarOptions.filterResourcesWithEvents = true;
@@ -155,7 +167,7 @@ export default {
 </script>
 <template>
     <FullCalendar ref="fullCalendar" :options="calendarOptions" />
-    <entry-modal :entry="currentEvent" :id="'eventInfo'" />
+    <entry-modal :entry="currentEvent" :id="'eventInfo'" @updatefavs="updateEvents" />
 </template>
 
 <style>
