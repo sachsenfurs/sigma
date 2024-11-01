@@ -357,8 +357,7 @@ class SigEventResource extends Resource
                     ]
                 )
                 ->translateLabel()
-                ->columnSpan(1)
-            ->visible(auth()->user()->can('manage_sigs'));
+                ->columnSpan(1);
     }
 
     private static function getSigRegistrationFieldSet(): Forms\Components\Component {
