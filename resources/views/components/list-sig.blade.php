@@ -31,7 +31,7 @@
                     <div class="col-auto">
                         <span class="fw-bold">{{ $entry->start->dayName }}</span><span class="text-muted fw-light"> &mdash; {{ $entry->start->format("d.m.y") }}</span>
                         <div class="text-muted fw-light">
-                            {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                            {{ $entry->start->format("H:i") }} @if($entry->duration > 0) - {{ $entry->end->format("H:i") }}@endif
                         </div>
                     </div>
                     </a>

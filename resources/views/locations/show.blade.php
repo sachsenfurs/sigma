@@ -5,10 +5,10 @@
 
         <div class="row justify-content-md-center">
             <div class="col-xl-12 mb-3">
-                <div class="d-flex align-items-start p-2">
+                <div class="d-flex align-items-start">
                     <div class="w-100 ms-3 align-self-center">
-                        <h2>
-                            <i class="bi bi-geo-alt"></i>
+                        <h2 class="d-flex">
+                            <i class="bi bi-geo-alt pe-2"></i>
                             {{ $location->name_localized }}
                         </h2>
                         <p class="text-muted">

@@ -17,12 +17,12 @@
             @endif
             <div @class(["col-md-6" => $avatar, "col-md-10" => !$avatar])>
                 <div class="card-body">
-                    <h2 class="card-title">
+                    <h2 class="card-title d-flex">
                         @if($instance instanceof \App\Models\SigHost)
-                            <i class="bi bi-person-circle"></i>
+                            <i class="bi bi-person-circle pe-2"></i>
                         @endif
                         @if($instance instanceof \App\Models\SigLocation)
-                            <i class="bi bi-geo-alt"></i>
+                            <i class="bi bi-geo-alt pe-2"></i>
                         @endif
                         {{ $title }}
                     </h2>
