@@ -321,6 +321,7 @@ class TimetableEntryResource extends Resource
             ->format('Y-m-d\TH:i')
             ->seconds(false)
             ->columns(1)
+            ->afterOrEqual('start')
             ->required();
     }
 

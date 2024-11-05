@@ -89,6 +89,7 @@ class EditTimetableEntry extends EditRecord
                                   ->seconds(false)
                                   ->required()
                                   ->prefix(__("End"))
+                                  ->afterOrEqual('start')
                                   ->hiddenLabel(true),
                 ])
                 ->columns(2)
