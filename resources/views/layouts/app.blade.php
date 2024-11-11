@@ -264,6 +264,7 @@
 
     {{--  Just to make sure Alpine.js is loaded on every page without Livewire components  --}}
     @livewireScripts
+    @livewireStyles
 </body>
 
 </html>

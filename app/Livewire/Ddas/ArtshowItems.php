@@ -6,6 +6,7 @@ use App\Livewire\Ddas\Forms\ArtshowItemBidForm;
 use App\Livewire\Traits\HasModal;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\ArtshowItem;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,12 +17,25 @@ class ArtshowItems extends Component
     public ArtshowItem|null $currentItem = null;
 
     public ArtshowItemBidForm $form;
-
+    public string $query = "";
 
     public function render() {
-        return view('livewire.ddas.artshow-items', [
-            'items' => ArtshowItem::approvedItems()->orderBy("name")->paginate(30),
-        ]);
+        return view('livewire.ddas.artshow-items');
+    }
+
+    #[Computed]
+    public function items() {
+        $items = ArtshowItem::approvedItems()->orderBy("name");
+        if($this->query != "")
+            $items = $items->where(function($query) {
+                $query->whereId($this->query)->orWhereAny(['name' ,'description', 'description_en'], 'like', "%{$this->query}%");
+            });
+
+        return $items->paginate(30);
+    }
+
+    public function search() {
+
     }
 
     public function showItem(ArtshowItem $item) {
