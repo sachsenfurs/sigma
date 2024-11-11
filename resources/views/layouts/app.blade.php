@@ -99,13 +99,19 @@
 
                             <li class="py-1">
                                 <a @class(['btn btn-nav d-flex p-2', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
-                                    <i class="bi bi-megaphone pe-2"></i> {{ __('Announcements') }}
-                                    @cache('announcements_count', 300)
-                                        @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
-                                        @if($count)
-                                            <div class="text-end d-inline-flex"><span class="badge bg-dark">{{ $count }}</span></div>
-                                        @endif
-                                    @endcache
+                                    <div class="d-inline-flex w-100">
+                                        <div class="col-auto">
+                                            <i class="bi bi-megaphone pe-2"></i> {{ __('Announcements') }}
+                                        </div>
+                                        @cache('announcements_count', 300)
+                                            @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
+                                            @if($count)
+                                                <div class="col ml-auto">
+                                                    <div class="text-end ps-1"><span class="badge bg-dark border border-dark-subtle">{{ $count }}</span></div>
+                                                </div>
+                                            @endif
+                                        @endcache
+                                    </div>
                                 </a>
                             </li>
 
