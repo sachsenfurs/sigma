@@ -28,6 +28,7 @@ class DealerFactory extends Factory
             'icon_file' => $this->faker->imageUrl(width: 300, height: 300),
             'sig_location_id' => SigLocation::inRandomOrder()->first()->id,
             'user_id' => User::factory(),
+            'additional_info' => $this->faker->realText(),
         ];
     }
 }

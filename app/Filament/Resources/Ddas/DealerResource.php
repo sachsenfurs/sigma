@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 
 class DealerResource extends Resource
 {
@@ -164,6 +165,10 @@ class DealerResource extends Resource
                     ->translateLabel()
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make("additional_info")
+                    ->view("filament.resources.ddas.additional-info")
+                    ->wrap()
+                ,
                 Tables\Columns\TextColumn::make("tags")
                     ->formatStateUsing(fn(Model $state) => $state->name_localized)
                     ->translateLabel()
@@ -179,7 +184,10 @@ class DealerResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make("approval")
+                    ->label("Approval")
+                    ->translateLabel()
+                    ->options(Approval::class),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->modalWidth("7xl"),
