@@ -109,7 +109,7 @@
                                 {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}
                             </div>
                             <div class="card-footer">
-                                <i class="bi bi-geo-alt"></i>
+                                <i class="bi bi-geo-alt icon-link"></i>
                                 {{ $e->sigLocation->name }}
                             </div>
                         </div>

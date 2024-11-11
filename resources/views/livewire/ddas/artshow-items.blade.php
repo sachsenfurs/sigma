@@ -4,9 +4,9 @@
             <div class="card h-100" style="cursor: pointer" wire:click="showItem({{$item->id}})">
                 <div class="row g-0 h-100">
                     <div class="col p-4 d-grid">
-                        <div class="card-title d-flex flex-wrap align-items-center gap-1">
+                        <div class="card-title d-flex flex-wrap align-items-start gap-1">
                             <h3 class="me-2 w-100">{{ $item->name }}</h3>
-                            <h6 class="text-muted"><i class="bi bi-palette"></i> {{ $item->artist->name }}</h6>
+                            <h6 class="text-muted"><i class="bi bi-palette icon-link"></i> {{ $item->artist->name }}</h6>
                         </div>
                         <div class="card-text">
                             {!! $item->description_localized !!}
@@ -22,13 +22,13 @@
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item flex-fill border-0 border-end">
                             <div class="fw-bold">{{ __("Starting Bid") }}</div>
-                            <i class="bi bi-currency-euro"></i> {{ $item->starting_bid }}
+                            <i class="bi bi-currency-euro icon-link"></i> {{ $item->starting_bid }}
                         </li>
                         <li class="list-group-item flex-fill border-0 border-end">
                             <div class="fw-bold">
                                 {{ __("Charity Percentage") }}
                             </div>
-                            <i class="bi bi-percent"></i> {{ $item->charity_percentage }}
+                            <i class="bi bi-percent icon-link"></i> {{ $item->charity_percentage }}
                         </li>
                         <li @class([
                                 "list-group-item flex-fill border-0",
@@ -38,7 +38,7 @@
                             <div class="fw-bold">
                                 {{ __("Current Bid") }}
                             </div>
-                            <i class="bi bi-currency-euro"></i>
+                            <i class="bi bi-currency-euro icon-link"></i>
                             {{ \Illuminate\Support\Number::format($item->highestBid?->value ?? 0) ?: "-" }}
                         </li>
                     </ul>
@@ -75,11 +75,11 @@
 
                         <div class="row p-2">
                             <div class="col">{{ __("Starting Bid") }}:</div>
-                            <div class="col"><i class="bi bi-currency-euro"></i> {{ \Illuminate\Support\Number::format($currentItem->starting_bid) }}</div>
+                            <div class="col"><i class="bi bi-currency-euro icon-link"></i> {{ \Illuminate\Support\Number::format($currentItem->starting_bid) }}</div>
                         </div>
                         <div class="row p-2">
                             <div class="col">{{ __("Current Bid") }}:</div>
-                            <div class="col"><i class="bi bi-currency-euro"></i> {{ \Illuminate\Support\Number::format($currentItem->highestBid?->value ?? 0) ?: "-" }}</div>
+                            <div class="col"><i class="bi bi-currency-euro icon-link"></i> {{ \Illuminate\Support\Number::format($currentItem->highestBid?->value ?? 0) ?: "-" }}</div>
                         </div>
                         @if($currentItem->isHighestBidder(auth()->user()))
                             <div class="text-success fs-5 text-center p-1 my-2">
@@ -127,7 +127,7 @@
                                         {{ $bid->created_at->diffForHumans() }}
                                     </div>
                                     <div class="col text-end">
-                                        <i class="bi bi-currency-euro"></i> {{ \Illuminate\Support\Number::format($bid->value) }}
+                                        <i class="bi bi-currency-euro icon-link"></i> {{ \Illuminate\Support\Number::format($bid->value) }}
                                     </div>
                                 </div>
                             @endforeach
