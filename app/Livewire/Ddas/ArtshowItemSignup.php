@@ -9,6 +9,7 @@ use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -83,7 +84,17 @@ class ArtshowItemSignup extends Component
             if($this->editArtshowItem?->image AND Storage::fileExists($this->editArtshowItem->image))
                 Storage::delete($this->editArtshowItem->image);
 
-            $validated['image'] = basename($this->form->new_image->store('public'));
+            $image = Image::read($this->form->new_image);
+            if($image->height() > 500 OR $image->width() > 500)
+                $image->scaleDown(500);
+
+
+
+//            $validated['image'] = basename($this->form->new_image->store('public'));
+            $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
+            if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
+                $validated['image'] = $filename;
+            }
         }
 
         if($this->editArtshowItem) {
@@ -98,7 +109,7 @@ class ArtshowItemSignup extends Component
 
     public function confirm($modalId) {
         $this->authorize('delete', $this->editArtshowItem);
-        $this->editArtshowItem->delete();
+        $this->editArtshowItem?->delete();
         $this->editArtshowItem = null;
         $this->hideModal("confirmModal");
     }

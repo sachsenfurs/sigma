@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class ArtshowItemObserver
 {
     public function deleted(ArtshowItem $artshowItem): void {
-        if($artshowItem->image AND Storage::fileExists($artshowItem->image))
-            Storage::delete($artshowItem->image);
+        if($artshowItem->image AND Storage::disk('public')->fileExists($artshowItem->image))
+            Storage::disk('public')->delete($artshowItem->image);
     }
-    
+
 }
