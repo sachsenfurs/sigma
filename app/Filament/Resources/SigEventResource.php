@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
+use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
@@ -16,6 +17,7 @@ use Filament\Forms\Get;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
@@ -26,20 +28,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
 {
     protected static ?string $model = SigEvent::class;
-
+    protected static ?string $label = "SIGs";
+    protected static ?string $cluster = SigManagement::class;
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
-
-    protected static ?string $navigationGroup = 'SIG';
-
-    protected static ?string $label = 'SIGs';
-
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form {
         return $form
@@ -122,10 +120,7 @@ class SigEventResource extends Resource
     }
 
     public static function getNavigationBadge(): ?string {
-        if(!Route::is("filament.*") AND !Route::is("livewire.*"))
-            return null;
-
-        return SigEvent::whereApproval(Approval::PENDING)->count() ?: false;
+        return SigManagement::getNavigationBadge();
     }
 
     public static function getPages(): array {

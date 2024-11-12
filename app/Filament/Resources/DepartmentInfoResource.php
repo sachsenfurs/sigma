@@ -28,7 +28,7 @@ class DepartmentInfoResource extends Resource
 
     protected static ?string $navigationGroup = 'SIG';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 20;
 
     public static function getLabel(): ?string {
         return __('SIG Requirement');

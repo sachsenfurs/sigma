@@ -2,24 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
-use App\Filament\Resources\SigTagResource\RelationManagers;
 use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class SigTagResource extends Resource
 {
     protected static ?string $model = SigTag::class;
-
-    protected static ?string $navigationGroup = 'SIG';
+    protected static ?string $cluster = SigManagement::class;
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static ?int $navigationSort = 50;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?int $navigationSort = 100;
 
     public static function getPluralLabel(): ?string {
         return __('Tags');

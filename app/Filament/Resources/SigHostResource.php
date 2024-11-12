@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\Pages;
 use App\Filament\Resources\SigHostResource\RelationManagers;
 use App\Models\SigHost;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,11 +17,10 @@ use Illuminate\Database\Eloquent\Model;
 class SigHostResource extends Resource
 {
     protected static ?string $model = SigHost::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-users';
-
-    protected static ?string $navigationGroup = 'SIG';
+    protected static ?string $cluster = SigManagement::class;
     protected static ?int $navigationSort = 20;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getPluralLabel(): ?string {
         return __('Hosts');

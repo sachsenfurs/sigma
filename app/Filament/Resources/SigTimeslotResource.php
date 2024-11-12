@@ -2,16 +2,15 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigTimeslotResource\Pages;
 use App\Filament\Resources\SigTimeslotResource\RelationManagers;
 use App\Models\SigTimeslot;
-use App\Models\TimetableEntry;
-use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -19,16 +18,15 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
 class SigTimeslotResource extends Resource
 {
     protected static ?string $model = SigTimeslot::class;
-
+    protected static ?string $cluster = SigManagement::class;
     protected static ?string $navigationIcon = 'heroicon-o-clock';
-    protected static ?string $navigationGroup = "SIG";
-    protected static ?int $navigationSort = 70;
+    protected static ?int $navigationSort = 10;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getModelLabel(): string {
         return __("Time Slot");
