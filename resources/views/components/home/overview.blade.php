@@ -8,7 +8,7 @@
         <div class="card-body">
             <h5 class="card-title">
                 @if($icon)
-                    <i @class(['bi', $icon])></i>
+                    <i @class(['bi icon-link', $icon])></i>
                 @endif
                 {{ $slot }}
             </h5>

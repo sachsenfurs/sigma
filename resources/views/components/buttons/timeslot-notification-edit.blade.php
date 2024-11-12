@@ -17,8 +17,8 @@
     @disabled($reg?->sigTimeslot->slot_start->isBefore(now()))
 >
     @if($timeslotReminderExists)
-        <span class="bi bi-bell"></span> {{ $reg?->timeslotReminders->first()->minutes_before }}min
+        <span class="bi bi-bell icon-link"></span> {{ $reg?->timeslotReminders->first()->minutes_before }}min
     @else
-        <span class="bi bi-clock"></span>
+        <span class="bi bi-clock icon-link"></span>
     @endif
 </button>

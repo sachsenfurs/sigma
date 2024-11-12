@@ -11,12 +11,12 @@
                     @endif
                     <div class="w-100 ms-3 align-self-center">
                         <h2>
-                            <i class="bi bi-person-circle"></i>
+                            <i class="bi bi-person-circle icon-link"></i>
                             {{ $host->name }}
                         </h2>
                         <p class="text-muted">{{ $host->description_localized }}</p>
                         @can("update", $host)
-                            <a href="{{ \App\Filament\Resources\SigHostResource::getUrl('edit', ['record' => $host]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
+                            <a href="{{ \App\Filament\Resources\SigHostResource::getUrl('edit', ['record' => $host]) }}"><i class="bi bi-pen icon-link"></i> {{ __("Edit") }}</a>
                         @endcan
                     </div>
                 </div>

@@ -27,7 +27,7 @@
                             <span class="text-nowrap">{{ __("Slots taken") }}</span>
                             @if ($timeslot->sigAttendees->count() > 0 && auth()->check())
                                 <br>
-                                <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill icon-link"></i>
                                 {{ collect($timeslot->getAttendeeNames())->pluck("name")->join(", ") }}
                             @endif
                             </div>

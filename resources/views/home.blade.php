@@ -23,7 +23,7 @@
         <div class="row mt-5">
             <div class="col-12 col-md-8">
                 <div class="container">
-                    <h2 class="p-2"><i class="bi bi-calendar-week"></i> {{ __("Your Upcoming Events") }}</h2>
+                    <h2 class="p-2"><i class="bi bi-calendar-week icon-link"></i> {{ __("Your Upcoming Events") }}</h2>
                     @if (auth()->user()->attendeeEvents()->count() == 0)
                         <p>{{ __("You haven't signed up for any event yet!") }}</p>
                         <a class="btn btn-primary btn-lg" href="{{ route("schedule.listview") }}" role="button">
@@ -56,7 +56,7 @@
                                 <div class="card-footer d-flex justify-content-center">
                                     <x-buttons.timeslot-notification-edit :reg="$registration" />
                                     <a type="button" class="btn btn-info text-black" style="margin-left: 5px" onclick="$('#attendeeListModal{{$registration->sigTimeslot->id}}').modal('toggle');" data-toggle="modal" data-target="#attendeeListModal{{$registration->sigTimeslot->id}}">
-                                        <span class="bi bi-people-fill"></span>
+                                        <span class="bi bi-people-fill icon-link"></span>
                                     </a>
                                     <button type="button"
                                             class="btn btn-secondary text-white"
@@ -65,7 +65,7 @@
                                             data-toggle="modal" data-target="#deleteModal"
                                             @disabled($registration->sigTimeslot->reg_end->isBefore(now()))
                                     >
-                                        <span class="bi bi-x"></span>
+                                        <span class="bi bi-x icon-link"></span>
                                     </button>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
             <div class="col-12 col-md-4 mt-2 mt-md-0">
                 @if (!auth()->user()->telegram_user_id)
                     <div class="container">
-                        <h2 class="p-2"><i class="bi bi-telegram"></i> {{ __("Telegram Connection") }}</h2>
+                        <h2 class="p-2"><i class="bi bi-telegram icon-link"></i> {{ __("Telegram Connection") }}</h2>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
                         <a class="btn btn-primary btn-lg mx-auto" href="{{ route("user-settings.edit") }}" role="button">
                             {{ __("Connect it now") }}
@@ -102,7 +102,7 @@
                     </div>
                 @endif
                 <div class="container mt-2">
-                    <h2 class="p-2"><h3><i class="bi bi-bell-fill"></i> {{ __("Notifications") }}</h2>
+                    <h2 class="p-2"><h3><i class="bi bi-bell-fill icon-link"></i> {{ __("Notifications") }}</h2>
                     <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
                     <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
                         {{ __("Modify them here") }}
@@ -111,7 +111,7 @@
             </div>
         </div>
         <div class="container mt-2">
-            <h2 class="p-2"><i class="bi bi-heart-fill"></i> {{ __("Favorite Events") }}</h2>
+            <h2 class="p-2"><i class="bi bi-heart-fill icon-link"></i> {{ __("Favorite Events") }}</h2>
             <div class="row g-3">
                 @forelse ($favorites as $fav)
                     <div class="col-12 col-xl-6 col-">
@@ -124,10 +124,10 @@
                             <div class="card-body">
                                 <div class="row m-0 py-1 align-items-center">
                                     <div class="col-5">
-                                        <i class="bi bi-calendar4 align-baseline"></i> {{ $fav->timetableEntry->start->translatedFormat("l") }}
+                                        <i class="bi bi-calendar4 align-baseline icon-link"></i> {{ $fav->timetableEntry->start->translatedFormat("l") }}
                                     </div>
                                     <div class="col-4">
-                                        <i class="bi bi-clock align-baseline"></i> {{ $fav->timetableEntry->start->format("H:i") }}
+                                        <i class="bi bi-clock align-baseline icon-link"></i> {{ $fav->timetableEntry->start->format("H:i") }}
                                     </div>
                                     <div class="col-2 p-0">
                                         <div class="d-flex justify-content-center">
@@ -139,7 +139,7 @@
                                                 data-bs-toggle="modal" data-bs-target="#deleteFavModal"
                                                 @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())
                                                 >
-                                                <span class="bi bi-x"></span>
+                                                <span class="bi bi-x icon-link"></span>
                                             </button>
                                         </div>
                                     </div>

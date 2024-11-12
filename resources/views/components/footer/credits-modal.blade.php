@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <a class="icon-link" href="https://github.com/sachsenfurs/sigma" target="_blank"><i class="bi bi-github"></i> SIGMA on GitHub</a>
+                    <a class="text-decoration-none" href="https://github.com/sachsenfurs/sigma" target="_blank"><i class="bi bi-github icon-link"></i> SIGMA on GitHub</a>
                     <ul>
                         <li>
                             <a href="https://fullcalendar.io/" class="text-decoration-none" target="_blank">FullCalendar</a> -
@@ -18,9 +18,8 @@
                             <a href="https://www.cheetagonzita.com/" class="text-decoration-none" target="_blank">Artworks by Zita</a>
                         </li>
                     </ul>
-
-
                 </div>
+
                 <h5>Contributors</h5>
                 <div class="d-flex flex-wrap pb-3 gap-2">
                     <a href="https://github.com/Kidran" target="_blank" class="text-decoration-none">

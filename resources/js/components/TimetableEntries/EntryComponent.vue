@@ -4,7 +4,7 @@
             <div class="row g-0 flex-nowrap d-flex">
                 <div class="col-lg-2 col-3 d-flex">
                     <div class="card-body align-self-center text-center">
-                        <h3 class="">
+                        <h3 class="d-inline-flex flex-wrap justify-content-center">
                             <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                             {{
                                 new Date(entry.start).toLocaleTimeString(getActiveLanguage(), {

@@ -18,11 +18,11 @@
     @disabled($fav?->timetableEntry->start < \Carbon\Carbon::now())
 >
     @if($reminderExists)
-        <span class="bi bi-bell"></span>
+        <span class="bi bi-bell icon-link"></span>
         <span @class(['small' => $small])>
             {{ $fav->timetableEntry->reminders->where("user_id", auth()->id())->first()?->minutes_before }}min
         </span>
     @else
-        <span class="bi bi-clock"></span>
+        <span class="bi bi-clock icon-link"></span>
     @endif
 </button>

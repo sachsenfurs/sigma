@@ -60,7 +60,7 @@
                                         <div class="mt-3" x-show="dealer.gallery_link">
                                             <a x-bind:href="dealer.gallery_link" target="_blank">
                                                 <button type="button" class="btn btn-dark">
-                                                    <i class="bi bi-link-45deg"></i> <span x-text="dealer.gallery_link_name"></span>
+                                                    <i class="bi bi-link-45deg icon-link"></i> <span x-text="dealer.gallery_link_name"></span>
                                                 </button>
                                             </a>
                                         </div>
@@ -70,7 +70,7 @@
                                             <img x-bind:src="dealer.icon_file" class="img-fluid" style="max-height: 10em" alt="">
                                         </div>
                                         <div class="mx-1 p-4 d-block">
-                                            <i x-show="dealer.location" class="bi bi-geo-alt"></i>
+                                            <i x-show="dealer.location" class="bi bi-geo-alt icon-link"></i>
                                             <span x-text="dealer.location"></span>
                                         </div>
                                     </div>
