@@ -5,7 +5,6 @@ namespace App\Models\Ddas;
 use App\Enums\Approval;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
-use App\Settings\ArtShowSettings;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

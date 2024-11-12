@@ -2,12 +2,17 @@
 @section('title', "Lost & Found")
 @section('content')
     <div class="container">
-        <div class="alert alert-info">
-            <i class="bi bi-exclamation-lg"></i>
-            {{ __("If you lost or found something, please reach out to Con Ops (Leitstelle)!") }}
+        <div class="alert alert-info row m-1 mb-3 d-flex align-items-center">
+            <div class="col-auto ">
+                <i class="bi bi-exclamation-lg fs-4"></i>
+            </div>
+            <div class="col">
+
+                {{ __("If you lost or found something, please reach out to Con Ops (Leitstelle)!") }}
+            </div>
         </div>
         <div class="sticky-top container-fluid p-0">
-            <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap" id="lostfoundTab" role="tablist">
+            <ul class="nav nav-underline navbar-nav-scroll d-flex bg-body flex-nowrap pt-2" id="lostfoundTab" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
                     <button class="nav-link w-100 active" id="found-tab" data-bs-toggle="tab" data-bs-target="#found-tab-pane" type="button" role="tab" aria-controls="found-tab-pane" aria-selected="true">
                         <h3>{{ __("Found") }}</h3>

@@ -19,41 +19,41 @@
                         </div>
                         <ul class="list-unstyled mb-auto nav-ul">
                             <li class="py-1">
-                                <a @class(['btn btn-nav rounded d-flex p-2', 'active' => Route::is('home')]) href="{{ route('home') }}">
-                                    <i class="bi bi-house pe-2"></i> {{ __('Home') }}
+                                <a @class(['btn btn-nav', 'active' => Route::is('home')]) href="{{ route('home') }}">
+                                    <i class="bi bi-house icon-link"></i> {{ __('Home') }}
                                 </a>
                             </li>
 
                             <li class="py-1">
-                                <a @class(['btn btn-nav rounded d-flex p-2', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
-                                    <i class="bi bi-calendar2-range pe-2"></i> {{ __('Event Schedule') }}
+                                <a @class(['btn btn-nav', 'active' => Route::is('schedule.listview')]) href="{{ route('schedule.listview') }}">
+                                    <i class="bi bi-calendar2-range icon-link"></i> {{ __('Event Schedule') }}
                                 </a>
-                                <a @class(['btn btn-nav rounded d-flex p-2 mt-1', 'active' => Route::is('schedule.calendarview')]) href="{{ route('schedule.calendarview') }}">
-                                    <i class="bi bi-calendar-week pe-2"></i> {{ __("Calendar View") }}
+                                <a @class(['btn btn-nav', 'active' => Route::is('schedule.calendarview')]) href="{{ route('schedule.calendarview') }}">
+                                    <i class="bi bi-calendar-week icon-link"></i> {{ __("Calendar View") }}
                                 </a>
                             </li>
 
                             <li>
                                 <button @class(["btn btn-toggle align-items-center rounded py-2", 'collapsed' => !Route::is("sigs.*") && !Route::is("hosts.*") && !Route::is("locations.*")])
                                         data-bs-toggle="collapse" data-bs-target="#events-collapse" aria-expanded="{{ Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*") ? "true":"false" }}">
-                                    <i class="bi bi-view-list"></i>
+                                    <i class="bi bi-view-list icon-link"></i>
                                     {{ __("Events")}}
                                 </button>
                                 <div @class(["collapse", 'show' => Route::is("sigs.*") || Route::is("hosts.*") || Route::is("locations.*")]) id="events-collapse">
                                     <ul class="btn-toggle-nav list-unstyled fw-normal">
                                         <li>
                                             <a @class(['rounded', 'active' => Route::is("hosts.index")]) href="{{ route("hosts.index")}}">
-                                                <i class="bi bi-person-circle"></i> {{ __("Hosts") }}
+                                                <i class="bi bi-person-circle icon-link"></i> {{ __("Hosts") }}
                                             </a>
                                         </li>
                                         <li>
                                             <a @class(['rounded', 'active' => Route::is("locations.index")]) href="{{ route("locations.index") }}">
-                                                <i class="bi bi-geo-alt"></i> {{ __("Locations") }}
+                                                <i class="bi bi-geo-alt icon-link"></i> {{ __("Locations") }}
                                             </a>
                                         </li>
                                         <li>
                                             <a @class(['rounded', 'active' => Route::is("sigs.index")]) href="{{ route("sigs.index") }}">
-                                                <i class="bi bi-person-lines-fill"></i> {{ __("My Events") }}
+                                                <i class="bi bi-person-lines-fill icon-link"></i> {{ __("My Events") }}
                                             </a>
                                         </li>
                                     </ul>
@@ -72,7 +72,7 @@
                                 <li class="py-1">
                                     <button @class(["btn btn-toggle rounded py-2", 'collapsed' => !Route::is("artshow.*") && !Route::is("dealers.*")])
                                             data-bs-toggle="collapse" data-bs-target="#ddas-collapse" aria-expanded="{{ Route::is("artshow.*") || Route::is("dealers.*") ? "true":"false" }}">
-                                        <i class="bi bi-palette"></i>
+                                        <i class="bi bi-palette icon-link"></i>
                                         {{ $items->join(" & ") }}
                                     </button>
 
@@ -81,14 +81,14 @@
                                             @if(app(\App\Settings\DealerSettings::class)->enabled)
                                                 <li>
                                                     <a @class(['btn btn-nav', 'active' => Route::is("dealers.index")]) href="{{ route("dealers.index")}}">
-                                                        <i class="bi bi-cart"></i> {{ __("Dealer's Den Overview")}}
+                                                        <i class="bi bi-cart icon-link"></i> {{ __("Dealer's Den Overview")}}
                                                     </a>
                                                 </li>
                                             @endif
                                             @if(app(\App\Settings\ArtShowSettings::class)->enabled)
                                                 <li>
                                                     <a @class(['btn btn-nav', 'active' => Route::is("artshow.index")]) href="{{ route("artshow.index") }}">
-                                                        <i class="bi bi-easel"></i> {{ __("Art Show Overview")}}
+                                                        <i class="bi bi-easel icon-link"></i> {{ __("Art Show Overview")}}
                                                     </a>
                                                 </li>
                                             @endif
@@ -98,42 +98,48 @@
                             @endif
 
                             <li class="py-1">
-                                <a @class(['btn btn-nav d-flex p-2', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
-                                    <i class="bi bi-megaphone pe-2"></i> {{ __('Announcements') }}
-                                    @cache('announcements_count', 300)
-                                        @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
-                                        @if($count)
-                                            <div class="text-end d-inline-flex"><span class="badge bg-dark">{{ $count }}</span></div>
-                                        @endif
-                                    @endcache
+                                <a @class(['btn btn-nav', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
+                                    <div class="d-inline-flex w-100">
+                                        <div class="col-auto">
+                                            <i class="bi bi-megaphone icon-link"></i> {{ __('Announcements') }}
+                                        </div>
+                                        @cache('announcements_count', 300)
+                                            @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
+                                            @if($count)
+                                                <div class="col ml-auto">
+                                                    <div class="text-end ps-1"><span class="badge bg-dark border border-dark-subtle">{{ $count }}</span></div>
+                                                </div>
+                                            @endif
+                                        @endcache
+                                    </div>
                                 </a>
                             </li>
 
                             @if(app(\App\Settings\AppSettings::class)->lost_found_enabled)
                                 <li class="py-1">
-                                    <a @class(['btn btn-nav d-flex p-2', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
-                                        <i class="bi bi-box2 pe-2"></i> {{ __('Lost & Found') }}
+                                    <a @class(['btn btn-nav', 'active' => Route::is('lostfound.index')]) href="{{ route('lostfound.index') }}">
+                                        <i class="bi bi-box2 icon-link"></i> {{ __('Lost & Found') }}
                                     </a>
                                 </li>
                             @endif
 
                             @auth
                                 <li class="py-1">
-                                    <a @class(['btn btn-nav d-flex p-2', 'active' => Route::is("notifications.index")]) href="{{ route('notifications.index') }}">
+                                    <a @class(['btn btn-nav', 'active' => Route::is("notifications.index")]) href="{{ route('notifications.index') }}">
                                         @if (auth()->user()->unreadNotifications->count() > 0)
-                                            <i class="bi bi-bell-fill pe-2"></i> {{ __('Notifications') }}
+                                            <i class="bi bi-bell-fill icon-link"></i> {{ __('Notifications') }}
                                         @else
-                                            <i class="bi bi-bell pe-2"></i> {{ __('Notifications') }}
+                                            <i class="bi bi-bell icon-link"></i> {{ __('Notifications') }}
                                         @endif
                                     </a>
                                 </li>
                                 @if(app(\App\Settings\ChatSettings::class)->enabled)
                                     <li class="py-1">
-                                        <a @class(['btn btn-nav d-flex p-2', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
+                                        <a @class(['btn btn-nav', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
                                             @if (auth()->user()->unreadNotifications->count() > 0)
-                                                <i class="bi bi-mailbox2-flag pe-2"></i> {{ __('Messages') }}
+                                                <i class="bi bi-mailbox2-flag icon-link"></i> {{ __('Messages') }}
                                             @else
-                                                <i class="bi bi-mailbox2 pe-2"></i> {{ __('Messages') }}
+                                                <i class="bi bi-mailbox2 icon-link"></i> {{ __('Messages') }}
                                             @endif
                                         </a>
                                     </li>
@@ -258,6 +264,7 @@
 
     {{--  Just to make sure Alpine.js is loaded on every page without Livewire components  --}}
     @livewireScripts
+    @livewireStyles
 </body>
 
 </html>

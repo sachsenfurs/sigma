@@ -4,7 +4,7 @@
 
         <button class="btn card h-100 w-100 text-center justify-content-center btn-success" style="min-height: 10rem" wire:click="newArtist">
             <div class="fs-2">
-                <i class="bi bi-plus-lg"></i>
+                <i class="bi bi-plus-lg icon-link"></i>
                 {{ __("Register as Exhibitor / Artist") }}
             </div>
         </button>
@@ -63,20 +63,20 @@
                                     @canany(['edit', 'delete'], $item)
                                         <div class="dropdown d-inline p-0 m-0 ms-1">
                                             <button class="btn lh-1 p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-three-dots-vertical fs-4"></i>
+                                                <i class="bi bi-three-dots-vertical fs-4 icon-link"></i>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 @can('update', $item)
                                                     <li>
                                                         <a class="dropdown-item" href="#" wire:click="editItem({{$item->id}})">
-                                                            <i class="bi bi-pencil"></i> {{ __("Edit") }}
+                                                            <i class="bi bi-pencil icon-link"></i> {{ __("Edit") }}
                                                         </a>
                                                     </li>
                                                 @endcan
                                                 @can('delete', $item)
                                                     <li>
                                                         <a class="dropdown-item" href="#" wire:click="deleteItem({{$item->id}})">
-                                                            <i class="bi bi-trash"></i> {{ __("Remove") }}
+                                                            <i class="bi bi-trash icon-link"></i> {{ __("Remove") }}
                                                         </a>
                                                     </li>
                                                 @endcan
@@ -105,19 +105,19 @@
                                         <div class="fw-bold">
                                             {{ __("Starting Bid") }}:
                                         </div>
-                                        <i class="bi bi-currency-euro"></i> {{ $item->starting_bid }}
+                                        <i class="bi bi-currency-euro icon-link"></i> {{ $item->starting_bid }}
                                     </li>
                                     <li class="list-group-item flex-fill border-0 border-end">
                                         <div class="fw-bold">
                                             {{ __("Charity Percentage") }}:
                                         </div>
-                                        <i class="bi bi-percent"></i> {{ round($item->charity_percentage) }}
+                                        <i class="bi bi-percent icon-link"></i> {{ round($item->charity_percentage) }}
                                     </li>
                                     <li class="list-group-item flex-fill border-0">
                                         <div class="fw-bold">
                                             {{ __("Current Bid") }}:
                                         </div>
-                                        <i class="bi bi-currency-euro"></i> {{ $item->highestBid ? $item->highestBid->value . " (" . $item->artshowBids->count() . ")" : "-" }}
+                                        <i class="bi bi-currency-euro icon-link"></i> {{ $item->highestBid ? $item->highestBid->value . " (" . $item->artshowBids->count() . ")" : "-" }}
                                     </li>
                                 </ul>
                             </div>
@@ -130,7 +130,7 @@
                 <div class="col">
                     <button class="btn card h-100 w-100 text-center justify-content-center btn-success" style="min-height: 10rem" wire:click="newItem">
                         <div class="fs-2">
-                            <i class="bi bi-plus-lg"></i>
+                            <i class="bi bi-plus-lg icon-link"></i>
                             {{ __("Add Item") }}
                         </div>
                     </button>

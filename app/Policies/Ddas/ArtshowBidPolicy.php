@@ -27,6 +27,10 @@ class ArtshowBidPolicy //extends ManageArtshowPolicy
     }
 
     public function create(User $user, ArtshowItem $artshowItem): bool {
+        // item approved?
+        if(!$artshowItem->approved())
+            return false;
+
         // not in auction, not locked and not sold
         if(!$artshowItem->auction OR $artshowItem->locked OR $artshowItem->sold)
             return false;

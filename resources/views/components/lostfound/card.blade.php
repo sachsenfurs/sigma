@@ -7,9 +7,9 @@
             <div class="card-body">
                 <h3 class="card-title">
                     @if($item->status == "F")
-                        <i class="bi bi-exclamation-square"></i>
+                        <i class="bi bi-exclamation-square icon-link text-secondary pe-1"></i>
                     @elseif($item->status == "L")
-                        <i class="bi bi-question-square"></i>
+                        <i class="bi bi-question-square icon-link text-secondary pe-1"></i>
                     @endif
                     {{ $item->title }}
                 </h3>
@@ -17,7 +17,7 @@
                     {{ $item->description }}
                 </p>
 
-                <p>
+                <p class="text-muted small">
                     @if($item->lost_at)
                         {{ __("Lost"). ": " . $item->lost_at->diffForHumans() }}
                     @endif

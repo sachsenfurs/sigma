@@ -143,7 +143,8 @@ export default {
         // Events come back ordered by start date
         this.calendarOptions.validRange.start = startDate;
         this.calendarOptions.validRange.end = endDate;
-        this.$refs.fullCalendar.getApi().gotoDate(new Date(calEvents[0].start));
+        if(startDate > new Date())
+            this.$refs.fullCalendar.getApi().gotoDate(new Date(calEvents[0].start));
 
         const daysInMSecs = 1000 * 60 * 60 * 24;
         const days = Math.round((endDate - startDate) / daysInMSecs);
