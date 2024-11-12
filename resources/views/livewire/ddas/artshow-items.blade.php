@@ -2,16 +2,17 @@
     <div class="col w-100">
         <div class="input-group mb-3">
             <span class="input-group-text">
-                <i class="bi bi-search"></i>
+                <i class="bi bi-search" wire:loading.remove wire:target="search"></i>
+                <div class="spinner-border spinner-border-sm" role="status" wire:loading wire:target="search"></div>
             </span>
-            <x-form.input-floating wire:model="query" wire:keydown.debounce="search" :placeholder="__('Search')"></x-form.input-floating>
+            <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')"></x-form.input-floating>
         </div>
 
     </div>
 
     @forelse($this->items AS $item)
-        <div class="col">
-            <div class="card h-100" style="cursor: pointer" wire:click.throttle.500ms="showItem({{$item->id}})">
+        <div class="col" wire:loading.remove wire:target="search">
+            <div class="card h-100" style="cursor: pointer" wire:click.throttle.1000ms="showItem({{$item->id}})">
                 <div class="row g-0 h-100">
                     <div class="col p-4 d-grid">
                         <div class="card-title d-flex flex-wrap align-items-start gap-1">
@@ -24,7 +25,7 @@
                     </div>
                     <div class="col-auto text-center">
                         <div class="align-self-start justify-content-end p-3">
-                            <img src="{{ $item->image_url }}" class="rounded img-fluid" style="max-height: 10em" alt="" id="itemImage{{$item->id}}">
+                            <img src="{{ $item->image_url }}" class="rounded img-fluid" style="max-height: 10em" alt="" id="itemImage{{$item->id}}" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -56,10 +57,12 @@
             </div>
         </div>
     @empty
-        <x-infocard class="w-100">{{ __("Nothing found") }}</x-infocard>
+        <x-infocard class="w-100" wire:loading.remove wire:target="search">{{ __("Nothing found") }}</x-infocard>
     @endforelse
 
-    {{ $this->items->links() }}
+    <div class="w-100" wire:loading.remove wire:target="search">
+        {{ $this->items->links() }}
+    </div>
 
     <x-modal.livewire-modal class="modal-xl" id="itemModal" type="alert" button-text-ok="Close" x-data="{ confirm: $wire.$entangle('form.confirm') }">
         @if($currentItem)
@@ -67,12 +70,12 @@
                 {{ $currentItem->name }}
             </x-slot:title>
             <div class="row">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-lg-6">
                     <div class="align-self-start justify-content-end p-3">
                         <img src="{{ $currentItem->image_url }}" class="rounded img-fluid" style="max-height: 40%" alt="" id="previewImage{{$currentItem->id}}">
                     </div>
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-lg-6">
                     <div class="row p-2">
                         <div class="col">{{ __("Artist") }}:</div>
                         <div class="col">

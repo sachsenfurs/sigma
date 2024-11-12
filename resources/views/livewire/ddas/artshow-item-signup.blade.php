@@ -40,6 +40,17 @@
         @endif
 
         <div class="row row-cols-1 row-cols-lg-2 g-3">
+            @can("create", [\App\Models\Ddas\ArtshowItem::class, $artistProfile])
+                <div class="col">
+                    <button class="btn card h-100 w-100 text-center justify-content-center btn-success" style="min-height: 10rem" wire:click="newItem">
+                        <div class="fs-2">
+                            <i class="bi bi-plus-lg icon-link"></i>
+                            {{ __("Add Item") }}
+                        </div>
+                    </button>
+                </div>
+            @endcan
+
             @foreach(($artistProfile->artshowItems ?? []) AS $item)
                 <div class="col">
                     <div class="card" style="min-height: 15rem">
@@ -125,18 +136,6 @@
                     </div>
                 </div>
             @endforeach
-
-            @can("create", [\App\Models\Ddas\ArtshowItem::class, $artistProfile])
-                <div class="col">
-                    <button class="btn card h-100 w-100 text-center justify-content-center btn-success" style="min-height: 10rem" wire:click="newItem">
-                        <div class="fs-2">
-                            <i class="bi bi-plus-lg icon-link"></i>
-                            {{ __("Add Item") }}
-                        </div>
-                    </button>
-                </div>
-            @endcan
-
         </div>
 
 

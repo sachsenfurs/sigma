@@ -31,6 +31,7 @@
     @script
     <script>
         $wire.on('showModal', function(id) {
+            bootstrap.Modal.getInstance(document.getElementById(id))?.hide();
             new bootstrap.Modal(document.getElementById(id)).show();
             document.getElementById(id).addEventListener('shown.bs.modal', (event) => event.target.querySelector('input,.btn-primary').focus());
         });
