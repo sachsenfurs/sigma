@@ -1,17 +1,39 @@
 <div class="row row-cols-1 row-cols-xxl-2 g-3 align-items-stretch">
-    <div class="col w-100">
-        <div class="input-group mb-3">
-            <span class="input-group-text">
-                <i class="bi bi-search" wire:loading.remove wire:target="search"></i>
-                <div class="spinner-border spinner-border-sm" role="status" wire:loading wire:target="search"></div>
-            </span>
-            <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')"></x-form.input-floating>
+    <div class="col-12 w-100">
+        <div class="row gy-2">
+            <div class="col-12 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-search" wire:loading.remove wire:target="search, artist"></i>
+                        <div class="spinner-border spinner-border-sm" role="status" wire:loading wire:target="search, artist"></div>
+                    </span>
+                    <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')"></x-form.input-floating>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group col-12 col-md-6 h-100">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                        {{ __("Artist") }}
+                    </label>
+                    <select wire:model.live="artist" class="form-select" id="inputGroupSelect01">
+                        <option value="0">- {{ __("All") }} -</option>
+                        @foreach($this->artists AS $artist)
+                            @php($count = $this->itemsWithoutArtistFilter->filter(fn($i) => $i->artist->id == $artist->id)->count())
+                            <option value="{{ $artist->id }}" @disabled($count == 0)>
+                                {{ $artist->name }}
+                                @if($this->search)
+                                    ({{ $count }})
+                                @endif
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
-
     </div>
 
-    @forelse($this->items AS $item)
-        <div class="col" wire:loading.remove wire:target="search">
+    @forelse($this->itemsPaginated AS $item)
+        <div class="col" wire:loading.remove wire:target="search, artist">
             <div class="card h-100" style="cursor: pointer" wire:click.throttle.1000ms="showItem({{$item->id}})">
                 <div class="row g-0 h-100">
                     <div class="col p-4 d-grid">
@@ -57,11 +79,11 @@
             </div>
         </div>
     @empty
-        <x-infocard class="w-100" wire:loading.remove wire:target="search">{{ __("Nothing found") }}</x-infocard>
+        <x-infocard class="mt-3 w-100" wire:loading.remove wire:target="search, artist">{{ __("Nothing found") }}</x-infocard>
     @endforelse
 
-    <div class="w-100" wire:loading.remove wire:target="search">
-        {{ $this->items->links() }}
+    <div class="w-100" wire:loading.remove wire:target="search, artist">
+        {{ $this->itemsPaginated->links() }}
     </div>
 
     <x-modal.livewire-modal class="modal-xl" id="itemModal" type="alert" button-text-ok="Close" x-data="{ confirm: $wire.$entangle('form.confirm') }">

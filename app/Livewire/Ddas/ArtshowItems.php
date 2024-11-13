@@ -4,8 +4,11 @@ namespace App\Livewire\Ddas;
 
 use App\Livewire\Ddas\Forms\ArtshowItemBidForm;
 use App\Livewire\Traits\HasModal;
+use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\ArtshowItem;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -22,29 +25,55 @@ class ArtshowItems extends Component
     #[Url]
     public string $search = "";
 
-    public function render() {
+    #[Url]
+    public int $artist = 0;
+
+    public function render(): View {
         return view('livewire.ddas.artshow-items');
+    }
+
+    public function getItems($filterArtist=true) {
+        $items = ArtshowItem::approvedItems()->orderBy("name");
+        if($this->search != "")
+            $items = $items->where(function(Builder $query) {
+                if(ctype_digit($this->search))
+                    $query->whereId($this->search);
+                else
+                    $query->orWhereAny(['name' ,'description', 'description_en'], 'like', "%{$this->search}%");
+            });
+        if($this->artist AND $filterArtist)
+            $items->where("artshow_artist_id", $this->artist);
+        return $items;
+    }
+
+    #[Computed]
+    public function itemsPaginated() {
+        return $this->getItems()->paginate(30);
     }
 
     #[Computed]
     public function items() {
-        $items = ArtshowItem::approvedItems()->orderBy("name");
-        if($this->search != "")
-            $items = $items->where(function($query) {
-                $query->whereId($this->search)->orWhereAny(['name' ,'description', 'description_en'], 'like', "%{$this->search}%");
-            });
-
-        return $items->paginate(30);
+        return $this->getItems()->get();
     }
 
-    public function showItem(ArtshowItem $item) {
+    #[Computed] // separate computed property so livewire can do caching and stuff
+    public function itemsWithoutArtistFilter() {
+        return $this->getItems(false)->get();
+    }
+
+    #[Computed]
+    public function artists() {
+        return ArtshowArtist::havingApprovedItems()->get()->sortBy("name");
+    }
+
+    public function showItem(ArtshowItem $item): void {
         $this->form->reset();
         $this->currentItem = $item;
         $this->form->artshow_item_id = $item->id;
         $this->showModal("itemModal");
     }
 
-    public function submitBid() {
+    public function submitBid(): void {
         $this->authorize("create", [ArtshowBid::class, ArtshowItem::find($this->form->artshow_item_id)]);
         $validated = $this->form->validate();
 

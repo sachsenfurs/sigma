@@ -177,11 +177,11 @@
                         </fieldset>
                         <div class="col-12" style="height: 100%">
                             <x-form.livewire-input type="textarea" name="form.description" :label="__('Description')" rows="5" required/>
-                            <span class="small">{{ __('Visible for everyone') }}</span>
+                            <span class="small text-muted">{{ __('Visible for everyone') }}</span>
                         </div>
                         <div class="col-12" style="height: 100%">
                             <x-form.livewire-input type="textarea" name="form.additional_info" :label="__('Additional Information')" rows="5" required/>
-                            <span class="small">{{ __('Only visible for staff. Here you can put some details or fun facts for the auction!') }}</span>
+                            <span class="small text-muted">{{ __('Only visible for staff. Here you can put some details or fun facts for the auction!') }}</span>
                         </div>
                     </div>
                 </div>

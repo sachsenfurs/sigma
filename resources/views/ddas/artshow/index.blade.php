@@ -4,7 +4,7 @@
 @section('content')
     <div class="container">
         @can("create", \App\Models\Ddas\ArtshowItem::class)
-            <div class="card my-3 bg-info-subtle">
+            <div class="card mb-3 bg-info-subtle">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
