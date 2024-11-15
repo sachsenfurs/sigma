@@ -33,7 +33,7 @@ class DealerSeeder extends Seeder
             ]
         ]);
 
-        Dealer::factory(15)->create();
+        Dealer::factory(30)->create();
 
         foreach(Dealer::all() AS $dealer) {
             $dealer->tags()->sync(DealerTag::inRandomOrder()->limit(rand(0,3))->get());

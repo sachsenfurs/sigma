@@ -1,6 +1,6 @@
 <div class="row row-cols-1 row-cols-xxl-2 g-3 align-items-stretch">
     <div class="col-12 w-100">
-        <div class="row gy-2">
+        <div class="row g-3">
             <div class="col-12 col-md-6">
                 <div class="input-group">
                     <span class="input-group-text">

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Dealer extends Model
 {
@@ -53,7 +54,7 @@ class Dealer extends Model
 
     public function iconFileUrl(): Attribute {
         return Attribute::make(
-            get: fn() => $this->icon_file ? Storage::url($this->icon_file) : ""
+            get: fn() => $this->icon_file ? Str::startsWith($this->icon_file, "http") ? $this->icon_file : Storage::url($this->icon_file) : ""
         );
     }
     public function galleryLinkName(): Attribute {

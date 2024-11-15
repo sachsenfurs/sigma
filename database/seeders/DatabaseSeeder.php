@@ -82,31 +82,8 @@ class DatabaseSeeder extends Seeder
             $entry->sigEvent->save();
         });
 
-        ArtshowItem::factory(10)->create();
+        ArtshowItem::factory(50)->create();
 
-        DealerTag::insert([
-            [
-                'name' => "NSFW",
-                'name_en' => "NSFW",
-            ],
-            [
-                'name' => "Merch",
-                'name_en' => "Merch",
-            ],
-            [
-                'name' => "Prints",
-                'name_en' => "Prints",
-            ],
-            [
-                'name' => "Plushies",
-                'name_en' => "Plushies",
-            ]
-        ]);
-
-        Dealer::factory(15)->create();
-
-        foreach(Dealer::all() AS $dealer) {
-            $dealer->tags()->sync(DealerTag::inRandomOrder()->limit(rand(0,3))->get());
-        }
+        (new DealerSeeder())->run();
     }
 }

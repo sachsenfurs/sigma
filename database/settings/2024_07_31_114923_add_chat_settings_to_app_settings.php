@@ -7,7 +7,7 @@ return new class extends SettingsMigration
 {
     public function up(): void {
         $this->migrator->inGroup('chat', function (SettingsBlueprint $blueprint): void {
-            $blueprint->add('enabled', true);
+            $blueprint->add('enabled', env("CHAT.ENABLED", true));
         });
     }
 };

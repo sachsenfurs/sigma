@@ -13,8 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 #[ObservedBy(ArtshowItemObserver::class)]
 class ArtshowItem extends Model
@@ -113,7 +116,19 @@ class ArtshowItem extends Model
 
     public function imageUrl(): Attribute {
         return Attribute::make(
-            get: fn() => $this->image ? Storage::url($this->image) : null
+            get: function() {
+                if(!$this->image)
+                    return null;
+
+                // caching for placeholder example images
+                if(Str::startsWith($this->image, "http")) {
+                    return Cache::remember("artshow_image_{$this->id}", 3600, function() {
+                        return "data:image/jpeg;base64,".base64_encode(Http::get($this->image)->body());
+                    });
+                }
+
+                return Storage::url($this->image);
+            }
         );
     }
 }

@@ -166,9 +166,12 @@ class DealerResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make("additional_info")
+                    ->label("Additional Information")
+                    ->translateLabel()
                     ->view("filament.resources.ddas.additional-info")
-                    ->wrap()
-                ,
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->wrap(),
                 Tables\Columns\TextColumn::make("tags")
                     ->formatStateUsing(fn(Model $state) => $state->name_localized)
                     ->translateLabel()

@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot() {
         if($this->app->environment('production')) {
             \URL::forceScheme('https');
+        } else {
+            $this->app->register(FakerServiceProvider::class);
         }
 
         // registering in boot because we are using values from settings (database)
