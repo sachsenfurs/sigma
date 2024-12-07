@@ -217,7 +217,7 @@
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
                             <img src="/images/logo.png" alt="{{ config('app.name') }}">
                         </a>
-                        @yield('title') - {{ app(\App\Settings\AppSettings::class)->event_name }}
+                        @yield('title', __('Home')) - {{ app(\App\Settings\AppSettings::class)->event_name }}
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                             <span class="navbar-toggler-icon"></span>
