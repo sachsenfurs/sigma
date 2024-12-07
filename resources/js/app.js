@@ -1,8 +1,5 @@
 import './bootstrap';
 
-// bootstrap
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
 
 // Vue
 import EntryList from "./components/TimetableEntries/EntryList.vue";

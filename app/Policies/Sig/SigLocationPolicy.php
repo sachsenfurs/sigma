@@ -6,6 +6,7 @@ use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Models\SigLocation;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class SigLocationPolicy extends ManageEventPolicy
 {
@@ -26,7 +27,7 @@ class SigLocationPolicy extends ManageEventPolicy
         return true;
     }
 
-    public function view(?User $user, SigLocation $sigLocation): bool {
+    public function view(?User $user, SigLocation $sigLocation): Response|bool {
         if($user?->hasPermission(Permission::MANAGE_HOSTS, PermissionLevel::READ))
             return true;
         if($user?->hasPermission(Permission::MANAGE_LOCATIONS, PermissionLevel::READ))
@@ -34,6 +35,9 @@ class SigLocationPolicy extends ManageEventPolicy
 
         if(!TimetableEntryPolicy::isSchedulePublic())
             return false;
+
+        if($sigLocation->timetableEntries->count() == 0)
+            return Response::denyWithStatus(404);
 
         return true;
     }

@@ -10,6 +10,7 @@ use App\Models\TimetableEntry;
 use Filament\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Support\Enums\Alignment;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
@@ -54,6 +55,8 @@ class SigPlannerWidget extends FullCalendarWidget
                           return "#756d6a";
                       if($entry->has_time_changed || $entry->has_location_changed)
                           return "#ff0000";
+                      if($entry->sigEvent->is_private)
+                          return "#380550";
 
                       if($entry->sigEvent->primaryHost?->color)
                         return "#ffffff00";
@@ -66,6 +69,8 @@ class SigPlannerWidget extends FullCalendarWidget
                               return "#eb8060";
                           if($entry->hide)
                               return "#948e8a";
+                          if($entry->sigEvent->is_private)
+                              return "#6e0b9d";
 
                           if($entry->sigEvent->primaryHost?->color)
                               return $entry->sigEvent->primaryHost?->color;

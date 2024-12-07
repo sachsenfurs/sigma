@@ -24,6 +24,7 @@ class SigEvent extends Model
         'languages' => 'array',
         'approval' => Approval::class,
         'attributes' => 'array',
+        'private_group_ids' => 'array',
     ];
 
     protected $guarded = [];
@@ -37,8 +38,30 @@ class SigEvent extends Model
         'timetableEntries',
     ];
 
+
+    protected static function booted(): void {
+        if(!auth()->user()?->isAdmin())
+            static::addGlobalScope('private', self::applyPrivateScope());
+    }
+
+    public static function applyPrivateScope(): \Closure {
+        return function($query) {
+            $query
+                ->whereNull('private_group_ids')
+                ->orWhere('private_group_ids', '[]')
+                ->orWhereJsonOverlaps('private_group_ids', auth()->user()?->roles?->pluck("id") ?? [])
+            ;
+        };
+    }
+
     public function scopeUnprocessed(Builder $query) {
         $query->withCount("timetableEntries")->having("timetable_entries_count", 0);
+    }
+
+    public function isPrivate(): Attribute {
+        return Attribute::make(
+            get: fn() => count($this->private_group_ids ?? []) > 0
+        );
     }
 
     public function approved(): Attribute {
@@ -60,7 +83,7 @@ class SigEvent extends Model
 
     public function primaryHost(): Attribute {
         return Attribute::make(
-            get: fn() => $this->sigHosts()->oldest()->first()
+            get: fn() => $this->sigHosts->first()
         );
     }
 
@@ -72,7 +95,7 @@ class SigEvent extends Model
 
     public function timetableCount(): Attribute {
         return Attribute::make(
-            get: fn() => $this->timetableEntries()->count()
+            get: fn() => $this->timetableEntries->count()
         );
     }
 
@@ -117,11 +140,6 @@ class SigEvent extends Model
         return Attribute::make(
             get: fn() => number_format($this->duration / 60, 1)
         );
-    }
-
-    public function isCompletelyPrivate(): bool {
-        $entries = $this->timetableEntries;
-        return ($entries->count() == $entries->where("hide", 1)->count());
     }
 
     /**

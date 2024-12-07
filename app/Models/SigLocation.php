@@ -94,7 +94,4 @@ class SigLocation extends Model
         );
     }
 
-    public function hasAnyPublicEvents(): bool {
-        return $this->sigEvents->filter(fn($event) => !$event->hide)->count() > 0;
-    }
 }

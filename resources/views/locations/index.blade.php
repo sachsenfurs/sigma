@@ -32,7 +32,6 @@
                         :instance="$location"
                         :link="route('locations.show', $location)"
                         :title="$location->description_localized"
-                        :edit_link="\App\Filament\Resources\SigLocationResource::getUrl('edit', [ 'record' => $location ])"
                     >
                         {{ $location->essential_description_localized }}
                         <p class="text-muted">
@@ -44,12 +43,11 @@
             </div>
             <div class="tab-pane fade show active" id="location-2-tab-pane" role="tabpanel" aria-labelledby="location-2" tabindex="0">
                 {{-- Rooms --}}
-                @forelse($locations->filter(fn($l) => $l->sig_events_count > 0 AND $l->hasAnyPublicEvents()) AS $location)
+                @forelse($locations->filter(fn($l) => $l->getPublicSigEventCount() > 0 AND !$l->essential) AS $location)
                     <x-list-host-location
                         :instance="$location"
                         :link="route('locations.show', $location)"
                         :title="$location->name_localized"
-                        :edit_link="\App\Filament\Resources\SigLocationResource::getUrl('edit', [ 'record' => $location ])"
                     >
                         {{ $location->description_localized }}
                     </x-list-host-location>

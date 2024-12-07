@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UserRoleResource\RelationManagers;
 
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\UserResource;
 use App\Models\User;
 use Filament\Forms;
@@ -52,8 +53,8 @@ class UserResourceRelationManager extends RelationManager
                    ->modalHeading(__('Assign User'))
                    ->modalSubmitActionLabel(__('Assign'))
                    ->attachAnother(false)
-                   ->recordSelectSearchColumns(['id', 'name'])
-                   ->recordTitle(fn($record) => $record->id . " - " . $record->name)
+                   ->recordSelectSearchColumns(['reg_id', 'name'])
+                   ->recordTitle(FormHelper::formatUserWithRegId())
                    ->successNotificationTitle(__('User Assigned')),
             ])
             ->actions([

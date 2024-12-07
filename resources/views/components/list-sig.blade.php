@@ -2,15 +2,14 @@
     'sig',
 ])
 
-<div class="card mb-4">
+<div @class(['card mb-4', 'bg-purple-800' => $sig->is_private])>
     <div class="card-header">
         <h4 class="d-inline">
+            @if($sig->is_private)
+                <i class="bi bi-lock icon-link"></i>
+            @endif
             {{ $sig->name_localized }}
         </h4>
-
-        @can("update", $sig)
-            <a href="{{ \App\Filament\Resources\SigEventResource::getUrl('edit', ['record' => $sig]) }}" class="inline float-end"><i class="bi bi-pen"></i> Edit</a>
-        @endcan
     </div>
     @if($sig->description_localized)
         <div class="card-body">
@@ -20,7 +19,7 @@
         </div>
     @endif
 
-    @forelse($sig->timetableEntries()->public()->get() AS $entry)
+    @forelse($sig->timetableEntries AS $entry)
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <div class="row">
@@ -40,7 +39,7 @@
                             @if($entry->cancelled)
                                 <h2><span class="badge bg-danger">{{ __("Cancelled") }}</span></h2>
                             @else
-                                @if($entry->sigEvent->reg_possible)
+                                @if($sig->reg_possible)
                                     <a href="{{ route("timetable-entry.show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged)
@@ -53,13 +52,13 @@
                     </div>
                 </div>
 
-                @if((Route::is("locations.*") OR $entry->sigEvent->publicHosts->count() > 1) AND !$entry->sigEvent->primaryHost->hide)
+                @if((Route::is("locations.*") OR $sig->publicHosts->count() > 1) AND !$sig->primaryHost->hide)
                     <div class="row mt-2">
                         <div class="col-auto d-flex">
                             <i class="bi bi-person-circle align-self-center"></i>
                         </div>
                         <div class="col-auto">
-                            @foreach($entry->sigEvent->publicHosts AS $host)
+                            @foreach($sig->publicHosts AS $host)
                                 <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none">
                                     <span class="fw-light">{{ $host->name }}</span>@if(!$loop->last), @endif
                                 </a>

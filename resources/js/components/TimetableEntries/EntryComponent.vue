@@ -1,6 +1,12 @@
 <template>
     <div>
-        <div :class="['card mt-3', { 'opacity-50': eventPassed }, { 'bg-dark': eventInternal }]" :id="'event' + entry.id" @click="showInfoModal()" >
+        <div :class="[
+                'card mt-3',
+                { 'opacity-50': eventPassed },
+                { 'bg-dark': eventInternal },
+                { 'bg-purple-800': entry.sig_event.is_private },
+            ]"
+             :id="'event' + entry.id" @click="showInfoModal()" >
             <div class="row g-0 flex-nowrap d-flex">
                 <div class="col-lg-2 col-3 d-flex">
                     <div class="card-body align-self-center text-center">
@@ -34,6 +40,7 @@
                 <div class="col-lg-9 col-8 d-flex">
                     <div class="card-body px-1 pe-0 align-self-center" style="word-wrap: anywhere">
                         <h1>
+                            <i class="bi bi-lock icon-link" v-if="entry.sig_event.is_private"></i>
                             {{ entry.sig_event.name_localized }}
                         </h1>
 

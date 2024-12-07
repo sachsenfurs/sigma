@@ -23,12 +23,10 @@
             </div>
 
         </div>
-        @forelse($sigs AS $sig)
-            @if($sig->isCompletelyPrivate())
-                @continue
-            @endif
-
+        @forelse($sigEvents AS $sig)
+            @can("view", $sig)
                 <x-list-sig :sig="$sig" />
+            @endcan
         @empty
             <div class="alert alert-info">
                 {{ __("No SIGs assigned") }}

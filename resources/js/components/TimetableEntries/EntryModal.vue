@@ -1,15 +1,23 @@
 <template>
     <div class="modal fade" :id="id" tabindex="-1" role="dialog" :aria-labelledby="'eventInfoLabel' + entry?.id" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div v-if="entry" class="modal-content">
+            <div v-if="entry" :class="['modal-content', {'bg-purple-800': entry.sig_event.is_private}]">
                 <div class="modal-header">
                     <h4 class="modal-title w-100" :id="'eventInfoLabel' + entry.id">
+                        <i class="bi bi-lock icon-link" v-if="entry.sig_event.is_private"></i>
                         {{ entry.sig_event.name_localized }}
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" v-if="description_markdown">
                     <div class="row g-3">
+                        <div v-if="entry.sig_event.is_private" class="alert alert-warning d-flex align-items-center">
+                            <i class="col-auto pe-3 bi bi-exclamation-lg fs-4"></i>
+                            <div class="col">
+                                {{ $t("This event is not listed in the public schedule and only selected attendees can see this. Be careful sharing this with others as it may contain sensitive information!") }}
+                            </div>
+                        </div>
+
                         <div class="col-11 no-p mb-2" v-html="description_markdown">
 
                         </div>

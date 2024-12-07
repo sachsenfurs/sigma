@@ -23,12 +23,21 @@ class SigEventPolicy extends ManageEventPolicy
     }
 
     public function view(?User $user, SigEvent $sigEvent): bool {
-        if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
+        // staff
+        if($user AND $user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ))
             return true;
+
+        // own events
         if($user AND $sigEvent->sigHosts->pluck("reg_id")->contains($user?->reg_id))
             return true;
 
-        return false;
+        // not at least once in the public schedule?
+        $entries = $sigEvent->timetableEntries;
+        if($entries->count() == $entries->where("hide", 1)->count())
+            return false;
+
+        // at least once in the public schedule?
+        return $entries->count() > 0;
     }
 
     public function create(User $user, $sigHostId = null): bool {

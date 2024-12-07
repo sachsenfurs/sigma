@@ -20,8 +20,11 @@ class SigHostController extends Controller
     }
 
     public function show(SigHost $host) {
-        $events = $host->sigEvents()
-            ->with("timetableEntries")
+        $this->authorize("view", $host);
+
+        $sigEvents = $host->sigEvents()
+            ->public()
+            ->with("sigHosts")
             ->get()
             ->sortBy(function($event, $key) {
                 return ($event->timetableEntries->first()?->start);
@@ -29,7 +32,7 @@ class SigHostController extends Controller
 
         return view("hosts.show", [
             'host' => $host,
-            'sigs' => $events,
+            'sigEvents' => $sigEvents,
         ]);
     }
 

@@ -6,13 +6,29 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-sidebar.scss';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
-//@import 'jquery-ui/themes/base/all.css';
-//@import '~jqueryui/jquery-ui.theme.min.css';
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
+@each $utility in ("background-color", "color") {
+    $utilities: map-merge(
+            $utilities,
+            (
+                #{$utility}: map-merge(
+                        map-get($utilities, $utility),
+                        (
+                            values: map-merge(
+                                    map-get(map-get($utilities, $utility), "values"),
+                                    $all-colors
+                            ),
+                        ),
+                ),
+            )
+    );
+}
+@import "bootstrap/scss/utilities/api";
 
 @import '../css/app.css';
-
+@import 'bootstrap-sidebar.scss';
 
 @include color-mode(light) {
     .card {

@@ -11,6 +11,8 @@ use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelatio
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
+use App\Models\UserRole;
+use App\Settings\AppSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -28,6 +30,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
@@ -38,6 +41,7 @@ class SigEventResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
     protected static ?int $navigationSort = 1;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
 
     public static function form(Form $form): Form {
         return $form
@@ -58,6 +62,11 @@ class SigEventResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
+            ->recordClasses(function(Model $record) {
+                if($record->is_private)
+                    return 'bg-purple-950';
+                return null;
+            })
             ->defaultSort('approval')
             ->emptyStateHeading(__('No SIGs available'))
             ->persistSortInSession()
@@ -461,6 +470,14 @@ class SigEventResource extends Resource
                 Forms\Components\KeyValue::make("attributes")
                     ->nullable()
                     ->label(__("API Metadata")),
+                Forms\Components\Select::make("private_group_ids")
+                    ->options(UserRole::all()->pluck("title", "id"))
+                    ->multiple()
+                    ->dehydrateStateUsing(function ($state) {
+                        $array = collect($state)->map(fn($i) => (int)$i)->toArray();
+                        return count($array) == 0 ? null : $array;
+                    })
+                    ->visible(auth()->user()->isAdmin())
             ])
             ->collapsed()
             ->columns(1)

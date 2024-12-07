@@ -12,22 +12,14 @@
                             {{ $location->name_localized }}
                         </h2>
                         <p class="text-muted">
-                            @if($location->essential)
-                                {{ $location->essential_description_localized }}
-                            @else
-                                {{ $location->description_localized }}
-                            @endif
+                            {{ $location->essential ? $location->essential_description_localized : $location->description_localized }}
                         </p>
-                        @can("update", $location)
-                            <a href="{{ \App\Filament\Resources\SigLocationResource::getUrl('edit', ['record' => $location]) }}"><i class="bi bi-pen"></i> {{ __("Edit") }}</a>
-                        @endcan
                     </div>
                 </div>
             </div>
 
         </div>
-
-        @forelse($events AS $sig)
+        @forelse($sigEvents AS $sig)
             <x-list-sig :sig="$sig" />
         @empty
             <div class="alert alert-info">

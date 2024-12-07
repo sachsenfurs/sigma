@@ -6,6 +6,7 @@ use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Models\SigHost;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class SigHostPolicy extends ManageEventPolicy
 {
@@ -39,6 +40,9 @@ class SigHostPolicy extends ManageEventPolicy
 
         if($sigHost->reg_id === $user?->reg_id)
             return true;
+
+        if($sigHost->sigEvents->count() == 0)
+            return false;
 
         return true;
     }
