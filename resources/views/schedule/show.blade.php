@@ -3,6 +3,16 @@
 @section('content')
     <div class="container pt-3">
 
+        @if($entry->sigEvent->is_private)
+            <div class="alert text-purple-100 bg-purple-800 border-light-subtle row m-1 mb-4 d-flex align-items-center">
+                <div class="col-auto ">
+                    <i class="bi bi-lock fs-4"></i>
+                </div>
+                <div class="col">
+                    {{ __("This event is not listed in the public schedule and only selected attendees can see this. Be careful sharing this with others as it may contain sensitive information!") }}
+                </div>
+            </div>
+        @endif
         @if($entry->cancelled)
             <h1 class="d-grid mb-4">
                 <span class="badge bg-danger">
@@ -10,14 +20,6 @@
                 </span>
             </h1>
         @endif
-        <div class="alert text-purple-100 bg-purple-800 border-light-subtle row m-1 mb-4 d-flex align-items-center">
-            <div class="col-auto ">
-                <i class="bi bi-lock fs-4"></i>
-            </div>
-            <div class="col">
-                {{ __("This event is not listed in the public schedule and only selected attendees can see this. Be careful sharing this with others as it may contain sensitive information!") }}
-            </div>
-        </div>
 
         <div class="row d-flex">
             <div class="col-6 text-center align-self-center">
