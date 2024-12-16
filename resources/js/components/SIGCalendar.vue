@@ -101,6 +101,16 @@ export default {
                 stickyFooterScrollbar: true,
                 resources: [],
                 events: [],
+                eventDidMount: function(info) {
+                    // hiding "end" time when event is "announce only event" (start == end)
+                    // this is the best solution i have found so far:
+                    // (end time is ALWAYS adjusted to fullcalendars 'defaultTimedEventDuration' so we can't rely on that)
+                    if (info.event.extendedProps.formatted_length === "") {
+                        window.setTimeout(function() {
+                            info.el.innerHTML = info.el.innerHTML.replace(info.timeText, info.timeText.split("-")[0]);
+                        }, 10);
+                    }
+                },
                 resourceAreaHeaderContent: wTrans('Location'),
                 validRange: {
                     start: '', // Is set when events are fetched
