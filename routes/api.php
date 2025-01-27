@@ -25,5 +25,6 @@ Route::get("/events", [SignageEndpointController::class, 'events'])->name("api.e
 Route::get("/locations", [SignageEndpointController::class, 'locations'])->name("api.locations");
 Route::get("/socials", [SignageEndpointController::class, "socials"])->name("api.socials");
 Route::get("/essentials", [SignageEndpointController::class, 'essentials'])->name("api.essentials");
+Route::get("/artshowItems", [SignageEndpointController::class, 'artshowItems'])->name("api.artshow_items");
 
 //Route::get("/auctions", [AuctionEndpoint::class, "index"])->name("api.auction");

@@ -39,7 +39,6 @@ class AppSettingsPage extends SettingsPage
         return $form
             ->schema([
                 Forms\Components\Section::make(__("Event Details"))
-                    ->collapsible()
                     ->collapsed()
                     ->columns(3)
                     ->schema([
@@ -70,62 +69,73 @@ class AppSettingsPage extends SettingsPage
                             ->label("Accept SIG applications after deadline")
                             ->translateLabel()
                             ->inline(false),
-                        Forms\Components\Fieldset::make("api_endpoints")
-                            ->label("API Endpoints")
+                    ]),
+                Forms\Components\Section::make("API Endpoints")
+                    ->translateLabel()
+                    ->collapsed()
+                    ->schema([
+                        Forms\Components\TextInput::make("event_api")
+                            ->label("Signage Event API")
                             ->translateLabel()
-                            ->schema([
-                                Forms\Components\TextInput::make("event_api")
-                                    ->label("Signage Event API")
-                                    ->translateLabel()
-                                    ->readOnly()
-                                    ->dehydrated(false)
-                                    ->formatStateUsing(fn() => URL::signedRoute("api.events"))
-                                    ->columnSpanFull()
-                                    ->hintAction(function($state) {
-                                        return Action::make("open")
-                                              ->url($state)
-                                              ->openUrlInNewTab();
-                                    }),
-                                Forms\Components\TextInput::make("location_api")
-                                    ->label("Signage Location API")
-                                    ->translateLabel()
-                                    ->readOnly()
-                                    ->dehydrated(false)
-                                    ->formatStateUsing(fn() => route("api.locations"))
-                                    ->columnSpanFull()
-                                    ->hintAction(function($state) {
-                                        return Action::make("open")
-                                              ->url($state)
-                                              ->openUrlInNewTab();
-                                    }),
-                                Forms\Components\TextInput::make("essentials_api")
-                                    ->label("Signage Event API")
-                                    ->translateLabel()
-                                    ->readOnly()
-                                    ->dehydrated(false)
-                                    ->formatStateUsing(fn() => route("api.essentials"))
-                                    ->columnSpanFull()
-                                    ->hintAction(function($state) {
-                                        return Action::make("open")
-                                              ->url($state)
-                                              ->openUrlInNewTab();
-                                    }),
-                                Forms\Components\TextInput::make("socials_api")
-                                    ->label("Signage Socials API")
-                                    ->translateLabel()
-                                    ->readOnly()
-                                    ->dehydrated(false)
-                                    ->formatStateUsing(fn() => route("api.socials"))
-                                    ->columnSpanFull()
-                                    ->hintAction(function($state) {
-                                        return Action::make("open")
-                                              ->url($state)
-                                              ->openUrlInNewTab();
-                                    }),
-                            ]),
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn() => URL::signedRoute("api.events"))
+                            ->columnSpanFull()
+                            ->hintAction(function($state) {
+                                return Action::make("open")
+                                      ->url($state)
+                                      ->openUrlInNewTab();
+                            }),
+                        Forms\Components\TextInput::make("location_api")
+                            ->label("Signage Location API")
+                            ->translateLabel()
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn() => route("api.locations"))
+                            ->columnSpanFull()
+                            ->hintAction(function($state) {
+                                return Action::make("open")
+                                      ->url($state)
+                                      ->openUrlInNewTab();
+                            }),
+                        Forms\Components\TextInput::make("essentials_api")
+                            ->label("Signage Event API")
+                            ->translateLabel()
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn() => route("api.essentials"))
+                            ->columnSpanFull()
+                            ->hintAction(function($state) {
+                                return Action::make("open")
+                                      ->url($state)
+                                      ->openUrlInNewTab();
+                            }),
+                        Forms\Components\TextInput::make("socials_api")
+                            ->label("Signage Socials API")
+                            ->translateLabel()
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn() => route("api.socials"))
+                            ->columnSpanFull()
+                            ->hintAction(function($state) {
+                                return Action::make("open")
+                                      ->url($state)
+                                      ->openUrlInNewTab();
+                            }),
+                        Forms\Components\TextInput::make("artshow_items_api")
+                            ->label("Artshow Items API")
+                            ->translateLabel()
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn() => URL::signedRoute("api.artshow_items"))
+                            ->columnSpanFull()
+                            ->hintAction(function($state) {
+                                return Action::make("open")
+                                      ->url($state)
+                                      ->openUrlInNewTab();
+                            }),
                     ]),
                 Forms\Components\Section::make(__("LASSIE Settings"))
-                    ->collapsible()
                     ->collapsed()
                     ->columns(3)
                     ->schema([
@@ -153,7 +163,6 @@ class AppSettingsPage extends SettingsPage
                             ),
                     ]),
                 Forms\Components\Section::make(__("Telegram Settings"))
-                    ->collapsible()
                     ->collapsed()
                     ->columns(2)
                     ->schema([
@@ -167,7 +176,6 @@ class AppSettingsPage extends SettingsPage
                             ->string(),
                     ]),
                 Forms\Components\Section::make(__("DeepL Settings"))
-                    ->collapsible()
                     ->collapsed()
                     ->columns(2)
                     ->schema([

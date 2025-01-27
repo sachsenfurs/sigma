@@ -41,7 +41,7 @@
                             <h3 class="me-2 w-100">{{ $item->name }}</h3>
                             <h6 class="text-muted"><i class="bi bi-palette icon-link"></i> {{ $item->artist->name }}</h6>
                         </div>
-                        <div class="card-text">
+                        <div class="card-text small">
                             {!! $item->description_localized !!}
                         </div>
                     </div>

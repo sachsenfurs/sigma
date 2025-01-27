@@ -46,10 +46,10 @@ class ArtshowItem extends Model
     }
 
     public function scopeApprovedItems(Builder $query) {
-        $query->where("approval", "=", Approval::APPROVED->value);
+        $query->where("approval", Approval::APPROVED->value);
     }
     public function scopeAuctionableItems(Builder $query) {
-        $query->where("auction", 1)->where("sold", 0);
+        $query->where("approval", Approval::APPROVED->value)->where("auction", 1)->where("sold", 0);
     }
 
     public function bidPossible(): bool {
