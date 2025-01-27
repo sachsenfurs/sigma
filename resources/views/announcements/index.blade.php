@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="pb-3">{{ __("Announcements") }}</h2>
+        <h2 class="pb-3 d-none d-lg-block">{{ __("Announcements") }}</h2>
 
         <livewire:announcements />
     </div>

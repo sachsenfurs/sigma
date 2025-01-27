@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\UserRoleObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,5 +31,13 @@ class UserRole extends Model
 
     public function departmentInfos(): HasMany {
         return $this->hasMany(DepartmentInfo::class);
+    }
+
+    public function chats(): HasMany {
+        return $this->hasMany(Chat::class);
+    }
+
+    public function scopeChattable(Builder $query) {
+        $query->where("chat_activated", true);
     }
 }

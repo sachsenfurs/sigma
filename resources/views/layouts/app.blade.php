@@ -97,23 +97,69 @@
                                 </li>
                             @endif
 
-                            <li class="py-1">
-                                <a @class(['btn btn-nav', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
-                                    <div class="d-inline-flex w-100">
-                                        <div class="col-auto">
-                                            <i class="bi bi-megaphone icon-link"></i> {{ __('Announcements') }}
+                            @guest
+                                <li class="py-1">
+                                    <a @class(['btn btn-nav', 'active' => Route::is('announcements')]) href="{{ route('announcements') }}">
+                                        <div class="d-inline-flex w-100">
+                                            <div class="col-auto">
+                                                <i class="bi bi-megaphone icon-link"></i> {{ __('Announcements') }}
+                                            </div>
+                                            @cache('announcements_count', 300)
+                                                @php($count = \App\Models\Post\Post::recent()->count())
+                                                @if($count)
+                                                    <div class="col ml-auto">
+                                                        <div class="text-end ps-1"><span class="badge bg-dark border border-dark-subtle">{{ $count }}</span></div>
+                                                    </div>
+                                                @endif
+                                            @endcache
                                         </div>
-                                        @cache('announcements_count', 300)
-                                            @php($count = \App\Models\Post\Post::where('created_at', '>=', \Carbon\Carbon::now()->subHours(2))->count())
-                                            @if($count)
-                                                <div class="col ml-auto">
-                                                    <div class="text-end ps-1"><span class="badge bg-dark border border-dark-subtle">{{ $count }}</span></div>
+                                    </a>
+                                </li>
+                            @endguest
+
+                            @auth
+                                <li class="py-1">
+                                    <a @class(['btn btn-nav', 'active' => Route::is("notifications.*")]) href="{{ route('notifications.index') }}">
+                                        <div class="d-inline-flex w-100">
+                                            <div class="col-auto flex-shrink-1">
+                                                <i @class([ "bi icon-link", "bi-bell" ])></i>
+                                                {{ __('Notifications') }}
+                                            </div>
+                                            @if(!Route::is("notifications.*"))
+                                                <div class="col ml-auto text-end">
+                                                    @php($count = \App\Models\Post\Post::recent()->count())
+                                                    @if($count)
+                                                        <span class="badge bg-dark border border-dark-subtle">{{ $count }}</span>
+                                                    @endif
+
+                                                    @php($count = auth()->user()->unreadNotifications->count())
+                                                    @if($count)
+                                                        <span class="badge bg-danger border border-danger-subtle">{{ $count }}</span>
+                                                    @endif
                                                 </div>
                                             @endif
-                                        @endcache
-                                    </div>
-                                </a>
-                            </li>
+                                        </div>
+                                    </a>
+                                </li>
+                                @if(app(\App\Settings\ChatSettings::class)->enabled)
+                                    <li class="py-1">
+                                        <a @class(['btn btn-nav', 'active' => Route::is("chats.*")]) href="{{ route('chats.index') }}">
+                                            @php($count = auth()->user()->unread_messages_count)
+                                            <div class="d-inline-flex w-100">
+                                                <div class="col-auto flex-shrink-1">
+                                                    <i @class([ "bi  icon-link", "bi-mailbox2" => $count == 0, "bi-mailbox2-flag" => $count > 0 ])></i>
+                                                    {{ __('Messages') }}
+                                                </div>
+                                                @if($count)
+                                                    <div class="col ml-auto text-end">
+                                                        <span class="badge bg-danger border border-danger">{{ $count }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
 
                             @if(app(\App\Settings\AppSettings::class)->lost_found_enabled)
                                 <li class="py-1">
@@ -122,36 +168,13 @@
                                     </a>
                                 </li>
                             @endif
-
-                            @auth
-                                <li class="py-1">
-                                    <a @class(['btn btn-nav', 'active' => Route::is("notifications.index")]) href="{{ route('notifications.index') }}">
-                                        @if (auth()->user()->unreadNotifications->count() > 0)
-                                            <i class="bi bi-bell-fill icon-link"></i> {{ __('Notifications') }}
-                                        @else
-                                            <i class="bi bi-bell icon-link"></i> {{ __('Notifications') }}
-                                        @endif
-                                    </a>
-                                </li>
-                                @if(app(\App\Settings\ChatSettings::class)->enabled)
-                                    <li class="py-1">
-                                        <a @class(['btn btn-nav', 'active' => Route::is("chats.index")])  href="{{ route('chats.index') }}">
-                                            @if (auth()->user()->unreadNotifications->count() > 0)
-                                                <i class="bi bi-mailbox2-flag icon-link"></i> {{ __('Messages') }}
-                                            @else
-                                                <i class="bi bi-mailbox2 icon-link"></i> {{ __('Messages') }}
-                                            @endif
-                                        </a>
-                                    </li>
-                                @endif
-                            @endauth
                         </ul>
 
                         @guest
                             <a class="p-3 fs-5" href="{{ route('oauthlogin_regsys') }}">Login</a>
                         @else
                             <div class="dropdown m-3">
-                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle text-wrap" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                     @if(Auth::user()->avatar_thumb)
                                         <img src="{{ Auth::user()->avatar_thumb }}" alt="" width="32" height="32" class="rounded-circle me-2">
                                     @endif
@@ -213,11 +236,13 @@
             </div>
             <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-grid">
                 <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
-                    <div class="container-fluid fs-5">
+                    <div class="container-fluid fs-5 text-wrap flex-nowrap">
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
                             <img src="/images/logo.png" alt="{{ config('app.name') }}">
                         </a>
-                        @yield('title', __('Home')) - {{ app(\App\Settings\AppSettings::class)->event_name }}
+                        <span class="px-2 text-break">
+                            @yield('title', __('Home'))
+                        </span>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                             <span class="navbar-toggler-icon"></span>
@@ -259,7 +284,6 @@
     </div>
 
 
-
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     {{--  Just to make sure Alpine.js is loaded on every page without Livewire components  --}}
@@ -268,22 +292,3 @@
 </body>
 
 </html>
-
-
-{{--            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" >--}}
-{{--                <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">--}}
-{{--                    <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>--}}
-{{--                    <span class="fs-5 fw-semibold">List group</span>--}}
-{{--                </a>--}}
-{{--                <div class="list-group list-group-flush border-bottom scrollarea">--}}
-{{--                    @for($i=0;$i<10;$i++)--}}
-{{--                        <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">--}}
-{{--                            <div class="d-flex w-100 align-items-center justify-content-between">--}}
-{{--                                <strong class="mb-1">List group item heading</strong>--}}
-{{--                                <small>Wed</small>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>--}}
-{{--                        </a>--}}
-{{--                    @endfor--}}
-{{--                </div>--}}
-{{--            </div>--}}

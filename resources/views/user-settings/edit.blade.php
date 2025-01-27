@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', __("Edit User Settings"))
 @section('content')
-<div class="col-12 col-md-4 mx-auto">
+<div class="col-12 col-md-8 mx-auto">
     @if (!auth()->user()->telegram_user_id)
         <div class="card m-3">
             <div class="row m-3">
@@ -9,7 +9,7 @@
                     <h2>{{ __("Notifications") }}</h2>
                     <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
                 </div>
-                <div class="col-10 col-md-4 mx-auto">
+                <div class="col mx-auto text-center">
                     <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
                 </div>
             </div>
@@ -62,13 +62,10 @@
                             <div class="col-5 col-md-5">
                                 <div class="row">
                                     <div class="col-6 col-md-6">
-                                        <input class="form-check-input" type="checkbox" name="notification-mail-{{ $notification }}" value="1" @if (in_array('mail', $value)) checked @endif>
+                                        <input class="form-check-input" type="checkbox" name="{{ $notification }}[]" value="mail" @if (in_array('mail', $value)) checked @endif>
                                     </div>
                                     <div class="col-6 col-md-6">
-                                        <input class="form-check-input" type="checkbox" name="notification-telegram-{{ $notification }}" value="1" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->telegram_user_id) disabled @endif>
-                                    </div>
-                                    <div class="col-4 col-md-4 d-none">
-                                        <input class="form-check-input" type="checkbox" name="notification-database-{{ $notification }}" value="1" checked>
+                                        <input class="form-check-input" type="checkbox" name="{{ $notification }}[]" value="telegram" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->telegram_user_id) disabled @endif>
                                     </div>
                                 </div>
                                 <!--

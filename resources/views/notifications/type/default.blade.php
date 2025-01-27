@@ -1,0 +1,3 @@
+<p>
+    {{ $notification->type }}
+</p>

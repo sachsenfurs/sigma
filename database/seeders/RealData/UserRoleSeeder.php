@@ -39,13 +39,32 @@ class UserRoleSeeder extends Seeder
             'title'                     => 'Leitstelle',
             'registration_system_key'   => 'leitstelle',
         ]);
+
         foreach([
             Permission::MANAGE_EVENTS,
             Permission::MANAGE_FORMS,
             Permission::MANAGE_POSTS,
             Permission::MANAGE_HOSTS
-                ] AS $permission) {
+        ] AS $permission) {
             UserRole::whereTitle('Leitstelle')->first()->permissions()->create([
+                'permission' => $permission,
+                'level' => PermissionLevel::ADMIN,
+            ]);
+        }
+
+        DB::table('user_roles')->insert([
+            'title'                     => 'Programmplanung',
+            'registration_system_key'   => 'programming',
+            'chat_activated'            => 1,
+        ]);
+
+        foreach([
+            Permission::MANAGE_EVENTS,
+            Permission::MANAGE_FORMS,
+            Permission::MANAGE_HOSTS,
+            Permission::MANAGE_LOCATIONS,
+        ] AS $permission) {
+            UserRole::whereTitle('Programmplanung')->first()->permissions()->create([
                 'permission' => $permission,
                 'level' => PermissionLevel::ADMIN,
             ]);

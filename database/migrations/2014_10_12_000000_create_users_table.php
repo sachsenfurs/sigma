@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string("avatar")->nullable();
             $table->string("avatar_thumb")->nullable();
             $table->string("email")->nullable()->change();
-
+            $table->json("notification_channels")->default(json_encode([]));
             $table->string("telegram_user_id")->nullable();
 
             $table->timestamps();

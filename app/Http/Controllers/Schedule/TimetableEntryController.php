@@ -31,6 +31,7 @@ class TimetableEntryController extends Controller
                  return $query->with("sigHosts")
                  ->with("sigTags");
              })
+             ->with("favorites")
              ->orderBy("start")
              ->get();
 

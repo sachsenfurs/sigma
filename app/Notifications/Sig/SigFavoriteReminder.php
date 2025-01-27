@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Notifications\SigFavorite;
+namespace App\Notifications\Sig;
 
-use App;
 use App\Models\SigReminder;
 use App\Models\TimetableEntry;
-use App\Models\UserNotificationChannel;
+use App\Services\NotificationService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -15,22 +15,16 @@ class SigFavoriteReminder extends Notification
 {
     use Queueable;
 
-    protected $timetableEntry;
-    protected $reminder;
-    public static $text = "*:event* starts in :minutes_before minutes!";
+    protected TimetableEntry $timetableEntry;
+    protected SigReminder $reminder;
+    public static string $text = "*:event* starts in :minutes_before minutes!";
     public function __construct(TimetableEntry $entry, SigReminder $reminder) {
         $this->timetableEntry = $entry;
         $this->reminder = $reminder;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable) {
-        return UserNotificationChannel::list('sig_favorite_reminder', $notifiable->id, ['telegram']);
+    public function via(Model $notifiable): array {
+        return NotificationService::channels($this, $notifiable);
     }
 
     public function toTelegram($notifiable) {
@@ -74,9 +68,8 @@ class SigFavoriteReminder extends Notification
     }
 
 
-    public function toArray($notifiable) {
+    public function toArray($notifiable): array {
         return [
-            'type' => 'sig_favorite_reminder',
             'timetableEntryid' => $this->timetableEntry->id,
             'eventName' => $this->timetableEntry->sigEvent->name_localized,
             'minutes_before' => $this->reminder->minutes_before

@@ -201,6 +201,7 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelegramServiceProvider::class,
+        App\Providers\NotificationServiceProvider::class,
 
     ],
 

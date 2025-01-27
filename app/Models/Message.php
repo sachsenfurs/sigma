@@ -2,32 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\MessageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+#[ObservedBy(MessageObserver::class)]
 class Message extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
-    public function chat(): BelongsTo
-    {
+    public function chat(): BelongsTo {
         return $this->belongsTo(Chat::class);
     }
 
-    public function getTimeAttribute(): string
-    {
-        return date(
-            "d M Y, H:i:s",
-            strtotime($this->attributes['created_at'])
+    public function time(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->created_at->format("d.m.Y, H:i")
         );
     }
 
@@ -35,5 +32,9 @@ class Message extends Model
         return Attribute::make(
             get: fn() => ($this->user?->avatar ?? "")
         );
+    }
+
+    public function scopeUnread(Builder $query) {
+        $query->whereNull("read_at");
     }
 }

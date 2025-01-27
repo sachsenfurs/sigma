@@ -17,12 +17,13 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
- * @property string $status
+ * @property string $subject
+ * @property int $user_role_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $user_role_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $messages
  * @property-read int|null $messages_count
+ * @property-read mixed $unread_messages_count
  * @property-read \App\Models\User $user
  * @property-read \App\Models\UserRole $userRole
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat newModelQuery()
@@ -30,7 +31,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereSubject($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereUserRoleId($value)
@@ -50,6 +51,7 @@ namespace App\Models\Ddas{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowItem> $artshowItems
  * @property-read int|null $artshow_items_count
+ * @property-read \App\Models\Ddas\TFactory|null $use_factory
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\Ddas\ArtshowArtistFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ArtshowArtist havingApprovedItems()
@@ -117,6 +119,7 @@ namespace App\Models\Ddas{
  * @property-read int|null $artshow_bids_count
  * @property-read \App\Models\Ddas\ArtshowPickup|null $artshowPickup
  * @property-read mixed $description_localized
+ * @property-read \App\Models\Ddas\TFactory|null $use_factory
  * @property-read \App\Models\Ddas\ArtshowBid|null $highestBid
  * @property-read mixed $image_url
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ddas\ArtshowBid> $latestBids
@@ -190,6 +193,7 @@ namespace App\Models\Ddas{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $gallery_link_name
+ * @property-read \App\Models\Ddas\TFactory|null $use_factory
  * @property-read mixed $icon_file_url
  * @property-read mixed $info_localized
  * @property-read \App\Models\SigLocation|null $sigLocation
@@ -348,18 +352,21 @@ namespace App\Models{
  * @property string|null $text
  * @property int $chat_id
  * @property int $user_id
+ * @property string|null $read_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $avatar
  * @property-read \App\Models\Chat $chat
- * @property-read string $time
+ * @property-read mixed $time
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message unread()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereChatId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereReadAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)
@@ -417,6 +424,7 @@ namespace App\Models\Post{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Post recent()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereId($value)
@@ -512,7 +520,7 @@ namespace App\Models{
  * @property string $name
  * @property string|null $name_en
  * @property int|null $sig_host_id
- * @property array $languages two letter language code as JSON array
+ * @property array<array-key, mixed> $languages two letter language code as JSON array
  * @property string|null $description
  * @property string|null $description_en
  * @property int $text_confirmed Proofreading status
@@ -520,12 +528,12 @@ namespace App\Models{
  * @property int $duration
  * @property \App\Enums\Approval $approval 0 => Pending, 1 => Approved, 2 => Rejected
  * @property string|null $additional_info
- * @property array $attributes
+ * @property array<array-key, mixed> $attributes
  * @property string|null $requirements
  * @property int $reg_possible
  * @property int $max_regs_per_day
  * @property int $max_group_attendees_count
- * @property array|null $private_group_ids
+ * @property array<array-key, mixed>|null $private_group_ids
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $group_registration_enabled
@@ -538,6 +546,7 @@ namespace App\Models{
  * @property-read mixed $favorite_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigForm> $forms
  * @property-read int|null $forms_count
+ * @property-read \App\Models\TFactory|null $use_factory
  * @property-read mixed $is_private
  * @property-read mixed $name_localized
  * @property-read mixed $name_localized_other
@@ -616,7 +625,7 @@ namespace App\Models{
  * @property int $user_id
  * @property \App\Enums\Approval $approval
  * @property string|null $rejection_reason
- * @property array|null $form_data
+ * @property array<array-key, mixed>|null $form_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\SigForm $sigForm
@@ -644,7 +653,7 @@ namespace App\Models{
  * @property string $slug
  * @property string $name
  * @property string $name_en
- * @property array|null $form_definition
+ * @property array<array-key, mixed>|null $form_definition
  * @property int $form_closed
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -706,6 +715,7 @@ namespace App\Models{
  * @property string|null $color
  * @property-read mixed $avatar
  * @property-read mixed $avatar_thumb
+ * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -741,7 +751,7 @@ namespace App\Models{
  * @property string|null $room
  * @property string|null $roomsize
  * @property string|null $seats
- * @property array|null $render_ids layer id for displaying as interactive SVG or whatever
+ * @property array<array-key, mixed>|null $render_ids layer id for displaying as interactive SVG or whatever
  * @property bool $infodisplay Is there a digital display in front of the door? (Signage)
  * @property bool $essential true = show periodically on the info screens (signage)
  * @property string|null $essential_description
@@ -751,6 +761,7 @@ namespace App\Models{
  * @property-read int|null $dealers_count
  * @property-read mixed $description_localized
  * @property-read mixed $essential_description_localized
+ * @property-read \App\Models\TFactory|null $use_factory
  * @property-read mixed $name_localized
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
@@ -927,6 +938,7 @@ namespace App\Models{
  * @property-read mixed $formatted_length
  * @property-read bool $has_location_changed
  * @property-read bool $has_time_changed
+ * @property-read \App\Models\TFactory|null $use_factory
  * @property-read mixed $is_favorite
  * @property-read TimetableEntry|null $parentEntry
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigReminder> $reminders
@@ -970,9 +982,10 @@ namespace App\Models{
  * @property int $checkedin
  * @property string|null $language
  * @property int|null $telegram_id
- * @property array $groups
+ * @property array<array-key, mixed> $groups
  * @property string|null $avatar
  * @property string|null $avatar_thumb
+ * @property array<array-key, mixed> $notification_channels
  * @property string|null $telegram_user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -988,8 +1001,7 @@ namespace App\Models{
  * @property-read int|null $dealers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserNotificationChannel> $notificationChannels
- * @property-read int|null $notification_channels_count
+ * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
@@ -1006,6 +1018,7 @@ namespace App\Models{
  * @property-read int|null $sig_timeslots_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigTimeslotReminder> $timeslotReminders
  * @property-read int|null $timeslot_reminders_count
+ * @property-read mixed $unread_messages_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
@@ -1019,6 +1032,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNotificationChannels($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRegId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
@@ -1033,22 +1047,10 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
- * @property int $user_id
- * @property string $notification
- * @property string $channel
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereChannel($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereNotification($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel whereUserId($value)
  */
 	class UserNotificationChannel extends \Eloquent {}
 }
@@ -1064,12 +1066,15 @@ namespace App\Models{
  * @property string $background_color
  * @property string|null $registration_system_key
  * @property int $chat_activated
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat> $chats
+ * @property-read int|null $chats_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentInfo> $departmentInfos
  * @property-read int|null $department_infos_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserRolePermission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole chattable()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole query()

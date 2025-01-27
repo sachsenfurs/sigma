@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\DatabaseNotification;
 
-class Notification extends Model
+class Notification extends DatabaseNotification
 {
-    use HasFactory;
+    public function view() {
+        if(is_subclass_of($this->type, \App\Notifications\Notification::class)) {
+            return $this->type::view([...$this->data, 'notification' => $this]);
+        }
 
-    protected $guarded = [];
-
+        return \App\Notifications\Notification::view([...$this->data, 'notification' => $this]);
+    }
 }

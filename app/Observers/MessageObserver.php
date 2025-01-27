@@ -3,52 +3,25 @@
 namespace App\Observers;
 
 use App\Models\Message;
-use App\Notifications\NewChatMessage;
+use App\Notifications\Chat\NewChatMessage;
 
 class MessageObserver
 {
     /**
      * Handle the Message "created" event.
      */
-    public function created(Message $message): void
-    {
-        $toBeNotifiedUsers = $message->chat()->messages()->where('user_id', '!', $message->user_id)->all();
-        $department = $message->chat->department;
-        $sender = $message->user;
+    public function created(Message $message): void {
+        // determine the last one who messaged the user
+        $lastUser = $message->chat->messages()->whereNot('user_id', $message->user_id)->latest()->first()?->user;
+
+        if($lastUser)
+            $toBeNotifiedUsers = [ $lastUser ];
+        else // no one found? notify the whole department!
+            $toBeNotifiedUsers = $message->chat->userRole->users;
+
         foreach ($toBeNotifiedUsers as $user) {
-            $user->notify(new NewChatMessage($department, $sender, $message->chat, $message->text));
+            $user->notify((new NewChatMessage($message)));
         }
     }
 
-    /**
-     * Handle the Message "updated" event.
-     */
-    public function updated(Message $message): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Message "deleted" event.
-     */
-    public function deleted(Message $message): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Message "restored" event.
-     */
-    public function restored(Message $message): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Message "force deleted" event.
-     */
-    public function forceDeleted(Message $message): void
-    {
-        //
-    }
 }

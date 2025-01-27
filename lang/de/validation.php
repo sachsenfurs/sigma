@@ -108,7 +108,7 @@ return [
     ],
     'string'               => ':Attribute muss ausgefüllt sein.',
     'timezone'             => ':Attribute muss eine gültige Zeitzone sein.',
-    'unique'               => ':Attribute ist schon vergeben.',
+    'unique'               => ':Attribute ist bereits vergeben.',
     'uploaded'             => ':Attribute konnte nicht hochgeladen werden.',
     'url'                  => ':Attribute muss eine URL sein.',
 
@@ -172,6 +172,7 @@ return [
         'size'                  => 'Größe',
         'files.*'               => "Datei",
         'value'                 => "Wert",
+        'subject'               => "Betreff",
 
         'charity_percentage' => "Charityanteil",
         'starting_bid' => "Startgebot",

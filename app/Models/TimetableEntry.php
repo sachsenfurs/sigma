@@ -174,7 +174,7 @@ class TimetableEntry extends Model
                 return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
             }
             return false;
-        });
+        })->shouldCache();
     }
 
     public function qrCode(): string {
@@ -209,6 +209,6 @@ class TimetableEntry extends Model
                     return ['#9f3ab6', '#6e2651'];
                 return [ '#2C3D4F' ];
             }
-        );
+        )->shouldCache();
     }
 }

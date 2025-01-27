@@ -2,12 +2,14 @@
 
 namespace App\Notifications\Ddas;
 
-use App\Models\UserNotificationChannel;
+use App\Models\Ddas\ArtshowItem;
+use App\Notifications\Notification;
+use App\Services\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use NotificationChannels\Telegram\TelegramMessage;
 
@@ -17,9 +19,6 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
 
     protected string $itemsString = "";
 
-    /**
-     * @param Collection $artshowItems
-     */
     public function __construct(protected Collection $artshowItems) {
         $this->itemsString = collect($this->artshowItems)
             ->map(fn($i) =>
@@ -35,13 +34,8 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             ->join("\r\n");
     }
 
-    public function getItemString() {
-
-    }
-
-
-    public function via(object $notifiable): array {
-        return UserNotificationChannel::list('artshow_winner', $notifiable->id, ['database', 'mail', 'telegram']);
+    public function via(Model $notifiable): array {
+        return NotificationService::channels($this, $notifiable, ['database', 'mail']);
     }
 
     public function toMail(object $notifiable): MailMessage {
@@ -73,4 +67,14 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             'artshowItems' => collect($this->artshowItems)->pluck("id"),
         ];
     }
+
+
+    public static function view($data) {
+        $artshowItems = ArtshowItem::find($data['artshowItems'] ?? 0);
+
+        return view("notifications.type.artshow-winner-notification", [
+            'artshowItems' => $artshowItems
+        ]);
+    }
+
 }

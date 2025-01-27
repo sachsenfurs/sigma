@@ -14,9 +14,11 @@ use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -27,12 +29,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
     use HasFactory;
     use Notifiable;
 
-    protected $guarded = [
-        'user_role_id',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'groups' => 'array',
+        'notification_channels' => 'array',
     ];
 
 
@@ -44,9 +45,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         'telegram_user_id',
     ];
 
-    protected $with = [
-        'roles'
-    ];
+//    protected $with = [
+//        'roles'
+//    ];
 
     public function roles(): BelongsToMany {
         return $this->belongsToMany(
@@ -68,12 +69,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
                 return true;
         }
         return false;
-    }
-
-
-
-    public function notificationChannels(): HasMany {
-        return $this->hasMany(UserNotificationChannel::class);
     }
 
     public function attendeeEvents(): HasMany {
@@ -135,7 +130,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
     }
 
     public function chats() {
-        return $this->hasMany(Chat::class);
+        return $this->hasMany(Chat::class)->withAggregate("messages", "created_at", "max")->orderBy("messages_max_created_at", "desc");
     }
 
     public function isAdmin(): bool {
@@ -148,5 +143,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function preferredLocale() {
         return $this->language;
+    }
+
+    public function unreadMessagesCount(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->chats()->with("messages")->get()->sum("unread_messages_count")
+        )->shouldCache();
+    }
+
+    public function notifications(): MorphMany {
+        return $this->morphMany(Notification::class, 'notifiable')->latest();
     }
 }

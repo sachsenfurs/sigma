@@ -4,7 +4,9 @@ namespace App\Models\Post;
 
 use App\Models\User;
 use App\Observers\PostObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +26,10 @@ class Post extends Model
     protected $guarded = [];
 
     public static $parseMode = "markdown";
+
+    public function scopeRecent(Builder $query) {
+        $query->where('created_at', '>=', Carbon::now()->subHours(2));
+    }
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
