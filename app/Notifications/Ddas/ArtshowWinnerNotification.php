@@ -70,11 +70,9 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
 
 
     public static function view($data) {
-        $artshowItems = ArtshowItem::find($data['artshowItems'] ?? 0);
+        $data['artshowItems'] = ArtshowItem::find($data['artshowItems'] ?? 0);
 
-        return view("notifications.type.artshow-winner-notification", [
-            'artshowItems' => $artshowItems
-        ]);
+        return view("notifications.type.artshow-winner-notification", $data);
     }
 
 }

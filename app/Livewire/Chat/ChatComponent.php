@@ -24,7 +24,6 @@ class ChatComponent extends Component
 
     public function render() {
         $chats = auth()->user()->chats()->with(["userRole", "messages"])->get();
-        $this->dispatch("scrolldown");
         return view('livewire.chat.chat-component', compact("chats"));
     }
 
@@ -32,7 +31,7 @@ class ChatComponent extends Component
         if($this->currentChat) {
             $this->authorize("view", $this->currentChat);
             $this->validate([
-                'text' => "required|min:2"
+                'text' => "required|min:2|max:4000"
             ]);
             $this->currentChat->messages()->create([
                 'user_id' => auth()->id(),
@@ -48,6 +47,7 @@ class ChatComponent extends Component
         $this->authorize("view", $chat);
         $this->currentChat = $chat;
         $chat->markAsRead();
+        $this->dispatch("scrolldown");
     }
 
     public function newChatModal(): void {
@@ -58,7 +58,7 @@ class ChatComponent extends Component
         $this->authorize("create", Chat::class);
         $validated = $this->validate([
             'department' => Rule::in(UserRole::chattable()->pluck("id")),
-            'subject' => "string|required|min:3",
+            'subject' => "string|required|min:3|max:40",
         ]);
         auth()->user()->chats()->create([
             'user_role_id' => $validated['department'],

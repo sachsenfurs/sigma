@@ -9,3 +9,4 @@
 <p>
     {{ __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)") }}
 </p>
+<a href="{{ route("home") }}" class="stretched-link"></a>

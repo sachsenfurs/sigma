@@ -1,34 +1,39 @@
 <div>
-    <div class="row p-0 mx-md-none mx-1">
-        <div class="col-12 col-md-3 text-center m-0 p-0 border border-secondary rounded-left">
-            <ul class="list-group list-group-flush">
-                @can("create", \App\Models\Chat::class)
-                    <button class="list-group-item list-group-item-action text-primary fs-5 p-3" wire:click="newChatModal()">
-                        <i class="bi bi-plus icon-link"></i> {{ __('New Chat') }}
-                    </button>
-                @endcan
+    <div class="row border border-secondary rounded overflow-hidden m-0" style="height: calc(100vh - 100px)">
+        <ul class="col-2 col-sm-3 col-md-4 text-center p-0 list-group list-group-flush overflow-scroll border-2 bg-dark-subtle" style="height: inherit">
+            @can("create", \App\Models\Chat::class)
+                <button class="list-group-item list-group-item-action text-primary fs-5 p-3" wire:click="newChatModal()">
+                    <i class="bi bi-plus icon-link"></i>
+                    <span class="d-none d-sm-block">
+                        {{ __('New Chat') }}
+                    </span>
+                </button>
+            @endcan
 
-                @forelse($chats AS $chat)
-                    <button @class(["list-group-item list-group-item-action d-flex text-start align-items-baseline", "active" => $chat->id == $currentChat?->id])
-                            wire:click="selectChat({{$chat->id}})"
-                            aria-current="{{ $chat->id == $currentChat?->id ? "true":"false" }}"
-                    >
-                        <div class="me-auto text-break">
-                            <div class="fw-bold">{{ __($chat->userRole->title) }}</div>
+            @forelse($chats AS $chat)
+                <button @class(["list-group-item list-group-item-action d-flex text-start align-items-baseline", "active" => $chat->id == $currentChat?->id])
+                        wire:click="selectChat({{$chat->id}})"
+                        aria-current="{{ $chat->id == $currentChat?->id ? "true":"false" }}">
+                    <div class="me-auto text-break">
+                        <div class="fw-bold d-none d-md-block">{{ __($chat->userRole->title) }}</div>
+                        <span class="d-none d-md-block">
                             {{ $chat->subject }}
-                        </div>
-                        @if($chat->id != $currentChat?->id)
-                            <span class="badge text-bg-primary rounded-pill">{{ $chat->unread_messages_count ?: "" }}</span>
-                        @endif
-                    </button>
-                @empty
-                    <p class="m-2 p-1">{{ __('No chats available') }}</p>
-                @endforelse
-            </ul>
-        </div>
+                        </span>
+                        <span class="d-md-none">
+                            {{ \Illuminate\Support\Str::limit($chat->subject, 10) }}
+                        </span>
+                    </div>
+                    @if($chat->id != $currentChat?->id)
+                        <span class="badge text-bg-primary rounded-pill">{{ $chat->unread_messages_count ?: "" }}</span>
+                    @endif
+                </button>
+            @empty
+                <p class="m-2 p-1">{{ __('No chats available') }}</p>
+            @endforelse
+        </ul>
 
-        <div class="col-12 col-md-9 border border-secondary rounded-right px-0">
-            <div class="p-1 pt-3 overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="height: 60vh;" >
+        <div class="col d-flex flex-column p-0 border-start border-2" style="height: inherit; ">
+            <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%">
                 @php($newMessage=false)
                 @forelse ($currentChat?->messages ?? [] as $message)
                     @if(!$message->read_at AND $message->user_id != auth()->id() AND !$newMessage)
@@ -68,12 +73,14 @@
                 @endforelse
             </div>
             @if($currentChat)
-                <div class="d-flex flex-nowrap p-2">
-                    <div class="col">
-                        <x-form.livewire-input type="textarea" rows=5 class="small" wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" name="text" />
+                <div class="d-flex flex-nowrap flex-grow m-0" style="height: inherit">
+                    <div class="col d-flex" style="flex-direction: column">
+                        <x-form.livewire-input :placeholder="__('Your Message')" type="textarea"
+                                               class="small flex-grow-1 rounded-0 border-0 border-top" style="resize: none"
+                                               wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" name="text" />
                     </div>
                     <div class="col-auto d-grid">
-                        <button class="btn btn-primary" wire:click="submitMessage" wire:loading.class="disabled" wire:target="submitMessage">
+                        <button class="btn btn-primary rounded-0" wire:click="submitMessage" wire:loading.class="disabled" wire:target="submitMessage">
                             <span wire:loading.remove wire:target="submitMessage">
                                 <i class="bi bi-send icon-link"></i>
                                 {{ __('Send') }}
@@ -102,7 +109,7 @@
                 <x-form.input-error name="department" />
             </div>
             <div class="col-12">
-                <x-form.livewire-input name="subject" :label="__('Subject')" required></x-form.livewire-input>
+                <x-form.livewire-input name="subject" maxlength="40" :label="__('Subject')" required></x-form.livewire-input>
             </div>
         </div>
     </x-modal.livewire-modal>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('subject')->default('');
+            $table->string('subject', 40)->default('');
             $table->foreignId('user_role_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

@@ -24,15 +24,16 @@
                     <div class="card my-3 rounded-4">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-1 col-md-2 d-flex align-items-center justify-content-center fs-1">
+                                <div class="col-auto d-flex align-items-center justify-content-center fs-1">
                                     <i class="bi bi-bell"></i>
                                 </div>
-                                <div class="col-11 col-md-10">
+                                <div class="col">
                                     {{ $notification->view() }}
+                                    <div class="col-12 text-end text-muted small">
+                                        {{ $notification->created_at->diffForHumans() }}
+                                    </div>
                                 </div>
-                                <div class="col-12 text-end text-muted small">
-                                    {{ $notification->created_at->diffForHumans() }}
-                                </div>
+
                             </div>
                         </div>
                     </div>
