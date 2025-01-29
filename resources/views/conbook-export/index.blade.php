@@ -19,7 +19,7 @@
                         {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                         |
                         {{ $entry->sigLocation->name }}
-                        @if(!$entry->sigEvent->primaryHost->hide)
+                        @if(!$entry->sigEvent->primaryHost?->hide)
                             | {{ Str::plural("Host", $entry->sigEvent->publicHosts->count()) }}:
                             {{ $entry->sigEvent->publicHosts->pluck("name")->join(", ") }}
                         @endif

@@ -7,14 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\SigLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SigLocationController extends Controller
 {
     public function index() {
         $locations = [];
         if(Gate::allows("viewAny", SigLocation::class))
-            $locations = SigLocation::with("sigEvents")
-                ->whereHas("timetableEntries", fn(Builder $query) => $query->where("hide", false))
+            $locations = SigLocation::with(["sigEvents" => fn($query) => $query->public()])
+                ->used()
                 ->orderBy("name")
                 ->get();
 
@@ -24,12 +25,15 @@ class SigLocationController extends Controller
     public function show(SigLocation $location) {
         $this->authorize("view", $location);
 
-        $sigEvents = $location
-            ->sigEvents()
-            ->public()
-            ->with("timetableEntries")
-            ->with("sigHosts")
-            ->get();
+        $sigEvents = Cache::remember("sigLocationShow{$location->id}", 120, function() use ($location) {
+            return $location
+                ->sigEvents()
+                ->public()
+                ->with("timetableEntries")
+                ->with("sigHosts")
+                ->get();
+        });
+
         return view("locations.show", [
             'location' => $location,
             'sigEvents' => $sigEvents,

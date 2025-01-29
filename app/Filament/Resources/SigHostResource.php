@@ -92,7 +92,7 @@ class SigHostResource extends Resource
             Tables\Columns\TextColumn::make('publicSigEventCount')
                 ->label('Event count')
                 ->translateLabel()
-                ->getStateUsing(fn (SigHost $record) => $record->getPublicSigEventCount()),
+                ->getStateUsing(fn (SigHost $record) => $record->public_sig_event_count),
             Tables\Columns\IconColumn::make('hide')
                 ->label('Show Name on Schedule')
                 ->translateLabel()

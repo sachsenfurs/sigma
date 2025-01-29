@@ -7,7 +7,7 @@
 
             {{-- Rooms --}}
             @slot("Rooms")
-                @forelse($locations->filter(fn($l) => $l->getPublicSigEventCount() > 0 AND !$l->essential) AS $location)
+                @forelse($locations->filter(fn($l) => !$l->essential) AS $location)
                     <x-list-host-location
                         :instance="$location"
                         :link="route('locations.show', $location)"

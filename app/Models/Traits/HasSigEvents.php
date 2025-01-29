@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\SigEvent;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 
@@ -20,14 +21,14 @@ trait HasSigEvents {
         ");
     }
 
-    public function getPublicSigEventCount(): int {
-        return Cache::remember('getPublicSigEventCount'.static::class.$this->id, 120, function() {
-            return $this->sigEvents
-                 ->filter(function($sigEvent) {
-                     return !$sigEvent->isInfoEvent();
-                 })
-                 ->count();
-        });
+    public function publicSigEventCount(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigEvents
+                ->filter(function($sigEvent) {
+                    return !$sigEvent->isInfoEvent();
+                })
+                ->count()
+        )->shouldCache();
     }
 
 }
