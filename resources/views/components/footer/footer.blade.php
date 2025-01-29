@@ -2,7 +2,6 @@
     <p class="col mb-0 text-body-secondary text-nowrap p-0 px-2">
         <span style="cursor: pointer; font-size:0.75em" data-bs-toggle="modal" data-bs-target="#creditsModal">&Sigma; - Credits</span>
     </p>
-
     @cache('footer_' . app()->currentLocale())
     @foreach(\App\Models\Info\Social::footerText()->get() AS $social)
         <a href="{{ $social->link_localized }}" class="col text-center text-body text-nowrap text-muted text-decoration-none p-1" style="font-size: 0.9em">
@@ -19,3 +18,4 @@
     </ul>
     @endcache
 </footer>
+<x-footer.credits-modal />

@@ -236,11 +236,11 @@
             </div>
             <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-grid">
                 <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
-                    <div class="container-fluid fs-5 text-wrap flex-nowrap">
+                    <div class="container-fluid text-wrap flex-nowrap">
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
                             <img src="/images/logo.png" alt="{{ config('app.name') }}">
                         </a>
-                        <span class="px-2 text-break">
+                        <span class="px-2 text-break text-center fs-5 d-none d-md-block">
                             @yield('title', __('Home'))
                         </span>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -277,7 +277,6 @@
                 </main>
                 <div class="container align-content-end">
                     <x-footer.footer/>
-                    <x-footer.credits-modal />
                 </div>
             </div>
         </div>
