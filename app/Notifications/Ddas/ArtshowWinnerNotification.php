@@ -35,7 +35,7 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
     }
 
     public function via(Model $notifiable): array {
-        return NotificationService::channels($this, $notifiable, ['database', 'mail']);
+        return NotificationService::channels($this, $notifiable, ['database', 'mail', 'telegram']);
     }
 
     public function toMail(object $notifiable): MailMessage {

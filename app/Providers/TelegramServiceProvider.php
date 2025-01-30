@@ -4,16 +4,7 @@ namespace App\Providers;
 
 use App\Helper\Telegram\LoginWidget;
 use App\Settings\AppSettings;
-use Closure;
-use GuzzleHttp\Client;
-use Illuminate\Notifications\ChannelManager;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\ServiceProvider;
-use NotificationChannels\Telegram\Telegram;
-use NotificationChannels\Telegram\TelegramChannel;
-use Spatie\LaravelSettings\Settings;
 
 class TelegramServiceProvider extends ServiceProvider
 {

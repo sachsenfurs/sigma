@@ -275,7 +275,7 @@
                     @endif
                     @yield('content')
                 </main>
-                <div class="container align-content-end">
+                <div class="container-lg align-content-end">
                     <x-footer.footer/>
                 </div>
             </div>

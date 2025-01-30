@@ -23,21 +23,19 @@
                             {{ \Illuminate\Support\Str::limit($chat->subject, 10) }}
                         </span>
                     </div>
-                    @if($chat->id != $currentChat?->id)
-                        <span class="badge text-bg-primary rounded-pill">{{ $chat->unread_messages_count ?: "" }}</span>
-                    @endif
+                    <span @class(["badge rounded-pill",  $chat->id == $currentChat?->id  ? "text-bg-danger" : "text-bg-primary"])>{{ $chat->unread_messages_count ?: "" }}</span>
                 </button>
             @empty
                 <p class="m-2 p-1">{{ __('No chats available') }}</p>
             @endforelse
         </ul>
 
-        <div class="col d-flex flex-column p-0 border-start border-2" style="height: inherit; ">
-            <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%">
+        <div class="col d-flex flex-column p-0 border-start border-2" style="height: inherit;"  @if($currentChat?->unread_messages_count) wire:click="markAsRead" @endif>
+            <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%" wire:poll.10s>
                 @php($newMessage=false)
-                @forelse ($currentChat?->messages ?? [] as $message)
-                    @if(!$message->read_at AND $message->user_id != auth()->id() AND !$newMessage)
-                        <div class="col-12 text-center">{{ __("New Messages") }}</div>
+                @forelse ($currentChat?->messages->load("user") ?? [] as $message)
+                    @if((!$message->read_at OR $message->read_at->diffInMinutes() < 3) AND $message->user_id != auth()->id() AND !$newMessage)
+                        <div class="col-12 text-center" x-init="$dispatch('scrolldown')">{{ __("New Messages") }}</div>
                         <hr>
                         @php($newMessage=true)
                     @endif
@@ -100,9 +98,9 @@
         <div class="row g-3">
             <div class="col-12">
                 <label for="department" class="form-label">{{ __("Department") }}</label>
-                <select class="form-select" name="department" wire:model="department">
+                <select class="form-select" id="department" name="department" wire:model="department">
                     <option value="0" selected>{{ __('-- Select Department --') }}</option>
-                    @foreach (\App\Models\UserRole::chattable()->get() as $dep)
+                    @foreach ($departments as $dep)
                         <option value="{{ $dep->id }}">{{ $dep->title }}</option>
                     @endforeach
                 </select>

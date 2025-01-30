@@ -5,6 +5,7 @@ namespace App\Livewire\Chat;
 use App\Livewire\Traits\HasModal;
 use App\Models\Chat;
 use App\Models\UserRole;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
@@ -14,16 +15,20 @@ class ChatComponent extends Component
 
     public $text;
 
-    public ?Chat $currentChat;
+    public $currentChat = null;
 
     /**
      * vars for createNewChat modal
      */
-    public ?string $department;
+    public $departments;
     public ?string $subject;
 
+    public function mount(): void {
+        $this->departments = Cache::remember("chattableUserRoles", 300, fn() => UserRole::chattable()->get());
+    }
+
     public function render() {
-        $chats = auth()->user()->chats()->with(["userRole", "messages"])->get();
+        $chats = auth()->user()->chats()->get();
         return view('livewire.chat.chat-component', compact("chats"));
     }
 
@@ -46,8 +51,12 @@ class ChatComponent extends Component
         $chat = auth()->user()->chats()->with(["messages", "messages.user"])->find($chatId);
         $this->authorize("view", $chat);
         $this->currentChat = $chat;
-        $chat->markAsRead();
+        $this->markAsRead();
         $this->dispatch("scrolldown");
+    }
+
+    public function markAsRead(): void {
+        $this->currentChat?->markAsRead();
     }
 
     public function newChatModal(): void {
@@ -57,7 +66,7 @@ class ChatComponent extends Component
     public function createNewChat() {
         $this->authorize("create", Chat::class);
         $validated = $this->validate([
-            'department' => Rule::in(UserRole::chattable()->pluck("id")),
+            'department' => ['required', Rule::in(UserRole::chattable()->pluck("id"))],
             'subject' => "string|required|min:3|max:40",
         ]);
         auth()->user()->chats()->create([

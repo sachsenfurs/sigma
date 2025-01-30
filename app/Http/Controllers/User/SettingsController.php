@@ -11,7 +11,7 @@ class SettingsController extends Controller
 
     public function edit() {
         $notificationType = [];
-        foreach(NotificationService::$UserNotifications AS $notification => $name) {
+        foreach(NotificationService::userNotifications() AS $notification => $name) {
             $notificationType[$name] = auth()->user()->notification_channels[$name] ?? [];
         }
 
@@ -19,7 +19,7 @@ class SettingsController extends Controller
     }
 
     public function update(Request $request) {
-        $notifications = collect(NotificationService::$UserNotifications)->mapWithKeys(function($name) {
+        $notifications = collect(NotificationService::userNotifications())->mapWithKeys(function($name) {
             return [$name => 'array|nullable'];
         });
 

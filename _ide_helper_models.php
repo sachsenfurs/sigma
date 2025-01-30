@@ -352,7 +352,7 @@ namespace App\Models{
  * @property string|null $text
  * @property int $chat_id
  * @property int $user_id
- * @property string|null $read_at
+ * @property \Illuminate\Support\Carbon|null $read_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $avatar
@@ -378,17 +378,22 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
+ * @property string $id
  * @property string $type
  * @property string $notifiable_type
  * @property int $notifiable_id
- * @property string $data
- * @property string|null $read_at
+ * @property array<array-key, mixed> $data
+ * @property \Illuminate\Support\Carbon|null $read_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model $notifiable
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection<int, static> all($columns = ['*'])
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection<int, static> get($columns = ['*'])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification read()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification unread()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereData($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereId($value)
@@ -716,6 +721,7 @@ namespace App\Models{
  * @property-read mixed $avatar
  * @property-read mixed $avatar_thumb
  * @property-read \App\Models\TFactory|null $use_factory
+ * @property-read mixed $public_sig_event_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -763,6 +769,7 @@ namespace App\Models{
  * @property-read mixed $essential_description_localized
  * @property-read \App\Models\TFactory|null $use_factory
  * @property-read mixed $name_localized
+ * @property-read mixed $public_sig_event_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigEvent> $sigEvents
  * @property-read int|null $sig_events_count
  * @property-read mixed $slug
@@ -1002,7 +1009,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SigFavorite> $favorites
  * @property-read int|null $favorites_count
  * @property-read \App\Models\TFactory|null $use_factory
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \App\Models\Notification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post\Post> $posts
  * @property-read int|null $posts_count
@@ -1041,18 +1048,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent implements \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar, \Illuminate\Contracts\Translation\HasLocalePreference {}
-}
-
-namespace App\Models{
-/**
- * 
- *
- * @property-read \App\Models\User|null $user
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotificationChannel query()
- */
-	class UserNotificationChannel extends \Eloquent {}
 }
 
 namespace App\Models{

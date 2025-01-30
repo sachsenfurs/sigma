@@ -108,6 +108,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         return $this->hasMany(Post::class);
     }
 
+    public function notifications(): MorphMany {
+        return $this->morphMany(Notification::class, 'notifiable')->latest();
+    }
+
+    public function getMorphClass(): string {
+        return "user";
+    }
+
     public function canAccessPanel(Panel $panel): bool {
         // needs at least 1 permission
         return $this->permissions()->count() > 0;
@@ -149,9 +157,5 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         return Attribute::make(
             get: fn() => $this->chats()->with("messages")->get()->sum("unread_messages_count")
         )->shouldCache();
-    }
-
-    public function notifications(): MorphMany {
-        return $this->morphMany(Notification::class, 'notifiable')->latest();
     }
 }

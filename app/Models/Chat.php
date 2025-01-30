@@ -30,7 +30,7 @@ class Chat extends Model
     }
 
     public function markAsRead() {
-        $this->messages()->update([
+        $this->messages()->unread()->update([
             'read_at' => now(),
         ]);
     }
