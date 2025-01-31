@@ -142,6 +142,8 @@ class AppSettingsPage extends SettingsPage
                         Forms\Components\TextInput::make("lassie_api_key")
                             ->label("LASSIE API Key")
                             ->string()
+                            ->password()
+                            ->revealable()
                             ->helperText(__("For retrieving Lost+Found DB")),
                         Forms\Components\TextInput::make("lassie_con_id")
                             ->label("LASSIE con_id")
@@ -172,6 +174,8 @@ class AppSettingsPage extends SettingsPage
                             ->string(),
                         Forms\Components\TextInput::make("telegram_bot_token")
                             ->label("Telegram Bot Token")
+                            ->password()
+                            ->revealable()
                             ->nullable()
                             ->string(),
                     ]),
@@ -180,6 +184,8 @@ class AppSettingsPage extends SettingsPage
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make("deepl_api_key")
+                            ->password()
+                            ->revealable()
                             ->label("DeepL API Key")
                             ->nullable()
                             ->string(),
