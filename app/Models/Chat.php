@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ChatStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Chat extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+        'status' => ChatStatus::class,
+    ];
 
     public function messages(): HasMany {
         return $this->hasMany(Message::class);
@@ -26,11 +31,11 @@ class Chat extends Model
     public function unreadMessagesCount(): Attribute {
         return Attribute::make(
             get: fn() => $this->messages->filter(fn($m) => $m->user_id != $this->user_id AND !$m->read_at)->count()
-        );
+        )->shouldCache();
     }
 
-    public function markAsRead() {
-        $this->messages()->unread()->update([
+    public function markAsRead(?User $user=null): void {
+        $this->messages()->to($user)->unread()->update([
             'read_at' => now(),
         ]);
     }

@@ -1,14 +1,16 @@
 <div>
     <div class="row border border-secondary rounded overflow-hidden m-0" style="height: calc(100vh - 100px)">
         <ul class="col-2 col-sm-3 col-md-4 text-center p-0 list-group list-group-flush overflow-scroll border-2 bg-dark-subtle" style="height: inherit">
-            @can("create", \App\Models\Chat::class)
-                <button class="list-group-item list-group-item-action text-primary fs-5 p-3" wire:click="newChatModal()">
-                    <i class="bi bi-plus icon-link"></i>
-                    <span class="d-none d-sm-block">
-                        {{ __('New Chat') }}
-                    </span>
-                </button>
-            @endcan
+            @if(count($departments) > 0)
+                @can("create", \App\Models\Chat::class)
+                    <button class="list-group-item list-group-item-action text-primary fs-5 p-3" wire:click="newChatModal()">
+                        <i class="bi bi-plus icon-link"></i>
+                        <span class="d-none d-sm-block">
+                            {{ __('New Chat') }}
+                        </span>
+                    </button>
+                @endcan
+            @endif
 
             @forelse($chats AS $chat)
                 <button @class(["list-group-item list-group-item-action d-flex text-start align-items-baseline", "active" => $chat->id == $currentChat?->id])
@@ -54,20 +56,25 @@
                             @endif
                         </div>
                         <div class="col-12 order-4">
-                            <p class="text-muted ml-auto small">
+                            <p class="text-muted ml-auto small" title="{{ __("Sent:") . " ". $message->created_at->toDateTimeString() }}">
                                 @if($message->user_id != auth()->id())
                                     {{ $message->user->name }} -
                                 @endif
                                 {{ $message->created_at->diffForHumans() }}
+                                @if($message->user_id == auth()->id())
+                                    <i @class(["bi", $message->read_at ?  "bi-check2-all text-info" : "bi-check2"])></i>
+                                @endif
                             </p>
                         </div>
                     </div>
                 @empty
-                    @if(!$currentChat)
-                        <div class="d-flex justify-content-center mt-2">
+                    <div class="d-flex justify-content-center align-items-center h-100 p-3">
+                        @if($currentChat)
+                            <i class="text-muted">{{ __('Chat opened. Please enter your message below.') }}</i>
+                        @else
                             <p>{{ __('Please select a chat') }}</p>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 @endforelse
             </div>
             @if($currentChat)
@@ -98,7 +105,7 @@
         <div class="row g-3">
             <div class="col-12">
                 <label for="department" class="form-label">{{ __("Department") }}</label>
-                <select class="form-select" id="department" name="department" wire:model="department">
+                <select @class(['form-select', 'border-danger' => $errors->has("department")]) id="department" name="department" wire:model="department">
                     <option value="0" selected>{{ __('-- Select Department --') }}</option>
                     @foreach ($departments as $dep)
                         <option value="{{ $dep->id }}">{{ $dep->title }}</option>

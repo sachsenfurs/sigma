@@ -16,19 +16,21 @@ class ChatComponent extends Component
     public $text;
 
     public $currentChat = null;
+    public iterable $departments;
 
     /**
      * vars for createNewChat modal
      */
-    public $departments;
+    public ?int $department;
     public ?string $subject;
 
-    public function mount(): void {
-        $this->departments = Cache::remember("chattableUserRoles", 300, fn() => UserRole::chattable()->get());
+    public function boot(): void {
+
     }
 
     public function render() {
-        $chats = auth()->user()->chats()->get();
+        $this->departments = Cache::remember("chattableUserRoles", 300, fn() => UserRole::chattable()->get());
+        $chats = auth()->user()->chats()->with(["messages", "userRole"])->get();
         return view('livewire.chat.chat-component', compact("chats"));
     }
 
@@ -69,11 +71,12 @@ class ChatComponent extends Component
             'department' => ['required', Rule::in(UserRole::chattable()->pluck("id"))],
             'subject' => "string|required|min:3|max:40",
         ]);
-        auth()->user()->chats()->create([
+        $newChat = auth()->user()->chats()->create([
             'user_role_id' => $validated['department'],
             'subject' => $validated['subject'],
         ]);
         $this->reset();
         $this->hideModal();
+        $this->selectChat($newChat->id);
     }
 }

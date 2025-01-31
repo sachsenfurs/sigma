@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Observers\UserRoleObserver;
+use Filament\Support\Colors\Color;
+use Filament\Support\Contracts\HasColor;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ObservedBy(UserRoleObserver::class)]
-class UserRole extends Model
+class UserRole extends Model implements HasColor
 {
     protected $guarded = [];
     public $timestamps = false;
@@ -39,5 +41,9 @@ class UserRole extends Model
 
     public function scopeChattable(Builder $query) {
         $query->where("chat_activated", true);
+    }
+
+    public function getColor(): string|array|null {
+        return Color::hex($this->background_color);
     }
 }

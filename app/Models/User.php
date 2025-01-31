@@ -137,8 +137,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         return $this->hasMany(ArtshowBid::class);
     }
 
-    public function chats() {
-        return $this->hasMany(Chat::class)->withAggregate("messages", "created_at", "max")->orderBy("messages_max_created_at", "desc");
+    public function chats(): HasMany {
+        return $this->hasMany(Chat::class)
+                    ->withAggregate("messages", "created_at", "max")
+                    ->orderByRaw("CASE WHEN messages_max_created_at THEN messages_max_created_at ELSE created_at END DESC");
     }
 
     public function isAdmin(): bool {

@@ -38,6 +38,15 @@ class Message extends Model
         );
     }
 
+    public function scopeTo(Builder $query, User $user = null) {
+        if($user == null)
+            $user = auth()->user();
+        $query->where("user_id","!=", $user->id)
+              ->whereHas("chat", function(Builder $query) use ($user) {
+            $query->where("user_id", $user?->id);
+        });
+    }
+
     public function scopeUnread(Builder $query) {
         $query->whereNull("read_at");
     }
