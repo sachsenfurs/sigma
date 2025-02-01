@@ -9,6 +9,8 @@ use Filament\Actions;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ManagePosts extends ManageRecords
 {
@@ -48,13 +50,20 @@ class ManagePosts extends ManageRecords
                         $action->halt();
                     }
                 })
+                ->mutateFormDataUsing(function (array $data): array {
+                    // resize image
+                   if(isset($data['image'])) {
+                       $path    = Storage::disk("public")->path($data['image']);
+                       $image   = Image::read($path);
+                       if($image->height() > 800 OR $image->width() > 800) {
+                           $image->scaleDown(800);
+                           $image->save();
+                       }
+                   }
+                    return $data;
+                })
             ,
         ];
     }
-
-
-//    public function validate($rules = null, $messages = [], $attributes = []): array {
-//        dd($attributes);
-//    }
 
 }

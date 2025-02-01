@@ -76,6 +76,7 @@ class TimetableEntryResource extends Resource
     public static function table(Table $table): Table {
 
         return $table
+            ->modifyQueryUsing(fn($query) => $query->with(["sigEvent.sigHosts.user"]))
             ->columns(static::getTableColumns())
             ->defaultPaginationPageOption('all')
             ->defaultGroup(

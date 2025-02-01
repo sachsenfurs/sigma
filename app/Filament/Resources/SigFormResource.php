@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -41,7 +42,7 @@ class SigFormResource extends Resource
         if(!Route::is("filament.*"))
             return null;
 
-        return SigFilledForm::where('approval', Approval::PENDING)->count() ?: null;
+        return Cache::remember("sigform-unapproved-badge", 10, fn() => SigFilledForm::where('approval', Approval::PENDING)->count()) ?: null;
     }
 
     public static function form(Form $form): Form {

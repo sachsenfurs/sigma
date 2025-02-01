@@ -22,6 +22,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -55,7 +56,7 @@ class ArtshowItemResource extends Resource
         if(!Route::is("filament.*") AND !Route::is("livewire.*"))
             return null;
 
-        return ArtshowItem::whereApproval(Approval::PENDING)->count() ?: null;
+        return Cache::remember("artshow-unapproved-badge", 10, fn() => ArtshowItem::whereApproval(Approval::PENDING)->count()) ?: null;
     }
 
     public static function form(Form $form): Form {

@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class SigHost extends Model
 {
     use HasFactory,
         HasSigEvents,
-        HasTimetableEntries,
         NameIdAsSlug;
 
     protected $guarded = [];
@@ -31,10 +32,10 @@ class SigHost extends Model
         'avatar_thumb',
     ];
 
-    protected $with = [
-        'sigEvents',
-        'user',
-    ];
+//    protected $with = [
+//        'sigEvents',
+//        'user',
+//    ];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, "reg_id", "reg_id");
@@ -42,6 +43,11 @@ class SigHost extends Model
 
     public function sigEvents(): BelongsToMany {
         return $this->belongsToMany(SigEvent::class, 'sig_host_sig_events', 'sig_host_id', 'sig_event_id')->withTimestamps();
+    }
+
+    public function timetableEntries(): HasManyThrough {
+        return $this->hasManyThrough(TimetableEntry::class, SigEvent::class, "id", "sig_event_id")
+                ->orderBy("start");
     }
 
     public function scopePublic($query) {
@@ -56,13 +62,13 @@ class SigHost extends Model
     public function avatar() : Attribute {
         return Attribute::make(
             get: fn() => ($this->user?->avatar ?? "")
-        );
+        )->shouldCache();
     }
 
     public function avatarThumb() : Attribute {
         return Attribute::make(
             get: fn() => ($this->user?->avatar_thumb ?? "")
-        );
+        )->shouldCache();
     }
 
 }

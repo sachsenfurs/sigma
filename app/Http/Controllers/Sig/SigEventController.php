@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Settings\AppSettings;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -20,7 +21,12 @@ class SigEventController extends Controller
     }
 
     public function index() {
-        return view("sigs.index");
+        $sigHosts = auth()->user()->sigHosts()->with([
+            "sigEvents.timetableEntries",
+            "sigEvents.timetableEntries.sigLocation" ,
+            "sigEvents" => fn($query) => $query->withCount("favorites"),
+        ])->get();
+        return view("sigs.index", compact("sigHosts"));
     }
 
 

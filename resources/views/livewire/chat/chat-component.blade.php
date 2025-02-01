@@ -21,7 +21,7 @@
                         <span class="d-none d-md-block">
                             {{ $chat->subject }}
                         </span>
-                        <span class="d-md-none">
+                        <span class="d-md-none small">
                             {{ \Illuminate\Support\Str::limit($chat->subject, 10) }}
                         </span>
                     </div>
@@ -33,7 +33,7 @@
         </ul>
 
         <div class="col d-flex flex-column p-0 border-start border-2" style="height: inherit;"  @if($currentChat?->unread_messages_count) wire:click="markAsRead" @endif>
-            <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%" wire:poll.10s>
+            <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%; word-break: break-all;" wire:poll.10s>
                 @php($newMessage=false)
                 @forelse ($currentChat?->messages->load("user") ?? [] as $message)
                     @if((!$message->read_at OR $message->read_at->diffInMinutes() < 3) AND $message->user_id != auth()->id() AND !$newMessage)
@@ -80,9 +80,9 @@
             @if($currentChat)
                 <div class="d-flex flex-nowrap flex-grow m-0" style="height: inherit">
                     <div class="col d-flex" style="flex-direction: column">
-                        <x-form.livewire-input :placeholder="__('Your Message')" type="textarea"
+                        <x-form.livewire-input :placeholder="__('Your Message')" type="textarea" name="text" maxlength="4000"
                                                class="small flex-grow-1 rounded-0 border-0 border-top" style="resize: none"
-                                               wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" name="text" />
+                                               wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" wire:keydown.ctrl.enter="submitMessage" />
                     </div>
                     <div class="col-auto d-grid">
                         <button class="btn btn-primary rounded-0" wire:click="submitMessage" wire:loading.class="disabled" wire:target="submitMessage">

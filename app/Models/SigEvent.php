@@ -34,9 +34,9 @@ class SigEvent extends Model
         'description_localized',
     ];
 
-    protected $with = [
-        'timetableEntries',
-    ];
+//    protected $with = [
+//        'timetableEntries',
+//    ];
 
 
     protected static function booted(): void {
@@ -58,6 +58,13 @@ class SigEvent extends Model
         $query->withCount("timetableEntries")->having("timetable_entries_count", 0);
     }
 
+    public function scopePublic($query) {
+        return $query->whereHas("timetableEntries", function ($query) {
+            $query
+                ->where("hide", false)
+            ;
+        });
+    }
     public function isPrivate(): Attribute {
         return Attribute::make(
             get: fn() => count($this->private_group_ids ?? []) > 0
@@ -81,28 +88,42 @@ class SigEvent extends Model
         return $this->belongsToMany(SigHost::class, 'sig_host_sig_events')->withTimestamps();
     }
 
+    public function favorites(): HasManyThrough {
+        return $this->hasManyThrough(SigFavorite::class, TimetableEntry::class);
+    }
+
+    public function sigTags(): BelongsToMany {
+        return $this->belongsToMany(SigTag::class);
+    }
+
+    public function forms(): BelongsToMany {
+        return $this->belongsToMany(SigForm::class);
+    }
+
+    public function sigTimeslots(): HasManyThrough {
+        return $this->hasManyThrough(SigTimeslot::class, TimetableEntry::class);
+    }
+
+    public function departmentInfos(): HasMany {
+        return $this->hasMany(DepartmentInfo::class);
+    }
+
     public function primaryHost(): Attribute {
         return Attribute::make(
             get: fn() => $this->sigHosts->first()
-        );
+        )->shouldCache();
     }
 
     public function publicHosts(): Attribute {
         return Attribute::make(
             get: fn() => $this->sigHosts->filter(fn($host) => !$host->hide)
-        );
+        )->shouldCache();
     }
 
     public function timetableCount(): Attribute {
         return Attribute::make(
             get: fn() => $this->timetableEntries->count()
-        );
-    }
-
-    public function favoriteCount(): Attribute {
-        return Attribute::make(
-            get: fn() => $this->timetableEntries->pluck("favorites")->flatten()->count()
-        );
+        )->shouldCache();
     }
 
     public function nameLocalized(): Attribute {
@@ -150,27 +171,4 @@ class SigEvent extends Model
         return $this->timetableEntries->count() > 0 AND $this->timetableEntries->filter(fn($e) => $e->duration > 0)->count() == 0;
     }
 
-    public function sigTags(): BelongsToMany {
-        return $this->belongsToMany(SigTag::class);
-    }
-
-    public function scopePublic($query) {
-        return $query->whereHas("timetableEntries", function ($query) {
-            $query
-                ->where("hide", false)
-            ;
-        });
-    }
-
-    public function forms(): BelongsToMany {
-        return $this->belongsToMany(SigForm::class);
-    }
-
-    public function sigTimeslots(): HasManyThrough {
-        return $this->hasManyThrough(SigTimeslot::class, TimetableEntry::class);
-    }
-
-    public function departmentInfos(): HasMany {
-        return $this->hasMany(DepartmentInfo::class);
-    }
 }

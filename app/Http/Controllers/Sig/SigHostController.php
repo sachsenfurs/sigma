@@ -14,7 +14,9 @@ class SigHostController extends Controller
     public function index() {
         $hosts = [];
         if(Gate::allows("viewAny", SigHost::class))
-            $hosts = SigHost::public()->orderBy("name")->get();
+            $hosts = SigHost::with(["sigEvents" => fn($query) => $query->public(), "user", "sigEvents.timetableEntries"])
+                            ->public()
+                            ->orderBy("name")->get();
 
         return view("hosts.index", compact("hosts"));
     }

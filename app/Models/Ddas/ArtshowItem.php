@@ -63,7 +63,7 @@ class ArtshowItem extends Model
     public function approved(): Attribute {
         return Attribute::make(
             get: fn() => $this->approval == Approval::APPROVED
-        );
+        )->shouldCache();
     }
 
     public function descriptionLocalized(): Attribute {

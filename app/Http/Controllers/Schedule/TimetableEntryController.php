@@ -26,12 +26,15 @@ class TimetableEntryController extends Controller
             $entries = TimetableEntry::withoutGlobalScope('public');
         }
 
-        $entries = $entries->with("sigLocation")
+        $entries = $entries
+             ->with("sigLocation")
              ->with("sigEvent", function($query) {
-                 return $query->with("sigHosts")
+                 return $query->with(["sigHosts", "sigHosts.user"])
                  ->with("sigTags");
              })
-             ->with("favorites")
+             ->with("favorites", function ($query) {
+                 return $query->where("user_id", auth()->id());
+             })
              ->orderBy("start")
              ->get();
 
@@ -40,6 +43,12 @@ class TimetableEntryController extends Controller
 
     public function show(TimetableEntry $entry) {
         $this->authorize("view", $entry);
+
+        $entry->load([
+            "sigEvent.sigHosts",
+            "sigEvent.forms",
+            "sigEvent.timetableEntries.sigLocation",
+        ]);
 
         return view("schedule.show", [
             'entry' => $entry,

@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        @foreach(auth()->user()->sigHosts AS $host)
+        @foreach($sigHosts AS $host)
             <h5 class="py-2 fw-light pt-4">{{ __("Registered SIGs for :name", ['name' => $host->name]) }}</h5>
             <section class="accordion pb-4" id="sigList">
                 @foreach($host->sigEvents AS $sig)
@@ -38,8 +38,8 @@
                                         </h5>
                                         <x-flag :language="$sig->languages"/>
                                         <span class="badge fs-6 bg-dark-subtle text-secondary">{{ $sig->duration/60 }} h</span>
-                                        @if($sig->favorite_count > 0)
-                                            <span class="badge fs-6 bg-dark-subtle text-secondary"><i class="bi bi-heart-fill"></i> {{ $sig->favorite_count }}</span>
+                                        @if($sig->favorites_count > 0)
+                                            <span class="badge fs-6 bg-dark-subtle text-secondary"><i class="bi bi-heart-fill"></i> {{ $sig->favorites_count }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -116,44 +116,11 @@
                                         </div>
                                     @endforelse
                                 </div>
-
-
                             </div>
                         </div>
                     </article>
                 @endforeach
             </section>
-
-
-
-{{--            <div class="row g-3 py-3">--}}
-{{--                @foreach($host->sigEvents AS $sig)--}}
-
-{{--                    <div class="card">--}}
-{{--                        <div class="card-body">--}}
-{{--                            <div class="row">--}}
-{{--                                <div class="col order-1 order-md-0">--}}
-{{--                                    <h4 class="me-2">{{ $sig->name }}</h4>--}}
-{{--                                    <h4 class="me-2">{{ $sig->name_en }}</h4>--}}
-{{--                                    <x-flag :language="$sig->languages"/>--}}
-{{--                                    <span class="badge fs-6 bg-dark">{{ $sig->duration/60 }} h</span>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-12 col-lg-auto text-end order-0 order-md-1 py-2">--}}
-{{--                                    <span class="badge d-flex d-md-inline bg-success fs-5">Approved</span>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-12 py-2 order-2">--}}
-
-{{--                                    {{ $sig->name }}--}}
-{{--                                </div>--}}
-{{--                                <div class="col py-2 order-3">--}}
-{{--                                    {{ $sig->additional_info }}--}}
-{{--                                </div>--}}
-
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                @endforeach--}}
-{{--            </div>--}}
         @endforeach
     </div>
 @endsection

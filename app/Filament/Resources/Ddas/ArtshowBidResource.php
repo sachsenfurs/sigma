@@ -68,6 +68,7 @@ class ArtshowBidResource extends Resource
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn($query) => $query->with(["user"]))
             ->columns([
                 Tables\Columns\TextColumn::make("user")
                     ->formatStateUsing(fn(Model $record) => $record->user->name . " #" . $record->user->reg_id),

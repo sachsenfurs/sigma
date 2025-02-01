@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocalePreference
@@ -56,19 +57,23 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         );
     }
 
-    public function permissions(): Collection {
-        return $this->roles->map->permissions->flatten();
+    public function permissions(): Attribute {
+        return Attribute::make(
+            get: fn() => Cache::remember("userPerms{$this->id}", 120, fn() => $this->roles->map->permissions->flatten())
+        )->shouldCache();
     }
 
     public function hasPermission(Permission $checkPermission, PermissionLevel $level = PermissionLevel::READ): bool {
         /**
          * @var $userRolePermission UserRolePermission
          */
-        foreach($this->permissions() AS $userRolePermission) {
-            if($checkPermission == $userRolePermission->permission AND $userRolePermission->level->value >= $level->value)
-                return true;
-        }
-        return false;
+        return Cache::remember("has{$this->id}{$checkPermission->name}{$level->value}", 120, function() use ($level, $checkPermission) {
+            foreach($this->permissions AS $userRolePermission) {
+                if($checkPermission == $userRolePermission->permission AND $userRolePermission->level->value >= $level->value)
+                    return true;
+            }
+            return false;
+        });
     }
 
     public function attendeeEvents(): HasMany {
@@ -118,7 +123,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function canAccessPanel(Panel $panel): bool {
         // needs at least 1 permission
-        return $this->permissions()->count() > 0;
+        return $this->permissions->count() > 0;
     }
 
     public function getFilamentAvatarUrl(): ?string {
@@ -157,7 +162,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function unreadMessagesCount(): Attribute {
         return Attribute::make(
-            get: fn() => $this->chats()->with("messages")->get()->sum("unread_messages_count")
+            get: fn() => $this->chats()->withCount(["messages" => fn($query) => $query->where("user_id", "!=", $this->id)->whereNull("read_at")])->get()->sum("messages_count")
         )->shouldCache();
     }
 }

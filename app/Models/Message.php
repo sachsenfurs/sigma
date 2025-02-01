@@ -38,7 +38,7 @@ class Message extends Model
         );
     }
 
-    public function scopeTo(Builder $query, User $user = null) {
+    public function scopeTo(Builder $query, User $user = null): void {
         if($user == null)
             $user = auth()->user();
         $query->where("user_id","!=", $user->id)
@@ -47,7 +47,7 @@ class Message extends Model
         });
     }
 
-    public function scopeUnread(Builder $query) {
+    public function scopeUnread(Builder $query): void {
         $query->whereNull("read_at");
     }
 }

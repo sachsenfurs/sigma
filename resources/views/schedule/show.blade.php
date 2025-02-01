@@ -34,9 +34,13 @@
             </div>
             <div class="col-6 text-center align-self-center">
                 <h3 class="d-flex justify-content-center py-2">
-                    <i class="bi bi-geo-alt align-self-center pe-1"></i>
+
                     <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
+                        <i class="bi bi-geo-alt icon-link pe-1"></i>
                         {{ $entry->sigLocation->name }}
+                        @if($entry->sigLocation->description != $entry->sigLocation->name)
+                            ({{ $entry->sigLocation->description }})
+                        @endisset
                     </a>
                     @if($entry->hasLocationChanged)
                         <span class="badge bg-warning">{{ __("Changed") }}</span>
@@ -46,8 +50,12 @@
                 <div class="d-flex flex-wrap justify-content-center">
                     @foreach($entry->sigEvent->public_hosts as $host)
                         <div class="text-nowrap d-flex">
-                            <i class="bi bi-person-circle fs-6 px-1 ps-3"></i>
-                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none fs-6">
+                            <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none fs-5">
+                                @if($host->avatar_thumb)
+                                    <img src="{{ $host->avatar_thumb }}"  class="img-thumbnail rounded-circle icon-link" style="height: 2.3em" alt="">
+                                @else
+                                    <i class="bi bi-person-circle fs-5 px-1 ps-3 icon-link"></i>
+                                @endif
                                 {{ $host->name }}
                             </a>
                         </div>
@@ -90,14 +98,13 @@
             </div>
         @endif
         <div class="row mt-4">
-
             @forelse($entry->sigEvent->timetableEntries AS $e)
                 @if ($e->sigTimeslots->count() > 0)
                     <div class="col-12 col-md-6">
                         <x-timeslot.accordion :entry="$e"></x-timeslot.accordion>
                     </div>
                 @else
-                    <div class="col-5 col-md-4 m-3 mx-auto">
+                    <div class="col-12 col-md-6 col-xl-4 m-3 mx-auto">
                         <div class="card text-center">
                             <div class="card-header">
                                 <span style="font-size: 1.3em">

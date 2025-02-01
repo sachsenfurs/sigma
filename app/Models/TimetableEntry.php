@@ -51,9 +51,7 @@ class TimetableEntry extends Model
     ];
 
     protected $with = [
-//        'favorites', // this results in an unknown 500 error :|
-        'sigLocation',
-//        'sigEvent', // << i dont know why this isnt working..
+//        'sigLocation',
         'parentEntry',
     ];
 
@@ -111,12 +109,16 @@ class TimetableEntry extends Model
         return $this->hasOne(TimetableEntry::class, "replaced_by_id");
     }
 
-    public function getHasTimeChangedAttribute(): bool {
-        return ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at;
+    public function hasTimeChanged(): Attribute {
+        return Attribute::make(
+            get: fn() => ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at
+        )->shouldCache();
     }
 
-    public function getHasLocationChangedAttribute(): bool {
-        return $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation;
+    public function hasLocationChanged(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation
+        )->shouldCache();
     }
 
     public function duration(): Attribute {
@@ -127,14 +129,6 @@ class TimetableEntry extends Model
 
     public function hasEventChanged(): bool {
         return $this->updated_at->isAfter($this->created_at);
-    }
-
-    public function getFavStatus(): bool {
-        if (auth()->user()->favorites->where('timetable_entry_id', $this->id)->first()) {
-            return true;
-        }
-
-        return false;
     }
 
     public function maxUserRegsExeeded(User $user=null): bool {

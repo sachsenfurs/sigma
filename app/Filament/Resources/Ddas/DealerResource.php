@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 
@@ -45,7 +46,7 @@ class DealerResource extends Resource
         if(!Route::is("filament.*") AND !Route::is("livewire.*"))
             return null;
 
-        return Dealer::whereApproval(Approval::PENDING)->count() ?: null;
+        return Cache::remember("dealer-unapproved-badge", 10, fn() => Dealer::whereApproval(Approval::PENDING)->count()) ?: null;
     }
 
 

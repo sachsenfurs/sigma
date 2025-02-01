@@ -14,7 +14,7 @@ class SigLocationController extends Controller
     public function index() {
         $locations = [];
         if(Gate::allows("viewAny", SigLocation::class))
-            $locations = SigLocation::with(["sigEvents" => fn($query) => $query->public()])
+            $locations = SigLocation::with(["sigEvents" => fn($query) => $query->public(), "sigEvents.timetableEntries"])
                 ->used()
                 ->orderBy("name")
                 ->get();

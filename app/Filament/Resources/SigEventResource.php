@@ -61,6 +61,7 @@ class SigEventResource extends Resource
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn($query) => $query->with(["sigHosts", "sigHosts.user"]))
             ->columns(self::getTableColumns())
             ->recordClasses(function(Model $record) {
                 if($record->is_private)
