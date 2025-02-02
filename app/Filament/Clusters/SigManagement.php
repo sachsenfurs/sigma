@@ -5,6 +5,7 @@ namespace App\Filament\Clusters;
 use App\Enums\Approval;
 use App\Models\SigEvent;
 use Filament\Clusters\Cluster;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,7 @@ class SigManagement extends Cluster
     protected static ?string $navigationLabel = "SIGs";
     protected static ?string $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 15;
+    protected static ?string $title = "SIG Management"; // can't override getTitle() for translation. probably a filament bug?
 
     public static function getNavigationBadge(): ?string {
         if(!Route::is("filament.*") AND !Route::is("livewire.*"))

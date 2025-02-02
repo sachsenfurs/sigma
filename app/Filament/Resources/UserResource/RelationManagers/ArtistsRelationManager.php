@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class ArtistsRelationManager extends RelationManager
 {
     protected static string $relationship = 'artists';
+    protected static ?string $icon = 'heroicon-o-paint-brush';
 
     /**
      * @param Model $ownerRecord

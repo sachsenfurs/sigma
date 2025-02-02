@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use App\Services\Translator;
 use App\Settings\AppSettings;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +35,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Translator::class, function() {
             return new Translator(app(AppSettings::class)->deepl_api_key, app(AppSettings::class)->deepl_source_lang, app(AppSettings::class)->deepl_target_lang);
         });
+
+        /**
+         *
+         */
+        Relation::morphMap([
+            'user' => User::class, // getMorphClass() on User::class won't work with filament!
+        ]);
 
     }
 }

@@ -37,6 +37,9 @@ return new class extends Migration
             // relativer Pfad zur Datei (local storage)
             $table->string('image')->nullable();
 
+            // rating
+            $table->tinyInteger("rating")->default(\App\Enums\Rating::SFW->value)->comment("Rating for items (sfw, nsfw)");
+
             // Nur Ausstellungstück oder zur Auktion freigegeben?
             $table->boolean('auction')->default(true);
 

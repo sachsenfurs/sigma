@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Gate;
 class TimetableEntriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'timetableEntries';
+    protected static ?string $icon = 'heroicon-o-rectangle-stack';
 
     public static function getPluralModelLabel(): ?string {
         return TimetableEntryResource::getPluralModelLabel();
@@ -37,6 +38,10 @@ class TimetableEntriesRelationManager extends RelationManager
     protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
         return auth()->user()->can("viewAny", $record);
+    }
+
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
+        return $ownerRecord->timetableEntries->count() ?: null;
     }
 
     public function table(Table $table): Table {

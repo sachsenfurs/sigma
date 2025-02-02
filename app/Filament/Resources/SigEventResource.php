@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Clusters\SigManagement;
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\SigHostsRelationManager;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -147,6 +149,7 @@ class SigEventResource extends Resource
             TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
             SigTimeslotsRelationManager::class,
             DepartmentInfosRelationManager::class,
+            SigHostsRelationManager::class,
         ];
     }
 
@@ -218,6 +221,7 @@ class SigEventResource extends Resource
                 ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray)
                 ->action(
                     Tables\Actions\ViewAction::make()
+                        ->modalHeading(fn($record) => $record->name_localized)
                         ->infolist([
                             TextEntry::make("additional_info")
                                 ->label("Additional Information")
@@ -329,6 +333,8 @@ class SigEventResource extends Resource
                             ->relationship('sigHosts', 'name')
                             ->preload()
                             ->multiple()
+                            ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()) // formatting when user already present
+                            ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
                             ->columnSpanFull()
                             ->createOptionModalHeading(__('Create Host'))
                             ->createOptionForm([

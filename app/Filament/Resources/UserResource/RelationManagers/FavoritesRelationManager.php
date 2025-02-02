@@ -17,9 +17,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class FavoritesRelationManager extends RelationManager
 {
     protected static string $relationship = 'favorites';
+    protected static ?string $icon = 'heroicon-o-heart';
 
-    public static function getModelLabel(): ?string {
+    public static function getPluralModelLabel(): ?string {
         return __("Favorites");
+    }
+    public static function getModelLabel(): ?string {
+        return __("Favorite");
     }
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {

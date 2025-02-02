@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class DealersRelationManager extends RelationManager
 {
     protected static string $relationship = 'dealers';
+    protected static ?string $icon = 'heroicon-o-shopping-cart';
 
     /**
      * @return string

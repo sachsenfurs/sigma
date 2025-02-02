@@ -52,7 +52,6 @@ class TimetableEntryResource extends Resource
             self::getSigLocationField(),
             self::getSigStartField(),
             self::getSigEndField(),
-
             Forms\Components\Fieldset::make("Event Settings")
                 ->schema([
                     self::getSigNewField(),
@@ -60,21 +59,17 @@ class TimetableEntryResource extends Resource
                     self::getSigCancelledField(),
                 ])
                 ->columns(3),
-
             Forms\Components\Fieldset::make("Communication Settings")
                 ->translateLabel()
                 ->schema([
                     self::getSendUpdateField(),
                 ])
-                ->hidden(fn(string $operation): bool => $operation == "create")
-            ,
-
+                ->hidden(fn(string $operation): bool => $operation == "create"),
             self::getResetUpdateField(),
         ];
     }
 
     public static function table(Table $table): Table {
-
         return $table
             ->modifyQueryUsing(fn($query) => $query->with(["sigEvent.sigHosts.user"]))
             ->columns(static::getTableColumns())
@@ -161,18 +156,18 @@ class TimetableEntryResource extends Resource
                     } else {
                         if ($record->new)
                             $suffix = ' - ' . __('New');
-                        if ($record->hasTimeChanged)
+                        if ($record->has_time_changed)
                             $suffix = ' - ' . __('Changed');
                     }
                     return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
                 })
                 ->badge(function (Model $record) {
-                    return $record->cancelled || $record->new || $record->hasTimeChanged;
+                    return $record->cancelled || $record->new || $record->has_time_changed;
                 })
                 ->color(function (Model $record) {
                     if ($record->cancelled) {
                         return 'danger';
-                    } else if ($record->new || $record->hasTimeChanged) {
+                    } else if ($record->new || $record->has_time_changed) {
                         return 'info';
                     }
                     return 'secondary';
@@ -189,12 +184,7 @@ class TimetableEntryResource extends Resource
             Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
                  ->label('Host')
                  ->translateLabel()
-                 ->searchable()
-//                 ->formatStateUsing(function (Model $record) {
-//                     $regNr = $record->sigEvent->sigHost->reg_id ? ' (' . __('Reg Number') . ': ' . $record->sigEvent->sigHost->reg_id . ')' : '';
-//                     return $record->sigEvent->sigHost->name . $regNr;
-//                 })
-            ,
+                 ->searchable(),
             Tables\Columns\TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')

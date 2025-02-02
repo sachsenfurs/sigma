@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class DepartmentInfosRelationManager extends RelationManager
 {
     protected static string $relationship = 'departmentInfos';
+    protected static ?string $icon = 'heroicon-o-user-group';
 
     public static function getPluralModelLabel(): ?string {
         return __("Assigned Departments");

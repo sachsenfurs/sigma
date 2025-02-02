@@ -3,6 +3,7 @@
 namespace App\Models\Ddas;
 
 use App\Enums\Approval;
+use App\Enums\Rating;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -31,6 +32,7 @@ class ArtshowItem extends Model
         'sold' => "boolean",
         'paid' => "boolean",
         'approval' => Approval::class,
+        'rating' => Rating::class,
     ];
 
     protected $with = [

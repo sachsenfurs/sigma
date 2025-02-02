@@ -7,8 +7,6 @@ use App\Filament\Resources\Ddas\ArtshowBidResource\Pages;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
-use Filament\Forms\Components\Field;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -35,6 +33,7 @@ class ArtshowBidResource extends Resource
     public static function getPluralLabel(): ?string {
         return __('Bids');
     }
+
     public static function getNavigationGroup(): ?string {
         return __("Art Show");
     }
@@ -47,6 +46,8 @@ class ArtshowBidResource extends Resource
         return $form
             ->schema([
                 Select::make("artshow_item_id")
+                    ->label("Art Show Item")
+                    ->translateLabel()
                     ->relationship("artshowItem", "name")
                     ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->id . " - " . $record->name)
                     ->columnSpanFull()
@@ -54,13 +55,24 @@ class ArtshowBidResource extends Resource
                     ->preload()
                     ->live()
                     ->required()
-                    ->helperText(fn(Get $get) => __("Current Bid") . ": " . (ArtshowItem::find($get("artshow_item_id"))?->highestBid->value ?? 0)),
+                    ->helperText(function (Get $get) {
+                        if($item = ArtshowItem::find($get("artshow_item_id"))) {
+                            if($bid = $item->highestBid)
+                                return __("Current Bid") . ": " . $bid->value . " ({$bid->user->name})";
+                        }
+                        return null;
+                    }),
                 Select::make("user_id")
+                    ->label("User")
+                    ->translateLabel()
                     ->relationship("user", "name")
                     ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                     ->searchable(['reg_id', 'name']),
                 TextInput::make("value")
+                    ->label("Bid")
+                    ->translateLabel()
                     ->numeric()
+                    ->prefixIcon("heroicon-o-currency-euro")
                     ->required(),
 
             ]);
@@ -100,7 +112,6 @@ class ArtshowBidResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowBids::route('/'),
-//            'create' => Pages\CreateArtshowBid::route('/create'),
             'edit' => Pages\EditArtshowBid::route('/{record}/edit'),
         ];
     }

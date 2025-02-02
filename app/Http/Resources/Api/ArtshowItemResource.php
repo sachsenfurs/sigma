@@ -24,6 +24,7 @@ class ArtshowItemResource extends JsonResource
             'starting_bid'      => $this->starting_bid,
             'bid_count'         => $this->artshow_bids_count,
             'image_url'         => $this->image_url ? URL::to($this->image_url) : null,
+            'rating'            => $this->rating->name,
         ];
     }
 }

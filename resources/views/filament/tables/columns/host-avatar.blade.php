@@ -1,6 +1,6 @@
-@if($getRecord()->avatar)
+@if($getRecord()->avatar_thumb)
     <x-filament::avatar
-        src="{{ $getRecord()->avatar }}"
+        src="{{ $getRecord()->avatar_thumb }}"
         class="ml-0.5"
     />
 @else

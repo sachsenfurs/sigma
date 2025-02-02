@@ -3,15 +3,12 @@
 namespace App\Observers;
 
 use App\Models\Chat;
-use App\Models\UserRole;
-use App\Notifications\Chat\NewChatMessage;
 
 class ChatObserver
 {
-    /**
-     * Handle the Chat "created" event.
-     */
-    public function created(Chat $chat): void {
-
+    public function updated(Chat $chat) {
+//        if($chat->isDirty("user_role_id")) {
+//            $chat->userRole->users->each->notify(new ...);
+//        }
     }
 }

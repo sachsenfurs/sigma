@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot() {
         Gate::before(function (User $user) {
-            if($user->hasPermission(Permission::MANAGE_ADMIN, PermissionLevel::ADMIN))
+            if($user->isAdmin())
                 return true;
             // IMPORTANT: don't return false!
             // Otherwise it won't check for remaining policies and aborts the request IMMEDIATELY!
@@ -60,5 +60,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::policy(\App\Models\Post\Post::class               , \App\Policies\Post\PostPolicy::class);
         Gate::policy(\App\Models\Post\PostChannel::class        , \App\Policies\Post\PostChannelPolicy::class);
+
+        Gate::policy(\App\Models\Chat::class                    , \App\Policies\ChatPolicy::class);
     }
 }

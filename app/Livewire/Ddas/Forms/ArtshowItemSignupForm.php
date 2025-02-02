@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Ddas\Forms;
 
+use App\Enums\Rating;
 use App\Settings\ArtShowSettings;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -28,11 +30,14 @@ class ArtshowItemSignupForm extends Form
 
     public int $charity_percentage = 0;
 
+    public int $rating = Rating::SFW->value;
+
 
     public function rules() {
         $charity_min = $this->auction ? app(ArtShowSettings::class)->charity_min_percentage : 0;
         return [
             'charity_percentage' => 'bail|required_if:auction,on|int|min:'.$charity_min.'|max:100',
+            'rating' => ['required', Rule::enum(Rating::class)],
         ];
     }
 

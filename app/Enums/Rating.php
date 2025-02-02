@@ -8,20 +8,18 @@ use App\Enums\Traits\AttributableEnum;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum ChatStatus: int implements HasLabel, HasColor
+enum Rating: int implements HasLabel, HasColor
 {
     use AttributableEnum;
 
-    #[Name('Closed')]
-    #[Color(\Filament\Support\Colors\Color::Green)]
-    case CLOSED     = 0;
+    #[Name('SFW')]
+    #[Color(\Filament\Support\Colors\Color::Stone)]
+    case SFW        = 0;
 
-    #[Name('Open')]
+    #[Name('NSFW')]
     #[Color(\Filament\Support\Colors\Color::Red)]
-    case OPEN       = 1;
-    #[Name('Locked')]
-    #[Color(\Filament\Support\Colors\Color::Gray)]
-    case LOCKED     = 2;
+    case NSFW       = 1;
+
 
     /**
      * Filament translation

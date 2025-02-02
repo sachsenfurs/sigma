@@ -39,12 +39,16 @@ class Message extends Model
     }
 
     public function scopeTo(Builder $query, User $user = null): void {
+//        $query->where("user_id","!=", $user->id)
+//              ->whereHas("chat", function(Builder $query) use ($user) {
+            $query->where("user_id", "!=", $user?->id);
+//        });
+    }
+
+    public function scopeFrom(Builder $query, User $user = null): void {
         if($user == null)
             $user = auth()->user();
-        $query->where("user_id","!=", $user->id)
-              ->whereHas("chat", function(Builder $query) use ($user) {
-            $query->where("user_id", $user?->id);
-        });
+        $query->where("user_id", $user->id);
     }
 
     public function scopeUnread(Builder $query): void {

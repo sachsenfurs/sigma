@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Ddas;
 
 use App\Enums\Approval;
+use App\Enums\Rating;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
@@ -73,7 +74,10 @@ class ArtshowItemResource extends Resource
                     ->options(Approval::class)
                     ->required(),
                 Forms\Components\Grid::make()
-                     ->columns(1)
+                     ->columns([
+                         'lg' => 1,
+                         '2xl' => 2
+                     ])
                      ->schema([
                             Forms\Components\RichEditor::make('description')
                                 ->label('Description')
@@ -106,6 +110,7 @@ class ArtshowItemResource extends Resource
                     ->label('Additional Information')
                     ->translateLabel()
                     ->maxLength(65535)
+                    ->rows(5)
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
                     ->label('Image')
@@ -117,6 +122,10 @@ class ArtshowItemResource extends Resource
                     ->imageEditor()
                     ->maxFiles(1)
                     ->maxSize(5120),
+                Forms\Components\Radio::make("rating")
+                    ->options(Rating::class)
+                    ->default(Rating::SFW)
+                    ->required(),
                 Forms\Components\Checkbox::make('locked')
                     ->label('Locked')
                     ->translateLabel(),
@@ -139,7 +148,11 @@ class ArtshowItemResource extends Resource
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
                     ->translateLabel()
+                    ->height("4rem")
+                    ->alignCenter()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('rating')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Item Name')
                     ->translateLabel()

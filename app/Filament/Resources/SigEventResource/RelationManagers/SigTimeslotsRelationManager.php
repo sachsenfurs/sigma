@@ -34,6 +34,7 @@ class SigTimeslotsRelationManager extends RelationManager
     public ?SigEvent $sigEvent;
 
     protected static string $relationship = 'sigTimeslots';
+    protected static ?string $icon = 'heroicon-o-clock';
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
         return __("Time Slots");

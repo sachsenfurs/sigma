@@ -36,19 +36,20 @@
             <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%; word-break: break-all;" wire:poll.10s>
                 @php($newMessage=false)
                 @forelse ($currentChat?->messages->load("user") ?? [] as $message)
-                    @if((!$message->read_at OR $message->read_at->diffInMinutes() < 3) AND $message->user_id != auth()->id() AND !$newMessage)
+                    @php($own = $message->user_id == auth()->id())
+                    @if((!$message->read_at OR $message->read_at->diffInMinutes() < 3) AND !$own AND !$newMessage)
                         <div class="col-12 text-center" x-init="$dispatch('scrolldown')">{{ __("New Messages") }}</div>
                         <hr>
                         @php($newMessage=true)
                     @endif
 
-                    <div @class(["row mt-2", "justify-content-end text-end" => $message->user_id == auth()->id()])>
-                        <div class="col p-1 ml-auto rounded bg-dark-subtle order-2">
-                            <pre class="small p-2 mb-0 text-wrap text-start">
+                    <div @class(["row mt-2", "justify-content-end text-end" => $own])>
+                        <div @class(["col-auto p-1 ml-auto rounded order-2", $own ? "bg-primary text-white" : "bg-white text-dark"]) style="min-width: 10rem">
+                            <div class="p-2 mb-0 text-wrap text-start">
                                 {!! nl2br(e($message->text)) !!}
-                            </pre>
+                            </div>
                         </div>
-                        <div @class(["col-auto align-content-end pb-1", "order-3" => $message->user_id == auth()->id()])>
+                        <div @class(["col-auto align-content-end pb-1", "order-3" => $own])>
                             @if ($message->user->avatar_thumb)
                                 <img src="{{ $message->user->avatar_thumb }}" class="img-fluid img-thumbnail rounded-circle" style="width: 3em" alt="{{ $message->user->name }}">
                             @else
@@ -57,11 +58,11 @@
                         </div>
                         <div class="col-12 order-4">
                             <p class="text-muted ml-auto small" title="{{ __("Sent:") . " ". $message->created_at->toDateTimeString() }}">
-                                @if($message->user_id != auth()->id())
+                                @if(!$own)
                                     {{ $message->user->name }} -
                                 @endif
                                 {{ $message->created_at->diffForHumans() }}
-                                @if($message->user_id == auth()->id())
+                                @if($own)
                                     <i @class(["bi", $message->read_at ?  "bi-check2-all text-info" : "bi-check2"])></i>
                                 @endif
                             </p>
@@ -85,7 +86,7 @@
                                                wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" wire:keydown.ctrl.enter="submitMessage" />
                     </div>
                     <div class="col-auto d-grid">
-                        <button class="btn btn-primary rounded-0" wire:click="submitMessage" wire:loading.class="disabled" wire:target="submitMessage">
+                        <button class="btn btn-secondary rounded-0" wire:click="submitMessage" wire:loading.class="disabled" wire:target="submitMessage">
                             <span wire:loading.remove wire:target="submitMessage">
                                 <i class="bi bi-send icon-link"></i>
                                 {{ __('Send') }}

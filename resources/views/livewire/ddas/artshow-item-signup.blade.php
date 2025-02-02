@@ -197,16 +197,14 @@
                     </label>
                     <input type="file" accept="image/*" class="form-control" wire:model="form.new_image" id="selectImage">
                     <x-form.input-error name="form.new_image"/>
-                    {{--                <script>--}}
-                    {{--                    selectImage.onchange = evt => {--}}
-                    {{--                        let preview = document.getElementById('preview');--}}
-                    {{--                        preview.style.display = 'block';--}}
-                    {{--                        const [file] = selectImage.files--}}
-                    {{--                        if (file) {--}}
-                    {{--                            preview.src = URL.createObjectURL(file)--}}
-                    {{--                        }--}}
-                    {{--                    }--}}
-                    {{--                </script>--}}
+                    <div class="mt-3">
+                        <label class="form-label" for="rating">{{ __("Rating") }}</label>
+                        <select id="rating" name="rating" class="form-select" wire:model="form.rating" required>
+                            @foreach(\App\Enums\Rating::cases() AS $rating)
+                                <option value="{{ $rating->value }}">{{  $rating->name() }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </x-modal.livewire-modal>

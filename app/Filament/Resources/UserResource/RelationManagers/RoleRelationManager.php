@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoleRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
+    protected static ?string $icon = 'heroicon-o-user-group';
 
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
@@ -66,10 +67,10 @@ class RoleRelationManager extends RelationManager
                     ->infolist([
                         KeyValueEntry::make('permissions')
                             ->keyLabel(__('Permission'))
-                            ->valueLabel(__('Description'))
+                            ->valueLabel(__('Level'))
                             ->state(function ($record) {
-                                return $record->permissions->mapWithKeys(function ($permission) {
-                                    return [$permission->name => $permission->friendly_name];
+                                return $record->permissions->mapWithKeys(function ($userRolePermission) {
+                                    return [$userRolePermission->permission->name() => $userRolePermission->level->name()];
                                 });
                             }),
                     ]),

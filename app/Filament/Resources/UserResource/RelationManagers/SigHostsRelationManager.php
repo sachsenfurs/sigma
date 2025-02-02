@@ -6,12 +6,14 @@ use App\Filament\Resources\SigHostResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
 class SigHostsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigHosts';
+    protected static ?string $icon = 'heroicon-o-users';
 
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
@@ -33,9 +35,12 @@ class SigHostsRelationManager extends RelationManager
 
     public function table(Table $table): Table {
         $table = SigHostResource::table($table);
-//        $table->getColumn("name")->hidden();
         return $table
+            ->actions([
+                EditAction::make("edit")
+                    ->form(fn($form) => SigHostResource::form($form))
+            ])
             ->recordUrl(fn(Model $record) => SigHostResource::getUrl("edit", ["record" => $record]))
-            ->actions([]);
+        ;
     }
 }

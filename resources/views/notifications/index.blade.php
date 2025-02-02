@@ -2,7 +2,7 @@
 @section('title', "Notifications")
 @section('content')
     <div class="container">
-        <x-tabs :tabs="['Notifications', 'Announcements']">
+        <x-tabs :tabs="['Notifications', 'Announcements']" :active-index="count($notifications) == 0 ? 1 : 0">
             <x-slot name="Notifications" :badge="auth()->user()->unreadNotifications->count()" badgeClass="bg-danger border border-danger-subtle">
                 @if(auth()->user()->unreadNotifications->count() > 0)
                     <div class="row">

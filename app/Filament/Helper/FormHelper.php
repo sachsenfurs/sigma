@@ -3,6 +3,7 @@
 namespace App\Filament\Helper;
 
 use App\Models\Ddas\DealerTag;
+use App\Models\SigHost;
 use App\Models\SigLocation;
 use App\Models\SigTag;
 use App\Models\User;
@@ -12,7 +13,7 @@ class FormHelper
 {
     public static function formatUserWithRegId(): \Closure {
         return function(?Model $record) {
-            if($record instanceof User) {
+            if($record instanceof User OR $record instanceof SigHost) {
                 if($record->reg_id)
                     return $record->reg_id . " - " . $record->name;
                 return $record->name;

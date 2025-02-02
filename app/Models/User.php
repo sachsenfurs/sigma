@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 #[ObservedBy(UserObserver::class)]
@@ -115,10 +114,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function notifications(): MorphMany {
         return $this->morphMany(Notification::class, 'notifiable')->latest();
-    }
-
-    public function getMorphClass(): string {
-        return "user";
     }
 
     public function canAccessPanel(Panel $panel): bool {

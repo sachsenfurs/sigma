@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasSigEvents;
 use App\Observers\TimetableEntryObserver;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
@@ -17,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy(TimetableEntryObserver::class)]
 class TimetableEntry extends Model
@@ -37,8 +35,8 @@ class TimetableEntry extends Model
 
     protected $appends = [
         'formatted_length',
-        'hasTimeChanged',
-        'hasLocationChanged',
+        'has_time_changed',
+        'has_location_changed',
         'is_favorite',
     ];
 

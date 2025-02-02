@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string("name");
             $table->string('name_en')->nullable();
 
-            $table->foreignId("sig_host_id")->nullable()->constrained()->nullOnDelete();
             $table->json("languages")->comment("two letter language code as JSON array")->default(json_encode([]));
 
             $table->text("description")->nullable();
