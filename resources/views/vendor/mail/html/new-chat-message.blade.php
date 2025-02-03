@@ -6,12 +6,12 @@
 
 @foreach($messages AS $message)
     @if($loop->index == 0)
-        @if($previous = $message->chat->messages()->to($message->user)->where("read_at", "<", $message->created_at)->first())
+        @if($previous = $message->chat->messages()->to($message->user)->where("read_at", "<", $message->created_at)->latest()->first())
             <!-- Empfangen (Receiver) -->
             <div style="display: flex; align-items: center; margin: 10px 0;">
                 <div style="padding: 10px; border-radius: 5px; max-width: 80%; background: #f7f7f7; color: #151515; text-align: right; margin-left: auto;">
                     <p>{!! nl2br(e($previous->text)) !!}</p>
-                    <span style="font-size: 12px; color: #bbbbbb; display: block; margin-top: 5px;">
+                    <span style="font-size: 12px; color: #626262; display: block; margin-top: 5px;">
                     {{ $previous->created_at->format("d.m.Y, H:i") }}
                 </span>
                 </div>

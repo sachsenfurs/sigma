@@ -32,7 +32,7 @@ class NewChatMessage extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage {
         return (new MailMessage)
             ->greeting(__("Hello :name", ['name' => $notifiable->name]))
-            ->view("mail::html.new-chat-message", ['messages' => $this->message->chat->messages()->to($this->message->user)->unread()])
+            ->view("mail::html.new-chat-message", ['messages' => $this->message->chat->messages()->from($this->message->user)->unread()->get()])
             ->action(__("Answer") , route("chats.index"));
     }
 
