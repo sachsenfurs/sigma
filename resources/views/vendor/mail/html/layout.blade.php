@@ -4,54 +4,51 @@
 <title>{{ config('app.name') }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="color-scheme" content="light">
-<meta name="supported-color-schemes" content="light">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
 <style>
-@media only screen and (max-width: 600px) {
-.inner-body {
-width: 100% !important;
+body {
+font-family: 'Open Sans', Arial, sans-serif;
+background-color: #1f1f1f;
+color: #ffffff;
+margin: 0;
+padding: 0;
 }
-
-.footer {
-width: 100% !important;
+.center {
+    max-width: 1200px;
+    margin: 20px auto;
 }
+.container {
+    text-align: left;
+max-width: 1200px;
+margin: 20px;
+background: rgb(20,20,20);
+background: linear-gradient(48deg, rgba(0,0,0,1) 0%, rgba(14,14,14,1) 100%);
+padding: 20px;
+border-radius: 5px;
+box-shadow: 6px 6px 0px #424242;
 }
-
-@media only screen and (max-width: 500px) {
-.button {
-width: 100% !important;
+.header_a {
+    text-decoration: none !important;
+    color: #ffffff;
 }
-}
+@yield("style")
 </style>
 </head>
-<body>
 
-<table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td align="center">
-<table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<body>
+<center>
+<div class="center">
+<div class="container">
 {{ $header ?? '' }}
 
-<!-- Email Body -->
-<tr>
-<td class="body" width="100%" cellpadding="0" cellspacing="0" style="border: hidden !important;">
-<table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-<!-- Body content -->
-<tr>
-<td class="content-cell">
-{{ Illuminate\Mail\Markdown::parse($slot) }}
+{{ $slot }}
 
 {{ $subcopy ?? '' }}
-</td>
-</tr>
-</table>
-</td>
-</tr>
 
+</div>
 {{ $footer ?? '' }}
-</table>
-</td>
-</tr>
-</table>
+</div>
+</center>
 </body>
 </html>

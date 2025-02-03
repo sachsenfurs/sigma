@@ -1,9 +1,7 @@
-<x-mail::layout>
+<x-mail::html.layout>
     {{-- Header --}}
     <x-slot:header>
-        <x-mail::header :url="config('app.url')">
-            {{ config('app.name') }}
-        </x-mail::header>
+        <x-mail::html.header :url="config('app.url')" />
     </x-slot:header>
 
     {{-- Body --}}
@@ -12,16 +10,16 @@
     {{-- Subcopy --}}
     @isset($subcopy)
         <x-slot:subcopy>
-            <x-mail::subcopy>
+            <x-mail::html.subcopy>
                 {{ $subcopy }}
-            </x-mail::subcopy>
+            </x-mail::html.subcopy>
         </x-slot:subcopy>
     @endisset
 
     {{-- Footer --}}
     <x-slot:footer>
-        <x-mail::footer>
+        <x-mail::html.footer>
             {{ parse_url(config('app.url'), PHP_URL_HOST) }}
-        </x-mail::footer>
+        </x-mail::html.footer>
     </x-slot:footer>
-</x-mail::layout>
+</x-mail::html.layout>

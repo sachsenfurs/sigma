@@ -31,11 +31,8 @@ class NewChatMessage extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage {
         return (new MailMessage)
-            ->subject(__("New Message in chat: {$this->message->chat->subject}"))
             ->greeting(__("Hello :name", ['name' => $notifiable->name]))
-            ->line(__("You have a new message in chat ({$this->message->chat->subject}):"))
-            ->line("")
-            ->line($this->message->text)
+            ->view("mail::html.new-chat-message", ['messages' => $this->message->chat->messages()->to($this->message->user)->unread()])
             ->action(__("Answer") , route("chats.index"));
     }
 
@@ -48,15 +45,16 @@ class NewChatMessage extends Notification implements ShouldQueue
     /**
      * add a small delay so it won't spam the users mailbox when they is currently active
      */
-    public function withDelay(object $notifiable): array {
-        return [
-            'mail' => now()->addMinutes(5),
-            'telegram' => now()->addMinutes(5)
-        ];
-    }
+//    public function withDelay(object $notifiable): array {
+//        return [
+//            'mail' => now()->addMinutes(5),
+//            'telegram' => now()->addMinutes(5)
+//        ];
+//    }
 
-    public function shouldSend() {
-        return $this->message->read_at == null;
-    }
+//    public function shouldSend() {
+//        return $this->message->read_at == null  // message is still unread
+//            AND $this->message->chat->messages()->where("created_at", ">", $this->message->created_at)->count() == 1; // no messages were sent after
+//    }
 
 }
