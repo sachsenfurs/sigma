@@ -36,7 +36,7 @@ class ChatComponent extends Component
 
     public function submitMessage(): void {
         if($this->currentChat) {
-            $this->authorize("view", $this->currentChat);
+            $this->authorize("update", $this->currentChat);
             $this->validate([
                 'text' => "required|min:2|max:4000"
             ]);

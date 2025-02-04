@@ -10,12 +10,14 @@ use App\Filament\Resources\ChatResource\RelationManagers\DealersRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\RoleRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\SigHostsRelationManager;
 use App\Models\Chat;
+use App\Models\Message;
 use Carbon\Carbon;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
 class ChatResource extends Resource
@@ -23,6 +25,18 @@ class ChatResource extends Resource
     protected static ?string $model = Chat::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+
+    public static function getNavigationBadge(): ?string {
+        return Cache::remember("filamentUnreadMessagesss", 1, fn() => Message::whereHas("chat", fn($query) => $query->involved())->unread()->to(auth()->user())->count()) ?: null;
+    }
+
+    public static function getNavigationLabel(): string {
+        return __("Messages");
+    }
+    public static function getNavigationGroup(): ?string {
+        return __("Messages");
+    }
+
 
     public static function table(Table $table): Table {
         return $table
@@ -66,7 +80,7 @@ class ChatResource extends Resource
                     ->translateLabel()
                     ->limit(120)
                     ->getStateUsing(function ($record) {
-                        $msg = $record->messages->sortBy("created_at")->first();
+                        $msg = $record->messages->sortByDesc("created_at")->first();
                         if($msg)
                             return new HtmlString('<span style="word-break: break-word; text-wrap: wrap">'.e("{$msg->user->name}: {$msg->text}").'</span>');
                     })

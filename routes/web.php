@@ -49,13 +49,6 @@ Route::get("/devlogin/{id?}", function($id=1) {
    }
 })->name("devlogin");
 
-Route::get("/mailtest", function () {
-    return view("mail::html.new-chat-message", [
-        'messages' => \App\Models\Message::unread()->get(),
-        'introLines' => [],
-    ]);
-});
-
 // Auth
 Route::get("/login", [LoginController::class, 'showLoginForm'])->name("login");
 Route::post("/login", [LoginController::class, 'login']);

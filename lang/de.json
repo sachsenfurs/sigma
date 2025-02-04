@@ -575,6 +575,10 @@
     "Read at :time": "Gelesen: :time",
     "Last message": "Letzte Nachricht",
     "Unread messages": "Ungelesene Nachrichten",
+    "Answer": "Antwort",
+    "New Message from :user (:chat)": "Neue Nachricht von :user (:chat)",
+    "Your message": "Deine Nachricht",
+    "Chat opened. Please enter your message below.": "Chat eröffnet. Bitte gib unten deine Nachricht ein.",
 
     "View Chat": "Chat anzeigen",
     "Chat Created": "Chat erstellt",

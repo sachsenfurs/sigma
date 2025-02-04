@@ -78,10 +78,10 @@
                     </div>
                 @endforelse
             </div>
-            @if($currentChat)
+            @if($currentChat AND $currentChat->status != \App\Enums\ChatStatus::LOCKED)
                 <div class="d-flex flex-nowrap flex-grow m-0" style="height: inherit">
                     <div class="col d-flex" style="flex-direction: column">
-                        <x-form.livewire-input :placeholder="__('Your Message')" type="textarea" name="text" maxlength="4000"
+                        <x-form.livewire-input :placeholder="__('Your message')" type="textarea" name="text" maxlength="4000"
                                                class="small flex-grow-1 rounded-0 border-0 border-top" style="resize: none"
                                                wire:loading.attr="disabled" wire:target="submitMessage" wire:model="text" wire:keydown.ctrl.enter="submitMessage" />
                     </div>

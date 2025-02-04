@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\ChatStatus;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Models\Chat;
@@ -18,11 +19,19 @@ class ChatPolicy
     }
 
     public function view(User $user, Chat $chat): bool {
+        if($chat->user_id == auth()->id())
+            return true;
+
         return $user->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::READ);
     }
 
     public function update(User $user, Chat $chat): bool {
-        return $chat->user_id === $user->id OR $user->roles->contains($chat->user_role_id);
+        if($user->roles->contains($chat->user_role_id))
+            return true;
+        if($chat->status == ChatStatus::LOCKED)
+            return false;
+
+        return $chat->user_id === $user->id ;
     }
 
 //    public function viewAny(User $user): bool {
