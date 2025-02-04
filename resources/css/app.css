@@ -26,3 +26,20 @@ input, label {
 .border-left-0 {
     border-left: 0 !important;
 }
+
+.blur {
+    filter: blur(8px);
+}
+
+.blur-hover {
+    filter: blur(8px);
+    transition: filter 0.1s ease;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    /*pointer-events: none;*/
+}
+.blur-hover:hover, .blur-hover:active .blur-hover:focus {
+    filter: none;
+}

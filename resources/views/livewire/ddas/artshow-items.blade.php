@@ -47,7 +47,12 @@
                     </div>
                     <div class="col-auto text-center">
                         <div class="align-self-start justify-content-end p-3">
-                            <img src="{{ $item->image_url }}" class="rounded img-fluid" style="max-height: 10em" alt="" id="itemImage{{$item->id}}" loading="lazy">
+                            <img oncontextmenu="return false;" tabindex="0" src="{{ $item->image_url }}" @class(["rounded img-fluid shadow", "blur-hover" => $item->rating == \App\Enums\Rating::NSFW]) style="max-height: 10em" alt="" id="itemImage{{$item->id}}" loading="lazy">
+                            @if($item->rating == \App\Enums\Rating::NSFW)
+                                <div class="mt-3">
+                                    <span class="badge border border-danger-subtle bg-danger-subtle text-danger opacity-50 fs-6">{{ \App\Enums\Rating::NSFW->name() }}</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
