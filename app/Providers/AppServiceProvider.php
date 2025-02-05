@@ -42,10 +42,5 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'user' => User::class, // getMorphClass() on User::class won't work with filament!
         ]);
-
-
-//        $this->loadViewsFrom(__DIR__.'/views/vendor/mail/html', 'mail');
-        $this->loadViewsFrom(__DIR__.'/views/vendor', 'mail');
-
     }
 }

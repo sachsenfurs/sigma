@@ -8,10 +8,11 @@ use App\Notifications\Notification;
 use App\Services\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class NewChatMessage extends Notification implements ShouldQueue
+class NewChatMessageNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -34,12 +35,12 @@ class NewChatMessage extends Notification implements ShouldQueue
             ->button(__("Answer") , route("chats.index"));
     }
 
-    public function toMail(object $notifiable): MailMessage {
+    public function toMail(object $notifiable): Renderable {
         return (new MailMessage)
             ->subject($this->getSubject())
             ->greeting(__("Hello :name", ['name' => $notifiable->name]))
             ->line($this->getSubject() . ":")
-            ->view("mail::html.new-chat-message", ['messages' => $this->message->chat->messages()->from($this->message->user)->unread()->get()])
+            ->markdown("mail.new-chat-message", ['messages' => $this->message->chat->messages()->from($this->message->user)->unread()->get()])
             ->action(__("Answer"), $this->message->user_id != $this->message->chat->user_id ? route("chats.index") : ChatResource::getUrl('edit', ['record' => $this->message->chat]));
     }
 

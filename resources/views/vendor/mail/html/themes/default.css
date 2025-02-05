@@ -10,15 +10,31 @@ body *:not(html):not(style):not(br):not(tr):not(code) {
 
 body {
     -webkit-text-size-adjust: none;
-    background-color: #ffffff;
-    color: #718096;
     height: 100%;
     line-height: 1.4;
     margin: 0;
     padding: 0;
     width: 100% !important;
+    font-family: 'Open Sans', Arial, sans-serif;
+    background-color: #1f1f1f;
+    color: #ffffff;
 }
-
+.center {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+.container {
+    text-align: left;
+    max-width: 1200px;
+    margin: 20px;
+    background: rgb(20,20,20);
+    background: linear-gradient(48deg, rgba(0,0,0,1) 0%, rgba(14,14,14,1) 100%);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 6px 6px 0 #424242;
+    text-wrap: wrap;
+    word-break: break-word;
+}
 p,
 ul,
 ol,
@@ -98,15 +114,14 @@ img {
 /* Header */
 
 .header {
-    padding: 25px 0;
     text-align: center;
 }
 
 .header a {
-    color: #3d4852;
-    font-size: 19px;
+    font-size: 24px;
     font-weight: bold;
     text-decoration: none;
+    color: #ffffff;
 }
 
 /* Logo */

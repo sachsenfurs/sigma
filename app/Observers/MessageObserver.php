@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Message;
-use App\Notifications\Chat\NewChatMessage;
+use App\Notifications\Chat\NewChatMessageNotification;
 
 class MessageObserver
 {
@@ -20,7 +20,7 @@ class MessageObserver
             $toBeNotifiedUsers = $message->chat->userRole->users;
 
         foreach ($toBeNotifiedUsers as $user) {
-            $user->notify((new NewChatMessage($message)));
+            $user->notify((new NewChatMessageNotification($message)));
         }
     }
 

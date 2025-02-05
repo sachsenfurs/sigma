@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Notifications\Chat\NewChatMessage;
+use App\Notifications\Chat\NewChatMessageNotification;
 use App\Notifications\Ddas\ArtshowWinnerNotification;
 use App\Notifications\MorphedDatabaseChannel;
 use App\Notifications\Sig\SigFavoriteReminder;
@@ -47,6 +47,6 @@ class NotificationServiceProvider extends ServiceProvider
         ]);
 
         if(app(ChatSettings::class)->enabled)
-            NotificationService::registerNotification([NewChatMessage::class => "new_chat_message"]);
+            NotificationService::registerNotification([NewChatMessageNotification::class => "new_chat_message"]);
     }
 }

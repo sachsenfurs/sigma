@@ -1,13 +1,13 @@
-<x-mail::text.layout>
+<x-mail::layout>
 {{-- Body --}}
 {{ $slot }}
 
 {{-- Subcopy --}}
 @isset($subcopy)
 <x-slot:subcopy>
-<x-mail::text.subcopy>
+<x-mail::subcopy>
 {{ $subcopy }}
-</x-mail::text.subcopy>
+</x-mail::subcopy>
 </x-slot:subcopy>
 @endisset
 
@@ -16,4 +16,4 @@
 ---
 {{ parse_url(config('app.url'), PHP_URL_HOST) }}
 </x-slot:footer>
-</x-mail::text.layout>
+</x-mail::layout>
