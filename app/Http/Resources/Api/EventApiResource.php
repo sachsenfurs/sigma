@@ -28,7 +28,7 @@ class EventApiResource extends JsonResource
                 'name'          => $host->name,
                 'color'         => $host->color,
                 'avatar'        => $host->avatar,
-                'avatar_thumb'  => $host->avatar_thumb,
+                'hide'          => $host->hide,
             ]),
             'start'                 => Carbon::parse($this->start)->toW3cString(),
             'end'                   => Carbon::parse($this->end)->toW3cString(),
