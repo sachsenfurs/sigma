@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\SigEventResource\Widgets\OverviewStatsWidget;
+use App\Filament\Resources\Widgets\DashboardWidget;
 use App\Http\Middleware\SetLocale;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
@@ -60,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                OverviewStatsWidget::class,
+                DashboardWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
