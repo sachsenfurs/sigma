@@ -25,11 +25,9 @@
                         @endif
                         {{ $title }}
                     </h2>
-                    <p class="card-text">
-                        <x-markdown>
-                            {{ $slot != $title ? $slot : "" }}
-                        </x-markdown>
-                    </p>
+                    <div class="card-text">
+                        {{ $slot != $title ? $slot : "" }}
+                    </div>
                     <a href="{{ $link }}" class="stretched-link"> </a>
                 </div>
             </div>

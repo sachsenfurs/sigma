@@ -31,11 +31,11 @@
                             :link="route('locations.show', $location)"
                             :title="$location->description_localized"
                         >
-                            {{ $location->essential_description_localized }}
-                            <p class="text-muted">
-                                <i class="bi bi-geo-alt"></i>
+                            <x-markdown>{{ $location->essential_description_localized }}</x-markdown>
+                            <div class="text-muted">
+                                <i class="bi bi-geo-alt icon-link"></i>
                                 {{ $location->name_localized }}
-                            </p>
+                            </div>
                         </x-list-host-location>
                     @endforeach
                 @endslot

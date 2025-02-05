@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                @if((Route::is("locations.*") OR $sig->publicHosts->count() > 1) AND ($sig->priamryHost AND !$sig->primaryHost?->hide))
+                @if((Route::is("locations.*") OR $sig->publicHosts->count() > 1) AND ($sig->primaryHost AND !$sig->primaryHost?->hide))
                     <div class="row mt-2">
                         <div class="col-auto d-flex">
                             <i class="bi bi-person-circle align-self-center"></i>
