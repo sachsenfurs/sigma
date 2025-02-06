@@ -6,6 +6,7 @@ use App\Models\Post\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use Spatie\LaravelMarkdown\MarkdownBladeComponent;
 
 class AnnouncementsApiResource extends JsonResource
 {
@@ -19,12 +20,12 @@ class AnnouncementsApiResource extends JsonResource
         /**
          * @var $this Post
          */
-        return collect($this->only([
-            'text',
-            'text_en',
-            'created_at',
-        ]))->merge([
-            'image'     => $this->image ? Storage::disk("public")->url($this->image) : null,
-        ])->toArray();
+
+        return [
+            'text'          => (new MarkdownBladeComponent())->toHtml($this->text),
+            'text_en'       => (new MarkdownBladeComponent())->toHtml($this->text_en),
+            'created_at'    => $this->created_at,
+            'image'         => $this->image ? Storage::disk("public")->url($this->image) : null,
+        ];
     }
 }
