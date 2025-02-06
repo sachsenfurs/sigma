@@ -10,7 +10,7 @@
                 <div class="card-header">
                     <p>{{ $entry->sigEvent->name_localized }}
                         @foreach($entry->sigEvent->languages AS $language)
-                            <img src="/icons/{{$language}}-flag.svg" style="height: 15px" alt="{{ strtoupper($language) }}">
+                            <x-flag :language="$language" />
                         @endforeach
                     </p>
                 </div>

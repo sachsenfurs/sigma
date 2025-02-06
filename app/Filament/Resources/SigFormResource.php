@@ -87,17 +87,20 @@ class SigFormResource extends Resource
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('name')
-                ->label('Name (' . __('German') . ')')
+                ->label('Name')
+                ->translateLabel()
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('name_en')
-                ->label('Name (' . __('English') . ')')
+                ->label('Name (English)')
+                ->translateLabel()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigEvent.name')
+            Tables\Columns\TextColumn::make('sigEvents.name')
                 ->label('SIG')
                 ->searchable()
                 ->sortable()
+                ->badge()
                 ->limit(50),
             Tables\Columns\TextColumn::make('sig_filled_forms_count')
                 ->label('Filled')
@@ -207,9 +210,9 @@ class SigFormResource extends Resource
                         ->multiple()
                         ->relationship('sigEvents', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
                         ->getOptionLabelFromRecordUsing(function (Model $record) {
-                            return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
+                            return $record->name_localized . ' - ' . $record->sigHosts->pluck("name")->join(", ");
                         })
-                        ->searchable()
+                        ->searchable(['name', 'name_en'])
                 ])
                 ->columnSpanFull();
     }

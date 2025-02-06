@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SigTimeslotResource\RelationManagers;
 
 use App\Filament\Helper\FormHelper;
+use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use Closure;
 use Filament\Forms;
@@ -75,8 +76,7 @@ class SigAttendeeRelationManager extends RelationManager
                                             $fail(__("Attendee limit reached"));
                                     }
                                 }
-                            ])
-                            ->unique(),
+                            ]),
                     ]),
             ])
             ->actions([

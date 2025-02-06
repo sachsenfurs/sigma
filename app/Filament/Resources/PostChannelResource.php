@@ -67,6 +67,7 @@ class PostChannelResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('language')
+                    ->label("Language")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => strtoupper($state)),
                 Tables\Columns\TextColumn::make("channel_identifier")

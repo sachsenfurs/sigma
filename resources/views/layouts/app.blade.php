@@ -210,19 +210,18 @@
                         @endguest
 
 
-                        <button class="p-3 nav-link dropdown-toggle rounded collapsed text-start" data-bs-toggle="dropdown" data-bs-target="#home-collapse" aria-expanded="false">
-                            <img class="align-middle me-2" style="height: 1em; margin-top: -4px"
-                                 src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">
+                        <button class="p-3 nav-link dropdown-toggle rounded collapsed text-start d-flex align-items-center" data-bs-toggle="dropdown" data-bs-target="#home-collapse" aria-expanded="false">
+                            <x-flag :language="App::getLocale()" height="1em" />
+{{--                            <img class="align-middle me-2" style="height: 1em; margin-top: -4px"--}}
+{{--                                 src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">--}}
                         </button>
 
                         <ul class="dropdown-menu">
                             @foreach (config('app.locales') as $locale => $name)
                                 @if (App::getLocale() != $locale)
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('lang.set', $locale) }}">
-                                            <i class="bi">
-                                                <img class="" src="/icons/{{ $locale }}-flag.svg" style="height: 1em; margin-top: -2px" alt="[{{ $locale }}]">
-                                            </i>
+                                        <a class="dropdown-item align-items-center" href="{{ route('lang.set', $locale) }}">
+                                            <x-flag :language="$locale" height="1em" />
                                             <span class="align-middle mx-1">{{ $name }}</span>
                                         </a>
                                     </li>

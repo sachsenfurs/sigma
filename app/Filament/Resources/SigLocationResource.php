@@ -96,15 +96,15 @@ class SigLocationResource extends Resource
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('name')
+            Tables\Columns\TextColumn::make('name_localized')
                  ->label('Name')
                  ->translateLabel()
-                 ->searchable()
+                 ->searchable(['name', 'name_en'])
                  ->sortable(),
-            Tables\Columns\TextColumn::make('description')
+            Tables\Columns\TextColumn::make('description_localized')
                  ->label('Description')
                  ->translateLabel()
-                 ->searchable(),
+                 ->searchable(['description', 'description_en']),
             Tables\Columns\TextColumn::make('floor')
                  ->label('Floor')
                  ->translateLabel()
@@ -127,7 +127,7 @@ class SigLocationResource extends Resource
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\IconColumn::make('infodisplay')
-                 ->label('Infodisplay')
+                 ->label('Info Display')
                  ->translateLabel()
                  ->boolean()
                  ->sortable(),

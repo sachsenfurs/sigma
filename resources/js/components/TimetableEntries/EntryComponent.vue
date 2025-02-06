@@ -33,7 +33,7 @@
                             <span class="badge bg-warning d-block text-uppercase">{{  $t("Changed") }}</span>
                         </h3>
                         <div v-if="entry.sig_event.languages.length > 0" class="mt-3">
-                            <img v-for="lang in entry.sig_event.languages" :src="'/icons/' + lang + '-flag.svg'" class="m-1" style="height: 1.2em; opacity: 0.7" :alt="'[' + lang.toUpperCase() + ']'" />
+                            <img v-for="lang in entry.sig_event.languages" :src="'/icons/' + lang + '-flag.svg'" class="m-1 rounded-1" style="height: 1.2em; opacity: 0.7" :alt="'[' + lang.toUpperCase() + ']'" />
                         </div>
                     </div>
                 </div>

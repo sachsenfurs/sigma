@@ -12,17 +12,20 @@ use App\Filament\Resources\ChatResource\RelationManagers\SigHostsRelationManager
 use App\Models\Chat;
 use App\Models\Message;
 use Carbon\Carbon;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
 class ChatResource extends Resource
 {
     protected static ?string $model = Chat::class;
+    protected static ?string $label = "Chat";
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
 
@@ -33,10 +36,10 @@ class ChatResource extends Resource
     public static function getNavigationLabel(): string {
         return __("Messages");
     }
+
     public static function getNavigationGroup(): ?string {
         return __("Messages");
     }
-
 
     public static function table(Table $table): Table {
         return $table
@@ -110,6 +113,13 @@ class ChatResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make("status")
+                        ->form([
+                            Select::make("status")
+                                ->options(ChatStatus::class)
+                        ])
+                        ->action(fn(Collection $records, array $data) => $records->each->update($data))
+                        ->icon('heroicon-o-pencil-square')
                 ]),
             ]);
     }

@@ -28,7 +28,7 @@ class DashboardWidget extends BaseWidget
                 ->value($chatCount > 0 ? new HtmlString('<span class="text-red-500">' . $chatCount . '</span>') : 0)
                 ->icon(ChatResource::getNavigationIcon())
                 ->description(__("Chats open: :count", ['count' => Chat::where("status", ChatStatus::OPEN)->count()]))
-;
+                ->url(ChatResource::getUrl());
         }
 
         if(Gate::check("viewAny", SigEvent::class))

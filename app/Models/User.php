@@ -67,6 +67,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
          * @var $userRolePermission UserRolePermission
          */
         return Cache::remember("has{$this->id}{$checkPermission->name}{$level->value}", 120, function() use ($level, $checkPermission) {
+            if($this->permissions->filter(fn($p) => $p->permission == Permission::MANAGE_ADMIN AND $p->level == PermissionLevel::ADMIN)->count() > 0)
+                return true;
+
             foreach($this->permissions AS $userRolePermission) {
                 if($checkPermission == $userRolePermission->permission AND $userRolePermission->level->value >= $level->value)
                     return true;

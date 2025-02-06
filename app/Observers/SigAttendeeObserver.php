@@ -2,21 +2,18 @@
 
 namespace App\Observers;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use App\Models\SigTimeslotReminder;
+use App\Models\User;
 use Carbon\Carbon;
 
 class SigAttendeeObserver
 {
-    /**
-     * Handle the SigAttendee "created" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
-    public function created(SigAttendee $sigAttendee)
-    {
+
+    public function created(SigAttendee $sigAttendee) {
         $reminderAttributes = [
             'timeslot_id' => $sigAttendee->sig_timeslot_id,
             'minutes_before' => 15,
@@ -25,39 +22,21 @@ class SigAttendeeObserver
         ];
 
         $sigAttendee->user->timeslotReminders()->create($reminderAttributes);
-   
+
     }
 
-    /**
-     * Handle the SigAttendee "updated" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
-    public function updated(SigAttendee $sigAttendee)
-    {
+    public function updated(SigAttendee $sigAttendee) {
         //
     }
 
-    /**
-     * Handle the SigAttendee "deleting" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
-    public function deleting(SigAttendee $sigAttendee)
-    {
-        if($sigAttendee->sigTimeslot->reg_end < Carbon::now()) {
+    public function deleting(SigAttendee $sigAttendee) {
+        if($sigAttendee->sigTimeslot->reg_end < Carbon::now() AND !auth()->user()->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE)) {
             return false;
+            // TODO: refactoring. move auth checks to policy
         }
     }
 
-    /**
-     * Handle the SigAttendee "deleted" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
+
     public function deleted(SigAttendee $sigAttendee) {
         if (SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->exists()) {
             $reminder = SigTimeslotReminder::where('user_id', $sigAttendee->user_id)->where('timeslot_id', $sigAttendee->sig_timeslot_id)->first();
@@ -65,25 +44,12 @@ class SigAttendeeObserver
         }
     }
 
-    /**
-     * Handle the SigAttendee "restored" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
-    public function restored(SigAttendee $sigAttendee)
-    {
+
+    public function restored(SigAttendee $sigAttendee) {
         //
     }
 
-    /**
-     * Handle the SigAttendee "force deleted" event.
-     *
-     * @param  \App\Models\SigAttendee  $sigAttendee
-     * @return void
-     */
-    public function forceDeleted(SigAttendee $sigAttendee)
-    {
+    public function forceDeleted(SigAttendee $sigAttendee) {
         //
     }
 }

@@ -37,15 +37,13 @@
                     <div class="col-auto d-flex">
                         <div class="align-self-center">
                             @if($entry->cancelled)
-                                <h2><span class="badge bg-danger">{{ __("Cancelled") }}</span></h2>
+                                <span class="badge bg-danger fs-5">{{ __("Cancelled") }}</span>
                             @else
                                 @if($sig->reg_possible)
                                     <a href="{{ route("timetable-entry.show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged)
-                                    <h2>
-                                        <span class="badge bg-warning">{{ __("Changed") }}</span>
-                                    </h2>
+                                    <span class="badge bg-warning fs-5">{{ __("Changed") }}</span>
                                 @endif
                             @endif
                         </div>

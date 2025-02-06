@@ -32,15 +32,17 @@
                                             </span>
                                         </div>
                                     @endif
-                                    <div class="col-12">
-                                        <h5 class="d-inline-block me-2">
+                                    <div class="col-12 d-flex align-content-center">
+                                        <span class="fs-5 me-2 align-self-center">
                                             {{ $sig->name_localized }}
-                                        </h5>
-                                        <x-flag :language="$sig->languages"/>
-                                        <span class="badge fs-6 bg-dark-subtle text-secondary">{{ $sig->duration/60 }} h</span>
-                                        @if($sig->favorites_count > 0)
-                                            <span class="badge fs-6 bg-dark-subtle text-secondary"><i class="bi bi-heart-fill"></i> {{ $sig->favorites_count }}</span>
-                                        @endif
+                                        </span>
+                                        <x-flag :language="$sig->languages" class="align-self-center"/>
+                                        <span class="d-inline-flex gap-1">
+                                            <span class="badge fs-6 bg-dark-subtle text-secondary align-content-center">{{ $sig->duration/60 }} h</span>
+                                            @if($sig->favorites_count > 0)
+                                                <span class="badge fs-6 bg-dark-subtle text-secondary align-content-center"><i class="bi bi-heart-fill"></i> {{ $sig->favorites_count }}</span>
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </button>
@@ -91,17 +93,17 @@
                                                 <div class="card-body row">
                                                     <div class="col">
                                                         <div>
-                                                            <i class="bi bi-calendar-day"></i>
+                                                            <i class="bi bi-calendar-day icon-link"></i>
                                                             {{ $entry->start->dayName }}, {{ $entry->start->format("d.m.Y") }}
                                                         </div>
                                                         <div>
-                                                            <i class="bi bi-clock"></i>
+                                                            <i class="bi bi-clock icon-link"></i>
                                                             {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
                                                         </div>
                                                     </div>
                                                     <div class="col align-content-center">
                                                         <div class="mt-1 text-center">
-                                                            <i class="bi bi-geo-alt"></i>
+                                                            <i class="bi bi-geo-alt icon-link"></i>
                                                             <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
                                                                 {{ $entry->sigLocation->name }}
                                                             </a>

@@ -77,20 +77,30 @@ class PostResource extends Resource
                     ->visible(fn(Table $table) => $table->getFilters()['trashed']->getActiveCount())
                     ->getStateUsing(fn(Model $record) => $record->deleted_at == null),
                 Tables\Columns\TextColumn::make('text')
+                    ->label("Text")
+                    ->translateLabel()
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
                     ->limit(100),
                 Tables\Columns\TextColumn::make('text_en')
+                    ->label("Text (English)")
+                    ->translateLabel()
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
                     ->limit(100),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label("Image")
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label("Created")
+                    ->translateLabel()
                     ->dateTime()
                     ->formatStateUsing(fn(?Carbon $state) => $state?->diffForHumans())
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label("User")
+                    ->translateLabel()
                     ->sortable(),
             ])
             ->filters([

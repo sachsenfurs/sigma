@@ -8,13 +8,13 @@ use App\Filament\Clusters\SigManagement;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\SigEventResource\Pages;
 use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRelationManager;
+use App\Filament\Resources\SigEventResource\RelationManagers\SigFormsRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\SigHostsRelationManager;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\UserRole;
-use App\Settings\AppSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -32,7 +32,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
@@ -150,6 +149,7 @@ class SigEventResource extends Resource
             SigTimeslotsRelationManager::class,
             DepartmentInfosRelationManager::class,
             SigHostsRelationManager::class,
+            SigFormsRelationManager::class,
         ];
     }
 
@@ -163,7 +163,7 @@ class SigEventResource extends Resource
                         ->modalWidth(MaxWidth::SevenExtraLarge)
                     ),
             Tables\Columns\TextColumn::make('name')
-                ->searchable()
+                ->searchable(['name', 'name_en'])
                 ->sortable(),
             Tables\Columns\TextColumn::make('sigHosts.name')
                 ->label('Hosts')
@@ -252,7 +252,7 @@ class SigEventResource extends Resource
             ->translateLabel()
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('German')
+                    ->label('Name')
                     ->translateLabel()
                     ->maxLength(255)
                     ->required()

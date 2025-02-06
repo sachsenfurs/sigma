@@ -175,12 +175,12 @@ class TimetableEntryResource extends Resource
                 ->label('Time span')
                 ->width(10)
                 ->translateLabel(),
-            Tables\Columns\TextColumn::make('sigEvent.name')
+            Tables\Columns\TextColumn::make('sigEvent.name_localized')
                 ->label('Event')
                 ->translateLabel()
                 ->color(fn(Model $record) => $record->hide ? Color::Gray : null)
                 ->badge(fn(Model $record) => $record->hide)
-                ->searchable(),
+                ->searchable(['name', 'name_en']),
             Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
                  ->label('Host')
                  ->translateLabel()
@@ -233,23 +233,23 @@ class TimetableEntryResource extends Resource
         return Tables\Filters\SelectFilter::make('sigLocation')
             ->label('Location')
             ->translateLabel()
+            ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
             ->options(function (Model $record) {
                 // If the location has a description, append it to the name
-                if ($record->description) {
-                    return $record->name . ' - ' . $record->description;
+                if ($record->description_localized) {
+                    return $record->name_localized . ' - ' . $record->description_localized;
                 }
                 return $record->name;
             })
             ->getOptionLabelFromRecordUsing(function (Model $record) {
                 // If the location has a description, append it to the name
-                if ($record->description) {
-                    return $record->name . ' - ' . $record->description;
+                if ($record->description_localized) {
+                    return $record->name_localized . ' - ' . $record->description_localized;
                 }
-                return $record->name;
+                return $record->name_localized;
             })
-            ->searchable()
-            ->preload()
-            ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'));
+            ->searchable(['name', 'name_en'])
+            ->preload();
     }
 
     public static function getSigEventField(): Forms\Components\Component {
@@ -261,7 +261,7 @@ class TimetableEntryResource extends Resource
             ->model(TimetableEntry::class)
             ->relationship('sigEvent', 'name', fn (Builder $query) => $query->orderBy('name')->with('sigHosts'))
             ->getOptionLabelFromRecordUsing(function (Model $record) {
-                return $record->name . ' - ' . $record->sigHosts->pluck("name")->join(", ");
+                return $record->name_localized . ' - ' . $record->sigHosts->pluck("name")->join(", ");
             })
             ->live()
             ->hintAction(
@@ -275,7 +275,7 @@ class TimetableEntryResource extends Resource
                 }
             )
             ->required()
-            ->searchable()
+            ->searchable(['name', 'name_en'])
             ->preload();
     }
 
@@ -283,16 +283,16 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Select::make('sig_location_id')
             ->label('Location')
             ->translateLabel()
-            ->relationship('sigLocation', 'name')
+            ->relationship('sigLocation', 'name_localized')
             ->model(TimetableEntry::class)
             ->options(function(): array {
-                return SigLocation::orderBy('name')->get()->mapWithKeys(function ($sigLocation) {
-                    $name = $sigLocation->description ? $sigLocation->name . " - " . $sigLocation->description : $sigLocation->name;
+                return SigLocation::all()->sortBy("name_localized")->mapWithKeys(function ($sigLocation) {
+                    $name = $sigLocation->description_localized ? $sigLocation->name_localized . " - " . $sigLocation->description_localized : $sigLocation->name_localized;
                     return [ $sigLocation->id => $name ];
                 })->toArray();
             })
             ->required()
-            ->searchable()
+            ->searchable(['name', 'name_en'])
             ->preload();
     }
 

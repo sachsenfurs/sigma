@@ -67,32 +67,6 @@ class EditTimetableEntry extends EditRecord
         return [
             Grid::make()
                 ->columns(2)
-                ->schema([
-                    Select::make('sig_event_id')
-                          ->relationship('sigEvent', 'name')
-                          ->prefix(__("SIG"))
-                          ->hiddenLabel()
-                          ->searchable()
-                          ->preload()
-                          ->required(),
-                    Select::make('sig_location_id')
-                          ->prefix(__("Location"))
-                          ->hiddenLabel()
-                          ->relationship('sigLocation', 'name'),
-
-                    DateTimePicker::make('start')
-                                  ->seconds(false)
-                                  ->required()
-                                  ->prefix(__("Start"))
-                                  ->hiddenLabel(true),
-                    DateTimePicker::make('end')
-                                  ->seconds(false)
-                                  ->required()
-                                  ->prefix(__("End"))
-                                  ->afterOrEqual('start')
-                                  ->hiddenLabel(true),
-                ])
-                ->columns(2)
                 ->schema(TimetableEntryResource::getSchema())
         ];
     }

@@ -51,7 +51,7 @@ class UnprocessedSigEvents extends TableWidget
                     ->translateLabel()
                     ->sortable()
                     ->width(1),
-                TextColumn::make("name")
+                TextColumn::make("name_localized")
                     ->label("SIG Name")
                     ->translateLabel()
                     ->sortable(),

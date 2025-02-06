@@ -186,7 +186,7 @@ class SigTimeslotsRelationManager extends RelationManager
                     return $this->entries->keyBy("id")->map(
                         fn($t) =>
                             $t->start->translatedFormat("l d.m.Y, H:i") . " - " .
-                            $t->end->translatedFormat("H:i") . " | " . $t->sigEvent->name
+                            $t->end->translatedFormat("H:i") . " | " . $t->sigEvent->name_localized
                     );
                 })
                 ->afterStateHydrated(fn($state) => $this->entry = TimetableEntry::find($state))

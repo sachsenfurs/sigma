@@ -26,10 +26,10 @@
                 <h1>{{ $entry->sigEvent->name_localized }}</h1>
 
                 @if (in_array('de' ,$entry->sigEvent->languages))
-                    <img height="19px" src="{{ asset('icons/de-flag.svg') }}" alt="Event in german">
+                    <x-flag language="de" />
                 @endif
                 @if (in_array('en' ,$entry->sigEvent->languages))
-                    <img height="19px" src="{{ asset('icons/uk-flag.svg') }}" alt="Event in english">
+                    <x-flag language="en" />
                 @endif
             </div>
             <div class="col-6 text-center align-self-center">
