@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\AnnouncementsApiResource;
 use App\Http\Resources\Api\ArtshowItemResource;
 use App\Http\Resources\Api\EssentialLocationsApiResource;
 use App\Http\Resources\Api\EventApiResource;
@@ -10,10 +11,10 @@ use App\Http\Resources\Api\LocationApiResource;
 use App\Http\Resources\Api\SocialApiResource;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\Info\Social;
+use App\Models\Post\Post;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Gate;
 
 class SignageEndpointController extends Controller
 {
@@ -58,5 +59,9 @@ class SignageEndpointController extends Controller
         return ArtshowItemResource::collection(
             ArtshowItem::auctionableItems()->with(["artist", "highestBid"])->withCount("artshowBids")->get()
         );
+    }
+
+    public function announcements() {
+        return AnnouncementsApiResource::collection(Post::latest()->limit(10)->get());
     }
 }
