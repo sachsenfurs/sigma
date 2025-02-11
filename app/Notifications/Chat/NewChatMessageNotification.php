@@ -62,7 +62,7 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
 
     public function shouldSend() {
         return $this->message->read_at == null  // message is still unread
-            AND $this->message->chat->messages()->where("created_at", ">", $this->message->created_at)->count() == 1; // no messages were sent after
+            AND $this->message->chat->messages()->where("created_at", ">", $this->message->created_at)->count() == 0; // no messages were sent after
     }
 
 }
