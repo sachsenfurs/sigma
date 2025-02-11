@@ -1,5 +1,10 @@
 <!-- Modal -->
 <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
+    <script>
+        document.getElementById('creditsModal').addEventListener('show.bs.modal', () => {
+            document.querySelectorAll('.credits-img').forEach((i) => i.style.display="block")
+        })
+    </script>
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-bottom-0">
@@ -50,7 +55,7 @@
                     ] AS $contributor => $data)
                         <a href="{{ $data['href'] }}" target="_blank" class="text-decoration-none">
                             <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
-                                <img class="rounded-circle me-1" width="24" height="24" src="{{ $data['img'] }}" loading="lazy" alt="">
+                                <img class="rounded-circle me-1 credits-img" width="24" height="24" src="{{ $data['img'] }}" loading="lazy" alt="" style="display: none">
                                 {{ $contributor }}
                             </span>
                         </a>

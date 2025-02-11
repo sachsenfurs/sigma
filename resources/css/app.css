@@ -1,3 +1,14 @@
+/* nunito-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url('nunito-v26-latin-regular.woff2') format('woff2'),
+    url('nunito-v26-latin-regular.ttf') format('truetype');
+}
+
+
 .navbar-brand img {
     height: 32px;
 }

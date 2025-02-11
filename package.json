@@ -15,7 +15,6 @@
         "axios": "^1.6.2",
         "bootstrap": "^5.3.3",
         "laravel-vite-plugin": "^0.8.1",
-        "lodash": "^4.17.19",
         "postcss": "^8.4.35",
         "postcss-nesting": "^12.0.2",
         "resolve-url-loader": "^5.0.0",
