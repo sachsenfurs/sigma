@@ -3,16 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Ddas\ArtshowItem;
-use App\Models\Ddas\Dealer;
-use App\Models\Ddas\DealerTag;
 use App\Models\SigEvent;
+use App\Models\SigFavorite;
 use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\RealData\EASTSeeder;
-use Database\Seeders\RealData\PermissionSeeder;
 use Database\Seeders\RealData\RingbergSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
 use Database\Seeders\RealData\UserRoleSeeder;
@@ -27,7 +25,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        (new PermissionSeeder())->run(); // Needs to be run before user role seeder
         (new UserRoleSeeder())->run();
 
         User::factory()->create([
@@ -44,13 +41,24 @@ class DatabaseSeeder extends Seeder
         ]);
         UserRoleSeeder::assignUserToRole('Lytrox', 'Administrator');
 
+        $users = User::factory()->count(50)->create();
+
         (new RingbergSeeder())->run();
         (new EASTSeeder())->run();
 
         (new PostChannelSeeder())->run();
 
-        SigHost::factory()->count(10)->create();
-        SigEvent::factory()->count(25)->create();
+        // create sig hosts
+        foreach($users AS $user) {
+            if(rand(0,100) > 10)
+                SigHost::factory()->create([
+                    'reg_id' => $user->reg_id,
+                    'name' => $user->name,
+                ]);
+        }
+
+        // create sig events
+        SigEvent::factory()->count(35)->create();
 
          // create tags and associate random sigs
         (new SigTagSeeder())->run();
@@ -60,9 +68,8 @@ class DatabaseSeeder extends Seeder
              * @var $sig SigEvent
              */
             $sig->sigTags()->attach(SigTag::inRandomOrder()->limit(rand(0,3))->get());
+            $sig->sigHosts()->attach(SigHost::inRandomOrder()->limit(rand(1,2))->get());
         });
-
-        (new SigHostSigEventsTableSeeder())->run();
 
         TimetableEntry::factory()->count(50)->create();
         $entries = TimetableEntry::inRandomOrder()->limit(15)->get();
@@ -82,8 +89,25 @@ class DatabaseSeeder extends Seeder
             $entry->sigEvent->save();
         });
 
-        ArtshowItem::factory(50)->create();
 
+        // generate some favorites
+        $inserts = collect();
+        foreach(TimetableEntry::all() AS $entry) {
+            $user_ids = User::inRandomOrder()->limit(rand(0,20))->get("id");
+            foreach($user_ids AS $user) {
+                $inserts->add([
+                    'timetable_entry_id' => $entry->id,
+                    'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+        SigFavorite::insert($inserts->toArray());
+
+
+        // Art show & dealers den
+        ArtshowItem::factory(50)->create();
         (new DealerSeeder())->run();
     }
 }
