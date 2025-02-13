@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Widgets;
+namespace App\Filament\Widgets;
 
 use App\Enums\ChatStatus;
 use App\Filament\Resources\ChatResource;

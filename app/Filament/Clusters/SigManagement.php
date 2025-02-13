@@ -23,7 +23,7 @@ class SigManagement extends Cluster
             return null;
 
         return Cache::remember('sig_pending_count', 30, function() {
-            return SigEvent::whereApproval(Approval::PENDING)->count() ?: false;
+            return SigEvent::whereApproval(Approval::PENDING)->count() ?: null;
         });
     }
 }

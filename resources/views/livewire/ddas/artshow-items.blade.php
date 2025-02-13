@@ -107,7 +107,10 @@
                         <div class="col">{{ __("Artist") }}:</div>
                         <div class="col">
                             @if($currentItem->artist->social)
-                                <a href="{{ $currentItem->artist->social }}" target="_blank">{{ $currentItem->artist->name }}</a>
+                                <a href="{{ $currentItem->artist->social }}" class="text-decoration-none" target="_blank">
+                                    <i class="bi bi-box-arrow-up-right icon-link"></i>
+                                    {{ $currentItem->artist->name }}
+                                </a>
                             @else
                                 {{ $currentItem->artist->name }}
                             @endif

@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\Widgets\DashboardWidget;
+use App\Filament\Widgets\DashboardWidget;
 use App\Http\Middleware\SetLocale;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
