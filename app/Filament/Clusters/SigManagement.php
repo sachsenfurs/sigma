@@ -3,14 +3,15 @@
 namespace App\Filament\Clusters;
 
 use App\Enums\Approval;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigEvent;
 use Filament\Clusters\Cluster;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 class SigManagement extends Cluster
 {
+    use HasActiveIcon;
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
     protected static ?string $navigationLabel = "SIGs";
     protected static ?string $navigationGroup = 'SIG';

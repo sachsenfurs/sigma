@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = User::class;
 
     protected static ?string $navigationGroup = "System";

@@ -27,6 +27,7 @@
     "None": "Keine",
     "User Settings": "Benutzer Einstellungen",
     "SIG Management": "SIG Verwaltung",
+    "Chat Settings": "Chat Einstellungen",
 
     "User Count": "Benutzeranzahl",
     "User Role": "Benutzerrolle",
@@ -515,6 +516,8 @@
     "Total Events: :count": "Events gesamt: :count",
     "Total Dealers: :count": "Dealer gesamt: :count",
     "Total Art Show Items: :count": "Art Show Gegenstände gesamt: :count",
+    "Currently Active Users": "Aktuell aktive Nutzer",
+    "Logged in Users: :count": "Eingeloggte Nutzer: :count",
 
     "Settings": "Einstellungen",
     "System Settings": "Systemeinstellungen",
@@ -570,6 +573,7 @@
     "No chats available": "Keine Chats verfügbar",
     "No Messages": "Keine Nachrichten",
     "Open": "Offen",
+    "open": "öffnen",
     "Closed": "Geschlossen",
     "Sent": "Gesendet",
     "Read at :time": "Gelesen: :time",
@@ -579,6 +583,7 @@
     "New Message from :user (:chat)": "Neue Nachricht von :user (:chat)",
     "Your message": "Deine Nachricht",
     "Chat opened. Please enter your message below.": "Chat eröffnet. Bitte gib unten deine Nachricht ein.",
+    "Chats open: :count": "Offene chats: :count",
 
     "View Chat": "Chat anzeigen",
     "Chat Created": "Chat erstellt",

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DepartmentInfoResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\DepartmentInfo;
 use App\Models\SigEvent;
 use App\Models\UserRole;
@@ -22,6 +23,7 @@ use Illuminate\Validation\Rules\Unique;
 
 class DepartmentInfoResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = DepartmentInfo::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';

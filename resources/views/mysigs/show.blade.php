@@ -29,7 +29,7 @@
                             <div id="panelsStayOpen-collapse-{{ $tte->id }}" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
                                     @forelse ($tte->sigTimeslots as $ts)
-                                        <a href="{{ route('timeslots.editNotes', $ts->id) }}" style="text-decoration: none;">
+                                        <a href="#" style="text-decoration: none;">
                                             <div class="col-12 col-md-12 mb-2">
                                                 <div class="row">
                                                     <div class="col-12 col-md-3 d-flex border" style="align-items: center; justify-content: center;">

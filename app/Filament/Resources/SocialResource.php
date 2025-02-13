@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Clusters\Settings;
 use App\Filament\Resources\SocialResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Filament\Forms;
@@ -15,8 +16,8 @@ use Filament\Tables\Table;
 
 class SocialResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = Social::class;
-
     protected static ?string $cluster = Settings::class;
     protected static ?int $navigationSort = 1900;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

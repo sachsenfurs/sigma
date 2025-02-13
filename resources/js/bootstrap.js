@@ -4,6 +4,10 @@ window.$ = $;
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
+import axios from 'axios';
+window.axios = axios;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 function defineJQueryPlugin(plugin) {
     const name = plugin.NAME;
     const JQUERY_NO_CONFLICT = $.fn[name];

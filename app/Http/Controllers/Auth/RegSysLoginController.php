@@ -7,7 +7,6 @@ use App\Models\User;
 use App\OAuth2\RegSysProvider;
 use App\OAuth2\RegSysResourceOwner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
@@ -20,12 +19,11 @@ class RegSysLoginController extends Controller
         $this->provider = new RegSysProvider([
             'clientId' => config("app.regsys_oauth.clientId"),
             'clientSecret' => config("app.regsys_oauth.clientSecret"),
-            'redirectUri' => config("app.regsys_oauth.redirectUri"),
+            'redirectUri' => route("oauth_redirect"),
         ]);
     }
 
     public function index(Request $request) {
-//        return redirect()->back()->withError(__("Login not available yet! Please try again in a few days :)"));
         // initialize state
         $authorizationUrl = $this->provider->getAuthorizationUrl();
 

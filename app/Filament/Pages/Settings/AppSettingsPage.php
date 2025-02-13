@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Filament\Clusters\Settings;
+use App\Filament\Traits\HasActiveIcon;
 use App\Services\Translator;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ use Illuminate\Support\HtmlString;
 
 class AppSettingsPage extends SettingsPage
 {
+    use HasActiveIcon;
     protected static string $settings = AppSettings::class;
     protected static ?string $cluster = Settings::class;
     protected static ?string $navigationIcon = "heroicon-o-cog-6-tooth";
@@ -73,6 +75,7 @@ class AppSettingsPage extends SettingsPage
                 Forms\Components\Section::make("API Endpoints")
                     ->translateLabel()
                     ->collapsed()
+                    ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make("event_api")
                             ->label("Signage Event API")
@@ -80,9 +83,8 @@ class AppSettingsPage extends SettingsPage
                             ->readOnly()
                             ->dehydrated(false)
                             ->formatStateUsing(fn() => URL::signedRoute("api.events"))
-                            ->columnSpanFull()
                             ->hintAction(function($state) {
-                                return Action::make("open")
+                                return Action::make(__("open"))
                                       ->url($state)
                                       ->openUrlInNewTab();
                             }),
@@ -92,21 +94,18 @@ class AppSettingsPage extends SettingsPage
                             ->readOnly()
                             ->dehydrated(false)
                             ->formatStateUsing(fn() => route("api.locations"))
-                            ->columnSpanFull()
                             ->hintAction(function($state) {
-                                return Action::make("open")
+                                return Action::make(__("open"))
                                       ->url($state)
                                       ->openUrlInNewTab();
                             }),
                         Forms\Components\TextInput::make("essentials_api")
-                            ->label("Signage Event API")
+                            ->label("Signage Essentials API")
                             ->translateLabel()
-                            ->readOnly()
                             ->dehydrated(false)
                             ->formatStateUsing(fn() => route("api.essentials"))
-                            ->columnSpanFull()
                             ->hintAction(function($state) {
-                                return Action::make("open")
+                                return Action::make(__("open"))
                                       ->url($state)
                                       ->openUrlInNewTab();
                             }),
@@ -116,9 +115,8 @@ class AppSettingsPage extends SettingsPage
                             ->readOnly()
                             ->dehydrated(false)
                             ->formatStateUsing(fn() => route("api.socials"))
-                            ->columnSpanFull()
                             ->hintAction(function($state) {
-                                return Action::make("open")
+                                return Action::make(__("open"))
                                       ->url($state)
                                       ->openUrlInNewTab();
                             }),
@@ -128,9 +126,8 @@ class AppSettingsPage extends SettingsPage
                             ->readOnly()
                             ->dehydrated(false)
                             ->formatStateUsing(fn() => URL::signedRoute("api.artshow_items"))
-                            ->columnSpanFull()
                             ->hintAction(function($state) {
-                                return Action::make("open")
+                                return Action::make(__("open"))
                                       ->url($state)
                                       ->openUrlInNewTab();
                             }),

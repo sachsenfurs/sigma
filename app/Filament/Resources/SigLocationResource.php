@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SigLocationResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigLocation;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +13,7 @@ use Filament\Tables\Table;
 
 class SigLocationResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigLocation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';

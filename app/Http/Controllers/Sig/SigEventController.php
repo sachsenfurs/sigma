@@ -38,13 +38,9 @@ class SigEventController extends Controller
             'description' => "required|string|min:0|max:3000",
             'additional_info' => "nullable|string|max:3000",
             'languages' => "nullable|array|in:de,en",
-            'sig_host_id' => [
-                'required',
-                Rule::in(auth()->user()->sigHosts()->pluck("id"))
-            ],
         ]);
 
-        SigHost::find($request->get("sig_host_id"))->sigEvents()->create($validated);
+        auth()->user()->sigHosts()->firstOrFail()->sigEvents()->create($validated);
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));
     }

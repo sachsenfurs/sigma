@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigFavorite;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
@@ -26,6 +27,7 @@ use Illuminate\Support\HtmlString;
 
 class TimetableEntryResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = TimetableEntry::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $cluster = SigPlanning::class;

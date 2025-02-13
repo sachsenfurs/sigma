@@ -2,12 +2,13 @@
 
 namespace App\Filament\Clusters;
 
+use App\Filament\Traits\HasActiveIcon;
 use Filament\Clusters\Cluster;
-use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
 
 class SigPlanning extends Cluster
 {
+    use HasActiveIcon;
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationGroup = 'SIG';

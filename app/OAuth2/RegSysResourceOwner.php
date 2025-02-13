@@ -7,52 +7,47 @@ use League\OAuth2\Client\Tool\ArrayAccessorTrait;
 
 class RegSysResourceOwner implements ResourceOwnerInterface
 {
-
     use ArrayAccessorTrait;
 
-    protected array $response;
+    public function __construct(protected array $response = []) {}
 
-    public function __construct(array $response = []) {
-        $this->response = $response;
-    }
-
-
-    public function getId() {
+    public function getId(): int {
         return $this->getValueByKey($this->response, "id");
     }
 
-    public function getCheckedIn() {
+    public function getCheckedIn(): bool {
         return $this->getValueByKey($this->response, "checkedin", false);
     }
 
-    public function getNickname() {
+    public function getNickname(): string {
         return $this->getValueByKey($this->response, "nickname");
     }
 
-    public function getEmail() {
+    public function getEmail(): string {
         return $this->getValueByKey($this->response, "email", "");
     }
 
-    public function getLanguage() {
+    public function getLanguage(): string {
         return $this->getValueByKey($this->response, "language", "en");
     }
 
-    public function getTelegramId() {
+    public function getTelegramId(): int {
         return $this->getValueByKey($this->response, "telegram_id");
     }
 
-    public function getGroups() {
+    public function getGroups(): array {
         return $this->getValueByKey($this->response, "groups", []);
     }
-    public function getAvatar() {
+
+    public function getAvatar(): string {
         return $this->getValueByKey($this->response, "avatar");
     }
-    public function getAvatarThumb() {
+
+    public function getAvatarThumb(): string {
         return $this->getValueByKey($this->response, "avatar_thumb");
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         return $this->response;
     }
 }

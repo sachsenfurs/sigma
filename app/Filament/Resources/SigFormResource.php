@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Approval;
 use App\Filament\Resources\SigFormResource\Pages;
 use App\Filament\Resources\SigFormResource\RelationManagers\SigFilledFormsRelationManager;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use Filament\Forms;
@@ -22,6 +23,7 @@ use Illuminate\Support\Str;
 
 class SigFormResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigForm::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';

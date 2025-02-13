@@ -9,6 +9,7 @@ use App\Filament\Resources\ChatResource\RelationManagers\ArtshowBidsRelationMana
 use App\Filament\Resources\ChatResource\RelationManagers\DealersRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\RoleRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\SigHostsRelationManager;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\Chat;
 use App\Models\Message;
 use Carbon\Carbon;
@@ -24,6 +25,7 @@ use Illuminate\Support\HtmlString;
 
 class ChatResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = Chat::class;
     protected static ?string $label = "Chat";
 

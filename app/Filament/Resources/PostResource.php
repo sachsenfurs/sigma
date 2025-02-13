@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Forms;
@@ -17,6 +18,7 @@ use Illuminate\Support\HtmlString;
 
 class PostResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = Post::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';

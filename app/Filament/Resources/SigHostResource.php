@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\Pages;
 use App\Filament\Resources\SigHostResource\RelationManagers;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigHost;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SigHostResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigHost::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $cluster = SigManagement::class;

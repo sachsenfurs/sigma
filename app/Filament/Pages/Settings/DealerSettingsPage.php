@@ -3,11 +3,11 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Filament\Clusters\Settings;
+use App\Filament\Traits\HasActiveIcon;
 use App\Settings\DealerSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Gate;
 
 class DealerSettingsPage extends SettingsPage
 {
+    use HasActiveIcon;
     protected static string $settings = DealerSettings::class;
     protected static ?string $cluster = Settings::class;
     protected static ?string $navigationIcon = "heroicon-o-shopping-cart";

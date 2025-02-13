@@ -11,7 +11,7 @@ use App\Models\Chat;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\Ddas\Dealer;
 use App\Models\SigEvent;
-use Filament\Support\Colors\Color;
+use App\Services\SessionStatsService;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Gate;
@@ -21,6 +21,7 @@ class DashboardWidget extends BaseWidget
 {
     protected function getStats(): array {
         $stats = [];
+
 
         if(Gate::check("viewAny", Chat::class)) {
             $chatCount = ChatResource::getNavigationBadge();
@@ -48,6 +49,13 @@ class DashboardWidget extends BaseWidget
                 ->description(__("Total Dealers: :count", ['count' => Dealer::count()]))
                 ->icon(DealerResource::getNavigationIcon())
                 ->url(DealerResource::getUrl());
+
+
+        if(SessionStatsService::isSupported()) {
+            $stats[] = Stat::make(__("Currently Active Users"), SessionStatsService::getActiveSessionsCount())
+                ->icon("heroicon-o-globe-alt")
+                ->description(__("Logged in Users: :count", ['count' => SessionStatsService::getActiveUsersCount()]));
+        }
 
         return $stats;
     }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostChannelResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\PostChannel;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +13,7 @@ use Filament\Tables\Table;
 
 class PostChannelResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = PostChannel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';

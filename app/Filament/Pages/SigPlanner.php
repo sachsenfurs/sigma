@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
 use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\TimetableEntry;
 use App\Providers\Filament\FilamentFullCalendarProvider;
 use Filament\Facades\Filament;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Gate;
 
 class SigPlanner extends Page
 {
-
+    use HasActiveIcon;
     protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 

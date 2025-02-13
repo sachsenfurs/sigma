@@ -3,36 +3,33 @@
 namespace App\OAuth2;
 
 use League\OAuth2\Client\Grant\AbstractGrant;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 
-class RegSysProvider extends \League\OAuth2\Client\Provider\AbstractProvider
+class RegSysProvider extends AbstractProvider
 {
 
-    public function getBaseAuthorizationUrl()
-    {
-        return config("app.regsys_oauth.domain") . "/?page=Authorize";
+    public function getBaseAuthorizationUrl(): string {
+        return config("app.regsys_oauth.url");
     }
 
-    public function getBaseAccessTokenUrl(array $params)
-    {
-        return config("app.regsys_oauth.domain") . "/?page=AuthorizeToken";
+    public function getBaseAccessTokenUrl(array $params): string {
+        return config("app.regsys_oauth.token_url");
     }
 
-    public function getResourceOwnerDetailsUrl(AccessToken $token)
-    {
-        return config("app.regsys_oauth.domain") . "/?page=AuthorizeToken&profile&access_token=" . $token->getToken();
+    public function getResourceOwnerDetailsUrl(AccessToken $token): string {
+        return config("app.regsys_oauth.resource_url") . "&access_token=" . $token->getToken();
     }
 
-    protected function getAuthorizationHeaders($token = null) {
+    protected function getAuthorizationHeaders($token = null): array {
         return [
             'Authorization' => "Bearer $token"
         ];
     }
 
-    protected function getDefaultScopes()
-    {
+    protected function getDefaultScopes(): array {
         return [  ];
     }
 
@@ -41,13 +38,11 @@ class RegSysProvider extends \League\OAuth2\Client\Provider\AbstractProvider
      * @param AccessToken $token
      * @return RegSysResourceOwner
      */
-    protected function createResourceOwner(array $response, AccessToken $token): RegSysResourceOwner
-    {
+    protected function createResourceOwner(array $response, AccessToken $token): RegSysResourceOwner {
         return new RegSysResourceOwner($response);
     }
 
-    protected function checkResponse(ResponseInterface $response, $data)
-    {
+    protected function checkResponse(ResponseInterface $response, $data) {
         return $data;
     }
 
@@ -57,8 +52,7 @@ class RegSysProvider extends \League\OAuth2\Client\Provider\AbstractProvider
      * @return AccessToken
      * @throws IdentityProviderException
      */
-    protected function createAccessToken(array $response, AbstractGrant $grant)
-    {
+    protected function createAccessToken(array $response, AbstractGrant $grant): AccessToken {
         if(empty($response['access_token']))
             throw new IdentityProviderException("Fehler bei der Authentifizierung", 100, $response);
         return new AccessToken($response);

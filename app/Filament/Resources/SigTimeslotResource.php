@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigTimeslotResource\Pages;
 use App\Filament\Resources\SigTimeslotResource\RelationManagers;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigTimeslot;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -22,6 +23,7 @@ use Illuminate\Support\HtmlString;
 
 class SigTimeslotResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigTimeslot::class;
     protected static ?string $cluster = SigManagement::class;
     protected static ?string $navigationIcon = 'heroicon-o-clock';

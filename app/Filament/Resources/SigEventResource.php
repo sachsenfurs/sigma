@@ -11,6 +11,7 @@ use App\Filament\Resources\SigEventResource\RelationManagers\DepartmentInfosRela
 use App\Filament\Resources\SigEventResource\RelationManagers\SigFormsRelationManager;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\SigHostsRelationManager;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigEvent;
 use App\Models\SigHost;
 use App\Models\SigTag;
@@ -36,6 +37,7 @@ use Illuminate\Support\HtmlString;
 
 class SigEventResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigEvent::class;
     protected static ?string $label = "SIGs";
     protected static ?string $cluster = SigManagement::class;

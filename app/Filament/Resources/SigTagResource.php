@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
+use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigTag;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,6 +16,7 @@ use Filament\Tables\Table;
 
 class SigTagResource extends Resource
 {
+    use HasActiveIcon;
     protected static ?string $model = SigTag::class;
     protected static ?string $cluster = SigManagement::class;
     protected static ?string $navigationIcon = 'heroicon-o-tag';

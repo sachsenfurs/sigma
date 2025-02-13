@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
     {
         // Default pagination for all tables
         Table::configureUsing(function(Table $table): void {
-            $table->defaultPaginationPageOption(50);
+            $table->defaultPaginationPageOption(25);
         });
         Table::$defaultDateTimeDisplayFormat = "l, d.m.Y - H:i";
         Table::$defaultDateDisplayFormat = "l, d.m.Y";

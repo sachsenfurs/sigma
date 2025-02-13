@@ -2,8 +2,8 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Enums\Permission;
 use App\Filament\Clusters\Settings;
+use App\Filament\Traits\HasActiveIcon;
 use App\Settings\ArtShowSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\DateTimePicker;
@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Gate;
 
 class ArtShowSettingsPage extends SettingsPage
 {
+    use HasActiveIcon;
     protected static string $settings = ArtShowSettings::class;
     protected static ?string $cluster = Settings::class;
     protected static ?string $navigationIcon = "heroicon-o-paint-brush";
