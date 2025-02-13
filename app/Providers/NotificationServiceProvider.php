@@ -12,9 +12,11 @@ use App\Notifications\TimetableEntry\TimetableEntryLocationChanged;
 use App\Notifications\TimetableEntry\TimetableEntryTimeChanged;
 use App\Services\NotificationService;
 use App\Settings\ChatSettings;
+use Illuminate\Database\QueryException;
 use Illuminate\Notifications\Channels\DatabaseChannel;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelSettings\Settings;
 
 class NotificationServiceProvider extends ServiceProvider
 {
@@ -45,8 +47,11 @@ class NotificationServiceProvider extends ServiceProvider
             TimetableEntryTimeChanged::class        => "timetable_entry_time_changed",
             ArtshowWinnerNotification::class        => "artshow_winner_notification",
         ]);
-
-        if(app(ChatSettings::class)->enabled)
-            NotificationService::registerNotification([NewChatMessageNotification::class => "new_chat_message"]);
+        try {
+            if(app(ChatSettings::class)->enabled)
+                NotificationService::registerNotification([NewChatMessageNotification::class => "new_chat_message"]);
+        } catch(QueryException $e) {
+            // settings not present (migration/setup in progress?)
+        }
     }
 }

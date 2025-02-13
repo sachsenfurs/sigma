@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row mt-3 flex">
-                        <div class="col-12 text-center align-items-center">
+                        <div class="col-12 text-center">
                             <a class="btn btn-success btn-lg" href="{{ route('oauthlogin_regsys') }}">
                                 {{ __('Login with your existing con-registration') }}
                             </a>
@@ -19,11 +19,19 @@
 {{--                                </a>--}}
 {{--                            </small>--}}
                             @if(\Illuminate\Support\Facades\App::environment("local"))
-                                <small class="d-flex w-100 justify-content-end mt-1">
-                                    <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">
-                                        {{ __('Dev-Login ID 1') }}
-                                    </a>
-                                </small>
+
+                                <div class="d-grid justify-content-end mt-1">
+                                    <label for="devlogin" class="form-label">Dev Login</label>
+                                    <select id="devlogin" class="form-select" onchange="window.location='{{ route("devlogin") }}/' + this.value">
+                                        <option value="0">Select to login...</option>
+                                        @foreach(\App\Models\User::limit(20)->get() AS $user)
+                                            <option value="{{ $user->id }}">{{  $user->id }} - {{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+{{--                                    <a class="justify-content-end text-decoration-none"  href="{{ route('devlogin', 1) }}">--}}
+{{--                                        {{ __('Dev-Login ID 1') }}--}}
+{{--                                    </a>--}}
+                                </div>
                             @endif
                         </div>
                     </div>

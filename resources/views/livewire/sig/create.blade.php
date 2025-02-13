@@ -11,5 +11,10 @@
     </x-modal.livewire-modal>
 
 
-    <button class="btn btn-primary" wire:click="createHost">{{ __("Register as Host") }}</button>
+    <button class="btn card h-100 w-100 text-center justify-content-center btn-success mt-3" style="min-height: 10rem" wire:click="createHost">
+        <div class="fs-2">
+            <i class="bi bi-plus-lg icon-link"></i>
+            {{ __("Register as Host") }}
+        </div>
+    </button>
 </div>

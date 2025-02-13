@@ -10,7 +10,7 @@
             <div class="col-12 col-lg-4">
                 <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
                     <div class="card-body">
-                        <i class="bi bi-plus"></i> {{ __("Register a new SIG") }}
+                        <i class="bi bi-plus icon-link"></i> {{ __("Register a new SIG") }}
                     </div>
                 </a>
             </div>

@@ -48,46 +48,13 @@
                     </div>
                 </div>
             </div>
-            {{--            <div class="card mt-3">--}}
-            {{--                <div class="card-title d-flex flex-wrap align-items-center gap-1">--}}
-            {{--                    <h3 class="me-2 w-100">{{ $dealer->name }}</h3>--}}
-            {{--                    @foreach($dealer->tags AS $tag)--}}
-            {{--                        <span class="badge bg-dark fs-6 text-secondary">{{ $tag->name_localized }}</span>--}}
-            {{--                    @endforeach--}}
-            {{--                </div>--}}
-            {{--                <div class="card-body">--}}
-            {{--                    <div class="row">--}}
-            {{--                        <div class="col-9">--}}
-            {{--                            <p class="mt-2">--}}
-            {{--                                {{ $dealer->info_localized }}--}}
-            {{--                            </p>--}}
-
-            {{--                            <div class="card m-2">--}}
-            {{--                                <div class="card-body text-secondary">--}}
-            {{--                                    {{ $dealer->additional_info }}--}}
-            {{--                                </div>--}}
-            {{--                            </div>--}}
-
-            {{--                            <a href="{{  $dealer->gallery_link }}" target="_blank">--}}
-            {{--                                <button type="button" class="btn btn-dark mt-3">--}}
-            {{--                                    <i class="bi bi-link-45deg"></i> {{ $dealer->gallery_link_name }}--}}
-            {{--                                </button>--}}
-            {{--                            </a>--}}
-
-            {{--                        </div>--}}
-            {{--                        <div class="col-3">--}}
-            {{--                            <img src="{{ $dealer->icon_file_url }}" alt="" class="rounded img-fluid">--}}
-            {{--                        </div>--}}
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
         @endforeach
     @else
         <h2 class="mt-3">{{ __("Sign up") }}</h2>
 
         <button class="btn card h-100 w-100 text-center justify-content-center btn-success mt-3" style="min-height: 10rem" wire:click="newDealer">
             <div class="fs-2">
-                <i class="bi bi-plus-lg"></i>
+                <i class="bi bi-plus-lg icon-link"></i>
                 {{ __("Register as Dealer") }}
             </div>
         </button>
