@@ -108,4 +108,20 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | OAuth2 Provider Settings
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'oauth' => [
+        'url' => env('OAUTH_URL', ""),
+        'token_url' => env('OAUTH_TOKEN_URL', ""),
+        'resource_url' => env('OAUTH_RESOURCE_URL', ""),
+        'client_id' => env('OAUTH_CLIENT_ID', ""),
+        'client_secret' => env('OAUTH_CLIENT_SECRET', ""),
+        'refresh_interval' => env('OAUTH_REFRESH_INTERVAL', 60),
+        'refresh_token_lifetime' => env('OAUTH_REFRESH_TOKEN_LIFETIME', 20160),
+    ],
 ];

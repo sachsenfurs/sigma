@@ -1,6 +1,6 @@
 <?php
 
-namespace App\OAuth2;
+namespace App\Http\OAuth2;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Tool\ArrayAccessorTrait;
@@ -31,7 +31,7 @@ class RegSysResourceOwner implements ResourceOwnerInterface
         return $this->getValueByKey($this->response, "language", "en");
     }
 
-    public function getTelegramId(): int {
+    public function getTelegramId(): string {
         return $this->getValueByKey($this->response, "telegram_id");
     }
 

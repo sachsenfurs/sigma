@@ -249,26 +249,19 @@
                     </div>
                 </nav>
                 <main class="d-block py-4 px-lg-3 mb-auto">
-                    @if (!$noerror AND $errors->any())
-                        @foreach ($errors->all() as $error)
+                    @if (!$noerror AND ($errors->any() OR session('error')))
+                        @foreach ([...$errors->all(), session()->get('error')] as $error)
                             <div class="container">
-                                <div class="alert alert-danger" role="alert">
-                                    <h4>{{ $error }}</h4>
+                                <div class="alert alert-danger fs-4" role="alert">
+                                    {{ $error }}
                                 </div>
                             </div>
                         @endforeach
                     @endif
-                    @if (session('error'))
-                        <div class="container">
-                            <div class="alert alert-danger" role="alert">
-                                <h4 class="alert-title">{{ session()->get('error') }}</h4>
-                            </div>
-                        </div>
-                    @endif
                     @if (session('success'))
                         <div class="container">
-                            <div class="alert alert-success" role="alert">
-                                <h4 class="alert-title">{{ session()->get('success') }}</h4>
+                            <div class="alert alert-success fs-4" role="alert">
+                                {{ session()->get('success') }}
                             </div>
                         </div>
                     @endif

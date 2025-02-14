@@ -31,3 +31,6 @@ package-lock.json
 public/css
 public/js
 /storage
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php

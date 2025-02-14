@@ -1,6 +1,6 @@
 <?php
 
-namespace App\OAuth2;
+namespace App\Http\OAuth2;
 
 use League\OAuth2\Client\Grant\AbstractGrant;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -12,15 +12,15 @@ class RegSysProvider extends AbstractProvider
 {
 
     public function getBaseAuthorizationUrl(): string {
-        return config("app.regsys_oauth.url");
+        return config("auth.oauth.url");
     }
 
     public function getBaseAccessTokenUrl(array $params): string {
-        return config("app.regsys_oauth.token_url");
+        return config("auth.oauth.token_url");
     }
 
     public function getResourceOwnerDetailsUrl(AccessToken $token): string {
-        return config("app.regsys_oauth.resource_url") . "&access_token=" . $token->getToken();
+        return config("auth.oauth.resource_url") . "&access_token=" . $token->getToken();
     }
 
     protected function getAuthorizationHeaders($token = null): array {
@@ -30,7 +30,7 @@ class RegSysProvider extends AbstractProvider
     }
 
     protected function getDefaultScopes(): array {
-        return [  ];
+        return [];
     }
 
     /**
@@ -57,4 +57,5 @@ class RegSysProvider extends AbstractProvider
             throw new IdentityProviderException("Fehler bei der Authentifizierung", 100, $response);
         return new AccessToken($response);
     }
+
 }

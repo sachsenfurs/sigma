@@ -11,10 +11,10 @@ use App\Models\TimetableEntry;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\RealData\EASTSeeder;
-use Database\Seeders\RealData\RingbergSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
 use Database\Seeders\RealData\UserRoleSeeder;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,8 +23,9 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run(): void
-    {
+    public function run(): void {
+        Cache::clear();
+
         (new UserRoleSeeder())->run();
 
         User::factory()->create([
@@ -43,7 +44,6 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory()->count(50)->create();
 
-        (new RingbergSeeder())->run();
         (new EASTSeeder())->run();
 
         (new PostChannelSeeder())->run();

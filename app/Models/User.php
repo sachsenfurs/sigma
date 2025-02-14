@@ -34,20 +34,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
     protected $casts = [
         'groups' => 'array',
         'notification_channels' => 'array',
+        'token_updated_at' => 'datetime',
     ];
 
-
     protected $hidden = [
-        'password',
-        'remember_token',
         'email',
         'telegram_id',
         'telegram_user_id',
+        'refresh_token',
+        'token_updated_at',
     ];
-
-//    protected $with = [
-//        'roles'
-//    ];
 
     public function roles(): BelongsToMany {
         return $this->belongsToMany(

@@ -219,19 +219,4 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
-
-    'oauth' => [
-        'domain' => env('OAUTH_DOMAIN'),
-        'clientId' => env('OAUTH_CLIENT_ID', ""),
-        'clientSecret' => env('OAUTH_CLIENT_SECRET', ""),
-        'redirectUri' => env('OAUTH_REDIRECT_URI', ""),
-    ],
-    'regsys_oauth' => [
-        'url' => env('REGSYS_OAUTH_URL'),
-        'token_url' => env('REGSYS_OAUTH_TOKEN_URL'),
-        'resource_url' => env('REGSYS_OAUTH_RESOURCE_URL'),
-        'clientId' => env('REGSYS_OAUTH_CLIENT_ID', ""),
-        'clientSecret' => env('REGSYS_OAUTH_CLIENT_SECRET', ""),
-    ],
-
 ];

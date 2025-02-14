@@ -13,6 +13,8 @@ class EASTSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void {
+        (new RingbergSeeder())->run();
+
         @copy(Storage::disk("local")->path("") . "../../database/seeders/RealData/Resources/qr_tg.png", Storage::disk("local")->path("public/qr_tg.png"));
         @copy(Storage::disk("local")->path("") . "../../database/seeders/RealData/Resources/qr_tg_en.png", Storage::disk("local")->path("public/qr_tg_en.png"));
         @copy(Storage::disk("local")->path("") . "../../database/seeders/RealData/Resources/qr_discord.png", Storage::disk("local")->path("public/qr_discord.png"));

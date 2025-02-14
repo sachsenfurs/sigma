@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             //$table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->default("");
-            $table->rememberToken();
+            $table->string('refresh_token', 1000)->nullable();
+            $table->dateTime('token_updated_at')->nullable();
 
             $table->unsignedBigInteger("reg_id")->unique()->nullable();
             $table->string("language", 4)->nullable();
