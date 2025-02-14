@@ -18,10 +18,10 @@
             <div class="modal-footer">
                 @if($type == "submit")
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary" wire:click.debounce="{{$action}}">{{ __('Save') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click.debounce="{{$action}}" wire:loading.attr="disabled">{{ __('Save') }}</button>
                 @elseif($type == "confirm")
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('No') }}</button>
-                    <button type="button" class="btn btn-primary" wire:click.debounce="{{$action}}">{{ __('Yes') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click.debounce="{{$action}}" wire:loading.attr="disabled">{{ __('Yes') }}</button>
                 @elseif($type == "alert")
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __($buttonTextOk) }}</button>
                 @endif
