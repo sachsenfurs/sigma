@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sig_form_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->tinyInteger('approval', false, true)->default(0);
+            $table->string('rejection_reason')->nullable();
             $table->json('form_data')->nullable();
             $table->timestamps();
         });

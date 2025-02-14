@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('token_updated_at')->nullable();
 
             $table->unsignedBigInteger("reg_id")->unique()->nullable();
+            $table->boolean("checkedin")->default(false);
             $table->string("language", 4)->nullable();
             $table->unsignedBigInteger("telegram_id")->nullable();
             $table->json("groups")->default(json_encode([]));

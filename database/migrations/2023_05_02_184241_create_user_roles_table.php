@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('border_color')->default('#666666');
             $table->string('background_color')->default('#E6E6E6');
             $table->string('registration_system_key')->nullable();
+            $table->boolean("chat_activated")->default(false);
 
-            $table->timestamps();
         });
     }
 

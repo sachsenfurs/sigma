@@ -43,6 +43,9 @@ return new class extends Migration
             // Nur Ausstellungstück oder zur Auktion freigegeben?
             $table->boolean('auction')->default(true);
 
+            // gesperrt für weitere gebote
+            $table->boolean("locked")->default(0);
+
             // Status, ob es nach der Anmeldung "angenommen" wurde
             $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
 

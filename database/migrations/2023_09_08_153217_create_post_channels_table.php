@@ -16,9 +16,12 @@ return new class extends Migration
         Schema::create('post_channels', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("channel_identifier");
+            $table->bigInteger("test_channel_identifier")->nullable();
+            $table->text("info")->nullable();
             $table->string("name")->nullable();
             $table->string("language")->default("de");
             $table->string("implementation");
+
         });
     }
 

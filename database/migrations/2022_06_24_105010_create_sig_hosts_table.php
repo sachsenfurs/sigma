@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->text("description")->nullable()->default("");
             $table->string('description_en')->nullable()->default("");
-
+            $table->string('color')->nullable();
             $table->boolean("hide")->default(false);
         });
     }

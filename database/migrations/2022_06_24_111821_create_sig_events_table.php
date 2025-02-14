@@ -24,15 +24,22 @@ return new class extends Migration
             $table->text("description")->nullable();
             $table->text("description_en")->nullable();
 
+            $table->boolean("text_confirmed")->default(false)->comment("Proofreading status");
+            $table->boolean("no_text")->default(false)->comment("Specifies if event description is mandatory");
+
             $table->integer("duration")->default(0);
             $table->tinyInteger("approval")->default(\App\Enums\Approval::PENDING)->comment("0 => Pending, 1 => Approved, 2 => Rejected");
 
             $table->text('additional_info')->nullable();
+            $table->json("attributes")->default("[]");
             $table->json('requirements')->nullable();
             $table->boolean("reg_possible")->default(false);
 
             $table->unsignedInteger('max_regs_per_day')->default(1);
             $table->unsignedInteger('max_group_attendees_count')->default(0);
+            $table->boolean("group_registration_enabled")->default(false);
+
+            $table->json('private_group_ids')->nullable();
 
             $table->timestamps();
         });

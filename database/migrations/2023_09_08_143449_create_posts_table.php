@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->text("text_de")->nullable();
+            $table->text("text")->nullable();
             $table->text("text_en")->nullable();
             $table->foreignId("user_id")->nullable()->constrained()->nullOnDelete();
             $table->string("image")->nullable();

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('sig_reminders', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('timetable_entry_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('timetable_entry_id')->constrained()->cascadeOnDelete();
             $table->integer('send_at');
             $table->integer('minutes_before');
             $table->integer('executed_at')->nullable();
