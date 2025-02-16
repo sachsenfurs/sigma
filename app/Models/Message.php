@@ -54,4 +54,18 @@ class Message extends Model
     public function scopeUnread(Builder $query): void {
         $query->whereNull("read_at");
     }
+
+    public function scopeUnreadAdmin(Builder $query): void {
+//        $query->with("chat")->whereColumn("chats.user_id", "=", "messages.user_id")->whereNull("read_at");
+        $query->whereNull("read_at")->whereNotIn("user_id", auth()->user()?->roles?->pluck("id") ?? []);
+    }
+
+
+    public function isOwn(): bool {
+        if(auth()->id() == $this->user_id)
+            return true;
+        if($this->user->roles->pluck("id")->contains($this->chat->user_role_id))
+            return true;
+        return false;
+    }
 }

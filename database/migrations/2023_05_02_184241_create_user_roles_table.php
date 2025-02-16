@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->string('name');
+            $table->string('name_en')->nullable();
             $table->string('fore_color')->default('#333333');
             $table->string('border_color')->default('#666666');
             $table->string('background_color')->default('#E6E6E6');

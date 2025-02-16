@@ -10,7 +10,7 @@
                 <h5 class="modal-title" id="reminderModalLabel">{{ __("Modify reminder") }}</h5>
             </div>
             <div class="modal-body">
-                <p>{{ __('How many minutes before the event :event do you want to be reminded for?', [ 'event' => $timetableEntry->sigEvent->name ])}}</p>
+                <p>{{ __('How many minutes before the event :event do you want to be reminded for?', [ 'event' => $timetableEntry->sigEvent?->name_localized ])}}</p>
                 <input type="hidden" id="timetable_entry_id" name="timetable_entry_id" value="{{ $timetableEntry->id }}" />
                 <select class="form-select" name="minutes_before" id="minutes_before" aria-label="Select minutes">
                     <option value="15" selected>15 {{ __('Minutes') }}</option>

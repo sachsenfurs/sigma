@@ -3,7 +3,7 @@
         <div id="chat" class="overflow-scroll scrolldown" style="max-height: 40rem" x-init="$dispatch('scrolldown')">
             <div class="mx-auto space-y-4" wire:poll.10s>
                 @forelse ($record->messages as $message)
-                    @php($own = auth()->id() == $message->user_id)
+                    @php($own = $message->isOwn())
                     <div @class(["flex items-end gap-3", "justify-end" => $own])>
                         @if ($message->user->avatar)
                             <img src="{{ $message->user->avatar_thumb }}" @class(["w-10 h-10 rounded-full object-cover", $own ? "order-3" : "order-1"]) alt="{{ $message->user->name }}">
@@ -19,6 +19,9 @@
                                 {!! nl2br(e($message->text)) !!}
                             </div>
                             <div @class(["text-xs text-gray-500 mt-1 flex items-center", "text-right" => $own])>
+                                @if($own)
+                                    {{ $message->user->name }} -
+                                @endif
                                 {{ $message->created_at->diffForHumans() }}
                                 @if($own AND $message->read_at)
                                     <span class="inline-block" title="{{ __("Read at :time", ['time' => $message->created_at->format("d.m.Y, H:i")]) }}">

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller

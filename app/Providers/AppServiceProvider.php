@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Post\PostChannel;
 use App\Models\User;
+use App\Models\UserRole;
 use App\Services\Translator;
 use App\Settings\AppSettings;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -12,19 +14,15 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register() {
+    public function register(): void {
 
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot() {
+    public function boot(): void {
         if($this->app->environment('production')) {
             \URL::forceScheme('https');
         } else {
@@ -36,11 +34,10 @@ class AppServiceProvider extends ServiceProvider
             return new Translator(app(AppSettings::class)->deepl_api_key, app(AppSettings::class)->deepl_source_lang, app(AppSettings::class)->deepl_target_lang);
         });
 
-        /**
-         *
-         */
         Relation::morphMap([
             'user' => User::class, // getMorphClass() on User::class won't work with filament!
+            'post_channel' => PostChannel::class,
+            'user_role' => UserRole::class,
         ]);
     }
 }

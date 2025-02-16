@@ -4,8 +4,9 @@ namespace App\Notifications\Sig;
 
 use App\Models\SigReminder;
 use App\Models\TimetableEntry;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -29,7 +30,6 @@ class SigFavoriteReminder extends Notification
 
     public function toTelegram($notifiable) {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line(
                 __(self::$text, [
                     "event" => $this->timetableEntry->sigEvent->name_localized,
@@ -51,7 +51,7 @@ class SigFavoriteReminder extends Notification
             ->button(__("View Event") , route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
 
-    public function toMail(object $notifiable): MailMessage {
+    public function toMail(object $notifiable): Renderable {
         return (new MailMessage)
             ->subject(
                 '[INFO] ' . __(":event starting soon", [

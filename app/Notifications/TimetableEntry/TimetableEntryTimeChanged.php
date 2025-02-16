@@ -2,9 +2,8 @@
 
 namespace App\Notifications\TimetableEntry;
 
-use App;
 use App\Models\TimetableEntry;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -26,7 +25,6 @@ class TimetableEntryTimeChanged extends Notification
 
     public function toTelegram($notifiable) {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
             ->line(__('The time of the event :event has changed!', ["event" => $this->timetableEntry->sigEvent->name_localized]))
             ->line(__('New Time: ') . Carbon::parse($this->timetableEntry->start)->format("H:i") . ' - ' . Carbon::parse($this->timetableEntry->end)->format("H:i"))

@@ -5,7 +5,7 @@ namespace App\Notifications\Chat;
 use App\Filament\Resources\ChatResource;
 use App\Models\Message;
 use App\Notifications\Notification;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Renderable;
@@ -18,17 +18,16 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
 
     public function __construct(protected Message $message) {}
 
-    private function getSubject(): string { // can't be called in constructor, otherwise the localization won't be applied
+    protected function getSubject(): string { // can't be called in constructor, otherwise the localization won't be applied
         return __("New Message from :user (:chat)", ['user' => $this->message->user->name, 'chat' => $this->message->chat->subject]);
     }
 
-    public function via(object $notifiable): array {
-        return NotificationService::channels($this, $notifiable, ['mail']);
+    protected function getVia(): array {
+        return ['mail'];
     }
 
     public function toTelegram(object $notifiable): TelegramMessage {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line($this->getSubject() . ":")
             ->line("")
             ->line($this->message->text)
@@ -40,11 +39,11 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
             ->subject($this->getSubject())
             ->greeting(__("Hello :name", ['name' => $notifiable->name]))
             ->line($this->getSubject() . ":")
-            ->markdown("mail.new-chat-message", ['messages' => $this->message->chat->messages()->from($this->message->user)->unread()->get()])
+            ->markdown("mail.new-chat-message", ['messages' => $this->message->chat->messages()->from($this->message->user)->unread()->get(), 'user' => $notifiable ])
             ->action(__("Answer"), $this->message->user_id != $this->message->chat->user_id ? route("chats.index") : ChatResource::getUrl('edit', ['record' => $this->message->chat]));
     }
 
-    public function toArray(object $notifiable) {
+    public function toArray(object $notifiable): array {
         return [
             'text' => __("New Message in Chat")
         ];
@@ -60,7 +59,7 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
         ];
     }
 
-    public function shouldSend() {
+    public function shouldSend(): bool {
         return $this->message->read_at == null  // message is still unread
             AND $this->message->chat->messages()->where("created_at", ">", $this->message->created_at)->count() == 0; // no messages were sent after
     }

@@ -11,8 +11,14 @@ class MessageObserver
      * Handle the Message "created" event.
      */
     public function created(Message $message): void {
-        // determine the last one who messaged the user
-        $lastUser = $message->chat->messages()->whereNot('user_id', $message->user_id)->latest()->first()?->user;
+        if($message->chat->user_id == $message->user_id) {
+            // message direction: user => admin
+            // determine the last one who messaged the user
+            $lastUser = $message->chat->messages()->whereNot('user_id', $message->user_id)->latest()->first()?->user;
+        } else {
+            // message direction: admin => user
+            $lastUser = $message->chat->user;
+        }
 
         if($lastUser)
             $toBeNotifiedUsers = [ $lastUser ];

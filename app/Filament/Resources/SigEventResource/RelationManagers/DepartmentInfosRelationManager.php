@@ -43,7 +43,7 @@ class DepartmentInfosRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user_role_id')
             ->columns([
-                Tables\Columns\TextColumn::make('userRole.title')
+                Tables\Columns\TextColumn::make('userRole.name_localized')
                     ->label('User Role')
                     ->translateLabel()
                     ->sortable(),
@@ -67,7 +67,8 @@ class DepartmentInfosRelationManager extends RelationManager
                         Forms\Components\Select::make('user_role_id')
                             ->label('Department')
                             ->translateLabel()
-                            ->relationship('userRole', 'title')
+                            ->relationship('userRole', 'name')
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                             ->preload()
                             ->searchable()
                             ->required(),
@@ -88,7 +89,8 @@ class DepartmentInfosRelationManager extends RelationManager
                         Forms\Components\Select::make('user_role_id')
                             ->label('Department')
                             ->translateLabel()
-                            ->relationship('userRole', 'title')
+                            ->relationship('userRole', 'name')
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                             ->preload()
                             ->searchable()
                             ->required(),

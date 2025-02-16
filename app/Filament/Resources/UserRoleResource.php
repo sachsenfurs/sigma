@@ -4,7 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Enums\PermissionLevel;
 use App\Filament\Resources\UserRoleResource\Pages;
-use App\Filament\Resources\UserRoleResource\RelationManagers\UserResourceRelationManager;
+use App\Filament\Resources\UserRoleResource\RelationManagers\NotificationRoutesRelationManager;
+use App\Filament\Resources\UserRoleResource\RelationManagers\UserRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\UserRole;
 use Filament\Forms;
@@ -39,7 +40,8 @@ class UserRoleResource extends Resource
                     ->label("User Details")
                     ->translateLabel()
                     ->schema([
-                        self::getTitleField(),
+                        self::getNameField(),
+                        self::getNameEnField(),
                         self::getRegistrationSystemKeyField(),
                         self::getChatActivatedField(),
                     ]),
@@ -71,7 +73,7 @@ class UserRoleResource extends Resource
 
     public static function getRelations(): array {
         return [
-            UserResourceRelationManager::class,
+            UserRelationManager::class,
         ];
     }
 
@@ -85,7 +87,7 @@ class UserRoleResource extends Resource
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('title')
+            Tables\Columns\TextColumn::make('name_localized')
                 ->label('User Role')
                 ->translateLabel()
                 ->searchable()
@@ -103,11 +105,18 @@ class UserRoleResource extends Resource
         ];
     }
 
-    private static function getTitleField(): Forms\Components\Component {
-        return Forms\Components\TextInput::make('title')
+    private static function getNameField(): Forms\Components\Component {
+        return Forms\Components\TextInput::make('name')
             ->label('User Role')
             ->translateLabel()
             ->required()
+            ->maxLength(255);
+    }
+
+    private static function getNameEnField(): Forms\Components\Component {
+        return Forms\Components\TextInput::make('name_en')
+            ->label('User Role (English)')
+            ->translateLabel()
             ->maxLength(255);
     }
 

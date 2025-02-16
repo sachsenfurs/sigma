@@ -66,7 +66,7 @@ class PostResource extends Resource
                     ->translateLabel()
                     ->visibleOn('create')
                     ->options($channels->pluck("name", "id"))
-                    ->formatStateUsing(fn(?Model $record) => $record?->channels?->pluck("id")?->toArray() ?? $channels->pluck("id")->toArray())
+                    ->formatStateUsing(fn(?Model $record) => $record?->channels?->pluck("id")?->toArray() ?? $channels->where("default")->pluck("id")->toArray())
             ]);
     }
 

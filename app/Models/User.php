@@ -8,6 +8,7 @@ use App\Models\Ddas\ArtshowArtist;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\Dealer;
 use App\Models\Post\Post;
+use App\Models\Traits\HasNotificationRoutes;
 use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -22,12 +23,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Mockery\Exception;
 
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocalePreference
 {
     use HasFactory;
     use Notifiable;
+    use HasNotificationRoutes;
 
     protected $guarded = [];
 
@@ -52,9 +55,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         );
     }
 
-    public function permissions(): Attribute {
+    public function permissions(): ?Attribute {
+        $id = $this->attributes['id'] ?? []; // somehow $this->id won't work in some cases (probably a bug when Laravel tries to do some attribute-magic)
+        if(empty($id))
+            return null; // just to be safe
         return Attribute::make(
-            get: fn() => Cache::remember("userPerms{$this->id}", 120, fn() => $this->roles->map->permissions->flatten())
+            get: fn() => Cache::remember("userPerms{$id}", 120, fn() => $this->roles->map->permissions->flatten())
         )->shouldCache();
     }
 
@@ -113,6 +119,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function notifications(): MorphMany {
         return $this->morphMany(Notification::class, 'notifiable')->latest();
+    }
+
+    /**
+     * returns the telegram id used for all notification-related services
+     */
+    public function routeNotificationForTelegram(): ?string {
+        return $this->telegram_user_id;
     }
 
     public function canAccessPanel(Panel $panel): bool {

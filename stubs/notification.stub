@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -15,22 +15,27 @@ class {{ class }} extends Notification
         //
     }
 
-    public function via(object $notifiable): array {
-        return NotificationService::channels($this, $notifiable, ['database']);
+    // enforced channels
+    protected function getVia(): array {
+        return ['database'];
     }
 
-    public function toMail(object $notifiable): MailMessage {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+    protected function getSubject(): ?string {
+        return __("New Notification");
     }
 
-    public function toTelegram(object $notifiable): TelegramMessage {
-        return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
-            ->line("This is a Notification")
-            ->button(__("View") , route("..."));
+    protected function getLines(): array {
+        return [
+            __("Hello World"),
+        ];
+    }
+
+    protected function getAction(): ?string {
+        return __("Action");
+    }
+
+    protected function getActionUrl(): string {
+        return route("home");
     }
 
     public function toArray(object $notifiable): array {

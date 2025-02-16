@@ -50,7 +50,7 @@ class Chat extends Model
 
     public function unreadMessagesCount(): Attribute {
         return Attribute::make(
-            get: fn() => $this->messages->filter(fn($m) => $m->user_id != $this->user_id AND !$m->read_at)->count()
+            get: fn() => $this->messages()->unread()->where("user_id", "!=", $this->user_id)->count()
         )->shouldCache();
     }
 

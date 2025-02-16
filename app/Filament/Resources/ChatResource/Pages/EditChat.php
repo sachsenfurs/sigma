@@ -50,7 +50,8 @@ class EditChat extends EditRecord
                 Select::make("user_role_id")
                     ->label("Department")
                     ->translateLabel()
-                    ->relationship("userRole", "title")
+                    ->relationship("userRole", "name")
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                     ->searchable()
                     ->preload(),
                 Select::make("status")

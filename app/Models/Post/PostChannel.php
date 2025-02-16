@@ -2,11 +2,16 @@
 
 namespace App\Models\Post;
 
+use App\Models\Traits\HasNotificationRoutes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Notifications\Notifiable;
 
 class PostChannel extends Model
 {
+    use Notifiable;
+    use HasNotificationRoutes;
+
     public $timestamps = false;
     protected $table = "post_channels";
 
@@ -37,5 +42,13 @@ class PostChannel extends Model
     public function sendTestMessage(Post $post): void {
         if($this->test_channel_identifier)
             $post->sendToChannel($this, true);
+    }
+
+    public function routeNotificationForMail(): null {
+        return null;
+    }
+
+    public function routeNotificationForTelegram(): ?string {
+        return $this->channel_identifier;
     }
 }

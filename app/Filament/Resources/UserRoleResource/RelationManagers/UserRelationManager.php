@@ -12,7 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 
-class UserResourceRelationManager extends RelationManager
+class UserRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
     protected static ?string $inverseRelationship = 'roles';

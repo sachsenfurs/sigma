@@ -4,10 +4,10 @@ namespace App\Notifications\Sig;
 
 use App\Models\SigTimeslot;
 use App\Models\SigTimeslotReminder as SigTimeSlotReminderModel;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
@@ -29,9 +29,8 @@ class SigTimeslotReminder extends Notification
         return NotificationService::channels($this, $notifiable);
     }
 
-    public function toTelegram(Model $notifiable): MailMessage {
+    public function toTelegram(Model $notifiable): Renderable {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line(__("Hi ") . $notifiable->name . ",")
             ->line(__('your booked timeslot of the event :event starts in :minutes_before minutes!', ["event" => $this->sigTimeslot->timetableEntry->sigEvent->name_localized, "minutes_before" => $this->reminder->minutes_before]))
             ->button(__("View Event") , route("timetable-entry.show", ['entry' => $this->sigTimeslot->id]));

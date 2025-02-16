@@ -34,7 +34,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <a class="text-decoration-none" href="{{ route("timetable-entry.show", $registration->sigTimeslot->timetableEntry) }}">
-                                        <h3>{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}</h3>
+                                        <h3>{{ $registration->sigTimeslot->timetableEntry->sigEvent?->name_localized }}</h3>
                                     </a>
 
                                     <hr>
@@ -61,7 +61,7 @@
                                     <button type="button"
                                             class="btn btn-secondary text-white"
                                             style="margin-left: 5px"
-                                            onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent->name_localized }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
+                                            onclick="document.getElementById('deleteModalEventName').innerHTML = '{{ $registration->sigTimeslot->timetableEntry->sigEvent?->name_localized }}'; $('#deleteModal').modal('show'); $('#deleteForm').attr('action', '/cancel/{{ $registration->sigTimeslot->id }}')"
                                             data-toggle="modal" data-target="#deleteModal"
                                             @disabled($registration->sigTimeslot->reg_end->isBefore(now()))
                                     >
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-4 mt-2 mt-md-0">
-                @if (!auth()->user()->telegram_user_id)
+                @if (!auth()->user()->routeNotificationForTelegram())
                     <div class="container">
                         <h2 class="p-2"><i class="bi bi-telegram icon-link"></i> {{ __("Telegram Connection") }}</h2>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
@@ -118,7 +118,7 @@
                         <div class="card my-1">
                             <div class="card-header">
                                 <a class="text-decoration-none" href="{{ route("timetable-entry.show", $fav->timetableEntry) }}">
-                                    {{ $fav->timetableEntry->sigEvent->name_localized }}
+                                    {{ $fav->timetableEntry->sigEvent?->name_localized }}
                                 </a>
                             </div>
                             <div class="card-body">
@@ -134,7 +134,7 @@
                                             <x-buttons.notification-edit :fav="$fav" :small="true"/>
                                             <button type="button" class="btn btn-secondary text-white btn"
                                                 style="margin-left: 5px;"
-                                                data-bs-signame="{{ $fav->timetableEntry->sigEvent->name_localized }}"
+                                                data-bs-signame="{{ $fav->timetableEntry->sigEvent?->name_localized }}"
                                                 data-bs-entryid="{{ $fav->timetableEntry->id }}"
                                                 data-bs-toggle="modal" data-bs-target="#deleteFavModal"
                                                 @disabled($fav->timetableEntry->start < \Carbon\Carbon::now())

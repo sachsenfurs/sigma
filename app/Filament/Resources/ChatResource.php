@@ -19,7 +19,9 @@ use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
@@ -32,7 +34,7 @@ class ChatResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
 
     public static function getNavigationBadge(): ?string {
-        return Cache::remember("filamentUnreadMessagesss", 1, fn() => Message::whereHas("chat", fn($query) => $query->involved())->unread()->to(auth()->user())->count()) ?: null;
+        return Cache::remember("filamentUnreadMessages".auth()->id(), 10, fn() => Message::unreadAdmin()->whereHas("chat", fn($query) => $query->involved())->count()) ?: null;
     }
 
     public static function getNavigationLabel(): string {
@@ -45,11 +47,11 @@ class ChatResource extends Resource
 
     public static function table(Table $table): Table {
         return $table
-            ->modifyQueryUsing(fn($query) =>
-                $query->involved()
+            ->modifyQueryUsing(fn(Builder $query) =>
+                $query
                     ->with(["userRole", "messages.user"])
                     ->withCount(["messages" => function($query) {
-                         return $query->to(auth()->user())->unread();
+                        return $query->unreadAdmin();
                     }])
                     ->withAggregate("messages", "created_at", "max")
                     ->orderByDesc("messages_max_created_at")
@@ -61,7 +63,7 @@ class ChatResource extends Resource
                 TextColumn::make('userRole')
                     ->label("Department")
                     ->translateLabel()
-                    ->formatStateUsing(fn($state) => $state->title)
+                    ->formatStateUsing(fn($state) => $state->name_localized)
                     ->badge(),
                 Tables\Columns\ImageColumn::make("user.avatar_thumb")
                     ->label("")
@@ -79,6 +81,7 @@ class ChatResource extends Resource
                     ->width("0")
                     ->badge()
                     ->color(fn($state) => $state == 0 ? Color::Gray : Color::Red)
+//                    ->getStateUsing(fn($record) => $record->unreadMessagesAdmin()->count() ?: null),
                     ->formatStateUsing(fn($state) => $state ?: null),
                 TextColumn::make("last_message")
                     ->label("Last message")
@@ -97,7 +100,8 @@ class ChatResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make("userRole")
-                    ->relationship("userRole", "title")
+                    ->relationship("userRole", "name")
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                     ->label("Department")
                     ->translateLabel()
                     ->searchable()

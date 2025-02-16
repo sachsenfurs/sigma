@@ -232,7 +232,7 @@ class SigEventResource extends Resource
                                 ->label("Linked Departments")
                                 ->translateLabel()
                                 ->schema([
-                                    TextEntry::make("userRole.title")
+                                    TextEntry::make("userRole.name_localized")
                                         ->label("")
                                         ->hintIcon("heroicon-o-pencil-square")
                                         ->hintAction(fn($record) => Action::make("edit")->url(DepartmentInfoResource::getUrl("edit", ['record' => $record]))),
@@ -480,7 +480,7 @@ class SigEventResource extends Resource
                     ->nullable()
                     ->label(__("API Metadata")),
                 Forms\Components\Select::make("private_group_ids")
-                    ->options(UserRole::all()->pluck("title", "id"))
+                    ->options(UserRole::all()->pluck("name_localized", "id"))
                     ->multiple()
                     ->dehydrateStateUsing(function ($state) {
                         $array = collect($state)->map(fn($i) => (int)$i)->toArray();

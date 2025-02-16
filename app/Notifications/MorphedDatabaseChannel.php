@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Notifications\Channels\DatabaseChannel;
 use Illuminate\Notifications\Notification;
 

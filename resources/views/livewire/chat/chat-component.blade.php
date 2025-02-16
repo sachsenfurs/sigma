@@ -17,7 +17,7 @@
                         wire:click="selectChat({{$chat->id}})"
                         aria-current="{{ $chat->id == $currentChat?->id ? "true":"false" }}">
                     <div class="me-auto text-break">
-                        <div class="fw-bold d-none d-md-block">{{ __($chat->userRole->title) }}</div>
+                        <div class="fw-bold d-none d-md-block">{{ __($chat->userRole->name_localized) }}</div>
                         <span class="d-none d-md-block">
                             {{ $chat->subject }}
                         </span>
@@ -109,7 +109,7 @@
                 <select @class(['form-select', 'border-danger' => $errors->has("department")]) id="department" name="department" wire:model="department">
                     <option value="0" selected>{{ __('-- Select Department --') }}</option>
                     @foreach ($departments as $dep)
-                        <option value="{{ $dep->id }}">{{ $dep->title }}</option>
+                        <option value="{{ $dep->id }}">{{ $dep->name_localized }}</option>
                     @endforeach
                 </select>
                 <x-form.input-error name="department" />

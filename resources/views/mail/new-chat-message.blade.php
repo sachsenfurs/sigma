@@ -14,7 +14,7 @@
 
 @foreach($messages as $message)
 @if($loop->index == 0)
-@if($previous = $message->chat->messages()->to($message->user)->where("id", "<", $message->id)->latest()->first())
+@if($previous = $message->chat->messages()->from($user)->where("id", "<", $message->id)->latest()->first())
 {{--<!-- Empfangen (Receiver) -->--}}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:10px 0;">
 <tr>

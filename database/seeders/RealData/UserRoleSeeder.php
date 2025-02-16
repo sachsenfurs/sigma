@@ -19,24 +19,22 @@ class UserRoleSeeder extends Seeder
     public function run(): void
     {
         DB::table('user_roles')->insert([
-            'title'                     => 'Administrator',
+            'name'                      => 'Administrator',
             'fore_color'                => '#333333',
             'border_color'              => '#2196F3',
             'background_color'          => '#DDFFFF',
         ]);
         foreach(Permission::cases() AS $permission) {
-            UserRole::whereTitle('Administrator')->first()->permissions()->create([
+            UserRole::whereName('Administrator')->first()->permissions()->create([
                 'permission' => $permission,
                 'level' => PermissionLevel::ADMIN,
             ]);
         }
 
-        DB::table('user_roles')->insert([
-            'title'                     => 'Gast',
-        ]);
 
         DB::table('user_roles')->insert([
-            'title'                     => 'Leitstelle',
+            'name'                      => 'Leitstelle',
+            'name_en'                   => 'Con Ops',
             'registration_system_key'   => 'leitstelle',
         ]);
 
@@ -46,14 +44,15 @@ class UserRoleSeeder extends Seeder
             Permission::MANAGE_POSTS,
             Permission::MANAGE_HOSTS
         ] AS $permission) {
-            UserRole::whereTitle('Leitstelle')->first()->permissions()->create([
+            UserRole::whereName('Leitstelle')->first()->permissions()->create([
                 'permission' => $permission,
                 'level' => PermissionLevel::ADMIN,
             ]);
         }
 
         DB::table('user_roles')->insert([
-            'title'                     => 'Programmplanung',
+            'name'                      => 'Programmplanung',
+            'name_en'                   => 'Programming',
             'registration_system_key'   => 'programming',
             'chat_activated'            => 1,
         ]);
@@ -64,7 +63,7 @@ class UserRoleSeeder extends Seeder
             Permission::MANAGE_HOSTS,
             Permission::MANAGE_LOCATIONS,
         ] AS $permission) {
-            UserRole::whereTitle('Programmplanung')->first()->permissions()->create([
+            UserRole::whereName('Programmplanung')->first()->permissions()->create([
                 'permission' => $permission,
                 'level' => PermissionLevel::ADMIN,
             ]);
@@ -72,11 +71,11 @@ class UserRoleSeeder extends Seeder
 
 
         DB::table('user_roles')->insert([
-            'title'                     => 'Social Media',
+            'name'                      => 'Social Media',
             'registration_system_key'   => 'socialmedia',
         ]);
 
-        UserRole::whereTitle('Social Media')->first()->permissions()->create([
+        UserRole::whereName('Social Media')->first()->permissions()->create([
             'permission' => Permission::MANAGE_POSTS,
             'level' => PermissionLevel::ADMIN,
         ]);
@@ -86,7 +85,7 @@ class UserRoleSeeder extends Seeder
     public static function assignUserToRole($userName, $roleName): void
     {
         $userId = User::where('name', $userName)->first()->id ?? null;
-        $roleId = UserRole::where('title', $roleName)->first()->id ?? null;
+        $roleId = UserRole::where('name', $roleName)->first()->id ?? null;
         if (!$userId || !$roleId) {
             return;
         }

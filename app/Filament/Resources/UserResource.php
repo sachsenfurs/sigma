@@ -73,9 +73,10 @@ class UserResource extends Resource
             Tables\Columns\TextColumn::make('name')
                 ->sortable()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('roles.title')
+            Tables\Columns\TextColumn::make('roles')
                 ->label('User Roles')
                 ->translateLabel()
+                ->formatStateUsing(fn($state) => $state->name_localized)
                 ->badge(),
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()
@@ -115,7 +116,10 @@ class UserResource extends Resource
         return Tables\Filters\SelectFilter::make('roles')
             ->label('User Role')
             ->translateLabel()
-            ->relationship('roles', 'title', fn (Builder $query) => $query->orderBy('title'));
+            ->searchable()
+            ->preload()
+            ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
+            ->relationship('roles', 'name', fn (Builder $query) => $query->orderBy('name'));
     }
 
 }

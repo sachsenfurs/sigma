@@ -52,6 +52,11 @@ class PostChannelResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->default('de'),
+                        Forms\Components\Toggle::make('default')
+                            ->label("Default")
+                            ->translateLabel()
+                            ->inline(false)
+                            ->helperText("Selected by default when creating a new post?"),
                         Forms\Components\RichEditor::make('info')
                             ->columnSpanFull()
                             ->label("Info (Internal)")

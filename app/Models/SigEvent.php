@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Enums\Approval;
 use App\Models\Traits\HasTimetableEntries;
-use App\Observers\SigEventObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\App;
 
-#[ObservedBy(SigEventObserver::class)]
+/**
+ * ObservedBy SigEventObserver
+ */
 class SigEvent extends Model
 {
     use HasFactory, HasTimetableEntries;
@@ -33,11 +33,6 @@ class SigEvent extends Model
         'name_localized',
         'description_localized',
     ];
-
-//    protected $with = [
-//        'timetableEntries',
-//    ];
-
 
     protected static function booted(): void {
         if(!auth()->user()?->isAdmin())
@@ -110,7 +105,7 @@ class SigEvent extends Model
 
     public function primaryHost(): Attribute {
         return Attribute::make(
-            get: fn() => $this->sigHosts->first()
+            get: fn(): ?SigHost => $this->sigHosts->first()
         )->shouldCache();
     }
 

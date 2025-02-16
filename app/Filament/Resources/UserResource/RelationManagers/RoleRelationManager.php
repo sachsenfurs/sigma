@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use App\Models\UserRole;
+use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\MaxWidth;
@@ -40,9 +42,10 @@ class RoleRelationManager extends RelationManager
 
     public function table(Table $table): Table {
         return $table
-            ->recordTitleAttribute('title')
+            ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('name_localized')
+                    ->label(__("Name")),
             ])
             ->filters([
                 //
@@ -51,6 +54,10 @@ class RoleRelationManager extends RelationManager
                 Tables\Actions\AttachAction::make()
                     ->label('Assign Role')
                     ->translateLabel()
+                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                        $action->getRecordSelect()
+                            ->options(UserRole::whereNotIn("id", auth()->user()->roles->pluck("id"))->get()->pluck("name_localized", "id")), // yes, thats the only way i found to apply the localization correctly >.>
+                    ])
                     ->modalHeading(__('Assign Role'))
                     ->modalSubmitActionLabel(__('Assign'))
                     ->attachAnother(false)

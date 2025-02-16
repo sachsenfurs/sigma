@@ -19,4 +19,8 @@ class SettingsPolicy
     public function dealerSettings(User $user): bool {
         return $user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::ADMIN);
     }
+
+    public function notificationSettings(User $user): bool {
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN);
+    }
 }

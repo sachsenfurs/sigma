@@ -20,8 +20,8 @@ return new class extends Migration
             $table->text("info")->nullable();
             $table->string("name")->nullable();
             $table->string("language")->default("de");
-            $table->string("implementation");
-
+            $table->string("implementation")->nullable();
+            $table->boolean("default")->default(true);
         });
     }
 

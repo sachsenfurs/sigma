@@ -105,7 +105,7 @@ class TimetableEntryResource extends Resource
                             ->label("SIG Requirements")
                             ->translateLabel()
                             ->schema([
-                                TextEntry::make("userRole.title")
+                                TextEntry::make("userRole.name_localized")
                                     ->label("")
                                     ->prefixAction(
                                         Action::make("edit")
@@ -365,6 +365,6 @@ class TimetableEntryResource extends Resource
               ->translateLabel()
               ->searchable()
               ->preload()
-              ->relationship("sigEvent.departmentInfos.userRole", "title");
+              ->relationship("sigEvent.departmentInfos.userRole", "name");
     }
 }

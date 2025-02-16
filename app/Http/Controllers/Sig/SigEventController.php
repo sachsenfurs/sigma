@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Sig;
 
+use App\Events\Sig\SigApplicationSubmitted;
 use App\Http\Controllers\Controller;
 use App\Models\SigEvent;
-use App\Models\SigHost;
 use App\Settings\AppSettings;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class SigEventController extends Controller
 {
@@ -40,7 +38,9 @@ class SigEventController extends Controller
             'languages' => "nullable|array|in:de,en",
         ]);
 
-        auth()->user()->sigHosts()->firstOrFail()->sigEvents()->create($validated);
+        $sig = auth()->user()->sigHosts()->firstOrFail()->sigEvents()->create($validated);
+
+        SigApplicationSubmitted::dispatch($sig);
 
         return redirect(route("sigs.index"))->withSuccess(__("SIG application sent!"));
     }

@@ -70,7 +70,7 @@ class DepartmentInfoResource extends Resource
                         TextEntry::make('sigEvent.name')
                             ->label('SIG')
                             ->inlineLabel(),
-                        TextEntry::make('userRole.title')
+                        TextEntry::make('userRole.name_localized')
                             ->label('Department')
                             ->translateLabel()
                             ->inlineLabel(),
@@ -109,7 +109,8 @@ class DepartmentInfoResource extends Resource
                     ->translateLabel()
                     ->searchable()
                     ->preload()
-                    ->relationship("userRole", "title"),
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
+                    ->relationship("userRole", "name"),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -136,7 +137,7 @@ class DepartmentInfoResource extends Resource
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('userRole.title')
+            Tables\Columns\TextColumn::make('userRole.name_localized')
                 ->label('Department')
                 ->translateLabel()
                 ->sortable(),
@@ -164,7 +165,7 @@ class DepartmentInfoResource extends Resource
             Forms\Components\Select::make('user_role_id')
                 ->label('Department')
                 ->translateLabel()
-                ->options(UserRole::all()->pluck('title', 'id'))
+                ->options(UserRole::all()->pluck('name_localized', 'id'))
                 ->searchable()
                 ->unique(ignoreRecord: true, modifyRuleUsing: function(Unique $rule, Forms\Get $get) {
                     return $rule->where(function(Builder $query) use($get) {

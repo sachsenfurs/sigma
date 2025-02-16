@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Facades\LoginWidget;
+use App\Facades\NotificationService;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

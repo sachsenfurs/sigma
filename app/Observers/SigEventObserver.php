@@ -2,15 +2,18 @@
 
 namespace App\Observers;
 
-use App\Models\Chat;
+use App\Events\Sig\SigApplicationSubmitted;
 use App\Models\SigEvent;
-use App\Models\SigTag;
-use App\Models\User;
+use App\Notifications\Sig\NewSigApplicationNotification;
+use App\Facades\NotificationService;
 
 class SigEventObserver
 {
-    public function updated(SigEvent $sig)
-    {
+    public function applicationSubmitted(SigApplicationSubmitted $event): void {
+        NotificationService::dispatchRoutedNotification(new NewSigApplicationNotification($event->sigEvent));
+    }
+
+    public function updated(SigEvent $sig) {
         // If the event is approved, create a new chat for better communication
         //if($sig->approved) {
         //    $chat = Chat::new($sig->name);
@@ -18,6 +21,16 @@ class SigEventObserver
         //    $chat->users()->attach($host->id);
         //    $chat->save();
         //}
+    }
+
+    public function subscribe(): array {
+        // register observer
+        SigEvent::observe(SigEventObserver::class);
+
+        // register custom events
+        return [
+            SigApplicationSubmitted::class => 'applicationSubmitted',
+        ];
     }
 
 

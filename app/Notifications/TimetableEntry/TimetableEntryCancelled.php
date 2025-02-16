@@ -3,8 +3,9 @@
 namespace App\Notifications\TimetableEntry;
 
 use App\Models\TimetableEntry;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -25,14 +26,13 @@ class TimetableEntryCancelled extends Notification
 
     public function toTelegram($notifiable): TelegramMessage {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line('[INFO]')
             ->line(__('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->button(__('View Event'), route('timetable-entry.show', ['entry' => $this->timetableEntry->id]));
     }
 
 
-    public function toMail(object $notifiable): MailMessage {
+    public function toMail(object $notifiable): Renderable {
         return (new MailMessage)
             ->subject('[INFO] ' . __('the event ') . $this->timetableEntry->sigEvent->name_localized . __(' was cancelled!'))
             ->line('[INFO]')

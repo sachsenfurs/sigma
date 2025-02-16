@@ -176,7 +176,8 @@ class SigFormResource extends Resource
                 ->translateLabel()
                 ->schema([
                     Forms\Components\Select::make('userRoles')
-                        ->relationship('userRoles', "title")
+                        ->relationship('userRoles', "name")
+                        ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                         ->label('')
                         ->preload()
                         ->multiple()

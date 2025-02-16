@@ -3,7 +3,7 @@
 namespace App\Notifications\TimetableEntry;
 
 use App\Models\TimetableEntry;
-use App\Services\NotificationService;
+use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -24,7 +24,6 @@ class TimetableEntryLocationChanged extends Notification
 
     public function toTelegram($notifiable) {
         return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
             ->line(__('[CHANGE]'))
             ->line(__('The location for the event :event has changed!', ["event" => $this->timetableEntry->sigEvent->name_localized]))
             ->line(__('New location: ') . $this->timetableEntry->sigLocation->name)
