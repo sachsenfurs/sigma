@@ -6,17 +6,16 @@ use App\Enums\Approval;
 use App\Enums\Rating;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Helper\FormHelper;
+use App\Filament\Resources\ChatResource;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBidsRelationManager;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
-use Filament\Actions\Action;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -25,7 +24,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
 
 class ArtshowItemResource extends Resource
 {
@@ -63,16 +61,32 @@ class ArtshowItemResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Item Name')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Radio::make('approval')
-                    ->label('Approval')
-                    ->translateLabel()
-                    ->default(Approval::PENDING)
-                    ->options(Approval::class)
-                    ->required(),
+                Forms\Components\Grid::make()
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Item Name')
+                            ->translateLabel()
+                            ->columnSpan(1)
+                            ->maxLength(255),
+                        Forms\Components\Fieldset::make("")
+                            ->columnSpan(1)
+                            ->schema([
+                                Forms\Components\Radio::make('approval')
+                                    ->label('Approval')
+                                    ->translateLabel()
+                                    ->default(Approval::PENDING)
+                                    ->options(Approval::class)
+                                    ->required(),
+                                Actions::make([
+                                        ChatResource::getCreateChatAction(fn(Model $record) => $record?->artist?->user_id),
+                                    ])
+                                    ->alignCenter()
+                                    ->verticallyAlignCenter()
+                                    ->visibleOn("edit"),
+                            ]),
+                    ]),
                 Forms\Components\Grid::make()
                      ->columns([
                          'lg' => 1,

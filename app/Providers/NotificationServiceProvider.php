@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Facades\NotificationService;
 use App\Notifications\Chat\NewChatMessageNotification;
+use App\Notifications\Ddas\ArtshowItemSubmittedNotification;
 use App\Notifications\Ddas\ArtshowWinnerNotification;
 use App\Notifications\MorphedDatabaseChannel;
 use App\Notifications\Sig\NewSigApplicationNotification;
+use App\Notifications\Sig\SigApplicationProcessedNotification;
 use App\Notifications\Sig\SigFavoriteReminder;
 use App\Notifications\Sig\SigTimeslotReminder;
 use App\Notifications\TimetableEntry\TimetableEntryCancelled;
@@ -49,7 +51,6 @@ class NotificationServiceProvider extends ServiceProvider
             TimetableEntryCancelled::class          => "timetable_entry_cancelled",
             TimetableEntryLocationChanged::class    => "timetable_entry_location_changed",
             TimetableEntryTimeChanged::class        => "timetable_entry_time_changed",
-            ArtshowWinnerNotification::class        => "artshow_winner_notification",
         ]);
         try {
             if(app(ChatSettings::class)->enabled)
@@ -58,8 +59,14 @@ class NotificationServiceProvider extends ServiceProvider
             // settings not present (migration/setup in progress?)
         }
 
+        NotificationService::registerAdminNotifications([
+            SigApplicationProcessedNotification::class  => "sig_application_processed",
+            ArtshowWinnerNotification::class            => "artshow_winner_notification",
+        ]);
+
         NotificationService::registerRoutableNotifications([
-            NewSigApplicationNotification::class    => "new_sig_application",
+            NewSigApplicationNotification::class        => "new_sig_application",
+            ArtshowItemSubmittedNotification::class     => "artshow_item_submitted",
         ]);
     }
 }

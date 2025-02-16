@@ -26,21 +26,21 @@ class NotificationService
     /**
      * userNotifications = All notifications that can be configured by the user (sig reminders etc.)
      */
-    public function registeruserNotifications(array $notifications): void {
+    public function registerUserNotifications(array $notifications): void {
         $this->userNotifications = array_unique(array_merge($notifications, $this->userNotifications));
     }
 
     /**
      * adminNotifications = All notifications related to administrative tasks (chat messages etc.)
      */
-    public function registeradminNotifications(array $notifications): void {
+    public function registerAdminNotifications(array $notifications): void {
         $this->adminNotifications = array_unique(array_merge($notifications, $this->adminNotifications));
     }
 
     /**
      * routableNotifications = All notifications that can be routed to specific users, roles and telegram channels (new sig application etc.)
      */
-    public function registerroutableNotifications(array $notifications): void {
+    public function registerRoutableNotifications(array $notifications): void {
         $this->routableNotifications = array_unique(array_merge($notifications, $this->routableNotifications));
     }
 
@@ -56,10 +56,16 @@ class NotificationService
         return [...$this->userNotifications, ...$this->adminNotifications, ...$this->routableNotifications];
     }
 
+    /**
+     * returns the mapped name
+     */
     public function morphName(string $notificationClass): string {
         return $this->allNotifications()[$notificationClass] ?? $notificationClass;
     }
 
+    /**
+     * returns the original class name
+     */
     public function resolveClass(string $name): ?string {
         return array_flip($this->allNotifications())[$name] ?? null;
     }
@@ -84,7 +90,8 @@ class NotificationService
     public function channels(Notification $notification, object $notifiable, array $additional = []): array {
         // check for notification routes
         if(method_exists($notifiable, "notificationRoutes")) {
-            return $notifiable->notificationRoutes()->where("notification", $notification->getMorphName())->first()->channels ?? [];
+            $routes =  $notifiable->notificationRoutes()->where("notification", $notification->getMorphName())->first()->channels ?? [];
+            if(!empty($routes)) return $routes;
         }
 
         if($notifiable instanceof User) {
@@ -102,6 +109,7 @@ class NotificationService
         if($notifiable instanceof PostChannel) {
             return ['telegram'];
         }
+
         return [];
     }
 

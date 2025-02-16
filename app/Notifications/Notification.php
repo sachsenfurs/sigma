@@ -6,10 +6,13 @@ use App\Facades\NotificationService;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification as LaravelNotification;
+use Illuminate\Queue\SerializesModels;
 use NotificationChannels\Telegram\TelegramMessage;
 
 abstract class Notification extends LaravelNotification
 {
+    use SerializesModels;
+
     public static bool $userSetting = true;
 
     public function via(object $notifiable): array {
@@ -55,8 +58,16 @@ abstract class Notification extends LaravelNotification
         return __(ucwords($string));
     }
 
+    /**
+     * storing data for database-notifications
+     */
     public function toArray(object $notifiable): array {
-        return [];
+        return [
+            'subject'       => $this->getSubject(),
+            'lines'         => $this->getLines(),
+            'action'        => $this->getAction(),
+            'action_url'    => $this->getActionUrl(),
+        ];
     }
 
     public static function view($data) {

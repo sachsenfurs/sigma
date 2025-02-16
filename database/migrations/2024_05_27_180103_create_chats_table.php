@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('subject', 40)->default('');
+            $table->string('subjectable_type')->nullable();
+            $table->unsignedBigInteger('subjectable_id')->nullable();
             $table->foreignId('user_role_id')->constrained()->cascadeOnDelete();
             $table->tinyInteger("status")->default(ChatStatus::OPEN);
             $table->timestamps();

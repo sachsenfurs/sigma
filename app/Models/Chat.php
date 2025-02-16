@@ -5,13 +5,17 @@ namespace App\Models;
 use App\Enums\ChatStatus;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
+use App\Filament\Resources\SigEventResource;
 use App\Observers\ChatObserver;
+use App\Providers\Filament\AdminPanelProvider;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Gate;
 
 #[ObservedBy(ChatObserver::class)]
@@ -46,6 +50,10 @@ class Chat extends Model
 
     public function userRole(): BelongsTo {
         return $this->belongsTo(UserRole::class);
+    }
+
+    public function subjectable(): MorphTo {
+        return $this->morphTo();
     }
 
     public function unreadMessagesCount(): Attribute {

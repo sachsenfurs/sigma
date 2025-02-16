@@ -5,7 +5,6 @@ namespace App\Notifications\Chat;
 use App\Filament\Resources\ChatResource;
 use App\Models\Message;
 use App\Notifications\Notification;
-use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Renderable;

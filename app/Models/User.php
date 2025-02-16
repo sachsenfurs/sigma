@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
-use Mockery\Exception;
 
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocalePreference

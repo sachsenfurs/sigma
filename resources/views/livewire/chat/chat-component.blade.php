@@ -33,6 +33,57 @@
         </ul>
 
         <div class="col d-flex flex-column p-0 border-start border-2" style="height: inherit;"  @if($currentChat?->unread_messages_count) wire:click="markAsRead" @endif>
+            @if($subjectable = $currentChat?->subjectable)
+                <div class="bg-dark-subtle w-100 p-3">
+                    @if($subjectable instanceof \App\Models\SigEvent)
+                        <a href="{{ route("sigs.index") }}" class="text-decoration-none">
+                            {{ __("SIG") }}: {{ $subjectable->name_localized }}
+                            @foreach($subjectable->languages AS $lang)
+                                <x-flag :language="$lang" />
+                            @endforeach
+                            <span class="badge bg-dark fs-6">{{ $subjectable->duration_hours }} h</span>
+                            <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', $subjectable->approval->style()])>
+                                {{ $subjectable->approval->name() }}
+                            </span>
+                        </a>
+                    @endif
+
+                    @if($subjectable instanceof \App\Models\Ddas\ArtshowItem)
+                        <a href="{{ route("artshow.create") }}" class="text-decoration-none">
+                            <div class="row">
+                                <div class="col-auto align-content-center">
+                                    <img src="{{ $subjectable->image_url }}" class="img-fluid img-thumbnail" style="height: 3.5em">
+                                </div>
+                                <div class="col align-content-center">
+                                    {{ __("Item") }}: {{ $subjectable->name }}
+                                    <span class="badge bg-dark fs-6">{{ $subjectable->starting_bid }} &euro;</span>
+                                    <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', $subjectable->approval->style()])>
+                                        {{ $subjectable->approval->name() }}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    @endif
+
+                    @if($subjectable instanceof \App\Models\Ddas\Dealer)
+                        <a href="{{ route("dealers.create") }}" class="text-decoration-none">
+                            <div class="row">
+                                <div class="col-auto align-content-center">
+                                    @if($subjectable->icon_file_url)
+                                        <img src="{{ $subjectable->icon_file_url }}" class="img-fluid img-thumbnail" style="height: 3.5em">
+                                    @endif
+                                </div>
+                                <div class="col align-content-center">
+                                    {{ __("Dealer") }}: {{ $subjectable->name }}
+                                    <span @class(['badge d-inline-block fw-normal p-2 text-uppercase', $subjectable->approval->style()])>
+                                        {{ $subjectable->approval->name() }}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    @endif
+                </div>
+            @endif
             <div class="overflow-x-hidden overflow-y-scroll px-3 scrolldown" style="min-height: 80%; word-break: break-all;" wire:poll.10s>
                 @php($newMessage=false)
                 @forelse ($currentChat?->messages->load("user") ?? [] as $message)

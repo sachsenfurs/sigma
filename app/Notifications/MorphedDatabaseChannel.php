@@ -15,7 +15,7 @@ class MorphedDatabaseChannel extends DatabaseChannel
     protected function buildPayload($notifiable, Notification $notification): array {
         return [
             'id' => $notification->id,
-            'type' => NotificationService::userNotifications()[get_class($notification)] ?? get_class($notification),
+            'type' => NotificationService::morphName(get_class($notification)) ?? get_class($notification),
             'data' => $this->getData($notifiable, $notification),
             'read_at' => null,
         ];

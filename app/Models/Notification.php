@@ -10,7 +10,7 @@ class Notification extends DatabaseNotification
 {
     public function type(): Attribute {
         return Attribute::make(
-            get: fn($type) => array_flip(NotificationService::userNotifications())[$type] ?? $type
+            get: fn($type) => NotificationService::resolveClass($type) ?? $type
         );
     }
 

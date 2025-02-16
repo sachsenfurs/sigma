@@ -5,10 +5,12 @@ namespace App\Filament\Resources\Ddas;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Helper\FormHelper;
+use App\Filament\Resources\ChatResource;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
 use App\Settings\DealerSettings;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -18,7 +20,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\HtmlString;
 
 class DealerResource extends Resource
 {
@@ -55,18 +56,29 @@ class DealerResource extends Resource
             ->schema([
                 Forms\Components\Fieldset::make("User Details")
                     ->translateLabel()
+                    ->columnSpanFull()
                     ->schema([
                         Forms\Components\Select::make('user_id')
                             ->label('User')
                             ->searchable()
-//                            ->preload()
                             ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                             ->translateLabel()
-                            ->relationship('user', 'name'),
-                        Forms\Components\Radio::make('approval')
-                            ->translateLabel()
-                            ->options(Approval::class)
-                            ->required(),
+                            ->relationship('user', 'name')
+                            ->columnSpan(1),
+                        Forms\Components\Grid::make()
+                            ->columnSpan(1)
+                            ->schema([
+                                    Forms\Components\Radio::make('approval')
+                                        ->translateLabel()
+                                        ->options(Approval::class)
+                                        ->required(),
+                                    Actions::make([
+                                            ChatResource::getCreateChatAction(fn(Model $record) => $record?->user_id),
+                                        ])
+                                       ->alignCenter()
+                                       ->verticallyAlignCenter()
+                                       ->visibleOn("edit")
+                            ]),
                     ]),
                 Forms\Components\Fieldset::make("Dealer Details")#
                     ->translateLabel()

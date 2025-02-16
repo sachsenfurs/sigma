@@ -75,7 +75,7 @@
                                             </h4>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    {{ $sig->additional_info }}
+                                                    {!! nl2br(e(($sig->additional_info))) !!}
                                                 </div>
                                             </div>
                                         </div>
@@ -87,6 +87,11 @@
                                 </div>
 
                                 <div class="row justify-items-center g-3">
+                                    @if(!app(\App\Settings\AppSettings::class)->isSchedulePublic())
+                                        <div class="alert alert-info bg-info-subtle mt-4">
+                                            {{ __("Note: The schedule has not yet been published. Changes can be made at any time!") }}
+                                        </div>
+                                    @endif
                                     @forelse($sig->timetableEntries AS $entry)
                                         <div class="col-12 col-md-6 col-xl-4">
                                             <div class="card">

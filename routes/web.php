@@ -49,6 +49,7 @@ Route::get("/devlogin/{id?}", function($id=1) {
 Route::get("/login", [LoginController::class, 'showLoginForm'])->name("login");
 Route::post("/login", [LoginController::class, 'login']);
 Route::post("/logout", [LoginController::class, 'logout'])->name("logout");
+Route::get("/logout", [LoginController::class, 'redirect']);
 
 Route::get("/oauthlogin_regsys", [RegSysLoginController::class, 'index'])->name("oauthlogin_regsys");
 Route::get("/oauth_regsys", [RegSysLoginController::class, 'redirect'])->name("oauth_redirect");
@@ -83,7 +84,8 @@ Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     // SIG Events
-    Route::resource("/sigs", SigEventController::class);
+    Route::resource("/sigs", SigEventController::class)
+        ->only(['create', 'index', 'store']);
 
     // Sig application
     Route::prefix('sigs')->name('sigs.')->group(function() {

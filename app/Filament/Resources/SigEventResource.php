@@ -17,6 +17,7 @@ use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\UserRole;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Infolists\Components\Actions\Action;
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
+use Livewire\Component;
 
 class SigEventResource extends Resource
 {
@@ -322,53 +324,55 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostsFieldSet(): Forms\Components\Component
-    {
+    private static function getSigHostsFieldSet(): Forms\Components\Component {
         return
             Forms\Components\Fieldset::make('hosts')
                 ->label('SIG Hosts')
-                ->schema(
-                    [
-                        Forms\Components\Select::make('sigHosts')
-                            ->label('')
-                            ->options(SigHost::all()->pluck('name', 'id'))
-                            ->relationship('sigHosts', 'name')
-                            ->preload()
-                            ->multiple()
-                            ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()) // formatting when user already present
-                            ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
-                            ->columnSpanFull()
-                            ->createOptionModalHeading(__('Create Host'))
-                            ->createOptionForm([
-                                Forms\Components\TextInput::make('name')
-                                    ->label('Name')
-                                    ->translateLabel()
-                                    ->required()
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('reg_id')
-                                    ->label('Reg ID')
-                                    ->translateLabel()
-                                    ->numeric(),
-                            ])
-                            ->createOptionUsing(function ($data) {
-                                $sigHost = SigHost::create([
-                                    'name' => $data['name'],
-                                    'reg_id' => $data['reg_id'] ?? null,
-                                ]);
+                ->schema([
+                    Forms\Components\Select::make('sigHosts')
+                        ->label('')
+                        ->options(SigHost::all()->pluck('name', 'id'))
+                        ->relationship('sigHosts', 'name')
+                        ->preload()
+                        ->multiple()
+                        ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()) // formatting when user already present
+                        ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
+                        ->columnSpanFull()
+                        ->createOptionModalHeading(__('Create Host'))
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('name')
+                                ->label('Name')
+                                ->translateLabel()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('reg_id')
+                                ->label('Reg ID')
+                                ->translateLabel()
+                                ->numeric(),
+                        ])
+                        ->createOptionUsing(function ($data) {
+                            $sigHost = SigHost::create([
+                                'name' => $data['name'],
+                                'reg_id' => $data['reg_id'] ?? null,
+                            ]);
 
-                                return $sigHost->id ?? null;
-                            })
-                            ->live()
-                            ->columnSpanFull(),
-                        Forms\Components\Select::make("approval")
-                            ->label("Approval")
-                            ->translateLabel()
-                            ->required()
-                            ->default(Approval::PENDING)
-                            ->columnSpanFull()
-                            ->options(Approval::class),
-                    ]
-                )
+                            return $sigHost->id ?? null;
+                        })
+                        ->live()
+                        ->columnSpanFull(),
+                    Forms\Components\Select::make("approval")
+                        ->label("Approval")
+                        ->translateLabel()
+                        ->required()
+                        ->default(Approval::PENDING)
+                        ->columnSpanFull()
+                        ->options(Approval::class),
+                    Actions::make([
+                        ChatResource::getCreateChatAction(fn(Get $get, Component $livewire) => SigHost::find($livewire->data['sigHosts'][0] ?? null)?->user?->id ?? 0),
+                    ])
+                    ->visibleOn("edit")
+                    ->hidden(fn(Get $get) => empty($get('sigHosts')))
+                ])
                 ->translateLabel()
                 ->columnSpan(1);
     }

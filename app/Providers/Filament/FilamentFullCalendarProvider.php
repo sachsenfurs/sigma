@@ -5,7 +5,6 @@ namespace App\Providers\Filament;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Panel;
-use Filament\PanelProvider;
 use Illuminate\Support\Carbon;
 use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 

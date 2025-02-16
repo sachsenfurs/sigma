@@ -10,6 +10,9 @@ class SigApplicationSubmitted
 {
     use Dispatchable, SerializesModels;
 
+    /**
+     * user submitted a new registration for a SIG
+     */
     public function __construct(public SigEvent $sigEvent) {}
 
 }

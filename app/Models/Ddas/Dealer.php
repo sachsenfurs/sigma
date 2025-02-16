@@ -4,6 +4,7 @@ namespace App\Models\Ddas;
 
 use App\Enums\Approval;
 use App\Models\SigLocation;
+use App\Models\Traits\HasChats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,7 +18,7 @@ use Illuminate\Support\Str;
 
 class Dealer extends Model
 {
-    use HasFactory;
+    use HasFactory, HasChats;
 
     protected $guarded = [];
 

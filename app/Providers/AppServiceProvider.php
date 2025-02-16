@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Ddas\ArtshowItem;
+use App\Models\Ddas\Dealer;
 use App\Models\Post\PostChannel;
+use App\Models\SigEvent;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Services\Translator;
 use App\Settings\AppSettings;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,10 +38,15 @@ class AppServiceProvider extends ServiceProvider
             return new Translator(app(AppSettings::class)->deepl_api_key, app(AppSettings::class)->deepl_source_lang, app(AppSettings::class)->deepl_target_lang);
         });
 
+        Paginator::useBootstrapFive();
+
         Relation::morphMap([
-            'user' => User::class, // getMorphClass() on User::class won't work with filament!
-            'post_channel' => PostChannel::class,
-            'user_role' => UserRole::class,
+            'user'              => User::class, // getMorphClass() on User::class won't work with filament!
+            'post_channel'      => PostChannel::class,
+            'user_role'         => UserRole::class,
+            'dealer'            => Dealer::class,
+            'artshow_item'      => ArtshowItem::class,
+            'sig_event'         => SigEvent::class,
         ]);
     }
 }

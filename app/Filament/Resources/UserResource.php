@@ -43,7 +43,7 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('reg_id')
                     ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->numeric(),
             ]);
     }
@@ -101,6 +101,7 @@ class UserResource extends Resource
             RelationManagers\SigHostsRelationManager::class,
             RelationManagers\FavoritesRelationManager::class,
             RelationManagers\ArtshowBidsRelationManager::class,
+            RelationManagers\NotificationsRelationManager::class,
         ];
     }
 

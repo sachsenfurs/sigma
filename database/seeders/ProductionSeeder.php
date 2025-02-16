@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserRole;
 use Database\Seeders\RealData\EASTSeeder;
 use Database\Seeders\RealData\RingbergSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
@@ -20,12 +21,11 @@ class ProductionSeeder extends Seeder
     {
         (new UserRoleSeeder())->run();
 
-        User::create([
+        User::factory()->create([
             'name' => "Kidran",
-            'email' => "mail@kidran.de",
             'reg_id' => 1,
-        ]);
-        UserRoleSeeder::assignUserToRole('Kidran', 'Administrator');
+            'email' => "mail@kidran.de"
+        ])->roles()->attach(UserRole::where("name", "Administrator")->first());
 
         (new RingbergSeeder())->run();
         (new EASTSeeder())->run();

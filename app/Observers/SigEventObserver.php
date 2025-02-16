@@ -6,6 +6,7 @@ use App\Events\Sig\SigApplicationSubmitted;
 use App\Models\SigEvent;
 use App\Notifications\Sig\NewSigApplicationNotification;
 use App\Facades\NotificationService;
+use App\Notifications\Sig\SigApplicationProcessedNotification;
 
 class SigEventObserver
 {
@@ -14,19 +15,12 @@ class SigEventObserver
     }
 
     public function updated(SigEvent $sig) {
-        // If the event is approved, create a new chat for better communication
-        //if($sig->approved) {
-        //    $chat = Chat::new($sig->name);
-        //    $host = User::where('reg_id', $sig->sigHost()->reg_id)->first();
-        //    $chat->users()->attach($host->id);
-        //    $chat->save();
-        //}
+        if($sig->isDirty("approval")) {
+            $sig->sigHosts->pluck("user")->each->notify(new SigApplicationProcessedNotification($sig));
+        }
     }
 
     public function subscribe(): array {
-        // register observer
-        SigEvent::observe(SigEventObserver::class);
-
         // register custom events
         return [
             SigApplicationSubmitted::class => 'applicationSubmitted',

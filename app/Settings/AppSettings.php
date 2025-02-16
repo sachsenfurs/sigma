@@ -3,6 +3,7 @@
 namespace App\Settings;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\LaravelSettings\Settings;
 
 class AppSettings extends Settings
@@ -33,6 +34,16 @@ class AppSettings extends Settings
 
     public static function group(): string {
         return 'app';
+    }
+
+    public function isPreConMode(): bool {
+        $conStartDate       = strtotime($this->event_start->subDays(7));
+        $currentDate        = strtotime(Carbon::now()->toDateString());
+        return ($conStartDate > $currentDate);
+    }
+
+    public function isSchedulePublic() {
+        return $this->show_schedule_date->isPast();
     }
 
 }

@@ -4,6 +4,7 @@ namespace App\Models\Ddas;
 
 use App\Enums\Approval;
 use App\Enums\Rating;
+use App\Models\Traits\HasChats;
 use App\Models\User;
 use App\Observers\ArtshowItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -23,7 +24,7 @@ use Illuminate\Support\Str;
 #[ObservedBy(ArtshowItemObserver::class)]
 class ArtshowItem extends Model
 {
-    use HasFactory;
+    use HasFactory, HasChats;
 
     protected $guarded = [];
 

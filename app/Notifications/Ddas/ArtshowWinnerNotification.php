@@ -19,6 +19,7 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected string $itemsString = "";
+    public static bool $userSetting = false;
 
     public function __construct(protected Collection $artshowItems) {
         $this->itemsString = collect($this->artshowItems)

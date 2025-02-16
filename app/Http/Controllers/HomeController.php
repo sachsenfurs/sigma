@@ -27,17 +27,8 @@ class HomeController extends Controller
     public function index() {
         $registrations  = auth()->user()->attendeeEvents;
         $favorites      = auth()->user()->favorites()->upcoming()->with("timetableEntry")->with("timetableEntry.sigEvent")->with("timetableEntry.reminders")->orderBy("start")->get();
-
-        $posts      = Post::latest()->limit(6)->get();
-
-        $preConMode = false;
-        $preConStartDate = strtotime(app(AppSettings::class)->event_start->subDays(7));
-        $currentDate = strtotime(Carbon::now()->toDateString());
-        if ($preConStartDate > $currentDate) {
-            $preConMode = true;
-        }
-
-        //dd($registrations->first()->sigEvent()->attendees());
+        $posts          = Post::latest()->limit(6)->get();
+        $preConMode     = app(AppSettings::class)->isPreConMode();
 
         return view('home', compact([
             'registrations',

@@ -9,6 +9,7 @@ use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\TimetableEntry;
 use App\Models\User;
+use App\Models\UserRole;
 use Carbon\Carbon;
 use Database\Seeders\RealData\EASTSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
@@ -32,15 +33,16 @@ class DatabaseSeeder extends Seeder
             'name' => "Kidran",
             'reg_id' => 1,
             'email' => "mail@kidran.de"
-        ]);
-        UserRoleSeeder::assignUserToRole('Kidran', 'Administrator');
+        ])->roles()->sync(
+            UserRole::find([1, 3, 4])
+        );
+
 
         User::factory()->create([
             'name' => "Lytrox",
             'reg_id' => 2,
             'email' => "lytrox@sachsenfurs.de"
-        ]);
-        UserRoleSeeder::assignUserToRole('Lytrox', 'Administrator');
+        ])->roles()->attach(UserRole::where("name", "Administration")->first());
 
         $users = User::factory()->count(50)->create();
 

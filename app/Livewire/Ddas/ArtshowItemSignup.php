@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Ddas;
 
+use App\Events\Ddas\ArtshowItemSubmitted;
 use App\Livewire\Ddas\Forms\ArtshowArtistForm;
 use App\Livewire\Ddas\Forms\ArtshowItemSignupForm;
 use App\Livewire\Traits\HasModal;
@@ -88,9 +89,6 @@ class ArtshowItemSignup extends Component
             if($image->height() > 500 OR $image->width() > 500)
                 $image->scaleDown(500);
 
-
-
-//            $validated['image'] = basename($this->form->new_image->store('public'));
             $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
             if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
                 $validated['image'] = $filename;
@@ -102,7 +100,8 @@ class ArtshowItemSignup extends Component
             $this->editArtshowItem->update($validated);
         } else {
             $this->authorize("create", [ArtshowItem::class, $this->artistProfile]);
-            $this->artistProfile->artshowItems()->create($validated);
+            $item = $this->artistProfile->artshowItems()->create($validated);
+            ArtshowItemSubmitted::dispatch($item);
         }
         $this->hideModal("itemModal");
     }

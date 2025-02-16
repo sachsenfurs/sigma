@@ -4,13 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Enums\PermissionLevel;
 use App\Filament\Resources\UserRoleResource\Pages;
-use App\Filament\Resources\UserRoleResource\RelationManagers\NotificationRoutesRelationManager;
 use App\Filament\Resources\UserRoleResource\RelationManagers\UserRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\UserRole;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -91,6 +91,8 @@ class UserRoleResource extends Resource
                 ->label('User Role')
                 ->translateLabel()
                 ->searchable()
+                ->badge()
+                ->color(fn($record) => Color::hex($record->background_color))
                 ->sortable(),
             Tables\Columns\TextColumn::make('users_count')
                 ->label('User Count')

@@ -2,15 +2,16 @@
 
 namespace App\Filament\Resources\ChatResource\Pages;
 
-use App\Enums\ChatStatus;
 use App\Filament\Resources\ChatResource;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class EditChat extends EditRecord
 {
@@ -18,6 +19,20 @@ class EditChat extends EditRecord
 
     public function getTitle(): string|Htmlable {
         return $this->record->user->name . " (#" . $this->record->user_id .  "): " . $this->record->subject;
+    }
+
+    public function getSubheading(): string|Htmlable|null {
+        if($this->record->subjectable) {
+            try {
+                $url = Filament::getModelResource($this->record->subjectable::class)::getUrl("edit", ['record' => $this->record->subjectable]);
+            } catch(RouteNotFoundException $e) {
+                $url = "";
+            }
+            $name = Filament::getModelResource($this->record->subjectable::class)::getModelLabel() . " - ";
+            $name .= $this->record->subjectable->name ?? $this->record->subjectable->title ?? "";
+            return new HtmlString('<a href="' . $url . '">' . $name . '</a>');
+        }
+        return null;
     }
 
     protected function getHeaderWidgets(): array {
@@ -36,29 +51,21 @@ class EditChat extends EditRecord
                     $record->markAsRead();
                     $this->dispatch("refresh");
                 })
-                ->button()
-            ,
+                ->button(),
         ];
     }
 
+    protected function getRedirectUrl(): ?string {
+        return $this->previousUrl ?? self::getUrl("index");
+    }
+
     public function form(Form $form): Form {
-        return $form
-            ->schema([
-                TextInput::make("subject")
-                    ->label("Subject")
-                    ->translateLabel(),
-                Select::make("user_role_id")
-                    ->label("Department")
-                    ->translateLabel()
-                    ->relationship("userRole", "name")
-                    ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
-                    ->searchable()
-                    ->preload(),
-                Select::make("status")
-                    ->required()
-                    ->options(ChatStatus::class),
-            ])
-            ->columns(3);
+        return $form->schema([
+            Section::make("Details")
+                ->translateLabel()
+                ->collapsed()
+                ->schema(ChatResource::form($form)->getComponents())
+        ]);
     }
 
 
