@@ -7,7 +7,7 @@
                         <i class="bi bi-search" wire:loading.remove wire:target="search, artist"></i>
                         <div class="spinner-border spinner-border-sm" role="status" wire:loading wire:target="search, artist"></div>
                     </span>
-                    <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')"></x-form.input-floating>
+                    <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')" wire:keydown.debounce="resetPage"></x-form.input-floating>
                 </div>
             </div>
             <div class="col-12 col-md-6">
@@ -15,7 +15,7 @@
                     <label class="input-group-text" for="inputGroupSelect01">
                         {{ __("Artist") }}
                     </label>
-                    <select wire:model.live="artist" class="form-select" id="inputGroupSelect01">
+                    <select wire:model.live="artist" class="form-select" id="inputGroupSelect01" wire:change.debounce="resetPage">
                         <option value="0">- {{ __("All") }} -</option>
                         @foreach($this->artists AS $artist)
                             @php($count = $this->itemsWithoutArtistFilter->filter(fn($i) => $i->artist->id == $artist->id)->count())
