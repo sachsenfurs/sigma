@@ -6,8 +6,8 @@ use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Facades\NotificationService;
 use App\Models\UserRole;
-use App\Notifications\Ddas\ArtshowItemSubmittedNotification;
-use App\Notifications\Sig\NewSigApplicationNotification;
+use App\Notifications\Ddas\SubmittedItemNotification;
+use App\Notifications\Sig\NewApplicationNotification;
 use Illuminate\Database\Seeder;
 
 class UserRoleSeeder extends Seeder
@@ -69,7 +69,7 @@ class UserRoleSeeder extends Seeder
                 ])
             );
         })->notificationRoutes()->create([
-            'notification' => NotificationService::morphName(NewSigApplicationNotification::class),
+            'notification' => NotificationService::morphName(NewApplicationNotification::class),
             'channels' => NotificationService::availableChannels(),
         ]);
 
@@ -107,7 +107,7 @@ class UserRoleSeeder extends Seeder
                 ])
             );
         })->notificationRoutes()->create([
-            'notification' => NotificationService::morphName(ArtshowItemSubmittedNotification::class),
+            'notification' => NotificationService::morphName(SubmittedItemNotification::class),
             'channels' => NotificationService::availableChannels(),
         ]);
 

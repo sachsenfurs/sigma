@@ -14,6 +14,7 @@ abstract class Notification extends LaravelNotification
     use SerializesModels;
 
     public static bool $userSetting = true;
+    private array $overrideVia = [];
 
     public function via(object $notifiable): array {
         return NotificationService::channels($this, $notifiable, $this->getVia());
@@ -27,11 +28,13 @@ abstract class Notification extends LaravelNotification
     }
 
     public function toTelegram(object $notifiable): TelegramMessage {
-        $message = TelegramMessage::create()
-            ->line(collect($this->getLines())->join("\n"));
-        if($this->getAction())
-            $message = $message->button($this->getAction(), $this->getActionUrl());
-        return $message;
+        return tap(TelegramMessage::create(), function(TelegramMessage $message) {
+            if($this->getSubject())
+               $message->line("**" . $this->getSubject() . "**")->line("");
+            $message->line(collect($this->getLines())->join("\n"));
+            if($this->getAction())
+                $message->button($this->getAction(), $this->getActionUrl());
+        });
     }
 
 
@@ -50,7 +53,11 @@ abstract class Notification extends LaravelNotification
      * overrides the "additional channels" on "via"
      * Only use to "enforce" specific channels!
      */
-    protected function getVia(): array { return []; }
+    protected function getVia(): array { return $this->overrideVia; }
+
+    public function setVia(array $via): void {
+        $this->overrideVia = $via;
+    }
 
     public static function getName(): string {
         $data = preg_split('/(?=[A-Z])/', basename(static::class));

@@ -8,7 +8,7 @@ use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ArtshowItemSubmittedNotification extends Notification implements ShouldQueue
+class SubmittedItemNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

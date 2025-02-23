@@ -16,7 +16,7 @@ class PostObserver
         $post->messages->each->updateMessage();
     }
 
-    public function deleting(Post $post): void {
+    public function deleted(Post $post): void {
         foreach($post->channels->pluck("postChannelMessage") AS $message) {
             $message->delete();
         }

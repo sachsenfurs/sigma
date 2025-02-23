@@ -79,7 +79,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         });
     }
 
-    public function attendeeEvents(): HasMany {
+    public function sigAttendees(): HasMany {
         return $this->hasMany(SigAttendee::class);
     }
 
@@ -88,12 +88,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
     }
 
 
-    public function reminders(): HasMany {
-        return $this->hasMany(SigReminder::class);
-    }
-
-    public function timeslotReminders(): HasMany {
-        return $this->hasMany(SigTimeslotReminder::class);
+    public function reminders(): MorphMany {
+        return $this->morphMany(Reminder::class, "notifiable");
     }
 
     public function sigHosts(): HasMany {

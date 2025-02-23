@@ -4,16 +4,19 @@ namespace App\Providers;
 
 use App\Facades\NotificationService;
 use App\Notifications\Chat\NewChatMessageNotification;
-use App\Notifications\Ddas\ArtshowItemSubmittedNotification;
 use App\Notifications\Ddas\ArtshowWinnerNotification;
+use App\Notifications\Ddas\ProcessedItemNotification;
+use App\Notifications\Ddas\SubmittedItemNotification;
 use App\Notifications\MorphedDatabaseChannel;
-use App\Notifications\Sig\NewSigApplicationNotification;
-use App\Notifications\Sig\SigApplicationProcessedNotification;
+use App\Notifications\Sig\NewApplicationNotification;
+use App\Notifications\Sig\ProcessedApplicationNotification;
 use App\Notifications\Sig\SigFavoriteReminder;
 use App\Notifications\Sig\SigTimeslotReminder;
-use App\Notifications\TimetableEntry\TimetableEntryCancelled;
-use App\Notifications\TimetableEntry\TimetableEntryLocationChanged;
-use App\Notifications\TimetableEntry\TimetableEntryTimeChanged;
+use App\Notifications\TimetableEntry\CancelledFavoriteNotification;
+use App\Notifications\TimetableEntry\CancelledNotification;
+use App\Notifications\TimetableEntry\ChangedFavoriteNotification;
+use App\Notifications\TimetableEntry\ChangedNotification;
+use App\Notifications\TimetableEntry\NewNotification;
 use App\Settings\ChatSettings;
 use Illuminate\Database\QueryException;
 use Illuminate\Notifications\Channels\DatabaseChannel;
@@ -46,12 +49,12 @@ class NotificationServiceProvider extends ServiceProvider
          * static property $userSetting from the extended Notification class can be used to disable it for the user settings page
          */
         NotificationService::registerUserNotifications([
+            CancelledFavoriteNotification::class    => "favorite_event_cancelled",
+            ChangedFavoriteNotification::class      => "favorite_event_changed",
             SigFavoriteReminder::class              => "sig_favorite",
             SigTimeslotReminder::class              => "sig_timeslot",
-            TimetableEntryCancelled::class          => "timetable_entry_cancelled",
-            TimetableEntryLocationChanged::class    => "timetable_entry_location_changed",
-            TimetableEntryTimeChanged::class        => "timetable_entry_time_changed",
         ]);
+
         try {
             if(app(ChatSettings::class)->enabled)
                 NotificationService::registerUserNotifications([NewChatMessageNotification::class => "new_chat_message"]);
@@ -60,13 +63,17 @@ class NotificationServiceProvider extends ServiceProvider
         }
 
         NotificationService::registerAdminNotifications([
-            SigApplicationProcessedNotification::class  => "sig_application_processed",
+            ProcessedApplicationNotification::class  => "sig_application_processed",
             ArtshowWinnerNotification::class            => "artshow_winner_notification",
+            ProcessedItemNotification::class            => "artshow_item_processed",
         ]);
 
         NotificationService::registerRoutableNotifications([
-            NewSigApplicationNotification::class        => "new_sig_application",
-            ArtshowItemSubmittedNotification::class     => "artshow_item_submitted",
+            NewApplicationNotification::class        => "sig_application_new",
+            SubmittedItemNotification::class            => "artshow_item_submitted",
+            NewNotification::class                      => "event_new",
+            CancelledNotification::class                => "event_cancelled",
+            ChangedNotification::class                  => "event_changed",
         ]);
     }
 }

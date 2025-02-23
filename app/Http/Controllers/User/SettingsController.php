@@ -12,7 +12,10 @@ class SettingsController extends Controller
     public function edit() {
         $notificationType = [];
         foreach(NotificationService::userNotifications() AS $notification => $name) {
-            $notificationType[$name] = auth()->user()->notification_channels[$name] ?? [];
+            $notificationType[$name] = [
+                'name' => NotificationService::resolveClass($name)::getName(),
+                'channels' => auth()->user()->notification_channels[$name] ?? [],
+            ];
         }
 
         return view('user-settings.edit', compact('notificationType'));

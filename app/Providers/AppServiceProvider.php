@@ -6,6 +6,9 @@ use App\Models\Ddas\ArtshowItem;
 use App\Models\Ddas\Dealer;
 use App\Models\Post\PostChannel;
 use App\Models\SigEvent;
+use App\Models\SigFavorite;
+use App\Models\SigTimeslot;
+use App\Models\TimetableEntry;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Services\Translator;
@@ -47,6 +50,9 @@ class AppServiceProvider extends ServiceProvider
             'dealer'            => Dealer::class,
             'artshow_item'      => ArtshowItem::class,
             'sig_event'         => SigEvent::class,
+            'sig_timeslot'      => SigTimeslot::class,
+            'timetable_entry'   => TimetableEntry::class,
+            'sig_favorite'      => SigFavorite::class,
         ]);
     }
 }

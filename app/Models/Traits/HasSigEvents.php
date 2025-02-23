@@ -5,7 +5,6 @@ namespace App\Models\Traits;
 use App\Models\SigEvent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 
 trait HasSigEvents {
 

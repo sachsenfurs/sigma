@@ -2,12 +2,19 @@
 
 namespace App\Models\Post;
 
+use App\Models\Reminder;
 use App\Models\Traits\HasNotificationRoutes;
+use App\Observers\PostChannelObserver;
+use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\Notifiable;
 
-class PostChannel extends Model
+
+#[ObservedBy(PostChannelObserver::class)]
+class PostChannel extends Model implements HasLocalePreference
 {
     use Notifiable;
     use HasNotificationRoutes;
@@ -50,5 +57,13 @@ class PostChannel extends Model
 
     public function routeNotificationForTelegram(): ?string {
         return $this->channel_identifier;
+    }
+
+    public function preferredLocale() {
+        return $this->language;
+    }
+
+    public function reminders(): MorphMany {
+        return $this->morphMany(Reminder::class, "notifiable");
     }
 }

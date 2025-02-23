@@ -9,7 +9,10 @@
     <div {{ $attributes->class(['modal-dialog']) }}>
         <div class="modal-content" @if($action) wire:keydown.debounce.enter="{{$action}}" @endif>
             <div class="modal-header">
-                <h5 class="modal-title">{{ $title }}</h5>
+                <div class="row">
+                    <div class="col-12"><h5 class="modal-title">{{ $title }}</h5></div>
+                    <div class="col-12">{{ $subtitle ?? "" }}</div>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body">

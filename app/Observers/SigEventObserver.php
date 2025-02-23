@@ -4,19 +4,19 @@ namespace App\Observers;
 
 use App\Events\Sig\SigApplicationSubmitted;
 use App\Models\SigEvent;
-use App\Notifications\Sig\NewSigApplicationNotification;
+use App\Notifications\Sig\NewApplicationNotification;
 use App\Facades\NotificationService;
-use App\Notifications\Sig\SigApplicationProcessedNotification;
+use App\Notifications\Sig\ProcessedApplicationNotification;
 
 class SigEventObserver
 {
     public function applicationSubmitted(SigApplicationSubmitted $event): void {
-        NotificationService::dispatchRoutedNotification(new NewSigApplicationNotification($event->sigEvent));
+        NotificationService::dispatchRoutedNotification(new NewApplicationNotification($event->sigEvent));
     }
 
-    public function updated(SigEvent $sig) {
+    public function updated(SigEvent $sig): void {
         if($sig->isDirty("approval")) {
-            $sig->sigHosts->pluck("user")->each->notify(new SigApplicationProcessedNotification($sig));
+            $sig->sigHosts->pluck("user")->each->notify(new ProcessedApplicationNotification($sig));
         }
     }
 
@@ -27,5 +27,11 @@ class SigEventObserver
         ];
     }
 
+    public function deleted(SigEvent $event): void {
+        foreach($event->chats AS $chat) {
+            $chat->subjectable()->dissociate();
+            $chat->save();
+        }
+    }
 
 }

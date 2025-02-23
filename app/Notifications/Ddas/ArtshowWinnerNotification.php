@@ -4,12 +4,10 @@ namespace App\Notifications\Ddas;
 
 use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
-use App\Facades\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\HtmlString;
 use NotificationChannels\Telegram\TelegramMessage;

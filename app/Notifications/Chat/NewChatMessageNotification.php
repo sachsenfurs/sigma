@@ -15,6 +15,11 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+
+    public static function getName(): string {
+        return __("New Chat Message");
+    }
+
     public function __construct(protected Message $message) {}
 
     protected function getSubject(): string { // can't be called in constructor, otherwise the localization won't be applied

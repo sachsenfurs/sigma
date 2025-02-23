@@ -20,8 +20,6 @@ use App\Http\Controllers\Sig\SigFormController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
-use App\Http\Controllers\Sig\SigReminderController;
-use App\Http\Controllers\Sig\SigTimeslotReminderController;
 use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\ConnectTelegramController;
 use App\Providers\RouteServiceProvider;
@@ -99,18 +97,18 @@ Route::group(['middleware' => "auth"], function() {
     Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
     // SIG Reminders
-    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
-    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
-    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
+//    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
+//    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
+//    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
 
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
     Route::delete("/favorites/{entry}", [SigFavoriteController::class, 'destroy'])->name('favorites.destroy');
 
     // Timeslot Reminders
-    Route::post("/timeslotReminders", [SigTimeslotReminderController::class, 'store'])->name('timeslotReminders.store');
-    Route::post("/timeslotReminders/update", [SigTimeslotReminderController::class, 'update'])->name('timeslotReminders.update');
-    Route::delete("/timeslotReminders/delete", [SigTimeslotReminderController::class, 'delete'])->name('timeslotReminders.delete');
+//    Route::post("/timeslotReminders", [SigTimeslotReminderController::class, 'store'])->name('timeslotReminders.store');
+//    Route::post("/timeslotReminders/update", [SigTimeslotReminderController::class, 'update'])->name('timeslotReminders.update');
+//    Route::delete("/timeslotReminders/delete", [SigTimeslotReminderController::class, 'delete'])->name('timeslotReminders.delete');
 
     // Telegram auth
     Route::get("/telegram/connect", ConnectTelegramController::class)->name('telegram.connect');

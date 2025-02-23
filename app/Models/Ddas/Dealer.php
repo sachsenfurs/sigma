@@ -6,6 +6,8 @@ use App\Enums\Approval;
 use App\Models\SigLocation;
 use App\Models\Traits\HasChats;
 use App\Models\User;
+use App\Observers\DealerObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+#[ObservedBy(DealerObserver::class)]
 class Dealer extends Model
 {
     use HasFactory, HasChats;

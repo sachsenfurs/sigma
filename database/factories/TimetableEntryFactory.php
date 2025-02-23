@@ -7,9 +7,6 @@ use App\Models\SigLocation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class TimetableEntryFactory extends Factory
 {
     /**
@@ -19,7 +16,7 @@ class TimetableEntryFactory extends Factory
      */
     public function definition()
     {
-        $start = $this->faker->dateTimeBetween(Carbon::yesterday(), Carbon::tomorrow()->addDay(1));
+        $start = $this->faker->dateTimeBetween(Carbon::yesterday(), Carbon::tomorrow()->addDay(2));
         $start = (new Carbon($start))->setMinutes($this->faker->randomElement([0,15,30,45]))->setSeconds(0);
         return [
             'sig_event_id' => SigEvent::all()->random(),

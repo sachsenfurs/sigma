@@ -23,12 +23,12 @@ class AuthServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot() {
-        Gate::before(function (User $user) {
-            if($user->isAdmin())
-                return true;
-            // IMPORTANT: don't return false!
-            // Otherwise it won't check for remaining policies and aborts the request IMMEDIATELY!
-        });
+//        Gate::before(function (User $user) {
+//            if($user->isAdmin())
+//                return true;
+//            // IMPORTANT: don't return false!
+//            // Otherwise it won't check for remaining policies and aborts the request IMMEDIATELY!
+//        });
 
 
         Gate::policy(\App\Models\DepartmentInfo::class          , \App\Policies\Sig\DepartmentInfoPolicy::class);
@@ -39,6 +39,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\SigLocation::class             , \App\Policies\Sig\SigLocationPolicy::class);
         Gate::policy(\App\Models\SigTag::class                  , \App\Policies\Sig\SigTagPolicy::class);
         Gate::policy(\App\Models\TimetableEntry::class          , \App\Policies\Sig\TimetableEntryPolicy::class);
+        Gate::policy(\App\Models\SigAttendee::class             , \App\Policies\Sig\SigAttendeePolicy::class);
+        Gate::policy(\App\Models\SigTimeslot::class             , \App\Policies\Sig\SigTimeslotPolicy::class);
 
         Gate::policy(\App\Models\User::class                    , \App\Policies\User\UserPolicy::class);
         Gate::policy(\App\Models\UserRole::class                , \App\Policies\User\UserRolePolicy::class);

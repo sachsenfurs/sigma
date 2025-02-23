@@ -23,13 +23,10 @@ class SigFavoriteController extends Controller
         ]);
 
         $reminderAttributes = [
-            'timetable_entry_id' => $attributes['timetable_entry_id'],
             'minutes_before' => 15,
-            'send_at' => strtotime(TimetableEntry::find(['id' => $attributes['timetable_entry_id']])->first()->start) - (15 * 60),
         ];
 
-        auth()->user()->reminders()->create($reminderAttributes);
-
+        auth()->user()->reminders()->make()->remindable()->associate(TimetableEntry::find($attributes['timetable_entry_id']))->save();
     }
 
 

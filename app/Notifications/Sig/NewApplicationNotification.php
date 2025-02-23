@@ -8,7 +8,7 @@ use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SigApplicationProcessedNotification extends Notification implements ShouldQueue
+class NewApplicationNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -17,24 +17,22 @@ class SigApplicationProcessedNotification extends Notification implements Should
 
 
     public static function getName(): string {
-        return __("SIG Application Processed");
+        return __("New SIG Application");
     }
 
     protected function getVia(): array {
-        return ['mail', 'telegram', 'database'];
+        return ['mail', 'telegram'];
     }
 
     protected function getSubject(): ?string {
-        return __(":sig: :approval", ['sig' => $this->sigEvent->name_localized, 'approval' => $this->sigEvent->approval->name()]);
+        return __("New SIG Application: :sig", ['sig' => $this->sigEvent->name]);
     }
 
     protected function getLines(): array {
         return [
-            __("The status of your submitted SIG :sig has been changed: :approval", ['sig' => $this->sigEvent->name_localized, 'approval' => $this->sigEvent->approval->name()]),
+            __(":name has registered the SIG :sig:", ['name' => $this->sigEvent->primary_host->name, 'sig' => $this->sigEvent->name]),
             "",
-            $this->sigEvent->description_localized,
-            "",
-            $this->sigEvent->description_localized_other,
+            $this->sigEvent->description,
         ];
     }
 
@@ -43,7 +41,6 @@ class SigApplicationProcessedNotification extends Notification implements Should
     }
 
     protected function getActionUrl(): string {
-        return route("sigs.index");
+        return SigEventResource::getUrl('edit', ['record' => $this->sigEvent]);
     }
-
 }

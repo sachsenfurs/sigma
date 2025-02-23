@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasReminders;
 use App\Observers\TimetableEntryObserver;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 class TimetableEntry extends Model
 {
     use HasFactory;
+    use HasReminders;
 
     protected $guarded = [];
 
@@ -29,6 +31,7 @@ class TimetableEntry extends Model
         'cancelled' => "boolean",
         'start' => 'datetime',
         'end' => "datetime",
+        'new' => "boolean",
         'updated_at' => "datetime", // according to the docs timestamps will be casted by default but it causes issues without explicitly doing it again here!
         'created_at' => "datetime",
     ];
@@ -50,7 +53,7 @@ class TimetableEntry extends Model
 
     protected $with = [
 //        'sigLocation',
-        'parentEntry',
+//        'parentEntry', // for future use, not used atm
     ];
 
     protected static function booted() {
@@ -63,10 +66,6 @@ class TimetableEntry extends Model
 
     public function favorites(): HasMany {
         return $this->hasMany(SigFavorite::class);
-    }
-
-    public function reminders(): HasMany {
-        return $this->hasMany(SigReminder::class);
     }
 
     public function scopePublic($query) {

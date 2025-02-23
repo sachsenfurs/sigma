@@ -88,12 +88,6 @@ class NotificationService
      * verifies that telegram id is connected, otherwise remove it from channel
      */
     public function channels(Notification $notification, object $notifiable, array $additional = []): array {
-        // check for notification routes
-        if(method_exists($notifiable, "notificationRoutes")) {
-            $routes =  $notifiable->notificationRoutes()->where("notification", $notification->getMorphName())->first()->channels ?? [];
-            if(!empty($routes)) return $routes;
-        }
-
         if($notifiable instanceof User) {
             $indexName      = $this->userNotifications[$notification::class] ?? '';
             $channels       = $notifiable->notification_channels[$indexName] ?? [];
@@ -110,7 +104,7 @@ class NotificationService
             return ['telegram'];
         }
 
-        return [];
+        return $additional;
     }
 
     public function availableChannels(): array {
@@ -135,7 +129,7 @@ class NotificationService
     public function dispatchRoutedNotification(Notification $notification): void {
         $routes = NotificationRoute::where("notification", $notification->getMorphName())->get();
         foreach($routes AS $route) {
-            $route->notifiable->notify($notification);
+            $route->notifiable->notify(tap($notification, fn($n) => $n->setVia($route->channels)));
         }
     }
 

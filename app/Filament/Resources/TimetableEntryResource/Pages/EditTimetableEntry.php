@@ -45,20 +45,20 @@ class EditTimetableEntry extends EditRecord
     }
 
     public static function handleUpdate(Model $record, array $data): Model {
-        // If the send_update flag is set, we will update the timestamps
-        $record->timestamps = false;
-        if ($data['send_update'] ?? false) {
-            $record->timestamps = true;
-        }
-        unset($data['send_update']);
-
         // If the reset_update flag is set, we will reset the updated_at timestamp
         if ($data['reset_update'] ?? false) {
             $record->updated_at = $record->created_at;
         }
         unset($data['reset_update']);
 
-        $record->update($data);
+        // If the send_update flag is set, we will update the timestamps
+        $record->timestamps = ($data['send_update'] ?? false);
+        unset($data['send_update']);
+
+        if ($record->timestamps)
+            $record->update($data);
+        else
+            $record->updateQuietly($data);
 
         return $record;
     }

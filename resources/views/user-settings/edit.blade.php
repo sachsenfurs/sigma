@@ -51,18 +51,18 @@
                             </div>
                         </div>
                     </div>
-                    @foreach ($notificationType as $notification => $value)
+                    @foreach ($notificationType as $notification => $data)
                         <div class="row m-2">
                             <div class="col-7 text-center text-md-start pb-md-0 pb-3 my-auto">
-                                {{ __($notification) }}
+                                {{ $data['name'] }}
                             </div>
                             <div class="col-5">
                                 <div class="row">
                                     <div class="col-6 col-md-6">
-                                        <input class="form-check-input fs-5" type="checkbox" name="{{ $notification }}[]" value="mail" @if (in_array('mail', $value)) checked @endif>
+                                        <input class="form-check-input fs-5" type="checkbox" name="{{ $notification }}[]" value="mail" @if (in_array('mail', $data['channels'])) checked @endif>
                                     </div>
                                     <div class="col-6 col-md-6">
-                                        <input class="form-check-input fs-5" type="checkbox" name="{{ $notification }}[]" value="telegram" @if (in_array('telegram', $value)) checked @endif @if (!auth()->user()->routeNotificationForTelegram()) disabled @endif>
+                                        <input class="form-check-input fs-5" type="checkbox" name="{{ $notification }}[]" value="telegram" @if (in_array('telegram', $data['channels'])) checked @endif @if (!auth()->user()->routeNotificationForTelegram()) disabled @endif>
                                     </div>
                                 </div>
                             </div>

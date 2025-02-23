@@ -11,19 +11,14 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('sig_attendees', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sig_timeslot_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
-
-            $table->boolean("timeslot_owner")->default(false);
         });
     }
 
@@ -32,8 +27,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('sig_attendees');
     }
 };

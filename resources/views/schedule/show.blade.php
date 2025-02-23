@@ -34,7 +34,6 @@
             </div>
             <div class="col-6 text-center align-self-center">
                 <h3 class="d-flex justify-content-center py-2">
-
                     <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
                         <i class="bi bi-geo-alt icon-link pe-1"></i>
                         {{ $entry->sigLocation->name }}
@@ -47,12 +46,12 @@
                     @endif
                 </h3>
 
-                <div class="d-flex flex-wrap justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center gap-3">
                     @foreach($entry->sigEvent->public_hosts as $host)
                         <div class="text-nowrap d-flex">
                             <a href="{{ route("hosts.show", $host) }}" class="text-decoration-none fs-5">
                                 @if($host->avatar_thumb)
-                                    <img src="{{ $host->avatar_thumb }}"  class="img-thumbnail rounded-circle icon-link" style="height: 2.3em" alt="">
+                                    <img src="{{ $host->avatar_thumb }}"  class="img-thumbnail rounded-circle icon-link" style="height: 2.2em" alt="">
                                 @else
                                     <i class="bi bi-person-circle fs-5 px-1 ps-3 icon-link"></i>
                                 @endif

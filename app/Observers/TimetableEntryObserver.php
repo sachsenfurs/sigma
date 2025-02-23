@@ -2,44 +2,65 @@
 
 namespace App\Observers;
 
-use App\Models\SigReminder;
-use App\Models\User;
+use App\Facades\NotificationService;
+use App\Models\Reminder;
 use App\Models\TimetableEntry;
-use App\Notifications\TimetableEntry\TimetableEntryTimeChanged;
-use App\Notifications\TimetableEntry\TimetableEntryCancelled;
-use App\Notifications\TimetableEntry\TimetableEntryLocationChanged;
-use App\Settings\AppSettings;
-use Notification;
+use App\Notifications\TimetableEntry\CancelledFavoriteNotification;
+use App\Notifications\TimetableEntry\CancelledNotification;
+use App\Notifications\TimetableEntry\ChangedFavoriteNotification;
+use App\Notifications\TimetableEntry\ChangedNotification;
+use App\Notifications\TimetableEntry\NewNotification;
 
 class TimetableEntryObserver
 {
-    /**
-     * Handle the TimetableEntry "updated" event.
-     *
-     * @param  \App\Models\TimetableEntry  $timetableEntry
-     * @return void
-     */
-    public function updated(TimetableEntry $timetableEntry) {
-//        $users = User::where('telegram_user_id', '!=', null)->get();
-//
-//        if (!$timetableEntry->hide && app(AppSettings::class)->telegram_bot_name != "") {
-//            if (($timetableEntry->start != $timetableEntry->getOriginal('start')) || ($timetableEntry->end != $timetableEntry->getOriginal('end'))) {
-//                Notification::send($users, new TimetableEntryTimeChanged($timetableEntry));
-//                foreach(SigReminder::where('timetable_entry_id', $timetableEntry->id)->get() as $reminder) {
-//                    $reminder->update([
-//                        'send_at' => strtotime($reminder->timetableEntry->start) - ($reminder->minutes_before * 60),
-//                    ]);
-//                    $reminder->save();
-//                }
-//            }
-//
-//            if ($timetableEntry->cancelled != $timetableEntry->getOriginal('cancelled')) {
-//                Notification::send($users, new TimetableEntryCancelled($timetableEntry));
-//            }
-//
-//            if ($timetableEntry->sig_location_id != $timetableEntry->getOriginal('sig_location_id')) {
-//                Notification::send($users, new TimetableEntryLocationChanged($timetableEntry));
-//            }
-//        }
+
+    public function created(TimetableEntry $timetableEntry): void {
+        $this->createdUpdated($timetableEntry);
+    }
+
+    public function updated(TimetableEntry $timetableEntry): void {
+        Reminder::updateSendTime($timetableEntry);
+
+        $this->createdUpdated($timetableEntry);
+    }
+
+    public function createdUpdated(TimetableEntry $timetableEntry): void {
+        if(!$timetableEntry->hide AND !$timetableEntry->sigEvent->is_private) {
+            // event cancelled?
+            if($timetableEntry->isDirty("cancelled") AND $timetableEntry->cancelled) {
+                // global notification
+                NotificationService::dispatchRoutedNotification(new CancelledNotification($timetableEntry));
+
+                // favorite notification
+                foreach($timetableEntry->favorites AS $fav)
+                    $fav->user->notify(new CancelledFavoriteNotification($fav->timetableEntry));
+
+                return;
+            }
+
+            // new event?
+            if($timetableEntry->isDirty("new") AND $timetableEntry->new) {
+                NotificationService::dispatchRoutedNotification(new NewNotification($timetableEntry));
+                return;
+            }
+
+            // event changed?
+            if($timetableEntry->updated_at != $timetableEntry->created_at) {
+                // getDirty() contains the CHANGED data. But we need an array containing only the OLD data
+                $oldData = collect($timetableEntry->getOriginal())->intersectByKeys($timetableEntry->getDirty());
+
+                NotificationService::dispatchRoutedNotification(new ChangedNotification($timetableEntry, $oldData));
+
+                // favs
+                foreach($timetableEntry->favorites AS $fav)
+                    $fav->user->notify(new ChangedFavoriteNotification($fav->timetableEntry, $oldData));
+
+                return;
+            }
+        }
+    }
+
+    public function deleted(TimetableEntry $entry): void {
+        $entry->reminders()->delete();
     }
 }

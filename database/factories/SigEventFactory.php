@@ -3,10 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Approval;
-use App\Models\SigHost;
-use App\Services\Translator;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SigEvent>

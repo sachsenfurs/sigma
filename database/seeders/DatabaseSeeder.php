@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Facades\NotificationService;
 use App\Models\Ddas\ArtshowItem;
+use App\Models\NotificationRoute;
+use App\Models\Post\PostChannel;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigHost;
@@ -50,6 +53,20 @@ class DatabaseSeeder extends Seeder
 
         (new PostChannelSeeder())->run();
 
+        // notification routes
+        foreach(PostChannel::all() AS $channel) {
+            foreach([
+                'event_cancelled',
+                'event_changed',
+                'event_new'
+            ] AS $notification) {
+                $channel->notificationRoutes()->create([
+                    'notification' => $notification,
+                    'channels' => NotificationService::availableChannels(),
+                ]);
+            }
+        }
+
         // create sig hosts
         foreach($users AS $user) {
             if(rand(0,100) > 10)
@@ -60,7 +77,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // create sig events
-        SigEvent::factory()->count(35)->create();
+        SigEvent::factory()->count(40)->create();
 
          // create tags and associate random sigs
         (new SigTagSeeder())->run();
@@ -79,7 +96,7 @@ class DatabaseSeeder extends Seeder
             /**
              * @var $entry TimetableEntry
              */
-            $entry->sigTimeslots()->create([
+            $slot = $entry->sigTimeslots()->create([
                 'max_users' => rand(1,5),
                 'slot_start' => $entry->start,
                 'slot_end' => $entry->end,
@@ -89,6 +106,7 @@ class DatabaseSeeder extends Seeder
             ]);
             $entry->sigEvent->reg_possible = true;
             $entry->sigEvent->save();
+            $slot->sigAttendees()->make()->user()->associate(User::find(1))->save();
         });
 
 

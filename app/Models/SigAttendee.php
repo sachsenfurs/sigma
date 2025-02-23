@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\SigAttendeeObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,8 +22,13 @@ class SigAttendee extends Model
         return $this->belongsTo(SigTimeslot::class);
     }
 
-    public function timeslotReminders(): HasMany {
-//        return $this->hasMany(SigTimeslotReminder::class)->where("user_id", auth()->user?->id);
-        return auth()?->user()->timeslotReminders()->where("timeslot_id", $this->sigTimeslot->id);
+    public function isOwner(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigTimeslot?->getOwner()?->user_id == auth()->id()
+        )->shouldCache();
+    }
+
+    public function reminders(): HasMany {
+        return $this->hasMany(Reminder::class, "remindable_id", "id")->where("remindable_type", SigTimeslot::make()->getMorphClass());
     }
 }

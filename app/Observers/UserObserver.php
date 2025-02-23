@@ -8,12 +8,6 @@ use Illuminate\Support\Str;
 
 class UserObserver
 {
-    /**
-     * Handle the User "created" event.
-     *
-     * @param  \App\Models\User  $user
-     * @return void
-     */
     public function created(User $user) {
         $this->createUpdate($user);
     }
@@ -47,6 +41,9 @@ class UserObserver
     }
 
     public function deleted(User $user) {
-        //
+        // deleting the polymorphic relationships which can't be handled by the DB
+        $user->reminders()->delete();
+        $user->notifications()->delete();
+        $user->notificationRoutes()->delete();
     }
 }
