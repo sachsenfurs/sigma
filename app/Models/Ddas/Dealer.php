@@ -23,7 +23,14 @@ class Dealer extends Model
 {
     use HasFactory, HasChats;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'info',
+        'info_en',
+        'gallery_link',
+        'additional_info',
+        'icon_file',
+    ];
 
     protected $appends = [
         'info_localized'

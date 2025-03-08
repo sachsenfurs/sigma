@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Ddas\Forms;
 
+use App\Models\Ddas\DealerTag;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -21,6 +22,9 @@ class DealersForm extends Form
 
     #[Validate('string|min:10|max:1000')]
     public string $info;
+
+    #[Validate('array|nullable|exists:'.DealerTag::class.",id")]
+    public array $tags;
 
 //    #[Validate('string|nullable|min:10|max:1000')]
 //    public ?string $info_en;
