@@ -91,24 +91,13 @@ Route::group(['middleware' => "auth"], function() {
         Route::post('/', [SigEventController::class, 'store'])->name("store");
     });
 
-
     // SIG Timeslot Registration
     Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
     Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
-    // SIG Reminders
-//    Route::post("/reminders", [SigReminderController::class, 'store'])->name('reminders.store');
-//    Route::post("/reminders/update", [SigReminderController::class, 'update'])->name('reminders.update');
-//    Route::delete("/reminders/delete", [SigReminderController::class, 'delete'])->name('reminders.delete');
-
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');
     Route::delete("/favorites/{entry}", [SigFavoriteController::class, 'destroy'])->name('favorites.destroy');
-
-    // Timeslot Reminders
-//    Route::post("/timeslotReminders", [SigTimeslotReminderController::class, 'store'])->name('timeslotReminders.store');
-//    Route::post("/timeslotReminders/update", [SigTimeslotReminderController::class, 'update'])->name('timeslotReminders.update');
-//    Route::delete("/timeslotReminders/delete", [SigTimeslotReminderController::class, 'delete'])->name('timeslotReminders.delete');
 
     // Telegram auth
     Route::get("/telegram/connect", ConnectTelegramController::class)->name('telegram.connect');

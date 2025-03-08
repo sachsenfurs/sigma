@@ -44,7 +44,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -52,10 +51,12 @@
         @empty
     </div>
         <x-infocard>
-            {{ __("No events favored") }}
+            {{ __("No favorite events") }}
+            <p class="mt-3">
+                <a class="btn btn-outline-light" href="{{ route("schedule.listview") }}">{{ __("Explore Events") }}</a>
+            </p>
         </x-infocard>
     @endforelse
-{{--    <livewire:sig.edit-reminder-modal wire:model="selected_timeslot" />--}}
 
     <div class="w-100 mt-4">
         {{ $favorites?->links(data: ['scrollTo' => '#favorites']) }}

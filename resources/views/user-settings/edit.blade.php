@@ -2,32 +2,47 @@
 @section('title', __("Edit User Settings"))
 @section('content')
 <div class="col-12 col-md-8 mx-auto">
-    @if (!auth()->user()->routeNotificationForTelegram())
-        <div class="card m-3">
-            <div class="row m-3">
-                <div class="col-12 col-md-12 text-center">
-                    <h2>{{ __("Notifications") }}</h2>
-                    <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-auto align-content-center">
+                    @if(auth()->user()->avatar)
+                        <img src="{{ auth()->user()->avatar }}" class="rounded-circle img-thumbnail" style="max-height: 7rem" alt="">
+                    @else
+                        <i class="bi bi-person-circle" style="font-size: 5rem"></i>
+                    @endif
                 </div>
-                <div class="col mx-auto text-center">
-                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
+                <div class="col align-content-center">
+                    <h3>{{ auth()->user()->name }}</h3>
+                    <p class="text-muted">
+                        {{ __("Reg Number").": ".auth()->user()->reg_id }}
+                    </p>
+
                 </div>
             </div>
         </div>
-    @else
-        <div class="card m-3">
-            <div class="row m-3">
-                <div class="col-12 col-md-12 text-center">
-                    <h2>{{ __("Notifications") }}</h2>
-                    <div class="row p-3">
-                        <div class="col-2"><i class="bi bi-check-circle-fill text-success" style="font-size: 42px"></i></div>
-                        <div class="col-10"><p class="p-0">{{ __("You have successfully connected your Telegram account") }}</p></div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="card-title">
+                <h4>{{ __("Notifications") }}</h4>
+            </div>
+            <div class="row p-3">
+                @if (!auth()->user()->routeNotificationForTelegram())
+                    <div class="col mx-auto text-center">
+                        <p>{{ __("Connect your account with telegram to enable notifications") }}</p>
+                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{ app(\App\Settings\AppSettings::class)->telegram_bot_name }}" data-size="large" data-auth-url="{{ route("telegram.connect") }}" data-request-access="write"></script>
                     </div>
-                </div>
+                @else
+                    <div class="col-auto"><i class="bi bi-check-circle-fill text-success fs-1"></i></div>
+                    <div class="col align-content-center">{{ __("You have successfully connected your Telegram account") }}</div>
+                @endif
             </div>
         </div>
-    @endif
-    <div class="card m-3">
+    </div>
+
+    <div class="card mt-3">
         <form action="{{ route('user-settings.update') }}" method="POST">
             @method('PATCH')
             @csrf

@@ -31,8 +31,8 @@ class SigTimeslotReminder extends Notification
 
     protected function getLines(): array {
         return [
-            "🕗 **" . __("Time") . ":** " . $this->sigTimeslot->slot_start->translatedFormat("H:i") . " - " . $this->sigTimeslot->slot_end->translatedFormat("H:i"),
-            "📍 **" . __("Location") . ":" . $this->sigTimeslot->timetableEntry->sigLocation->name_localized,
+            "🕗 " . __("Time") . ": " . $this->sigTimeslot->slot_start->translatedFormat("H:i") . " - " . $this->sigTimeslot->slot_end->translatedFormat("H:i"),
+            "📍 " . __("Location") . ": " . $this->sigTimeslot->timetableEntry->sigLocation->name_localized,
         ];
     }
 

@@ -22,7 +22,7 @@ class EditReminderModal extends Component
 
     public function updateReminder(): void {
         $this->validate([
-            'time' => 'int',
+            'time' => 'int|min:0|max:240',
         ]);
 
         $reminder = $this->remindable->reminders()->whereHasMorph("notifiable", User::class, fn($query) => $query->where("notifiable_id", auth()->id()))->first();

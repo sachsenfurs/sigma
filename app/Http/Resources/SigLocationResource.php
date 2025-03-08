@@ -25,7 +25,7 @@ class SigLocationResource extends JsonResource
 
         self::withoutWrapping();
         return [
-            'id'                    => $this->id,
+            'id'                    => $this->id, // neede by SIG Calendar vue component
             'name_localized'        => $this->name_localized,
             'description_localized' => $this->description_localized,
         ];

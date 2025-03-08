@@ -21,37 +21,34 @@
         </div>
     @else
         <div class="row mt-2">
-            <div class="col-12 col-md-8">
-                <div class="container">
-                    <h2 class="p-2"><i class="bi bi-calendar-week icon-link"></i> {{ __("Your Upcoming Events") }}</h2>
-                    <livewire:sig.upcoming-timeslots />
-                </div>
+            <div class="col-12 col-lg-8 order-0">
+                <h2 class="py-2"><i class="bi bi-calendar-week icon-link"></i> {{ __("Your Upcoming Events") }}</h2>
+                <livewire:sig.upcoming-timeslots />
             </div>
-            <div class="col-12 col-md-4 mt-2 mt-md-0">
+            <div class="col-12 col-lg-4 order-3 order-lg-1">
                 @if (!auth()->user()->routeNotificationForTelegram())
-                    <div class="container">
-                        <h2 class="p-2"><i class="bi bi-telegram icon-link"></i> {{ __("Telegram Connection") }}</h2>
+                    <div class="container py-3">
+                        <h4><i class="bi bi-telegram icon-link"></i> {{ __("Telegram Connection") }}</h4>
                         <p>{{ __("Haven't connected your Telegram Account yet?") }}</p>
                         <a class="btn btn-primary btn-lg mx-auto" href="{{ route("user-settings.edit") }}" role="button">
                             {{ __("Connect it now") }}
                         </a>
                     </div>
                 @endif
-                <div class="container mt-2">
-                    <h2 class="p-2"><h3><i class="bi bi-bell-fill icon-link"></i> {{ __("Notifications") }}</h2>
+                <div class="container py-3">
+                    <h4><i class="bi bi-bell-fill icon-link"></i> {{ __("Notifications") }}</h4>
                     <p>{{ __("Do you want to modify how you recive notifications?") }}</p>
                     <a class="btn btn-primary btn-lg" href="{{ route("user-settings.edit") }}" role="button">
                         {{ __("Modify them here") }}
                     </a>
                 </div>
             </div>
+            <div class="col-12 order-2">
+                <h2 class="py-2"><i class="bi bi-heart-fill icon-link"></i> {{ __("Favorite Events") }}</h2>
+                <livewire:sig.favorite-events />
+            </div>
         </div>
 
-        <div class="container mt-2">
-            <h2 class="p-2" id="favorites"><i class="bi bi-heart-fill icon-link"></i> {{ __("Favorite Events") }}</h2>
-
-            <livewire:sig.favorite-events />
-        </div>
     @endif
 </div>
 

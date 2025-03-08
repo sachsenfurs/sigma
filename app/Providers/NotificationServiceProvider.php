@@ -17,6 +17,7 @@ use App\Notifications\TimetableEntry\CancelledNotification;
 use App\Notifications\TimetableEntry\ChangedFavoriteNotification;
 use App\Notifications\TimetableEntry\ChangedNotification;
 use App\Notifications\TimetableEntry\NewNotification;
+use App\Notifications\TimetableEntry\TimetableEntryReminder;
 use App\Settings\ChatSettings;
 use Illuminate\Database\QueryException;
 use Illuminate\Notifications\Channels\DatabaseChannel;
@@ -49,10 +50,10 @@ class NotificationServiceProvider extends ServiceProvider
          * static property $userSetting from the extended Notification class can be used to disable it for the user settings page
          */
         NotificationService::registerUserNotifications([
-            CancelledFavoriteNotification::class    => "favorite_event_cancelled",
-            ChangedFavoriteNotification::class      => "favorite_event_changed",
-            SigFavoriteReminder::class              => "sig_favorite",
-            SigTimeslotReminder::class              => "sig_timeslot",
+            CancelledFavoriteNotification::class        => "favorite_event_cancelled",
+            ChangedFavoriteNotification::class          => "favorite_event_changed",
+            SigFavoriteReminder::class                  => "sig_favorite_reminder",
+            SigTimeslotReminder::class                  => "sig_timeslot_reminder",
         ]);
 
         try {
@@ -63,13 +64,14 @@ class NotificationServiceProvider extends ServiceProvider
         }
 
         NotificationService::registerAdminNotifications([
-            ProcessedApplicationNotification::class  => "sig_application_processed",
+            ProcessedApplicationNotification::class     => "sig_application_processed",
             ArtshowWinnerNotification::class            => "artshow_winner_notification",
             ProcessedItemNotification::class            => "artshow_item_processed",
+            TimetableEntryReminder::class               => "timetable_entry_reminder",
         ]);
 
         NotificationService::registerRoutableNotifications([
-            NewApplicationNotification::class        => "sig_application_new",
+            NewApplicationNotification::class           => "sig_application_new",
             SubmittedItemNotification::class            => "artshow_item_submitted",
             NewNotification::class                      => "event_new",
             CancelledNotification::class                => "event_cancelled",

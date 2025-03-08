@@ -1,7 +1,9 @@
 <div class="col-12">
-    <strong>
-        {{ $notification->type::getName() }}
-    </strong>
+    <p>
+        <strong>
+            {{ $notification->data['subject'] ?? $notification->type::getName() }}
+        </strong>
+    </p>
     @foreach($notification->data['lines'] ?? [] AS $line)
         <p>
             {{ $line }}

@@ -173,15 +173,15 @@
                         @guest
                             <a class="p-3 fs-5" href="{{ route('oauthlogin_regsys') }}">Login</a>
                         @else
-                            <div class="dropdown m-3">
+                            <div class="dropdown m-3 user-select-none">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle text-wrap" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                     @if(Auth::user()->avatar_thumb)
                                         <img src="{{ Auth::user()->avatar_thumb }}" alt="" width="32" height="32" class="rounded-circle me-2">
                                     @endif
                                     <strong>{{ Auth::user()->name }}</strong>
+                                    <span class="text-muted px-1 ps-2 small">(#{{ auth()->user()->reg_id }})</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
-
                                     @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
                                         <li>
                                             <a class="dropdown-item" href="{{ \Filament\Facades\Filament::getUrl() }}">
@@ -189,13 +189,11 @@
                                             </a>
                                         </li>
                                     @endif
-
                                     <li>
                                         <a class="dropdown-item" href="{{ route('user-settings.edit') }}">
                                             {{ __('User Settings') }}
                                         </a>
                                     </li>
-
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -209,11 +207,8 @@
                             </div>
                         @endguest
 
-
                         <button class="p-3 nav-link dropdown-toggle rounded collapsed text-start d-flex align-items-center" data-bs-toggle="dropdown" data-bs-target="#home-collapse" aria-expanded="false">
                             <x-flag :language="App::getLocale()" height="1em" />
-{{--                            <img class="align-middle me-2" style="height: 1em; margin-top: -4px"--}}
-{{--                                 src="/icons/{{ App::getLocale() }}-flag.svg" alt="[{{ App::getLocale() }}]">--}}
                         </button>
 
                         <ul class="dropdown-menu">
@@ -228,9 +223,7 @@
                                 @endif
                             @endforeach
                         </ul>
-
                     </div>
-
                 </div>
             </div>
             <div class="col-auto flex-grow-1 flex-shrink-1 p-0 main-col d-grid">
@@ -273,7 +266,6 @@
             </div>
         </div>
     </div>
-
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 

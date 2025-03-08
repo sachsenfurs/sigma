@@ -108,13 +108,13 @@ class TimetableEntry extends Model
 
     public function hasTimeChanged(): Attribute {
         return Attribute::make(
-            get: fn() => ($this->parentEntry && $this->parentEntry->start != $this->start) || $this->updated_at > $this->created_at
+            get: fn() => /**($this->parentEntry && $this->parentEntry->start != $this->start) || **/ $this->updated_at > $this->created_at
         )->shouldCache();
     }
 
     public function hasLocationChanged(): Attribute {
         return Attribute::make(
-            get: fn() => $this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation
+            get: fn() => /**$this->parentEntry && $this->parentEntry->sigLocaton != $this->sigLocation**/ false
         )->shouldCache();
     }
 

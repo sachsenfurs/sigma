@@ -30,8 +30,8 @@ class TimetableEntryReminder extends Notification
 
     protected function getLines(): array {
         return [
-            "🕗 **" . __("Time") . ":** " . $this->entry->start->translatedFormat("H:i") . " - " . $this->entry->end->translatedFormat("H:i"),
-            "📍 **" . __("Location") . ":" . $this->entry->sigLocation->name_localized,
+            "🕗 " . __("Time") . ": " . $this->entry->start->translatedFormat("H:i") . " - " . $this->entry->end->translatedFormat("H:i"),
+            "📍 " . __("Location") . ": " . $this->entry->sigLocation->name_localized,
         ];
     }
 

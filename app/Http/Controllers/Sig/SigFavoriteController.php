@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Gate;
 class SigFavoriteController extends Controller
 {
     public function store(Request $request) {
-        Gate::allowIf(Auth::check());
-
         $attributes = $request->validate([
             'timetable_entry_id' => 'required|exists:timetable_entries,id'
         ]);
@@ -21,19 +19,11 @@ class SigFavoriteController extends Controller
             'timetable_entry_id' => $attributes['timetable_entry_id'],
             'user_id' => auth()->user()->id,
         ]);
-
-        $reminderAttributes = [
-            'minutes_before' => 15,
-        ];
-
-        auth()->user()->reminders()->make()->remindable()->associate(TimetableEntry::find($attributes['timetable_entry_id']))->save();
     }
 
 
     public function destroy(Request $request, TimetableEntry $entry) {
-        Gate::allowIf(Auth::check());
-
-        auth()->user()->favorites()->where("timetable_entry_id", $entry->id)->delete();
+        auth()->user()->favorites()->where("timetable_entry_id", $entry->id)->get()->each->delete(); // don't delete via eloquent because otherwise the observer won't be called
 
         if(!$request->ajax())
             return back()->withSuccess(__('Favorite successfully removed!'));
