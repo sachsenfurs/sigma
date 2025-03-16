@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 class SigLocationController extends Controller
 {
     public function index() {
-        $locations = [];
+        $locations = collect();
         if(Gate::allows("viewAny", SigLocation::class))
             $locations = SigLocation::with(["sigEvents" => fn($query) => $query->public(), "sigEvents.timetableEntries"])
                 ->used()
