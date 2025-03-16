@@ -27,7 +27,6 @@ class ProductionSeeder extends Seeder
             'email' => "mail@kidran.de"
         ])->roles()->attach(UserRole::where("name", "Administrator")->first());
 
-        (new RingbergSeeder())->run();
         (new EASTSeeder())->run();
 
         (new SigTagSeeder())->run();
