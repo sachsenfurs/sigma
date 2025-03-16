@@ -66,7 +66,7 @@ class OAuthProfileUpdateService
         ];
 
         return User::where("reg_id", $resourceOwner->getId())
-                   ->first()
+                   ->limit(1)
                    ->updateOrCreate(
                        [   // where
                            'reg_id' => $resourceOwner->getId()
