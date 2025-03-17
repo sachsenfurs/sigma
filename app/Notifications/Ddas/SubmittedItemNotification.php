@@ -7,21 +7,20 @@ use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Storage;
+use NotificationChannels\Telegram\TelegramBase;
+use NotificationChannels\Telegram\TelegramFile;
+use NotificationChannels\Telegram\TelegramMessage;
 
 class SubmittedItemNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public static bool $userSetting = false;
     public function __construct(protected ArtshowItem $item) {}
 
 
     public static function getName(): string {
         return __("Art Show Item Submitted");
-    }
-
-    protected function getVia(): array {
-        return [];
     }
 
     protected function getSubject(): ?string {
@@ -36,6 +35,19 @@ class SubmittedItemNotification extends Notification implements ShouldQueue
             "",
             $this->item->additional_info,
         ];
+    }
+
+    public function toTelegram(object $notifiable): TelegramBase {
+        if($this->item->image) {
+            return TelegramFile::create()
+                ->content("**" . $this->getSubject() . "**\n\n".collect($this->getLines())->join("\n").$this->getActionUrl())
+                ->file(Storage::disk("public")->path($this->item->image), 'photo');
+        } else {
+            return TelegramMessage::create()
+                ->line("**" . $this->getSubject() . "**")->line("")
+                ->line(collect($this->getLines())->join("\n"))
+                ->button($this->getAction(), $this->getActionUrl());
+        }
     }
 
     protected function getAction(): ?string {

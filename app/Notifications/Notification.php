@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification as LaravelNotification;
 use Illuminate\Queue\SerializesModels;
+use NotificationChannels\Telegram\TelegramBase;
 use NotificationChannels\Telegram\TelegramMessage;
 
 abstract class Notification extends LaravelNotification
@@ -27,7 +28,7 @@ abstract class Notification extends LaravelNotification
             ->action($this->getAction(), $this->getActionUrl());
     }
 
-    public function toTelegram(object $notifiable): TelegramMessage {
+    public function toTelegram(object $notifiable): TelegramBase {
         return tap(TelegramMessage::create(), function(TelegramMessage $message) {
             if($this->getSubject())
                $message->line("**" . $this->getSubject() . "**")->line("");
