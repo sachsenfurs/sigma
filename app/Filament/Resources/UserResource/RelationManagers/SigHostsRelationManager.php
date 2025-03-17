@@ -6,6 +6,7 @@ use App\Filament\Resources\SigHostResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,13 @@ class SigHostsRelationManager extends RelationManager
     protected static string $relationship = 'sigHosts';
     protected static ?string $icon = 'heroicon-o-users';
 
+    public static function getModelLabel(): ?string {
+        return __("Host");
+    }
+
+    public static function getPluralModelLabel(): ?string {
+        return __("Hosts");
+    }
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
         return __("SIG Hosts");
@@ -41,6 +49,13 @@ class SigHostsRelationManager extends RelationManager
                     ->form(fn($form) => SigHostResource::form($form))
             ])
             ->recordUrl(fn(Model $record) => SigHostResource::getUrl("edit", ["record" => $record]))
-        ;
+            ->headerActions([
+                CreateAction::make()
+                    ->form(fn($form) => SigHostResource::form($form))
+                    ->fillForm([
+                        'reg_id' => $this->ownerRecord->reg_id,
+                        'name' => $this->ownerRecord->name,
+                    ]),
+            ]);
     }
 }

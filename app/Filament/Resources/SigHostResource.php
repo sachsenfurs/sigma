@@ -117,10 +117,6 @@ class SigHostResource extends Resource
             Forms\Components\TextInput::make('reg_id')
                 ->label('Reg Number')
                 ->translateLabel()
-                ->formatStateUsing(function (SigHost $record = null) {
-                    // Needs to be done, otherwise the form field is empty (Bug in filament?)
-                    return $record->reg_id ?? null;
-                })
                 ->numeric();
     }
 

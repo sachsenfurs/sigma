@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use App\Models\UserRole;
-use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\MaxWidth;
@@ -22,6 +21,14 @@ class RoleRelationManager extends RelationManager
         return __("User Roles");
     }
 
+    public static function getModelLabel(): ?string {
+        return __("User Role");
+    }
+
+    public static function getPluralModelLabel(): ?string {
+        return __("User Roles");
+    }
+
     protected function getTableHeading(): string|Htmlable|null {
         return __('User Roles');
     }
@@ -37,7 +44,7 @@ class RoleRelationManager extends RelationManager
 
     protected function can(string $action, ?Model $record = null): bool {
         // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can('viewAny', $record);
+        return auth()->user()->can('viewAny', UserRole::class);
     }
 
     public function table(Table $table): Table {
