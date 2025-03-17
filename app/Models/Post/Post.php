@@ -28,7 +28,13 @@ class Post extends Model
     public static $parseMode = "markdown";
 
     public function scopeRecent(Builder $query) {
-        $query->where('created_at', '>=', Carbon::now()->subHours(2));
+        $query
+            ->public()
+            ->where('created_at', '>=', Carbon::now()->subHours(2));
+    }
+
+    public function scopePublic(Builder $query) {
+        return $query->whereHas("channels", fn(Builder $query) => $query->whereDefault(true));
     }
 
     public function user(): BelongsTo {

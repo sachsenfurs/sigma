@@ -62,6 +62,6 @@ class SignageEndpointController extends Controller
     }
 
     public function announcements() {
-        return AnnouncementsApiResource::collection(Post::latest()->limit(10)->get());
+        return AnnouncementsApiResource::collection(Post::public()->latest()->limit(10)->get());
     }
 }

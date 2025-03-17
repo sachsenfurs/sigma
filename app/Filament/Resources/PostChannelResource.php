@@ -53,10 +53,10 @@ class PostChannelResource extends Resource
                             ->maxLength(255)
                             ->default('de'),
                         Forms\Components\Toggle::make('default')
-                            ->label("Default")
+                            ->label("Default / Public")
                             ->translateLabel()
                             ->inline(false)
-                            ->helperText("Selected by default when creating a new post?"),
+                            ->helperText("Selected by default when creating a new post? Every message in this channel will be publicly visible in the announcements tab."),
                         Forms\Components\RichEditor::make('info')
                             ->columnSpanFull()
                             ->label("Info (Internal)")
