@@ -14,9 +14,7 @@ class ArtshowArtist extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 'social', 'user_id'
-    ];
+    protected $guarded = [];
 
     public function user(): BelongsTo|null {
         return $this->belongsTo(User::class);
