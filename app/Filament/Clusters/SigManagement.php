@@ -3,6 +3,8 @@
 namespace App\Filament\Clusters;
 
 use App\Enums\Approval;
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigEvent;
 use Filament\Clusters\Cluster;
@@ -25,5 +27,9 @@ class SigManagement extends Cluster
         return Cache::remember('sig_pending_count', 30, function() {
             return SigEvent::whereApproval(Approval::PENDING)->count() ?: null;
         });
+    }
+
+    public static function canAccess(): bool {
+        return auth()->user()->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ);
     }
 }

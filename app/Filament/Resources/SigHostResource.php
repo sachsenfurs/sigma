@@ -13,6 +13,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class SigHostResource extends Resource
@@ -47,6 +48,7 @@ class SigHostResource extends Resource
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->with(["sigEvents" => fn($query) => $query->public(), "user", "sigEvents.timetableEntries"]))
             ->columns(self::getTableColumns())
             ->defaultSort('reg_id')
             ->filters([

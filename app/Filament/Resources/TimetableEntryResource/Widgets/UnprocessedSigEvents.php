@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
@@ -26,19 +28,8 @@ class UnprocessedSigEvents extends TableWidget
         return __("Unprocessed SIG Events");
     }
 
-    /**
-     * @return string|null
-     */
-    public static function getHeading(): ?string {
-        return "AAAA";
-    }
-
-    /**
-     * Conditionally show/hide widget
-     * @return bool
-     */
     public static function canView(): bool {
-        return SigEvent::unprocessed()->count() > 0;
+        return SigEvent::unprocessed()->count() > 0 AND auth()->user()->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ);
     }
 
     public function table(Table $table): Table {
