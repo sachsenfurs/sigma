@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Facades\NotificationService;
 use App\Notifications\Chat\NewChatMessageNotification;
 use App\Notifications\Ddas\ArtshowWinnerNotification;
+use App\Notifications\Ddas\ProcessedDealerNotification;
 use App\Notifications\Ddas\ProcessedItemNotification;
 use App\Notifications\Ddas\SubmittedItemNotification;
 use App\Notifications\MorphedDatabaseChannel;
@@ -67,6 +68,7 @@ class NotificationServiceProvider extends ServiceProvider
             ProcessedApplicationNotification::class     => "sig_application_processed",
             ArtshowWinnerNotification::class            => "artshow_winner_notification",
             ProcessedItemNotification::class            => "artshow_item_processed",
+            ProcessedDealerNotification::class          => "dealer_processed",
             TimetableEntryReminder::class               => "timetable_entry_reminder",
         ]);
 
