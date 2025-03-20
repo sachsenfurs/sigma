@@ -21,6 +21,13 @@ class SigFormsRelationManager extends RelationManager
         return $form;
     }
 
+    protected static ?string $modelLabel = "Form";
+    protected static ?string $pluralModelLabel = "Forms";
+
+    public function isReadOnly(): bool {
+        return false;
+    }
+
     public function table(Table $table): Table {
         return $table
             ->recordTitleAttribute('name')

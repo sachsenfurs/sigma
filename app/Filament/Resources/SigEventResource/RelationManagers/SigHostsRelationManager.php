@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
 use App\Filament\Resources\SigHostResource;
 use Filament\Forms;

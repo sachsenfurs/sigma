@@ -29,17 +29,15 @@ class DepartmentInfosRelationManager extends RelationManager
         return auth()->user()->can("view", $ownerRecord);
     }
 
-    protected function can(string $action, ?Model $record = null): bool {
-        // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can("viewAny", $record);
-    }
-
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
         return $ownerRecord->departmentInfos->count() ?: null;
     }
 
-    public function table(Table $table): Table
-    {
+    public function isReadOnly(): bool {
+        return false;
+    }
+
+    public function table(Table $table): Table {
         return $table
             ->recordTitleAttribute('user_role_id')
             ->columns([

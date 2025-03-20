@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class ChatResource extends Resource
@@ -125,13 +126,14 @@ class ChatResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->modifyQueryUsing(fn(Builder $query) =>
-                $query
+                tap($query
                     ->with(["userRole", "messages.user"])
                     ->withCount(["messages" => function($query) {
                         return $query->unreadAdmin();
                     }])
                     ->withAggregate("messages", "created_at", "max")
-                    ->orderByDesc("messages_max_created_at")
+                    ->orderByDesc("messages_max_created_at"),
+                fn($query) => Gate::allows("deleteAny", Chat::class) ? $query : $query->involved()) // if admin show all, otherwise only involved
             )
             ->columns([
                 TextColumn::make("status")

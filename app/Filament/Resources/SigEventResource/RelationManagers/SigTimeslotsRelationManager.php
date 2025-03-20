@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Filament\Resources\SigTimeslotResource;
 use App\Models\SigEvent;
 use App\Models\SigTimeslot;
@@ -10,6 +12,7 @@ use App\Settings\AppSettings;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -30,8 +33,8 @@ use Illuminate\Support\Carbon;
 class SigTimeslotsRelationManager extends RelationManager
 {
     public ?Collection $entries;
-    public ?TimetableEntry $entry;
-    public ?SigEvent $sigEvent;
+    public ?TimetableEntry $entry = null;
+    public ?SigEvent $sigEvent = null;
 
     protected static string $relationship = 'sigTimeslots';
     protected static ?string $icon = 'heroicon-o-clock';
@@ -63,6 +66,10 @@ class SigTimeslotsRelationManager extends RelationManager
     }
     public static function getPluralLabel(): ?string {
         return __("Time Slots");
+    }
+
+    public function isReadOnly(): bool {
+        return !auth()->user()->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE);
     }
 
     public function form(Form $form): Form {
@@ -119,7 +126,8 @@ class SigTimeslotsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->disabled($this->entries->count() == 0)
             ])
             ->actions([
                 ViewAction::make('view')
@@ -173,7 +181,7 @@ class SigTimeslotsRelationManager extends RelationManager
     }
 
     public function getTimeslotForm(): array {
-        $previousSlot   = $this->entry?->sigTimeslots?->last();
+        $previousSlot   = $this->entries->count() > 0 ? $this?->entry?->sigTimeslots?->last() : null;
         return [
             Select::make("timetable_entry_id")
                 ->label(__("Timetable Entry"))
@@ -194,6 +202,7 @@ class SigTimeslotsRelationManager extends RelationManager
                 ->default(function() {
                     return $this->entry?->id;
                 })
+                ->required()
                 ->disabled($this->ownerRecord instanceof TimetableEntry),
             DateTimePicker::make('slot_start')
                 ->label('Slot Start')
@@ -218,7 +227,7 @@ class SigTimeslotsRelationManager extends RelationManager
                     if($previousSlot) {
                         return $previousSlot->slot_end;
                     }
-                    return $this->entry->start;
+                    return $this->entry?->start;
                 })
                 ->afterStateUpdated(function(?string $state, Set $set, Get $get) {
                     if(!$state)

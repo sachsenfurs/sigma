@@ -18,6 +18,10 @@ class ChatPolicy
         return null;
     }
 
+    public function viewAny(User $user): bool {
+        return $user->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::READ);
+    }
+
     public function view(User $user, Chat $chat): bool {
         if($chat->user_id == auth()->id())
             return true;
@@ -34,11 +38,13 @@ class ChatPolicy
         return $chat->user_id === $user->id ;
     }
 
-//    public function viewAny(User $user): bool {
-//        return $user->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::READ);
-//    }
 
-    public function create() {
+    public function deleteAny(User $user): bool {
+        return $user->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::ADMIN);
+    }
+
+
+    public function create(): bool {
         return auth()->check();
     }
 }

@@ -98,7 +98,7 @@ class UserResource extends Resource
             RelationManagers\RoleRelationManager::class,
             RelationManagers\ArtistsRelationManager::class,
             RelationManagers\DealersRelationManager::class,
-            RelationManagers\SigHostsRelationManager::class,
+            SigEventResource\RelationManagers\SigHostsRelationManager::class,
             RelationManagers\FavoritesRelationManager::class,
             RelationManagers\ArtshowBidsRelationManager::class,
             RelationManagers\NotificationsRelationManager::class,
