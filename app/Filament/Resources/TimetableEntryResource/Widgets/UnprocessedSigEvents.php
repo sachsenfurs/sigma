@@ -7,7 +7,6 @@ use App\Enums\PermissionLevel;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
-use App\Models\TimetableEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Actions\Action;

@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Sig;
 use \Gate;
 use App\Http\Controllers\Controller;
 use App\Models\SigLocation;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class SigLocationController extends Controller

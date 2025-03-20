@@ -3,11 +3,9 @@
 namespace App\Filament\Resources\SigHostResource\RelationManagers;
 
 use App\Filament\Resources\SigEventResource;
-use App\Models\SigEvent;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class SigEventsRelationManager extends RelationManager
 {

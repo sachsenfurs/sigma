@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Settings\AppSettings;
 use DeepL\DeepLException;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class Translator
 {

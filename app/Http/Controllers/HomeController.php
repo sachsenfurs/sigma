@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post\Post;
 use App\Settings\AppSettings;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
 
 class HomeController extends Controller
 {

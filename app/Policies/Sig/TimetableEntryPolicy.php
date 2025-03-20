@@ -7,7 +7,6 @@ use App\Enums\PermissionLevel;
 use App\Models\TimetableEntry;
 use App\Models\User;
 use App\Settings\AppSettings;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TimetableEntryPolicy extends ManageEventPolicy
 {

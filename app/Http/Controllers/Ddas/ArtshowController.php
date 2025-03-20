@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Ddas;
 use App\Http\Controllers\Controller;
 use App\Models\Ddas\ArtshowItem;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Gate;
 
 class ArtshowController extends Controller
 {

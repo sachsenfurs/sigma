@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Sig;
 use App\Http\Controllers\Controller;
 use App\Models\TimetableEntry;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class SigFavoriteController extends Controller
 {

@@ -3,7 +3,6 @@
 namespace App\Settings;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\LaravelSettings\Settings;
 
 class AppSettings extends Settings

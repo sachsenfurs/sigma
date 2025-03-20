@@ -43,10 +43,4 @@ class SigTimeslotReminder extends Notification
     protected function getActionUrl(): string {
         return route("timetable-entry.show", $this->sigTimeslot->timetableEntry);
     }
-
-    public function toArray(object $notifiable): array {
-        return [
-            //
-        ];
-    }
 }

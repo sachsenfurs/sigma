@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Ddas;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ddas\Dealer;
 use App\Policies\Ddas\DealerPolicy;
-use App\Settings\DealerSettings;
 
 class DealersDenController extends Controller
 {

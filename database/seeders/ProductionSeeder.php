@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\UserRole;
 use Database\Seeders\RealData\EASTSeeder;
-use Database\Seeders\RealData\RingbergSeeder;
 use Database\Seeders\RealData\SigTagSeeder;
 use Database\Seeders\RealData\UserRoleSeeder;
 use Illuminate\Database\Seeder;

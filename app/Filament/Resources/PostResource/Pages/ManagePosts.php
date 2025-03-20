@@ -6,7 +6,6 @@ use App\Filament\Resources\PostResource;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Actions;
-use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Support\Facades\Storage;

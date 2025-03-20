@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Facades\NotificationService;
 use App\Models\Ddas\ArtshowItem;
-use App\Models\NotificationRoute;
 use App\Models\Post\PostChannel;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;

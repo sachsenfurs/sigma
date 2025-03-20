@@ -6,9 +6,7 @@ use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 

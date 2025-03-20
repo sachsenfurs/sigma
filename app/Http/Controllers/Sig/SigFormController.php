@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Sig;
 
 use App\Http\Controllers\Controller;
-use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;

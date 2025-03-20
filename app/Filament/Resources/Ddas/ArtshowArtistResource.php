@@ -6,7 +6,6 @@ use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowArtistResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowItemRelationManager;
 use App\Models\Ddas\ArtshowArtist;
-use App\Models\User;
 use App\Settings\ArtShowSettings;
 use Filament\Forms;
 use Filament\Forms\Form;

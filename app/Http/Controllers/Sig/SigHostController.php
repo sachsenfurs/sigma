@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Sig;
 
-use App\Models\User;
 use \Gate;
 use App\Http\Controllers\Controller;
 use App\Models\SigHost;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class SigHostController extends Controller
 {

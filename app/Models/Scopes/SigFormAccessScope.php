@@ -2,13 +2,9 @@
 
 namespace App\Models\Scopes;
 
-use App\Models\SigFilledForm;
-use App\Models\SigForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 
 class SigFormAccessScope implements Scope
 {

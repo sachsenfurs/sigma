@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\OAuth2\RegSysProvider;
-use App\Http\OAuth2\RegSysResourceOwner;
-use App\Models\User;
 use App\Services\OAuthProfileUpdateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;

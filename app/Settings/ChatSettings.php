@@ -2,7 +2,6 @@
 
 namespace App\Settings;
 
-use Carbon\Carbon;
 use Spatie\LaravelSettings\Settings;
 
 class ChatSettings extends Settings

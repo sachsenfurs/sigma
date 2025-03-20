@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\SigHostResource\Pages;
 
 use App\Filament\Resources\SigHostResource;
-use Filament\Actions;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;

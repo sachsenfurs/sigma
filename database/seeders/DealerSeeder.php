@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Ddas\Dealer;
 use App\Models\Ddas\DealerTag;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DealerSeeder extends Seeder

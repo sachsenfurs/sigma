@@ -10,7 +10,6 @@ use App\Models\TimetableEntry;
 use Filament\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Support\Enums\Alignment;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
 use Saade\FilamentFullCalendar\Actions\CreateAction;

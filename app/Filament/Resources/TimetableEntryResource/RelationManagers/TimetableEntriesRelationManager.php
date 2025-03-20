@@ -6,7 +6,6 @@ use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
-use Closure;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;

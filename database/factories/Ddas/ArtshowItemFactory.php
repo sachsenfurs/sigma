@@ -4,9 +4,7 @@ namespace Database\Factories\Ddas;
 
 use App\Enums\Approval;
 use App\Models\Ddas\ArtshowArtist;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 /**
