@@ -14,6 +14,8 @@ class ChatPolicy
     public function before(User $user): ?bool {
         if(!app(ChatSettings::class)->enabled)
             return false;
+        if($user->isAdmin())
+            return true;
 
         return null;
     }
