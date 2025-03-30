@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\ChatStatus;
 use App\Models\Message;
 use App\Notifications\Chat\NewChatMessageNotification;
 
@@ -27,6 +28,12 @@ class MessageObserver
 
         foreach ($toBeNotifiedUsers as $user) {
             $user->notify((new NewChatMessageNotification($message)));
+        }
+
+        // re-open chat if chat owner responds again
+        if($message->chat->user_id == $message->user_id) {
+            $message->chat->status = ChatStatus::OPEN;
+            $message->chat->save();
         }
     }
 
