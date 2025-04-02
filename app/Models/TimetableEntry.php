@@ -7,7 +7,6 @@ use App\Observers\TimetableEntryObserver;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -56,13 +55,12 @@ class TimetableEntry extends Model
 //        'parentEntry', // for future use, not used atm
     ];
 
-    protected static function booted() {
-        if(!auth()->user()?->isAdmin()) {
-            static::addGlobalScope('private', function(Builder $query) {
-                $query->whereHas("sigEvent", SigEvent::applyPrivateScope());
-            });
-        }
-    }
+    /**
+     * addGlobalScope('private')
+     *  -> global scope is defined in AppServiceProvider
+     *     defining it within the models booted() method won't work in some cases (when working with eager loading). probably a laravel bug?
+     */
+
 
     public function favorites(): HasMany {
         return $this->hasMany(SigFavorite::class);

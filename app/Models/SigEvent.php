@@ -35,10 +35,11 @@ class SigEvent extends Model
         'description_localized',
     ];
 
-    protected static function booted(): void {
-        if(!auth()->user()?->isAdmin())
-            static::addGlobalScope('private', self::applyPrivateScope());
-    }
+    /**
+     * addGlobalScope('private')
+     *  -> global scope is defined in AppServiceProvider
+     *     defining it within the models booted() method won't work in some cases (when working with eager loading). probably a laravel bug?
+     */
 
     public static function applyPrivateScope(): \Closure {
         return function($query) {

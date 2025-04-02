@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Services\Translator;
 use App\Settings\AppSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -54,5 +55,15 @@ class AppServiceProvider extends ServiceProvider
             'timetable_entry'   => TimetableEntry::class,
             'sig_favorite'      => SigFavorite::class,
         ]);
+
+        /**
+         * defining global scopes
+         */
+        if(!auth()->user()?->isAdmin()) {
+            TimetableEntry::addGlobalScope('private', function(Builder $query) {
+                $query->whereHas("sigEvent", SigEvent::applyPrivateScope());
+            });
+            SigEvent::addGlobalScope('private', SigEvent::applyPrivateScope());
+        }
     }
 }
