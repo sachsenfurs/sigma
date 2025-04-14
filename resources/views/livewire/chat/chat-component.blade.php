@@ -155,6 +155,9 @@
             {{ __("New Chat") }}
         </x-slot:title>
         <div class="row g-3">
+            <div class="col-12 text-muted">
+                {{ __("You can start a new chat with our team here if you have a question or a problem. Please select the department that could help you with your request.") }}
+            </div>
             <div class="col-12">
                 <label for="department" class="form-label">{{ __("Department") }}</label>
                 <select @class(['form-select', 'border-danger' => $errors->has("department")]) id="department" name="department" wire:model="department">

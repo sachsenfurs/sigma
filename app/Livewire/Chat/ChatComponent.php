@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Chat;
 
+use App\Enums\ChatStatus;
 use App\Livewire\Traits\HasModal;
 use App\Models\Chat;
 use App\Models\UserRole;
@@ -74,6 +75,7 @@ class ChatComponent extends Component
         $newChat = auth()->user()->chats()->create([
             'user_role_id' => $validated['department'],
             'subject' => $validated['subject'],
+            'status' => ChatStatus::CLOSED, // will be openend with every new message
         ]);
         $this->reset();
         $this->hideModal();
