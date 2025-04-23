@@ -4,48 +4,56 @@
         @foreach(auth()->user()->dealers AS $dealer)
             <div class="card mt-3">
                 <div class="card-body p-4">
-                    <div class="card-title">
-                        <div class="row">
-                            <div class="col fs-3 align-items-center">
-                                {{ $dealer->name }}
+                    <div class="row flex-nowrap">
+                        @if($dealer->icon_file_url)
+                            <div class="col-auto">
+                                <div class="col-auto text-center">
+                                    <div class="align-self-start justify-content-end p-3">
+                                        <img src="{{ $dealer->icon_file_url }}" class="img-fluid" style="max-height: 10em" alt="">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col fs-4 text-end align-content-center">
-                                 <span @class([ 'badge', $dealer->approval->style() ])>
-                                     {{ $dealer->approval->name() }}
-                                 </span>
+                        @endif
+                        <div class="col">
+                            <div class="card-title">
+                                <div class="row">
+                                    <div class="col fs-3 align-items-center">
+                                        {{ $dealer->name }}
+                                    </div>
+                                    <div class="col fs-4 text-end align-content-center">
+                                         <span @class([ 'badge', $dealer->approval->style() ])>
+                                             {{ $dealer->approval->name() }}
+                                         </span>
+                                    </div>
+                                </div>
+                                @if($dealer->tags->count())
+                                    <div class="col-12">
+                                        @foreach($dealer->tags AS $tag)
+                                            <span class="badge bg-dark fs-6 text-secondary">{{ $tag->name_localized }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="col-12">
-                            @foreach($dealer->tags AS $tag)
-                                <span class="badge bg-dark fs-6 text-secondary">{{ $tag->name_localized }}</span>
-                            @endforeach
+
+                            <div class="card-text">{{ $dealer->info_localized }}</div>
+
+                            <div class="card m-2">
+                                <div class="card-body text-secondary">
+                                    {{ $dealer->additional_info }}
+                                </div>
+                            </div>
+
+                            @if($dealer->gallery_link)
+                                <div class="mt-3">
+                                    <a href="{{ $dealer->gallery_link }}" target="_blank">
+                                        <button type="button" class="btn btn-dark">
+                                            <i class="bi bi-link-45deg"></i> <span>{{ $dealer->gallery_link_name }}</span>
+                                        </button>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
-
-                    <div class="card-text">{{ $dealer->info_localized }}</div>
-
-                    <div class="card m-2">
-                        <div class="card-body text-secondary">
-                            {{ $dealer->additional_info }}
-                        </div>
-                    </div>
-
-                    @if($dealer->gallery_link)
-                        <div class="mt-3">
-                            <a href="{{ $dealer->gallery_link }}" target="_blank">
-                                <button type="button" class="btn btn-dark">
-                                    <i class="bi bi-link-45deg"></i> <span>{{ $dealer->gallery_link_name }}</span>
-                                </button>
-                            </a>
-                        </div>
-                    @endif
-                    @if($dealer->icon_file_url)
-                        <div class="col-auto text-center">
-                            <div class="align-self-start justify-content-end p-3">
-                                <img src="{{ $dealer->icon_file_url }}" class="img-fluid" style="max-height: 10em" alt="">
-                            </div>
-                        </div>
-                    @endif
                 </div>
 
             </div>
