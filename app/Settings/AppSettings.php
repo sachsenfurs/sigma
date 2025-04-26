@@ -36,7 +36,7 @@ class AppSettings extends Settings
     }
 
     public function isPreConMode(): bool {
-        $conStartDate       = strtotime($this->event_start->subDays(7));
+        $conStartDate       = strtotime($this->event_start->copy()->subDays(7));
         $currentDate        = strtotime(Carbon::now()->toDateString());
         return ($conStartDate > $currentDate);
     }
