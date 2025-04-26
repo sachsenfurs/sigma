@@ -6,9 +6,9 @@ use App\Livewire\Ddas\Forms\DealersForm;
 use App\Livewire\Traits\HasModal;
 use App\Models\Ddas\Dealer;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 class DealersSignup extends Component
@@ -17,18 +17,15 @@ class DealersSignup extends Component
 
     public DealersForm $form;
 
-    public function createDealer() {
+    public function createDealer(): void {
         $this->authorize("create", Dealer::class);
         $validated = $this->form->validate();
         if($this->form->icon_file) {
-            $image = Image::read($this->form->icon_file);
-            if($image->height() > 500 OR $image->width() > 500)
-                $image->scaleDown(500);
-
-            $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
-            if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
-                $validated['icon_file'] = $filename;
-            }
+            /**
+             * @var $tempfile TemporaryUploadedFile
+             */
+            $tempfile = $this->form->icon_file;
+            $validated['icon_file'] = basename($tempfile->store("public"));
         }
         $tags = Arr::pull($validated, "tags");
         auth()->user()->dealers()->create($validated)->tags()->sync($tags);
@@ -36,11 +33,11 @@ class DealersSignup extends Component
         $this->hideModal();
     }
 
-    public function newDealer() {
+    public function newDealer(): void {
         $this->showModal();
     }
 
-    public function render() {
+    public function render(): View {
         return view('livewire.ddas.dealers-signup');
     }
 }

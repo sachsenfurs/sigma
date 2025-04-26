@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="row row-cols-1 row-cols-lg-2 g-3 align-items-stretch">
-                    <template x-for="dealer in dealers().filter(d => (filter==0 || d.tags.find(t => t.id == filter)))">
+                    <template x-for="dealer in dealers().filter(d => (filter==0 || d.tags.find(t => t.id == filter)))" :key="dealer.name + dealer.icon_file">
                         <div class="col">
                             <div class="card h-100">
                                 <div class="row g-0 h-100">
@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="col-auto text-end">
                                         <div x-show="dealer.icon_file" class="align-self-start justify-content-end p-3">
-                                            <img x-bind:src="dealer.icon_file" class="img-fluid" style="max-height: 10em" alt="">
+                                            <img x-bind:src="dealer.icon_file" class="img-fluid" style="max-height: 10em" alt="" loading="lazy">
                                         </div>
                                         <div class="mx-1 p-4 d-block text-center">
                                             <i x-show="dealer.location" class="bi bi-geo-alt icon-link"></i>
