@@ -3,9 +3,11 @@
 namespace App\Notifications\Messages;
 
 use App\Notifications\Notification;
+use App\Services\LanguageParser;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MessageNotification extends Notification
+class MessageNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -17,11 +19,11 @@ class MessageNotification extends Notification
     }
 
     protected function getSubject(): ?string {
-        return __($this->subject);
+        return LanguageParser::parse($this->subject);
     }
 
     protected function getLines(): array {
-        return explode("\r\n", $this->body);
+        return explode("\n", LanguageParser::parse($this->body));
     }
 
 }

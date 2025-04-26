@@ -617,16 +617,16 @@
         },
         {
             "name": "deeplcom/deepl-php",
-            "version": "v1.11.1",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeepLcom/deepl-php.git",
-                "reference": "004cf73864e8547ece7e49a2b08ed7a2d6672d9c"
+                "reference": "b9a7e0385d27a99b7756ebf95e953785b90e8161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeepLcom/deepl-php/zipball/004cf73864e8547ece7e49a2b08ed7a2d6672d9c",
-                "reference": "004cf73864e8547ece7e49a2b08ed7a2d6672d9c",
+                "url": "https://api.github.com/repos/DeepLcom/deepl-php/zipball/b9a7e0385d27a99b7756ebf95e953785b90e8161",
+                "reference": "b9a7e0385d27a99b7756ebf95e953785b90e8161",
                 "shasum": ""
             },
             "require": {
@@ -674,9 +674,9 @@
             ],
             "support": {
                 "issues": "https://github.com/DeepLcom/deepl-php/issues",
-                "source": "https://github.com/DeepLcom/deepl-php/tree/v1.11.1"
+                "source": "https://github.com/DeepLcom/deepl-php/tree/v1.12.0"
             },
-            "time": "2025-01-17T09:36:14+00:00"
+            "time": "2025-04-25T20:00:25+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2868,16 +2868,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.44.3",
+            "version": "v11.44.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b0a87fbd13c0b05227a00da7968701f4274e3195"
+                "reference": "00bc6ac91a6d577bf051c18ddaa638c0d221e1c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b0a87fbd13c0b05227a00da7968701f4274e3195",
-                "reference": "b0a87fbd13c0b05227a00da7968701f4274e3195",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/00bc6ac91a6d577bf051c18ddaa638c0d221e1c7",
+                "reference": "00bc6ac91a6d577bf051c18ddaa638c0d221e1c7",
                 "shasum": ""
             },
             "require": {
@@ -3079,7 +3079,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-04-23T14:45:24+00:00"
+            "time": "2025-04-25T12:40:47+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -12314,5 +12314,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

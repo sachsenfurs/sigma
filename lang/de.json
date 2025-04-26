@@ -599,6 +599,9 @@
     "Your message": "Deine Nachricht",
     "Chat opened. Please enter your message below.": "Chat eröffnet. Bitte gib unten deine Nachricht ein.",
     "Chats open: :count": "Offene chats: :count",
+    "Send Mass Mail": "Nachrichten Massenversand",
+    "Recipients": "Empfänger",
+    "Message Content": "Nachrichteninhalt",
 
     "View Chat": "Chat anzeigen",
     "Chat Created": "Chat erstellt",

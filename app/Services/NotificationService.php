@@ -6,6 +6,7 @@ use App\Models\NotificationRoute;
 use App\Models\Post\PostChannel;
 use App\Models\User;
 use App\Notifications\Notification;
+use App\Settings\AppSettings;
 
 class NotificationService
 {
@@ -94,7 +95,7 @@ class NotificationService
             $targetChannels = array_unique([...$channels, ...$additional]);
 
             // make sure telegram is connected
-            if(!$notifiable->routeNotificationForTelegram())
+            if(!$notifiable->routeNotificationForTelegram() OR !app(AppSettings::class)->telegram_bot_token)
                 $targetChannels = array_diff($targetChannels, ['telegram']); // remove telegram
 
             return $targetChannels;

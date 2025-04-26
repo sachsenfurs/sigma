@@ -8,6 +8,7 @@ use App\Notifications\Ddas\ArtshowWinnerNotification;
 use App\Notifications\Ddas\ProcessedDealerNotification;
 use App\Notifications\Ddas\ProcessedItemNotification;
 use App\Notifications\Ddas\SubmittedItemNotification;
+use App\Notifications\Messages\MessageNotification;
 use App\Notifications\MorphedDatabaseChannel;
 use App\Notifications\Sig\NewApplicationNotification;
 use App\Notifications\Sig\ProcessedApplicationNotification;
@@ -70,6 +71,7 @@ class NotificationServiceProvider extends ServiceProvider
             ProcessedItemNotification::class            => "artshow_item_processed",
             ProcessedDealerNotification::class          => "dealer_processed",
             TimetableEntryReminder::class               => "timetable_entry_reminder",
+            MessageNotification::class                  => "message_notification",
         ]);
 
         NotificationService::registerRoutableNotifications([

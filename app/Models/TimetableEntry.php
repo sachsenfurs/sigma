@@ -7,6 +7,7 @@ use App\Models\Traits\NameIdAsSlug;
 use App\Observers\TimetableEntryObserver;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use Dom\Attr;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -221,5 +222,11 @@ class TimetableEntry extends Model
         return Attribute::make(function() {
             return $this->id.$this->slugChecksum()."-".urlencode(Str::slug($this->sigEvent->name_localized));
         });
+    }
+
+    public function detailedNameLocalized(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->sigEvent->name_localized . " | " . $this->start->translatedFormat("l | H:i"),
+        );
     }
 }

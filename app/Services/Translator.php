@@ -9,10 +9,11 @@ class Translator
 {
     private ?\DeepL\Translator $translator = null;
 
-    public function __construct(private readonly ?string $authKey,
-                                private string $sourceLang = "de",
-                                private string $targetLang = "en-US") {
-
+    public function __construct(
+        private readonly ?string $authKey,
+        private string $sourceLang = "de",
+        private string $targetLang = "en-US"
+    ) {
         $this->sourceLang = $this->parseLanguage($this->sourceLang);
 
         try {
@@ -39,13 +40,15 @@ class Translator
             $targetLang = $this->targetLang;
 
         try {
-            $result =  $this->translator?->translateText(
-                $text,
-                $sourceLang,
-                $targetLang
-            );
+            return Cache::remember(md5($result->text . $sourceLang . $targetLang), 3600 * 24, function () use ($targetLang, $sourceLang, $text) {
+                $result = $this->translator?->translateText(
+                    $text,
+                    $sourceLang,
+                    $targetLang
+                );
 
-            return Cache::remember(md5($result->text . $sourceLang . $targetLang), 3600 * 24, fn() => $result->text) ?? $text;
+                return $result->text;
+            }) ?? $text;
         } catch(\Exception $e) {
             return $text;
         }

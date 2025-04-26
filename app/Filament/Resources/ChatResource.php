@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ChatStatus;
+use App\Filament\Clusters\MessageCluster;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\ChatResource\Pages;
 use App\Filament\Resources\ChatResource\RelationManagers\ArtistsRelationManager;
@@ -27,6 +28,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -45,17 +47,15 @@ class ChatResource extends Resource
     protected static ?string $model = Chat::class;
     protected static ?string $label = "Chat";
 
+    protected static ?string $cluster = MessageCluster::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationBadge(): ?string {
-        return Cache::remember("filamentUnreadMessages".auth()->id(), 10, fn() => Message::unreadAdmin()->whereHas("chat", fn($query) => $query->involved())->count()) ?: null;
+        return MessageCluster::getNavigationBadge();
     }
 
     public static function getNavigationLabel(): string {
-        return __("Messages");
-    }
-
-    public static function getNavigationGroup(): ?string {
         return __("Messages");
     }
 

@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Facades\NotificationService;
+use App\Settings\AppSettings;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification as LaravelNotification;
