@@ -29,12 +29,11 @@ class Dealer extends Model
         'info_localized'
     ];
 
-
     protected $casts = [
         'approval' => Approval::class,
     ];
 
-    public function scopeApproved(Builder $query) {
+    public function scopeApproved(Builder $query): void {
         $query->where("approval", "=", Approval::APPROVED->value);
     }
 

@@ -58,7 +58,7 @@ Route::get("/announcements", [AnnouncementController::class, 'index'])->name("an
 // Schedule
 Route::get("/schedule", [TimetableEntryController::class, 'index'])->name("schedule.listview");
 Route::get("/schedule/index", [TimetableEntryController::class, 'timetableIndex'])->name("schedule.listview-index");
-Route::get("/show/{entry}", [TimetableEntryController::class, 'show'])->name("timetable-entry.show");
+Route::get("/show/{entry:slug}", [TimetableEntryController::class, 'show'])->name("timetable-entry.show");
 
 Route::get("/table", [TimetableEntryController::class, 'table'])->name("schedule.tableview");
 Route::get("/calendar", [TimetableEntryController::class, 'calendar'])->name("schedule.calendarview");

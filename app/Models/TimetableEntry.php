@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\HasReminders;
+use App\Models\Traits\NameIdAsSlug;
 use App\Observers\TimetableEntryObserver;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,12 +18,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 #[ObservedBy(TimetableEntryObserver::class)]
 class TimetableEntry extends Model
 {
-    use HasFactory;
-    use HasReminders;
+    use HasFactory,
+        HasReminders,
+        NameIdAsSlug;
 
     protected $guarded = [];
 
@@ -40,6 +44,7 @@ class TimetableEntry extends Model
         'has_time_changed',
         'has_location_changed',
         'is_favorite',
+        'slug',
     ];
 
     protected $hidden = [
@@ -199,5 +204,22 @@ class TimetableEntry extends Model
                 return [ '#2C3D4F' ];
             }
         )->shouldCache();
+    }
+
+    public function resolveRouteBinding($value, $field = null) {
+        $parts = explode($this->slugChecksum(), $value);
+        $id = $parts[0] ?? 0;
+
+        $instances = self::where("id", $id)->orWhereHas("sigEvent", function(Builder $query) use ($value) {
+            $query->where("name", $value)->orWhere("name_en", $value);
+        });
+
+        return $instances->first();
+    }
+
+    public function slug() : Attribute {
+        return Attribute::make(function() {
+            return $this->id.$this->slugChecksum()."-".urlencode(Str::slug($this->sigEvent->name_localized));
+        });
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
@@ -42,16 +43,16 @@ class ArtshowItem extends Model
         'highestBid'
     ];
 
-    public function scopeOwn(Builder $query) {
+    public function scopeOwn(Builder $query): void {
         $query->whereHas('artist.user', function(Builder $query) {
             $query->where('artshow_artists.user_id', auth()->user()?->id);
         });
     }
 
-    public function scopeApprovedItems(Builder $query) {
+    public function scopeApprovedItems(Builder $query): void {
         $query->where("approval", Approval::APPROVED->value);
     }
-    public function scopeAuctionableItems(Builder $query) {
+    public function scopeAuctionableItems(Builder $query): void {
         $query->where("approval", Approval::APPROVED->value)->where("auction", 1)->where("sold", 0);
     }
 
@@ -97,7 +98,7 @@ class ArtshowItem extends Model
         return $this->highestBid?->user_id == $user->id;
     }
 
-    public function userBidOnce(User $user = null) {
+    public function userBidOnce(User $user = null): bool {
         if(!$user)
             $user = auth()->user();
         return $this->artshowBids->intersect($user->artshowBids)->count() > 0;
@@ -107,9 +108,7 @@ class ArtshowItem extends Model
         return $this->highestBid ? $this->highestBid->value+1 : $this->starting_bid;
     }
 
-    public function userOutbid(User $user = null): bool {
-        if(!$user)
-            $user = auth()->user();
+    public function userOutbid(): bool {
         return $this->userBidOnce() AND !$this->isHighestBidder();
     }
 
@@ -134,4 +133,5 @@ class ArtshowItem extends Model
             }
         );
     }
+
 }

@@ -8,7 +8,7 @@ use App\Notifications\Ddas\ArtshowWinnerNotification;
 
 class ArtshowNotificationService
 {
-    public static function notifyWinners() {
+    public static function notifyWinners(): void {
         $bidders = User::whereHas("artshowBids.artshowItem")->get();
         foreach($bidders AS $bidder) {
             $wonItems = ArtshowItem::where("sold", false)->whereHas("highestBid")->get()->filter(fn($item) => $item->highestBid?->user_id == $bidder->id);

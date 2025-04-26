@@ -9,12 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ArtshowBid extends Model
 {
 
-    protected $guarded = [
-        'sold',
-        'paid',
-        'auction',
-        'locked',
-    ];
+    protected $guarded = [];
 
     public function artshowItem(): BelongsTo {
         return $this->belongsTo(ArtshowItem::class);

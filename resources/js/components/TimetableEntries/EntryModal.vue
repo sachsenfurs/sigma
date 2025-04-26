@@ -63,7 +63,7 @@ export default {
             return marked(this.entry.sig_event.description_localized ?? "");
         },
         link() {
-            return '/show/' + this.entry.id;
+            return '/show/' + this.entry.slug;
         }
     }
 }

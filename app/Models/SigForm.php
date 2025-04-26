@@ -20,26 +20,22 @@ class SigForm extends Model
         static::addGlobalScope(new SigFormAccessScope());
     }
 
-    public function getNameLocalizedAttribute()
-    {
+    public function getNameLocalizedAttribute() {
         return App::getLocale() == 'en' ? ($this->name_en ?? $this->name) : $this->name;
     }
 
-    public function sigEvents(): BelongsToMany
-    {
+    public function sigEvents(): BelongsToMany {
         return $this->belongsToMany(SigEvent::class);
     }
 
-    public function sigFilledForms(): HasMany
-    {
+    public function sigFilledForms(): HasMany {
         return $this->hasMany(SigFilledForm::class);
     }
 
-    public function userRoles(): BelongsToMany
-    {
+    public function userRoles(): BelongsToMany {
         return $this->belongsToMany(UserRole::class, 'sig_form_user_roles');
     }
-    public function getRouteKeyName() {
+    public function getRouteKeyName(): string {
         return 'slug';
     }
 }
