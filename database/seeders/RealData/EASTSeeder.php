@@ -100,6 +100,32 @@ class EASTSeeder extends Seeder
                 "image_en" => "",
                 "show_on" => json_encode([ShowMode::FOOTER_TEXT]),
                 'order' => 10,
+            ],
+            [
+                "description" => "Impressum",
+                "description_en" => "Imprint",
+                "link_name" => "Impressum",
+                "link" => "https://sachsenfurs.de/de/verein/impressum/",
+                "link_name_en" => "Imprint",
+                "link_en" => "https://sachsenfurs.de/de/verein/impressum/",
+                "icon" => "",
+                "image" => "",
+                "image_en" => "",
+                "show_on" => json_encode([ShowMode::FOOTER_TEXT]),
+                'order' => 15,
+            ],
+            [
+                "description" => "Datenschutzerklärung",
+                "description_en" => "Privacy Policy",
+                "link_name" => "Datenschutzerklärung",
+                "link" => "https://sachsenfurs.de/de/datenschutz/",
+                "link_name_en" => "Privacy Policy",
+                "link_en" => "https://sachsenfurs.de/de/datenschutz/",
+                "icon" => "",
+                "image" => "",
+                "image_en" => "",
+                "show_on" => json_encode([ShowMode::FOOTER_TEXT]),
+                'order' => 20,
             ]
         ]);
     }

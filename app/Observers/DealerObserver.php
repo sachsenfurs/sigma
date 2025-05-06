@@ -25,16 +25,18 @@ class DealerObserver
             if(empty($dealer->icon_file)) {
                 Storage::disk("public")->delete($dealer->getOriginal("icon_file"));
             } else {
-                if($image = Image::read(Storage::disk('public')->get($dealer->icon_file))) {
-                    if($image->height() > 500 OR $image->width() > 500)
-                        $image->scaleDown(500);
+                if(Storage::disk("public")->exists($dealer->icon_file)) {
+                    if($image = Image::read(Storage::disk('public')->get($dealer->icon_file))) {
+                        if($image->height() > 500 OR $image->width() > 500)
+                            $image->scaleDown(500);
 
-                    $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
-                    if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
-                        Storage::disk('public')->delete($dealer->getOriginal("icon_file") ?? "");
-                        Storage::disk('public')->delete($dealer->icon_file ?? "");
-                        $dealer->icon_file = $filename;
-                        $dealer->saveQuietly();
+                        $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
+                        if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
+                            Storage::disk('public')->delete($dealer->getOriginal("icon_file") ?? "");
+                            Storage::disk('public')->delete($dealer->icon_file ?? "");
+                            $dealer->icon_file = $filename;
+                            $dealer->saveQuietly();
+                        }
                     }
                 }
             }
