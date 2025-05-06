@@ -18,6 +18,7 @@ use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Unique;
 
@@ -40,8 +41,7 @@ class DepartmentInfoResource extends Resource
         return __('SIG Requirements');
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 self::getSigInfoFiled(),
@@ -51,15 +51,27 @@ class DepartmentInfoResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn(\Illuminate\Database\Eloquent\Builder $query) =>
+                $query->with(["sigEvent", "sigEvent.departmentInfos", "userRole", "sigEvent.timetableEntries.sigLocation"])
+                    ->whereHas("sigEvent.departmentInfos", fn(\Illuminate\Database\Eloquent\Builder $query) =>
+                        $query->where("additional_info", "!=", "")
+                    )
+                    ->select("department_infos.*", "timetable_entries.start", "timetable_entries.end", "timetable_entries.id AS tid")
+                    ->rightJoinRelationship("sigEvent.timetableEntries")
+                    ->orderBy("start")
+            )
             ->columns(self::getTableColumns())
             ->defaultGroup(
-                Group::make('sigEvent.name')
+                Group::make('start')
                     ->label('')
                     ->collapsible()
-                    ->getTitleFromRecordUsing(fn($record) => $record->sigEvent->name_localized)
+                    ->getTitleFromRecordUsing(function ($record) {
+                        return Carbon::parse($record->start)->translatedFormat("l, d.m.Y - H:i")
+                        . " | " . $record->sigEvent->name_localized
+                        . " | " . $record->sigEvent->timetableEntries->find($record->tid)?->sigLocation->name_localized ?? "";
+                    })
             )
             ->actions([
                 Tables\Actions\ViewAction::make()
@@ -70,8 +82,10 @@ class DepartmentInfoResource extends Resource
                         TextEntry::make('sigEvent.name')
                             ->label('SIG')
                             ->inlineLabel(),
-                        TextEntry::make('userRole.name_localized')
+                        TextEntry::make('userRole')
                             ->label('Department')
+                            ->formatStateUsing(fn($state) => $state->name_localized)
+                            ->badge()
                             ->translateLabel()
                             ->inlineLabel(),
                         TextEntry::make('additional_info')
@@ -85,7 +99,12 @@ class DepartmentInfoResource extends Resource
                             ->schema([
                                 TextEntry::make("start")
                                     ->label("")
-                                    ->dateTime(),
+                                    ->dateTime()
+                                    ->formatStateUsing(function ($record) {
+                                        $start = Carbon::parse($record->start);
+                                        $end    = Carbon::parse($record->end);
+                                        return $start->translatedFormat("l, H:i") . " - " . $end->translatedFormat("H:i") . " (" . round($end->diff($start)->minutes / 60, 2) . "h)";
+                                    }),
                                 TextEntry::make("sigLocation.name_localized")
                                     ->label("")
                                     ->formatStateUsing(fn(Model $record) => $record->sigLocation->name_localized . " - " . $record->sigLocation->description_localized),
@@ -103,15 +122,22 @@ class DepartmentInfoResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->recordUrl(null)
+            ->filtersLayout(Tables\Enums\FiltersLayout::AboveContent)
             ->filters([
                 Tables\Filters\SelectFilter::make("userRole")
                     ->label("Department")
                     ->translateLabel()
                     ->searchable()
                     ->preload()
+                    ->multiple()
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                     ->relationship("userRole", "name"),
+                Tables\Filters\Filter::make("hide_past_events")
+                    ->label(__("Hide past events"))
+                    ->query(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->where("end", ">", now()))
+                    ->default(),
             ])
+            ->persistFiltersInSession()
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -119,33 +145,32 @@ class DepartmentInfoResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ListDepartmentInfos::route('/'),
-            'create' => Pages\CreateDepartmentInfo::route('/create'),
             'edit' => Pages\EditDepartmentInfo::route('/{record}/edit'),
         ];
     }
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('userRole.name_localized')
+            Tables\Columns\TextColumn::make('userRole')
+                ->badge()
+                ->formatStateUsing(fn($state) => $state->name_localized)
                 ->label('Department')
-                ->translateLabel()
-                ->sortable(),
+                ->translateLabel(),
             Tables\Columns\TextColumn::make('additional_info')
+                ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
                 ->label('Requirements to Department')
                 ->translateLabel()
-                ->sortable()
-                ->limit(50),
+                ->color(fn($record) => Carbon::parse($record->end)->isPast() ? Color::Gray : "")
+                ->limit(),
         ];
     }
 

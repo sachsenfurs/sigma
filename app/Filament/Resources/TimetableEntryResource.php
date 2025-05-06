@@ -131,7 +131,8 @@ class TimetableEntryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->recordClasses(fn(TimetableEntry $record) => $record->end->isPast() ? "bg-gray-800 text-gray-500" : "");
     }
 
     public static function getRelations(): array {
@@ -180,10 +181,11 @@ class TimetableEntryResource extends Resource
             Tables\Columns\TextColumn::make('sigEvent.name_localized')
                 ->label('Event')
                 ->translateLabel()
-                ->color(fn(Model $record) => $record->hide ? Color::Gray : null)
+                ->color(fn(Model $record) => $record->hide ? Color::Gray : "default")
                 ->badge(fn(Model $record) => $record->hide)
                 ->searchable(['name', 'name_en']),
             Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
+                 ->color("default")
                  ->label('Host')
                  ->translateLabel()
                  ->searchable(),
