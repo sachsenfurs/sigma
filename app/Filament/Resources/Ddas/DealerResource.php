@@ -8,6 +8,8 @@ use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\ChatResource;
 use App\Filament\Resources\Ddas\DealerResource\Pages;
 use App\Models\Ddas\Dealer;
+use App\Models\Ddas\DealerTag;
+use App\Models\SigLocation;
 use App\Settings\DealerSettings;
 use Filament\Forms;
 use Filament\Forms\Components\Actions;
@@ -204,6 +206,14 @@ class DealerResource extends Resource
                     ->label("Approval")
                     ->translateLabel()
                     ->options(Approval::class),
+                Tables\Filters\SelectFilter::make("tags")
+                    ->relationship("tags", "name")
+                    ->getOptionLabelFromRecordUsing(fn(DealerTag $record) => $record->name_localized),
+                Tables\Filters\SelectFilter::make("sigLocation")
+                    ->relationship("sigLocation", "name", fn(Builder $query) => $query->whereIn("id", Dealer::pluck("sig_location_id")))
+                    ->getOptionLabelFromRecordUsing(fn(SigLocation $record) => $record->name_localized)
+                    ->label("Location")
+                    ->translateLabel(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->modalWidth("7xl"),
@@ -231,8 +241,7 @@ class DealerResource extends Resource
             ])
             ->defaultSort(fn(Builder $query): Builder => $query->orderBy("approval")->orderBy("name"))
             ->recordAction(Tables\Actions\EditAction::class)
-            ->recordUrl(null)
-            ;
+            ->recordUrl(null);
     }
 
     public static function getRelations(): array {
