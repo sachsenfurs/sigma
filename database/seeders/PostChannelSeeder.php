@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class PostChannelSeeder extends Seeder
@@ -31,11 +32,12 @@ class PostChannelSeeder extends Seeder
             'implementation' => "TelegramPostChannel::class",
         ]);
 
+        File::copy(public_path("images/logo.png"), storage_path("app/public/logo.png"));
         Post::create([
             'user_id' => 1,
             'text' => "Schon neugierig, welches Programm euch auf der EAST geboten wird? 👀\nUnser Programmheft ist nun online, viel Spaß beim Stöbern, wir sehen uns auf dem Ringberg! \n\n▶️ https://sigma.sachsenfurs.de/",
             'text_en' => "Curious about what program will be offered at the EAST? 👀\nOur program booklet is now online, have fun browsing, see you on the Ringberg!\n\n▶️ https://sigma.sachsenfurs.de/",
-            'image' => '../images/logo.png',
+            'image' => 'logo.png',
             'created_at' => now()->subDays(2),
             'updated_at' => now()->subDays(2),
         ])->channels()->attach($channels, ['message_id' => 1234567890]);
