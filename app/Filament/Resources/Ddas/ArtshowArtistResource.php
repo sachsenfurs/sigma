@@ -46,7 +46,7 @@ class ArtshowArtistResource extends Resource
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                Forms\Components\Select::make('user')
+                Forms\Components\Select::make('user_id')
                     ->label('User')
                     ->relationship('user', 'name')
                     ->translateLabel()

@@ -62,7 +62,7 @@ class DealerResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('user_id')
                             ->label('User')
-                            ->searchable()
+                            ->searchable(['id', 'name'])
                             ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                             ->translateLabel()
                             ->relationship('user', 'name')

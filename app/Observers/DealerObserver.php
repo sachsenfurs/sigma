@@ -22,10 +22,10 @@ class DealerObserver
 
     public function createUpdate(Dealer $dealer): void {
         if($dealer->isDirty('icon_file')) {
-            if(empty($dealer->icon_file)) {
+            if(empty($dealer->icon_file) AND !empty($dealer->getOriginal("icon_file"))) {
                 Storage::disk("public")->delete($dealer->getOriginal("icon_file"));
             } else {
-                if(Storage::disk("public")->exists($dealer->icon_file)) {
+                if($dealer->icon_file AND Storage::disk("public")->exists($dealer->icon_file)) {
                     if($image = Image::read(Storage::disk('public')->get($dealer->icon_file))) {
                         if($image->height() > 500 OR $image->width() > 500)
                             $image->scaleDown(500);
