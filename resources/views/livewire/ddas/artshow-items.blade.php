@@ -149,7 +149,10 @@
                                 <div class="col-12 pt-2">
                                     <label class="text-muted" style="font-size: 0.75em">
                                         <input type="checkbox" name="confirm" x-model="confirm" wire:model="form.confirm">
-                                        {{ __("I hereby confirm that I have informed myself about the rules and conditions of the Artshow and I am aware that a bid is binding") }}
+                                        {!! \App\Services\PageHookService::resolve(
+                                            "artshow.items.dialog.rules",
+                                            __("I hereby confirm that I have informed myself about the rules and conditions of the Artshow and I am aware that a bid is binding")
+                                        )  !!}
                                     </label>
                                     <x-form.input-error name="form.confirm"/>
                                 </div>

@@ -2,8 +2,10 @@
 
 namespace App\Notifications\Ddas;
 
+use App\Enums\Approval;
 use App\Models\Ddas\Dealer;
 use App\Notifications\Notification;
+use App\Services\PageHookService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -32,6 +34,13 @@ class ProcessedDealerNotification extends Notification implements ShouldQueue
             $this->dealer->info_localized,
             "",
             $this->dealer->additional_info,
+            "",
+            PageHookService::resolve("dealers.notification.application.processed") . " " .
+            match($this->dealer->approval) {
+                Approval::APPROVED => PageHookService::resolve("dealers.notification.application.approved"),
+                Approval::REJECTED => PageHookService::resolve("dealers.notification.application.rejected"),
+                default => "",
+            }
         ];
     }
 

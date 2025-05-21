@@ -21,7 +21,12 @@
                 </div>
             </div>
         @endcan
+
+        {!! \App\Services\PageHookService::resolve("artshow.index.always.top")  !!}
+
         @if(app(\App\Settings\ArtShowSettings::class)->show_items_date->isAfter(now()))
+            {!! \App\Services\PageHookService::resolve("artshow.index.closed.top")  !!}
+
             <x-infocard>
                 {{ __("Art Show Items are not published yet") }}
             </x-infocard>
@@ -31,6 +36,7 @@
                     {{ $error }}
                 </x-infocard>
             @else
+                {!! \App\Services\PageHookService::resolve("artshow.index.open.top")  !!}
                 <livewire:ddas.artshow-items />
             @endif
         @endif

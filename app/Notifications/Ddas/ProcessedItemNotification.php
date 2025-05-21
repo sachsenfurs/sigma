@@ -2,8 +2,10 @@
 
 namespace App\Notifications\Ddas;
 
+use App\Enums\Approval;
 use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
+use App\Services\PageHookService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -32,6 +34,13 @@ class ProcessedItemNotification extends Notification implements ShouldQueue
             $this->item->description,
             "",
             $this->item->description_localized,
+            "",
+            PageHookService::resolve("artshow.notification.application.processed") . " " .
+            match($this->item->approval) {
+                Approval::APPROVED => PageHookService::resolve("artshow.notification.application.approved"),
+                Approval::REJECTED => PageHookService::resolve("artshow.notification.application.rejected"),
+                default => "",
+            }
         ];
     }
 

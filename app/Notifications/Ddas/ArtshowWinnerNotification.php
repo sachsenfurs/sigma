@@ -4,6 +4,7 @@ namespace App\Notifications\Ddas;
 
 use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
+use App\Services\PageHookService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Renderable;
@@ -45,7 +46,7 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             ->line("")
             ->line(new HtmlString(nl2br(e($this->itemsString))))
             ->line("")
-            ->line(__("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)"));
+            ->line(PageHookService::resolve("artshow.notification.winner.info", __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)")));
     }
 
     public function toTelegram($notifiable): TelegramMessage {
@@ -54,7 +55,7 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             ->line("")
             ->line($this->itemsString)
             ->line("")
-            ->line(__("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)"))
+            ->line(PageHookService::resolve("artshow.notification.winner.info", __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)")));
         ;
     }
 
