@@ -47,6 +47,10 @@ class RegSysResourceOwner implements ResourceOwnerInterface
         return $this->getValueByKey($this->response, "avatar_thumb");
     }
 
+    public function hasPaid(): bool {
+        return $this->getValueByKey($this->response, 'paid');
+    }
+
     public function toArray(): array {
         return $this->response;
     }

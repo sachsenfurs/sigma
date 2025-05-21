@@ -56,6 +56,9 @@ class DealerSettingsPage extends SettingsPage
                             ->native(false)
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                       Toggle::make("paid_only")
+                            ->label("Signup requires paid ticket")
+                            ->translateLabel(),
                    ])
             ]);
     }

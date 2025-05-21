@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Ddas;
 
 use App\Http\Controllers\Controller;
-use App\Policies\Ddas\DealerPolicy;
+use App\Models\Ddas\Dealer;
+use Illuminate\Support\Facades\Gate;
 
 class DealersDenController extends Controller
 {
@@ -14,8 +15,9 @@ class DealersDenController extends Controller
     }
 
     public function create() {
-        if(!DealerPolicy::isWithinDeadline())
-            return redirect()->route("home")->withError(__("The deadline for dealers application has already passed"));
+        if(($response = Gate::inspect("create", Dealer::class))->denied())
+            return redirect()->route("home")->withError($response->message());
+
         return view("ddas.dealers.create");
     }
 }

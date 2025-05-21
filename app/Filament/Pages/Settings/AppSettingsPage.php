@@ -67,10 +67,18 @@ class AppSettingsPage extends SettingsPage
                             ->translateLabel()
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
-                        Forms\Components\Toggle::make("accept_sigs_after_deadline")
-                            ->label("Accept SIG applications after deadline")
-                            ->translateLabel()
-                            ->inline(false),
+                        Forms\Components\Grid::make("")
+                            ->columns(2)
+                            ->schema([
+                                Forms\Components\Toggle::make("accept_sigs_after_deadline")
+                                    ->label("Accept SIG applications after deadline")
+                                    ->translateLabel()
+                                    ->inline(false),
+                                Forms\Components\Toggle::make("paid_only")
+                                    ->label("Signup requires paid ticket")
+                                    ->translateLabel()
+                                    ->inline(false),
+                            ]),
                     ]),
                 Forms\Components\Section::make("API Endpoints")
                     ->translateLabel()

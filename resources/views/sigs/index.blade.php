@@ -5,16 +5,17 @@
     <div class="container">
         <h2>{{ __('SIG Overview') }}</h2>
 
-
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-4">
-                <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
-                    <div class="card-body">
-                        <i class="bi bi-plus icon-link"></i> {{ __("Register a new SIG") }}
-                    </div>
-                </a>
+        @can("create", \App\Models\SigEvent::class)
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-4">
+                    <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
+                        <div class="card-body">
+                            <i class="bi bi-plus icon-link"></i> {{ __("Register a new SIG") }}
+                        </div>
+                    </a>
+                </div>
             </div>
-        </div>
+        @endcan
 
         @foreach($sigHosts AS $host)
             <h5 class="py-2 fw-light pt-4">{{ __("Registered SIGs for :name", ['name' => $host->name]) }}</h5>

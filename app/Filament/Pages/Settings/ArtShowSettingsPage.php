@@ -71,6 +71,9 @@ class ArtShowSettingsPage extends SettingsPage
                                      ->minValue(0)
                                      ->maxValue(100)
                                      ->numeric(),
+                                Toggle::make("paid_only")
+                                      ->label("Signup requires paid ticket")
+                                      ->translateLabel(),
                             ]),
                         Fieldset::make("Bids")
                                 ->translateLabel()

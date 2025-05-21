@@ -244,11 +244,13 @@
                 <main class="d-block py-4 px-lg-3 mb-auto">
                     @if (!$noerror AND ($errors->any() OR session('error')))
                         @foreach ([...$errors->all(), session()->get('error')] as $error)
-                            <div class="container">
-                                <div class="alert alert-danger fs-4" role="alert">
-                                    {{ $error }}
+                            @if($error)
+                                <div class="container">
+                                    <div class="alert alert-danger fs-4" role="alert">
+                                        {{ $error }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     @endif
                     @if (session('success'))

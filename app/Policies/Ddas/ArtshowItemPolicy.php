@@ -21,7 +21,7 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         return app(ArtShowSettings::class)->item_deadline->isAfter(now());
     }
 
-    private function isOwnItem(User $user, ArtshowItem $artshowItem) {
+    private function isOwnItem(User $user, ArtshowItem $artshowItem): bool {
         return $artshowItem?->artist()->first()?->user_id === $user->id;
     }
 
@@ -59,12 +59,16 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         return Response::deny();
     }
 
-    public function create(User $user, ?ArtshowArtist $artshowArtist=null): bool {
+    public function create(User $user, ?ArtshowArtist $artshowArtist=null): Response|bool {
         if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
             return true;
 
         if(!$this->isWithinDeadline())
             return false;
+
+        if(app(ArtShowSettings::class)->paid_only AND !$user->paid)
+            return Response::deny(__("You need a valid (paid) ticket for the event in order to sign up"));
+
         if($artshowArtist?->user_id == auth()->user()->id)
             return true;
 

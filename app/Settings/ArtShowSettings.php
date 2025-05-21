@@ -15,6 +15,7 @@ class ArtShowSettings extends Settings
     public Carbon $bid_end_date;
     public int $max_bids_per_item;
     public bool $require_checkin;
+    public bool $paid_only;
 
     public static function group(): string {
         return 'artshow';

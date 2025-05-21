@@ -54,11 +54,13 @@ class DealerPolicy
         return false;
     }
 
-    public function create(User $user): bool {
+    public function create(User $user): bool|Response {
         if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::WRITE))
             return true;
         if(!self::isWithinDeadline())
-            return false;
+            return Response::deny(__("The deadline for dealers application has already passed"));
+        if(app(DealerSettings::class)->paid_only AND !$user->paid)
+            return Response::deny(__("You need a valid (paid) ticket for the event in order to sign up"));
         if($user->dealers()->count() == 0)
             return true;
 

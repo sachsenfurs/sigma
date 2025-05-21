@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Sig;
 use App\Events\Sig\SigApplicationSubmitted;
 use App\Http\Controllers\Controller;
 use App\Models\SigEvent;
-use App\Settings\AppSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SigEventController extends Controller
 {
 
     public function create() {
-        if(app(AppSettings::class)->sig_application_deadline->isBefore(now()) && !app(AppSettings::class)->accept_sigs_after_deadline) {
-            return redirect()->back()->withError(__("SIG applications are no longer possible"));
-        }
+        if(($response = Gate::inspect("create", SigEvent::class))->denied())
+            return redirect()->route("sigs.index")->withError($response->message());
+
         return view("sigs.create");
     }
 

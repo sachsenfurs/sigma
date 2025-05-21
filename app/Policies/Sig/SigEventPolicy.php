@@ -7,6 +7,7 @@ use App\Enums\PermissionLevel;
 use App\Models\SigEvent;
 use App\Models\User;
 use App\Settings\AppSettings;
+use Illuminate\Auth\Access\Response;
 
 class SigEventPolicy extends ManageEventPolicy
 {
@@ -40,11 +41,13 @@ class SigEventPolicy extends ManageEventPolicy
         return $entries->count() > 0;
     }
 
-    public function create(User $user, $sigHostId = null): bool {
+    public function create(User $user, $sigHostId = null): Response|bool {
         if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
             return true;
         if(app(AppSettings::class)->sig_application_deadline->isBefore(now()) && !app(AppSettings::class)->accept_sigs_after_deadline)
-            return false;
+            return Response::deny(__("SIG applications are no longer possible"));
+        if(app(AppSettings::class)->paid_only AND !$user->paid)
+            return Response::deny(__("You need a valid (paid) ticket for the event in order to sign up"));
         if($user->sigHosts->contains($sigHostId))
             return true;
 

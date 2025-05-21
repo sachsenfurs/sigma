@@ -14,6 +14,7 @@ class AppSettings extends Settings
     public Carbon $show_schedule_date;
     public Carbon $sig_application_deadline;
     public bool $accept_sigs_after_deadline;
+    public bool $paid_only;
 
     public string $lassie_api_key;
     public ?int $lassie_con_id;
