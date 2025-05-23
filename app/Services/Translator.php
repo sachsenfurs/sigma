@@ -40,7 +40,7 @@ class Translator
             $targetLang = $this->targetLang;
 
         try {
-            return Cache::remember(md5($result->text . $sourceLang . $targetLang), 3600 * 24, function () use ($targetLang, $sourceLang, $text) {
+            return Cache::remember(md5($text . $sourceLang . $targetLang), 3600 * 24 * 14, function () use ($targetLang, $sourceLang, $text) {
                 $result = $this->translator?->translateText(
                     $text,
                     $sourceLang,
