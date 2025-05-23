@@ -3,9 +3,12 @@
 namespace App\Models\Ddas;
 
 use App\Models\User;
+use App\Observers\ArtshowBidObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(ArtshowBidObserver::class)]
 class ArtshowBid extends Model
 {
 

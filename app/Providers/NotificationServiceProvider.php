@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Facades\NotificationService;
 use App\Notifications\Chat\NewChatMessageNotification;
+use App\Notifications\Ddas\ArtshowItemOutbidNotification;
 use App\Notifications\Ddas\ArtshowWinnerNotification;
 use App\Notifications\Ddas\ProcessedDealerNotification;
 use App\Notifications\Ddas\ProcessedItemNotification;
@@ -56,6 +57,7 @@ class NotificationServiceProvider extends ServiceProvider
             ChangedFavoriteNotification::class          => "favorite_event_changed",
             SigFavoriteReminder::class                  => "sig_favorite_reminder",
             SigTimeslotReminder::class                  => "sig_timeslot_reminder",
+            ArtshowItemOutbidNotification::class        => "artshow_item_outbid_notification",
         ]);
 
         try {

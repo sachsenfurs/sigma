@@ -11,6 +11,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Number;
 use NotificationChannels\Telegram\TelegramMessage;
 
 class ArtshowWinnerNotification extends Notification implements ShouldQueue
@@ -25,10 +26,10 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             ->map(fn($i) =>
                 " - "
                 . __(
-                    ":item by :artist, :value EUR", [
+                    ":item by :artist, :value", [
                         'item' => $i->name,
                         'artist' => $i->artist->name,
-                        'value' => $i->highestBid?->value
+                        'value' => Number::currency($i->highestBid?->value ?? 0)
                     ]
                 )
             )

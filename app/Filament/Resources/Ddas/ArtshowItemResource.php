@@ -174,7 +174,7 @@ class ArtshowItemResource extends Resource
                 Tables\Columns\TextColumn::make('starting_bid')
                     ->label('Starting Bid')
                     ->translateLabel()
-                    ->formatStateUsing(fn(string $state): string => "€ " . (int)$state)
+                    ->formatStateUsing(fn(string $state): string => config("app.currency_symbol") . " " . (int)$state)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('charity_percentage')
                     ->label('Charity Percentage')
@@ -188,7 +188,7 @@ class ArtshowItemResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make("highestBid.value")
                     ->label("Current Bid")
-                    ->money("EUR")
+                    ->money(config("app.currency"))
                     ->sortable()
                     ->translateLabel(),
                 Tables\Columns\TextColumn::make("highestBid.user.name")
@@ -254,13 +254,13 @@ class ArtshowItemResource extends Resource
                                          ->inlineLabel(),
                                     TextEntry::make("Current Bid")
                                          ->state($record->highestBid?->value ?? 0)
-                                         ->money("EUR")
+                                         ->money(config("app.currency"))
                                          ->inlineLabel()
                                 ]);
                         }
                         $entries[] = TextEntry::make("sum")
                             ->state($records->sum("highestBid.value"))
-                            ->money("EUR")
+                            ->money(config("app.currency"))
                             ->size(TextEntry\TextEntrySize::Large)
                             ->inlineLabel();
                         return $entries;

@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Widgets\DashboardWidget;
 use App\Http\Middleware\SetLocale;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\TextInput;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -34,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
         });
         Table::$defaultDateTimeDisplayFormat = "l, d.m.Y - H:i";
         Table::$defaultDateDisplayFormat = "l, d.m.Y";
+        Table::$defaultCurrency = config("app.currency");
 
         Infolist::$defaultDateTimeDisplayFormat = Table::$defaultDateTimeDisplayFormat;
         Infolist::$defaultDateDisplayFormat     = Table::$defaultDateDisplayFormat;

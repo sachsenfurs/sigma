@@ -89,6 +89,9 @@ return [
         'de' => "Deutsch",
     ],
 
+    'currency' => env("APP_CURRENCY", "EUR"),
+    'currency_symbol' => env("APP_CURRENCY_SYMBOL", "€"),
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

@@ -52,7 +52,7 @@ class ArtshowBidsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make("value")
                     ->label("Bid")
                     ->translateLabel()
-                    ->money("EUR"),
+                    ->money(config("app.currency")),
                 Tables\Columns\TextColumn::make("created_at")
                     ->label("Created")
                     ->translateLabel()

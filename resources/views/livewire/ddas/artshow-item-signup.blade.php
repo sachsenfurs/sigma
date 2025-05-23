@@ -168,7 +168,7 @@
                             </legend>
                             <div class="row row-cols-2" x-show="$wire.form.auction">
                                 <div class="col">
-                                    <x-form.livewire-input type="number" group-text="EUR" name="form.starting_bid" :label="__('Starting Bid')" min="0" required/>
+                                    <x-form.livewire-input type="number" :group-text="strtoupper(config('app.currency'))" name="form.starting_bid" :label="__('Starting Bid')" min="0" required/>
                                 </div>
                                 <div class="col">
                                     <x-form.livewire-input type="number" group-text="%" name="form.charity_percentage" :label="__('Charity Percentage')" min="0" max="100" required/>

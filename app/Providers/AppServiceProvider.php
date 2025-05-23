@@ -16,6 +16,7 @@ use App\Settings\AppSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -65,5 +66,8 @@ class AppServiceProvider extends ServiceProvider
             });
             SigEvent::addGlobalScope('private', SigEvent::applyPrivateScope());
         }
+
+        Number::useLocale(app()->getLocale());
+        Number::useCurrency(config("app.currency", "EUR"));
     }
 }

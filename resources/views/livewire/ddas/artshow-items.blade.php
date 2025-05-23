@@ -143,8 +143,8 @@
                             <div class="row p-2 align-items-baseline">
                                 <div class="col">{{ __("Your Bid") }}:</div>
                                 <div class="col">
-                                    <x-form.livewire-input type="number" group-text="€" name="form.value" min="{{ $currentItem->minBidValue() }}" required/>
-                                    <div class="form-text">{{ __("At least :value EUR", ['value' => $currentItem->minBidValue() ]) }}</div>
+                                    <x-form.livewire-input type="number" :group-text="config('app.currency_symbol')" name="form.value" min="{{ $currentItem->minBidValue() }}" required/>
+                                    <div class="form-text">{{ __("At least :value", ['value' => \Illuminate\Support\Number::currency($currentItem->minBidValue()) ]) }}</div>
                                 </div>
                                 <div class="col-12 pt-2">
                                     <label class="text-muted" style="font-size: 0.75em">
