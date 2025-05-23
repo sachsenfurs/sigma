@@ -105,8 +105,7 @@
                                                 <i class="bi bi-megaphone icon-link"></i> {{ __('Announcements') }}
                                             </div>
                                             @cache('announcements_count', 300)
-                                                @php($count = \App\Models\Post\Post::recent()->count())
-                                                @if($count)
+                                                @if($count = \App\Models\Post\Post::recent()->count())
                                                     <div class="col ml-auto">
                                                         <div class="text-end ps-1"><span class="badge bg-dark border border-dark-subtle">{{ $count }}</span></div>
                                                     </div>
@@ -127,13 +126,13 @@
                                             </div>
                                             @if(!Route::is("notifications.*"))
                                                 <div class="col ml-auto text-end">
-                                                    @php($count = \App\Models\Post\Post::recent()->count())
-                                                    @if($count)
-                                                        <span class="badge bg-dark border border-dark-subtle">{{ $count }}</span>
-                                                    @endif
+                                                    @cache('announcements_count_loggedin', 300)
+                                                        @if($count = \App\Models\Post\Post::recent()->count())
+                                                            <span class="badge bg-dark border border-dark-subtle">{{ $count }}</span>
+                                                        @endif
+                                                    @endcache
 
-                                                    @php($count = auth()->user()->unreadNotifications->count())
-                                                    @if($count)
+                                                    @if($count = auth()->user()->unreadNotifications->count())
                                                         <span class="badge bg-danger border border-danger-subtle">{{ $count }}</span>
                                                     @endif
                                                 </div>

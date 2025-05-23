@@ -57,7 +57,6 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
             ->line($this->itemsString)
             ->line("")
             ->line(PageHookService::resolve("artshow.notification.winner.info", __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)")));
-        ;
     }
 
     public function toArray(object $notifiable): array {

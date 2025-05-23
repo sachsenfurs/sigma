@@ -7,7 +7,6 @@ use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Number;
 
 class ArtshowItemOutbidNotification extends Notification implements ShouldQueue
