@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Ddas\Dealer;
 use App\Notifications\Ddas\ProcessedDealerNotification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 
 class DealerObserver
@@ -30,8 +31,10 @@ class DealerObserver
                         if($image->height() > 500 OR $image->width() > 500)
                             $image->scaleDown(500);
 
-                        $filename = md5($image->toJpeg()->toDataUri()).".jpeg";
-                        if(Storage::disk('public')->put("$filename", $image->toJpeg())) {
+                        $png        = Str::endsWith(strtolower($dealer->icon_file), ".png");
+                        $target     = $png ? $image->toPng() : $image->toJpeg();
+                        $filename   = md5($target->toDataUri()) . ($png ? ".png" : ".jpeg");
+                        if(Storage::disk('public')->put("$filename", $target)) {
                             Storage::disk('public')->delete($dealer->getOriginal("icon_file") ?? "");
                             Storage::disk('public')->delete($dealer->icon_file ?? "");
                             $dealer->icon_file = $filename;
