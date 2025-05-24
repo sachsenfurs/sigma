@@ -88,7 +88,19 @@
                                 <div class="row justify-items-center g-3">
                                     @if(!app(\App\Settings\AppSettings::class)->isSchedulePublic())
                                         <div class="alert alert-info bg-info-subtle mt-4">
-                                            {{ __("Note: The schedule has not yet been published. Changes can be made at any time!") }}
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ __("Note: The schedule has not yet been published. Changes can be made at any time!") }}
+                                                </div>
+                                                <div class="text-end align-content-center col-auto">
+                                                    <a href="{{ route("chats.index", ["type" => $sig->getMorphClass(), "id" => $sig->id]) }}">
+                                                        <button class="btn btn-info">
+                                                            <i class="bi bi-envelope icon-link"></i>
+                                                            {{ __("Questions?") }}
+                                                        </button>
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     @endif
                                     @forelse($sig->timetableEntries AS $entry)
@@ -108,9 +120,13 @@
                                                     <div class="col align-content-center">
                                                         <div class="mt-1 text-center">
                                                             <i class="bi bi-geo-alt icon-link"></i>
-                                                            <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
-                                                                {{ $entry->sigLocation->name }}
-                                                            </a>
+                                                            @can("view", $entry->sigLocation)
+                                                                <a href="{{ route("locations.show", $entry->sigLocation) }}" class="text-decoration-none">
+                                                                    {{ $entry->sigLocation->name_localized }}
+                                                                </a>
+                                                            @else
+                                                                {{ $entry->sigLocation->name_localized }}
+                                                            @endcan
                                                         </div>
                                                     </div>
                                                 </div>

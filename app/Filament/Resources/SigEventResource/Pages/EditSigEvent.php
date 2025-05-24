@@ -11,8 +11,7 @@ class EditSigEvent extends EditRecord
 {
     protected static string $resource = SigEventResource::class;
 
-    protected function getHeaderActions(): array
-    {
+    protected function getHeaderActions(): array {
         return [
             Actions\DeleteAction::make()
                 ->modalHeading(__('Delete SIG')),

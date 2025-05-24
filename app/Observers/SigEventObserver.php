@@ -16,7 +16,7 @@ class SigEventObserver
 
     public function updated(SigEvent $sig): void {
         if($sig->isDirty("approval")) {
-            $sig->sigHosts->pluck("user")->each->notify(new ProcessedApplicationNotification($sig));
+            $sig->sigHosts->pluck("user")->each?->notify(new ProcessedApplicationNotification($sig));
         }
     }
 

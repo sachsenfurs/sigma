@@ -24,8 +24,8 @@ class NewNotification extends Notification implements ShouldQueue
 
     protected function getLines(): array {
         return [
-            __("When?") . " " . $this->entry->start->translatedFormat("l, H:i") . " (" . $this->entry->formatted_length . ")",
-            __("Where?") . " " . $this->entry->sigLocation->name_localized,
+            "🕗 " . __("When?") . " " . $this->entry->start->translatedFormat("l, H:i") . " (" . $this->entry->formatted_length . ")",
+            "📍 " . __("Where?") . " " . $this->entry->sigLocation->name_localized,
         ];
     }
 
