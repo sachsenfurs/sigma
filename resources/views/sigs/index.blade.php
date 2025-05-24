@@ -5,22 +5,20 @@
     <div class="container">
         <h2>{{ __('SIG Overview') }}</h2>
 
-        @can("create", \App\Models\SigEvent::class)
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-4">
-                    <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
-                        <div class="card-body">
-                            <i class="bi bi-plus icon-link"></i> {{ __("Register a new SIG") }}
-                        </div>
-                    </a>
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-4">
+                <a href="{{ route("sigs.create") }}" class="btn card btn-success fs-5">
+                    <div class="card-body">
+                        <i class="bi bi-plus icon-link"></i> {{ __("Register a new SIG") }}
+                    </div>
+                </a>
             </div>
-        @endcan
+        </div>
 
-        @foreach($sigHosts AS $host)
+        @forelse($sigHosts AS $host)
             <h5 class="py-2 fw-light pt-4">{{ __("Registered SIGs for :name", ['name' => $host->name]) }}</h5>
             <section class="accordion pb-4" id="sigList">
-                @foreach($host->sigEvents AS $sig)
+                @forelse($host->sigEvents AS $sig)
                     <article class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$sig->id}}" aria-expanded="false" aria-controls="collapse{{$sig->id}}">
@@ -127,8 +125,12 @@
                             </div>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <x-infocard>{{ __("You haven't registered any events") }}</x-infocard>
+                @endforelse
             </section>
-        @endforeach
+        @empty
+            <x-infocard>{{ __("You haven't registered any events") }}</x-infocard>
+        @endforelse
     </div>
 @endsection

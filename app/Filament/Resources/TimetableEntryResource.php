@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\SigPlanning;
+use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigFavorite;
@@ -287,7 +288,7 @@ class TimetableEntryResource extends Resource
         return Forms\Components\Select::make('sig_location_id')
             ->label('Location')
             ->translateLabel()
-            ->relationship('sigLocation', 'name_localized')
+            ->relationship('sigLocation', 'name')
             ->model(TimetableEntry::class)
             ->options(function(): array {
                 return SigLocation::all()->sortBy("name_localized")->mapWithKeys(function ($sigLocation) {
@@ -295,8 +296,9 @@ class TimetableEntryResource extends Resource
                     return [ $sigLocation->id => $name ];
                 })->toArray();
             })
+            ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()) // formatting search results
             ->required()
-            ->searchable(['name', 'name_en'])
+            ->searchable(['name', 'name_en', 'description', 'description_en'])
             ->preload();
     }
 

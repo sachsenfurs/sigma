@@ -104,6 +104,7 @@ class CreateTimetableEntry extends CreateRecord
                         ->seconds(false)
                         ->columns(1)
                         ->live()
+                        ->debounce()
                         ->afterStateUpdated(function(Set $set, $state, Get $get) {
                             $record = SigEvent::find($get('../../sig_event_id'));
                             if(filled($state)) {

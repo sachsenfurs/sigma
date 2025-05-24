@@ -51,7 +51,7 @@ class SigEventPolicy extends ManageEventPolicy
         if($user->sigHosts->contains($sigHostId))
             return true;
 
-        return false;
+        return true;
     }
 
     public function update(User $user, SigEvent $sigEvent): bool {

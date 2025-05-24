@@ -18,6 +18,7 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 
 class UnprocessedSigEvents extends TableWidget
 {
@@ -79,12 +80,18 @@ class UnprocessedSigEvents extends TableWidget
                                 TextEntry::make("sigHosts.name")
                                     ->label("SIG Host")
                                     ->translateLabel(),
-                                TextEntry::make("duration_hours"),
+                                TextEntry::make("duration_hours")
+                                    ->label("Duration")
+                                    ->suffix(" h")
+                                    ->translateLabel(),
                             ]),
                         TextEntry::make("description_localized")
                             ->label("Description")
+                            ->translateLabel()
+                            ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
+                        TextEntry::make("additional_info")
+                            ->label("Additional Information")
                             ->translateLabel(),
-                        TextEntry::make("additional_info"),
                         TextEntry::make("sigTags.description_localized")
                             ->label("Tags")
                             ->translateLabel()
@@ -92,10 +99,9 @@ class UnprocessedSigEvents extends TableWidget
                     ]),
             ])
             ->recordAction(
-                ViewAction::class
+            ViewAction::class
             )
-            ->defaultPaginationPageOption(10)
-            ;
+            ->defaultPaginationPageOption(10);
     }
 
 }
