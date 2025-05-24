@@ -50,7 +50,7 @@ class SigPlannerWidget extends FullCalendarWidget
                   ->resourceId($entry->sigLocation->id)
                   ->borderColor((function() use ($entry) {
                       if($entry->approval != Approval::APPROVED)
-                          return "#550011";
+                          return "#00ffff";
                       if($entry->cancelled)
                           return "#ba5334";
                       if($entry->hide)
@@ -67,8 +67,6 @@ class SigPlannerWidget extends FullCalendarWidget
                   })())
                   ->extraProperties([
                       'backgroundColor' => (function() use ($entry) {
-                          if($entry->approval != Approval::APPROVED)
-                              return "#ff0000";
                           if($entry->cancelled)
                               return "#eb8060";
                           if($entry->hide)
