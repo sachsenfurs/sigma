@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Filament\Clusters\Settings;
 use App\Filament\Resources\PageHookResource\Pages;
 use App\Models\PageHook;
@@ -30,6 +32,10 @@ class PageHookResource extends Resource
 
     public function getTitle(): string|Htmlable {
         return self::getNavigationLabel();
+    }
+
+    public static function canAccess(): bool {
+        return auth()->user()->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN);
     }
 
     public static function form(Form $form): Form {

@@ -17,6 +17,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 
 class CreateTimetableEntry extends CreateRecord
@@ -36,7 +37,8 @@ class CreateTimetableEntry extends CreateRecord
     public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): CreateAction|\Filament\Tables\Actions\CreateAction {
         return $action
             ->model(TimetableEntry::class)
-            ->authorize("create", TimetableEntry::class)
+//            ->authorize("create", TimetableEntry::class) // won't work (filament bug?)
+            ->visible(Gate::check("create", TimetableEntry::class)) // real authorization is done in "mutateData()"
             ->fillForm(function(array $arguments, ?Model $record) {
                 return [
                    'sig_event_id' => $record?->id ?? $arguments['sig_location_id'] ?? null,
@@ -70,6 +72,8 @@ class CreateTimetableEntry extends CreateRecord
 
         // remove array
         array_pop($entries);
+
+        Gate::authorize("create", TimetableEntry::class);
 
         // create entries from repeater manually
         foreach($entries AS $entry) {

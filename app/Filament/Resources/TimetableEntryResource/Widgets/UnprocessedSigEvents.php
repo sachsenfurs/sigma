@@ -60,7 +60,7 @@ class UnprocessedSigEvents extends TableWidget
                 CreateTimetableEntry::getCreateAction(CreateAction::make())
                     ->button(),
                 Action::make("edit")
-                    ->authorize("edit", SigEvent::class)
+                    ->authorize("update", SigEvent::class)
                     ->model(SigEvent::class)
                     ->label("Edit")
                     ->translateLabel()
