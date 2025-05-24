@@ -69,6 +69,10 @@ class TimetableEntryResource extends Resource
                 ])
                 ->hidden(fn(string $operation): bool => $operation == "create"),
             self::getResetUpdateField(),
+            self::getSigApprovalField(),
+            self::getCommentField()
+                ->columnSpanFull(),
+
         ];
     }
 
@@ -370,5 +374,19 @@ class TimetableEntryResource extends Resource
               ->searchable()
               ->preload()
               ->relationship("sigEvent.departmentInfos.userRole", "name");
+    }
+
+    private static function getSigApprovalField(): Forms\Components\Checkbox {
+        return Forms\Components\Checkbox::make("approval")
+            ->formatStateUsing(fn($state) => !$state)
+            ->mutateDehydratedStateUsing(fn($state) => !$state)
+            ->label(__("WIP"))
+            ->helperText(__("Work in Progress, times may still change!"));
+    }
+
+    private static function getCommentField() {
+        return Forms\Components\Textarea::make("comment")
+            ->label("Comment")
+            ->translateLabel();
     }
 }

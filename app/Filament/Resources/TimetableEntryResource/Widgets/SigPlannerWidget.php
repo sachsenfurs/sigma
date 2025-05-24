@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use App\Enums\Approval;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
@@ -48,6 +49,8 @@ class SigPlannerWidget extends FullCalendarWidget
                   ->end($entry->end->toDateTimeLocalString())
                   ->resourceId($entry->sigLocation->id)
                   ->borderColor((function() use ($entry) {
+                      if($entry->approval != Approval::APPROVED)
+                          return "#550011";
                       if($entry->cancelled)
                           return "#ba5334";
                       if($entry->hide)
@@ -64,6 +67,8 @@ class SigPlannerWidget extends FullCalendarWidget
                   })())
                   ->extraProperties([
                       'backgroundColor' => (function() use ($entry) {
+                          if($entry->approval != Approval::APPROVED)
+                              return "#ff0000";
                           if($entry->cancelled)
                               return "#eb8060";
                           if($entry->hide)
@@ -120,8 +125,7 @@ class SigPlannerWidget extends FullCalendarWidget
                         ->close(),
                 ])
                 ->modelLabel(TimetableEntryResource::getModelLabel())
-                ->modalFooterActionsAlignment(Alignment::End)
-            ,
+                ->modalFooterActionsAlignment(Alignment::End),
             EditAction::make("view")
                 ->authorize("update", TimetableEntry::class)
                 ->using(function(Model $record, array $data) {

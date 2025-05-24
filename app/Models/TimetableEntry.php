@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Approval;
 use App\Models\Traits\HasReminders;
 use App\Models\Traits\NameIdAsSlug;
 use App\Observers\TimetableEntryObserver;
@@ -37,6 +38,7 @@ class TimetableEntry extends Model
         'new' => "boolean",
         'updated_at' => "datetime", // according to the docs timestamps will be casted by default but it causes issues without explicitly doing it again here!
         'created_at' => "datetime",
+        'approval' => Approval::class,
     ];
 
     protected $appends = [

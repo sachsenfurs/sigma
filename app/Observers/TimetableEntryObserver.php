@@ -10,6 +10,7 @@ use App\Notifications\TimetableEntry\CancelledNotification;
 use App\Notifications\TimetableEntry\ChangedFavoriteNotification;
 use App\Notifications\TimetableEntry\ChangedNotification;
 use App\Notifications\TimetableEntry\NewNotification;
+use Illuminate\Support\Facades\DB;
 
 class TimetableEntryObserver
 {
@@ -45,7 +46,10 @@ class TimetableEntryObserver
             }
 
             // event changed?
-            if($timetableEntry->updated_at != $timetableEntry->created_at) {
+            if($timetableEntry->updated_at != $timetableEntry->created_at AND $timetableEntry->isDirty([
+                    'start',
+                    'sig_location_id'
+                ])) {
                 // getDirty() contains the CHANGED data. But we need an array containing only the OLD data
                 $oldData = collect($timetableEntry->getOriginal())->intersectByKeys($timetableEntry->getDirty());
 
@@ -56,6 +60,14 @@ class TimetableEntryObserver
                     $fav->user->notify(new ChangedFavoriteNotification($fav->timetableEntry, $oldData));
 
                 return;
+            }
+        }
+
+        // dont' update event when approval state or "hide" changed
+        if($timetableEntry->getOriginal("updated_at") == $timetableEntry->created_at) {
+            if($timetableEntry->isDirty(['approval', 'hide', 'comment'])) {
+                // revert changes without triggering any events:
+                DB::statement("UPDATE timetable_entries SET updated_at = created_at WHERE id = " . $timetableEntry->id);
             }
         }
     }

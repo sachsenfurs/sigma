@@ -45,4 +45,9 @@ class ChangedNotification extends Notification implements ShouldQueue
     protected function getActionUrl(): string {
         return route("timetable-entry.show", $this->entry);
     }
+
+    public function shouldSend(): bool {
+        // only send when lines not empty
+        return !collect($this->getLines())->filter(fn($e) => !empty($e))->isEmpty();
+    }
 }

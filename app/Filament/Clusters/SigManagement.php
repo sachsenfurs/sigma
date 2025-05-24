@@ -30,6 +30,6 @@ class SigManagement extends Cluster
     }
 
     public static function canAccess(): bool {
-        return auth()->user()?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ);
+        return auth()->user()?->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ) ?? false;
     }
 }

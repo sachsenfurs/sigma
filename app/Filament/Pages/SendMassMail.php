@@ -44,7 +44,7 @@ class SendMassMail extends Page implements HasForms
     }
 
     public static function canAccess(): bool {
-        return auth()->user()->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::DELETE);
+        return auth()->user()?->hasPermission(Permission::MANAGE_CHATS, PermissionLevel::DELETE) ?? false;
     }
 
     protected function getFormSchema(): array {

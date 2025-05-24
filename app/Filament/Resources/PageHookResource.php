@@ -35,7 +35,7 @@ class PageHookResource extends Resource
     }
 
     public static function canAccess(): bool {
-        return auth()->user()->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN);
+        return auth()->user()?->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN) ?? false;
     }
 
     public static function form(Form $form): Form {

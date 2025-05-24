@@ -9,8 +9,10 @@ use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -18,6 +20,7 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class UnprocessedSigEvents extends TableWidget
@@ -70,6 +73,12 @@ class UnprocessedSigEvents extends TableWidget
                     ->label(false)
                     ->icon(false)
                     ->modalHeading(__("SIG Details"))
+                    ->extraModalFooterActions([
+                        EditAction::make()
+                            ->visible(fn(Model $record) => Gate::check("update", $record))
+                            ->url(fn(Model $record) => SigEventResource::getUrl('edit', ['record' => $record]))
+                            ->outlined(),
+                    ])
                     ->infolist([
                         Grid::make()
                             ->columns(3)

@@ -284,6 +284,7 @@
     "Internal Event": "Internes Event",
     "Announce Changes": "Änderungen kommunizieren",
     "Reset 'Changed'-flag": "'Geändert'-flag zurücksetzen",
+    "Comment": "Kommentar",
     "This needs to be checked if the event should be marked as changed!": "Haken setzen, damit -Geändert- mit dran steht!",
     "Manage Time Slots": "Timeslots verwalten",
     "Slot Time span": "Slot Zeitraum",
