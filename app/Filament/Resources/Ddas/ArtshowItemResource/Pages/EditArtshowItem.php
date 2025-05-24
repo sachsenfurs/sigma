@@ -13,6 +13,9 @@ class EditArtshowItem extends EditRecord
 {
     protected static string $resource = ArtshowItemResource::class;
 
+    protected function getRedirectUrl(): ?string {
+        return $this->previousUrl;
+    }
 
     public function getSubheading(): string|Htmlable|null {
         $user       = ($this->record->artist->user?->reg_id ?? "") . " - " . $this->record->artist->user?->name ?? "";

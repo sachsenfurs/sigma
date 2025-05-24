@@ -221,7 +221,8 @@ class DealerResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Approval::getBulkAction(),
+                    Approval::getBulkAction()
+                        ->authorize("update"),
                     Tables\Actions\BulkAction::make("sigLocation")
                         ->label("Set Location")
                         ->translateLabel()

@@ -10,6 +10,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class SigHostsRelationManager extends RelationManager
 {
@@ -48,7 +49,11 @@ class SigHostsRelationManager extends RelationManager
                 EditAction::make("edit")
                     ->form(fn($form) => SigHostResource::form($form))
             ])
-            ->recordUrl(fn(Model $record) => SigHostResource::getUrl("edit", ["record" => $record]))
+            ->recordUrl(fn(Model $record) =>
+                SigHostResource::getUrl(
+                    Gate::check("update", $record) ? "edit" : "view",
+                    ["record" => $record])
+                )
             ->headerActions([
                 CreateAction::make()
                     ->form(fn($form) => SigHostResource::form($form))

@@ -54,6 +54,7 @@ class ArtshowBidResource extends Resource
                     ->searchable(['id', 'name'])
                     ->preload()
                     ->live()
+                    ->debounce()
                     ->required()
                     ->helperText(function (Get $get) {
                         if($item = ArtshowItem::find($get("artshow_item_id"))) {
@@ -65,16 +66,24 @@ class ArtshowBidResource extends Resource
                 Select::make("user_id")
                     ->label("User")
                     ->translateLabel()
+                    ->required()
                     ->relationship("user", "name")
                     ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                     ->searchable(['reg_id', 'name']),
                 TextInput::make("value")
                     ->label("Bid")
                     ->translateLabel()
+                    ->required()
                     ->numeric()
+                    ->live()
+                    ->debounce()
+                    ->minValue(function (Get $get, $operation) {
+                        if($operation == "edit")
+                            return 0;
+                        return ArtshowItem::find($get("artshow_item_id"))?->minBidValue() ?? 0;
+                    })
                     ->prefixIcon("heroicon-o-currency-euro")
                     ->required(),
-
             ]);
     }
 
@@ -83,10 +92,18 @@ class ArtshowBidResource extends Resource
             ->modifyQueryUsing(fn($query) => $query->with(["user"]))
             ->columns([
                 Tables\Columns\TextColumn::make("user")
-                    ->formatStateUsing(fn(Model $record) => $record->user->name . " #" . $record->user->reg_id),
-                Tables\Columns\TextColumn::make("artshowItem.name"),
-                Tables\Columns\TextColumn::make("value"),
+                    ->formatStateUsing(fn(Model $record) => $record->user->name . " #" . $record->user->reg_id)
+                    ->label("User")
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make("artshowItem.name")
+                    ->label(__("Art Show Item"))
+                    ->badge()
+                    ->url(fn(Model $record) => ArtshowItemResource::getUrl("edit", ['record' => $record->artshow_item_id])),
+                Tables\Columns\TextColumn::make("value")
+                    ->label(__("Value"))
+                    ->money(config("app.currency")),
                 Tables\Columns\TextColumn::make("created_at")
+                    ->label(__("Created"))
                     ->dateTime(),
             ])
             ->defaultSort("created_at", "desc")
@@ -112,7 +129,6 @@ class ArtshowBidResource extends Resource
     public static function getPages(): array {
         return [
             'index' => Pages\ListArtshowBids::route('/'),
-            'edit' => Pages\EditArtshowBid::route('/{record}/edit'),
         ];
     }
 }

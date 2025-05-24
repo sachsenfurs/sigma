@@ -2,12 +2,15 @@
 
 namespace App\Policies\Ddas;
 
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Models\Ddas\ArtshowBid;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\User;
 use App\Settings\ArtShowSettings;
+use Illuminate\Auth\Access\Response;
 
-class ArtshowBidPolicy //extends ManageArtshowPolicy
+class ArtshowBidPolicy extends ManageArtshowPolicy
 {
 
     private static function isBiddingOpen(): bool {
@@ -19,14 +22,17 @@ class ArtshowBidPolicy //extends ManageArtshowPolicy
      */
 
     public function viewAny(User $user): bool {
-        return false;
+        return $user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ);
     }
 
     public function view(User $user, ArtshowBid $artshowBid): bool {
-        return false;
+        return $user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::READ);
     }
 
-    public function create(User $user, ArtshowItem $artshowItem): bool {
+    public function create(User $user, ?ArtshowItem $artshowItem=null): bool|Response {
+        if(!$artshowItem)
+            return false;
+
         // item approved?
         if(!$artshowItem->approved())
             return false;
@@ -37,10 +43,14 @@ class ArtshowBidPolicy //extends ManageArtshowPolicy
 
         // prohibit bidding on own items
         if($user->artists->pluck("id")->contains($artshowItem->artshow_artist_id))
-            return false;
+            return Response::deny("Can't bid on own items!");
+
+        if($artshowItem->artshowBids()->count() >= app(ArtShowSettings::class)->max_bids_per_item)
+            return Response::deny(__("Maximum bids reached. Item will be sold in the auction!"));
 
         if(ArtshowItemPolicy::isArtshowPublic())
-            return self::isBiddingOpen();
+            return self::isBiddingOpen() ? true : Response::deny(__("No bids are currently being accepted for this item"));
+
         return false;
     }
 

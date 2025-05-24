@@ -135,11 +135,7 @@
                                 {{ __("You have been outbid!") }}
                             </div>
                         @endif
-                        @if(!$currentItem->bidPossible())
-                            <div class="text-danger text-center p-1 my-2 fs-5">
-                                {{ __("No bids are currently being accepted for this item") }}
-                            </div>
-                        @else
+                        @can("create", [\App\Models\Ddas\ArtshowBid::class, $currentItem])
                             <div class="row p-2 align-items-baseline">
                                 <div class="col">{{ __("Your Bid") }}:</div>
                                 <div class="col">
@@ -162,7 +158,11 @@
                                     </button>
                                 </div>
                             </div>
-                        @endif
+                        @else
+                            <div class="text-danger text-center p-1 my-2 fs-5">
+                                {{ Gate::inspect("create", [\App\Models\Ddas\ArtshowBid::class, $currentItem])->message() ?: __("No bids are currently being accepted for this item") }}
+                            </div>
+                        @endcan
                     @endif
                     <div class="row p-2 text-muted">
                         <div class="col-12 p-2 text-center">

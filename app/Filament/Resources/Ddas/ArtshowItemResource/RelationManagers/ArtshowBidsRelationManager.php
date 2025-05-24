@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers;
 
+use App\Filament\Resources\Ddas\ArtshowBidResource;
 use Filament\Forms;
+use Filament\Forms\Components\Field;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -26,16 +28,19 @@ class ArtshowBidsRelationManager extends RelationManager
         return __("Bids");
     }
 
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('value')
-                    ->label("Bid")
-                    ->translateLabel()
-                    ->required()
-                    ->numeric(),
-            ]);
+    public function form(Form $form): Form {
+        return $form->schema(
+            collect(ArtshowBidResource::form($form)->getComponents())
+                ->filter(fn(Field $e) => $e->getName() != "artshow_item_id")
+                ->prepend(
+                    Forms\Components\Select::make("artshow_item_id")
+                        ->relationship("artshowItem", "name")
+                        ->default($this->ownerRecord->id)
+                        ->columnSpanFull()
+                        ->disabled()
+                )
+                ->toArray()
+        );
     }
 
     public function table(Table $table): Table

@@ -9,13 +9,17 @@ use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\ChatResource;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBidsRelationManager;
+use App\Infolists\Components\Alert;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -24,6 +28,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 
 class ArtshowItemResource extends Resource
 {
@@ -150,6 +155,7 @@ class ArtshowItemResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make("id")
+                    ->label("ID")
                     ->searchable(),
                 Tables\Columns\IconColumn::make('approval')
                     ->label('Approval')
@@ -224,41 +230,80 @@ class ArtshowItemResource extends Resource
                     ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId()),
                 Tables\Filters\TernaryFilter::make("paid")
                     ->label("Paid")
+                    ->default(false)
                     ->translateLabel(),
             ])
+            ->filtersLayout(Tables\Enums\FiltersLayout::AboveContent)
             ->actions([])
             ->headerActions([])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Approval::getBulkAction(),
+                    Approval::getBulkAction()
+                        ->authorize("update"),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
                 Tables\Actions\BulkAction::make("pickup")
+                    ->authorize("create")
                     ->infolist(function(Collection $records) {
                         $entries = [];
+                        $differentUsers = false;
+                        $lastUser = null;
                         foreach($records AS $record) {
-                            $entries[] = Fieldset::make("item_info")
-                                ->label($record->name)
-                                ->schema([
-                                    TextEntry::make("id")
-                                        ->state($record->id)
-                                        ->inlineLabel()
-                                        ->columns(6),
-                                    TextEntry::make("paid")
-                                        ->state($record->paid ? "THIS ITEM IS ALREADY PAID!" : "Not paid")
-                                        ->color($record->paid ? Color::Red : Color::Neutral)
-                                        ->inlineLabel()
-                                        ->columns(6),
-                                    TextEntry::make("artist")
-                                         ->state($record->artist->name)
-                                         ->inlineLabel(),
-                                    TextEntry::make("Current Bid")
-                                         ->state($record->highestBid?->value ?? 0)
-                                         ->money(config("app.currency"))
-                                         ->inlineLabel()
-                                ]);
+                            if($lastUser == null)
+                                $lastUser = $record->highestBid?->user_id;
+                            elseif($lastUser != $record->highestBid?->user_id)
+                                $differentUsers = true;
+
+                            $entries[] = Grid::make(3)
+                                    ->schema([
+                                        Fieldset::make("item_info")
+                                            ->columnSpan(2)
+                                            ->label($record->name)
+                                            ->schema([
+                                                TextEntry::make("id")
+                                                    ->label("ID")
+                                                    ->state($record->id)
+                                                    ->inlineLabel()
+                                                    ->size(TextEntry\TextEntrySize::Large),
+                                                TextEntry::make("paid")
+                                                    ->label("Paid")
+                                                    ->translateLabel()
+                                                    ->state($record->paid ? "THIS ITEM IS ALREADY PAID!" : "Not paid")
+                                                    ->color($record->paid ? Color::Red : Color::Neutral)
+                                                    ->inlineLabel(),
+                                                TextEntry::make("charity_percentage")
+                                                    ->label("Charity %")
+                                                    ->state($record->charity_percentage)
+                                                    ->suffix("%")
+                                                    ->inlineLabel(),
+                                                TextEntry::make("charity_amount")
+                                                    ->label(__("Charity Amount"))
+                                                    ->state(($record->highestBid?->value ?? 0) * ($record->charity_percentage/100))
+                                                    ->money(config("app.currency"))
+                                                    ->inlineLabel(),
+                                                TextEntry::make("artist")
+                                                     ->state($record->artist->name)
+                                                     ->inlineLabel(),
+                                                TextEntry::make("Current Bid")
+                                                     ->label(__("Current Bid"))
+                                                     ->state($record->highestBid?->value ?? 0)
+                                                     ->money(config("app.currency"))
+                                                     ->inlineLabel(),
+                                            ]),
+                                        ImageEntry::make("image")
+                                            ->state($record)
+                                            ->hiddenLabel()
+                                            ->alignCenter()
+                                            ->defaultImageUrl($record->image_url),
+                                    ]);
                         }
+                        if($differentUsers)
+                            $entries[] = Alert::make("warning")
+                                ->columnSpanFull()
+                                ->subText(__("You have selected multiple items from different users!"))
+                                ->state(__("Different users detected!"));
                         $entries[] = TextEntry::make("sum")
+                            ->label(__("Sum"))
                             ->state($records->sum("highestBid.value"))
                             ->money(config("app.currency"))
                             ->size(TextEntry\TextEntrySize::Large)

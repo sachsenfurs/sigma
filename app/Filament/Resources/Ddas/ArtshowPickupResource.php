@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Ddas;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages;
 use App\Models\Ddas\ArtshowPickup;
-use App\Settings\ArtShowSettings;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,7 +27,7 @@ class ArtshowPickupResource extends Resource
     }
 
     public static function canAccess(): bool {
-        return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
+        return false;
     }
 
 

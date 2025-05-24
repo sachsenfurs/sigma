@@ -116,8 +116,10 @@ class SigEventResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Approval::getBulkAction(),
+                    Approval::getBulkAction()
+                        ->authorize("update"),
                     BulkAction::make("text")
+                        ->authorize("update")
                         ->label("Text...")
                         ->icon("heroicon-o-document-text")
                         ->translateLabel()

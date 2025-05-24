@@ -75,11 +75,14 @@ class ArtshowItemPolicy extends ManageArtshowPolicy
         return true;
     }
 
-    public function update(User $user, ArtshowItem $artshowItem): bool {
+    public function update(User $user, ?ArtshowItem $artshowItem=null): bool {
         if($user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::WRITE))
             return true;
 
         if(!$this->isWithinDeadline())
+            return false;
+
+        if(!$artshowItem)
             return false;
 
         // allow as long as item is not yet in auction

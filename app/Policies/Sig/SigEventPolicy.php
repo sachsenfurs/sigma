@@ -54,10 +54,10 @@ class SigEventPolicy extends ManageEventPolicy
         return true;
     }
 
-    public function update(User $user, SigEvent $sigEvent): bool {
+    public function update(User $user, ?SigEvent $sigEvent=null): bool {
         if($user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE))
             return true;
-        if($sigEvent->sigHosts->pluck("reg_id")->contains($user->reg_id) && !$sigEvent->approved)
+        if($sigEvent AND $sigEvent->sigHosts->pluck("reg_id")->contains($user->reg_id) && !$sigEvent->approved)
             return true;
 
         return false;
