@@ -6,6 +6,8 @@ use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\SigLocation;
+use App\Models\TimetableEntry;
+use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -29,16 +31,6 @@ class TimetableEntriesRelationManager extends RelationManager
         return __("In Schedule");
     }
 
-    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool {
-        // Filament needs to know if the user can view the relation manager for the given record.
-        return auth()->user()->can("view", $ownerRecord);
-    }
-
-    protected function can(string $action, ?Model $record = null): bool {
-        // Filament needs to know if the user can perform the given action on the relation manager.
-        return auth()->user()->can("viewAny", $record);
-    }
-
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
         return $ownerRecord->timetableEntries->count() ?: null;
     }
@@ -46,7 +38,7 @@ class TimetableEntriesRelationManager extends RelationManager
     public function table(Table $table): Table {
         $table = TimetableEntryResource::table($table)
             ->headerActions($this->getTableHeaderActions())
-            ->recordUrl(fn($record) => Gate::allows("edit", $record) ? TimetableEntryResource::getUrl("edit", ['record' => $record]) : null)
+            ->recordUrl(fn($record) => Gate::allows("update", $record) ? TimetableEntryResource::getUrl("edit", ['record' => $record]) : null)
             ->actions($this->getTableEntryActions());
 
         $cols = $table->getColumns();
@@ -63,16 +55,12 @@ class TimetableEntriesRelationManager extends RelationManager
     protected function getTableHeaderActions(): array {
         return [
             TimetableEntryResource\Pages\CreateTimetableEntry::getCreateAction(
-                Tables\Actions\CreateAction::make()
+                Tables\Actions\CreateAction::make(),
+                [
+                    'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null,
+                    'sig_event_id' => ($this->ownerRecord instanceof  SigEvent) ? $this->ownerRecord->id : null,
+                ]
             )
-            ->fillForm(fn() => [
-                'sig_location_id' => ($this->ownerRecord instanceof SigLocation) ? $this->ownerRecord->id : null,
-                'sig_event_id' => ($this->ownerRecord instanceof  SigEvent) ? $this->ownerRecord->id : null,
-                'entries' => [[
-                    'start' => now()->addHour()->setMinutes(0),
-                    'end' => now()->addHours(2)->setMinutes(0),
-                ]]
-            ])
         ];
     }
 

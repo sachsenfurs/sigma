@@ -6,6 +6,7 @@ use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\TimetableEntry;
+use App\Settings\AppSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
@@ -34,19 +35,19 @@ class CreateTimetableEntry extends CreateRecord
         return $form->schema(self::getSchema());
     }
 
-    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): CreateAction|\Filament\Tables\Actions\CreateAction {
+    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action, array $defaults): CreateAction|\Filament\Tables\Actions\CreateAction {
         return $action
             ->model(TimetableEntry::class)
 //            ->authorize("create", TimetableEntry::class) // won't work (filament bug?)
             ->visible(Gate::check("create", TimetableEntry::class)) // real authorization is done in "mutateData()"
-            ->fillForm(function(array $arguments, ?Model $record) {
+            ->fillForm(function(array $arguments, ?Model $record) use ($defaults) {
                 return [
-                   'sig_event_id' => $record?->id ?? $arguments['sig_location_id'] ?? null,
-                   'sig_location_id' => $arguments['resource']['id'] ?? null,
+                   'sig_event_id' => $record?->id ?? $arguments['sig_event_id'] ?? $defaults['sig_event_id'] ?? null,
+                   'sig_location_id' => $arguments['resource']['id'] ?? $defaults['sig_location_id'] ?? null,
                    'entries' => [
                        [
-                           'start' => $model?->start ?? $arguments['start'] ?? now()->addHour()->setMinute(0)->setSecond(0),
-                           'end' => $model?->end ?? $arguments['end'] ?? now()->addHour()->setMinute(0)->setSecond(0)->addMinutes($record?->duration ?? 120),
+                           'start' => $model?->start ?? $arguments['start'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0),
+                           'end' => $model?->end ?? $arguments['end'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0)->addMinutes($record?->duration ?? 120),
                        ]
                    ],
                 ];
@@ -132,11 +133,11 @@ class CreateTimetableEntry extends CreateRecord
                         ->after(function(Set $set, Get $get, $state) {
                             array_pop($state);
                             $current = end($state);
-                            $set('start', $current['start'] ?? now());
-                            $set('end', $current['end'] ?? now());
+                            $set('start', $current['start'] ?? app(AppSettings::class)->event_start);
+                            $set('end', $current['end'] ?? app(AppSettings::class)->event_start->clone()->addHour(1));
                             $state[] = [
-                                'start' => Carbon::parse($current['start'] ?? now())->addDay()->toDateTimeString('minute'),
-                                'end' => Carbon::parse($current['end'] ?? now())->addDay()->toDateTimeString('minute'),
+                                'start' => Carbon::parse($current['start'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
+                                'end' => Carbon::parse($current['end'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
                             ];
                             $set('entries', $state);
                         });
