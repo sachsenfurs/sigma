@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Ddas\ArtshowCardsController;
 use App\Http\Controllers\Ddas\ArtshowController;
 use App\Http\Controllers\Ddas\DealersDenController;
 use App\Http\Controllers\HomeController;
@@ -111,6 +112,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::resource('/artshow', ArtshowController::class)
          ->parameters(['artshow' => 'artshowItem'])
          ->only(['index', 'create', 'show']);
+    Route::get('/artshow-cards', ArtshowCardsController::class)->name("artshow.cards");
 
     // Lost and found
     Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");

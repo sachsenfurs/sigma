@@ -113,17 +113,23 @@ class ArtshowItemResource extends Resource
                                     fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en')->authorize("create", ArtshowItem::class): null
                                 ),
                      ]),
+                Forms\Components\Checkbox::make("auction")
+                    ->columnSpanFull()
+                    ->label(__("Up for auction"))
+                    ->reactive(),
                 Forms\Components\TextInput::make('starting_bid')
                     ->label('Starting Bid')
                     ->translateLabel()
                     ->required()
                     ->numeric()
+                    ->visible(fn(Forms\Get $get) => $get('auction'))
                     ->default(0),
                 Forms\Components\TextInput::make('charity_percentage')
                     ->label('Charity Percentage')
                     ->translateLabel()
                     ->required()
                     ->numeric()
+                    ->visible(fn(Forms\Get $get) => $get('auction'))
                     ->default(0),
                 Forms\Components\Textarea::make('additional_info')
                     ->label('Additional Information')
