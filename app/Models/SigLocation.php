@@ -50,6 +50,10 @@ class SigLocation extends Model
         return $this->hasMany(Dealer::class);
     }
 
+    public function shiftTypes(): HasMany {
+        return $this->hasMany(ShiftType::class);
+    }
+
     /**
      * Scopes to SigLocation which are assigned to at least one event
      * @return void
