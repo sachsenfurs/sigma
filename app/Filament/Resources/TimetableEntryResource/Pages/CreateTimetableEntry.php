@@ -35,7 +35,7 @@ class CreateTimetableEntry extends CreateRecord
         return $form->schema(self::getSchema());
     }
 
-    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action, array $defaults): CreateAction|\Filament\Tables\Actions\CreateAction {
+    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action, array $defaults=[]): CreateAction|\Filament\Tables\Actions\CreateAction {
         return $action
             ->model(TimetableEntry::class)
 //            ->authorize("create", TimetableEntry::class) // won't work (filament bug?)
