@@ -21,6 +21,10 @@ class SigHostsRelationManager extends RelationManager
         return __("Host");
     }
 
+    public function isReadOnly(): bool {
+        return true;
+    }
+
     public static function getPluralModelLabel(): ?string {
         return __("Hosts");
     }

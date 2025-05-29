@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c960bf4b346accf6d14997f7f74fdb1d",
+    "content-hash": "34ad9a3dce99ab698854aef5cccfac21",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2007,6 +2007,83 @@
                 }
             ],
             "time": "2024-07-20T21:45:45+00:00"
+        },
+        {
+            "name": "guava/calendar",
+            "version": "1.14.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GuavaCZ/calendar.git",
+                "reference": "bf8f1d5e44e307a2a5dc9bda1e0c673bd12c18ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GuavaCZ/calendar/zipball/bf8f1d5e44e307a2a5dc9bda1e0c673bd12c18ea",
+                "reference": "bf8f1d5e44e307a2a5dc9bda1e0c673bd12c18ea",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2",
+                "illuminate/contracts": "^10.0|^11.0|^12.0",
+                "php": "^8.1|^8.2",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.8|^8.0",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^8.8|^9.0|^10.0",
+                "pestphp/pest": "^2.36",
+                "pestphp/pest-plugin": "^2.1.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Guava\\Calendar\\CalendarServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Guava\\Calendar\\": "src/",
+                    "Guava\\Calendar\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lukas Frey",
+                    "email": "lukas.frey@guava.cz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Adds support for vkurko/calendar to Filament PHP.",
+            "homepage": "https://github.com/GuavaCZ/calendar",
+            "keywords": [
+                "Guava",
+                "calendar",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/GuavaCZ/calendar/issues",
+                "source": "https://github.com/GuavaCZ/calendar/tree/1.14.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GuavaCZ",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-05-21T12:23:20+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

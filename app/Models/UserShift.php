@@ -13,4 +13,8 @@ class UserShift extends Pivot
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
+
+    public function shift(): BelongsTo {
+        return $this->belongsTo(Shift::class);
+    }
 }

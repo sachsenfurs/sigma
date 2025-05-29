@@ -90,7 +90,7 @@ class UserRoleResource extends Resource
             Tables\Columns\TextColumn::make('name_localized')
                 ->label('User Role')
                 ->translateLabel()
-                ->searchable()
+                ->searchable(['name', 'name_en'])
                 ->badge()
                 ->color(fn($record) => Color::hex($record->background_color))
                 ->sortable(),

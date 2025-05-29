@@ -99,6 +99,7 @@ class DepartmentInfoResource extends Resource
                             ->schema([
                                 TextEntry::make("start")
                                     ->label("")
+                                    ->extraAttributes(fn($record) => $record->start->isPast() ? ['style' => "opacity:0.5"] : [])
                                     ->dateTime()
                                     ->formatStateUsing(function ($record) {
                                         $start = Carbon::parse($record->start);
@@ -107,6 +108,7 @@ class DepartmentInfoResource extends Resource
                                     }),
                                 TextEntry::make("sigLocation.name_localized")
                                     ->label("")
+                                    ->extraAttributes(fn($record) => $record->start->isPast() ? ['style' => "opacity:0.5"] : [])
                                     ->formatStateUsing(fn(Model $record) => $record->sigLocation->name_localized . " - " . $record->sigLocation->description_localized),
 
                             ]),

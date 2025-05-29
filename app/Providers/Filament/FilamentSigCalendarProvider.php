@@ -35,6 +35,10 @@ class FilamentSigCalendarProvider {
                       'center' => 'title',
                       'right' => 'resourceTimeGridDay,resourceTimeline,dayGridMonth'
                   ],
+                  'buttonText' => [
+                      'resourceTimeline' => __("Day") . " " . __("Vertical"),
+                      'today' => __("Today"),
+                  ],
                   'titleFormat' => [
                       'day' => 'numeric',
                       'month' => 'long',

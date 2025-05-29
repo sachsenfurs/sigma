@@ -11,6 +11,7 @@
         "doctrine/dbal": "^3.6",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-settings-plugin": "^3.2",
+        "guava/calendar": "^1.14",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^3.9",
         "intervention/image-laravel": "^1.3",

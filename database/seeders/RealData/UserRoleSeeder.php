@@ -128,6 +128,33 @@ class UserRoleSeeder extends Seeder
             'level' => PermissionLevel::READ->value,
         ]));
 
+        tap(UserRole::create([
+            'name'                      => 'Stage',
+            'name_en'                   => "Stage",
+            'fore_color'                => '#ffff00',
+            'registration_system_key'   => 'stage',
+            'border_color'              => '#2b2b2b',
+            'background_color'          => '#2b2b2b',
+        ]), function(UserRole $role) {
+            $role->shiftTypes()->createMany([
+                [ 'name' => "Light" ],
+                [ 'name' => "Sound" ],
+                [ 'name' => "Video" ],
+                [ 'name' => "CAM1" ],
+                [ 'name' => "CAM2" ],
+                [ 'name' => "PTZ" ],
+                [ 'name' => "Streaming" ],
+            ]);
+
+        })->permissions()->createMany(collect([
+            Permission::MANAGE_EVENTS,
+            Permission::MANAGE_HOSTS,
+            Permission::MANAGE_LOCATIONS,
+        ])->map(fn($p) => [
+            'permission' => $p->name,
+            'level' => PermissionLevel::READ->value,
+        ]));
+
     }
 
 }

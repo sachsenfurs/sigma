@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Necessity;
 use App\Filament\Clusters\ShiftPlanning;
+use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Shift;
 use Filament\Forms;
@@ -21,8 +23,7 @@ class ShiftResource extends Resource
     protected static ?string $cluster = ShiftPlanning::class;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('user_role_id')
@@ -45,10 +46,8 @@ class ShiftResource extends Resource
                     ->required(),
                 Forms\Components\DateTimePicker::make('end')
                     ->required(),
-                Forms\Components\TextInput::make('necessity')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
+                Forms\Components\Select::make('necessity')
+                    ->default(Necessity::MANDATORY),
                 Forms\Components\Toggle::make('team')
                     ->required(),
                 Forms\Components\Toggle::make('locked')
@@ -56,8 +55,7 @@ class ShiftResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user_role_id')
@@ -81,7 +79,6 @@ class ShiftResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('necessity')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('team')
                     ->boolean(),
@@ -110,8 +107,7 @@ class ShiftResource extends Resource
             ]);
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => \App\Filament\Resources\ShiftResource\Pages\ManageShifts::route('/'),
         ];
