@@ -62,6 +62,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::policy(\App\Models\Chat::class                    , \App\Policies\ChatPolicy::class);
 
-        Gate::policy(\App\Models\Shift::class                    , \App\Policies\ShiftPolicy::class);
+        Gate::policy(\App\Models\Shift::class                    , \App\Policies\Shift\ShiftPolicy::class);
+        Gate::policy(\App\Models\ShiftType::class                , \App\Policies\Shift\ShiftTypePolicy::class);
     }
 }

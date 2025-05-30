@@ -12,7 +12,9 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 
 class ShiftTypeResource extends Resource
 {
@@ -34,18 +36,30 @@ class ShiftTypeResource extends Resource
         return __("Shift Types");
     }
 
+
+    public static function canAccess(): bool {
+        return auth()->user()->can("updateAny", ShiftType::class);
+    }
+
     public static function form(Form $form): Form {
         return $form
             ->schema([
+                Forms\Components\Select::make('user_role_id')
+                    ->relationship('userRole', 'name', fn(Builder $query) => $query->whereIn("id", auth()->user()->roles->pluck("id")))
+                    ->label(__("Department"))
+                    ->default(fn(Component $livewire) => data_get($livewire->tableFilters, "userRole.value", null))
+                    ->columnSpanFull()
+                    ->required(),
                 Forms\Components\TextInput::make('name')
+                    ->label(__("Name"))
+                    ->autofocus()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('description')
+                    ->label(__("Description"))
                     ->maxLength(255),
-                Forms\Components\Select::make('user_role_id')
-                    ->relationship('userRole', 'name')
-                    ->required(),
                 Forms\Components\ColorPicker::make('color')
+                    ->label(__("Color"))
                     ->default(null),
             ]);
     }
@@ -53,18 +67,24 @@ class ShiftTypeResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('userRole.name')
+                    ->label(__("Department"))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__("Name"))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->label(__("Description"))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('userRole.name')
-                    ->sortable(),
-                Tables\Columns\ColorColumn::make('color'),
+                Tables\Columns\ColorColumn::make('color')
+                    ->label(__("Color")),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('userRole')
                     ->label(__("Department"))
-                    ->relationship('userRole', 'name')
+                    ->columnSpanFull()
+                    ->relationship('userRole', 'name', fn(Builder $query) => $query->whereIn("id", auth()->user()->roles->pluck("id")))
+                    ->modifyBaseQueryUsing(fn(Builder $query) => $query->whereIn("user_role_id", auth()->user()->roles->pluck("id")))
                     ->getOptionLabelFromRecordUsing(fn(Model $record) => $record->name_localized),
 
             ])

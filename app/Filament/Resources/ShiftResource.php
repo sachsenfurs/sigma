@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\Necessity;
 use App\Filament\Clusters\ShiftPlanning;
 use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
 use App\Filament\Traits\HasActiveIcon;
@@ -13,6 +12,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ShiftResource extends Resource
 {
@@ -23,84 +23,94 @@ class ShiftResource extends Resource
     protected static ?string $cluster = ShiftPlanning::class;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    public static function getLabel(): ?string {
+        return __("Shifts");
+    }
+    public static function getPluralLabel(): ?string {
+        return __("Shifts");
+    }
+
     public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('user_role_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('shift_type_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\Select::make('sig_location_id')
-                    ->relationship('sigLocation', 'name')
-                    ->default(null),
-                Forms\Components\TextInput::make('max_user')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                Forms\Components\TextInput::make('info')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\DateTimePicker::make('start')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end')
-                    ->required(),
-                Forms\Components\Select::make('necessity')
-                    ->default(Necessity::MANDATORY),
-                Forms\Components\Toggle::make('team')
-                    ->required(),
-                Forms\Components\Toggle::make('locked')
-                    ->required(),
-            ]);
+        return $form->schema((new ShiftPlannerWidget())->getSchema(Shift::class));
     }
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->with(["type", "type.userRole"]))
             ->columns([
-                Tables\Columns\TextColumn::make('user_role_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('type.userRole')
+                    ->formatStateUsing(fn($record) => $record->type->userRole?->name_localized)
+                    ->label(__("Department"))
+                    ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('shift_type_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('type.name')
+                    ->label(__("Shift Type"))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sigLocation.name')
-                    ->numeric()
+                    ->label(__("Location"))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('info')
+                    ->label(__("Additional Information"))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('start')
+                    ->label(__("Duration"))
+                    ->formatStateUsing(fn($record) =>
+                        $record->start->translatedFormat("l, H:i")
+                            . "-" . $record->end->translatedFormat("H:i")
+                            . " (" . $record->start->diffInHours($record->end) . "h)"
+                    )
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('necessity')
+                    ->label(__("Necessity"))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('max_user')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('info')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('start')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('necessity')
-                    ->sortable(),
+                    ->label(__("Max. User"))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('team')
+                    ->label("For all team member")
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 Tables\Columns\IconColumn::make('locked')
-                    ->boolean(),
+                    ->label(__("Locked"))
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__("Created"))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__("Updated at"))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultGroup(
+                Tables\Grouping\Group::make("shift_type_id")
+                    ->collapsible()
+                    ->getTitleFromRecordUsing(fn($record) => $record->name)
+                    ->titlePrefixedWithLabel(false),
+            )
             ->filters([
                 //
             ])
+            ->defaultSort("start", "asc")
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                Tables\Actions\BulkAction::make("locked")
+                    ->authorize("deleteAny")
+                    ->label(__("Locked")."...")
+                    ->deselectRecordsAfterCompletion()
+                    ->form([
+                        Forms\Components\Toggle::make("locked")
+                            ->label(__("Locked")),
+                    ])
+                    ->action(fn($data, $records) => $records->toQuery()->update($data)),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),

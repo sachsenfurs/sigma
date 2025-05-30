@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\ShiftResource\Widgets;
 
 use App\Enums\Necessity;
+use App\Enums\Permission;
+use App\Enums\PermissionLevel;
 use App\Filament\Helper\FormHelper;
+use App\Filament\Resources\SigEventResource;
 use App\Models\Shift;
 use App\Models\ShiftType;
 use App\Models\SigLocation;
@@ -15,10 +18,14 @@ use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Colors\Color;
 use Guava\Calendar\Actions\CreateAction;
 use Guava\Calendar\Actions\DeleteAction;
@@ -27,11 +34,11 @@ use Guava\Calendar\ValueObjects\CalendarResource;
 use Guava\Calendar\Widgets\CalendarWidget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class ShiftPlannerWidget extends CalendarWidget implements HasForms
 {
-//    use InteractsWithForms;
 
 //    protected static string $view = 'filament.resources.shift-resource.widgets.shift-planner-widget';
     protected string $calendarView = "resourceTimeGridDay";
@@ -62,7 +69,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         return $form
             ->schema([
                 Select::make('user_role_id')
-                    ->label('Department')
+                    ->label(__('Department'))
                     ->placeholder(__("Select"))
                     ->options(fn() => auth()->user()->roles->pluck("name", "id"))
                     ->searchable()
@@ -104,6 +111,11 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
     }
 
     public function onEventDrop(array $info = []): bool {
+        if(data_get($info, "event.extendedProps.model") != Shift::class)
+            return false;
+        if(!Gate::check("delete", Shift::findOrFail(data_get($info, "event.extendedProps.key"))))
+            return false;
+
         parent::onEventDrop($info);
         if($shiftType = ShiftType::find(data_get($info, 'event.resourceIds.0'))) {
             /**
@@ -160,6 +172,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 
     public function getEventContent(): null|string|array {
         return new HtmlString('<span x-text="(new Date(event.start)).toLocaleTimeString(undefined, { hour: \'2-digit\', minute: \'2-digit\' })"></span>
+            <span x-show="!event.resourceIds.includes(\'0\') && event.editable === false">🔒</span>
+            <span x-show="event.extendedProps.team">‼️</span>
             <span x-text="event.extendedProps.username"></span>
             <span x-show="event.title"> | </span>
             <span x-text="event.title"></span>
@@ -172,7 +186,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
     public function getEvents(array $fetchInfo = []): Collection|array {
         $start      = Carbon::parse($fetchInfo['startStr'] ?? now());
         $end        = Carbon::parse($fetchInfo['endStr'] ?? now());
-        $query      = TimetableEntry::with("sigEvent")->whereBetween("start", [$start, $end]);
+        $query      = TimetableEntry::with(["sigEvent", "sigLocation"])->whereBetween("start", [$start, $end]);
         if($this->sig_location_id)
             $query->where("sig_location_id", $this->sig_location_id);
 
@@ -186,8 +200,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         'font-size: 44px'
                     ])
                     ->classNames([
-                        'opacity-50' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() == 0,
-                        'border border-4 border-red-500' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() > 0,
+                        'opacity-50' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() == 0 AND !$shift->team,
+                        'border border-4 border-red-500' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() > 0 OR $shift->team,
                     ])
                     ->backgroundColor("rgb(". match($shift->necessity) {
                         Necessity::OPTIONAL => Color::Green[700],
@@ -203,75 +217,131 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                     ->title($shift->info ?? "")
                     ->start($shift->start->shiftTimezone("UTC"))
                     ->end($shift->end->shiftTimezone("UTC"))
+                    ->editable(!$shift->locked)
                     ->resourceId($shift->shift_type_id)
-                    ->extendedProp('username', $shift->users->pluck("name")->join(", "))
+                    ->extendedProp('username', $shift->team ? __("All") : "[".$shift->users->count()."/".$shift->max_user."] " . $shift->users->pluck("name")->join(", "))
                     ->extendedProp('startTime', $shift->start->format("H:i"))
                     ->extendedProp('sigLocation', $this->sig_location_id ? "" : $shift->sigLocation?->description_localized)
+                    ->extendedProp('team', $shift->team)
                     ->action('edit')
             );
 
         $events = $query->get()
                 ->map(fn($e) => CalendarEvent::make()
-                    ->key($e->id * -1)
+                    ->key($e->id)
                     ->title($e->sigEvent->name_localized)
                     ->start($e->start->shiftTimezone('UTC'))
                     ->end($e->end->shiftTimezone('UTC'))
                     ->resourceId(0)
                     ->editable(false)
-                    ->display('ghost')
+                    ->model(TimetableEntry::class)
+                    ->action('view')
+//                    ->display('ghost')
                     ->backgroundColor('#cccccc')
                     ->textColor('#000000')
                     ->extendedProp('startTime', $e->start->format("H:i"))
+                    ->extendedProp('sigLocation', $e->sigLocation->description_localized)
                 );
         return [...$events, ...$shifts];
+    }
+
+
+    public function viewAction(): Action {
+        return parent::viewAction()->make("view")
+            ->infolist([
+                TextEntry::make("sigEvent.name_localized")
+                    ->label(__("Event Name"))
+                    ->inlineLabel(),
+                TextEntry::make("sigLocation")
+                    ->label(__("Location"))
+                    ->formatStateUsing(fn($state) => $state->name_localized . " - " . $state->description_localized)
+                    ->inlineLabel(),
+                RepeatableEntry::make("sigEvent.departmentInfos")
+                    ->label(__("Requirements to Department"))
+                    ->placeholder(__("None"))
+                    ->schema([
+                        TextEntry::make("userRole")
+                            ->inlineLabel()
+                            ->label(__("Department"))
+                            ->formatStateUsing(fn($state) => $state->name_localized)
+                            ->badge(),
+                        TextEntry::make('additional_info')
+                            ->label(""),
+                    ])
+            ])
+            ->extraModalFooterActions([
+                \Filament\Actions\ViewAction::make("view")
+                    ->url(fn($record) => SigEventResource::getUrl("view", ['record' => $record->sig_event_id])),
+            ])
+            ->modelLabel(__("Timetable Entry"));
     }
 
     public function editAction(): Action {
         return parent::editAction()
             ->extraModalFooterActions([
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->authorize("delete"),
             ]);
     }
 
     public function getSchema(?string $model = null): ?array {
+        if($model != Shift::class)
+            return [];
         return [
-            Grid::make()
-                ->schema([
-                    Select::make("shift_type_id")
-                            ->label(__("Shift Type"))
-                            ->relationship("type", "name"),
-                    Select::make('sig_location_id')
-                            ->relationship('sigLocation', "name")
-                            ->label(__("Location"))
-                            ->preload()
-                            ->default($this->sig_location_id)
-                            ->searchable(['name', 'name_en', 'description', 'description_en'])
-                            ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
-                ]),
             Grid::make()
                 ->schema([
                     Select::make("users")
                         ->multiple()
+                        ->columnSpanFull()
+                        ->maxItems(fn($record) => $record->max_user ?? 1)
                         ->preload()
                         ->relationship("users", "name", fn(Builder $query) => $query->whereHas("roles", fn($query) => $query->where("user_roles.id", $this->user_role_id)))
                         ->label(__("User"))
                         ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
-                        ->searchable(),
-                    Select::make("necessity")
-                        ->label(__("Necessity"))
-                        ->options(Necessity::class),
+                        ->searchable(['name', 'reg_id']),
+                    TextInput::make("info")
+                        ->columnSpanFull(),
                 ]),
-            Grid::make()
+
+            Section::make(__("Manager Settings"))
+                ->visible(auth()->user()->hasPermission(Permission::MANAGE_SHIFTS, PermissionLevel::DELETE))
                 ->schema([
-                    DateTimePicker::make("start")
-                        ->label(__("Start Date"))
-                        ->before("end"),
-                    DateTimePicker::make("end")
-                        ->after("start")
-                        ->label(__("End Date")),
-                ]),
-            TextInput::make("info")
-                ->columnSpanFull(),
+                    Grid::make()
+                        ->schema([
+                            Select::make("shift_type_id")
+                                  ->label(__("Shift Type"))
+                                  ->relationship("type", "name"),
+                            Select::make('sig_location_id')
+                                  ->relationship('sigLocation', "name")
+                                  ->label(__("Location"))
+                                  ->preload()
+                                  ->default($this->sig_location_id)
+                                  ->searchable(['name', 'name_en', 'description', 'description_en'])
+                                  ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
+                            DateTimePicker::make("start")
+                                  ->label(__("Start Date"))
+                                  ->before("end"),
+                            DateTimePicker::make("end")
+                                  ->after("start")
+                                  ->label(__("End Date")),
+                        ]),
+                    Grid::make()
+                        ->schema([
+                            Select::make("necessity")
+                                ->label(__("Necessity"))
+                                ->options(Necessity::class),
+                            TextInput::make('max_user')
+                                ->label(__("Max. User"))
+                                ->required()
+                                ->numeric()
+                                ->minValue(1)
+                                ->default(1),
+                            Toggle::make('team')
+                                ->label(__("For all team member")),
+                            Toggle::make('locked')
+                                ->label(__("Locked")),
+                        ]),
+                ])
         ];
     }
 
