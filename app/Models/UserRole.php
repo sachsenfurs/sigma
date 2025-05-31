@@ -69,4 +69,8 @@ class UserRole extends Model implements HasColor
     public function reminders(): MorphMany {
         return $this->morphMany(Reminder::class, "notifiable");
     }
+
+    public function shiftTypes(): HasMany {
+        return $this->hasMany(ShiftType::class);
+    }
 }

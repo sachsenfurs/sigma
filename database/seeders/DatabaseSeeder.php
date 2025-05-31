@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'reg_id' => 1,
             'email' => "mail@kidran.de"
         ])->roles()->sync(
-            UserRole::find([1, 3, 4])
+            UserRole::find([1, 3, 4, 7])
         );
 
 

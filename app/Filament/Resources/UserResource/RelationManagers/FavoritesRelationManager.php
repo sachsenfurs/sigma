@@ -43,7 +43,6 @@ class FavoritesRelationManager extends RelationManager
                     ->label("Event")
                     ->translateLabel()
                     ->options(TimetableEntry::orderBy("start")->get()->keyBy("id")->map(fn($e) => $e->start->translatedFormat("l | H:i") . " | " . $e->sigEvent->name_localized))
-                    ->getOptionLabelUsing(fn($value) => dd($value))
                     ->required()
                     ->searchable()
                     ->columnSpanFull()

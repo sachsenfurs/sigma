@@ -43,6 +43,9 @@ enum Permission implements HasLabel
     #[Name('Manage Chats')]
     case MANAGE_CHATS;
 
+    #[Name('Manage Shifts')]
+    case MANAGE_SHIFTS;
+
 
     /**
      * Filament translation

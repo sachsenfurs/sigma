@@ -77,7 +77,7 @@ class NotificationService
     public function userNotifications(): array {
         $notifications = [];
         foreach($this->userNotifications AS $notificationClass => $notificationName) {
-            if(class_exists($notificationClass) AND !empty($notificationClass::$userSetting)) {
+            if(class_exists($notificationClass) AND (method_exists($notificationClass, "userSetting") AND $notificationClass::userSetting())) {
                 $notifications[$notificationClass] = $notificationName;
             }
         }

@@ -7,7 +7,7 @@ use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
 use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\TimetableEntry;
-use App\Providers\Filament\FilamentFullCalendarProvider;
+use App\Providers\Filament\FilamentSigCalendarProvider;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
@@ -35,7 +35,7 @@ class SigPlanner extends Page
 
     public function __construct() {
         // registering here instead of AdminPanelProvider because otherwise all fullcalendar-related queries get executed on every other page as well...
-        FilamentFullCalendarProvider::registerPlugin(Filament::getPanel('admin'));
+        FilamentSigCalendarProvider::registerPlugin(Filament::getPanel('admin'));
     }
 
     public static function canAccess(): bool {

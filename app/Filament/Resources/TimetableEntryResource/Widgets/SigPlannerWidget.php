@@ -31,6 +31,16 @@ class SigPlannerWidget extends FullCalendarWidget
         $this->resources = SigLocation::select(["id", "name AS title", "description"])->orderBy("name")->get()->toArray();
     }
 
+    public function eventDidMount(): string
+    {
+        return <<<JS
+        function({ event, timeText, isStart, isEnd, isMirror, isPast, isFuture, isToday, el, view }){
+            el.setAttribute("x-tooltip", "tooltip");
+            el.setAttribute("x-data", "{ tooltip: '" + timeText + ' | ' + event.title + "' }");
+        }
+        JS;
+    }
+
     public function fetchEvents(array $info): array {
         return TimetableEntry::query()
              ->where(function($query) use ($info) {

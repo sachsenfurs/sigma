@@ -27,7 +27,10 @@ class SigFavorite extends Model
 
     public function scopeUpcoming(Builder $query) {
         $query->whereHas("timetableEntry", function (Builder $query) {
-            return $query->where("start", ">", now());
+            return $query->where("start", ">", now())
+                ->orWhere(function (Builder $query) {
+                   return $query->where("start", "<", now())->where("end", ">", now());
+                });
         });
     }
 

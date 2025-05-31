@@ -22,7 +22,7 @@ class SigTimeslotReminder extends Notification
     }
 
     protected function getSubject(): ?string {
-        return __("Timeslot :time for :event starts in :min Minutes!", [
+        return __("Timeslot :time for :event starts in :min minutes!", [
             'time' => $this->sigTimeslot->slot_start->translatedFormat("H:i"),
             'event' => $this->sigTimeslot->timetableEntry->sigEvent->name_localized,
             'min' => (int) round($this->sigTimeslot->slot_start->diffInMinutes()*-1)

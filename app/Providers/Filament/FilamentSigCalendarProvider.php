@@ -4,12 +4,13 @@ namespace App\Providers\Filament;
 
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
+use App\Settings\AppSettings;
 use Filament\Panel;
 use Illuminate\Support\Carbon;
 use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 
 
-class FilamentFullCalendarProvider {
+class FilamentSigCalendarProvider {
     public static function registerPlugin(Panel $panel)  {
         $panel->plugin(
             FilamentFullCalendarPlugin::make()
@@ -34,6 +35,10 @@ class FilamentFullCalendarProvider {
                       'center' => 'title',
                       'right' => 'resourceTimeGridDay,resourceTimeline,dayGridMonth'
                   ],
+                  'buttonText' => [
+                      'resourceTimeline' => __("Day") . " " . __("Vertical"),
+                      'today' => __("Today"),
+                  ],
                   'titleFormat' => [
                       'day' => 'numeric',
                       'month' => 'long',
@@ -56,7 +61,7 @@ class FilamentFullCalendarProvider {
                       $first = TimetableEntry::orderBy('start')->first();
                       if(Carbon::parse($first?->start)->isAfter(Carbon::now()))
                           return $first->start->format("Y-m-d");
-                      return Carbon::now()->format("Y-m-d");
+                      return app(AppSettings::class)->event_start->format("Y-m-d");
                   })(),
               ])
         );

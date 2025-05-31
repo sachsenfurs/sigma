@@ -1,6 +1,8 @@
 <?php
 
 use App\Jobs\SendReminders;
+use App\Jobs\ShiftQueueDailySummary;
+use App\Jobs\ShiftQueueReminders;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -21,5 +23,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
+Schedule::job(ShiftQueueDailySummary::class)->dailyAt("09:00");
+Schedule::job(ShiftQueueReminders::class)->everyMinute();
 Schedule::job(SendReminders::class)->everyMinute();
 Schedule::command("lassie:sync")->everyFifteenMinutes();

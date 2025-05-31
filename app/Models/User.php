@@ -161,4 +161,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
             get: fn() => $this->chats()->withCount(["messages" => fn($query) => $query->where("user_id", "!=", $this->id)->whereNull("read_at")])->get()->sum("messages_count")
         )->shouldCache();
     }
+
+    public function userShifts(): HasMany {
+        return $this->hasMany(UserShift::class);
+    }
 }

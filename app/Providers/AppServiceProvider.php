@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\Ddas\Dealer;
 use App\Models\Post\PostChannel;
+use App\Models\Shift;
 use App\Models\SigEvent;
 use App\Models\SigFavorite;
 use App\Models\SigTimeslot;
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
             'sig_timeslot'      => SigTimeslot::class,
             'timetable_entry'   => TimetableEntry::class,
             'sig_favorite'      => SigFavorite::class,
+            'shift'             => Shift::class,
         ]);
 
         /**

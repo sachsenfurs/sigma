@@ -8,8 +8,8 @@
            <x-filament-actions::actions :actions="$this->getCachedHeaderActions()" class="shrink-0" />
         </div>
 
-        <div class="filament-fullcalendar" wire:ignore ax-load
-            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'saade/filament-fullcalendar') }}"
+        <div class="filament-fullcalendar" wire:ignore x-load
+            x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'saade/filament-fullcalendar') }}"
             ax-load-css="{{ \Filament\Support\Facades\FilamentAsset::getStyleHref('filament-fullcalendar-styles', 'saade/filament-fullcalendar') }}"
             style="position: relative; z-index: 30"
             x-ignore x-data="fullcalendar({
@@ -20,6 +20,10 @@
                 config: {...@js($plugin->getConfig()), viewDidMount: ({view}) => $dispatch('loaded', { calendar: view.calendar }) },  {{-- thanks to Dexter for this workaround! --}}
                 editable: @json($plugin->isEditable()),
                 selectable: @json($plugin->isSelectable()),
+                eventClassNames: {!! htmlspecialchars($this->eventClassNames(), ENT_COMPAT) !!},
+                eventContent: {!! htmlspecialchars($this->eventContent(), ENT_COMPAT) !!},
+                eventDidMount: {!! htmlspecialchars($this->eventDidMount(), ENT_COMPAT) !!},
+                eventWillUnmount: {!! htmlspecialchars($this->eventWillUnmount(), ENT_COMPAT) !!},
             })">
         </div>
 
@@ -28,7 +32,7 @@
             <div class="py-4">
                 <x-filament::button
                     class="p-6"
-                    @click="selectAll = !selectAll; selectAll ? resources.map((r) => calendar.addResource(r)) : calendar.getResources().map((r) => r.remove())"
+                    @click="(selectAll = !selectAll) ? resources.map((r) => calendar.addResource(r)) : calendar.getResources().map((r) => r.remove())"
                 >
 
                     {{ __("Select all") }}
