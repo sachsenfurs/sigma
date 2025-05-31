@@ -6,6 +6,7 @@ use App\Models\TimetableEntry;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Str;
 
 class NewNotification extends Notification implements ShouldQueue
 {
@@ -24,7 +25,7 @@ class NewNotification extends Notification implements ShouldQueue
 
     protected function getLines(): array {
         return [
-            "🕗 " . __("When?") . " " . $this->entry->start->translatedFormat("l, H:i") . " (" . $this->entry->formatted_length . ")",
+            "🕗 " . __("When?") . " " . $this->entry->start->translatedFormat("l, H:i") . ($this->entry->formatted_length ? " (" . $this->entry->formatted_length . ")" : ""),
             "📍 " . __("Where?") . " " . $this->entry->sigLocation->name_localized,
         ];
     }

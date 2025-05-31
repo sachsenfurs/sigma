@@ -77,7 +77,7 @@ Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])
 // functional routes
 Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
 Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
-Route::get("/lassie-export", [LassieExportEndpoint::class, 'index'])->name("lassie-export.index");
+Route::get("/lassie-export", LassieExportEndpoint::class)->name("lassie-export.index");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');

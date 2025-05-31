@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Gate;
 
 class LassieExportEndpoint extends Controller
 {
-    public function index() {
-        Gate::denyIf(!request()->hasValidSignature());
+    public function __invoke() {
+        Gate::denyIf(!request()->hasValidSignature() AND request('api_key') != app(AppSettings::class)->lassie_api_key);
 
         header('Content-Type: text/plain; charset=UTF-8');
         header('Content-Disposition: attachment;filename=Schedule.csv');
@@ -23,7 +23,7 @@ class LassieExportEndpoint extends Controller
              * @var $timetableEntry TimetableEntry
              */
             // skip "empty" info entries (FSL opens, etc.)
-            if($timetableEntry->start->diffInMinutes($timetableEntry->end) == 0)
+            if($timetableEntry->start->diffInMinutes($timetableEntry->end) == 0 OR $timetableEntry->hide)
                 continue;
 
             $entry = [
