@@ -19,11 +19,13 @@ trait NameIdAsSlug {
     }
 
     public function resolveRouteBinding($value, $field = null) {
-        $parts = explode($this->slugChecksum(), $value);
-        $id = $parts[0] ?? 0;
+        $parts      = explode($this->slugChecksum(), $value);
+        $id         = $parts[0] ?? 0;
 
-        $instances = self::where($this->getTable().".id", $id)->orWhere($this->getTable().".name", $value);
+        if(!ctype_digit($id) AND str_contains($value, "-"))
+            abort(404);
 
-        return $instances->first();
+        return self::where($this->getTable().".id", $id)->orWhere($this->getTable().".name", $value)->firstOrFail();
     }
+
 }
