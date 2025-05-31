@@ -50,6 +50,10 @@ abstract class Notification extends LaravelNotification
 
     protected function getActionUrl(): string { return ""; }
 
+    public static function userSetting(): bool {
+        return self::$userSetting;
+    }
+
     /**
      * overrides the "additional channels" on "via"
      * Only use to "enforce" specific channels!

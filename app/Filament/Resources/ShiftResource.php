@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Clusters\ShiftPlanning;
 use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
+use App\Filament\Resources\ShiftResource\Widgets\ShiftSummaryWidget;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Shift;
 use Filament\Forms;
@@ -49,6 +50,10 @@ class ShiftResource extends Resource
                 Tables\Columns\TextColumn::make('sigLocation.name')
                     ->label(__("Location"))
                     ->sortable(),
+                Tables\Columns\TextColumn::make('userShifts.user.name')
+                    ->label(__("User"))
+                    ->searchable()
+                    ->badge(),
                 Tables\Columns\TextColumn::make('info')
                     ->label(__("Additional Information"))
                     ->searchable(),
@@ -57,11 +62,12 @@ class ShiftResource extends Resource
                     ->formatStateUsing(fn($record) =>
                         $record->start->translatedFormat("l, H:i")
                             . "-" . $record->end->translatedFormat("H:i")
-                            . " (" . $record->start->diffInHours($record->end) . "h)"
+                            . " (" . round($record->start->diffInHours($record->end), 2) . "h)"
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('necessity')
                     ->label(__("Necessity"))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('max_user')
                     ->numeric()
@@ -70,6 +76,7 @@ class ShiftResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('team')
                     ->label("For all team member")
+                    ->getStateUsing(fn($record) => $record->team ?: null)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 Tables\Columns\IconColumn::make('locked')
@@ -87,12 +94,19 @@ class ShiftResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultGroup(
+            ->groups([
                 Tables\Grouping\Group::make("shift_type_id")
+                    ->label(__("Shift Type"))
                     ->collapsible()
-                    ->getTitleFromRecordUsing(fn($record) => $record->name)
+                    ->getTitleFromRecordUsing(fn($record) => $record->type->name)
                     ->titlePrefixedWithLabel(false),
-            )
+//                Tables\Grouping\Group::make("userShifts.user_id")
+//                    ->label(__("User"))
+//                    ->collapsible()
+//                    ->getTitleFromRecordUsing(fn($record) => $record->)
+//                    ->titlePrefixedWithLabel(false),
+
+                ])
             ->filters([
                 //
             ])
@@ -120,6 +134,12 @@ class ShiftResource extends Resource
     public static function getPages(): array {
         return [
             'index' => \App\Filament\Resources\ShiftResource\Pages\ManageShifts::route('/'),
+        ];
+    }
+
+    public static function getWidgets(): array {
+        return [
+            ShiftSummaryWidget::class,
         ];
     }
 }

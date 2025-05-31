@@ -24,4 +24,10 @@ class ManageShifts extends ManageRecords
             ShiftResource\Widgets\ShiftPlannerWidget::class,
         ];
     }
+
+    protected function getFooterWidgets(): array {
+        return [
+            ShiftResource\Widgets\ShiftSummaryWidget::class,
+        ];
+    }
 }

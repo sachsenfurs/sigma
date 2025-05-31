@@ -39,3 +39,13 @@
     right: 0.56em;
     left: unset !important;
 }
+
+.ec-time-grid .ec-time, .ec-time-grid .ec-line {
+    height: 12px;  /* override this value */
+}
+
+.scheduleEvent {
+    font-size: 0.6em;
+    min-height: 4em !important;
+    overflow: hidden;
+}

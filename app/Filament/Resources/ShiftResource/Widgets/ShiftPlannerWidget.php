@@ -16,6 +16,7 @@ use App\Models\UserShift;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -55,11 +56,10 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 
 
     public function mount(): void {
-        $this->user_role_id ??= session('calendar_selected_user_role_id', auth()->user()->roles->first()?->id ?? 0);
-        $this->userRole = UserRole::with("shiftTypes")->find($this->user_role_id);
-        $this->sig_location_id ??= session('calendar_selected_sig_location_id');
+        $this->user_role_id     ??= session('calendar_selected_user_role_id', auth()->user()->roles->first()?->id ?? 0);
+        $this->sig_location_id  ??= session('calendar_selected_sig_location_id');
+        $this->userRole         = UserRole::with("shiftTypes")->find($this->user_role_id);
     }
-
 
     public function getHeading(): HtmlString|string {
         return new HtmlString($this->form->toHtml()); // HACKERMAN! XD (the calendar widget doesn't support displaying a form by default ...)
@@ -87,7 +87,6 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         return $this->refreshRecords();
                     })
                     ->live()
-                    ->getOptionLabelFromRecordUsing(fn() => dd("§sdg"))
                     ->options(SigLocation::used()->get()->mapWithKeys(fn($l) => [$l->id => $l->name_localized . " - " . $l->description_localized]))
             ])
             ;
@@ -97,6 +96,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         return [
             CreateAction::make('create')
                 ->model(Shift::class)
+                ->modelLabel(__("Shift"))
+                ->createAnother(false)
                 ->form($this->getSchema())
                 ->mountUsing(function ($arguments, $form) {
                     return $form->fill([
@@ -105,6 +106,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         'shift_type_id'     => data_get($arguments, 'resource.id'),
                         'sig_location_id'   => $this->sig_location_id,
                         'necessity'         => Necessity::MANDATORY,
+                        'max_user'          => 1
                     ]);
                 }),
         ];
@@ -156,8 +158,11 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                 'weekday' => 'long',
             ],
             'nowIndicator' => true,
+            'slotDuration' => "00:15:00",
+            'slotHeight' => 12,
             'slotMinTime' => "07:00:00",
             'slotMaxTime' => "32:00:00",
+            'slotLabelInterval' => "01:00",
             'eventResizableFromStart' => true,
             'allDaySlot' => false,
             'height' => "75vh",
@@ -239,6 +244,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 //                    ->display('ghost')
                     ->backgroundColor('#cccccc')
                     ->textColor('#000000')
+                    ->classNames(['scheduleEvent'])
                     ->extendedProp('startTime', $e->start->format("H:i"))
                     ->extendedProp('sigLocation', $e->sigLocation->description_localized)
                 );
@@ -270,7 +276,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                     ])
             ])
             ->extraModalFooterActions([
-                \Filament\Actions\ViewAction::make("view")
+                ViewAction::make("view")
                     ->url(fn($record) => SigEventResource::getUrl("view", ['record' => $record->sig_event_id])),
             ])
             ->modelLabel(__("Timetable Entry"));
@@ -278,14 +284,16 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 
     public function editAction(): Action {
         return parent::editAction()
+            ->modelLabel(__("Shift"))
             ->extraModalFooterActions([
                 DeleteAction::make()
+                    ->modelLabel(__("Shift"))
                     ->authorize("delete"),
             ]);
     }
 
     public function getSchema(?string $model = null): ?array {
-        if($model != Shift::class)
+        if($model != null AND $model != Shift::class)
             return [];
         return [
             Grid::make()

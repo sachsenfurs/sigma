@@ -44,6 +44,7 @@ class Reminder extends Model
      *  TimetableEntry::class,
      *  SigTimeslot::class,
      *  SigFavorite::class,
+     *  Shift::class,
      *
      */
     public function remindable(): MorphTo {
@@ -55,6 +56,7 @@ class Reminder extends Model
             TimetableEntry::class       => $remindable->start,
             SigTimeslot::class          => $remindable->slot_start,
             SigFavorite::class          => $remindable->timetableEntry->start,
+            Shift::class                => $remindable->start,
             default                     => Carbon::parse($remindable->send_at),
         };
     }

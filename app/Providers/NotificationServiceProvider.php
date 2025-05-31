@@ -11,6 +11,8 @@ use App\Notifications\Ddas\ProcessedItemNotification;
 use App\Notifications\Ddas\SubmittedItemNotification;
 use App\Notifications\Messages\MessageNotification;
 use App\Notifications\MorphedDatabaseChannel;
+use App\Notifications\Shift\ShiftReminder;
+use App\Notifications\Shift\ShiftSummaryReminder;
 use App\Notifications\Sig\NewApplicationNotification;
 use App\Notifications\Sig\ProcessedApplicationNotification;
 use App\Notifications\Sig\SigFavoriteReminder;
@@ -58,6 +60,8 @@ class NotificationServiceProvider extends ServiceProvider
             SigFavoriteReminder::class                  => "sig_favorite_reminder",
             SigTimeslotReminder::class                  => "sig_timeslot_reminder",
             ArtshowItemOutbidNotification::class        => "artshow_item_outbid_notification",
+            ShiftReminder::class                        => "shift_reminder",
+            ShiftSummaryReminder::class                 => "shift_summary",
         ]);
 
         try {

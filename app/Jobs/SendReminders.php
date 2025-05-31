@@ -3,9 +3,11 @@
 namespace App\Jobs;
 
 use App\Models\Reminder;
+use App\Models\Shift;
 use App\Models\SigFavorite;
 use App\Models\SigTimeslot;
 use App\Models\TimetableEntry;
+use App\Notifications\Shift\ShiftReminder;
 use App\Notifications\Sig\SigFavoriteReminder;
 use App\Notifications\Sig\SigTimeslotReminder;
 use App\Notifications\TimetableEntry\TimetableEntryReminder;
@@ -27,14 +29,18 @@ class SendReminders implements ShouldQueue
                 $remindable = new SigFavoriteReminder($reminder->remindable->timetableEntry);
             if($reminder->remindable instanceof SigTimeslot)
                 $remindable = new SigTimeslotReminder($reminder->remindable);
+            if($reminder->remindable instanceof Shift)
+                $remindable = new ShiftReminder($reminder->remindable);
 
             if($remindable)
                 $reminder->notifiable->notify($remindable);
         }
 
         // mass update
-        Reminder::whereIn("id", $upcomingReminders->pluck("id"))->update([
-            'sent_at' => time(),
-        ]);
+        if($upcomingReminders->count()) {
+            $upcomingReminders->toQuery()->update([
+                'sent_at' => time(),
+            ]);
+        }
     }
 }
