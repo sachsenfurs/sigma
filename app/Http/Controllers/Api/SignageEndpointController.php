@@ -27,7 +27,8 @@ class SignageEndpointController extends Controller
         if(!request()->hasValidSignature()) {
             $this->authorize("viewAny", TimetableEntry::class);
         }
-        $entries = TimetableEntry::public();
+        $entries = TimetableEntry::public()
+            ->with(["sigEvent.sigHosts", "sigEvent.sigTags", "sigLocation"]);
 
         return EventApiResource::collection(
             $entries->orderBy("start", "ASC")->get()

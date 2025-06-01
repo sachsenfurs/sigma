@@ -81,6 +81,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         return $this->hasMany(SigFavorite::class);
     }
 
+    public function calendars(): HasMany {
+        return $this->hasMany(UserCalendar::class);
+    }
 
     public function reminders(): MorphMany {
         return $this->morphMany(Reminder::class, "notifiable");
@@ -164,5 +167,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function userShifts(): HasMany {
         return $this->hasMany(UserShift::class);
+    }
+
+    public function shifts() {
+        // TODO
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Facades\NotificationService;
+use App\Models\UserCalendar;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -18,7 +19,9 @@ class SettingsController extends Controller
             ];
         }
 
-        return view('user-settings.edit', compact('notificationType'));
+        $calendars = auth()->user()->calendars;
+
+        return view('user-settings.edit', compact('notificationType', 'calendars'));
     }
 
     public function update(Request $request) {

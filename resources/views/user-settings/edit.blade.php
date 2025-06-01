@@ -52,9 +52,7 @@
             <div class="card-body">
                 <div class="col-12">
                     <div class="row m-2">
-                        <div class="col-7 text-center text-md-start pb-md-0 pb-3 my-auto">
-
-                        </div>
+                        <div class="col-7 text-center text-md-start pb-md-0 pb-3 my-auto"></div>
                         <div class="col-5 col-md-5">
                             <div class="row">
                                 <div class="col-6 col-md-6">
@@ -87,6 +85,36 @@
             </div>
             <div class="card-footer text-center">
                 <button type="submit" class="btn btn-primary m-1">{{ __("Save") }}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mt-3">
+        <form action="{{ route('user-settings.update') }}" method="POST">
+            @method('PATCH')
+            @csrf
+            <div class="card-header text-center">
+                <h5 class="card-title m-2">{{ __("Calendar Subscription") }}</h5>
+            </div>
+            <div class="card-body">
+                @foreach($calendars AS $calendar)
+                    <div class="row my-3">
+                        <div class="col-3">
+                            {{ $calendar->id }}
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                @foreach(\App\Enums\UserCalendarSettings::cases() AS $setting)
+                                    <div class="col">
+                                        <label>
+                                            <input type="checkbox" value="{{ $setting->name }}" class="form-check-input"> {{ $setting->name() }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </form>
     </div>

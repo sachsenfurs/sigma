@@ -18,12 +18,12 @@ class LassieExportEndpoint extends Controller
 
         $csvStream = fopen("php://output", "w");
         $first = true;
-        foreach(TimetableEntry::orderBy("start")->get() AS $timetableEntry) {
+        foreach(TimetableEntry::public()->with(["sigEvent", "sigLocation"])->orderBy("start")->get() AS $timetableEntry) {
             /**
              * @var $timetableEntry TimetableEntry
              */
             // skip "empty" info entries (FSL opens, etc.)
-            if($timetableEntry->start->diffInMinutes($timetableEntry->end) == 0 OR $timetableEntry->hide)
+            if($timetableEntry->start->diffInMinutes($timetableEntry->end))
                 continue;
 
             $entry = [

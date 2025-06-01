@@ -9,6 +9,7 @@
         "chillerlan/php-qrcode": "^5.0",
         "deeplcom/deepl-php": "^1.5",
         "doctrine/dbal": "^3.6",
+        "eluceo/ical": "^2.14",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-settings-plugin": "^3.2",
         "guava/calendar": "^1.14",

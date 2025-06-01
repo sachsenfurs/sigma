@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuctionEndpoint;
 use App\Http\Controllers\Api\SignageEndpointController;
 use App\Http\Controllers\Api\SocialsEndpoint;
+use App\Http\Controllers\userCalendarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
