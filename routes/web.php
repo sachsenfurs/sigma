@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegSysLoginController;
 use App\Http\Controllers\ChatController;
@@ -21,9 +20,8 @@ use App\Http\Controllers\Sig\SigFormController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
 use App\Http\Controllers\Sig\SigRegistrationController;
-use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\ConnectTelegramController;
-use App\Http\Controllers\UserCalendarController;
+use App\Http\Controllers\User\SettingsController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -78,9 +76,6 @@ Route::get("/locations/{location:slug}", [SigLocationController::class, 'show'])
 // functional routes
 Route::get("/lang/{locale}", [SetLocaleController::class, 'set'])->name("lang.set");
 Route::get("/conbook-export", [ConbookExportController::class, 'index'])->name("conbook-export.index");
-Route::get("/lassie-export", LassieExportEndpoint::class)->name("lassie-export.index");
-
-Route::get("/user-calendar/{calendar}", [UserCalendarController::class, 'show'])->name("user-calendar.show");
 
 Route::group(['middleware' => "auth"], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -129,7 +124,6 @@ Route::group(['middleware' => "auth"], function() {
 
     // User Settings
     Route::get("/settings", [SettingsController::class, "edit"])->name("user-settings.edit");
-    Route::patch("/settings", [SettingsController::class, "update"])->name("user-settings.update");
 
     // Notifications
     Route::get("/notifications", [NotificationController::class, "index"])->name("notifications.index");
@@ -141,9 +135,5 @@ Route::group(['middleware' => "auth"], function() {
     // Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('messages');
     Route::post('/messages/store', [MessageController::class, 'store'])->name('messages.store');
-
-    // Calendar (ics export)
-    Route::resource('/user-calendar', UserCalendarController::class)
-         ->only(['update', 'create', 'destroy']);
 
 });

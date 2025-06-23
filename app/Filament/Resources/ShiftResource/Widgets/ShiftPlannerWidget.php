@@ -147,9 +147,9 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                 'end' => 'resourceTimeGridDay,resourceTimelineDay,dayGridMonth'
             ],
             'buttonText' => [
-                'resourceTimeGridDay'   => 'Horizontal',
-                'resourceTimelineDay'   => 'Vertikal',
-                'dayGridMonth'          => 'Monat',
+                'resourceTimeGridDay'   => __("Horizontal"),
+                'resourceTimelineDay'   => __("Vertical"),
+                'dayGridMonth'          => __("Month"),
                 'today'                 => __("Today"),
             ],
             'titleFormat' => [

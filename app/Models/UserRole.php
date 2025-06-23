@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\App;
 
@@ -72,5 +73,9 @@ class UserRole extends Model implements HasColor
 
     public function shiftTypes(): HasMany {
         return $this->hasMany(ShiftType::class);
+    }
+
+    public function shifts(): HasManyThrough {
+        return $this->hasManyThrough(Shift::class, ShiftType::class);
     }
 }

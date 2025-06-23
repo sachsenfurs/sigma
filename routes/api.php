@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuctionEndpoint;
+use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Api\SignageEndpointController;
 use App\Http\Controllers\Api\SocialsEndpoint;
-use App\Http\Controllers\userCalendarController;
+use App\Http\Controllers\Api\userCalendarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +29,8 @@ Route::get("/socials", [SignageEndpointController::class, "socials"])->name("api
 Route::get("/essentials", [SignageEndpointController::class, 'essentials'])->name("api.essentials");
 Route::get("/artshowItems", [SignageEndpointController::class, 'artshowItems'])->name("api.artshow_items");
 Route::get("/announcements", [SignageEndpointController::class, 'announcements'])->name("api.announcements");
+Route::get("/lassie-export", LassieExportEndpoint::class)->name("lassie-export.index");
+
+Route::get("/user-calendar/{calendar}", [UserCalendarController::class, 'show'])->name("user-calendar.show");
 
 //Route::get("/auctions", [AuctionEndpoint::class, "index"])->name("api.auction");

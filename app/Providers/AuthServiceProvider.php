@@ -43,6 +43,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::policy(\App\Models\User::class                    , \App\Policies\User\UserPolicy::class);
         Gate::policy(\App\Models\UserRole::class                , \App\Policies\User\UserRolePolicy::class);
+        Gate::policy(\App\Models\UserCalendar::class            , \App\Policies\User\UserCalendarPolicy::class);
+
 
         Gate::policy(\App\Models\Ddas\ArtshowArtist::class      , \App\Policies\Ddas\ArtshowArtistPolicy::class);
         Gate::policy(\App\Models\Ddas\ArtshowBid::class         , \App\Policies\Ddas\ArtshowBidPolicy::class);

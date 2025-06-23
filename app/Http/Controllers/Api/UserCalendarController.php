@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Enums\UserCalendarSettings;
+use App\Http\Controllers\Controller;
 use App\Models\TimetableEntry;
 use App\Models\UserCalendar;
 use App\Services\iCal\iCalExporter;
@@ -22,10 +24,10 @@ class UserCalendarController extends Controller
         Auth::loginUsingId($calendar->user_id);
         App::setLocale($calendar->user->preferredLocale());
 
-        if(data_get($calendar->settings, "show_events") OR data_get($calendar->settings, "show_favorites")) {
-            $entries = TimetableEntry::public()->with(["sigEvent", "sigLocation", "favorites"])
+        if($calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name) OR $calendar->settings->contains(UserCalendarSettings::SHOW_FAVORITES->name)) {
+            $entries = TimetableEntry::public()->with(["sigEvent", "sigLocation", "favorites.reminders"])
                 ->where(function(Builder $query) use ($calendar) {
-                    if(!data_get($calendar->settings, "show_events"))
+                    if(!$calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name))
                         return $query->whereHas("favorites", function (Builder $query) use ($calendar) {
                             return $query->where("user_id", $calendar->user_id);
                         });
@@ -35,6 +37,9 @@ class UserCalendarController extends Controller
 
             foreach($entries AS $entry) {
                 $export->addTimetableEntry($entry, function(Event $event) use ($calendar, $entry) {
+                    if($entry->favorites->where("user_id", auth()->user()->id)->count() == 0)
+                        return $event;
+
                     $event->setSummary("❤ " . $event->getSummary())
                           ->addCategory(new Category(__("Favorite")));
 
@@ -60,12 +65,13 @@ class UserCalendarController extends Controller
             }
         }
 
-        if(data_get($calendar->settings, "show_timeslots")) {
+        if($calendar->settings->contains(UserCalendarSettings::SHOW_TIMESLOTS->name)) {
             $calendar->user->load([
                 "sigTimeslots.reminders",
                 "sigTimeslots.timetableEntry",
                 "sigTimeslots.timetableEntry.sigLocation",
-                "sigTimeslots.timetableEntry.sigEvent"
+                "sigTimeslots.timetableEntry.sigEvent",
+                "roles.shifts"
             ]);
 
             foreach($calendar->user->sigTimeslots AS $timeslot) {
@@ -73,13 +79,21 @@ class UserCalendarController extends Controller
             }
         }
 
-        if(data_get($calendar->settings, "show_shifts")) {
+        if($calendar->settings->contains(UserCalendarSettings::SHOW_SHIFTS->name)) {
             foreach($calendar->user->userShifts()->with(["shift.type.userRole", "shift.sigLocation"])->get() AS $userShift) {
                 $export->addShift($userShift->shift);
             }
+            foreach($calendar->user->roles AS $role) {
+                foreach($role->shifts->where("team") AS $shift) {
+                    $export->addShift($shift);
+                }
+            }
+
         }
 
-        return response($export->ical())->header("Content-Type","text/calendar; charset=utf-8");
+        return response($export->ical())
+            ->header("Content-Type","text/calendar; charset=utf-8");
     }
+
 
 }
