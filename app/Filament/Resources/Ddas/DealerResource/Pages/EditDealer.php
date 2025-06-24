@@ -10,8 +10,7 @@ class EditDealer extends EditRecord
 {
     protected static string $resource = DealerResource::class;
 
-    protected function getHeaderActions(): array
-    {
+    protected function getHeaderActions(): array {
         return [
             Actions\DeleteAction::make(),
         ];

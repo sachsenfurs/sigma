@@ -222,8 +222,9 @@ class DealerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Approval::getBulkAction()
-                        ->authorize("update"),
+                        ->authorize("updateAny", Dealer::class),
                     Tables\Actions\BulkAction::make("sigLocation")
+                        ->authorize("updateAny", Dealer::class)
                         ->label("Set Location")
                         ->translateLabel()
                         ->form([
@@ -242,7 +243,9 @@ class DealerResource extends Resource
             ])
             ->defaultSort(fn(Builder $query): Builder => $query->orderBy("approval")->orderBy("name"))
             ->recordAction(Tables\Actions\EditAction::class)
-            ->recordUrl(null);
+            ->recordUrl(function(Model $record) {
+                return self::canEdit($record) ? null : self::getUrl('view', ['record' => $record]);
+            });
     }
 
     public static function getRelations(): array {
@@ -255,6 +258,7 @@ class DealerResource extends Resource
         return [
             'index' => Pages\ListDealers::route('/'),
             'create' => Pages\CreateDealer::route('/create'),
+            'view' => Pages\ViewDealer::route('/{record}'),
             'edit' => Pages\EditDealer::route('/{record}/edit'),
         ];
     }

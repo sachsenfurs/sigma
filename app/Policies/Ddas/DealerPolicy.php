@@ -76,6 +76,12 @@ class DealerPolicy
         return false;
     }
 
+    public function updateAny(User $user): bool {
+        if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::WRITE))
+            return true;
+        return false;
+    }
+
     public function delete(User $user, Dealer $dealer): bool {
         if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::DELETE))
             return true;
