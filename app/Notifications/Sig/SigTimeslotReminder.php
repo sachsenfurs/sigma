@@ -37,7 +37,7 @@ class SigTimeslotReminder extends Notification
     }
 
     protected function getAction(): ?string {
-        return __("View Timeslot");
+        return __("View Time Slot");
     }
 
     protected function getActionUrl(): string {
