@@ -14,6 +14,7 @@ use Eluceo\iCal\Domain\ValueObject\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserCalendarController extends Controller
 {
@@ -23,59 +24,60 @@ class UserCalendarController extends Controller
 
         Auth::loginUsingId($calendar->user_id);
         App::setLocale($calendar->user->preferredLocale());
+        if(Gate::check("viewAny", TimetableEntry::class)) {
+            if($calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name) OR $calendar->settings->contains(UserCalendarSettings::SHOW_FAVORITES->name)) {
+                $entries = TimetableEntry::public()->with(["sigEvent", "sigLocation", "favorites.reminders"])
+                    ->where(function(Builder $query) use ($calendar) {
+                        if(!$calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name))
+                            return $query->whereHas("favorites", function (Builder $query) use ($calendar) {
+                                return $query->where("user_id", $calendar->user_id);
+                            });
+                        return $query;
+                    })
+                    ->get();
 
-        if($calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name) OR $calendar->settings->contains(UserCalendarSettings::SHOW_FAVORITES->name)) {
-            $entries = TimetableEntry::public()->with(["sigEvent", "sigLocation", "favorites.reminders"])
-                ->where(function(Builder $query) use ($calendar) {
-                    if(!$calendar->settings->contains(UserCalendarSettings::SHOW_EVENTS->name))
-                        return $query->whereHas("favorites", function (Builder $query) use ($calendar) {
-                            return $query->where("user_id", $calendar->user_id);
-                        });
-                    return $query;
-                })
-                ->get();
+                foreach($entries AS $entry) {
+                    $export->addTimetableEntry($entry, function(Event $event) use ($calendar, $entry) {
+                        if($entry->favorites->where("user_id", auth()->user()->id)->count() == 0)
+                            return $event;
 
-            foreach($entries AS $entry) {
-                $export->addTimetableEntry($entry, function(Event $event) use ($calendar, $entry) {
-                    if($entry->favorites->where("user_id", auth()->user()->id)->count() == 0)
-                        return $event;
+                        $event->setSummary("❤ " . $event->getSummary())
+                              ->addCategory(new Category(__("Favorite")));
 
-                    $event->setSummary("❤ " . $event->getSummary())
-                          ->addCategory(new Category(__("Favorite")));
-
-                    if($reminder = $entry->favorites->where("user_id", $calendar->user_id)->first()?->reminders?->first() AND $favorite = $reminder->remindable) {
-                        return $event
-                            ->addAlarm(
-                                new Alarm(
-                                    new Alarm\DisplayAction(
-                                        __(
-                                            "Your favorite event **:sig** starts in :min minutes!",
-                                            ['sig' => $favorite->timetableEntry->sigEvent->name_localized, 'min' => $reminder->offset_minutes]
+                        if($reminder = $entry->favorites->where("user_id", $calendar->user_id)->first()?->reminders?->first() AND $favorite = $reminder->remindable) {
+                            return $event
+                                ->addAlarm(
+                                    new Alarm(
+                                        new Alarm\DisplayAction(
+                                            __(
+                                                "Your favorite event **:sig** starts in :min minutes!",
+                                                ['sig' => $favorite->timetableEntry->sigEvent->name_localized, 'min' => $reminder->offset_minutes]
+                                            )
+                                        ),
+                                        new Alarm\RelativeTrigger(
+                                            DateInterval::createFromDateString("{$reminder->offset_minutes} min ago")
                                         )
-                                    ),
-                                    new Alarm\RelativeTrigger(
-                                        DateInterval::createFromDateString("{$reminder->offset_minutes} min ago")
                                     )
                                 )
-                            )
-                        ;
-                    }
-                    return $event;
-                });
+                            ;
+                        }
+                        return $event;
+                    });
+                }
             }
-        }
 
-        if($calendar->settings->contains(UserCalendarSettings::SHOW_TIMESLOTS->name)) {
-            $calendar->user->load([
-                "sigTimeslots.reminders",
-                "sigTimeslots.timetableEntry",
-                "sigTimeslots.timetableEntry.sigLocation",
-                "sigTimeslots.timetableEntry.sigEvent",
-                "roles.shifts"
-            ]);
+            if($calendar->settings->contains(UserCalendarSettings::SHOW_TIMESLOTS->name)) {
+                $calendar->user->load([
+                    "sigTimeslots.reminders",
+                    "sigTimeslots.timetableEntry",
+                    "sigTimeslots.timetableEntry.sigLocation",
+                    "sigTimeslots.timetableEntry.sigEvent",
+                    "roles.shifts"
+                ]);
 
-            foreach($calendar->user->sigTimeslots AS $timeslot) {
-                $export->addTimeslot($timeslot);
+                foreach($calendar->user->sigTimeslots AS $timeslot) {
+                    $export->addTimeslot($timeslot);
+                }
             }
         }
 

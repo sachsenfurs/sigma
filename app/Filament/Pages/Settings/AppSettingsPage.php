@@ -88,11 +88,13 @@ class AppSettingsPage extends SettingsPage
                             ->image()
                             ->disk("public")
                             ->dehydrateStateUsing(function () {
-                                $path    = Storage::disk("public")->path("logo.png");
-                                $image   = Image::read($path);
-                                if($image->width() > 300) {
-                                    $image->scaleDown(300);
-                                    $image->save();
+                                if(Storage::disk("public")->exists("logo.png")) {
+                                    $path    = Storage::disk("public")->path("logo.png");
+                                    $image   = Image::read($path);
+                                    if($image->width() > 300) {
+                                        $image->scaleDown(300);
+                                        $image->save();
+                                    }
                                 }
                             })
                             ->getUploadedFileNameForStorageUsing(
