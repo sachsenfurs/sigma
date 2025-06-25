@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
@@ -197,10 +198,12 @@ class AppSettingsPage extends SettingsPage
                         Forms\Components\TextInput::make("deepl_usage")
                             ->label("DeepL Usage")
                             ->formatStateUsing(function() {
-                                $usage = app(Translator::class)->getUsage();
-                                $used = $usage?->character?->count ?? 1;
-                                $max  = $usage?->character?->limit ?? 1;
-                                return $used . " / " . $max . " (" . number_format($used/$max*100, 2) . "%)";
+                                return Cache::remember("deepl_usage", 300, function() {
+                                    $usage = app(Translator::class)->getUsage();
+                                    $used = $usage?->character?->count ?? 1;
+                                    $max  = $usage?->character?->limit ?? 1;
+                                    return $used . " / " . $max . " (" . number_format($used/$max*100, 2) . "%)";
+                                });
                             })
                             ->readOnly()
                             ->dehydrated(false),
