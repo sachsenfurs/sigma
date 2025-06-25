@@ -82,7 +82,7 @@ class iCalExporter
     public function addTimetableEntry(TimetableEntry $entry, \Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($entry->id, $entry::class)
             ->setSummary($entry->sigEvent->name_localized)
-            ->setDescription($entry->sigEvent->description_localized)
+            ->setDescription($entry->sigEvent->description_localized ?? "")
             ->setLocation(self::getLocation($entry->sigLocation))
             ->setOccurrence(
                 new TimeSpan(
