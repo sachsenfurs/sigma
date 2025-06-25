@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\AuctionEndpoint;
 use App\Http\Controllers\Api\LassieExportEndpoint;
 use App\Http\Controllers\Api\SignageEndpointController;
-use App\Http\Controllers\Api\SocialsEndpoint;
-use App\Http\Controllers\Api\userCalendarController;
+use App\Http\Controllers\Api\UserCalendarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
