@@ -3,6 +3,7 @@
 namespace App\Settings;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelSettings\Settings;
 
 class AppSettings extends Settings
@@ -42,8 +43,12 @@ class AppSettings extends Settings
         return ($conStartDate > $currentDate);
     }
 
-    public function isSchedulePublic() {
+    public function isSchedulePublic(): bool {
         return $this->show_schedule_date->isPast();
+    }
+
+    public function logoUrl(): string {
+        return Storage::disk("public")->exists("logo.png") ? Storage::disk("public")->url("logo.png") : config("app.url") . "/images/logo.png";
     }
 
 }

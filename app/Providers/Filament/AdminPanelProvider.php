@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\DashboardWidget;
 use App\Http\Middleware\SetLocale;
+use App\Settings\AppSettings;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -50,7 +51,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex("#d47f2f"),
             ])
-            ->brandLogo(asset('images/logo.png'))
+            ->brandLogo(app(AppSettings::class)->logoUrl())
             ->favicon(asset('images/favicon.png'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

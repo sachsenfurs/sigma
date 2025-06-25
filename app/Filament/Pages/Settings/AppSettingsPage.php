@@ -13,10 +13,13 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
+use Intervention\Image\Laravel\Facades\Image;
 
 class AppSettingsPage extends SettingsPage
 {
@@ -44,7 +47,7 @@ class AppSettingsPage extends SettingsPage
                 Forms\Components\Section::make(__("Event Details"))
                     ->collapsed()
                     ->columns(3)
-                    ->schema([
+                    ->schema(array(
                         Forms\Components\TextInput::make("event_name")
                             ->label("Event Name")
                             ->translateLabel(),
@@ -70,7 +73,7 @@ class AppSettingsPage extends SettingsPage
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
                         Forms\Components\Grid::make("")
                             ->columns(2)
-                            ->schema([
+                            ->schema(array(
                                 Forms\Components\Toggle::make("accept_sigs_after_deadline")
                                     ->label("Accept SIG applications after deadline")
                                     ->translateLabel()
@@ -79,8 +82,25 @@ class AppSettingsPage extends SettingsPage
                                     ->label("Signup requires paid ticket")
                                     ->translateLabel()
                                     ->inline(false),
-                            ]),
-                    ]),
+                            )),
+                        Forms\Components\FileUpload::make("app_icon")
+                            ->label(__("Upload Logo"))
+                            ->image()
+                            ->disk("public")
+                            ->dehydrateStateUsing(function () {
+                                $path    = Storage::disk("public")->path("logo.png");
+                                $image   = Image::read($path);
+                                if($image->width() > 300) {
+                                    $image->scaleDown(300);
+                                    $image->save();
+                                }
+                            })
+                            ->getUploadedFileNameForStorageUsing(
+                                fn (UploadedFile $file): string => 'logo.png'
+                            )
+                            ->imageEditor()
+                            ->formatStateUsing(fn() => array("logo.png")),
+                    )),
                 Forms\Components\Section::make("API Endpoints")
                     ->translateLabel()
                     ->collapsed()

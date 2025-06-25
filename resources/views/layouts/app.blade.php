@@ -11,7 +11,7 @@
                     <div class="h-100 d-flex flex-column navbar2-padding">
                         <div class="navbar-brand">
                             <a href="{{ url('/') }}" class="d-flex align-items-center p-2 text-decoration-none">
-                                <img src="/images/logo.png" alt="{{ config('app.name') }}">
+                                <img src="{{ app(\App\Settings\AppSettings::class)->logoUrl() }}" alt="{{ config('app.name') }}">
                                 <span class="text-light w-100 text-center fs-5 px-2 text-wrap fw-bold" style="word-wrap: anywhere">
                                     {{ app(\App\Settings\AppSettings::class)->event_name }}
                                 </span>
@@ -229,7 +229,7 @@
                 <nav class="navbar navbar-expand-lg shadow-sm bg-dark d-lg-none">
                     <div class="container-fluid text-wrap flex-nowrap">
                         <a class="navbar-brand m-0" href="{{ url('/') }}">
-                            <img src="/images/logo.png" alt="{{ config('app.name') }}">
+                            <img src="{{ app(\App\Settings\AppSettings::class)->logoUrl() }}" alt="{{ config('app.name') }} Logo">
                         </a>
                         <span class="px-2 text-break text-center fs-5 d-none d-md-block">
                             @yield('title', __('Home'))
