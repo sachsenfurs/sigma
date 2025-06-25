@@ -24,11 +24,10 @@ class SignageEndpointController extends Controller
 
     public function events() {
         // allow for API (signed route) otherwise only if schedule is public
-        if(!request()->hasValidSignature()) {
+        $entries = TimetableEntry::unless(request()->hasValidSignature(), function ($query) {
             $this->authorize("viewAny", TimetableEntry::class);
-        }
-        $entries = TimetableEntry::public()
-            ->with(["sigEvent.sigHosts", "sigEvent.sigTags", "sigLocation"]);
+            return $query->public();
+        })->with(["sigEvent.sigHosts", "sigEvent.sigTags", "sigLocation"]);
 
         return EventApiResource::collection(
             $entries->orderBy("start", "ASC")->get()
