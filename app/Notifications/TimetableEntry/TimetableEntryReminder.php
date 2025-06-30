@@ -47,4 +47,8 @@ class TimetableEntryReminder extends Notification
         return (int) round($this->entry->start->diffInMinutes()*-1);
     }
 
+    public function shouldSend(): bool {
+        return $this->entry->start->isFuture();
+    }
+
 }
