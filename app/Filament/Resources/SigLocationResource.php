@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SigLocationResource extends Resource
 {
@@ -102,7 +103,11 @@ class SigLocationResource extends Resource
                  ->label('Name')
                  ->translateLabel()
                  ->searchable(['name', 'name_en'])
-                 ->sortable(),
+                 ->sortable(query: function(Builder $query, string $direction) {
+                     return $query
+                         ->selectRaw("COALESCE(`name_en`, `name`) AS name_en2")
+                         ->orderBy(app()->getLocale() == "en" ? 'name_en2' : 'name', $direction);
+                 }),
             Tables\Columns\TextColumn::make('description_localized')
                  ->label('Description')
                  ->translateLabel()
