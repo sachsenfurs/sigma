@@ -338,7 +338,7 @@ class SigEventResource extends Resource
                         ->preload()
                         ->multiple()
                         ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()) // formatting when user already present
-                        ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
+                        ->getSearchResultsUsing(FormHelper::searchSigHostByNameAndRegId())
                         ->columnSpanFull()
                         ->createOptionModalHeading(__('Create Host'))
                         ->createOptionForm([

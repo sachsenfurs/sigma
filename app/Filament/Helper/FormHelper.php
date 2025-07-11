@@ -33,6 +33,19 @@ class FormHelper
         };
     }
 
+    public static function searchSigHostByNameAndRegId(): \Closure {
+        return function (string $search) {
+            return SigHost::where('name', 'like', "%{$search}%")
+                       ->orWhere('reg_id', $search)
+                       ->limit(10)
+                       ->get()
+                       ->map(fn($u) => [
+                           $u->id => ($u->reg_id ? $u->reg_id  . " - " : "") . $u->name
+                       ])
+                       ->toArray();
+        };
+    }
+
     public static function formatLocationWithDescription(): \Closure {
         return function(?Model $record) {
             if($record instanceof SigLocation) {

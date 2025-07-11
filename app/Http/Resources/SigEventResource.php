@@ -23,7 +23,7 @@ class SigEventResource extends JsonResource
             'name_localized'        => $this->name_localized,
             'description_localized' => $this->description_localized,
             'languages'             => $this->languages,
-            'sig_hosts'             => $this->sigHosts->where("hide", false)->setVisible(['name', 'avatar', 'avatar_thumb']),
+            'sig_hosts'             => $this->sigHosts->where("hide", false)->setVisible(['name', 'avatar', 'avatar_thumb'])->toArray(),
             'sig_tags'              => $this->sigTags->setVisible(['name', 'description_localized', 'icon'])->sort(),
             'is_private'            => $this->is_private,
         ];
