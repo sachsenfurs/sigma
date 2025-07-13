@@ -99,6 +99,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                 ->modelLabel(__("Shift"))
                 ->createAnother(false)
                 ->form($this->getSchema())
+                ->authorize("deleteAny", Shift::class)
                 ->mountUsing(function ($arguments, $form) {
                     return $form->fill([
                         'start'             => data_get($arguments, 'startStr'),
@@ -299,6 +300,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
             Grid::make()
                 ->schema([
                     Select::make("users")
+                        ->visibleOn("edit")
                         ->multiple()
                         ->columnSpanFull()
                         ->maxItems(fn($record) => $record->max_user ?? 1)
@@ -317,6 +319,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                     Grid::make()
                         ->schema([
                             Select::make("shift_type_id")
+                                    ->required()
                                   ->label(__("Shift Type"))
                                   ->relationship("type", "name"),
                             Select::make('sig_location_id')
@@ -327,9 +330,11 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                                   ->searchable(['name', 'name_en', 'description', 'description_en'])
                                   ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
                             DateTimePicker::make("start")
+                                  ->required()
                                   ->label(__("Start Date"))
                                   ->before("end"),
                             DateTimePicker::make("end")
+                                  ->required()
                                   ->after("start")
                                   ->label(__("End Date")),
                         ]),
