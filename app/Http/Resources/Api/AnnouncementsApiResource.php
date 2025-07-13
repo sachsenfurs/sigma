@@ -22,6 +22,7 @@ class AnnouncementsApiResource extends JsonResource
          */
 
         return [
+            'id'            => $this->id,
             'text'          => (new MarkdownBladeComponent())->toHtml($this->text),
             'text_en'       => (new MarkdownBladeComponent())->toHtml($this->text_en),
             'created_at'    => $this->created_at,
