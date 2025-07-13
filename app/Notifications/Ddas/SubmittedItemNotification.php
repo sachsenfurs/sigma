@@ -40,7 +40,7 @@ class SubmittedItemNotification extends Notification implements ShouldQueue
     public function toTelegram(object $notifiable): TelegramBase {
         if($this->item->image) {
             return TelegramFile::create()
-                ->content("**" . $this->getSubject() . "**\n\n".collect($this->getLines())->join("\n").$this->getActionUrl())
+                ->content("**" . $this->getSubject() . "**\n\n".collect($this->getLines())->join("\n")."\n\n".$this->getActionUrl())
                 ->file(Storage::disk("public")->path($this->item->image), 'photo');
         } else {
             return TelegramMessage::create()
