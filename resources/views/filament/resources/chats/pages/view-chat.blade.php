@@ -42,6 +42,7 @@
         <div class="flex items-center p-2 m-2 rounded-lg bg-gray-50 dark:bg-gray-700">
                 <textarea wire:model="text" name="text" rows="6"
                           wire:keydown.ctrl.enter="sendMessage"
+                          onchange="window.confirmExit()"
                           class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="{{ __("Your message") }}" ></textarea>
             <button type="submit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600" wire:click="sendMessage">
@@ -61,5 +62,10 @@
             document.querySelectorAll(".scrolldown").forEach((el) => el.scrollTo(0, el.scrollHeight));
         }, 100);
     });
+    window.confirmExit = () => {
+        window.onbeforeunload = () => {
+            return "You have attempted to leave this page. Are you sure?";
+        };
+    }
 </script>
 @endscript
