@@ -19,7 +19,7 @@ class LassieExportEndpoint extends Controller
         Gate::denyIf(!request()->hasValidSignature() AND request('api_key') != app(AppSettings::class)->lassie_api_key);
 
         return LassieEventsExportResource::collection(
-            TimetableEntry::public()->with(["sigEvent", "sigLocation"])->orderBy("start")->get()
+            TimetableEntry::noAnnouncements()->with(["sigEvent", "sigLocation"])->orderBy("start")->get()
         );
     }
 }
