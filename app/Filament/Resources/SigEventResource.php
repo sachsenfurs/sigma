@@ -90,6 +90,7 @@ class SigEventResource extends Resource
                 Tables\Filters\Filter::make("Text Missing")
                     ->translateLabel()
                     ->query(fn(Builder $query) => $query
+                        ->where("no_text", false)
                         ->where(function(Builder $query) {
                             $query->where("description", "")
                                 ->orWhere("description_en", "")
@@ -191,14 +192,14 @@ class SigEventResource extends Resource
             IconColumn::make("description")
                 ->boolean()
                 ->label("Text")
-                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
+                ->visible(fn(?Model $record) => auth()->user()->can("attach", SigEvent::class))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => $record->isDescriptionPresent()),
             IconColumn::make("description_en")
                 ->boolean()
                 ->label("Text (EN)")
-                ->visible(fn(?Model $record) => auth()->user()->can("update", $record))
+                ->visible(fn(?Model $record) => auth()->user()->can("attach", SigEvent::class))
                 ->sortable()
                 ->toggleable()
                 ->getStateUsing(fn(Model $record) => $record->isDescriptionEnPresent()),
