@@ -60,7 +60,7 @@ export default {
     },
     computed: {
         description_markdown() {
-            return marked(this.entry.sig_event.description_localized ?? "");
+            return marked((this.entry.sig_event.description_localized ?? "").replace("<", "&lt;").replace(">", "&gt;")).replace(/[\r\n]/g, "<br>");
         },
         link() {
             return '/show/' + this.entry.slug;
