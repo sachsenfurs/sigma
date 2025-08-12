@@ -52,7 +52,7 @@
                                     <div @class(['col-12', 'col-xl-6' => $sig->name_localized_other]) style="text-align: justify">
                                         <h4>{{ __("Description") }}</h4>
                                         <x-markdown>
-                                            {!! nl2br(e($sig->description_localized)) !!}
+                                            {{ $sig->description_localized }}
                                         </x-markdown>
                                     </div>
                                     @if($sig->name_localized_other)

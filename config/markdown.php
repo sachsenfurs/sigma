@@ -33,7 +33,13 @@ return [
      *
      * More info: https://spatie.be/docs/laravel-markdown/v1/using-the-blade-component/passing-options-to-commonmark
      */
-    'commonmark_options' => [],
+    'commonmark_options' => [
+        'renderer' => [
+            'block_separator' => "\n",
+            'inner_separator' => "\n",
+            'soft_break'      => "<br>",
+        ],
+    ],
 
     /*
      * Rendering markdown to HTML can be resource intensive. By default

@@ -18,7 +18,7 @@
                             </div>
                         </div>
 
-                        <div class="col-11 no-p mb-2" v-html="description_markdown">
+                        <div class="col-11 mb-2" v-html="description_markdown">
 
                         </div>
                         <div class="col-1 text-center align-self-center">
@@ -52,6 +52,11 @@
 
 <script>
 import { marked } from "marked";
+
+marked.use({
+    breaks: true,
+})
+
 export default {
     name: "EntryModal",
     props: {
@@ -60,7 +65,7 @@ export default {
     },
     computed: {
         description_markdown() {
-            return marked((this.entry.sig_event.description_localized ?? "").replace("<", "&lt;").replace(">", "&gt;")).replace(/[\r\n]/g, "<br>");
+            return marked((this.entry.sig_event.description_localized ?? "").replace("<", "&lt;").replace(">", "&gt;"));
         },
         link() {
             return '/show/' + this.entry.slug;

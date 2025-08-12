@@ -26,7 +26,7 @@
                     </div>
                     <div class="mt-2">
                         <x-markdown>
-                            {!! nl2br(e($entry->sigEvent->description_localized)) !!}
+                            {{ $entry->sigEvent->description_localized }}
                         </x-markdown>
                     </div>
                 </div>
