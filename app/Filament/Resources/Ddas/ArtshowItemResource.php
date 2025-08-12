@@ -6,10 +6,10 @@ use App\Enums\Approval;
 use App\Enums\Rating;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Helper\FormHelper;
+use App\Filament\Infolists\Components\Alert;
 use App\Filament\Resources\ChatResource;
 use App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBidsRelationManager;
-use App\Infolists\Components\Alert;
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms;
@@ -19,7 +19,6 @@ use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ViewEntry;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -28,7 +27,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\HtmlString;
 
 class ArtshowItemResource extends Resource
 {

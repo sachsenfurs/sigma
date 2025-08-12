@@ -14,7 +14,7 @@
     @if($sig->description_localized)
         <div class="card-body">
             <x-markdown>
-                {{ $sig->description_localized }}
+                {!! nl2br(e($sig->description_localized)) !!}
             </x-markdown>
         </div>
     @endif

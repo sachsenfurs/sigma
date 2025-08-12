@@ -11,7 +11,7 @@
                 <div class="col">
                     <div class="card-body h-100 d-flex flex-column justify-content-between">
                         <div class="card-text fs-4">
-                            <x-markdown>{!! nl2br($post->text_localized) !!}</x-markdown>
+                            <x-markdown>{!! nl2br(e($post->text_localized)) !!}</x-markdown>
                         </div>
                         <p class="card-text text-end">
                             <small class="text-body-secondary" title="{{ $post->created_at->translatedFormat("l, d.m.Y H:i") }}">

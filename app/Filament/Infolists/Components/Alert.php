@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infolists\Components;
+namespace App\Filament\Infolists\Components;
 
 use Filament\Infolists\Components\Entry;
 
