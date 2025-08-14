@@ -30,6 +30,13 @@
                 <li>Zahlungen sind in bar, mit Karte sowie in Ausnahmefällen per PayPal möglich.</li>
             </ul>
         </li>
+
+        <li>
+            <strong>Abholung</strong>
+            <ul>
+                <li>Informiere dich vor dem Bieten bitte über die Abholzeiten! Die Ausgabe an die Gewinner erfolgt zum Ende der Convention. Die genauen Zeiten findest du im Programmplan unter Artshow Abolung / Pick-up</li>
+            </ul>
+        </li>
     </ol>
 @endsection
 @section("artshow.rules.default.en")
@@ -59,6 +66,13 @@
             <strong>Payment Options</strong>
             <ul>
                 <li>Payments can be made in cash, by card, and, in exceptional cases, via PayPal.</li>
+            </ul>
+        </li>
+
+        <li>
+            <strong>Pick-up</strong>
+            <ul>
+                <li>Please check the pick-up times before bidding! Items will be handed over to the winners at the end of the convention. You can find the exact times in the program schedule under Art Show Pick-up.</li>
             </ul>
         </li>
     </ol>
