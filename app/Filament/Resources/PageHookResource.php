@@ -44,7 +44,7 @@ class PageHookResource extends Resource
                 Forms\Components\TextInput::make("id")
                     ->label("Identifier")
                     ->columnSpanFull()
-                    ->unique(),
+                    ->unique(ignoreRecord: true),
                 Forms\Components\Section::make(__("Content"))
                     ->schema([
                         Forms\Components\Textarea::make('content')

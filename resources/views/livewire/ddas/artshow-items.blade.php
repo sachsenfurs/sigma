@@ -7,7 +7,7 @@
                         <i class="bi bi-search" wire:loading.remove wire:target="search, artist"></i>
                         <div class="spinner-border spinner-border-sm" role="status" wire:loading wire:target="search, artist"></div>
                     </span>
-                    <x-form.input-floating wire:model.live.debounce="search" :placeholder="__('Search')" wire:keydown.debounce="resetPage"></x-form.input-floating>
+                    <x-form.input-floating type="search" wire:model.live.debounce="search" :placeholder="__('Search')" wire:keydown.debounce="resetPage"></x-form.input-floating>
                 </div>
             </div>
             <div class="col-12 col-md-6">
@@ -28,6 +28,12 @@
                         @endforeach
                     </select>
                 </div>
+            </div>
+            <div class="col-12">
+                <label>
+                    <input type="checkbox" wire:model.live.debounce="showOnlyMyBids">
+                    {{ __("Show only items I have bid on") }}
+                </label>
             </div>
         </div>
     </div>
@@ -60,13 +66,13 @@
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item flex-fill border-0 border-end">
                             <div class="fw-bold">{{ __("Starting Bid") }}</div>
-                            <i class="bi bi-currency-euro icon-link"></i> {{ $item->starting_bid }}
+                            <i class="bi bi-currency-euro icon-link"></i> {{ round($item->starting_bid) }}
                         </li>
                         <li class="list-group-item flex-fill border-0 border-end">
                             <div class="fw-bold">
                                 {{ __("Charity Percentage") }}
                             </div>
-                            <i class="bi bi-percent icon-link"></i> {{ $item->charity_percentage }}
+                            <i class="bi bi-percent icon-link"></i> {{ round($item->charity_percentage) }}
                         </li>
                         <li @class([
                                 "list-group-item flex-fill border-0",
@@ -98,7 +104,7 @@
             </x-slot:title>
             <div class="row">
                 <div class="col-12 col-lg-6">
-                    <div class="align-self-start justify-content-end p-3">
+                    <div class="text-center p-3">
                         <img src="{{ $currentItem->image_url }}" class="rounded img-fluid" style="max-height: 40%" alt="" id="previewImage{{$currentItem->id}}">
                     </div>
                 </div>
@@ -145,10 +151,14 @@
                                 <div class="col-12 pt-2">
                                     <label class="text-muted" style="font-size: 0.75em">
                                         <input type="checkbox" name="confirm" x-model="confirm" wire:model="form.confirm">
-                                        {!! \App\Services\PageHookService::resolve(
-                                            "artshow.items.dialog.rules",
-                                            __("I hereby confirm that I have informed myself about the rules and conditions of the Artshow and I am aware that a bid is binding")
-                                        )  !!}
+                                        {!!
+                                            \App\Services\PageHookService::resolve(
+                                                "artshow.items.dialog.rules",
+                                                __("I hereby confirm that I have informed myself about the :rules of the art show and I am aware that a bid is binding", [
+                                                    'rules' => '<a href="'. route("artshow.rules") .'" target="_blank">' . __("rules and conditions") . '</a>',
+                                                ])
+                                            )
+                                        !!}
                                     </label>
                                     <x-form.input-error name="form.confirm"/>
                                 </div>

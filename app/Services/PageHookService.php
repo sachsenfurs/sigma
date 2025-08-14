@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Cache;
 class PageHookService
 {
     public static function resolve(string $id, string $default = ""): string {
-        return Cache::remember("pagehooks.".app()->getLocale().".$id", 3600, function() use ($id, $default) {
+        return Cache::remember("pagehooks.".app()->getLocale().".$id", app()->hasDebugModeEnabled() ? 1 : 600, function() use ($id, $default) {
             $content = $default;
             if($hook = PageHook::find($id)) {
                 $content = app()->getLocale() == "en" ? $hook->content_en : $hook->content;
-                $content = $hook->html ? strip_tags($content) : e($content);
             }
 
             if(app(PageHookSettings::class)->show_in_source){

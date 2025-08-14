@@ -152,7 +152,7 @@ class AppSettingsPage extends SettingsPage
                                       ->openUrlInNewTab();
                             }),
                         Forms\Components\TextInput::make("artshow_items_api")
-                            ->label("Artshow Items API")
+                            ->label("Art Show Items API")
                             ->translateLabel()
                             ->readOnly()
                             ->dehydrated(false)

@@ -107,6 +107,7 @@ Route::group(['middleware' => "auth"], function() {
          ->names("dealers");
 
     //Artshow
+    Route::view('/artshow/rules', "ddas.artshow.rules")->name("artshow.rules");
     Route::resource('/artshow', ArtshowController::class)
          ->parameters(['artshow' => 'artshowItem'])
          ->only(['index', 'create', 'show']);

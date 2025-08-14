@@ -46,7 +46,7 @@ enum MessageRecipient
     #[Name('Artists')]
     case ARTIST;
 
-    #[Name('Artshow Winner')]
+    #[Name('Art Show Winner')]
     case ARTSHOW_WINNER;
 
     #[Name('Hosts')]

@@ -28,6 +28,13 @@
         <h2>{{ __("Submitted Items") }}</h2>
         <p class="text-secondary">{{ $artistProfile->name }} @if($artistProfile->social) - {{$artistProfile->social}} @endif</p>
 
+        <p>
+            {!!
+                __("The :rules for participating in the Digital Art Show and Auction apply", [
+                    'rules' => '<a href="'.route("artshow.rules").'">'.__("rules and conditions").'</a>'
+                ])
+            !!}
+        </p>
         @if($this->artists->count() > 1)
             <div class="my-3">
                 <label for="artistProfile">{{ __("Select Artist Profile") }}</label>

@@ -28,12 +28,20 @@ class ArtshowItems extends Component
     #[Url]
     public int $artist = 0;
 
+    public bool $showOnlyMyBids = false;
+
     public function render(): View {
         return view('livewire.ddas.artshow-items');
     }
 
-    public function getItems($filterArtist=true) {
+    public function getItems($filterArtist=true): Builder {
         $items = ArtshowItem::approvedItems()->orderBy("name");
+
+        if($this->showOnlyMyBids)
+            $items = $items->whereHas("artshowBids", function(Builder $query) {
+                return $query->where("user_id", auth()->id());
+            });
+
         if($this->search != "")
             $items = $items->where(function(Builder $query) {
                 if(ctype_digit($this->search))
