@@ -4,6 +4,7 @@
 @section('content')
 
     <div class="container">
+        {!! \App\Services\PageHookService::resolve("dealers.create.top")  !!}
 {{--        <h2>{{ __('Dealers Den Sign Up') }}</h2>--}}
 {{--        <div class="card">--}}
 {{--            <div class="card-body">--}}
