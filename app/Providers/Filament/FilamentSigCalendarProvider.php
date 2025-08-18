@@ -24,12 +24,11 @@ class FilamentSigCalendarProvider {
               ])
               ->config([
                   'initialView' => "resourceTimeGridDay",
-                  'resources' => SigLocation::used()->get()->map(function($l) {
-                      $l->title = $l->description_localized;
-//                      if($l->description != $l->name)
-//                          $l->title .= " (" . $l->description_localized . ")";
-                      return $l;
-                  })->toArray(),
+                  'resources' => once(fn() => SigLocation::used()->get()->map(function($l) {
+                          $l->title = $l->description_localized;
+                          return $l;
+                      })->toArray()
+                  ),
                   'headerToolbar' => [
                       'left' => 'prev,next,today',
                       'center' => 'title',
@@ -57,12 +56,12 @@ class FilamentSigCalendarProvider {
                   'expandRows' => true,
                   'stickyHeaderDates' => true,
                   'contentHeight' => "auto",
-                  'initialDate' => (function() {
+                  'initialDate' => once(function() {
                       $first = TimetableEntry::orderBy('start')->first();
                       if(Carbon::parse($first?->start)->isAfter(Carbon::now()))
                           return $first->start->format("Y-m-d");
                       return app(AppSettings::class)->event_start->format("Y-m-d");
-                  })(),
+                  }),
               ])
         );
     }

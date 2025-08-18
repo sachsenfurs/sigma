@@ -48,8 +48,7 @@ class SigPlannerWidget extends FullCalendarWidget
                        ->where('start', '<=', $info['end']);
              })
              ->orWhere('end', '>=', $info['start'])
-             ->with("sigEvent")
-             ->with("sigEvent.sigHosts")
+             ->with(["sigLocation", "sigEvent.sigHosts"])
              ->get()
              ->map(
                 fn (TimetableEntry $entry) => EventData::make()

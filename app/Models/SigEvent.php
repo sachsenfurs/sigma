@@ -52,7 +52,7 @@ class SigEvent extends Model
     }
 
     public function scopeUnprocessed(Builder $query) {
-        $query->withCount("timetableEntries")->having("timetable_entries_count", 0);
+        $query->where("approval", Approval::APPROVED->value)->withCount("timetableEntries")->having("timetable_entries_count", 0);
     }
 
     public function scopePublic($query) {
