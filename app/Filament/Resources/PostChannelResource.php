@@ -10,14 +10,15 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Gate;
 
 class PostChannelResource extends Resource
 {
     use HasActiveIcon;
     protected static ?string $model = PostChannel::class;
-
+//    protected static ?string $cluster = Settings::class;
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
-
+//    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationGroup = "Post";
     protected static ?int $navigationSort = 110;
     public static function getModelLabel(): string {
@@ -26,6 +27,10 @@ class PostChannelResource extends Resource
 
     public static function getPluralModelLabel(): string {
         return __("Channels");
+    }
+
+    public static function canAccess(): bool {
+        return Gate::allows("viewAny", PostChannel::class);
     }
 
     public static function form(Form $form): Form {

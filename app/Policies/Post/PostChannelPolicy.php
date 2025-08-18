@@ -40,31 +40,26 @@ class PostChannelPolicy
     }
 
     public function create(User $user): bool {
-        if($user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::WRITE))
-            return true;
-
-        return false;
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::WRITE);
     }
 
     public function update(User $user, PostChannel $postChannel): bool {
-        if($user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::WRITE))
-            return true;
-
-        return false;
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::WRITE);
     }
 
     public function delete(User $user, PostChannel $postChannel): bool {
-        if($user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::DELETE))
-            return true;
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::DELETE);
+    }
 
-        return false;
+    public function deleteAny(User $user): bool {
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::DELETE);
     }
 
     public function restore(User $user, PostChannel $postChannel): bool {
-        return false;
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::DELETE);
     }
 
     public function forceDelete(User $user, PostChannel $postChannel): bool {
-        return false;
+        return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::DELETE);
     }
 }

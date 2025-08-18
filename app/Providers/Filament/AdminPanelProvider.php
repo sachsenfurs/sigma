@@ -87,6 +87,7 @@ class AdminPanelProvider extends PanelProvider
                         ->icon('heroicon-m-cog-8-tooth'),
             ])
             ->maxContentWidth(MaxWidth::Full)
+            ->sidebarCollapsibleOnDesktop()
             ;
     }
 }
