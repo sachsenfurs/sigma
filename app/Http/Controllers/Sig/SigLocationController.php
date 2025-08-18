@@ -10,14 +10,17 @@ use Illuminate\Support\Facades\Cache;
 class SigLocationController extends Controller
 {
     public function index() {
-        $locations = collect();
-        if(Gate::allows("viewAny", SigLocation::class))
+        $locations  = collect();
+        $essentials = collect();
+        if(Gate::allows("viewAny", SigLocation::class)) {
             $locations = SigLocation::with(["sigEvents" => fn($query) => $query->public(), "sigEvents.timetableEntries"])
                 ->used()
                 ->orderBy("name")
                 ->get();
+            $essentials = SigLocation::whereEssential(true)->get();
+        }
 
-        return view("locations.index", compact("locations"));
+        return view("locations.index", compact("locations", "essentials"));
     }
 
     public function show(SigLocation $location) {

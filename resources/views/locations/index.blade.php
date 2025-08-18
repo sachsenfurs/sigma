@@ -23,9 +23,9 @@
             @endslot
 
             {{-- Essentials --}}
-            @if($locations->filter(fn($l) => $l->essential)->count() > 0)
+            @if($essentials->count() > 0)
                 @slot("Essentials")
-                    @foreach($locations->filter(fn($l) => $l->essential) AS $location)
+                    @foreach($essentials AS $location)
                         <x-list-host-location
                             :instance="$location"
                             :link="route('locations.show', $location)"
