@@ -23,12 +23,12 @@ class SigLocationController extends Controller
     public function show(SigLocation $location) {
         $this->authorize("view", $location);
 
-        $sigEvents = Cache::remember("sigLocationShow{$location->id}", 120, function() use ($location) {
+        $sigEvents = Cache::remember("sigLocationShow{$location->id}", app()->hasDebugModeEnabled() ? 1 : 120, function() use ($location) {
             return $location
                 ->sigEvents()
                 ->public()
-                ->with("timetableEntries")
-                ->with("sigHosts")
+                ->with(["timetableEntries", "sigHosts"])
+                ->orderByRaw("timetable_entries.start")
                 ->get();
         });
 
