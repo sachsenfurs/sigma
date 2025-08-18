@@ -22,6 +22,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "league/html-to-markdown": "^5.1",
         "league/oauth2-client": "^2.6",
         "ryangjchandler/blade-cache-directive": "^1.0",
         "saade/filament-fullcalendar": "^3.1",

@@ -43,4 +43,8 @@ class SigTimeslotReminder extends Notification
     protected function getActionUrl(): string {
         return route("timetable-entry.show", $this->sigTimeslot->timetableEntry);
     }
+
+    public function shouldSend(): bool {
+        return $this->sigTimeslot->slot_start->isFuture();
+    }
 }

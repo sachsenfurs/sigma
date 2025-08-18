@@ -32,9 +32,9 @@ class NewChatMessageNotification extends Notification implements ShouldQueue
 
     public function toTelegram(object $notifiable): TelegramMessage {
         return TelegramMessage::create()
-            ->line($this->getSubject() . ":")
+            ->line($this->cleanMarkdown($this->getSubject()) . ":")
             ->line("")
-            ->line($this->message->text)
+            ->line($this->cleanMarkdown($this->message->text))
             ->button(__("Answer") , route("chats.index"));
     }
 

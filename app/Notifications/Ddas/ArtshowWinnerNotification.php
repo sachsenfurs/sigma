@@ -54,7 +54,7 @@ class ArtshowWinnerNotification extends Notification implements ShouldQueue
         return TelegramMessage::create()
             ->line(__("You have won the following items in the art show:"))
             ->line("")
-            ->line($this->itemsString)
+            ->line($this->cleanMarkdown($this->itemsString))
             ->line("")
             ->line(PageHookService::resolve("artshow.notification.winner.info", __("Please visit Dealers' Den for pickup (Refer to the con book for opening hours!)")));
     }

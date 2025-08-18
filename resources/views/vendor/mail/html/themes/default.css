@@ -41,6 +41,7 @@ ol,
 blockquote {
     line-height: 1.4;
     text-align: left;
+    color: #ffffff;
 }
 
 a {
@@ -80,6 +81,7 @@ p {
     line-height: 1.5em;
     margin-top: 0;
     text-align: left;
+    color: #ffffff;
 }
 
 p.sub {
