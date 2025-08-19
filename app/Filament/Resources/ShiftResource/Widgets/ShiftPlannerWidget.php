@@ -7,6 +7,7 @@ use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\SigEventResource;
+use App\Models\DepartmentInfo;
 use App\Models\Shift;
 use App\Models\ShiftType;
 use App\Models\SigLocation;
@@ -16,7 +17,6 @@ use App\Models\UserShift;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
 use Filament\Actions\Action;
-use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -258,27 +258,43 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
             ->infolist([
                 TextEntry::make("sigEvent.name_localized")
                     ->label(__("Event Name"))
+                    ->url(fn($record) => SigEventResource::getUrl("view", ['record' => $record->sig_event_id]))
+                    ->color("primary")
+                    ->openUrlInNewTab()
                     ->inlineLabel(),
                 TextEntry::make("sigLocation")
                     ->label(__("Location"))
                     ->formatStateUsing(fn($state) => $state->name_localized . " - " . $state->description_localized)
                     ->inlineLabel(),
+                TextEntry::make("sigEvent.description_localized")
+                    ->label(__("Description"))
+                    ->limit(800),
                 RepeatableEntry::make("sigEvent.departmentInfos")
                     ->label(__("Requirements to Department"))
                     ->placeholder(__("None"))
+                    ->contained(false)
+                    ->state(function($record) {
+                        return $record->sigEvent->departmentInfos->sort(function(DepartmentInfo $info) {
+                            return auth()->user()->roles->contains($info->user_role_id) ? -1 : 1;
+                        });
+                    })
                     ->schema([
-                        TextEntry::make("userRole")
-                            ->inlineLabel()
-                            ->label(__("Department"))
-                            ->formatStateUsing(fn($state) => $state->name_localized)
-                            ->badge(),
-                        TextEntry::make('additional_info')
-                            ->label(""),
+                        \Filament\Infolists\Components\Section::make()
+                            ->schema([
+                                TextEntry::make("userRole")
+                                    ->inlineLabel()
+                                    ->label(__("Department"))
+                                    ->formatStateUsing(fn($state) => $state->name_localized)
+                                    ->badge(),
+                                TextEntry::make('additional_info')
+                                    ->label(""),
+                            ])
+                            ->extraAttributes(function (DepartmentInfo $state) {
+                                if(!auth()->user()->roles->contains($state->user_role_id))
+                                    return ['class' => 'opacity-30 hover:opacity-75 transition'];
+                                return [];
+                            })
                     ])
-            ])
-            ->extraModalFooterActions([
-                ViewAction::make("view")
-                    ->url(fn($record) => SigEventResource::getUrl("view", ['record' => $record->sig_event_id])),
             ])
             ->modelLabel(__("Timetable Entry"));
     }
