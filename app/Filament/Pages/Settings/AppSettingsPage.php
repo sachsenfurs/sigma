@@ -101,7 +101,7 @@ class AppSettingsPage extends SettingsPage
                                 fn (UploadedFile $file): string => 'logo.png'
                             )
                             ->imageEditor()
-                            ->formatStateUsing(fn() => array("logo.png")),
+                            ->formatStateUsing(fn() => Storage::disk("public")->exists("logo.png") ? ["logo.png"] : null),
                     )),
                 Forms\Components\Section::make("API Endpoints")
                     ->translateLabel()
@@ -152,7 +152,7 @@ class AppSettingsPage extends SettingsPage
                                       ->openUrlInNewTab();
                             }),
                         Forms\Components\TextInput::make("artshow_items_api")
-                            ->label("Artshow Items API")
+                            ->label("Art Show Items API")
                             ->translateLabel()
                             ->readOnly()
                             ->dehydrated(false)

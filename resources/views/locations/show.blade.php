@@ -20,7 +20,7 @@
 
         </div>
         @forelse($sigEvents AS $sig)
-            <x-list-sig :sig="$sig" />
+            <x-list-sig :sig="$sig" :location="$location" />
         @empty
             <div class="alert alert-info">
                 {{ __("No SIGs assigned") }}

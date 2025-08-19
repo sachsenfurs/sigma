@@ -9,7 +9,7 @@
              :id="'event' + entry.id" @click="showInfoModal()" >
             <div class="row g-0 flex-nowrap d-flex">
                 <div class="col-lg-2 col-3 d-flex">
-                    <div class="card-body align-self-center text-center">
+                    <div class="card-body align-self-center text-center px-0 overflow-hidden">
                         <h3 class="d-inline-flex flex-wrap justify-content-center">
                             <i v-if="eventRunning" class="bi bi-record-fill text-danger blink"></i>
                             {{
@@ -20,16 +20,16 @@
                             }}
                         </h3>
                         <h6 class="text-secondary">{{ entry.formatted_length }}</h6>
-                        <h3 v-if="eventInternal">
+                        <h3 class="px-2 overflow-hidden" v-if="eventInternal">
                             <span class="badge bg-secondary d-block text-uppercase">{{  $t("Internal") }}</span>
                         </h3>
-                        <h3 v-if="entry.new">
+                        <h3 class="px-2 overflow-hidden" v-if="entry.new">
                             <span class="badge bg-info d-block text-uppercase">{{ $t("New") }}</span>
                         </h3>
-                        <h3 v-if="entry.cancelled">
+                        <h3 class="px-2 overflow-hidden" v-if="entry.cancelled">
                             <span class="badge bg-danger d-block text-uppercase">{{  $t("Cancelled") }}</span>
                         </h3>
-                        <h3 v-else-if="entry.hasTimeChanged">
+                        <h3 class="px-2 overflow-hidden" v-else-if="entry.hasTimeChanged">
                             <span class="badge bg-warning d-block text-uppercase">{{  $t("Changed") }}</span>
                         </h3>
                         <div v-if="entry.sig_event.languages.length > 0" class="mt-3">
@@ -155,6 +155,10 @@ export default {
 @keyframes pop{
     75%  {transform: scale(1.2);}
     70%  {transform: scale(0.8);}
+}
+
+h3 .badge {
+    font-size: clamp(10px, 2.5vw, 16px)
 }
 
 @media only screen and (max-width: 400px) {

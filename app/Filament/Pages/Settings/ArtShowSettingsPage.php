@@ -46,7 +46,7 @@ class ArtShowSettingsPage extends SettingsPage
                         Toggle::make("enabled")
                             ->label("Enabled")
                             ->translateLabel(),
-                        Fieldset::make("Artshow Items Signup")
+                        Fieldset::make("Art Show Items Signup")
                             ->translateLabel()
                             ->columns(3)
                             ->schema([

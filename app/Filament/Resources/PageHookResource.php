@@ -44,11 +44,12 @@ class PageHookResource extends Resource
                 Forms\Components\TextInput::make("id")
                     ->label("Identifier")
                     ->columnSpanFull()
-                    ->unique(),
+                    ->unique(ignoreRecord: true),
                 Forms\Components\Section::make(__("Content"))
                     ->schema([
                         Forms\Components\Textarea::make('content')
                             ->label("Content")
+                            ->autosize()
                             ->translateLabel()
                             ->required()
                             ->visible(fn(Forms\Get $get) => !$get("html")),
@@ -56,13 +57,16 @@ class PageHookResource extends Resource
                             ->label("Content")
                             ->translateLabel()
                             ->required()
+                            ->dehydrateStateUsing(fn($state) => htmlspecialchars_decode($state))
                             ->visible(fn(Forms\Get $get) => $get("html")),
                         Forms\Components\Textarea::make('content_en')
+                            ->autosize()
                             ->label("Content (English)")
                             ->translateLabel()
                             ->visible(fn(Forms\Get $get) => !$get("html")),
                         Forms\Components\RichEditor::make('content_en')
                             ->label("Content (English)")
+                            ->dehydrateStateUsing(fn($state) => htmlspecialchars_decode($state))
                             ->translateLabel()
                             ->visible(fn(Forms\Get $get) => $get("html")),
                     ]),

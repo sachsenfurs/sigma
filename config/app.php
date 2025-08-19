@@ -30,6 +30,12 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'artshow' => [
+        'enabled' => env("ARTSHOW.ENABLED", true),
+        'item_deadline' => env("ARTSHOW.ITEM_DEADLINE", now()->addDays(30)->setHour(0)->setMinute(0)->setSecond(0)),
+        'show_items_date' => env("ARTSHOW.SHOW_ITEMS_DATE", now()->addDays(30)->setHour(0)->setMinute(0)->setSecond(0)),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

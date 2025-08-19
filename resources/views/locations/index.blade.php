@@ -31,7 +31,7 @@
                             :link="route('locations.show', $location)"
                             :title="$location->description_localized"
                         >
-                            <x-markdown>{{ ($location->essential_description_localized }}</x-markdown>
+                            <x-markdown>{{ $location->essential_description_localized }}</x-markdown>
                             <div class="text-muted">
                                 <i class="bi bi-geo-alt icon-link"></i>
                                 {{ $location->name_localized }}

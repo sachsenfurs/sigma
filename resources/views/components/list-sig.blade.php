@@ -1,5 +1,6 @@
 @props([
     'sig',
+    'location' => null,
 ])
 
 <div @class(['card mb-4', 'bg-purple-800' => $sig->is_private])>
@@ -20,6 +21,7 @@
     @endif
 
     @forelse($sig->timetableEntries AS $entry)
+        @continue($location AND $entry->sig_location_id != $location->id)
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <div class="row">
@@ -43,7 +45,7 @@
                                     <a href="{{ route("timetable-entry.show", $entry) }}" class="btn btn-success">{{ __("Click here to sign up") }}</a>
                                 @endif
                                 @if($entry->hasTimeChanged)
-                                    <span class="badge bg-warning fs-5">{{ __("Changed") }}</span>
+                                    <span class="badge bg-warning fs-5 text-dark">{{ __("Changed") }}</span>
                                 @endif
                             @endif
                         </div>
