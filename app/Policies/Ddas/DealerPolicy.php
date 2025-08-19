@@ -70,7 +70,7 @@ class DealerPolicy
     public function update(User $user, Dealer $dealer): bool {
         if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::WRITE))
             return true;
-        if($dealer->user_id === $user->id && $dealer->approval != Approval::APPROVED)
+        if($dealer->user_id === $user->id AND $dealer->approval == Approval::PENDING)
             return true;
 
         return false;
@@ -84,6 +84,10 @@ class DealerPolicy
 
     public function delete(User $user, Dealer $dealer): bool {
         if($user->hasPermission(Permission::MANAGE_DEALERS, PermissionLevel::DELETE))
+            return true;
+
+        // delete own dealer applications IF not approved yet
+        if($dealer->user_id == $user->id AND $dealer->approval == Approval::PENDING)
             return true;
 
         return false;

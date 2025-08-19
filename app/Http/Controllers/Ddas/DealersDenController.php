@@ -16,7 +16,7 @@ class DealersDenController extends Controller
 
     public function create() {
         if(($response = Gate::inspect("create", Dealer::class))->denied())
-            return redirect()->route("home")->withError($response->message());
+            session()->flash("error", $response->message());
 
         return view("ddas.dealers.create");
     }

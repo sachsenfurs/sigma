@@ -14,6 +14,8 @@ class DealersForm extends Form
     #[Validate('nullable|image|max:10240')]
     public $icon_file;
 
+    public $icon_file_url;
+
     #[Validate('string|nullable|max:1000')]
     public ?string $additional_info;
 

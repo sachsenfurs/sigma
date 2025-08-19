@@ -17,9 +17,21 @@ class DealersSignup extends Component
 
     public DealersForm $form;
 
-    public function createDealer(): void {
-        $this->authorize("create", Dealer::class);
+    public int $currentDealerId = 0;
+
+    public function createUpdateDealer(): void {
+        $dealer = null;
+        if($this->currentDealerId) {
+            $this->authorize("update", $dealer = Dealer::find($this->currentDealerId));
+        } else {
+            $this->authorize("create", Dealer::class);
+        }
+
         $validated = $this->form->validate();
+
+        if(empty($validated['icon_file']))
+            unset($validated['icon_file']);
+
         if($this->form->icon_file) {
             /**
              * @var $tempfile TemporaryUploadedFile
@@ -28,13 +40,42 @@ class DealersSignup extends Component
             $validated['icon_file'] = basename($tempfile->store("public"));
         }
         $tags = Arr::pull($validated, "tags");
-        auth()->user()->dealers()->create($validated)->tags()->sync($tags);
+
+        if($dealer) {
+            $dealer->update($validated);
+            $dealer->tags()->sync($tags);
+        } else {
+            auth()->user()->dealers()->create($validated)->tags()->sync($tags);
+        }
 
         $this->hideModal();
     }
 
     public function newDealer(): void {
+        $this->currentDealerId = 0;
         $this->showModal();
+    }
+
+    public function editDealer(int $dealerId): void {
+        $this->authorize("update", $dealer = Dealer::find($dealerId));
+        $this->currentDealerId = $dealer->id;
+        $this->form->fill($dealer);
+        $this->form->icon_file_url = $dealer->icon_file_url;
+        $this->form->icon_file = null;
+        $this->showModal();
+    }
+
+    public function removeDealer(int $dealerId): void {
+        $this->authorize("delete", $dealer = Dealer::find($dealerId));
+        $this->currentDealerId = $dealer->id;
+        $this->showModal("removeDealerConfirm");
+    }
+
+    public function deleteDealer(): void {
+        $this->authorize("delete", $dealer = Dealer::find($this->currentDealerId));
+        $dealer->delete();
+        $this->currentDealerId = 0;
+        $this->hideModal("removeDealerConfirm");
     }
 
     public function render(): View {
