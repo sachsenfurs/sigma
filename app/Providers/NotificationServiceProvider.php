@@ -9,6 +9,9 @@ use App\Notifications\Ddas\ArtshowWinnerNotification;
 use App\Notifications\Ddas\ProcessedDealerNotification;
 use App\Notifications\Ddas\ProcessedItemNotification;
 use App\Notifications\Ddas\SubmittedItemNotification;
+use App\Notifications\DepartmentInfo\DepartmentInfoChangedNotification;
+use App\Notifications\DepartmentInfo\DepartmentInfoCreatedNotification;
+use App\Notifications\DepartmentInfo\DepartmentInfoDeletedNotification;
 use App\Notifications\Messages\MessageNotification;
 use App\Notifications\MorphedDatabaseChannel;
 use App\Notifications\Shift\ShiftReminder;
@@ -62,6 +65,9 @@ class NotificationServiceProvider extends ServiceProvider
             ArtshowItemOutbidNotification::class        => "artshow_item_outbid_notification",
             ShiftReminder::class                        => "shift_reminder",
             ShiftSummaryReminder::class                 => "shift_summary",
+            DepartmentInfoCreatedNotification::class    => "department_info_created",
+            DepartmentInfoChangedNotification::class    => "department_info_changed",
+            DepartmentInfoDeletedNotification::class    => "department_info_removed",
         ]);
 
         try {

@@ -38,7 +38,7 @@ abstract class Notification extends LaravelNotification
     public function toTelegram(object $notifiable): TelegramBase {
         return tap(TelegramMessage::create(), function(TelegramMessage $message) {
             if($this->getSubject())
-               $message->line($this->cleanMarkdown("**" . $this->getSubject() . "**"))
+               $message->line($this->cleanMarkdown("*" . $this->getSubject() . "*"))
                        ->line("");
             $message->line($this->cleanMarkdown(collect($this->getLines())->join("\n")));
             if($this->getAction())
@@ -104,7 +104,7 @@ abstract class Notification extends LaravelNotification
      * @param $content
      * @return string
      */
-    public static function cleanMarkdown($content): string {
+    public function cleanMarkdown($content): string {
         // adding white spaces for correct line breaks
         $content = str_replace("\n", "  \n", $content);
 
