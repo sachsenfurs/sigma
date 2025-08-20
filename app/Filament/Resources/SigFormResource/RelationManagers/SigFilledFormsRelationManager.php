@@ -3,9 +3,14 @@
 namespace App\Filament\Resources\SigFormResource\RelationManagers;
 
 use App\Enums\Approval;
+use App\Models\SigFilledForm;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -43,6 +48,54 @@ class SigFilledFormsRelationManager extends RelationManager
             ->bulkActions([
                 Approval::getBulkAction([self::getRejectComponent()]),
             ])
+            ->headerActions([
+                Tables\Actions\Action::make("export")
+                    ->label("CSV Export")
+                    ->action(function() {
+                        $fileName = 'export_' . now()->format('Y-m-d_H-i-s') . '.csv';
+
+                        return response()->streamDownload(function () {
+                            $handle = fopen('php://output', 'w');
+
+                            // Excel UTF-8 BOM
+                            fwrite($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+                            $delimiter = ';';
+
+                            $definition = collect($this->ownerRecord->form_definition)
+                                ->pluck("data.name")
+                                ->prepend("User")
+                                ->prepend("Reg Nr");
+
+                            // heading
+                            fputcsv($handle, $definition->toArray(), $delimiter);
+
+                            foreach ($this->ownerRecord->sigFilledForms()->with("user")->get() as $filledForm) {
+                                /** @var SigFilledForm $filledForm */
+                                $entry = [
+                                    $filledForm->user->reg_id,
+                                    $filledForm->user->name,
+                                ];
+
+                                $data = collect($filledForm->form_data)->get('form_data', []);
+
+                                $entry = array_merge(
+                                    $entry,
+                                    $definition->slice(2)->map(fn ($key) => data_get($data, $key))->toArray()
+                                );
+
+                                fputcsv($handle, $entry, $delimiter);
+                            }
+
+                            fclose($handle);
+                        }, $fileName, [
+                            'Content-Type'        => 'text/csv; charset=UTF-8',
+                            'Cache-Control'       => 'no-store, no-cache, must-revalidate',
+                            'Pragma'              => 'no-cache',
+                            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+                        ]);
+                    }),
+            ])
             ->columns($this->getTableColumns())
             ->actions($this->getTableEntryActions())
             ->striped();
@@ -63,50 +116,37 @@ class SigFilledFormsRelationManager extends RelationManager
             switch ($formDefinition['type']) {
                 case 'text':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
-                        ->label(App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : ''))
-                        ->getStateUsing(function ($record) use ($formData) {
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        });
+                        ->limit()
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData));
                     break;
                 case 'textarea':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
-                        ->label(App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : ''))
-                        ->getStateUsing(function ($record) use ($formData) {
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        })
+                        ->label($this->getLabel($formData))
+                        ->limit()
+                        ->getStateUsing($this->getState($formData))
                         ->listWithLineBreaks(true)
                         ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))));
                     break;
                 case 'file_upload':
                     $tableColumns[] = Tables\Columns\ImageColumn::make($formData['name'])
-                        ->label(App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : ''))
-                        ->getStateUsing(function ($record) use ($formData) {
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        })
-                        ->url(function ($record) use ($formData) {
-                            if ($record->form_data['form_data'][$formData['name']] ?? null) {
-                                return Storage::url($record->form_data['form_data'][$formData['name']] ?? null);
-                            }
-                            return null;
-                        }, true);
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData));
                     break;
                 case 'checkbox':
                     $tableColumns[] = Tables\Columns\IconColumn::make($formData['name'])
                         ->boolean()
-                        ->label(App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : ''))
-                        ->getStateUsing(function ($record) use ($formData) {
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        });
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData));
                     break;
                 case 'select':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
-                        ->label(App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : ''))
+                        ->label($this->getLabel($formData))
+                        ->limit()
                         ->getStateUsing(function ($record) use ($formData) {
                             $options = $formData['options'];
                             foreach ($options as $option) {
                                 $data = $option['data'] ?? [];
-//                                dd($option);
-//                                dd($formData['name'] ,$record->form_data['form_data'][$formData['name']]);
                                 if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
                                     return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
                                 }
@@ -119,8 +159,101 @@ class SigFilledFormsRelationManager extends RelationManager
         return $tableColumns;
     }
 
+    private function getLabel($formData) {
+        return App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : '');
+    }
+
+    private function getState($formData): \Closure {
+        return function ($record) use ($formData) {
+            return $record->form_data['form_data'][$formData['name']] ?? false;
+        };
+    }
+
     protected function getTableEntryActions(): array {
+        $viewEntries = [];
+        foreach ($this->ownerRecord->form_definition as $formDefinition) {
+            $formData = $formDefinition['data'];
+            switch ($formDefinition['type']) {
+                case 'text':
+                    $viewEntries[] = TextEntry::make($formData['name'])
+                        ->inlineLabel()
+                        ->label($this->getLabel($formData))
+                        ->visible(fn($state) => $state)
+                        ->getStateUsing($this->getState($formData));
+                    break;
+                case 'textarea':
+                    $viewEntries[] = TextEntry::make($formData['name'])
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData))
+                        ->visible(fn($state) => $state)
+                        ->listWithLineBreaks(true)
+                        ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))));
+                    break;
+                case 'file_upload':
+                    $viewEntries[] = ImageEntry::make($formData['name'])
+                        ->label($this->getLabel($formData))
+                        ->inlineLabel()
+                        ->getStateUsing($this->getState($formData))
+                        ->visible(fn($state) => $state)
+                        ->url(function ($record) use ($formData) {
+                            if ($record->form_data['form_data'][$formData['name']] ?? null) {
+                                return Storage::url($record->form_data['form_data'][$formData['name']] ?? null);
+                            }
+                            return null;
+                        }, true);
+                    break;
+                case 'checkbox':
+                    $viewEntries[] = IconEntry::make($formData['name'])
+                        ->boolean()
+                        ->inlineLabel()
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData));
+                    break;
+                case 'select':
+                    $viewEntries[] = TextEntry::make($formData['name'])
+                        ->label($this->getLabel($formData))
+                        ->visible(fn($state) => $state)
+                        ->getStateUsing(function ($record) use ($formData) {
+                            $options = $formData['options'];
+                            foreach ($options as $option) {
+                                $data = $option['data'] ?? [];
+                                if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
+                                    return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
+                                }
+                            }
+                            return $record->form_data['form_data'][$formData['name']] ?? '';
+                        });
+                    break;
+            }
+        }
         return [
+            Tables\Actions\ViewAction::make()
+                ->modalHeading(fn($record) => $record->user->name)
+                ->infolist($viewEntries)
+                ->modalFooterActions([
+                    Tables\Actions\Action::make("approve")
+                        ->label(__("Approve"))
+                        ->action(function (SigFilledForm $record) {
+                            $record->approval = Approval::APPROVED;
+                            $record->save();
+                        })
+                        ->requiresConfirmation()
+                        ->visible(fn($record) => $record->approval == Approval::PENDING)
+                        ->cancelParentActions(),
+                    Tables\Actions\Action::make("reject")
+                        ->label(__("Reject"))
+                        ->form([
+                            Forms\Components\TextInput::make("rejection_reason")
+                        ])
+                        ->color(Color::Red)
+                        ->action(function (SigFilledForm $record, $data) {
+                            $record->rejection_reason = data_get($data, "rejection_reason");
+                            $record->approval = Approval::REJECTED;
+                            $record->save();
+                        })
+                        ->visible(fn($record) => $record->approval == Approval::PENDING)
+                        ->cancelParentActions()
+                ]),
             Tables\Actions\EditAction::make()
                 ->authorize("update")
                 ->modalHeading(__('Approve or reject form'))
@@ -133,11 +266,11 @@ class SigFilledFormsRelationManager extends RelationManager
                 })
                 ->form([
                     Forms\Components\Radio::make('approval')
-                              ->label('Approval')
-                              ->translateLabel()
-                              ->required()
-                              ->options(Approval::class)
-                              ->live(),
+                        ->label('Approval')
+                        ->translateLabel()
+                        ->required()
+                        ->options(Approval::class)
+                        ->live(),
                     self::getRejectComponent()
                 ]),
 

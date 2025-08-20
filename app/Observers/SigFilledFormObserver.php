@@ -4,12 +4,12 @@ namespace App\Observers;
 
 
 use App\Models\SigFilledForm;
+use App\Notifications\Forms\SigFilledFormProcessedNotification;
 use Illuminate\Support\Facades\Storage;
 
 class SigFilledFormObserver
 {
-    public function deleted(SigFilledForm $filledForm)
-    {
+    public function deleted(SigFilledForm $filledForm): void {
         $sigForm = $filledForm->sigForm;
         foreach ($sigForm->form_definition as $formDefinition) {
             if ($formDefinition['type'] !== 'file_upload') {
@@ -23,5 +23,12 @@ class SigFilledFormObserver
         }
     }
 
+    public function updated(SigFilledForm $filledForm): void {
+        if($filledForm->isDirty("approval")) {
+            $filledForm->user->notify(
+                new SigFilledFormProcessedNotification($filledForm)
+            );
+        }
+    }
 
 }

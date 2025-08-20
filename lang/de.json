@@ -287,6 +287,7 @@
     "This form has been rejected. Reason for rejection: ": "Dieses Formular wurde abgelehnt. Grund für die Ablehnung: ",
     "This form was rejected during the last audit for the following reason: ": "Dieses Formular wurde bei der letzten Prüfung mit folgendem Grund abgelehnt: ",
     "No reason available": "Kein Grund verfügbar",
+    "Your submission for :form has been processed: :approval": "Deine Einsendung für :form wurde bearbeitet: :approval",
 
     "Create Tag": "Tag erstellen",
     "Edit Tag": "Tag bearbeiten",
