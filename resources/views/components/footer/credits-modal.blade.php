@@ -52,6 +52,10 @@
                             'img' => "https://avatars.githubusercontent.com/u/100375107?s=24",
                             'href' => "https://github.com/Kenthanar",
                         ],
+                        'RiNax' => [
+                            'img' => "https://avatars.githubusercontent.com/u/29910692?s=24",
+                            'href' => "https://github.com/R1N4x",
+                        ],
                     ] AS $contributor => $data)
                         <a href="{{ $data['href'] }}" target="_blank" class="text-decoration-none">
                             <span class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-light-subtle border border-dark-subtle rounded-pill">
