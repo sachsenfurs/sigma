@@ -42,6 +42,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 {
 
 //    protected static string $view = 'filament.resources.shift-resource.widgets.shift-planner-widget';
+    protected static string $view = "filament.resources.shift-resource.pages.shift-planner-widget";
+    protected int | string | array $columnSpan = "full";
     protected string $calendarView = "resourceTimeGridDay";
     protected bool $eventClickEnabled = true;
     protected ?string $defaultEventClickAction = "edit";
@@ -206,14 +208,22 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         'font-size: 44px'
                     ])
                     ->classNames([
-                        'opacity-50' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() == 0 AND !$shift->team,
+                        // grey-out other shifts except own
+                        'opacity-50' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() == 0
+                            AND !$shift->team
+                            AND $shift->userShifts->count() > 0,
+
+                        // highlight own shifts
                         'border border-4 border-red-500' => $shift->userShifts->filter(fn(UserShift $u) => $u->user_id == auth()->id())->count() > 0 OR $shift->team,
+
+                        // highlight empty mandatory shifts
+                        'border border-4 border-pink-600' => $shift->necessity == Necessity::MANDATORY AND $shift->userShifts->count() == 0,
                     ])
                     ->backgroundColor("rgb(". match($shift->necessity) {
-                        Necessity::OPTIONAL => Color::Green[700],
-                        Necessity::NICE_TO_HAVE => Color::Yellow[400],
-                        Necessity::MANDATORY => Color::Red[700],
-                        default => Color::Gray[400],
+                            Necessity::OPTIONAL => Color::Green[700],
+                            Necessity::NICE_TO_HAVE => Color::Yellow[400],
+                            Necessity::MANDATORY => Color::Red[700],
+                            default => Color::Gray[400],
                         }.")")
                     ->textColor("rgb(". match($shift->necessity) {
                             Necessity::NICE_TO_HAVE => Color::Gray[900],
@@ -225,10 +235,12 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                     ->end($shift->end->shiftTimezone("UTC"))
                     ->editable(!$shift->locked)
                     ->resourceId($shift->shift_type_id)
-                    ->extendedProp('username', $shift->team ? __("All") : "[".$shift->users->count()."/".$shift->max_user."] " . $shift->users->pluck("name")->join(", "))
-                    ->extendedProp('startTime', $shift->start->format("H:i"))
-                    ->extendedProp('sigLocation', $this->sig_location_id ? "" : $shift->sigLocation?->description_localized)
-                    ->extendedProp('team', $shift->team)
+                    ->extendedProps([
+                        'username' => $shift->team ? __("All") : "[".$shift->users->count()."/".$shift->max_user."] " . $shift->users->pluck("name")->join(", "),
+                        'startTime' => $shift->start->format("H:i"),
+                        'sigLocation' => $this->sig_location_id ? "" : $shift->sigLocation?->description_localized,
+                        'team' => $shift->team,
+                    ])
                     ->action('edit')
             );
 
@@ -321,9 +333,15 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         ->columnSpanFull()
                         ->maxItems(fn($record) => $record->max_user ?? 1)
                         ->preload()
-                        ->relationship("users", "name", fn(Builder $query) => $query->whereHas("roles", fn($query) => $query->where("user_roles.id", $this->user_role_id)))
+                        ->relationship("users", "name", function (Builder $query, $record) {
+                            return $query->whereHas("roles", function ($query) use ($record) {
+                                return $query->where("user_roles.id", $record->type->user_role_id);
+                            })
+                            ->orderByRaw('CASE WHEN users.id = ? THEN 0 ELSE 1 END', [auth()->id()])
+                            ->orderBy("users.name");
+                        })
                         ->label(__("User"))
-                        ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
+                        ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId(true))
                         ->searchable(['name', 'reg_id']),
                     TextInput::make("info")
                         ->columnSpanFull(),
@@ -382,6 +400,5 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         CalendarResource::make("0")->title(__("Schedule"))
         );
     }
-
 
 }

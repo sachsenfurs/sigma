@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormHelper
 {
-    public static function formatUserWithRegId(): \Closure {
-        return function(?Model $record) {
+    public static function formatUserWithRegId($swap=false): \Closure {
+        return function(?Model $record) use ($swap) {
             if($record instanceof User OR $record instanceof SigHost) {
                 if($record->reg_id)
-                    return $record->reg_id . " - " . $record->name;
+                    return $swap ? $record->name . " (#" . $record->reg_id . ")" : $record->reg_id . " - " . $record->name;
                 return $record->name;
             }
 

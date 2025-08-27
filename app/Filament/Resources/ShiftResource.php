@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\ShiftPlanning;
+use App\Filament\Resources\ShiftResource\Pages\ManageShifts;
 use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
 use App\Filament\Resources\ShiftResource\Widgets\ShiftSummaryWidget;
 use App\Filament\Traits\HasActiveIcon;
@@ -42,8 +43,7 @@ class ShiftResource extends Resource
                 Tables\Columns\TextColumn::make('type.userRole')
                     ->formatStateUsing(fn($record) => $record->type->userRole?->name_localized)
                     ->label(__("Department"))
-                    ->badge()
-                    ->sortable(),
+                    ->badge(),
                 Tables\Columns\TextColumn::make('type.name')
                     ->label(__("Shift Type"))
                     ->sortable(),
@@ -53,9 +53,11 @@ class ShiftResource extends Resource
                 Tables\Columns\TextColumn::make('userShifts.user.name')
                     ->label(__("User"))
                     ->searchable()
+                    ->sortable()
                     ->badge(),
                 Tables\Columns\TextColumn::make('info')
                     ->label(__("Additional Information"))
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start')
                     ->label(__("Duration"))
@@ -133,7 +135,7 @@ class ShiftResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => \App\Filament\Resources\ShiftResource\Pages\ManageShifts::route('/'),
+            'index' => ManageShifts::route('/'),
         ];
     }
 
