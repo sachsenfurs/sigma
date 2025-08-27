@@ -12,7 +12,7 @@ class ConbookExportController extends Controller
         $this->authorize("deleteAny", SigEvent::class);
 
         $days = TimetableEntry::public()->noAnnouncements()->with("sigEvent")->orderBy("start")->get()->groupBy(function($item) {
-            return $item->start->format("d.m.Y");
+            return $item->start->translatedFormat("l, d.m.Y");
         });
 
         return view("conbook-export.index", [

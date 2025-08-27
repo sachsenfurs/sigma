@@ -71,6 +71,11 @@ class AppSettingsPage extends SettingsPage
                             ->translateLabel()
                             ->seconds(false)
                             ->dehydrateStateUsing(fn($state) => Carbon::parse($state)),
+                        Forms\Components\TextInput::make("short_domain")
+                            ->label("Short Domain")
+                            ->dehydrateStateUsing(fn($state) => str_replace(["http://", "https://"], "", $state))
+                            ->helperText(__("Used for conbook export / QR Codes, enter with trailing slash or path!"))
+                            ->nullable(),
                         Forms\Components\Grid::make("")
                             ->columns(2)
                             ->schema(array(

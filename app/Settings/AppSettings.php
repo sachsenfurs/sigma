@@ -29,6 +29,8 @@ class AppSettings extends Settings
     public ?string $telegram_bot_token;
     public ?string $telegram_bot_name;
 
+    public ?string $short_domain;
+
     public function hasEventStarted(): bool {
         return $this->event_start->isAfter(now());
     }
