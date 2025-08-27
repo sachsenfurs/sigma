@@ -6,6 +6,7 @@ use App\Filament\Clusters\SigPlanning;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\TimetableEntryResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
+use App\Models\DepartmentInfo;
 use App\Models\SigFavorite;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
+use Nette\Utils\Html;
 
 class TimetableEntryResource extends Resource
 {
@@ -97,16 +99,27 @@ class TimetableEntryResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make("requirements")
                     ->infolist([
+                        TextEntry::make("sigEvent.name_localized")
+                            ->inlineLabel()
+                            ->label(__("Event Name"))
+                            ->color('primary')
+                            ->url(fn($record) => SigEventResource::getUrl('view', ['record' => $record->sigEvent])),
                         TextEntry::make("sigEvent.description_localized")
                             ->label("Description")
-                            ->translateLabel()
-                            ->inlineLabel(),
+                            ->markdown()
+                            ->listWithLineBreaks()
+                            ->limit(500)
+                            ->size(TextEntry\TextEntrySize::ExtraSmall)
+                            ->color('gray')
+                            ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
+                            ->translateLabel(),
                         TextEntry::make("sigEvent.additional_info")
                             ->label("Additional Information")
                             ->translateLabel()
                             ->listWithLineBreaks()
                             ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state)))),
                         RepeatableEntry::make("sigEvent.departmentInfos")
+                            ->visible(fn($state) => $state)
                             ->label("SIG Requirements")
                             ->translateLabel()
                             ->schema([
@@ -114,6 +127,8 @@ class TimetableEntryResource extends Resource
                                     ->label("")
                                     ->prefixAction(
                                         Action::make("edit")
+                                            ->label(__("Edit"))
+                                            ->authorize("create", DepartmentInfo::class)
                                             ->url(function(Model $record) {
                                                 return DepartmentInfoResource::getUrl("edit", ['record' => $record]);
                                             })
@@ -157,17 +172,21 @@ class TimetableEntryResource extends Resource
     public static function getTableColumns(): array {
         return [
             Tables\Columns\TextColumn::make('timestamp')
-                ->getStateUsing(function ($record) {
+                ->getStateUsing(function ($record, $table) {
                     $suffix = '';
+                    $prefix = '';
                     if ($record->cancelled) {
                         $suffix = ' - ' . __('Cancelled');
                     } else {
                         if ($record->new)
                             $suffix = ' - ' . __('New');
                         if ($record->has_time_changed)
-                            $suffix = ' - ' . __('Changed');
+                            $suffix = ' ' . __('Changed');
                     }
-                    return $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
+                    if(!empty($table->getSortColumn()))
+                        $prefix = $record->start->translatedFormat("D") . " - ";
+
+                    return $prefix . $record->start->format('H:i') . ' - ' . $record->end->format('H:i') . $suffix;
                 })
                 ->badge(function (Model $record) {
                     return $record->cancelled || $record->new || $record->has_time_changed;

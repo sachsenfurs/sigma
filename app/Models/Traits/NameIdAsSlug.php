@@ -12,6 +12,12 @@ trait NameIdAsSlug {
         return substr(md5(app(AppSettings::class)->event_start), 1, 4);
     }
 
+    public function routeUrl(string $route): string {
+        $route = route($route, $this);
+        $split = explode($this->id.$this->slugChecksum(), $route);
+        return $split[0] . $this->id;
+    }
+
     public function slug() : Attribute {
         return Attribute::make(function() {
             return $this->id.$this->slugChecksum()."-".urlencode(Str::slug($this->name));

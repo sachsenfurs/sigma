@@ -36,7 +36,7 @@
                             <p>
                                 <span class="badge bg-secondary">{{ $tag->description_localized }}</span>
                                 <img src="{{ $entry->qrCode() }}"
-                                     alt="{{ route("timetable-entry.show", $entry) }}"
+                                     alt="{{ app(\App\Settings\AppSettings::class)->short_domain ? "https://" . app(\App\Settings\AppSettings::class)->short_domain . $entry->id : $entry->routeUrl("timetable-entry.show") }}"
                                      class="img-thumbnail" style="max-height: 12em;"
                                 />
                             </p>

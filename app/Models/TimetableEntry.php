@@ -6,6 +6,7 @@ use App\Enums\Approval;
 use App\Models\Traits\HasReminders;
 use App\Models\Traits\NameIdAsSlug;
 use App\Observers\TimetableEntryObserver;
+use App\Settings\AppSettings;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -175,7 +176,7 @@ class TimetableEntry extends Model
 
     public function qrCode(): string {
         return Cache::remember(
-            "qrcode-entry-".$this->id,
+            "qrcode-entry-".$this->id.(app(AppSettings::class)->short_domain?:""),
             3600 * 4,
             function(): string {
                 $qrCode = new QRCode(
@@ -186,7 +187,10 @@ class TimetableEntry extends Model
                         'quietzoneSize' => 1, // the white box around the qr code
                     ])
                 );
-                return $qrCode->render(route("timetable-entry.show", $this));
+                $route = app(AppSettings::class)->short_domain
+                    ? "https://" . app(AppSettings::class)->short_domain . $this->id
+                    : $this->routeUrl("timetable-entry.show");
+                return $qrCode->render($route);
             }
         );
     }
