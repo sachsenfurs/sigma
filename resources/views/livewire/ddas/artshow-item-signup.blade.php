@@ -108,7 +108,9 @@
                             <div class="row d-flex justify-content-between">
                                 <div class="col-md col-12">
                                     <p class="card-text">
-                                        {!!  $item->description !!}
+                                        <x-markdown>
+                                            {{ $item->description }}
+                                        </x-markdown>
                                     </p>
                                 </div>
                                 <div class="col-12 col-md-auto align-top px-2 text-center">
