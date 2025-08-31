@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SigFormResource\RelationManagers;
 
 use App\Enums\Approval;
+use App\Filament\Helper\FormHelper;
 use App\Models\SigFilledForm;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -63,9 +64,11 @@ class SigFilledFormsRelationManager extends RelationManager
                             $delimiter = ';';
 
                             $definition = collect($this->ownerRecord->form_definition)
-                                ->pluck("data.name")
-                                ->prepend("User")
-                                ->prepend("Reg Nr");
+                                ->pluck("data.name");
+
+                            foreach ($startColumns = array_reverse(['ID', 'Reg Nr', 'Name', 'Approval', 'Reason']) as $item) {
+                                $definition->prepend($item);
+                            }
 
                             // heading
                             fputcsv($handle, $definition->toArray(), $delimiter);
@@ -73,15 +76,26 @@ class SigFilledFormsRelationManager extends RelationManager
                             foreach ($this->ownerRecord->sigFilledForms()->with("user")->get() as $filledForm) {
                                 /** @var SigFilledForm $filledForm */
                                 $entry = [
+                                    $filledForm->id,
                                     $filledForm->user->reg_id,
                                     $filledForm->user->name,
+                                    $filledForm->approval->name(),
+                                    $filledForm->rejection_reason
                                 ];
 
                                 $data = collect($filledForm->form_data)->get('form_data', []);
 
+                                // add correct host to file upload url
+                                $formDefinition = collect($this->ownerRecord->form_definition ?: []);
+                                foreach($data AS $dataEntry=>$value) {
+                                    $type = $formDefinition->firstWhere("data.name", $dataEntry)['type'] ?? "";
+                                    if($type == "file_upload")
+                                        $data[$dataEntry] = Storage::disk("public")->url($value);
+                                }
+
                                 $entry = array_merge(
                                     $entry,
-                                    $definition->slice(2)->map(fn ($key) => data_get($data, $key))->toArray()
+                                    $definition->slice(count($startColumns))->map(fn ($key) => data_get($data, $key))->toArray()
                                 );
 
                                 fputcsv($handle, $entry, $delimiter);
@@ -103,13 +117,18 @@ class SigFilledFormsRelationManager extends RelationManager
 
     protected function getTableColumns(): array {
         $tableColumns = [
+            Tables\Columns\TextColumn::make('id')
+                ->sortable()
+                ->label("ID"),
             Tables\Columns\IconColumn::make('approval')
                 ->label('Approval')
                 ->translateLabel(),
             Tables\Columns\TextColumn::make('rejection_reason'),
-            Tables\Columns\TextColumn::make("user.name"),
+            Tables\Columns\TextColumn::make("user")
+                ->formatStateUsing(FormHelper::formatStateUserWithRegId(true)),
             Tables\Columns\TextColumn::make('updated_at')
-             ->since(),
+                ->sortable()
+                ->since(),
         ];
         foreach ($this->ownerRecord->form_definition as $formDefinition) {
             $formData = $formDefinition['data'];
