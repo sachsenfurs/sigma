@@ -40,6 +40,7 @@ class PostResource extends Resource
             ->schema([
                 Forms\Components\Textarea::make('text')
                     ->label("Text")
+                    ->maxLength(fn(Forms\Get $get) => $get("image") ? 1023 : 4095)
                     ->hint(__("Telegram Markdown Syntax supported"))
                     ->helperText(__("Markdown Syntax: *bold*  _italic_  `monospace`"))
                     ->required()
@@ -47,6 +48,7 @@ class PostResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('text_en')
                     ->label("Text (English)")
+                    ->maxLength(fn(Forms\Get $get) => $get("image") ? 1023 : 4095)
                     ->translateLabel()
                     ->rows(10)
                     ->hintAction(
