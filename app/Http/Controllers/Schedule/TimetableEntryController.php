@@ -48,6 +48,7 @@ class TimetableEntryController extends Controller
             "sigEvent.sigHosts",
             "sigEvent.forms",
             "sigEvent.timetableEntries.sigLocation",
+            "sigEvent.timetableEntries.sigTimeslots.sigAttendees.user"
         ]);
 
         return view("schedule.show", [

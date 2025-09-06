@@ -94,7 +94,7 @@ class TimetableEntry extends Model
     }
 
     public function sigTimeslots(): HasMany {
-        return $this->hasMany(SigTimeslot::class);
+        return $this->hasMany(SigTimeslot::class)->orderBy("slot_start");
     }
     public function getAvailableSlotCount(): int {
         $counter = 0;
@@ -168,7 +168,7 @@ class TimetableEntry extends Model
     public function isFavorite(): Attribute {
         return Attribute::make(function() {
             if(Auth::check()) {
-                return $this->favorites->where("user_id", auth()->user()->id)->count() > 0;
+                return $this->favorites->where("user_id", auth()->id())->count() > 0;
             }
             return false;
         })->shouldCache();
@@ -216,6 +216,7 @@ class TimetableEntry extends Model
         $parts = explode($this->slugChecksum(), $value);
         $id = $parts[0] ?? 0;
 
+        
         $instances = self::where("id", $id)->orWhereHas("sigEvent", function(Builder $query) use ($value) {
             $query->where("name", $value)->orWhere("name_en", $value);
         });

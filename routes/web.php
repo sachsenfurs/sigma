@@ -19,7 +19,6 @@ use App\Http\Controllers\Sig\SigFavoriteController;
 use App\Http\Controllers\Sig\SigFormController;
 use App\Http\Controllers\Sig\SigHostController;
 use App\Http\Controllers\Sig\SigLocationController;
-use App\Http\Controllers\Sig\SigRegistrationController;
 use App\Http\Controllers\User\ConnectTelegramController;
 use App\Http\Controllers\User\SettingsController;
 use App\Providers\RouteServiceProvider;
@@ -89,10 +88,6 @@ Route::group(['middleware' => "auth"], function() {
         Route::get('/create', [SigEventController::class, 'create'])->name("create");
         Route::post('/', [SigEventController::class, 'store'])->name("store");
     });
-
-    // SIG Timeslot Registration
-    Route::post('/register/{timeslot}', [SigRegistrationController::class, 'register'])->name('registration.register');
-    Route::delete('/cancel/{timeslot}', [SigRegistrationController::class, 'cancel'])->name('registration.cancel');
 
     // Favorites
     Route::post("/favorites", [SigFavoriteController::class, 'store'])->name('favorites.store');

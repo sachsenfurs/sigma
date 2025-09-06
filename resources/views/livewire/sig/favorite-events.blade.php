@@ -17,7 +17,9 @@
                             <div class="col pe-1">
                                 <a class="text-decoration-none fs-6" href="{{ route("timetable-entry.show", $favorite->timetableEntry) }}">
                                     {{ $favorite->timetableEntry->sigEvent?->name_localized }}
-                                    ({{ $favorite->timetableEntry->formatted_length }})
+                                    @if($length = $favorite->timetableEntry->formatted_length)
+                                        ({{ $length }})
+                                    @endif
                                 </a>
                                 <div class="mt-2"><i class="bi bi-geo-alt icon-link"></i> {{ $favorite->timetableEntry->sigLocation->name_localized }}</div>
                             </div>

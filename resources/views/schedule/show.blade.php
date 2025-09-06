@@ -80,12 +80,13 @@
             </div>
         </div>
 
+
         <div class="col-12 text-center mb-2 mt-4">
             <h2>{{ $entry->sigEvent->reg_possible ? __("Sign up") : __("Scheduled") }}</h2>
         </div>
 
         @if($entry->sigEvent->forms->count() > 0)
-            <div class="alert alert-info mt-3">
+            <div class="alert alert-info my-4">
                 <p>
                     {{ __("There is a sign up form for this event:") }}
                 </p>
@@ -96,47 +97,9 @@
                 @endforeach
             </div>
         @endif
-        <div class="row mt-4">
-            @forelse($entry->sigEvent->timetableEntries AS $e)
-                @if ($e->sigTimeslots->count() > 0)
-                    <div class="col-12 col-md-6">
-                        <x-timeslot.accordion :entry="$e"></x-timeslot.accordion>
-                    </div>
-                @else
-                    <div class="col-12 col-md-6 col-xl-4 m-3 mx-auto">
-                        <div class="card text-center">
-                            <div class="card-header">
-                                <span style="font-size: 1.3em">
-                                    {{ $e->start->dayName }}
-                                </span>
-                                <p class="card-subtitle text-secondary">
-                                    {{ $e->start->format("d.m.Y") }}
-                                </p>
 
-                                @can("update", $e)
-                                    <div class="text-end">
-                                        <a href="{{ \App\Filament\Resources\TimetableEntryResource::getUrl('edit', ['record' => $e]) }}">
-                                            <i class="bi bi-pencil"></i>
-                                            {{ __("Edit") }}
-                                        </a>
-                                    </div>
-                                @endcan
-                            </div>
-                            <div class="card-body">
-                                {{ $e->start->format("H:i") }} - {{ $e->end->format("H:i") }}
-                            </div>
-                            <div class="card-footer">
-                                <i class="bi bi-geo-alt icon-link"></i>
-                                {{ $e->sigLocation->name }}
-                            </div>
-                        </div>
-                    </div>
-                @endif
+        <livewire:schedule.entries :entry="$entry"/>
 
-            @empty
-            {{ __("Not listed in schedule") }}
-            @endforelse
-        </div>
     </div>
 
     <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">

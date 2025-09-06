@@ -29,7 +29,7 @@ class Authenticate extends Middleware
                     (new OAuthProfileUpdateService())->byRefreshToken($refreshToken);
                     auth()->user()->refresh();
                 } catch(IdentityProviderException $e) {
-                    info("couldn't update refresh_token for user id " . auth()->id(), $e, auth()->user()->refresh_token);
+                    info("couldn't update refresh_token for user id " . auth()->id() .", " . $e->getMessage() . ", " . auth()->user()->refresh_token);
                     auth()->user()->token_updated_at = now(); // update token time so it won't try to update on every request from now on
                     auth()->user()->save();
                 }

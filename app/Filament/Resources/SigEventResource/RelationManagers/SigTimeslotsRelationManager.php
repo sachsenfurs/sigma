@@ -12,6 +12,7 @@ use App\Settings\AppSettings;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -89,6 +90,9 @@ class SigTimeslotsRelationManager extends RelationManager
                     ->label(__("Timetable Entry"))
                     ->translateLabel(),
                 Tables\Columns\IconColumn::make("self_register")
+                    ->boolean(),
+                Tables\Columns\IconColumn::make("group_registration")
+                    ->label(__("Group Registration"))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('slot_start')
                     ->label('Slot Start')
@@ -171,6 +175,10 @@ class SigTimeslotsRelationManager extends RelationManager
                                  ->translateLabel()
                                  ->type('number')
                                  ->minValue(1),
+                            Checkbox::make("self_register")
+                                ->label(__("Self Registration")),
+                            Checkbox::make("group_registration")
+                                ->label(__("Group Registration"))
                         ])
                         ->action(function(array $data, Collection $records) {
                             $records->each->update(collect($data)->filter(fn($d) => $d != null)->toArray());
@@ -304,9 +312,18 @@ class SigTimeslotsRelationManager extends RelationManager
                 ->type('number')
                 ->minValue(1)
                 ->default($previousSlot?->max_users ?? 1),
-            Checkbox::make('self_register')
-                ->inline(false)
-                ->default($previousSlot?->self_register ?? true),
+            Grid::make()
+                ->columns(2)
+                ->schema([
+                    Checkbox::make('self_register')
+                        ->inline(false)
+                        ->default($previousSlot?->self_register ?? true),
+                    Checkbox::make('group_registration')
+                        ->label(__("Group Registration"))
+                        ->helperText(__("Allow the first registered attendee to manage (Add/Remove) attendees for his timeslot"))
+                        ->inline(false)
+                        ->default($previousSlot?->self_register ?? true),
+                ])
         ];
     }
 }

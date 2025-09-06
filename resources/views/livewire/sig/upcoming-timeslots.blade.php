@@ -18,7 +18,12 @@
                                 {{ $timeslot->timetableEntry->sigEvent?->name_localized }}
                                 ({{ $timeslot->timetableEntry->formatted_length }})
                             </a>
-                            <div class="mt-2"><i class="bi bi-geo-alt icon-link"></i> {{ $timeslot->timetableEntry->sigLocation->name_localized }}</div>
+                            <div class="mt-2">
+                                <i class="bi bi-geo-alt icon-link"></i> {{ $timeslot->timetableEntry->sigLocation->name_localized }}
+                                <span class="text-secondary">
+                                    <i class="bi bi-people-fill icon-link ms-2"></i> {{ $timeslot->sigAttendees->count() }}
+                                </span>
+                            </div>
                         </div>
 
                         <div class="col-1 p-3 d-flex align-items-center justify-content-end w-auto">
@@ -34,15 +39,17 @@
                                     <div class="col row align-items-stretch">
                                         <button class="btn btn-outline-light" wire:click.debounce="showAttendeeModal({{ $timeslot->id }})">
                                             <i class="bi bi-people-fill"></i>
-                                            <div class="small">{{ __("Attendees") }}</div>
+                                            <div class="small">{{ __("Attendees") }} ({{ $timeslot->sigAttendees->count() }})</div>
                                         </button>
                                     </div>
-                                    <div class="col row align-items-stretch">
-                                        <button class="btn btn-outline-danger" wire:click.debounce="removeConfirmTimeslot({{ $timeslot->id }})">
-                                            <i class="bi bi-x"></i>
-                                            <div class="small">{{ __("Cancel registration") }}</div>
-                                        </button>
-                                    </div>
+                                    @can("delete", $timeslot?->sigAttendees?->firstWhere("user_id", auth()->id()))
+                                        <div class="col row align-items-stretch">
+                                            <button class="btn btn-outline-danger" wire:click.debounce="removeConfirmTimeslot({{ $timeslot->id }})">
+                                                <i class="bi bi-x"></i>
+                                                <div class="small">{{ __("Cancel registration") }}</div>
+                                            </button>
+                                        </div>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -68,12 +75,8 @@
 
         @foreach($selected_timeslot?->sigAttendees ?? [] AS $sigAttendee)
             <div class="row mt-3">
-                <div class="col-2 align-content-center text-center">
-                    @if($sigAttendee->user->avatar_thumb)
-                        <img src="{{ $sigAttendee->user->avatar_thumb }}" alt="" class="img-thumbnail rounded-circle">
-                    @else
-                        <i class="bi bi-person-circle fs-1"></i>
-                    @endif
+                <div class="col-2 align-content-center text-center fs-2">
+                    <x-avatar :user="$sigAttendee->user" size="3rem" />
                 </div>
                 <div class="col align-content-center">
                     <div class="fs-4">
@@ -82,12 +85,16 @@
                     <span class="small text-muted">{{ __("Signed up: :time", ['time' => $sigAttendee->created_at->ago()]) }}</span>
                 </div>
                 <div class="col-auto align-content-center">
-                    @if($selected_timeslot?->getOwner() == $sigAttendee)
-                        <span class="badge bg-success fs-6">{{ __("Leader") }}</span>
-                    @elseif($selected_timeslot?->getOwner()?->user_id == auth()->id())
-                        <button class="btn btn-outline-danger" wire:click="confirmRemoveSigAttendee({{ $sigAttendee->id }})">
-                            <i class="bi bi-x"></i>
-                        </button>
+                    @if($selected_timeslot->group_registration)
+                        @if($selected_timeslot?->getOwner() == $sigAttendee)
+                            <span class="badge bg-success fs-6">{{ __("Leader") }}</span>
+                        @elseif($selected_timeslot?->getOwner()?->user_id == auth()->id())
+                            @can("delete", [$sigAttendee, $selected_timeslot->getOwner()])
+                                <button class="btn btn-outline-danger" wire:click="confirmRemoveSigAttendee({{ $sigAttendee->id }})">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            @endcan
+                        @endif
                     @endif
                 </div>
             </div>

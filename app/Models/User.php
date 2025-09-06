@@ -81,6 +81,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
         return $this->hasMany(SigFavorite::class);
     }
 
+    public function favoriteEntries(): BelongsToMany {
+        return $this->belongsToMany(TimetableEntry::class, 'sig_favorites')
+//                    ->using(SigFavorite::class)
+                    ->withTimestamps();
+    }
+
     public function calendars(): HasMany {
         return $this->hasMany(UserCalendar::class);
     }
