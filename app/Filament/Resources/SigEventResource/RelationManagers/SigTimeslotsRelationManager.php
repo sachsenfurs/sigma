@@ -13,6 +13,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -165,7 +166,19 @@ class SigTimeslotsRelationManager extends RelationManager
                             DateTimePicker::make('reg_start')
                                  ->label('Registration Start')
                                  ->translateLabel()
-                                 ->seconds(false),
+                                 ->seconds(false)
+                                 ->hintAction(
+                                     function() {
+                                         if($this->entry) {
+                                             return Action::make("setToConStart")
+                                                ->label("Set to Con Start")
+                                                ->translateLabel()
+                                                ->action(function (Set $set) {
+                                                   $set('reg_start', app(AppSettings::class)->event_start->format("Y-m-d\TH:i"));
+                                                });
+                                         }
+                                     }
+                                 ),
                             DateTimePicker::make('reg_end')
                                  ->label('Registration End')
                                  ->translateLabel()
@@ -175,9 +188,13 @@ class SigTimeslotsRelationManager extends RelationManager
                                  ->translateLabel()
                                  ->type('number')
                                  ->minValue(1),
-                            Checkbox::make("self_register")
+                            Radio::make("self_register")
+                                ->boolean()
+                                ->inline()
                                 ->label(__("Self Registration")),
-                            Checkbox::make("group_registration")
+                            Radio::make("group_registration")
+                                ->boolean()
+                                ->inline()
                                 ->label(__("Group Registration"))
                         ])
                         ->action(function(array $data, Collection $records) {
