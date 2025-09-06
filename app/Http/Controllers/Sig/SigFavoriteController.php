@@ -15,7 +15,6 @@ class SigFavoriteController extends Controller
 
         auth()->user()->favorites()->create([
             'timetable_entry_id' => $attributes['timetable_entry_id'],
-            'user_id' => auth()->user()->id,
         ]);
     }
 

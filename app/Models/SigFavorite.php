@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Cache;
 class SigFavorite extends Model
 {
     use HasReminders;
+//    use AsPivot;
+//    protected $table = "sig_favorites";
 
     protected $guarded = [];
 

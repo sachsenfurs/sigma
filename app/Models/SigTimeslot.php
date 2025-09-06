@@ -24,7 +24,7 @@ class SigTimeslot extends Model
         'slot_end' => 'datetime',
     ];
 
-    public function scopeUpcoming(Builder $query) {
+    public function scopeUpcoming(Builder $query): void {
         $query->where("slot_end", ">", now()->addMinutes(15));
     }
 
@@ -40,17 +40,19 @@ class SigTimeslot extends Model
         return $this->sigAttendees->sortBy("created_at")->first();
     }
 
-    public function getAttendeeNames(): array {
-        $attendees = [];
-        foreach ($this->sigAttendees as $attendee) {
-            $user = [
-                'name' => $attendee->user->name,
-                'id' => $attendee->user->id,
-            ];
-            array_push($attendees, $user);
-        }
-
-        return $attendees;
+    public function isFull(): bool {
+        return $this->sigAttendees->count() >= $this->max_users;
     }
 
+    public function isWithinRegTime(): bool {
+        return $this->reg_start->isPast() AND $this->reg_end->isFuture();
+    }
+
+    public function isUserRegistered(?User $user = null): bool {
+        if(!$user)
+            $user = auth()->user();
+        if($user)
+            return $this->sigAttendees->contains("user_id", $user->id);
+        return false;
+    }
 }

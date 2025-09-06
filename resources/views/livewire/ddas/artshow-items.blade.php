@@ -37,8 +37,19 @@
             </div>
         </div>
     </div>
+    @if($this->showOnlyMyBids)
+        <div class="col-12 w-100 text-info">
+            {{ __("You have currently bid on :items.", [
+                'items' => trans_choice(":count items", $count=$this->items->count(), ['count' => $count])
+            ]) }}
+            {{ __("You are the highest bidder on :items with a total bid amount of :total.", [
+                'items' => trans_choice(":count items", $count=($highest = $this->items->filter(fn($item) => $item->highestBid?->user_id == auth()->id()))->count(), ['count' => $count]),
+                'total' => \Illuminate\Support\Number::format($highest->sum(fn($item) => $item->highestBid->value ?? 0), 2) . " " . config("app.currency")
+            ]) }}
+        </div>
+    @endif
 
-    @forelse($this->itemsPaginated AS $item)
+@forelse($this->itemsPaginated AS $item)
         <div class="col" wire:loading.remove wire:target="search, artist">
             <div class="card h-100" style="cursor: pointer" wire:click.throttle.1000ms="showItem({{$item->id}})">
                 <div class="row g-0 h-100">
@@ -48,7 +59,9 @@
                             <h6 class="text-muted"><i class="bi bi-palette icon-link"></i> {{ $item->artist->name }}</h6>
                         </div>
                         <div class="card-text small">
-                            {!! $item->description_localized !!}
+                            <x-markdown>
+                                {{ $item->description_localized }}
+                            </x-markdown>
                         </div>
                     </div>
                     <div class="col-auto text-center">

@@ -12,6 +12,8 @@ use App\Settings\AppSettings;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -90,6 +92,9 @@ class SigTimeslotsRelationManager extends RelationManager
                     ->translateLabel(),
                 Tables\Columns\IconColumn::make("self_register")
                     ->boolean(),
+                Tables\Columns\IconColumn::make("group_registration")
+                    ->label(__("Group Registration"))
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('slot_start')
                     ->label('Slot Start')
                     ->translateLabel()
@@ -161,7 +166,19 @@ class SigTimeslotsRelationManager extends RelationManager
                             DateTimePicker::make('reg_start')
                                  ->label('Registration Start')
                                  ->translateLabel()
-                                 ->seconds(false),
+                                 ->seconds(false)
+                                 ->hintAction(
+                                     function() {
+                                         if($this->entry) {
+                                             return Action::make("setToConStart")
+                                                ->label("Set to Con Start")
+                                                ->translateLabel()
+                                                ->action(function (Set $set) {
+                                                   $set('reg_start', app(AppSettings::class)->event_start->format("Y-m-d\TH:i"));
+                                                });
+                                         }
+                                     }
+                                 ),
                             DateTimePicker::make('reg_end')
                                  ->label('Registration End')
                                  ->translateLabel()
@@ -171,6 +188,14 @@ class SigTimeslotsRelationManager extends RelationManager
                                  ->translateLabel()
                                  ->type('number')
                                  ->minValue(1),
+                            Radio::make("self_register")
+                                ->boolean()
+                                ->inline()
+                                ->label(__("Self Registration")),
+                            Radio::make("group_registration")
+                                ->boolean()
+                                ->inline()
+                                ->label(__("Group Registration"))
                         ])
                         ->action(function(array $data, Collection $records) {
                             $records->each->update(collect($data)->filter(fn($d) => $d != null)->toArray());
@@ -304,9 +329,18 @@ class SigTimeslotsRelationManager extends RelationManager
                 ->type('number')
                 ->minValue(1)
                 ->default($previousSlot?->max_users ?? 1),
-            Checkbox::make('self_register')
-                ->inline(false)
-                ->default($previousSlot?->self_register ?? true),
+            Grid::make()
+                ->columns(2)
+                ->schema([
+                    Checkbox::make('self_register')
+                        ->inline(false)
+                        ->default($previousSlot?->self_register ?? true),
+                    Checkbox::make('group_registration')
+                        ->label(__("Group Registration"))
+                        ->helperText(__("Allow the first registered attendee to manage (Add/Remove) attendees for his timeslot"))
+                        ->inline(false)
+                        ->default($previousSlot?->self_register ?? true),
+                ])
         ];
     }
 }

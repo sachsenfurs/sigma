@@ -96,14 +96,14 @@ class ArtshowItemResource extends Resource
                          '2xl' => 2
                      ])
                      ->schema([
-                            Forms\Components\RichEditor::make('description')
+                            Forms\Components\MarkdownEditor::make('description')
                                 ->label('Description')
                                 ->translateLabel()
                                 ->maxLength(65535)
                                 ->hintAction(
                                     fn($operation, $record) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description')->authorize("create", ArtshowItem::class) : null
                                 ),
-                            Forms\Components\RichEditor::make('description_en')
+                            Forms\Components\MarkdownEditor::make('description_en')
                                 ->label('Description (English)')
                                 ->translateLabel()
                                 ->maxLength(65535)

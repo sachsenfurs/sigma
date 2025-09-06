@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SigTimeslotResource\RelationManagers;
 
 use App\Filament\Helper\FormHelper;
+use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use Closure;
 use Filament\Forms;
@@ -62,6 +63,9 @@ class SigAttendeeRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label("Add")
+                    ->authorize(function() {
+                        return auth()->user()->can("adminCreate", [SigAttendee::class, $this->ownerRecord]);
+                    })
                     ->translateLabel()
                     ->form([
                         Forms\Components\Select::make("user_id")
@@ -74,12 +78,22 @@ class SigAttendeeRelationManager extends RelationManager
                                         if($this->ownerRecord->sigAttendees->count() >= $this->ownerRecord->max_users)
                                             $fail(__("Attendee limit reached"));
                                     }
+                                },
+                                fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                                    if (SigAttendee::where('user_id', $value)
+                                                   ->where('sig_timeslot_id', $this->ownerRecord->id)
+                                                   ->exists()) {
+                                        $fail(__("Already signed up"));
+                                    }
                                 }
                             ]),
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->form([
+                        Forms\Components\DateTimePicker::make("created_at")
+                    ]),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

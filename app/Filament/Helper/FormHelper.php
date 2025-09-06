@@ -22,6 +22,17 @@ class FormHelper
         };
     }
 
+    public static function formatStateUserWithRegId($swap=false): \Closure {
+        return function($state) use ($swap) {
+            if($state instanceof User OR $state instanceof SigHost) {
+                if($state->reg_id)
+                    return $swap ? $state->name . " (#" . $state->reg_id . ")" : $state->reg_id . " - " . $state->name;
+                return $state->name;
+            }
+            return $state->name ?? $state->title ?? "";
+        };
+    }
+
     public static function searchUserByNameAndRegId(): \Closure {
         return function (string $search) {
             return User::where('name', 'like', "%{$search}%")

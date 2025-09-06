@@ -104,6 +104,9 @@ class SigTimeslotResource extends Resource
                             ])
                     )
                     ->tooltip(fn($record) => $record->sigAttendees->pluck("user.name")->join(", ")),
+                Tables\Columns\IconColumn::make("group_registration")
+                    ->label(__("Group Registration"))
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('reg_start')
                     ->label("Registration Start")
                     ->translateLabel()

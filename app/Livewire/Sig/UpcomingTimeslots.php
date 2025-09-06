@@ -24,7 +24,12 @@ class UpcomingTimeslots extends Component
     public function render() {
         $timeslots = auth()->user()->sigTimeslots()
             ->upcoming()
-            ->with(['timetableEntry.sigLocation', 'timetableEntry.sigEvent', 'userReminder'])
+            ->with([
+                'timetableEntry.sigLocation',
+                'timetableEntry.sigEvent',
+                'userReminder',
+                'sigAttendees',
+            ])
             ->orderBy("slot_start")->paginate(4, pageName: 'slots');
 
         return view('livewire.sig.upcoming-timeslots', [
@@ -42,6 +47,9 @@ class UpcomingTimeslots extends Component
 
     public function removeTimeslot(): void {
         $attendees = auth()->user()->sigAttendees()->where("sig_timeslot_id", $this->selected_timeslot?->id)->get();
+        foreach($attendees AS $attendee) {
+            $this->authorize("delete", $attendee);
+        }
         $attendees->each->delete(); // dont call "delete" on the eloquent query directly so the observer events can be dispatched
         $this->hideModal("removeConfirmModal");
     }

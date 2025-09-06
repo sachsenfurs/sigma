@@ -403,11 +403,6 @@ class SigEventResource extends Resource
                         ->default(1)
                         ->visible(fn (Get $get) => $get('reg_possible') === true)
                         ->columnSpanFull(),
-                    Forms\Components\Checkbox::make('group_registration_enabled')
-                        ->label('Allow the first registered attendee to manage (Add/Remove) attendees for his timeslot')
-                        ->translateLabel()
-                        ->columnSpanFull()
-                        ->visible(fn (Get $get) => $get('reg_possible') === true),
                 ])
                 ->columnSpan(1);
     }
