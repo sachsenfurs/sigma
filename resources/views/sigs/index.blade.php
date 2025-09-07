@@ -108,16 +108,18 @@
                                             <div class="card">
                                                 <div class="card-body row">
                                                     <div class="col">
-                                                        <div>
-                                                            <i class="bi bi-calendar-day icon-link"></i>
-                                                            {{ $entry->start->dayName }}, {{ $entry->start->format("d.m.Y") }}
-                                                        </div>
-                                                        <div>
-                                                            <i class="bi bi-clock icon-link"></i>
-                                                            {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
-                                                        </div>
+                                                        @can("view", $entry) <a href="{{ route("timetable-entry.show", $entry) }}" class="text-decoration-none"> @endcan
+                                                            <div>
+                                                                <i class="bi bi-calendar-day icon-link me-1"></i>
+                                                                {{ $entry->start->dayName }}, {{ $entry->start->format("d.m.Y") }}
+                                                            </div>
+                                                            <div>
+                                                                <i class="bi bi-clock icon-link me-1"></i>
+                                                                {{ $entry->start->format("H:i") }} - {{ $entry->end->format("H:i") }}
+                                                            </div>
+                                                        @can("view", $entry) </a> @endcan
                                                     </div>
-                                                    <div class="col align-content-center">
+                                                    <div class="col-auto align-content-center">
                                                         <div class="mt-1 text-center">
                                                             <i class="bi bi-geo-alt icon-link"></i>
                                                             @can("view", $entry->sigLocation)
