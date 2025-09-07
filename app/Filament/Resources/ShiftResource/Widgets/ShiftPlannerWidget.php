@@ -79,6 +79,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                     ->afterStateUpdated(function($state) {
                         session()->put('calendar_selected_user_role_id', $state);
                         $this->userRole = UserRole::with("shiftTypes")->find($state);
+                        $this->dispatch('refreshShifts');
                         return $this->refreshResources()->refreshRecords();
                     }),
                 Select::make("sig_location_id")

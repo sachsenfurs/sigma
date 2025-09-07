@@ -41,8 +41,10 @@ class DepartmentInfosRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user_role_id')
             ->columns([
-                Tables\Columns\TextColumn::make('userRole.name_localized')
+                Tables\Columns\TextColumn::make('userRole')
                     ->label('User Role')
+                    ->formatStateUsing(fn($state) => $state->name_localized)
+                    ->badge()
                     ->translateLabel()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('additional_info')

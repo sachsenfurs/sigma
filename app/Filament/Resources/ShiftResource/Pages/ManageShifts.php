@@ -12,8 +12,7 @@ class ManageShifts extends ManageRecords
 {
     protected static string $resource = ShiftResource::class;
 
-    protected function getHeaderActions(): array
-    {
+    protected function getHeaderActions(): array {
         return [
             Actions\CreateAction::make(),
         ];

@@ -25,6 +25,10 @@ class ShiftResource extends Resource
     protected static ?string $cluster = ShiftPlanning::class;
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected array $listeners = [
+        'refreshShifts' => '$refresh',
+    ];
+
     public static function getLabel(): ?string {
         return __("Shifts");
     }

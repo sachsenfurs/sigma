@@ -51,7 +51,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\Ddas\ArtshowItem::class        , \App\Policies\Ddas\ArtshowItemPolicy::class);
         Gate::policy(\App\Models\Ddas\ArtshowPickup::class      , \App\Policies\Ddas\ArtshowPickupPolicy::class);
         Gate::policy(\App\Models\Ddas\Dealer::class             , \App\Policies\Ddas\DealerPolicy::class);
-        Gate::policy(\App\Models\Ddas\DealerTag::class          , \App\Policies\Ddas\DealerPolicy::class);
+        Gate::policy(\App\Models\Ddas\DealerTag::class          , \App\Policies\Ddas\DealerTagPolicy::class);
 
         Gate::policy(\App\Models\LostFoundItem::class           , \App\Policies\LostFoundItemPolicy::class);
 
