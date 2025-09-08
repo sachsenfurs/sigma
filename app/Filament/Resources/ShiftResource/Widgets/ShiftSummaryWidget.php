@@ -11,11 +11,6 @@ use Illuminate\Database\Query\Builder;
 
 class ShiftSummaryWidget extends BaseWidget
 {
-
-    protected $listeners = [
-        'refreshShifts' => '$refresh',
-    ];
-
     protected function getTableHeading(): string|Htmlable|null {
         return __("Shift Summary");
     }
@@ -34,7 +29,7 @@ class ShiftSummaryWidget extends BaseWidget
                         ->whereColumn('shift_user.user_id', 'users.id')
                         ->where(function(Builder $query) {
                             if(session('calendar_selected_user_role_id'))
-                                return $query->where('shift_types.user_role_id', session('calendar_selected_user_role_id'));
+                                return $query->where('shift_types.user_role_id', session('calendar_selected_user_role_id', ""));
                         })
                       ->whereColumn('shift_user.user_id', 'users.id')
                       ->selectRaw('SUM(TIMESTAMPDIFF(MINUTE, shifts.start, shifts.end)) / 60');
@@ -46,7 +41,7 @@ class ShiftSummaryWidget extends BaseWidget
                         ->whereColumn('shift_user.user_id', 'users.id')
                         ->where(function(Builder $query) {
                             if(session('calendar_selected_user_role_id'))
-                                return $query->where('shift_types.user_role_id', session('calendar_selected_user_role_id'));
+                                return $query->where('shift_types.user_role_id', session('calendar_selected_user_role_id', ""));
                         })
                       ->whereColumn('shift_user.user_id', 'users.id')
                       ->selectRaw('COUNT(*)');
