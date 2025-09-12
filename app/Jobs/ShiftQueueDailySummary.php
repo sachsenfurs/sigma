@@ -15,8 +15,8 @@ class ShiftQueueDailySummary implements ShouldQueue
 
     public function handle(): void {
         $userWithShifts = User::whereHas("userShifts.shift", function(Builder $query) {
-               return $query->where("start", ">", now()->setHour(9)->setMinute(0))
-                   ->where("start", "<", now()->setHour(23)->setMinute(59));
+               return $query->where("start", ">", now()->subMinutes(30))
+                   ->where("start", "<", now()->addDay()->addMinutes(30));
             })
             ->with(["userShifts.shift.type"])
             ->get();
