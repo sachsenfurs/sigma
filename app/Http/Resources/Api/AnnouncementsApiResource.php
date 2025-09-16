@@ -25,8 +25,8 @@ class AnnouncementsApiResource extends JsonResource
 
         return [
             'id'            => $this->id,
-            'message_id'    => $this->channels->where("language",  "!=", "en")->first()?->postChannelMessage?->message_id,
-            'message_id_en' => $this->channels->where("language",  "en")->first()?->postChannelMessage?->message_id,
+            'message_id'    => $this->messages()->whereHas("postChannel", fn($c) => $c->where("language", "!=", "en"))->get()->first()?->id,
+            'message_id_en' => $this->messages()->whereHas("postChannel", fn($c) => $c->where("language", "en"))->get()->first()?->id,
             'text'          => (new MarkdownBladeComponent())->toHtml($this->text),
             'text_en'       => (new MarkdownBladeComponent())->toHtml($this->text_en),
             'created_at'    => $this->created_at,
