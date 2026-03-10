@@ -105,13 +105,15 @@
                 <div class="row">
                     <div class="col-md-5 col-7 col-lg-3">
                         <label class="container rounded bg-body border p-3" style="cursor: pointer" for="selectImage">
-                            {{ __('Image (optional)') }}
+                            {{ app(\App\Settings\DealerSettings::class)->image_mandatory ? __('Image') : __('Image (optional)') }}
                             <div class="text-center" style="aspect-ratio: 1">
                                 <div wire:loading.class="spinner-border m-5" wire:target="form.icon_file"></div>
                                 @if($form->icon_file)
                                     <img src="{{ $form->icon_file?->temporaryUrl() }}"
                                         wire:loading.remove wire:target="form.icon_file" alt="" class="rounded"
-                                        style="width: 100%; height: 100%; object-fit: cover" />
+                                        style="width: 100%; height: 100%; object-fit: cover"
+                                        @required(app(\App\Settings\DealerSettings::class)->image_mandatory)
+                                    />
                                 @elseif($form->icon_file_url)
                                     <img src="{{ $form->icon_file_url }}" alt="" style="width: 100%; height: 100%; object-fit: cover" />
                                 @endif

@@ -169,6 +169,7 @@ return [
         'files.*'           => "File",
         'charity_percentage' => "Charity Percentage",
         'additional_info' => "Additional Information",
+        'icon_file' => "Image",
     ],
 
 ];

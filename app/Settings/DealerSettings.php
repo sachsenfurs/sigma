@@ -11,6 +11,7 @@ class DealerSettings extends Settings
     public Carbon $signup_deadline;
     public Carbon $show_dealers_date;
     public bool $paid_only;
+    public bool $image_mandatory;
 
     public static function group(): string {
         return 'dealer';

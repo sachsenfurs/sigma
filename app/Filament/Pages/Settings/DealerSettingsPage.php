@@ -59,6 +59,9 @@ class DealerSettingsPage extends SettingsPage
                        Toggle::make("paid_only")
                             ->label("Signup requires paid ticket")
                             ->translateLabel(),
+                       Toggle::make("image_mandatory")
+                            ->label("Dealer must upload an image")
+                            ->translateLabel(),
                    ])
             ]);
     }

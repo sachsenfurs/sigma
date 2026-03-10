@@ -177,6 +177,7 @@ return [
         'charity_percentage' => "Charityanteil",
         'starting_bid' => "Startgebot",
         'new_image' => "Bild",
+        'icon_file' => "Bild",
         'auction' => '"Zur Versteigerung"',
         'true' => "aktiviert",
         'false' => "deaktiviert",
