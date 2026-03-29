@@ -6,7 +6,6 @@ use App\Models\TimetableEntry;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Str;
 
 class NewNotification extends Notification implements ShouldQueue
 {

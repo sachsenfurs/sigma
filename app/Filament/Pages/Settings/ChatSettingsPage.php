@@ -2,10 +2,11 @@
 
 namespace App\Filament\Pages\Settings;
 
+use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use App\Filament\Clusters\Settings;
+use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Filament\Traits\HasActiveIcon;
 use App\Settings\ChatSettings;
 use Filament\Forms\Components\Toggle;
@@ -17,10 +18,10 @@ class ChatSettingsPage extends SettingsPage
 {
     use HasActiveIcon;
     protected static string $settings = ChatSettings::class;
-    protected static ?string $cluster = Settings::class;
-    protected static string | \BackedEnum | null $navigationIcon = "heroicon-o-chat-bubble-left";
+    protected static ?string $cluster = SettingsCluster::class;
+    protected static string | BackedEnum | null $navigationIcon = "heroicon-o-chat-bubble-left";
     protected static ?string $slug = "chats";
-    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     public static function getNavigationLabel(): string {
         return __("Chat Settings");
     }

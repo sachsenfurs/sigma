@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\Settings;
 
+use BackedEnum;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
@@ -11,13 +13,11 @@ use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Placeholder;
-use App\Filament\Clusters\Settings;
+use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Filament\Traits\HasActiveIcon;
 use App\Services\Translator;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
-use Filament\Forms;
 use Filament\Pages\SettingsPage;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Http\UploadedFile;
@@ -32,10 +32,10 @@ class AppSettingsPage extends SettingsPage
 {
     use HasActiveIcon;
     protected static string $settings = AppSettings::class;
-    protected static ?string $cluster = Settings::class;
-    protected static string | \BackedEnum | null $navigationIcon = "heroicon-o-cog-6-tooth";
+    protected static ?string $cluster = SettingsCluster::class;
+    protected static string | BackedEnum | null $navigationIcon = "heroicon-o-cog-6-tooth";
     protected static ?string $slug = "system";
-    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     public static function getNavigationLabel(): string {
         return __("System Settings");
     }
@@ -84,7 +84,7 @@ class AppSettingsPage extends SettingsPage
                             ->dehydrateStateUsing(fn($state) => str_replace(["http://", "https://"], "", $state))
                             ->helperText(__("Used for conbook export / QR Codes, enter with trailing slash or path!"))
                             ->nullable(),
-                        Grid::make("")
+                        Grid::make()
                             ->columns(2)
                             ->columnSpanFull()
                             ->schema(array(
@@ -200,7 +200,7 @@ class AppSettingsPage extends SettingsPage
                         Toggle::make("lost_found_enabled")
                             ->label("Lost & Found Enabled")
                             ->translateLabel(),
-                        Placeholder::make("export")
+                        TextEntry::make("export")
                             ->label("LASSIE Export")
                             ->hintAction(
                                 Action::make("open")

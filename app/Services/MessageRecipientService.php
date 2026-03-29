@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 class MessageRecipientService
 {
     public static function getRecipients(MessageRecipient $type, ?Model $instance=null): Collection {
+        /** @noinspection PhpUnusedMatchConditionInspection */
         return (match($type) {
             MessageRecipient::USER_ROLE => $instance->users,
             MessageRecipient::HOST => SigHost::with("user")->whereHas("sigEvents")->get()->pluck("user"),

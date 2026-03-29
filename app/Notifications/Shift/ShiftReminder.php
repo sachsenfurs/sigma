@@ -4,7 +4,7 @@ namespace App\Notifications\Shift;
 
 use App\Enums\Necessity;
 use App\Enums\Permission;
-use App\Filament\Resources\ShiftResource;
+use App\Filament\Resources\Shifts\ShiftResource;
 use App\Models\Shift;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;

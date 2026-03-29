@@ -84,7 +84,7 @@ class iCalExporter
      * @param TimetableEntry $entry
      * @param Closure|null $modifyUsing
      */
-    public function addTimetableEntry(TimetableEntry $entry, Closure $modifyUsing = null): void {
+    public function addTimetableEntry(TimetableEntry $entry, ?Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($entry->id, $entry::class)
             ->setSummary($entry->sigEvent->name_localized)
             ->setDescription($entry->sigEvent->description_localized ?? "")
@@ -111,7 +111,7 @@ class iCalExporter
      * @param Shift $shift
      * @param Closure|null $modifyUsing
      */
-    public function addShift(Shift $shift, Closure $modifyUsing = null): void {
+    public function addShift(Shift $shift, ?Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($shift->id, $shift::class)
             ->setSummary("❗ " . $shift->type->userRole->name_localized . "-" . __("Shift") . ": " . $shift->type->name)
             ->setLocation(self::getLocation($shift->sigLocation))
@@ -151,7 +151,7 @@ class iCalExporter
      * @param Closure|null $modifyUsing
      * @return void
      */
-    public function addTimeslot(SigTimeslot $slot, Closure $modifyUsing = null): void {
+    public function addTimeslot(SigTimeslot $slot, ?Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($slot->id, $slot::class)
             ->setSummary(__("Time Slot") . ": " . $slot->timetableEntry->sigEvent->name_localized)
             ->setLocation(self::getLocation($slot->timetableEntry->sigLocation))

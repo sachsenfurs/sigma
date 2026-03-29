@@ -134,7 +134,7 @@ class TimetableEntry extends Model
         return $this->updated_at->isAfter($this->created_at);
     }
 
-    public function maxUserRegsExeeded(User $user=null): bool {
+    public function maxUserRegsExeeded(?User $user=null): bool {
         if ($this->sigEvent->max_regs_per_day == 0 || $this->sigEvent->max_regs_per_day == null) {
             return false;
         }
@@ -216,7 +216,7 @@ class TimetableEntry extends Model
         $parts = explode($this->slugChecksum(), $value);
         $id = $parts[0] ?? 0;
 
-        
+
         $instances = self::where("id", $id)->orWhereHas("sigEvent", function(Builder $query) use ($value) {
             $query->where("name", $value)->orWhere("name_en", $value);
         });

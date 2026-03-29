@@ -2,7 +2,7 @@
 
 namespace App\Notifications\Sig;
 
-use App\Filament\Resources\SigEventResource;
+use App\Filament\Resources\SigEvents\SigEventResource;
 use App\Models\SigEvent;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;

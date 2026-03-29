@@ -9,7 +9,6 @@ use App\Http\Controllers\Ddas\ArtshowController;
 use App\Http\Controllers\Ddas\DealersDenController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LostFoundItemController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Schedule\ConbookExportController;
 use App\Http\Controllers\Schedule\TimetableEntryController;
@@ -127,9 +126,4 @@ Route::group(['middleware' => "auth"], function() {
 
     // Chats
     Route::get("/chats", [ChatController::class, "index"])->name("chats.index");
-
-    // Messages
-    Route::get('/messages', [MessageController::class, 'index'])->name('messages');
-    Route::post('/messages/store', [MessageController::class, 'store'])->name('messages.store');
-
 });

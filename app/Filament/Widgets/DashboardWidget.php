@@ -3,10 +3,10 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ChatStatus;
-use App\Filament\Resources\ChatResource;
-use App\Filament\Resources\Ddas\ArtshowItemResource;
-use App\Filament\Resources\Ddas\DealerResource;
-use App\Filament\Resources\SigEventResource;
+use App\Filament\Resources\Chats\ChatResource;
+use App\Filament\Resources\Ddas\ArtshowItems\ArtshowItemResource;
+use App\Filament\Resources\Ddas\Dealers\DealerResource;
+use App\Filament\Resources\SigEvents\SigEventResource;
 use App\Models\Chat;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\Ddas\Dealer;

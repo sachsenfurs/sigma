@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use Filament\Pages\Dashboard;
 use Filament\Support\Enums\Width;
@@ -12,8 +13,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -32,7 +31,8 @@ class AdminPanelProvider extends PanelProvider
     {
         // Default pagination for all tables
         Table::configureUsing(function(Table $table): void {
-            $table->defaultPaginationPageOption(25);
+            $table->defaultPaginationPageOption(25)
+                  ->paginationPageOptions([5, 10, 25, 50, 100]);
         });
         Table::configureUsing(fn(Table $table) => $table->defaultDateTimeDisplayFormat("l, d.m.Y - H:i"));
         Table::configureUsing(fn(Table $table) => $table->defaultDateDisplayFormat("l, d.m.Y"));
@@ -80,10 +80,10 @@ class AdminPanelProvider extends PanelProvider
             ])
 //            ->breadcrumbs(false)
             ->userMenuItems([
-                MenuItem::make()
-                        ->label(__("Leave Admin Interface"))
-                        ->url(fn (): string => "/")
-                        ->icon('heroicon-m-cog-8-tooth'),
+                Action::make("leave")
+                    ->label(__("Leave Admin Interface"))
+                    ->url(fn (): string => "/")
+                    ->icon('heroicon-m-cog-8-tooth'),
             ])
             ->maxContentWidth(Width::Full)
             ->sidebarCollapsibleOnDesktop()

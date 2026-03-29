@@ -45,8 +45,10 @@ class TranslateAction extends ServiceAction
              ->label(__("Translate from :LANGUAGE", ['language' => $fromLang]))
              ->icon('heroicon-o-language')
              ->action(function(Get $get, Set $set) use ($toLang, $fromLang, $fromComponent, $toComponent) {
-                 if(!app(AppSettings::class)->deepl_api_key)
-                     return self::notAvailable();
+                 if(!app(AppSettings::class)->deepl_api_key) {
+                     self::notAvailable();
+                     return;
+                 }
 
                  $set(
                      $toComponent,

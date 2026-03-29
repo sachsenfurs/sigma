@@ -4,7 +4,7 @@ namespace App\Notifications\DepartmentInfo;
 
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
-use App\Filament\Resources\DepartmentInfoResource;
+use App\Filament\Resources\DepartmentInfos\DepartmentInfoResource;
 use App\Models\DepartmentInfo;
 use App\Models\TimetableEntry;
 use App\Notifications\Notification;

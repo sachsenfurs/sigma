@@ -13,7 +13,7 @@ class Translator
     public function __construct(
         private readonly ?string $authKey,
         private string $sourceLang = "de",
-        private string $targetLang = "en-US"
+        private readonly string $targetLang = "en-US"
     ) {
         $this->sourceLang = $this->parseLanguage($this->sourceLang);
 
@@ -24,12 +24,13 @@ class Translator
         }
     }
 
-    public function getUsage() {
+    public function getUsage(): ?\DeepL\Usage {
         try {
             return $this->translator?->getUsage();
         } catch(DeepLException $e) {
 
         }
+        return null;
     }
 
     public function translate($text, $sourceLang = null, $targetLang = null) {

@@ -16,7 +16,7 @@ class RegSysLoginController extends Controller
     }
 
     public function index(Request $request) {
-        $provider = (new OAuthProfileUpdateService())->getProvider();
+        $provider = (new OAuthProfileUpdateService())->provider;
 
         // initialize state
         $authorizationUrl = $provider->getAuthorizationUrl();

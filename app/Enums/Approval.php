@@ -65,9 +65,10 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
 
     /**
      * Filament Bulk Action
-     * @return Action
+     * @param array $extraComponents
+     * @return BulkAction
      */
-    public static function getBulkAction($extraComponents=[]): BulkAction {
+    public static function getBulkAction(array $extraComponents=[]): BulkAction {
         return BulkAction::make("approval")
             ->icon("heroicon-o-question-mark-circle")
             ->translateLabel()

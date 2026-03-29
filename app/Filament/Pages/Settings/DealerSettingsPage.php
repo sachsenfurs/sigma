@@ -2,10 +2,11 @@
 
 namespace App\Filament\Pages\Settings;
 
+use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use App\Filament\Clusters\Settings;
+use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Filament\Traits\HasActiveIcon;
 use App\Settings\DealerSettings;
 use Carbon\Carbon;
@@ -19,10 +20,10 @@ class DealerSettingsPage extends SettingsPage
 {
     use HasActiveIcon;
     protected static string $settings = DealerSettings::class;
-    protected static ?string $cluster = Settings::class;
-    protected static string | \BackedEnum | null $navigationIcon = "heroicon-o-shopping-cart";
+    protected static ?string $cluster = SettingsCluster::class;
+    protected static string | BackedEnum | null $navigationIcon = "heroicon-o-shopping-cart";
     protected static ?string $slug = "dealers";
-    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     public static function getNavigationLabel(): string {
         return __("Dealer Settings");
     }

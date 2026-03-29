@@ -2,7 +2,7 @@
 
 namespace App\Notifications\Ddas;
 
-use App\Filament\Resources\Ddas\ArtshowItemResource;
+use App\Filament\Resources\Ddas\ArtshowItems\ArtshowItemResource;
 use App\Models\Ddas\ArtshowItem;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;

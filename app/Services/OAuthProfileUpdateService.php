@@ -11,17 +11,18 @@ use League\OAuth2\Client\Token\AccessToken;
 
 class OAuthProfileUpdateService
 {
-    private RegSysProvider $provider;
+    public RegSysProvider $provider {
+        get {
+            return $this->provider;
+        }
+    }
+
     public function __construct() {
         $this->provider = new RegSysProvider([
             'clientId' => config("auth.oauth.client_id"),
             'clientSecret' => config("auth.oauth.client_secret"),
             'redirectUri' => route("oauth_redirect"),
         ]);
-    }
-
-    public function getProvider(): RegSysProvider {
-        return $this->provider;
     }
 
     /**

@@ -2,10 +2,11 @@
 
 namespace App\Filament\Pages\Settings;
 
+use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use App\Filament\Clusters\Settings;
+use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Settings\PageHookSettings;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
@@ -14,17 +15,17 @@ use Illuminate\Support\Facades\Gate;
 
 class PageHookSettingsPage extends SettingsPage
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static string $settings = PageHookSettings::class;
 
-    protected static ?string $cluster = Settings::class;
+    protected static ?string $cluster = SettingsCluster::class;
 
     protected static ?string $slug = "pagehooks";
 
     protected static ?int $navigationSort = 10000;
 
-    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationGroup(): ?string {
         return __("Page Hooks");

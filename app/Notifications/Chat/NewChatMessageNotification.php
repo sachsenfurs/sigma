@@ -2,7 +2,7 @@
 
 namespace App\Notifications\Chat;
 
-use App\Filament\Resources\ChatResource;
+use App\Filament\Resources\Chats\ChatResource;
 use App\Models\Message;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;

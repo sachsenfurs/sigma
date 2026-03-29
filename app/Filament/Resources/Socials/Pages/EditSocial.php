@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Filament\Resources\Socials\Pages;
+
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\Socials\SocialResource;
+use App\Models\Info\Social;
+use Filament\Resources\Pages\EditRecord;
+
+class EditSocial extends EditRecord
+{
+    protected static string $resource = SocialResource::class;
+
+    protected function getHeaderActions(): array {
+        return [
+            DeleteAction::make()
+                ->after(fn() => Social::clearCache()),
+        ];
+    }
+
+    public function afterSave() {
+        Social::clearCache();
+    }
+}

@@ -91,13 +91,13 @@ class ArtshowItem extends Model
         return $this->hasOne(ArtshowBid::class)->orderBy("value", "desc")->limit(1);
     }
 
-    public function isHighestBidder(User $user = null): bool {
+    public function isHighestBidder(?User $user = null): bool {
         if(!$user)
             $user = auth()->user();
         return $this->highestBid?->user_id == $user->id;
     }
 
-    public function userBidOnce(User $user = null): bool {
+    public function userBidOnce(?User $user = null): bool {
         if(!$user)
             $user = auth()->user();
         return $this->artshowBids->intersect($user->artshowBids)->count() > 0;

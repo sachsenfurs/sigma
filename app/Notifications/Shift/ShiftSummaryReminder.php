@@ -3,7 +3,7 @@
 namespace App\Notifications\Shift;
 
 use App\Enums\Permission;
-use App\Filament\Resources\ShiftResource;
+use App\Filament\Resources\Shifts\ShiftResource;
 use App\Models\UserShift;
 use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;

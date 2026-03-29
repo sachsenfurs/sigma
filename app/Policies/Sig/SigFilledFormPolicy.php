@@ -25,7 +25,7 @@ class SigFilledFormPolicy extends ManageEventPolicy
         return false;
     }
 
-    public function create(User $user, SigForm $form=null): bool {
+    public function create(User $user, ?SigForm $form=null): bool {
         if($form?->form_closed)
             return false;
 

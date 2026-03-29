@@ -9,11 +9,11 @@ use App\Models\User;
 
 class SigTimeslotPolicy extends ManageEventPolicy
 {
-    public function create(User $user, ): bool {
+    public function create(User $user): bool {
         return $user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE);
     }
 
-    public function view(User $user, SigTimeslot $sigTimeslot=null): bool {
+    public function view(User $user, ?SigTimeslot $sigTimeslot=null): bool {
         return $user->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::READ);
     }
 
