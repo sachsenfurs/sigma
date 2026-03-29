@@ -4,7 +4,14 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/sass/app.scss', 'resources/css/filament/admin/theme.css'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/site.js',
+                'resources/js/schedule-list.js',
+                'resources/js/schedule-calendar.js',
+                'resources/sass/app.scss',
+                'resources/css/filament/admin/theme.css',
+            ],
             refresh: true,
         }),
         vue({
@@ -20,5 +27,13 @@ export default defineConfig({
         cors: {
             origin: "*",
         }
-    }
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: ['color-functions'],
+            },
+        },
+    },
 });

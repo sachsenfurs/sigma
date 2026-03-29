@@ -12,3 +12,7 @@
         </div>
    @endif
 @endsection
+
+@push('vite')
+    @vite('resources/js/schedule-list.js')
+@endpush

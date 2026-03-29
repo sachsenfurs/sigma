@@ -23,7 +23,7 @@ class TimetableEntryController extends Controller
         $this->authorize("viewAny",TimetableEntry::class);
 
         $entries = TimetableEntry::public();
-        if (!Auth::guest() && Auth::user()->canAccessPanel(Filament::getPanel())) {
+        if (!Auth::guest() && Auth::user()->canAccessPanel(Filament::getDefaultPanel())) {
             $entries = TimetableEntry::withoutGlobalScope('public');
         }
 

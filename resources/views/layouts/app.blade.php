@@ -268,7 +268,8 @@
         </div>
     </div>
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/site.js'])
+    @stack('vite')
 
     {{--  Just to make sure Alpine.js is loaded on every page without Livewire components  --}}
     @livewireScripts
