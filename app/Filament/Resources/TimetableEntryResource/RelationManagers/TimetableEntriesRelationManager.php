@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TimetableEntryResource\RelationManagers;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ViewAction;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 use Filament\Actions\EditAction;
 use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
@@ -69,11 +70,13 @@ class TimetableEntriesRelationManager extends RelationManager
 
     protected function getTableEntryActions(): array {
         return [
-            ViewAction::make()
-                ->schema(fn($record) => (new Schema())->components(ViewSigEvent::getInfolistSchema())->record($record->sigEvent))
+            ViewAction::make() // schema is defined in TimetableEntryResource
                 ->hidden(fn(TimetableEntriesRelationManager $livewire) => $livewire->pageClass == ViewSigEvent::class),
             EditAction::make()
-                ->schema([(new \App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry)->getSchema("")])
+                ->schema([
+                    Grid::make()
+                        ->components(TimetableEntryResource::getSchema())
+                ])
                 ->using(fn(Model $record, array $data) => EditTimetableEntry::handleUpdate($record, $data)),
         ];
     }

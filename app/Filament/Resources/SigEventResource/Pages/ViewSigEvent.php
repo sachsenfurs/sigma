@@ -24,10 +24,10 @@ class ViewSigEvent extends ViewRecord
     }
 
     public function infolist(Schema $schema): Schema {
-        return $infolist->schema(self::getInfolistSchema());
+        return $schema->schema(self::getInfolistSchema());
     }
 
-    public static function getInfolistSchema() {
+    public static function getInfolistSchema(): array {
         return [
             TextEntry::make('description_localized')
                 ->label("Description")
