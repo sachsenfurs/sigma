@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\ShiftResource\Pages;
 
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
+use App\Filament\Resources\ShiftResource\Widgets\ShiftSummaryWidget;
 use App\Filament\Resources\ShiftResource;
-use Filament\Actions;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRecords;
 
 class ManageShifts extends ManageRecords
@@ -14,19 +14,19 @@ class ManageShifts extends ManageRecords
 
     protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 
     protected function getHeaderWidgets(): array {
         return [
-            ShiftResource\Widgets\ShiftPlannerWidget::class,
+            ShiftPlannerWidget::class,
         ];
     }
 
     protected function getFooterWidgets(): array {
         return [
-            ShiftResource\Widgets\ShiftSummaryWidget::class,
+            ShiftSummaryWidget::class,
         ];
     }
 }

@@ -2,6 +2,21 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\MorphToSelect\Type;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkAction;
+use App\Filament\Resources\ChatResource\Pages\ListChats;
+use App\Filament\Resources\ChatResource\Pages\EditChat;
+use Closure;
+use Filament\Actions\Action;
 use App\Enums\ChatStatus;
 use App\Filament\Clusters\MessageCluster;
 use App\Filament\Helper\FormHelper;
@@ -19,15 +34,9 @@ use App\Models\SigEvent;
 use App\Models\User;
 use App\Models\UserRole;
 use Carbon\Carbon;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MorphToSelect;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -46,8 +55,8 @@ class ChatResource extends Resource
     protected static ?string $label = "Chat";
 
     protected static ?string $cluster = MessageCluster::class;
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationBadge(): ?string {
         return MessageCluster::getNavigationBadge();
@@ -57,7 +66,7 @@ class ChatResource extends Resource
         return __("Messages");
     }
 
-    public static function form(Form $form): Form {
+    public static function form(Schema $schema): Schema {
         $gridColumns = [
             Select::make("user_id")
                   ->relationship("user", "name")
@@ -80,13 +89,15 @@ class ChatResource extends Resource
                   ->options(ChatStatus::class),
         ];
 
-        return $form->schema([
+        return $schema->components([
             Grid::make()
                 ->columns(count($gridColumns))
+                ->columnSpanFull()
                 ->schema($gridColumns),
             Fieldset::make()
                 ->label("Subject")
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
                     TextInput::make("subject")
                         ->maxLength(40)
@@ -97,20 +108,20 @@ class ChatResource extends Resource
                         ->searchable()
                         ->preload()
                         ->types([
-                            MorphToSelect\Type::make(SigEvent::class)
+                            Type::make(SigEvent::class)
                                 ->label(__("SIG"))
                                 ->titleAttribute("name")
                                 ->getOptionsUsing(function (Get $get) {
                                     return User::find($get("user_id"))?->sigHosts?->pluck("sigEvents")->flatten()->pluck("name", "id");
                                 })
                                 ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized),
-                            MorphToSelect\Type::make(ArtshowItem::class)
+                            Type::make(ArtshowItem::class)
                                 ->getOptionsUsing(function (Get $get) {
                                     return User::find($get("user_id"))?->artists?->pluck("artshowItems")?->flatten()?->pluck("name", "id");
                                 })
                                 ->label(__("Art Show Item"))
                                 ->titleAttribute("name"),
-                            MorphToSelect\Type::make(Dealer::class)
+                            Type::make(Dealer::class)
                                 ->getOptionsUsing(function (Get $get) {
                                     return User::find($get("user_id"))?->dealers?->pluck("name", "id");
                                 })
@@ -142,7 +153,7 @@ class ChatResource extends Resource
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => $state->name_localized)
                     ->badge(),
-                Tables\Columns\ImageColumn::make("user.avatar_thumb")
+                ImageColumn::make("user.avatar_thumb")
                     ->label("")
                     ->visibleFrom("md")
                     ->width("0"),
@@ -176,7 +187,7 @@ class ChatResource extends Resource
                     ->visibleFrom("xl"),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make("userRole")
+                SelectFilter::make("userRole")
                     ->relationship("userRole", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                     ->label("Department")
@@ -186,18 +197,18 @@ class ChatResource extends Resource
                     ->preload()
 //                    ->default(auth()->user()->roles->pluck("id")->toArray())
                 ,
-                Tables\Filters\SelectFilter::make("status")
+                SelectFilter::make("status")
                     ->options(ChatStatus::class)
                     ->default(),
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make("status")
-                        ->form([
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    BulkAction::make("status")
+                        ->schema([
                             Select::make("status")
                                 ->options(ChatStatus::class)
                         ])
@@ -221,19 +232,19 @@ class ChatResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListChats::route('/'),
-            'edit' => Pages\EditChat::route('/{record}')
+            'index' => ListChats::route('/'),
+            'edit' => EditChat::route('/{record}')
         ];
     }
 
     /**
      * target models needs the "HasChats" trait
      */
-    public static function getCreateChatAction(\Closure $default = null): Action {
+    public static function getCreateChatAction(Closure $default = null): Action {
         return Action::make("chat")
             ->label(fn($record) => $record->chats->count() > 0 ? __("Last Chat") : __("New Chat"))
             ->color(Color::Zinc)
-            ->form([
+            ->schema([
                 Select::make("user_id")
                     ->label(__("User"))
                     ->options(User::select(["id", "name", "reg_id"])->get()->keyBy("id")->map(fn($e) => $e->reg_id . " - ". $e->name))

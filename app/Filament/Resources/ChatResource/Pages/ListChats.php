@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ChatResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\ChatResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -13,7 +14,7 @@ class ListChats extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->successRedirectUrl(fn($record) => ChatResource::getUrl('edit', compact("record"))),
         ];
     }

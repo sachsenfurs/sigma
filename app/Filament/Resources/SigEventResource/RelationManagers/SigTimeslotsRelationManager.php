@@ -2,6 +2,22 @@
 
 namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Grouping\Group;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
+use Filament\Support\Enums\Width;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkAction;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Grid;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Filament\Resources\SigTimeslotResource;
@@ -9,22 +25,15 @@ use App\Models\SigEvent;
 use App\Models\SigTimeslot;
 use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,7 +47,7 @@ class SigTimeslotsRelationManager extends RelationManager
     public ?SigEvent $sigEvent = null;
 
     protected static string $relationship = 'sigTimeslots';
-    protected static ?string $icon = 'heroicon-o-clock';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-clock';
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
         return __("Time Slots");
@@ -73,9 +82,9 @@ class SigTimeslotsRelationManager extends RelationManager
         return !auth()->user()->hasPermission(Permission::MANAGE_EVENTS, PermissionLevel::WRITE);
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema($this->getTimeslotForm());
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components($this->getTimeslotForm());
     }
 
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
@@ -85,33 +94,33 @@ class SigTimeslotsRelationManager extends RelationManager
     public function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make("timetableEntry")
+                TextColumn::make("timetableEntry")
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state->start->translatedFormat("H:i") . " - ". $state->end->translatedFormat("H:i"))
                     ->label(__("Timetable Entry"))
                     ->translateLabel(),
-                Tables\Columns\IconColumn::make("self_register")
+                IconColumn::make("self_register")
                     ->boolean(),
-                Tables\Columns\IconColumn::make("group_registration")
+                IconColumn::make("group_registration")
                     ->label(__("Group Registration"))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('slot_start')
+                TextColumn::make('slot_start')
                     ->label('Slot Start')
                     ->translateLabel()
                     ->dateTime('H:i'),
-                Tables\Columns\TextColumn::make('slot_end')
+                TextColumn::make('slot_end')
                     ->label('Slot End')
                     ->translateLabel()
                     ->dateTime('H:i'),
-                Tables\Columns\TextColumn::make('reg_start')
+                TextColumn::make('reg_start')
                     ->label('Registration Start')
                     ->translateLabel()
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('reg_end')
+                TextColumn::make('reg_end')
                     ->label('Registration End')
                     ->translateLabel()
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('max_users')
+                TextColumn::make('max_users')
                     ->label('Attendees')
                     ->translateLabel()
                     ->formatStateUsing(function (SigTimeslot $timeslot) {
@@ -121,7 +130,7 @@ class SigTimeslotsRelationManager extends RelationManager
             ])
             ->recordUrl(fn($record) => SigTimeslotResource::getUrl("view", ['record' => $record]))
             ->defaultGroup(
-                Tables\Grouping\Group::make("timetableEntry.start")
+                Group::make("timetableEntry.start")
                     ->collapsible()
                     ->label('')
                     ->date(),
@@ -130,17 +139,17 @@ class SigTimeslotsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->disabled($this->entries->count() == 0)
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make('view')
                     ->label('Attendees')
                     ->translateLabel()
                     ->icon('heroicon-s-users')
-                    ->modalWidth(MaxWidth::Medium)
+                    ->modalWidth(Width::Medium)
                     ->modalHeading(__('Attendee List'))
-                    ->infolist([
+                    ->schema([
                         RepeatableEntry::make('sigAttendees')
                             ->label('')
                             ->schema([
@@ -151,18 +160,18 @@ class SigTimeslotsRelationManager extends RelationManager
                                     }),
                             ])
                     ]),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                EditAction::make(),
+                DeleteAction::make()
                     ->label(""),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make("edit")
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    BulkAction::make("edit")
                         ->label("Edit")
                         ->translateLabel()
                         ->icon("heroicon-o-pencil-square")
-                        ->form([
+                        ->schema([
                             DateTimePicker::make('reg_start')
                                  ->label('Registration Start')
                                  ->translateLabel()
@@ -331,6 +340,7 @@ class SigTimeslotsRelationManager extends RelationManager
                 ->default($previousSlot?->max_users ?? 1),
             Grid::make()
                 ->columns(2)
+                ->columnSpanFull()
                 ->schema([
                     Checkbox::make('self_register')
                         ->inline(false)

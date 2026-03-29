@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Schedule;
 
+use Filament\Facades\Filament;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleResource;
 use App\Http\Resources\SigLocationResource;
@@ -22,7 +23,7 @@ class TimetableEntryController extends Controller
         $this->authorize("viewAny",TimetableEntry::class);
 
         $entries = TimetableEntry::public();
-        if (!Auth::guest() && Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel())) {
+        if (!Auth::guest() && Auth::user()->canAccessPanel(Filament::getPanel())) {
             $entries = TimetableEntry::withoutGlobalScope('public');
         }
 

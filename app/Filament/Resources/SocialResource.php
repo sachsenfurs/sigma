@@ -2,14 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SocialResource\Pages\ListSocials;
+use App\Filament\Resources\SocialResource\Pages\CreateSocial;
+use App\Filament\Resources\SocialResource\Pages\EditSocial;
 use App\Filament\Clusters\Settings;
 use App\Filament\Resources\SocialResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,68 +32,72 @@ class SocialResource extends Resource
     protected static ?string $model = Social::class;
     protected static ?string $cluster = Settings::class;
     protected static ?int $navigationSort = 1900;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static ?string $navigationIcon = 'heroicon-o-share';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-share';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Fieldset::make()
+        return $schema
+            ->components([
+                Fieldset::make()
+                    ->columnSpanFull()
                     ->schema([
-                        Forms\Components\TextInput::make('description')
+                        TextInput::make('description')
                             ->label("Description")
                             ->translateLabel()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('description_en')
+                        TextInput::make('description_en')
                             ->label("Description (English)")
                             ->translateLabel()
                             ->maxLength(255)
                             ->default(null),
                     ]),
-                Forms\Components\Fieldset::make()
+                Fieldset::make()
+                    ->columnSpanFull()
                     ->schema([
-                            Forms\Components\TextInput::make('link_name')
+                            TextInput::make('link_name')
                                 ->label("Link Name")
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('link')
+                            TextInput::make('link')
                                 ->label("Link")
                                 ->maxLength(255)
                                 ->default(null),
-                            Forms\Components\TextInput::make('link_name_en')
+                            TextInput::make('link_name_en')
                                 ->label("Link Name (English)")
                                 ->translateLabel()
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('link_en')
+                            TextInput::make('link_en')
                                 ->label("Link (English)")
                                 ->maxLength(255)
                                 ->default(null),
                 ]),
-                Forms\Components\Fieldset::make()
+                Fieldset::make()
+                     ->columnSpanFull()
                      ->schema([
-                           Forms\Components\TextInput::make('icon')
+                           TextInput::make('icon')
                                ->maxLength(255)
                                ->default(null),
-                           Forms\Components\Grid::make()
-                               ->columns(2)
-                               ->schema([
-                                   Forms\Components\FileUpload::make('image')
+                            Grid::make()
+                                ->columns(2)
+                                ->columnSpanFull()
+                                ->schema([
+                                   FileUpload::make('image')
                                        ->label("Image")
                                        ->translateLabel(),
-                                   Forms\Components\FileUpload::make('image_en')
+                                   FileUpload::make('image_en')
                                        ->label("Image (English)")
                                        ->translateLabel(),
                            ]),
                 ]),
-                Forms\Components\TextInput::make('order')
+                TextInput::make('order')
                     ->label("Order")
                     ->translateLabel()
                     ->integer()
                     ->default(0),
-                Forms\Components\CheckboxList::make("show_on")
+                CheckboxList::make("show_on")
                     ->label("Show on..")
                     ->translateLabel()
                     ->options(ShowMode::class),
@@ -92,25 +108,25 @@ class SocialResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->label("Description")
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('link_name')
+                TextColumn::make('link_name')
                     ->label("Link Name")
                     ->searchable(),
-                Tables\Columns\TextColumn::make('link')
+                TextColumn::make('link')
                     ->searchable(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
                         ->after(fn() => Social::clearCache()),
                 ]),
             ]);
@@ -126,9 +142,9 @@ class SocialResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSocials::route('/'),
-            'create' => Pages\CreateSocial::route('/create'),
-            'edit' => Pages\EditSocial::route('/{record}/edit'),
+            'index' => ListSocials::route('/'),
+            'create' => CreateSocial::route('/create'),
+            'edit' => EditSocial::route('/{record}/edit'),
         ];
     }
 }

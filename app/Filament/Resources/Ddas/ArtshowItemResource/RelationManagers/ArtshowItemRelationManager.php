@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
 use App\Filament\Resources\Ddas\ArtshowItemResource;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -13,8 +15,8 @@ class ArtshowItemRelationManager extends RelationManager
 {
     protected static string $relationship = 'artshowItems';
 
-    public function form(Form $form): Form {
-        return ArtshowItemResource::form($form);
+    public function form(Schema $schema): Schema {
+        return ArtshowItemResource::form($schema);
     }
 
     protected function getTableHeading(): string|Htmlable|null {
@@ -27,10 +29,10 @@ class ArtshowItemRelationManager extends RelationManager
 
         return $table
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ]);
     }
 }

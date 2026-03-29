@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\SigEventResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Filament\Resources\SigEventResource;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -23,7 +23,7 @@ class ViewSigEvent extends ViewRecord
         return $this->record->name_localized;
     }
 
-    public function infolist(Infolist $infolist): Infolist {
+    public function infolist(Schema $schema): Schema {
         return $infolist->schema(self::getInfolistSchema());
     }
 

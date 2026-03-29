@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SocialResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\SocialResource;
 use App\Models\Info\Social;
 use Filament\Actions;
@@ -13,7 +14,7 @@ class EditSocial extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->after(fn() => Social::clearCache()),
         ];
     }

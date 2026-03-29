@@ -2,6 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\MorphToSelect;
+use Filament\Forms\Components\MorphToSelect\Type;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\NotificationRouteResource\Pages\ListNotificationRoutes;
 use App\Facades\NotificationService;
 use App\Filament\Clusters\Settings;
 use App\Filament\Helper\FormHelper;
@@ -12,8 +26,6 @@ use App\Models\Post\PostChannel;
 use App\Models\User;
 use App\Models\UserRole;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,8 +38,8 @@ class NotificationRouteResource extends Resource
     protected static ?string $model = NotificationRoute::class;
     protected static ?string $cluster = Settings::class;
     protected static ?int $navigationSort = 1500;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static ?string $navigationIcon = 'heroicon-o-arrows-right-left';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrows-right-left';
 
     public static function getNavigationLabel(): string {
         return __("Notifications");
@@ -45,34 +57,34 @@ class NotificationRouteResource extends Resource
         return Gate::allows("notificationSettings", \Spatie\LaravelSettings\Settings::class);
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('notification')
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Select::make('notification')
                     ->label(__("Notification"))
                     ->required()
                     ->options(NotificationService::getRoutableNotificationNames())
                     ->hiddenOn("edit"),
-                Forms\Components\Select::make("channels")
+                Select::make("channels")
                     ->label(__("Channels"))
                     ->options(collect(NotificationService::availableChannels())->mapWithKeys(fn($k, $v) => [$k => $k]))
                     ->required()
                     ->multiple(),
-                Forms\Components\MorphToSelect::make("notifiable")
+                MorphToSelect::make("notifiable")
                     ->label(__("Send Notification to"))
                     ->searchable()
                     ->preload()
                     ->columnSpanFull()
                     ->types([
-                        Forms\Components\MorphToSelect\Type::make(User::class)
+                        Type::make(User::class)
                             ->label(__("User"))
                             ->titleAttribute("name")
                             ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId()),
-                        Forms\Components\MorphToSelect\Type::make(UserRole::class)
+                        Type::make(UserRole::class)
                             ->label(__("Department"))
                             ->titleAttribute("name")
                             ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized),
-                        Forms\Components\MorphToSelect\Type::make(PostChannel::class)
+                        Type::make(PostChannel::class)
                             ->label(__("Channel"))
                             ->titleAttribute("name"),
                     ]),
@@ -84,7 +96,7 @@ class NotificationRouteResource extends Resource
         return $table
             ->recordTitleAttribute('notification_name')
             ->columns([
-                Tables\Columns\TextColumn::make("notifiable")
+                TextColumn::make("notifiable")
                     ->formatStateUsing(function($state) {
                         if($state instanceof User) {
                             return __("User") . " - " . $state->name;
@@ -97,24 +109,24 @@ class NotificationRouteResource extends Resource
                         }
                     })
                     ->badge(),
-                Tables\Columns\TextColumn::make("notification")
+                TextColumn::make("notification")
                     ->label(__("Notification"))
                     ->formatStateUsing(fn($record) => class_exists($record->notification) ? $record->notification::getName() : $record->notification),
-                Tables\Columns\TextColumn::make("channels")
+                TextColumn::make("channels")
                     ->label(__("Channels"))
                     ->badge(),
             ])
             ->defaultGroup(
-                Tables\Grouping\Group::make("notification")
+                Group::make("notification")
                     ->collapsible()
                     ->getTitleFromRecordUsing(fn($record) => class_exists($record->notification) ? $record->notification::getName() : $record->notification)
                     ->titlePrefixedWithLabel(false),
             )
             ->filters([
-                Tables\Filters\SelectFilter::make("notification")
+                SelectFilter::make("notification")
                     ->label(__("Notification"))
                     ->options(NotificationService::getRoutableNotificationNames()),
-                Tables\Filters\SelectFilter::make("notifiable_type")
+                SelectFilter::make("notifiable_type")
                     ->label(__("Notification Type"))
                     ->options([
                         'user' => __("User"),
@@ -122,14 +134,14 @@ class NotificationRouteResource extends Resource
                         'post_channel' => __("Channel"),
                     ]),
 
-            ], layout: Tables\Enums\FiltersLayout::AboveContent)
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ], layout: FiltersLayout::AboveContent)
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -144,7 +156,7 @@ class NotificationRouteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNotificationRoutes::route('/'),
+            'index' => ListNotificationRoutes::route('/'),
         ];
     }
 }

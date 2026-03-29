@@ -2,6 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SigFormResource\Pages\ListSigForms;
+use App\Filament\Resources\SigFormResource\Pages\CreateSigForm;
+use App\Filament\Resources\SigFormResource\Pages\ViewSigForm;
+use App\Filament\Resources\SigFormResource\Pages\EditSigForm;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Builder\Block;
 use App\Enums\Approval;
 use App\Filament\Resources\SigFormResource\Pages;
 use App\Filament\Resources\SigFormResource\RelationManagers\SigFilledFormsRelationManager;
@@ -9,9 +27,6 @@ use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,9 +41,9 @@ class SigFormResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigForm::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-pencil-square';
 
-    protected static ?string $navigationGroup = 'SIG';
+    protected static string | \UnitEnum | null $navigationGroup = 'SIG';
 
     protected static ?int $navigationSort = 20;
 
@@ -47,9 +62,9 @@ class SigFormResource extends Resource
         return Cache::remember("sigform-unapproved-badge", 10, fn() => SigFilledForm::where('approval', Approval::PENDING)->count()) ?: null;
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 self::getNameFieldSet(),
                 self::getSlugFieldSet(),
                 self::getRolesFieldSet(),
@@ -62,53 +77,53 @@ class SigFormResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns(self::getTableColumns())
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListSigForms::route('/'),
-            'create' => Pages\CreateSigForm::route('/create'),
-            'view' => Pages\ViewSigForm::route('/{record}'),
-            'edit' => Pages\EditSigForm::route('/{record?}/edit'),
+            'index' => ListSigForms::route('/'),
+            'create' => CreateSigForm::route('/create'),
+            'view' => ViewSigForm::route('/{record}'),
+            'edit' => EditSigForm::route('/{record?}/edit'),
         ];
     }
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('slug')
+            TextColumn::make('slug')
                 ->label('Slug')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('name')
+            TextColumn::make('name')
                 ->label('Name')
                 ->translateLabel()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('name_en')
+            TextColumn::make('name_en')
                 ->label('Name (English)')
                 ->translateLabel()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigEvents.name')
+            TextColumn::make('sigEvents.name')
                 ->label('SIG')
                 ->searchable()
                 ->sortable()
                 ->badge()
                 ->limit(50),
-            Tables\Columns\TextColumn::make('sig_filled_forms_count')
+            TextColumn::make('sig_filled_forms_count')
                 ->label('Filled')
                 ->translateLabel()
                 ->counts('sigFilledForms'),
-            Tables\Columns\TextColumn::make('sig_filled_forms_approval_needed_count')
+            TextColumn::make('sig_filled_forms_approval_needed_count')
                 ->label('To be approved')
                 ->translateLabel()
                 ->getStateUsing(function (SigForm $record) {
@@ -117,19 +132,20 @@ class SigFormResource extends Resource
         ];
     }
 
-    private static function getNameFieldSet(): Forms\Components\Component {
+    private static function getNameFieldSet(): Component {
         return
-            Forms\Components\Fieldset::make('name')
+            Fieldset::make('name')
                 ->label('Name')
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\TextInput::make('name')
+                    TextInput::make('name')
                         ->label('German')
                         ->translateLabel()
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel()
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('name_en')
+                    TextInput::make('name_en')
                         ->label('English')
                         ->translateLabel()
                         ->required()
@@ -147,12 +163,13 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSlugFieldSet(): Forms\Components\Component {
+    private static function getSlugFieldSet(): Component {
         return
-            Forms\Components\Fieldset::make('slug')
+            Fieldset::make('slug')
                 ->label('Slug')
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\TextInput::make('slug')
+                    TextInput::make('slug')
                         ->label('Slug')
                         ->translateLabel()
                         ->required()
@@ -169,13 +186,14 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getRolesFieldSet(): Forms\Components\Component {
+    private static function getRolesFieldSet(): Component {
         return
-            Forms\Components\Fieldset::make('roles')
+            Fieldset::make('roles')
                 ->label('User Roles')
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\Select::make('userRoles')
+                    Select::make('userRoles')
                         ->relationship('userRoles', "name")
                         ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                         ->label('')
@@ -187,13 +205,13 @@ class SigFormResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getFormClosedFieldSet(): Forms\Components\Component {
+    private static function getFormClosedFieldSet(): Component {
         return
-            Forms\Components\Fieldset::make('form_closed')
+            Fieldset::make('form_closed')
                 ->label('Close form')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Checkbox::make('form_closed')
+                    Checkbox::make('form_closed')
                         ->label('Form is closed')
                         ->translateLabel()
                         ->helperText(__('If the form is closed, no new forms can be submitted and existing forms can no longer be edited.'))
@@ -202,13 +220,13 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getSigEventsFieldSet(): Forms\Components\Component {
+    private static function getSigEventsFieldSet(): Component {
         return
-            Forms\Components\Fieldset::make('assigned_sig')
+            Fieldset::make('assigned_sig')
                 ->label('Assigned SIG')
                 ->translateLabel()
                 ->schema([
-                    Forms\Components\Select::make('sig_events')
+                    Select::make('sig_events')
                         ->label('')
                         ->multiple()
                         ->relationship('sigEvents', 'name', fn(Builder $query) => $query->orderBy('name')->with('sigHosts'))
@@ -220,8 +238,8 @@ class SigFormResource extends Resource
                 ->columnSpanFull();
     }
 
-    private static function getFormDefinitionFieldSet(): Forms\Components\Component {
-        return Forms\Components\Fieldset::make('form_definition')
+    private static function getFormDefinitionFieldSet(): Component {
+        return Fieldset::make('form_definition')
             ->label('Form definition')
             ->translateLabel()
             ->columnSpanFull()
@@ -242,8 +260,8 @@ class SigFormResource extends Resource
             ]);
     }
 
-    private static function getBlockTextInput(): Forms\Components\Builder\Block {
-        return Forms\Components\Builder\Block::make('text')
+    private static function getBlockTextInput(): Block {
+        return Block::make('text')
             ->icon('heroicon-o-chat-bubble-oval-left-ellipsis')
             ->label(function (?array $state): string {
                 if ($state === null) {
@@ -252,7 +270,7 @@ class SigFormResource extends Resource
                 return $state['label'] ?? __('Text input');
             })
             ->schema([
-                Forms\Components\TextInput::make('label')
+                TextInput::make('label')
                     ->label('Label')
                     ->translateLabel()
                     ->required()
@@ -264,33 +282,33 @@ class SigFormResource extends Resource
                         }
                         $set('name', Str::slug($state, '_'));
                     }),
-                Forms\Components\TextInput::make('label_en')
+                TextInput::make('label_en')
                     ->label('Label (English)')
                     ->translateLabel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
+                TextInput::make('help_text')
                     ->label('Help text')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
+                TextInput::make('help_text_en')
                     ->label('Help text (English)')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
+                Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
             ]);
     }
 
-    private static function getBlockTextarea(): Forms\Components\Builder\Block {
-        return Forms\Components\Builder\Block::make('textarea')
+    private static function getBlockTextarea(): Block {
+        return Block::make('textarea')
             ->icon('heroicon-o-bars-3-bottom-left')
             ->label(function (?array $state): string {
                 if ($state === null) {
@@ -299,7 +317,7 @@ class SigFormResource extends Resource
                 return $state['label'] ?? __('Textarea');
             })
             ->schema([
-                Forms\Components\TextInput::make('label')
+                TextInput::make('label')
                     ->label('Label')
                     ->translateLabel()
                     ->required()
@@ -311,33 +329,33 @@ class SigFormResource extends Resource
                         }
                         $set('name', Str::slug($state, '_'));
                     }),
-                Forms\Components\TextInput::make('label_en')
+                TextInput::make('label_en')
                     ->label('Label (English)')
                     ->translateLabel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
+                TextInput::make('help_text')
                     ->label('Help text')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
+                TextInput::make('help_text_en')
                     ->label('Help text (English)')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
+                Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
             ]);
     }
 
-    private static function getBlockFileUpload(): Forms\Components\Builder\Block {
-        return Forms\Components\Builder\Block::make('file_upload')
+    private static function getBlockFileUpload(): Block {
+        return Block::make('file_upload')
             ->icon('heroicon-o-document')
             ->label(function (?array $state): string {
                 if ($state === null) {
@@ -346,7 +364,7 @@ class SigFormResource extends Resource
                 return $state['label'] ?? __('File upload');
             })
             ->schema([
-                Forms\Components\TextInput::make('label')
+                TextInput::make('label')
                     ->label('Label')
                     ->translateLabel()
                     ->required()
@@ -358,33 +376,33 @@ class SigFormResource extends Resource
                         }
                         $set('name', Str::slug($state, '_'));
                     }),
-                Forms\Components\TextInput::make('label_en')
+                TextInput::make('label_en')
                     ->label('Label (English)')
                     ->translateLabel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
+                TextInput::make('help_text')
                     ->label('Help text')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
+                TextInput::make('help_text_en')
                     ->label('Help text (English)')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
+                Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
             ]);
     }
 
-    private static function getBlockCheckbox(): Forms\Components\Builder\Block {
-        return Forms\Components\Builder\Block::make('checkbox')
+    private static function getBlockCheckbox(): Block {
+        return Block::make('checkbox')
             ->icon('heroicon-o-check-circle')
             ->label(function (?array $state): string {
                 if ($state === null) {
@@ -393,7 +411,7 @@ class SigFormResource extends Resource
                 return $state['label'] ?? __('Checkbox');
             })
             ->schema([
-                Forms\Components\TextInput::make('label')
+                TextInput::make('label')
                     ->label('Label')
                     ->translateLabel()
                     ->required()
@@ -405,33 +423,33 @@ class SigFormResource extends Resource
                         }
                         $set('name', Str::slug($state, '_'));
                     }),
-                Forms\Components\TextInput::make('label_en')
+                TextInput::make('label_en')
                     ->label('Label (English)')
                     ->translateLabel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
+                TextInput::make('help_text')
                     ->label('Help text')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
+                TextInput::make('help_text_en')
                     ->label('Help text (English)')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
+                Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
             ]);
     }
 
-    private static function getBlockSelect(): Forms\Components\Builder\Block {
-        return Forms\Components\Builder\Block::make('select')
+    private static function getBlockSelect(): Block {
+        return Block::make('select')
             ->icon('heroicon-o-queue-list')
             ->label(function (?array $state): string {
                 if ($state === null) {
@@ -440,7 +458,7 @@ class SigFormResource extends Resource
                 return $state['label'] ?? __('Select');
             })
             ->schema([
-                Forms\Components\TextInput::make('label')
+                TextInput::make('label')
                     ->label('Label')
                     ->translateLabel()
                     ->required()
@@ -452,25 +470,25 @@ class SigFormResource extends Resource
                         }
                         $set('name', Str::slug($state, '_'));
                     }),
-                Forms\Components\TextInput::make('label_en')
+                TextInput::make('label_en')
                     ->label('Label (English)')
                     ->translateLabel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->alphaDash()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
+                Checkbox::make('required')
                     ->label('Required')
                     ->translateLabel(),
-                Forms\Components\TextInput::make('help_text')
+                TextInput::make('help_text')
                     ->label('Help text')
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
+                TextInput::make('help_text_en')
                     ->label('Help text (English)')
                     ->translateLabel()
                     ->maxLength(255),
@@ -481,7 +499,7 @@ class SigFormResource extends Resource
                     ->columnSpanFull()
                     ->blockNumbers(false)
                     ->blocks([
-                        Forms\Components\Builder\Block::make('option')
+                        Block::make('option')
                             ->icon('heroicon-o-queue-list')
                             ->label(function (?array $state): string {
                                 if ($state === null) {
@@ -490,7 +508,7 @@ class SigFormResource extends Resource
                                 return $state['label'] ?? __('Option');
                             })
                             ->schema([
-                                Forms\Components\TextInput::make('label')
+                                TextInput::make('label')
                                     ->label('Label')
                                     ->translateLabel()
                                     ->required()
@@ -502,12 +520,12 @@ class SigFormResource extends Resource
                                         }
                                         $set('value', Str::slug($state, '_'));
                                     }),
-                                Forms\Components\TextInput::make('label_en')
+                                TextInput::make('label_en')
                                     ->label('Label (English)')
                                     ->translateLabel()
                                     ->required()
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('value')
+                                TextInput::make('value')
                                     ->label('Value')
                                     ->translateLabel()
                                     ->alphaDash()

@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\ShiftResource\Widgets;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
 use App\Enums\Necessity;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
@@ -16,24 +19,27 @@ use App\Models\UserRole;
 use App\Models\UserShift;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
-use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Colors\Color;
-use Guava\Calendar\Actions\CreateAction;
-use Guava\Calendar\Actions\DeleteAction;
+use Guava\Calendar\Enums\CalendarViewType;
+use Guava\Calendar\Filament\Actions\CreateAction;
+use Guava\Calendar\Filament\Actions\DeleteAction;
+use Guava\Calendar\Filament\Actions\EditAction;
+use Guava\Calendar\Filament\Actions\ViewAction;
+use Guava\Calendar\Filament\CalendarWidget;
 use Guava\Calendar\ValueObjects\CalendarEvent;
 use Guava\Calendar\ValueObjects\CalendarResource;
-use Guava\Calendar\Widgets\CalendarWidget;
+use Guava\Calendar\ValueObjects\EventDropInfo;
+use Guava\Calendar\ValueObjects\EventResizeInfo;
+use Guava\Calendar\ValueObjects\FetchInfo;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
@@ -42,9 +48,9 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 {
 
 //    protected static string $view = 'filament.resources.shift-resource.widgets.shift-planner-widget';
-    protected static string $view = "filament.resources.shift-resource.pages.shift-planner-widget";
+    protected string $view = "filament.resources.shift-resource.pages.shift-planner-widget";
     protected int | string | array $columnSpan = "full";
-    protected string $calendarView = "resourceTimeGridDay";
+    protected CalendarViewType $calendarView = CalendarViewType::ResourceTimeGridDay;
     protected bool $eventClickEnabled = true;
     protected ?string $defaultEventClickAction = "edit";
     protected bool $eventDragEnabled = true;
@@ -67,9 +73,9 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         return new HtmlString($this->form->toHtml()); // HACKERMAN! XD (the calendar widget doesn't support displaying a form by default ...)
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 Select::make('user_role_id')
                     ->label(__('Department'))
                     ->placeholder(__("Select"))
@@ -101,7 +107,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                 ->model(Shift::class)
                 ->modelLabel(__("Shift"))
                 ->createAnother(false)
-                ->form($this->getSchema())
+                ->schema([$this->getSchema("")])
                 ->authorize("deleteAny", Shift::class)
                 ->mountUsing(function ($arguments, $form) {
                     return $form->fill([
@@ -116,14 +122,14 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         ];
     }
 
-    public function onEventDrop(array $info = []): bool {
-        if(data_get($info, "event.extendedProps.model") != Shift::class)
+
+    protected function processEventChange(EventDropInfo|EventResizeInfo $info): bool {
+        if(data_get($info->event->getExtendedProps(), "model") != Shift::class)
             return false;
-        if(!Gate::check("delete", Shift::findOrFail(data_get($info, "event.extendedProps.key"))))
+        if(!Gate::check("delete", Shift::findOrFail(data_get($info->event->getExtendedProps(), "key"))))
             return false;
 
-        parent::onEventDrop($info);
-        if($shiftType = ShiftType::find(data_get($info, 'event.resourceIds.0'))) {
+        if($shiftType = ShiftType::find(data_get($info->event->getResourceIds(), '0'))) {
             /**
              * @var Shift $record
              */
@@ -138,10 +144,13 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         return false;
     }
 
-    public function onEventResize(array $info = []): bool {
-        return $this->onEventDrop($info);
+    protected function onEventDrop(EventDropInfo $info, Model $event): bool {
+        return $this->processEventChange($info);
     }
 
+    public function onEventResize(EventResizeInfo $info, Model $event): bool {
+        return $this->processEventChange($info);
+    }
 
     public function getOptions(): array {
         return [
@@ -192,10 +201,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 
     }
 
-    public function getEvents(array $fetchInfo = []): Collection|array {
-        $start      = Carbon::parse($fetchInfo['startStr'] ?? now());
-        $end        = Carbon::parse($fetchInfo['endStr'] ?? now());
-        $query      = TimetableEntry::with(["sigEvent", "sigLocation"])->whereBetween("start", [$start, $end]);
+    protected function getEvents(FetchInfo $info): Collection | array | Builder {
+        $query      = TimetableEntry::with(["sigEvent", "sigLocation"])->whereBetween("start", [$info->start, $info->end]);
         if($this->sig_location_id)
             $query->where("sig_location_id", $this->sig_location_id);
 
@@ -266,9 +273,9 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
     }
 
 
-    public function viewAction(): Action {
+    public function viewAction(): ViewAction {
         return parent::viewAction()->make("view")
-            ->infolist([
+            ->schema([
                 TextEntry::make("sigEvent.name_localized")
                     ->label(__("Event Name"))
                     ->url(fn($record) => SigEventResource::getUrl("view", ['record' => $record->sig_event_id]))
@@ -292,7 +299,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                         });
                     })
                     ->schema([
-                        \Filament\Infolists\Components\Section::make()
+                        Section::make()
+                            ->columnSpanFull()
                             ->schema([
                                 TextEntry::make("userRole")
                                     ->inlineLabel()
@@ -312,7 +320,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
             ->modelLabel(__("Timetable Entry"));
     }
 
-    public function editAction(): Action {
+    public function editAction(): EditAction {
         return parent::editAction()
             ->modelLabel(__("Shift"))
             ->extraModalFooterActions([
@@ -322,11 +330,13 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
             ]);
     }
 
-    public function getSchema(?string $model = null): ?array {
-        if($model != null AND $model != Shift::class)
-            return [];
-        return [
+    public function getSchema(string $name): ?Schema {
+        if($name != Shift::class)
+            return Schema::make();
+
+        return Schema::make()->schema([
             Grid::make()
+                ->columnSpanFull()
                 ->schema([
                     Select::make("users")
                         ->visibleOn("edit")
@@ -350,8 +360,10 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
 
             Section::make(__("Manager Settings"))
                 ->visible(auth()->user()->hasPermission(Permission::MANAGE_SHIFTS, PermissionLevel::DELETE))
+                ->columnSpanFull()
                 ->schema([
                     Grid::make()
+                        ->columnSpanFull()
                         ->schema([
                             Select::make("shift_type_id")
                                     ->required()
@@ -374,6 +386,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                                   ->label(__("End Date")),
                         ]),
                     Grid::make()
+                        ->columnSpanFull()
                         ->schema([
                             Select::make("necessity")
                                 ->label(__("Necessity"))
@@ -390,7 +403,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                                 ->label(__("Locked")),
                         ]),
                 ])
-        ];
+        ]);
     }
 
     public function getResources(): array|Collection {

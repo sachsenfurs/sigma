@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PostResource\Pages;
 
+use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
 use App\Filament\Resources\PostResource;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
@@ -17,7 +19,7 @@ class ManagePosts extends ManageRecords
 
     protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->label("New Post")
                 ->translateLabel()
                 ->after(function($livewire, $data) {
@@ -30,7 +32,7 @@ class ManagePosts extends ManageRecords
                     }
                 })
                 ->extraModalFooterActions([
-                    Actions\Action::make("test")
+                    Action::make("test")
                         ->makeModalSubmitAction("test", ['test' => true])
                 ])
                 ->action(function(array $data, $action, array $arguments) {
@@ -49,7 +51,7 @@ class ManagePosts extends ManageRecords
                         $action->halt();
                     }
                 })
-                ->mutateFormDataUsing(function (array $data): array {
+                ->mutateDataUsing(function (array $data): array {
                     // resize image
                    if(isset($data['image'])) {
                        $path    = Storage::disk("public")->path($data['image']);

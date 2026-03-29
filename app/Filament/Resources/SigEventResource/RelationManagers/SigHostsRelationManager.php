@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\EditAction;
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\SigHostResource;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Gate;
 class SigHostsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sigHosts';
-    protected static ?string $icon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-users';
 
     public static function getModelLabel(): ?string {
         return __("Host");
@@ -37,10 +38,10 @@ class SigHostsRelationManager extends RelationManager
         return $ownerRecord->sigHosts()->count();
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -49,9 +50,9 @@ class SigHostsRelationManager extends RelationManager
     public function table(Table $table): Table {
         $table = SigHostResource::table($table);
         return $table
-            ->actions([
+            ->recordActions([
                 EditAction::make("edit")
-                    ->form(fn($form) => SigHostResource::form($form))
+                    ->schema(fn($form) => SigHostResource::form($form))
             ])
             ->recordUrl(fn(Model $record) =>
                 SigHostResource::getUrl(
@@ -60,7 +61,7 @@ class SigHostsRelationManager extends RelationManager
                 )
             ->headerActions([
                 CreateAction::make()
-                    ->form(fn($form) => SigHostResource::form($form))
+                    ->schema(fn($form) => SigHostResource::form($form))
                     ->fillForm([
                         'reg_id' => $this->ownerRecord->reg_id,
                         'name' => $this->ownerRecord->name,

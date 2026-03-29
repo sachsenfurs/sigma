@@ -1,10 +1,19 @@
-@import '/vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
 
-@config 'tailwind.config.js';
+@source '../../../../app/Filament/**/*';
+@source '../../../../app/**/*.php';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../resources/views/vendor/filament-fullcalendar/**/*';
+@source '../../../../vendor/filament/**/*.blade.php';
+@source '../../../../vendor/filament/**/*.php';
+@source '../../../../vendor/guava/calendar/resources/**/*.blade.php';
+@source '../../../../vendor/guava/calendar/**/*.php';
+@source '../../../../vendor/saade/filament-fullcalendar/resources/**/*.blade.php';
+@source '../../../../vendor/saade/filament-fullcalendar/**/*.php';
 
 /* Table styling for filament panel */
-.fi-ta-table .fi-ta-cell > div {
-    @apply py-1.5;
+.fi-ta-table .fi-ta-cell {
+    @apply py-1;
 }
 
 .fi-ta-image {

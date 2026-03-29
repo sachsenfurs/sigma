@@ -2,14 +2,31 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
+use App\Filament\Resources\SigHostResource\Pages\ListSigHosts;
+use App\Filament\Resources\SigHostResource\Pages\CreateSigHost;
+use App\Filament\Resources\SigHostResource\Pages\ViewSigHost;
+use App\Filament\Resources\SigHostResource\Pages\EditSigHost;
+use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Schemas\Components\Component;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ColorPicker;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\Pages;
 use App\Filament\Resources\SigHostResource\RelationManagers;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigHost;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,20 +37,21 @@ class SigHostResource extends Resource
 {
     use HasActiveIcon;
     protected static ?string $model = SigHost::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
     protected static ?string $cluster = SigManagement::class;
     protected static ?int $navigationSort = 20;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getPluralLabel(): ?string {
         return __('Hosts');
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make()
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Grid::make()
                     ->columns(4)
+                    ->columnSpanFull()
                     ->schema([
                         self::getNameField()
                             ->columnSpan(2),
@@ -54,50 +72,50 @@ class SigHostResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigEventsRelationManager::class,
+            SigEventsRelationManager::class,
         ];
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListSigHosts::route('/'),
-            'create' => Pages\CreateSigHost::route('/create'),
-            'view' => Pages\ViewSigHost::route('/{record}'),
-            'edit' => Pages\EditSigHost::route('/{record}/edit'),
+            'index' => ListSigHosts::route('/'),
+            'create' => CreateSigHost::route('/create'),
+            'view' => ViewSigHost::route('/{record}'),
+            'edit' => EditSigHost::route('/{record}/edit'),
         ];
     }
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\ViewColumn::make('name')
+            ViewColumn::make('name')
                 ->label('Name')
                 ->translateLabel()
                 ->searchable()
                 ->sortable()
                 ->view('filament.tables.columns.host-avatar'),
-            Tables\Columns\TextColumn::make('reg_id')
+            TextColumn::make('reg_id')
                 ->label('Reg Number')
                 ->translateLabel()
                 ->numeric()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('publicSigEventCount')
+            TextColumn::make('publicSigEventCount')
                 ->label('Event count')
                 ->translateLabel()
                 ->getStateUsing(fn (SigHost $record) => $record->public_sig_event_count),
-            Tables\Columns\IconColumn::make('hide')
+            IconColumn::make('hide')
                 ->label('Show Name on Schedule')
                 ->translateLabel()
                 ->getStateUsing(fn(SigHost $record) => !$record->hide)
@@ -106,50 +124,50 @@ class SigHostResource extends Resource
         ];
     }
 
-    private static function getNameField(): Forms\Components\Component {
+    private static function getNameField(): Component {
         return
-            Forms\Components\TextInput::make('name')
+            TextInput::make('name')
                 ->label('Name')
                 ->translateLabel()
                 ->required()->maxLength(255);
     }
 
-    private static function getRegIdField(): Forms\Components\Component {
+    private static function getRegIdField(): Component {
         return
-            Forms\Components\TextInput::make('reg_id')
+            TextInput::make('reg_id')
                 ->label('Reg Number')
                 ->translateLabel()
                 ->numeric();
     }
 
-    private static function getDescriptionField(): Forms\Components\Component {
+    private static function getDescriptionField(): Component {
         return
-            Forms\Components\Textarea::make('description')
+            Textarea::make('description')
                 ->label('Description')
                 ->translateLabel()
                 ->rows(5)
                 ->maxLength(65535);
     }
 
-    private static function getDescriptionEnField(): Forms\Components\Component {
+    private static function getDescriptionEnField(): Component {
         return
-            Forms\Components\Textarea::make('description_en')
+            Textarea::make('description_en')
                 ->label('Description (English)')
                 ->translateLabel()
                 ->rows(5)
                 ->maxLength(65535);
     }
 
-    private static function getHideField(): Forms\Components\Component {
+    private static function getHideField(): Component {
         return
-            Forms\Components\Toggle::make('hide')
+            Toggle::make('hide')
                 ->label('Hide name on schedule')
                 ->inline(false)
                 ->translateLabel();
     }
-    private static function getColorField(): Forms\Components\Component {
+    private static function getColorField(): Component {
         return
-            Forms\Components\ColorPicker::make('color')
+            ColorPicker::make('color')
                 ->label('Color in Schedule')
                 ->default("#cccccc")
                 ->formatStateUsing(fn(?Model $record) => $record?->color) // somehow the color isnt fetched from the db so we have to do it manually

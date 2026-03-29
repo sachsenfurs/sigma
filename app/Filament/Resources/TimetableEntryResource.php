@@ -2,6 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Actions\ViewAction;
+use Filament\Support\Enums\TextSize;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\TimetableEntryResource\Pages\ListTimetableEntries;
+use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Schemas\Components\Component;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Textarea;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\TimetableEntryResource\Pages;
@@ -12,11 +32,8 @@ use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -32,11 +49,11 @@ class TimetableEntryResource extends Resource
 {
     use HasActiveIcon;
     protected static ?string $model = TimetableEntry::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $cluster = SigPlanning::class;
     protected static ?int $navigationSort = 10;
 
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getLabel(): ?string {
         return __('Event Schedule');
@@ -46,9 +63,9 @@ class TimetableEntryResource extends Resource
         return __('Event Schedule');
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema(self::getSchema());
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components(self::getSchema());
     }
 
     public static function getSchema(): array {
@@ -57,15 +74,17 @@ class TimetableEntryResource extends Resource
             self::getSigLocationField(),
             self::getSigStartField(),
             self::getSigEndField(),
-            Forms\Components\Fieldset::make("Event Settings")
+            Fieldset::make("Event Settings")
+                ->columnSpanFull()
                 ->schema([
                     self::getSigNewField(),
                     self::getSigHideField(),
                     self::getSigCancelledField(),
                 ])
                 ->columns(3),
-            Forms\Components\Fieldset::make("Communication Settings")
+            Fieldset::make("Communication Settings")
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
                     self::getSendUpdateField(),
                 ])
@@ -96,9 +115,9 @@ class TimetableEntryResource extends Resource
                 self::getLocationFilter(),
                 self::getDepartmentFilter(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make("requirements")
-                    ->infolist([
+            ->recordActions([
+                ViewAction::make("requirements")
+                    ->schema([
                         TextEntry::make("sigEvent.name_localized")
                             ->inlineLabel()
                             ->label(__("Event Name"))
@@ -109,7 +128,7 @@ class TimetableEntryResource extends Resource
                             ->markdown()
                             ->listWithLineBreaks()
                             ->limit(500)
-                            ->size(TextEntry\TextEntrySize::ExtraSmall)
+                            ->size(TextSize::ExtraSmall)
                             ->color('gray')
                             ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
                             ->translateLabel(),
@@ -141,15 +160,15 @@ class TimetableEntryResource extends Resource
                             ])
                     ])
                     ->modal(),
-                Tables\Actions\EditAction::make()
-                    ->using(Pages\EditTimetableEntry::getEditAction())
+                EditAction::make()
+                    ->using(EditTimetableEntry::getEditAction())
                     ->url(null),
             ])
             ->recordUrl(null)
             ->recordAction("requirements")
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->recordClasses(fn(TimetableEntry $record) => $record->end->isPast() ? "bg-gray-800 text-gray-500" : "");
@@ -163,15 +182,15 @@ class TimetableEntryResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListTimetableEntries::route('/'),
-            'create' => Pages\CreateTimetableEntry::route('/create'),
-            'edit' => Pages\EditTimetableEntry::route('/{record}/edit'),
+            'index' => ListTimetableEntries::route('/'),
+            'create' => CreateTimetableEntry::route('/create'),
+            'edit' => EditTimetableEntry::route('/{record}/edit'),
         ];
     }
 
     public static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('timestamp')
+            TextColumn::make('timestamp')
                 ->getStateUsing(function ($record, $table) {
                     $suffix = '';
                     $prefix = '';
@@ -202,27 +221,27 @@ class TimetableEntryResource extends Resource
                 ->label('Time span')
                 ->width(10)
                 ->translateLabel(),
-            Tables\Columns\TextColumn::make('sigEvent.name_localized')
+            TextColumn::make('sigEvent.name_localized')
                 ->label('Event')
                 ->translateLabel()
                 ->color(fn(Model $record) => $record->hide ? Color::Gray : "default")
                 ->badge(fn(Model $record) => $record->hide)
                 ->searchable(['name', 'name_en']),
-            Tables\Columns\TextColumn::make('sigEvent.sigHosts.name')
+            TextColumn::make('sigEvent.sigHosts.name')
                  ->color("default")
                  ->label('Host')
                  ->translateLabel()
                  ->searchable(),
-            Tables\Columns\TextColumn ::make('sigLocation.name')
+            TextColumn ::make('sigLocation.name')
                 ->badge()
                 ->label('Location')
                 ->translateLabel(),
-            Tables\Columns\TextColumn::make("sig_timeslots_count")
+            TextColumn::make("sig_timeslots_count")
                 ->label("Timeslot Count")
                 ->translateLabel()
                 ->counts("sigTimeslots")
                 ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make("favorites_count")
+            TextColumn::make("favorites_count")
                 ->label("Favorites")
                 ->translateLabel()
                 ->counts("favorites")
@@ -243,8 +262,8 @@ class TimetableEntryResource extends Resource
                 ->toggleable(isToggledHiddenByDefault: true)
                 ->sortable()
                 ->action(
-                    Tables\Actions\ViewAction::make()
-                        ->infolist([
+                    ViewAction::make()
+                        ->schema([
                             RepeatableEntry::make("favorites")
                                 ->schema([
                                     TextEntry::make("user")
@@ -257,8 +276,8 @@ class TimetableEntryResource extends Resource
         ];
     }
 
-    private static function getLocationFilter(): Tables\Filters\SelectFilter {
-        return Tables\Filters\SelectFilter::make('sigLocation')
+    private static function getLocationFilter(): SelectFilter {
+        return SelectFilter::make('sigLocation')
             ->label('Location')
             ->translateLabel()
             ->relationship('sigLocation', 'name', fn (Builder $query) => $query->orderBy('name'))
@@ -280,8 +299,8 @@ class TimetableEntryResource extends Resource
             ->preload();
     }
 
-    public static function getSigEventField(): Forms\Components\Component {
-        return Forms\Components\Select::make('sig_event_id')
+    public static function getSigEventField(): Component {
+        return Select::make('sig_event_id')
             ->label('Event')
             ->translateLabel()
             ->createOptionForm(fn($form) => SigEventResource::form($form))
@@ -295,7 +314,7 @@ class TimetableEntryResource extends Resource
             ->hintAction(
                 function($state) {
                     if(filled($state)) {
-                        return Forms\Components\Actions\Action::make("edit")
+                        return Action::make("edit")
                             ->label("Edit")
                             ->translateLabel()
                             ->url(SigEventResource::getUrl("edit", ['record' => $state]));
@@ -307,8 +326,8 @@ class TimetableEntryResource extends Resource
             ->preload();
     }
 
-    public static function getSigLocationField(): Forms\Components\Component {
-        return Forms\Components\Select::make('sig_location_id')
+    public static function getSigLocationField(): Component {
+        return Select::make('sig_location_id')
             ->label('Location')
             ->translateLabel()
             ->relationship('sigLocation', 'name')
@@ -325,8 +344,8 @@ class TimetableEntryResource extends Resource
             ->preload();
     }
 
-    public static function getSigStartField(): Forms\Components\Component {
-        return Forms\Components\DateTimePicker::make('start')
+    public static function getSigStartField(): Component {
+        return DateTimePicker::make('start')
             ->label('Beginning')
             ->translateLabel()
             ->format('Y-m-d\TH:i')
@@ -334,8 +353,8 @@ class TimetableEntryResource extends Resource
             ->required();
     }
 
-    public static function getSigEndField(): Forms\Components\Component {
-        return Forms\Components\DateTimePicker::make('end')
+    public static function getSigEndField(): Component {
+        return DateTimePicker::make('end')
             ->label('End')
             ->translateLabel()
             ->format('Y-m-d\TH:i')
@@ -345,8 +364,8 @@ class TimetableEntryResource extends Resource
             ->required();
     }
 
-    public static function getSigNewField(): Forms\Components\Component {
-        return Forms\Components\Toggle::make('new')
+    public static function getSigNewField(): Component {
+        return Toggle::make('new')
             ->label('New Event')
             ->translateLabel()
             ->formatStateUsing(function(?Model $record) {
@@ -357,37 +376,37 @@ class TimetableEntryResource extends Resource
             });
     }
 
-    public static function getSigCancelledField(): Forms\Components\Component {
-        return Forms\Components\Toggle::make('cancelled')
+    public static function getSigCancelledField(): Component {
+        return Toggle::make('cancelled')
             ->label('Event Cancelled')
             ->onColor("danger")
             ->visible(fn(?Model $record): bool => $record !== null AND ($record instanceof TimetableEntry))
             ->translateLabel();
     }
 
-    public static function getSigHideField(): Forms\Components\Component {
-        return Forms\Components\Toggle::make('hide')
+    public static function getSigHideField(): Component {
+        return Toggle::make('hide')
             ->label('Internal Event')
             ->translateLabel();
     }
 
-    public static function getResetUpdateField(): Forms\Components\Component {
-        return Forms\Components\Checkbox::make('reset_update')
+    public static function getResetUpdateField(): Component {
+        return Checkbox::make('reset_update')
             ->label('Reset \'Changed\'-flag')
             ->translateLabel()
             ->visible(fn (string $operation, ?Model $record): bool => ($record?->hasEventChanged() ?? false));
     }
 
-    public static function getSendUpdateField(): Forms\Components\Component {
-        return Forms\Components\Checkbox::make('send_update')
+    public static function getSendUpdateField(): Component {
+        return Checkbox::make('send_update')
             ->label('Announce Changes')
             ->translateLabel()
             ->formatStateUsing(fn() => app(AppSettings::class)->show_schedule_date->isBefore(now()))
             ->helperText(__('This needs to be checked if the event should be marked as changed!'));
     }
 
-    private static function getDepartmentFilter(): Tables\Filters\SelectFilter {
-        return Tables\Filters\SelectFilter::make("department")
+    private static function getDepartmentFilter(): SelectFilter {
+        return SelectFilter::make("department")
               ->label("SIG Requirements")
               ->translateLabel()
               ->searchable()
@@ -395,8 +414,8 @@ class TimetableEntryResource extends Resource
               ->relationship("sigEvent.departmentInfos.userRole", "name");
     }
 
-    private static function getSigApprovalField(): Forms\Components\Checkbox {
-        return Forms\Components\Checkbox::make("approval")
+    private static function getSigApprovalField(): Checkbox {
+        return Checkbox::make("approval")
             ->formatStateUsing(fn($state) => !$state)
             ->mutateDehydratedStateUsing(fn($state) => !$state)
             ->label(__("WIP"))
@@ -404,7 +423,7 @@ class TimetableEntryResource extends Resource
     }
 
     private static function getCommentField() {
-        return Forms\Components\Textarea::make("comment")
+        return Textarea::make("comment")
             ->label("Comment")
             ->translateLabel();
     }

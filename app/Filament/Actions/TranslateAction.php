@@ -2,11 +2,11 @@
 
 namespace App\Filament\Actions;
 
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use App\Services\Translator;
 use App\Settings\AppSettings;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 
 class TranslateAction extends ServiceAction
 {

@@ -2,8 +2,12 @@
 
 namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\AttachAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DetachAction;
 use App\Filament\Resources\SigFormResource;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,8 +21,8 @@ class SigFormsRelationManager extends RelationManager
         return $ownerRecord->forms()->count() ?: null;
     }
 
-    public function form(Form $form): Form {
-        return $form;
+    public function form(Schema $schema): Schema {
+        return $schema;
     }
 
     protected static ?string $modelLabel = "Form";
@@ -32,17 +36,17 @@ class SigFormsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name_localized'),
+                TextColumn::make('name_localized'),
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->preloadRecordSelect()
                     ->recordSelectSearchColumns(['name', 'name_en']),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
+            ->recordActions([
+                EditAction::make()
                     ->url(fn($record) => SigFormResource::getUrl('edit', ['record' => $record])),
-                Tables\Actions\DetachAction::make()
+                DetachAction::make()
                     ->recordTitleAttribute("name_localized"),
             ])
             ->recordUrl(null);

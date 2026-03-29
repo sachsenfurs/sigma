@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 use App\Enums\Approval;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
@@ -9,7 +11,6 @@ use App\Filament\Resources\TimetableEntryResource\Pages\EditTimetableEntry;
 use App\Models\SigLocation;
 use App\Models\TimetableEntry;
 use Filament\Actions\Action;
-use Filament\Forms\Form;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
@@ -23,7 +24,7 @@ class SigPlannerWidget extends FullCalendarWidget
 {
     public Model | string | null $model = TimetableEntry::class;
 
-    protected static string $view = "vendor.filament-fullcalendar.sig-planner";
+    protected string $view = "vendor.filament-fullcalendar.sig-planner";
 
     public array $resources = [];
 
@@ -106,7 +107,10 @@ class SigPlannerWidget extends FullCalendarWidget
     }
 
     public function getFormSchema(): array {
-        return EditTimetableEntry::getSchema();
+        return [
+            Grid::make(2)
+              ->schema(TimetableEntryResource::getSchema())
+        ];
     }
 
     protected function modalActions(): array {
@@ -116,12 +120,12 @@ class SigPlannerWidget extends FullCalendarWidget
                 ->using(function(Model $record, array $data) {
                     return EditTimetableEntry::handleUpdate($record, $data);
                 })
-                ->mountUsing(function(TimetableEntry $entry, Form $form, array $arguments) {
+                ->mountUsing(function(TimetableEntry $entry, ?Schema $schema, array $arguments) {
                     $entry->start             = $arguments['event']['start'] ?? $entry->start;
                     $entry->end               = $arguments['event']['end'] ?? $entry->end;
                     $entry->sig_location_id   = $arguments['newResource']['id'] ?? $entry->sig_location_id;
 
-                    $form->fill($entry->attributesToArray());
+                    $schema?->fill($entry->attributesToArray());
                 })
                 ->modalFooterActions([
                     Action::make(__("Save"))
@@ -176,16 +180,16 @@ class SigPlannerWidget extends FullCalendarWidget
 
     /**
      * Override from InteractsWithActions to refresh/revert the view if unsuccessful
-     * @param bool $shouldCancelParentActions
+     * @param bool $canCancelParentActions
      * @return void
      */
-    public function unmountAction(bool $shouldCancelParentActions = true, bool $shouldCloseModal = true): void {
-        parent::unmountAction($shouldCancelParentActions, $shouldCloseModal);
+    public function unmountAction(bool $canCancelParentActions = true): void {
+        parent::unmountAction($canCancelParentActions);
         $this->refreshRecords();
     }
 
 
-//    /**
+    //    /**
 //     * Override from InteractsWithEvents to set the default clickAction to "edit"
 //     * @param array $event
 //     * @return void

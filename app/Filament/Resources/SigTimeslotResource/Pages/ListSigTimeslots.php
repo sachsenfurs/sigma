@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigTimeslotResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\SigTimeslotResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -12,7 +13,7 @@ class ListSigTimeslots extends ListRecords
 
     protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

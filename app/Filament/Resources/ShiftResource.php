@@ -2,6 +2,17 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Grouping\Group;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\Toggle;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Filament\Clusters\ShiftPlanning;
 use App\Filament\Resources\ShiftResource\Pages\ManageShifts;
 use App\Filament\Resources\ShiftResource\Widgets\ShiftPlannerWidget;
@@ -9,8 +20,6 @@ use App\Filament\Resources\ShiftResource\Widgets\ShiftSummaryWidget;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Shift;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,9 +30,9 @@ class ShiftResource extends Resource
     use HasActiveIcon;
 
     protected static ?string $model = Shift::class;
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $cluster = ShiftPlanning::class;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     protected array $listeners = [
         'refreshShifts' => '$refresh',
@@ -36,34 +45,34 @@ class ShiftResource extends Resource
         return __("Shifts");
     }
 
-    public static function form(Form $form): Form {
-        return $form->schema((new ShiftPlannerWidget())->getSchema(Shift::class));
+    public static function form(Schema $schema): Schema {
+        return $schema->components((new ShiftPlannerWidget())->getSchema(Shift::class));
     }
 
     public static function table(Table $table): Table {
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with(["type", "type.userRole"]))
             ->columns([
-                Tables\Columns\TextColumn::make('type.userRole')
+                TextColumn::make('type.userRole')
                     ->formatStateUsing(fn($record) => $record->type->userRole?->name_localized)
                     ->label(__("Department"))
                     ->badge(),
-                Tables\Columns\TextColumn::make('type.name')
+                TextColumn::make('type.name')
                     ->label(__("Shift Type"))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sigLocation.name')
+                TextColumn::make('sigLocation.name')
                     ->label(__("Location"))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('userShifts.user.name')
+                TextColumn::make('userShifts.user.name')
                     ->label(__("User"))
                     ->searchable()
                     ->sortable()
                     ->badge(),
-                Tables\Columns\TextColumn::make('info')
+                TextColumn::make('info')
                     ->label(__("Additional Information"))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('start')
+                TextColumn::make('start')
                     ->label(__("Duration"))
                     ->formatStateUsing(fn($record) =>
                         $record->start->translatedFormat("l, H:i")
@@ -71,37 +80,37 @@ class ShiftResource extends Resource
                             . " (" . round($record->start->diffInHours($record->end), 2) . "h)"
                     )
                     ->sortable(),
-                Tables\Columns\TextColumn::make('necessity')
+                TextColumn::make('necessity')
                     ->label(__("Necessity"))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('max_user')
+                TextColumn::make('max_user')
                     ->numeric()
                     ->label(__("Max. User"))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\IconColumn::make('team')
+                IconColumn::make('team')
                     ->label("For all team member")
                     ->getStateUsing(fn($record) => $record->team ?: null)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
-                Tables\Columns\IconColumn::make('locked')
+                IconColumn::make('locked')
                     ->label(__("Locked"))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__("Created"))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__("Updated at"))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->groups([
-                Tables\Grouping\Group::make("shift_type_id")
+                Group::make("shift_type_id")
                     ->label(__("Shift Type"))
                     ->collapsible()
                     ->getTitleFromRecordUsing(fn($record) => $record->type->name)
@@ -117,22 +126,22 @@ class ShiftResource extends Resource
                 //
             ])
             ->defaultSort("start", "asc")
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkAction::make("locked")
+            ->toolbarActions([
+                BulkAction::make("locked")
                     ->authorize("deleteAny")
                     ->label(__("Locked")."...")
                     ->deselectRecordsAfterCompletion()
-                    ->form([
-                        Forms\Components\Toggle::make("locked")
+                    ->schema([
+                        Toggle::make("locked")
                             ->label(__("Locked")),
                     ])
                     ->action(fn($data, $records) => $records->toQuery()->update($data)),
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

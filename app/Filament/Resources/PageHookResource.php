@@ -2,16 +2,29 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
+use Filament\Support\Enums\Width;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\PageHookResource\Pages\ManagePageHooks;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Filament\Clusters\Settings;
 use App\Filament\Resources\PageHookResource\Pages;
 use App\Models\PageHook;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -20,8 +33,8 @@ class PageHookResource extends Resource
 {
     protected static ?string $model = PageHook::class;
     protected static ?string $cluster = Settings::class;
-    protected static ?string $navigationIcon = 'heroicon-o-code-bracket';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-code-bracket';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationGroup(): ?string {
         return __("Page Hooks");
@@ -38,43 +51,44 @@ class PageHookResource extends Resource
         return auth()->user()?->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN) ?? false;
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make("id")
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make("id")
                     ->label("Identifier")
                     ->columnSpanFull()
                     ->unique(ignoreRecord: true),
-                Forms\Components\Section::make(__("Content"))
+                Section::make(__("Content"))
+                    ->columnSpanFull()
                     ->schema([
-                        Forms\Components\Textarea::make('content')
+                        Textarea::make('content')
                             ->label("Content")
                             ->autosize()
                             ->translateLabel()
                             ->required()
-                            ->visible(fn(Forms\Get $get) => !$get("html")),
-                        Forms\Components\RichEditor::make('content')
+                            ->visible(fn(Get $get) => !$get("html")),
+                        RichEditor::make('content')
                             ->label("Content")
                             ->translateLabel()
                             ->required()
                             ->dehydrateStateUsing(fn($state) => htmlspecialchars_decode($state))
-                            ->visible(fn(Forms\Get $get) => $get("html")),
-                        Forms\Components\Textarea::make('content_en')
+                            ->visible(fn(Get $get) => $get("html")),
+                        Textarea::make('content_en')
                             ->autosize()
                             ->label("Content (English)")
                             ->translateLabel()
-                            ->visible(fn(Forms\Get $get) => !$get("html")),
-                        Forms\Components\RichEditor::make('content_en')
+                            ->visible(fn(Get $get) => !$get("html")),
+                        RichEditor::make('content_en')
                             ->label("Content (English)")
                             ->dehydrateStateUsing(fn($state) => htmlspecialchars_decode($state))
                             ->translateLabel()
-                            ->visible(fn(Forms\Get $get) => $get("html")),
+                            ->visible(fn(Get $get) => $get("html")),
                     ]),
-                Forms\Components\Toggle::make('html')
+                Toggle::make('html')
                     ->label("Enable HTML")
                     ->reactive()
                     ->translateLabel(),
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
                     ->columnSpanFull(),
             ]);
     }
@@ -82,30 +96,30 @@ class PageHookResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('Identifier')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('content')
+                TextColumn::make('content')
                     ->label("Content")
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('content_en')
+                TextColumn::make('content_en')
                     ->label("Content (English)")
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\IconColumn::make('html')
+                IconColumn::make('html')
                     ->label("HTML")
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->label("Description")
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -113,20 +127,20 @@ class PageHookResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()->modalWidth(MaxWidth::SevenExtraLarge),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make()->modalWidth(Width::SevenExtraLarge),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ManagePageHooks::route('/'),
+            'index' => ManagePageHooks::route('/'),
         ];
     }
 }

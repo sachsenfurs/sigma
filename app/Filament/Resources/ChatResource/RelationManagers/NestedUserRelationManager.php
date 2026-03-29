@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ChatResource\RelationManagers;
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,8 +41,8 @@ class NestedUserRelationManager extends RelationManager
         return static::$relationManager::getBadge($ownerRecord->{static::$relationship}, $pageClass);
     }
 
-    public function form(Form $form): Form {
-        return $this->makeRelationManager()->form($form);
+    public function form(Schema $schema): Schema {
+        return $this->makeRelationManager()->form($schema);
     }
 
     public function table(Table $table): Table {

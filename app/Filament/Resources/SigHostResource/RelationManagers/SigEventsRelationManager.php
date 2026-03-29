@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigHostResource\RelationManagers;
 
+use Filament\Actions\EditAction;
 use App\Filament\Resources\SigEventResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -14,8 +15,8 @@ class SigEventsRelationManager extends RelationManager
     public function table(Table $table): Table {
         return SigEventResource::table($table)
             ->heading(__('Assigned SIGs'))
-            ->actions([
-                Tables\Actions\EditAction::make()
+            ->recordActions([
+                EditAction::make()
                     ->url(fn($record) => SigEventResource::getUrl("edit", ['record' => $record])),
             ])
             ->recordAction("view")

@@ -2,11 +2,23 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use App\Filament\Resources\PostChannelResource\Pages\ViewPostChannel;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\PostChannelResource\Pages\ManagePostChannels;
 use App\Filament\Resources\PostChannelResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\PostChannel;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,9 +29,9 @@ class PostChannelResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = PostChannel::class;
 //    protected static ?string $cluster = Settings::class;
-    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-megaphone';
 //    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static ?string $navigationGroup = "Post";
+    protected static string | \UnitEnum | null $navigationGroup = "Post";
     protected static ?int $navigationSort = 110;
     public static function getModelLabel(): string {
         return __("Channel");
@@ -33,36 +45,36 @@ class PostChannelResource extends Resource
         return Gate::allows("viewAny", PostChannel::class);
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Fieldset::make("Details")
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Fieldset::make("Details")
                     ->translateLabel()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->columnSpanFull()
                             ->required(),
-                        Forms\Components\TextInput::make('channel_identifier')
+                        TextInput::make('channel_identifier')
                             ->label("Channel ID")
                             ->translateLabel()
                             ->required()
                             ->numeric(),
-                        Forms\Components\TextInput::make('test_channel_identifier')
+                        TextInput::make('test_channel_identifier')
                             ->label("Test Channel ID")
                             ->translateLabel()
                             ->numeric(),
-                        Forms\Components\TextInput::make('language')
+                        TextInput::make('language')
                             ->label("Language")
                             ->translateLabel()
                             ->required()
                             ->maxLength(255)
                             ->default('de'),
-                        Forms\Components\Toggle::make('default')
+                        Toggle::make('default')
                             ->label("Default / Public")
                             ->translateLabel()
                             ->inline(false)
                             ->helperText("Selected by default when creating a new post? Every message in this channel will be publicly visible in the announcements tab."),
-                        Forms\Components\RichEditor::make('info')
+                        RichEditor::make('info')
                             ->columnSpanFull()
                             ->label("Info (Internal)")
                             ->translateLabel()
@@ -74,42 +86,42 @@ class PostChannelResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->translateLabel()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('language')
+                TextColumn::make('language')
                     ->label("Language")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => strtoupper($state)),
-                Tables\Columns\TextColumn::make("channel_identifier")
+                TextColumn::make("channel_identifier")
                     ->label("Channel ID")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make("test_channel_identifier")
+                TextColumn::make("test_channel_identifier")
                     ->label("Test Channel ID")
                     ->translateLabel(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->infolist(Pages\ViewPostChannel::getInfolistSchema()),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+            ->recordActions([
+                ViewAction::make()
+                    ->schema(ViewPostChannel::getInfolistSchema()),
+                EditAction::make(),
+                DeleteAction::make()
                     ->label(""),
             ])
             ->recordUrl(null)
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ManagePostChannels::route('/'),
+            'index' => ManagePostChannels::route('/'),
         ];
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Enums\Traits;
 
+use ReflectionEnum;
+use ReflectionAttribute;
+
 trait AttributableEnum
 {
     public function __call(string $method, array $arguments) {
-        $reflection = new \ReflectionEnum(static::class);
+        $reflection = new ReflectionEnum(static::class);
         $attributes = $reflection->getCase($this->name)->getAttributes();
-        $filtered = array_filter($attributes, fn(\ReflectionAttribute $attribute) => collect(explode("\\", $attribute->getName()))->last() == ucfirst($method));
+        $filtered = array_filter($attributes, fn(ReflectionAttribute $attribute) => collect(explode("\\", $attribute->getName()))->last() == ucfirst($method));
         if (empty($filtered)) {
             return null;
         }

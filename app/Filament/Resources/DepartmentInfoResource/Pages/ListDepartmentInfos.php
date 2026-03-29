@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\DepartmentInfoResource\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\DepartmentInfoResource;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HtmlString;
@@ -15,8 +16,8 @@ class ListDepartmentInfos extends ListRecords
 {
     protected static string $resource = DepartmentInfoResource::class;
 
-    public function infolist(Infolist $infolist): Infolist {
-        return $infolist->schema([
+    public function infolist(Schema $schema): Schema {
+        return $schema->components([
             TextEntry::make("test"),
         ]);
     }
@@ -27,7 +28,7 @@ class ListDepartmentInfos extends ListRecords
 
     protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

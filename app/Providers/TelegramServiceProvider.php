@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Exception;
 use App\Helper\Telegram\LoginWidget;
 use App\Settings\AppSettings;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +29,7 @@ class TelegramServiceProvider extends ServiceProvider
                 'services.telegram-bot-api.token' => app(AppSettings::class)->telegram_bot_token,
             ]);
             (new \NotificationChannels\Telegram\TelegramServiceProvider(app()))->register();
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             // table don't exists. Probably because the migration is currently running where all service providers being invoked...
             // not the best solution atm
         }

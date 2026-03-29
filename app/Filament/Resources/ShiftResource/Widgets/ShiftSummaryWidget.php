@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ShiftResource\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -49,17 +50,17 @@ class ShiftSummaryWidget extends BaseWidget
 
             )
             ->columns([
-                Tables\Columns\TextColumn::make('reg_id')
+                TextColumn::make('reg_id')
                     ->label(__("Reg Number"))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__("Name"))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user_shifts_count')
+                TextColumn::make('user_shifts_count')
                     ->label(__("Shift Count"))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_hours')
+                TextColumn::make('total_hours')
                     ->label(__("Total Hours"))
                     ->sortable()
                     ->state(fn ($record) => round($record->total_hours, 2) . " h")

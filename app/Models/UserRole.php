@@ -57,7 +57,7 @@ class UserRole extends Model implements HasColor
     }
 
     public function getColor(): string|array|null {
-        return Color::hex($this->background_color);
+        return Color::generateV3Palette($this->background_color);
     }
 
     /**

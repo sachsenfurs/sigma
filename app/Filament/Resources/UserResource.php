@@ -2,12 +2,28 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use App\Filament\Resources\UserResource\RelationManagers\RoleRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\ArtistsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\DealersRelationManager;
+use App\Filament\Resources\SigEventResource\RelationManagers\SigHostsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\FavoritesRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\ArtshowBidsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\NotificationsRelationManager;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\EditUser;
+use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,11 +34,11 @@ class UserResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = "System";
+    protected static string | \UnitEnum | null $navigationGroup = "System";
 
     protected static ?int $navigationSort = 1100;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
 
     public static function getLabel(): ?string {
         return __('User');
@@ -32,15 +48,15 @@ class UserResource extends Resource
         return __('Users');
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('reg_id')
+                TextInput::make('reg_id')
                     ->helperText(__("This field is overwritten with every user logon"))
                     ->translateLabel()
                     ->unique(ignoreRecord: true)
@@ -54,39 +70,39 @@ class UserResource extends Resource
             ->filters([
                 self::getRoleFilter(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('reg_id')
+            TextColumn::make('reg_id')
                 ->numeric()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('name')
+            TextColumn::make('name')
                 ->sortable()
                 ->searchable(),
-            Tables\Columns\TextColumn::make('roles')
+            TextColumn::make('roles')
                 ->label('User Roles')
                 ->translateLabel()
                 ->formatStateUsing(fn($state) => $state->name_localized)
                 ->badge(),
-            Tables\Columns\TextColumn::make('created_at')
+            TextColumn::make('created_at')
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('updated_at')
+            TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make("favorites_count")
+            TextColumn::make("favorites_count")
                 ->counts("favorites")
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
@@ -95,26 +111,26 @@ class UserResource extends Resource
 
     public static function getRelations(): array {
         return [
-            RelationManagers\RoleRelationManager::class,
-            RelationManagers\ArtistsRelationManager::class,
-            RelationManagers\DealersRelationManager::class,
-            SigEventResource\RelationManagers\SigHostsRelationManager::class,
-            RelationManagers\FavoritesRelationManager::class,
-            RelationManagers\ArtshowBidsRelationManager::class,
-            RelationManagers\NotificationsRelationManager::class,
+            RoleRelationManager::class,
+            ArtistsRelationManager::class,
+            DealersRelationManager::class,
+            SigHostsRelationManager::class,
+            FavoritesRelationManager::class,
+            ArtshowBidsRelationManager::class,
+            NotificationsRelationManager::class,
         ];
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 
-    private static function getRoleFilter(): Tables\Filters\SelectFilter {
-        return Tables\Filters\SelectFilter::make('roles')
+    private static function getRoleFilter(): SelectFilter {
+        return SelectFilter::make('roles')
             ->label('User Role')
             ->translateLabel()
             ->searchable()

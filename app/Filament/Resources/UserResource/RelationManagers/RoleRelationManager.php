@@ -2,10 +2,16 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\AttachAction;
+use Filament\Actions\ViewAction;
+use Filament\Support\Enums\Width;
+use Filament\Actions\DetachAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DetachBulkAction;
 use App\Models\UserRole;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -14,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoleRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
-    protected static ?string $icon = 'heroicon-o-user-group';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-user-group';
 
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string {
@@ -51,17 +57,17 @@ class RoleRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name_localized')
+                TextColumn::make('name_localized')
                     ->label(__("Name")),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->label('Assign Role')
                     ->translateLabel()
-                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                    ->schema(fn (AttachAction $action): array => [
                         $action->getRecordSelect()
                             ->options(UserRole::whereNotIn("id", auth()->user()->roles->pluck("id"))->get()->pluck("name_localized", "id")), // yes, thats the only way i found to apply the localization correctly >.>
                     ])
@@ -71,14 +77,14 @@ class RoleRelationManager extends RelationManager
                     ->successNotificationTitle(__('Role Assigned'))
                     ->preloadRecordSelect(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make('viewPermissions')
+            ->recordActions([
+                ViewAction::make('viewPermissions')
                     ->label('Permissions')
                     ->translateLabel()
                     ->icon('heroicon-s-key')
-                    ->modalWidth(MaxWidth::ExtraLarge)
+                    ->modalWidth(Width::ExtraLarge)
                     ->modalHeading(__('Permissions'))
-                    ->infolist([
+                    ->schema([
                         KeyValueEntry::make('permissions')
                             ->keyLabel(__('Permission'))
                             ->valueLabel(__('Level'))
@@ -88,15 +94,15 @@ class RoleRelationManager extends RelationManager
                                 });
                             }),
                     ]),
-                Tables\Actions\DetachAction::make()
+                DetachAction::make()
                     ->label('Remove Role')
                     ->translateLabel()
                     ->modalHeading(__('Remove Role'))
                     ->successNotificationTitle(__('Role Removed')),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DetachBulkAction::make(),
                 ]),
             ]);
     }

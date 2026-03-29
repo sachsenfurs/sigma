@@ -2,11 +2,17 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages\ListArtshowPickups;
+use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages\CreateArtshowPickup;
+use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages\EditArtshowPickup;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowPickupResource\Pages;
 use App\Models\Ddas\ArtshowPickup;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,7 +21,7 @@ class ArtshowPickupResource extends Resource
 {
     protected static ?string $model = ArtshowPickup::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-gift';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-gift';
 
     protected static ?int $navigationSort = 240;
 
@@ -31,9 +37,9 @@ class ArtshowPickupResource extends Resource
     }
 
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 Select::make("user")
                     ->relationship("user", "name")
                     ->searchable(["reg_id", "name"])
@@ -50,12 +56,12 @@ class ArtshowPickupResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -68,9 +74,9 @@ class ArtshowPickupResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListArtshowPickups::route('/'),
-            'create' => Pages\CreateArtshowPickup::route('/create'),
-            'edit' => Pages\EditArtshowPickup::route('/{record}/edit'),
+            'index' => ListArtshowPickups::route('/'),
+            'create' => CreateArtshowPickup::route('/create'),
+            'edit' => EditArtshowPickup::route('/{record}/edit'),
         ];
     }
 }

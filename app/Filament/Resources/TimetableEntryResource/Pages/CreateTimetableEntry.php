@@ -2,22 +2,21 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Fieldset;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use App\Models\SigEvent;
 use App\Models\TimetableEntry;
 use App\Settings\AppSettings;
 use Carbon\Carbon;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Enums\Alignment;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 
@@ -31,69 +30,11 @@ class CreateTimetableEntry extends CreateRecord
     {
         return __('Add Timetable Entry');
     }
-    public function form(Form $form): Form {
-        return $form->schema(self::getSchema());
+    public function form(Schema $schema): Schema {
+        return $schema->components(self::getCreateSchemaComponents());
     }
 
-    public static function getCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action, array $defaults=[]): CreateAction|\Filament\Tables\Actions\CreateAction {
-        return $action
-            ->model(TimetableEntry::class)
-//            ->authorize("create", TimetableEntry::class) // won't work (filament bug?)
-            ->visible(Gate::check("create", TimetableEntry::class)) // real authorization is done in "mutateData()"
-            ->fillForm(function(array $arguments, ?Model $record) use ($defaults) {
-                return [
-                   'sig_event_id' => $record?->id ?? $arguments['sig_event_id'] ?? $defaults['sig_event_id'] ?? null,
-                   'sig_location_id' => $arguments['resource']['id'] ?? $defaults['sig_location_id'] ?? null,
-                   'entries' => [
-                       [
-                           'start' => $model?->start ?? $arguments['start'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0),
-                           'end' => $model?->end ?? $arguments['end'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0)->addMinutes($record?->duration ?? 120),
-                       ]
-                   ],
-                ];
-            })
-            ->modalFooterActionsAlignment(Alignment::End)
-            ->createAnother(false)
-            ->mutateFormDataUsing(fn($data) => self::mutateData($data))
-            ->form(CreateTimetableEntry::getSchema())
-            ->after(fn($livewire) => ($livewire->dispatch("refresh")))
-            ->modelLabel(__("Timetable Entry"));
-
-    }
-
-    public static function mutateData(array $data): array {
-        // read "entries" and remove them from $data array
-        // entries => Filament Repeater for multiple event creation at once
-        $entries = $data['entries'];
-        unset($data['entries']);
-
-        // take the last element for the regular model creation via filament
-        $data['start'] = end($entries)['start'];
-        $data['end'] = end($entries)['end'];
-
-        // remove array
-        array_pop($entries);
-
-        Gate::authorize("create", TimetableEntry::class);
-
-        // create entries from repeater manually
-        foreach($entries AS $entry) {
-            TimetableEntry::create(
-                array_merge($data, [
-                    'start' => $entry['start'],
-                    'end' => $entry['end'],
-                ])
-            );
-        }
-
-        // client will be redirected to the last one
-        return $data;
-    }
-    public function mutateFormDataBeforeCreate(array $data): array {
-        return self::mutateData($data);
-    }
-
-    public static function getSchema(): array {
+    public static function getCreateSchemaComponents(): array {
         return [
             TimetableEntryResource::getSigEventField(),
             TimetableEntryResource::getSigLocationField(),
@@ -146,6 +87,7 @@ class CreateTimetableEntry extends CreateRecord
                 ->defaultItems(1),
                 Fieldset::make("Event Settings")
                     ->translateLabel()
+                    ->columnSpanFull()
                     ->schema([
                         TimetableEntryResource::getSigNewField(),
                         TimetableEntryResource::getSigHideField(),
@@ -155,10 +97,94 @@ class CreateTimetableEntry extends CreateRecord
 
                 Fieldset::make("Communication Settings")
                     ->translateLabel()
+                    ->columnSpanFull()
                     ->schema([
                         TimetableEntryResource::getSendUpdateField(),
                     ])
                     ->hidden(fn(string $operation): bool => $operation == "create"),
         ];
-}
+    }
+
+    protected static function resolveSourceSigEvent(Action $action, array $defaults = []): ?SigEvent {
+        $record = $action->getRecord();
+
+        if ($record instanceof SigEvent)
+            return $record;
+
+        $sigEventId = $defaults['sig_event_id'] ?? null;
+
+        if (blank($sigEventId))
+            return null;
+
+        return SigEvent::find($sigEventId);
+    }
+
+    public static function getCreateAction(CreateAction|\Filament\Actions\CreateAction $action, array $defaults=[]): CreateAction|\Filament\Actions\CreateAction {
+        return $action
+//            ->authorize("create", TimetableEntry::class) // won't work (filament bug?)
+            ->visible(Gate::check("create", TimetableEntry::class)) // real authorization is done in "mutateData()"
+            ->fillForm(function(Action $action, array $arguments) use ($defaults) {
+                $sourceSigEvent = static::resolveSourceSigEvent($action, $defaults);
+                $defaultStart = $arguments['start'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0);
+
+                return [
+                   'sig_event_id' => $sourceSigEvent?->id ?? $arguments['sig_event_id'] ?? $defaults['sig_event_id'] ?? null,
+                   'sig_location_id' => $arguments['resource']['id'] ?? $defaults['sig_location_id'] ?? null,
+                   'entries' => [
+                       [
+                           'start' => $defaultStart,
+                           'end' => $arguments['end'] ?? $defaultStart->clone()->addMinutes($sourceSigEvent?->duration ?? 120),
+                       ]
+                   ],
+                ];
+            })
+            ->modalFooterActionsAlignment(Alignment::End)
+            ->createAnother(false)
+            ->mutateDataUsing(fn($data) => self::mutateData($data))
+            ->schema(self::getCreateSchemaComponents())
+            ->action(function (array $data, Action $action): void {
+                $data = self::mutateData($data);
+
+                $record = TimetableEntry::create($data);
+
+                $action->record($record);
+                $action->success();
+            })
+            ->after(fn($livewire) => ($livewire->dispatch("refresh")))
+            ->modelLabel(__("Timetable Entry"));
+
+    }
+
+    public static function mutateData(array $data): array {
+        // read "entries" and remove them from $data array
+        // entries => Filament Repeater for multiple event creation at once
+        $entries = $data['entries'];
+        unset($data['entries']);
+
+        // take the last element for the regular model creation via filament
+        $data['start'] = end($entries)['start'];
+        $data['end'] = end($entries)['end'];
+
+        // remove array
+        array_pop($entries);
+
+        Gate::authorize("create", TimetableEntry::class);
+
+        // create entries from repeater manually
+        foreach($entries AS $entry) {
+            TimetableEntry::create(
+                array_merge($data, [
+                    'start' => $entry['start'],
+                    'end' => $entry['end'],
+                ])
+            );
+        }
+
+        // client will be redirected to the last one
+        return $data;
+    }
+    public function mutateFormDataBeforeCreate(array $data): array {
+        return self::mutateData($data);
+    }
+
 }

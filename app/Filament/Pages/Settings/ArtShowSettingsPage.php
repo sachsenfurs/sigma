@@ -2,18 +2,18 @@
 
 namespace App\Filament\Pages\Settings;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Fieldset;
 use App\Filament\Clusters\Settings;
 use App\Filament\Traits\HasActiveIcon;
 use App\Settings\ArtShowSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
-use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Gate;
 
@@ -22,9 +22,9 @@ class ArtShowSettingsPage extends SettingsPage
     use HasActiveIcon;
     protected static string $settings = ArtShowSettings::class;
     protected static ?string $cluster = Settings::class;
-    protected static ?string $navigationIcon = "heroicon-o-paint-brush";
+    protected static string | \BackedEnum | null $navigationIcon = "heroicon-o-paint-brush";
     protected static ?string $slug = "artshow";
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     public static function getNavigationLabel(): string {
         return __("Art Show Settings");
     }
@@ -36,18 +36,20 @@ class ArtShowSettingsPage extends SettingsPage
         return Gate::allows("artshowSettings", self::$settings);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make(__("General"))
                     ->collapsible()
+                    ->columnSpanFull()
                     ->schema([
                         Toggle::make("enabled")
                             ->label("Enabled")
                             ->translateLabel(),
                         Fieldset::make("Art Show Items Signup")
                             ->translateLabel()
+                            ->columnSpanFull()
                             ->columns(3)
                             ->schema([
                                 DateTimePicker::make("item_deadline")
@@ -77,6 +79,7 @@ class ArtShowSettingsPage extends SettingsPage
                             ]),
                         Fieldset::make("Bids")
                                 ->translateLabel()
+                                ->columnSpanFull()
                                 ->schema([
                                     DateTimePicker::make("bid_start_date")
                                         ->label("Bidding enabled from")

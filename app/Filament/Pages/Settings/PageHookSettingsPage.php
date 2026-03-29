@@ -2,19 +2,19 @@
 
 namespace App\Filament\Pages\Settings;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use App\Filament\Clusters\Settings;
 use App\Settings\PageHookSettings;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
-use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Gate;
 
 class PageHookSettingsPage extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static string $settings = PageHookSettings::class;
 
@@ -24,7 +24,7 @@ class PageHookSettingsPage extends SettingsPage
 
     protected static ?int $navigationSort = 10000;
 
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationGroup(): ?string {
         return __("Page Hooks");
@@ -42,11 +42,12 @@ class PageHookSettingsPage extends SettingsPage
         return Gate::allows("appSettings", self::$settings);
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 Section::make(__("General"))
                        ->collapsible()
+                       ->columnSpanFull()
                        ->schema([
                             Toggle::make("show_in_source")
                                 ->label("Show Hooks in source")

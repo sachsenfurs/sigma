@@ -2,9 +2,15 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Filament\Resources\Ddas\ArtshowBidResource;
 use App\Filament\Resources\Ddas\ArtshowItemResource;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Grouping\Group;
@@ -14,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class ArtshowBidsRelationManager extends RelationManager
 {
     protected static string $relationship = 'artshowBids';
-    protected static ?string $icon = 'heroicon-o-currency-euro';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-currency-euro';
 
 
     public static function getBadge(Model $ownerRecord, string $pageClass): ?string {
@@ -33,24 +39,24 @@ class ArtshowBidsRelationManager extends RelationManager
         return __("Bids");
     }
 
-    public function form(Form $form): Form {
-        return ArtshowBidResource::form($form);
+    public function form(Schema $schema): Schema {
+        return ArtshowBidResource::form($schema);
     }
 
     public function table(Table $table): Table {
         return $table
             ->recordTitleAttribute('artshowItem.name')
             ->columns([
-                Tables\Columns\TextColumn::make('artshowItem.artist.name')
+                TextColumn::make('artshowItem.artist.name')
                     ->label("Artist")
                     ->translateLabel()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('value')
+                TextColumn::make('value')
                     ->label("Bid")
                     ->translateLabel()
                     ->money(config("app.currency"))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label("Created")
                     ->translateLabel()
                     ->sortable()
@@ -67,20 +73,20 @@ class ArtshowBidsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->modelLabel(__("Bid"))
                     ->fillForm([
                         'user_id' => $this->ownerRecord->id
                     ]),
             ])
             ->recordUrl(fn(Model $record) => ArtshowItemResource::getUrl("edit", ['record' => $record->artshowItem]))
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

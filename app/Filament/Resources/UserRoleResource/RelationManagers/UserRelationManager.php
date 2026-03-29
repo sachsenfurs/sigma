@@ -2,11 +2,17 @@
 
 namespace App\Filament\Resources\UserRoleResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\AttachAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DetachAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DetachBulkAction;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\UserResource;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,10 +34,10 @@ class UserRelationManager extends RelationManager
         return __("Users");
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -47,7 +53,7 @@ class UserRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                    ->label('Assign User')
                    ->translateLabel()
                    ->modalHeading(__('Assign User'))
@@ -57,13 +63,13 @@ class UserRelationManager extends RelationManager
                    ->recordTitle(FormHelper::formatUserWithRegId())
                    ->successNotificationTitle(__('User Assigned')),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()->url(fn(User $record) => UserResource::getUrl("edit", ['record' => $record])),
-                Tables\Actions\DetachAction::make(),
+            ->recordActions([
+                EditAction::make()->url(fn(User $record) => UserResource::getUrl("edit", ['record' => $record])),
+                DetachAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DetachBulkAction::make(),
                 ]),
             ]);
     }

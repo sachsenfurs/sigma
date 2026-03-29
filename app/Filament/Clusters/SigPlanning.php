@@ -9,9 +9,9 @@ use Illuminate\Contracts\Support\Htmlable;
 class SigPlanning extends Cluster
 {
     use HasActiveIcon;
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationGroup = 'SIG';
+    protected static string | \UnitEnum | null $navigationGroup = 'SIG';
 
     public static function getNavigationLabel(): string {
         return __("Event Schedule");

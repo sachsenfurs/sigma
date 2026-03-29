@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use DeepL\DeepLException;
 use Illuminate\Support\Facades\Cache;
 
@@ -49,7 +50,7 @@ class Translator
 
                 return $result->text;
             }) ?? $text;
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             return $text;
         }
     }

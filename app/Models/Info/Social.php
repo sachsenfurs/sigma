@@ -2,6 +2,7 @@
 
 namespace App\Models\Info;
 
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Info\Enums\ShowMode;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -20,14 +21,14 @@ class Social extends Model
         'show_on' => Cast\ShowMode::class
     ];
 
-    public function scopeSignage(\Illuminate\Database\Eloquent\Builder $query) {
+    public function scopeSignage(Builder $query) {
         $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::SIGNAGE);
     }
 
-    public function scopeFooterIcon(\Illuminate\Database\Eloquent\Builder $query) {
+    public function scopeFooterIcon(Builder $query) {
         $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::FOOTER_ICON);
     }
-    public function scopeFooterText(\Illuminate\Database\Eloquent\Builder $query) {
+    public function scopeFooterText(Builder $query) {
         $query->orderBy("order", "ASC")->whereJsonContains("show_on", ShowMode::FOOTER_TEXT);
     }
 

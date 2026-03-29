@@ -2,12 +2,20 @@
 
 namespace App\Filament\Resources\SigTimeslotResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Forms\Components\Select;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Filament\Helper\FormHelper;
 use App\Models\SigAttendee;
 use App\Models\SigTimeslot;
 use Closure;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -32,9 +40,9 @@ class SigAttendeeRelationManager extends RelationManager
         return __("Attendees");
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
 //                Forms\Components\TextInput::make('user.name')
 //                    ->required()
 //                    ->maxLength(255),
@@ -45,13 +53,13 @@ class SigAttendeeRelationManager extends RelationManager
         return $table
             ->heading(__("Attendees"))
             ->columns([
-                Tables\Columns\TextColumn::make('user.reg_id')
+                TextColumn::make('user.reg_id')
                     ->label("Reg Number")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label("User")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make("created_at")
+                TextColumn::make("created_at")
                     ->label("Registered at")
                     ->translateLabel()
                     ->dateTime(),
@@ -61,14 +69,14 @@ class SigAttendeeRelationManager extends RelationManager
             ])
             ->selectable()
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label("Add")
                     ->authorize(function() {
                         return auth()->user()->can("adminCreate", [SigAttendee::class, $this->ownerRecord]);
                     })
                     ->translateLabel()
-                    ->form([
-                        Forms\Components\Select::make("user_id")
+                    ->schema([
+                        Select::make("user_id")
                             ->relationship("user","name")
                             ->searchable()
                             ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId())
@@ -89,16 +97,16 @@ class SigAttendeeRelationManager extends RelationManager
                             ]),
                     ]),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->form([
-                        Forms\Components\DateTimePicker::make("created_at")
+            ->recordActions([
+                EditAction::make()
+                    ->schema([
+                        DateTimePicker::make("created_at")
                     ]),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

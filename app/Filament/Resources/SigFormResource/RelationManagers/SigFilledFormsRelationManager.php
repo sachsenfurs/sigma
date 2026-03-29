@@ -2,11 +2,24 @@
 
 namespace App\Filament\Resources\SigFormResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Closure;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Radio;
+use Filament\Actions\DeleteAction;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Filters\SelectFilter;
 use App\Enums\Approval;
 use App\Filament\Helper\FormHelper;
 use App\Models\SigFilledForm;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -17,8 +30,6 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\App;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Get;
-use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 class SigFilledFormsRelationManager extends RelationManager
@@ -30,10 +41,10 @@ class SigFilledFormsRelationManager extends RelationManager
         return __('Filled forms');
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('sig_form_id')
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make('sig_form_id')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -46,11 +57,11 @@ class SigFilledFormsRelationManager extends RelationManager
             ->filters([
                 self::getApprovalFilter(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Approval::getBulkAction([self::getRejectComponent()]),
             ])
             ->headerActions([
-                Tables\Actions\Action::make("export")
+                Action::make("export")
                     ->label("CSV Export")
                     ->action(function() {
                         $fileName = 'export_' . now()->format('Y-m-d_H-i-s') . '.csv';
@@ -111,22 +122,22 @@ class SigFilledFormsRelationManager extends RelationManager
                     }),
             ])
             ->columns($this->getTableColumns())
-            ->actions($this->getTableEntryActions())
+            ->recordActions($this->getTableEntryActions())
             ->striped();
     }
 
     protected function getTableColumns(): array {
         $tableColumns = [
-            Tables\Columns\TextColumn::make('id')
+            TextColumn::make('id')
                 ->sortable()
                 ->label("ID"),
-            Tables\Columns\IconColumn::make('approval')
+            IconColumn::make('approval')
                 ->label('Approval')
                 ->translateLabel(),
-            Tables\Columns\TextColumn::make('rejection_reason'),
-            Tables\Columns\TextColumn::make("user")
+            TextColumn::make('rejection_reason'),
+            TextColumn::make("user")
                 ->formatStateUsing(FormHelper::formatStateUserWithRegId(true)),
-            Tables\Columns\TextColumn::make('updated_at')
+            TextColumn::make('updated_at')
                 ->sortable()
                 ->since(),
         ];
@@ -134,13 +145,13 @@ class SigFilledFormsRelationManager extends RelationManager
             $formData = $formDefinition['data'];
             switch ($formDefinition['type']) {
                 case 'text':
-                    $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
+                    $tableColumns[] = TextColumn::make($formData['name'])
                         ->limit()
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'textarea':
-                    $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
+                    $tableColumns[] = TextColumn::make($formData['name'])
                         ->label($this->getLabel($formData))
                         ->limit()
                         ->getStateUsing($this->getState($formData))
@@ -148,18 +159,18 @@ class SigFilledFormsRelationManager extends RelationManager
                         ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))));
                     break;
                 case 'file_upload':
-                    $tableColumns[] = Tables\Columns\ImageColumn::make($formData['name'])
+                    $tableColumns[] = ImageColumn::make($formData['name'])
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'checkbox':
-                    $tableColumns[] = Tables\Columns\IconColumn::make($formData['name'])
+                    $tableColumns[] = IconColumn::make($formData['name'])
                         ->boolean()
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'select':
-                    $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
+                    $tableColumns[] = TextColumn::make($formData['name'])
                         ->label($this->getLabel($formData))
                         ->limit()
                         ->getStateUsing(function ($record) use ($formData) {
@@ -182,7 +193,7 @@ class SigFilledFormsRelationManager extends RelationManager
         return App::getLocale() === 'en' ? $formData['label_en'] : $formData['label'] . ($formData['required'] ? ' *' : '');
     }
 
-    private function getState($formData): \Closure {
+    private function getState($formData): Closure {
         return function ($record) use ($formData) {
             return $record->form_data['form_data'][$formData['name']] ?? false;
         };
@@ -246,11 +257,11 @@ class SigFilledFormsRelationManager extends RelationManager
             }
         }
         return [
-            Tables\Actions\ViewAction::make()
+            ViewAction::make()
                 ->modalHeading(fn($record) => $record->user->name)
-                ->infolist($viewEntries)
+                ->schema($viewEntries)
                 ->modalFooterActions([
-                    Tables\Actions\Action::make("approve")
+                    Action::make("approve")
                         ->label(__("Approve"))
                         ->action(function (SigFilledForm $record) {
                             $record->approval = Approval::APPROVED;
@@ -259,10 +270,10 @@ class SigFilledFormsRelationManager extends RelationManager
                         ->requiresConfirmation()
                         ->visible(fn($record) => $record->approval == Approval::PENDING)
                         ->cancelParentActions(),
-                    Tables\Actions\Action::make("reject")
+                    Action::make("reject")
                         ->label(__("Reject"))
-                        ->form([
-                            Forms\Components\TextInput::make("rejection_reason")
+                        ->schema([
+                            TextInput::make("rejection_reason")
                         ])
                         ->color(Color::Red)
                         ->action(function (SigFilledForm $record, $data) {
@@ -273,7 +284,7 @@ class SigFilledFormsRelationManager extends RelationManager
                         ->visible(fn($record) => $record->approval == Approval::PENDING)
                         ->cancelParentActions()
                 ]),
-            Tables\Actions\EditAction::make()
+            EditAction::make()
                 ->authorize("update")
                 ->modalHeading(__('Approve or reject form'))
                 ->modalDescription(function ($record) {
@@ -283,8 +294,8 @@ class SigFilledFormsRelationManager extends RelationManager
                     }
                     return null;
                 })
-                ->form([
-                    Forms\Components\Radio::make('approval')
+                ->schema([
+                    Radio::make('approval')
                         ->label('Approval')
                         ->translateLabel()
                         ->required()
@@ -300,7 +311,7 @@ class SigFilledFormsRelationManager extends RelationManager
         ];
     }
 
-    private static function getRejectComponent(): Forms\Components\Component {
+    private static function getRejectComponent(): Component {
         return Textarea::make('rejection_reason')
                 ->label('Rejection reason')
                 ->translateLabel()
@@ -309,8 +320,8 @@ class SigFilledFormsRelationManager extends RelationManager
                 ->live()
                 ->rows(3);
     }
-    private static function getApprovalFilter(): Tables\Filters\SelectFilter {
-        return Tables\Filters\SelectFilter::make('approval')
+    private static function getApprovalFilter(): SelectFilter {
+        return SelectFilter::make('approval')
             ->label('Approval')
             ->translateLabel()
             ->options(Approval::class);

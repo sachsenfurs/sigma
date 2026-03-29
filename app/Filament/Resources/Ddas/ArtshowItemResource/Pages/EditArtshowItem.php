@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Ddas\ArtshowItemResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Ddas\ArtshowArtistResource;
 use App\Filament\Resources\Ddas\ArtshowItemResource;
 use Filament\Actions;
@@ -26,7 +27,7 @@ class EditArtshowItem extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

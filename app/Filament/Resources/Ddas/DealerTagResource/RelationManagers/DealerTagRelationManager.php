@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Ddas\DealerTagResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Ddas\DealerResource;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 
@@ -15,11 +16,11 @@ class DealerTagRelationManager extends RelationManager
 
     protected static ?string $title = "Tagged Dealers";
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);

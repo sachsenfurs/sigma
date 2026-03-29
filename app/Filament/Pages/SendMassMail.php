@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Components\Utilities\Get;
 use App\Enums\MessageRecipient;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
@@ -15,10 +17,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Pages\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
 
 class SendMassMail extends Page implements HasForms
@@ -27,12 +27,12 @@ class SendMassMail extends Page implements HasForms
 
     public ?array $data = [];
 
-    protected static ?string $navigationIcon = 'heroicon-o-envelope';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-envelope';
 
-    protected static string $view = 'filament.pages.send-mass-mail';
+    protected string $view = 'filament.pages.send-mass-mail';
 
     protected static ?string $cluster = MessageCluster::class;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?int $navigationSort = 10;
 
     public static function getNavigationLabel(): string {

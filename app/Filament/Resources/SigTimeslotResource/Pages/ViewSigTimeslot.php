@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\SigTimeslotResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\SigTimeslotResource;
 use Filament\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
@@ -22,7 +23,7 @@ class ViewSigTimeslot extends ViewRecord
                 ->translateLabel()
                 ->url(SigEventResource::getUrl("edit", ['record' => $this->record->timetableEntry->sigEvent]))
                 ->color(Color::Gray),
-            Actions\EditAction::make(),
+            EditAction::make(),
         ];
     }
 
@@ -38,8 +39,8 @@ class ViewSigTimeslot extends ViewRecord
         return __("Time Slot") . " - " . $this->getHeading();
     }
 
-    public function form(Form $form): Form {
-        return $form->schema([
+    public function form(Schema $schema): Schema {
+        return $schema->components([
             //
         ]);
     }

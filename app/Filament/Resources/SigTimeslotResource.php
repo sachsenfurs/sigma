@@ -2,16 +2,30 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SigTimeslotResource\RelationManagers\SigAttendeeRelationManager;
+use App\Filament\Resources\SigTimeslotResource\Pages\ListSigTimeslots;
+use App\Filament\Resources\SigTimeslotResource\Pages\CreateSigTimeslot;
+use App\Filament\Resources\SigTimeslotResource\Pages\ViewSigTimeslot;
+use App\Filament\Resources\SigTimeslotResource\Pages\EditSigTimeslot;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigTimeslotResource\Pages;
 use App\Filament\Resources\SigTimeslotResource\RelationManagers;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigTimeslot;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -26,9 +40,9 @@ class SigTimeslotResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigTimeslot::class;
     protected static ?string $cluster = SigManagement::class;
-    protected static ?string $navigationIcon = 'heroicon-o-clock';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clock';
     protected static ?int $navigationSort = 10;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getModelLabel(): string {
         return __("Time Slot");
@@ -38,12 +52,12 @@ class SigTimeslotResource extends Resource
         return __("Time Slots");
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Textarea::make('description')
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Textarea::make('description')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('notes')
+                Textarea::make('notes')
                     ->columnSpanFull(),
             ]);
     }
@@ -51,7 +65,7 @@ class SigTimeslotResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\IconColumn::make("reg_possible")
+                IconColumn::make("reg_possible")
                     ->label("Registration possible")
                     ->translateLabel()
                     ->wrapHeader()
@@ -62,29 +76,29 @@ class SigTimeslotResource extends Resource
                         $record->sig_attendees_count < $record->max_users
                         AND $record->reg_end->isAfter(now())
                     ),
-                Tables\Columns\TextColumn::make('slot_start')
+                TextColumn::make('slot_start')
                     ->dateTime("H:i")
                     ->label("Slot Start")
                     ->translateLabel()
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('slot_end')
+                TextColumn::make('slot_end')
                     ->dateTime("H:i")
                     ->label("Slot End")
                     ->translateLabel()
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('sig_attendees_count')
+                TextColumn::make('sig_attendees_count')
                     ->counts("sigAttendees")
                     ->formatStateUsing(fn(string $state, Model $record) => $state . " / " . $record->max_users)
                     ->label("Attendee Count")
                     ->translateLabel()
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make("sigAttendees.user.name")
+                TextColumn::make("sigAttendees.user.name")
                     ->listWithLineBreaks()
                     ->limitList()
                     ->action(
-                        Tables\Actions\ViewAction::make("attendee_list")
+                        ViewAction::make("attendee_list")
                             ->recordTitle(__("Attendees"))
-                            ->infolist([
+                            ->schema([
                                 RepeatableEntry::make("sigAttendees")
                                     ->label("")
                                     ->schema([
@@ -104,10 +118,10 @@ class SigTimeslotResource extends Resource
                             ])
                     )
                     ->tooltip(fn($record) => $record->sigAttendees->pluck("user.name")->join(", ")),
-                Tables\Columns\IconColumn::make("group_registration")
+                IconColumn::make("group_registration")
                     ->label(__("Group Registration"))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('reg_start')
+                TextColumn::make('reg_start')
                     ->label("Registration Start")
                     ->translateLabel()
                     ->dateTime()
@@ -115,7 +129,7 @@ class SigTimeslotResource extends Resource
                     ->toggleable()
                     ->color(fn($record) => $record->reg_start->isBefore(now()) ? Color::Green : Color::Neutral)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('reg_end')
+                TextColumn::make('reg_end')
                     ->label("Registration End")
                     ->translateLabel()
                     ->dateTime()
@@ -123,7 +137,7 @@ class SigTimeslotResource extends Resource
                     ->toggleable()
                     ->color(fn($record) => $record->reg_end->isAfter(now()) ? Color::Green : Color::Red)
                     ->badge(),
-                Tables\Columns\TextColumn::make("notes")
+                TextColumn::make("notes")
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->listWithLineBreaks()
                     ->limit(100)
@@ -131,7 +145,7 @@ class SigTimeslotResource extends Resource
                     ->translateLabel(),
             ])
             ->defaultGroup(
-                Tables\Grouping\Group::make("timetableEntry.sigEvent.id")
+                Group::make("timetableEntry.sigEvent.id")
                     ->collapsible()
                     ->orderQueryUsing(fn(Builder $query) => $query
                         ->join("timetable_entries", "sig_timeslots.timetable_entry_id", "=", "timetable_entries.id")
@@ -144,7 +158,7 @@ class SigTimeslotResource extends Resource
                         . $record->timetableEntry->end->format("H:i")),
             )
             ->filters([
-                Tables\Filters\SelectFilter::make("sigEvent")
+                SelectFilter::make("sigEvent")
                     ->relationship("timetableEntry.sigEvent", "name", fn(Builder $query) => $query->whereHas("sigTimeslots"))
                     ->searchable()
                     ->preload()
@@ -152,29 +166,29 @@ class SigTimeslotResource extends Resource
                     ->translateLabel(),
             ])
             ->defaultSort("slot_start")
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getRelations(): array {
         return [
-            RelationManagers\SigAttendeeRelationManager::class,
+            SigAttendeeRelationManager::class,
         ];
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListSigTimeslots::route('/'),
-            'create' => Pages\CreateSigTimeslot::route('/create'),
-            'view' => Pages\ViewSigTimeslot::route('/{record}'),
-            'edit' => Pages\EditSigTimeslot::route('/{record}/edit'),
+            'index' => ListSigTimeslots::route('/'),
+            'create' => CreateSigTimeslot::route('/create'),
+            'view' => ViewSigTimeslot::route('/{record}'),
+            'edit' => EditSigTimeslot::route('/{record}/edit'),
         ];
     }
 

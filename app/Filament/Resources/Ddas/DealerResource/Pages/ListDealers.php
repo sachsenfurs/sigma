@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Ddas\DealerResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\Ddas\DealerResource;
 use Closure;
 use Filament\Actions;
@@ -14,7 +15,7 @@ class ListDealers extends ListRecords
 
     protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

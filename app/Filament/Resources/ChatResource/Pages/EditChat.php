@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\ChatResource\Pages;
 
+use App\Filament\Resources\ChatResource\Widgets\Chatbox;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use App\Filament\Resources\ChatResource;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
@@ -37,7 +38,7 @@ class EditChat extends EditRecord
 
     protected function getHeaderWidgets(): array {
         return [
-            ChatResource\Widgets\Chatbox::class,
+            Chatbox::class,
         ];
     }
 
@@ -59,12 +60,13 @@ class EditChat extends EditRecord
         return $this->previousUrl ?? self::getUrl("index");
     }
 
-    public function form(Form $form): Form {
-        return $form->schema([
+    public function form(Schema $schema): Schema {
+        return $schema->components([
             Section::make("Details")
                 ->translateLabel()
                 ->collapsed()
-                ->schema(ChatResource::form($form)->getComponents())
+                ->columnSpanFull()
+                ->schema(ChatResource::form($schema)->getComponents())
         ]);
     }
 

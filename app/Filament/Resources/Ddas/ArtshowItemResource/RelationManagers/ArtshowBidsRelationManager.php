@@ -2,10 +2,17 @@
 
 namespace App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Filament\Resources\Ddas\ArtshowBidResource;
 use Filament\Forms;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,12 +35,12 @@ class ArtshowBidsRelationManager extends RelationManager
         return __("Bids");
     }
 
-    public function form(Form $form): Form {
-        return $form->schema(
-            collect(ArtshowBidResource::form($form)->getComponents())
+    public function form(Schema $schema): Schema {
+        return $schema->components(
+            collect(ArtshowBidResource::form($schema)->getComponents())
                 ->filter(fn(Field $e) => $e->getName() != "artshow_item_id")
                 ->prepend(
-                    Forms\Components\Select::make("artshow_item_id")
+                    Select::make("artshow_item_id")
                         ->relationship("artshowItem", "name")
                         ->default($this->ownerRecord->id)
                         ->columnSpanFull()
@@ -48,17 +55,17 @@ class ArtshowBidsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user.name')
             ->columns([
-                Tables\Columns\TextColumn::make("user.reg_id")
+                TextColumn::make("user.reg_id")
                     ->label("Reg Number")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label("User")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make("value")
+                TextColumn::make("value")
                     ->label("Bid")
                     ->translateLabel()
                     ->money(config("app.currency")),
-                Tables\Columns\TextColumn::make("created_at")
+                TextColumn::make("created_at")
                     ->label("Created")
                     ->translateLabel()
                     ->dateTime(),
@@ -68,15 +75,15 @@ class ArtshowBidsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -11,7 +11,7 @@ class Chatbox extends Widget
     public ?Model $record = null;
     public string $text;
     protected int | string | array $columnSpan = 'full';
-    protected static string $view = "filament.resources.chats.pages.view-chat";
+    protected string $view = "filament.resources.chats.pages.view-chat";
 
 //    protected $listeners = [
 //        '$refresh',

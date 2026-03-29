@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigEventResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\SigEventResource;
 use Filament\Actions;
 use Filament\Actions\Action;
@@ -16,13 +17,13 @@ class EditSigEvent extends EditRecord
 
     protected function getFormActions(): array {
         return [
-            Actions\Action::make("submit")
+            Action::make("submit")
                 ->label(__("Save and return"))
                 ->action(function (EditSigEvent $livewire) {
                     $livewire->save();
                     $livewire->redirect($this->previousUrl ?? SigEventResource::getUrl("index"));
                 }),
-            Actions\Action::make("save")
+            Action::make("save")
                 ->label(__("Save"))
                 ->submit("form")
                 ->keyBindings("ctrl+s")
@@ -37,7 +38,7 @@ class EditSigEvent extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->modalHeading(__('Delete SIG')),
         ];
     }

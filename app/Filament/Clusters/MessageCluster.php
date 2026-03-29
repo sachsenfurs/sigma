@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 class MessageCluster extends Cluster
 {
     use HasActiveIcon;
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string {

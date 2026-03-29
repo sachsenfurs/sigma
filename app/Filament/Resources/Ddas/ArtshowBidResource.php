@@ -2,6 +2,13 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Ddas\ArtshowBidResource\Pages\ListArtshowBids;
 use App\Filament\Helper\FormHelper;
 use App\Filament\Resources\Ddas\ArtshowBidResource\Pages;
 use App\Models\Ddas\ArtshowBid;
@@ -9,8 +16,6 @@ use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,7 +25,7 @@ class ArtshowBidResource extends Resource
 {
     protected static ?string $model = ArtshowBid::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-currency-euro';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-currency-euro';
 
     protected static ?int $navigationSort = 220;
 
@@ -42,9 +47,9 @@ class ArtshowBidResource extends Resource
         return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 Select::make("artshow_item_id")
                     ->label("Art Show Item")
                     ->translateLabel()
@@ -91,18 +96,18 @@ class ArtshowBidResource extends Resource
         return $table
             ->modifyQueryUsing(fn($query) => $query->with(["user"]))
             ->columns([
-                Tables\Columns\TextColumn::make("user")
+                TextColumn::make("user")
                     ->formatStateUsing(fn(Model $record) => $record->user->name . " #" . $record->user->reg_id)
                     ->label("User")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make("artshowItem.name")
+                TextColumn::make("artshowItem.name")
                     ->label(__("Art Show Item"))
                     ->badge()
                     ->url(fn(Model $record) => ArtshowItemResource::getUrl("edit", ['record' => $record->artshow_item_id])),
-                Tables\Columns\TextColumn::make("value")
+                TextColumn::make("value")
                     ->label(__("Value"))
                     ->money(config("app.currency")),
-                Tables\Columns\TextColumn::make("created_at")
+                TextColumn::make("created_at")
                     ->label(__("Created"))
                     ->dateTime(),
             ])
@@ -110,12 +115,12 @@ class ArtshowBidResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -128,7 +133,7 @@ class ArtshowBidResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListArtshowBids::route('/'),
+            'index' => ListArtshowBids::route('/'),
         ];
     }
 }

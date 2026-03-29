@@ -2,17 +2,17 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Widgets;
 
+use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Schemas\Components\Grid;
 use App\Enums\Permission;
 use App\Enums\PermissionLevel;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\TimetableEntryResource\Pages\CreateTimetableEntry;
 use App\Models\SigEvent;
-use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -58,7 +58,7 @@ class UnprocessedSigEvents extends TableWidget
                     ->translateLabel()
                     ->badge(),
             ])
-            ->actions([
+            ->recordActions([
                 CreateTimetableEntry::getCreateAction(CreateAction::make())
                     ->button(),
                 Action::make("edit")
@@ -78,9 +78,10 @@ class UnprocessedSigEvents extends TableWidget
                             ->url(fn(Model $record) => SigEventResource::getUrl('edit', ['record' => $record]))
                             ->outlined(),
                     ])
-                    ->infolist([
+                    ->schema([
                         Grid::make()
                             ->columns(3)
+                            ->columnSpanFull()
                             ->schema([
                                 TextEntry::make("name_localized")
                                     ->label("SIG Name")

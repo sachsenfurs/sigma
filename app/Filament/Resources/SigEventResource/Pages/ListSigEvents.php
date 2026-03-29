@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SigEventResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\SigEventResource;
 use App\Models\SigEvent;
 use Filament\Actions;
@@ -15,7 +16,7 @@ class ListSigEvents extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->authorize("deleteAny", SigEvent::class),
         ];
     }

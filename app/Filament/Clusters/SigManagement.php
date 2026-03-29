@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 class SigManagement extends Cluster
 {
     use HasActiveIcon;
-    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-presentation-chart-bar';
     protected static ?string $navigationLabel = "SIGs";
-    protected static ?string $navigationGroup = 'SIG';
+    protected static string | \UnitEnum | null $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 15;
     protected static ?string $title = "SIG Management"; // can't override getTitle() for translation. probably a filament bug?
 

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Support\Enums\Width;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource\Widgets\SigPlannerWidget;
 use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
@@ -10,8 +12,6 @@ use App\Models\TimetableEntry;
 use App\Providers\Filament\FilamentSigCalendarProvider;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
-use Filament\Pages\SubNavigationPosition;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Gate;
 
@@ -19,10 +19,10 @@ class SigPlanner extends Page
 {
     use HasActiveIcon;
     protected static ?int $navigationSort = 2;
-    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-table-cells';
 
-    protected static string $view = 'filament.resources.timetable-entry-resource.pages.sig-planner';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected string $view = 'filament.resources.timetable-entry-resource.pages.sig-planner';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     protected static ?string $cluster = SigPlanning::class;
 
@@ -49,7 +49,7 @@ class SigPlanner extends Page
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth|string|null {
-        return MaxWidth::Full;
+    public function getMaxContentWidth(): Width|string|null {
+        return Width::Full;
     }
 }

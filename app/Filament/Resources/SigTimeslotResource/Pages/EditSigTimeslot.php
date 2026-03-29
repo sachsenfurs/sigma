@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\SigTimeslotResource\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use App\Filament\Resources\SigEventResource;
 use App\Filament\Resources\SigTimeslotResource;
 use Filament\Actions;
@@ -15,12 +17,12 @@ class EditSigTimeslot extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\Action::make("sigEvent")
+            Action::make("sigEvent")
                 ->label("Show Event")
                 ->translateLabel()
                 ->url(SigEventResource::getUrl("edit", ['record' => $this->record->timetableEntry->sigEvent]))
                 ->color(Color::Gray),
-            Actions\ViewAction::make(),
+            ViewAction::make(),
         ];
     }
 

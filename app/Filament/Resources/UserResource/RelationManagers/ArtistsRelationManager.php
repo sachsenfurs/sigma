@@ -2,18 +2,19 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\Ddas\ArtshowArtistResource;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
 class ArtistsRelationManager extends RelationManager
 {
     protected static string $relationship = 'artists';
-    protected static ?string $icon = 'heroicon-o-paint-brush';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-paint-brush';
 
     public static function getModelLabel(): ?string {
         return __("Artist");
@@ -31,10 +32,10 @@ class ArtistsRelationManager extends RelationManager
         return $ownerRecord->artists()->count();
     }
 
-    public function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -45,10 +46,10 @@ class ArtistsRelationManager extends RelationManager
         $table->getColumn("user.name")->hidden();
         return $table
             ->recordUrl(fn(Model $record) => ArtshowArtistResource::getUrl("edit", ["record" => $record]))
-            ->actions([])
+            ->recordActions([])
             ->headerActions([
                 CreateAction::make()
-                    ->form(fn($form) => ArtshowArtistResource::form($form))
+                    ->schema(fn($form) => ArtshowArtistResource::form($form))
                     ->fillForm([
                         'user' => $this->ownerRecord->id,
                     ]),

@@ -2,13 +2,29 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\DepartmentInfoResource\Pages\ListDepartmentInfos;
+use App\Filament\Resources\DepartmentInfoResource\Pages\EditDepartmentInfo;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Schemas\Components\Component;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Placeholder;
 use App\Filament\Resources\DepartmentInfoResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\DepartmentInfo;
 use App\Models\SigEvent;
 use App\Models\UserRole;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
@@ -27,9 +43,9 @@ class DepartmentInfoResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = DepartmentInfo::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
 
-    protected static ?string $navigationGroup = 'SIG';
+    protected static string | \UnitEnum | null $navigationGroup = 'SIG';
 
     protected static ?int $navigationSort = 20;
 
@@ -41,9 +57,9 @@ class DepartmentInfoResource extends Resource
         return __('SIG Requirements');
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 self::getSigInfoFiled(),
                 self::getSIGField(),
                 self::getUserRoleField(),
@@ -73,12 +89,12 @@ class DepartmentInfoResource extends Resource
                         . " | " . $record->sigEvent->timetableEntries->find($record->tid)?->sigLocation->name_localized ?? "";
                     })
             )
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
                     ->label(false)
                     ->icon(false)
                     ->modalHeading(__('Requirements to Department'))
-                    ->infolist([
+                    ->schema([
                         TextEntry::make('sigEvent.name')
                             ->label('SIG')
                             ->inlineLabel(),
@@ -113,20 +129,20 @@ class DepartmentInfoResource extends Resource
 
                             ]),
                     ]),
-                Tables\Actions\EditAction::make()
+                EditAction::make()
                     ->label("Edit SIG")
                     ->translateLabel()
                     ->color(Color::Gray)
                     ->url(fn(Model $record) => SigEventResource::getUrl("edit", ['record' => $record->sigEvent])),
-                Tables\Actions\EditAction::make()
+                EditAction::make()
                     ->modal()
                     ->url(null),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
             ->recordUrl(null)
-            ->filtersLayout(Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersLayout(FiltersLayout::AboveContent)
             ->filters([
-                Tables\Filters\SelectFilter::make("userRole")
+                SelectFilter::make("userRole")
                     ->label("Department")
                     ->translateLabel()
                     ->searchable()
@@ -134,15 +150,15 @@ class DepartmentInfoResource extends Resource
                     ->multiple()
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->name_localized)
                     ->relationship("userRole", "name"),
-                Tables\Filters\Filter::make("hide_past_events")
+                Filter::make("hide_past_events")
                     ->label(__("Hide past events"))
                     ->query(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->where("end", ">", now()))
                     ->default(),
             ])
             ->persistFiltersInSession()
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -155,19 +171,19 @@ class DepartmentInfoResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListDepartmentInfos::route('/'),
-            'edit' => Pages\EditDepartmentInfo::route('/{record}/edit'),
+            'index' => ListDepartmentInfos::route('/'),
+            'edit' => EditDepartmentInfo::route('/{record}/edit'),
         ];
     }
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('userRole')
+            TextColumn::make('userRole')
                 ->badge()
                 ->formatStateUsing(fn($state) => $state->name_localized)
                 ->label('Department')
                 ->translateLabel(),
-            Tables\Columns\TextColumn::make('additional_info')
+            TextColumn::make('additional_info')
                 ->formatStateUsing(fn($state) => new HtmlString(nl2br(e($state))))
                 ->label('Requirements to Department')
                 ->translateLabel()
@@ -176,9 +192,9 @@ class DepartmentInfoResource extends Resource
         ];
     }
 
-    private static function getSIGField(): Forms\Components\Component {
+    private static function getSIGField(): Component {
         return
-            Forms\Components\Select::make('sig_event_id')
+            Select::make('sig_event_id')
                 ->label('Assigned SIG')
                 ->translateLabel()
                 ->live()
@@ -187,14 +203,14 @@ class DepartmentInfoResource extends Resource
                 ->required();
     }
 
-    private static function getUserRoleField(): Forms\Components\Component {
+    private static function getUserRoleField(): Component {
         return
-            Forms\Components\Select::make('user_role_id')
+            Select::make('user_role_id')
                 ->label('Department')
                 ->translateLabel()
                 ->options(UserRole::all()->pluck('name_localized', 'id'))
                 ->searchable()
-                ->unique(ignoreRecord: true, modifyRuleUsing: function(Unique $rule, Forms\Get $get) {
+                ->unique(ignoreRecord: true, modifyRuleUsing: function(Unique $rule, Get $get) {
                     return $rule->where(function(Builder $query) use($get) {
                        return $query->where("sig_event_id", $get('sig_event_id'))
                            ->where("user_role_id", $get('user_role_id'));
@@ -203,9 +219,9 @@ class DepartmentInfoResource extends Resource
                 ->required();
     }
 
-    private static function getAdditionalInfoField(): Forms\Components\Component {
+    private static function getAdditionalInfoField(): Component {
         return
-            Forms\Components\Textarea::make('additional_info')
+            Textarea::make('additional_info')
                 ->label('Requirements to Department')
                 ->translateLabel()
                 ->required()
@@ -214,8 +230,8 @@ class DepartmentInfoResource extends Resource
     }
 
     private static function getSigInfoFiled() {
-        return Forms\Components\Placeholder::make("additional_info")
+        return Placeholder::make("additional_info")
             ->columnSpanFull()
-            ->content(fn(Forms\Get $get) => new HtmlString(nl2br(e(SigEvent::find($get("sig_event_id"))?->additional_info))));
+            ->content(fn(Get $get) => new HtmlString(nl2br(e(SigEvent::find($get("sig_event_id"))?->additional_info))));
     }
 }

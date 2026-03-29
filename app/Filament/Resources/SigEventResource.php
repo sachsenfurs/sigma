@@ -2,6 +2,36 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\Checkbox;
+use App\Filament\Resources\SigEventResource\Pages\ListSigEvents;
+use App\Filament\Resources\SigEventResource\Pages\CreateSigEvent;
+use App\Filament\Resources\SigEventResource\Pages\ViewSigEvent;
+use App\Filament\Resources\SigEventResource\Pages\EditSigEvent;
+use App\Filament\Resources\TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager;
+use Filament\Actions\EditAction;
+use Filament\Support\Enums\Width;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Placeholder;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\KeyValue;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Clusters\SigManagement;
@@ -17,18 +47,11 @@ use App\Models\SigHost;
 use App\Models\SigTag;
 use App\Models\UserRole;
 use Filament\Forms;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,14 +66,14 @@ class SigEventResource extends Resource
     protected static ?string $model = SigEvent::class;
     protected static ?string $label = "SIGs";
     protected static ?string $cluster = SigManagement::class;
-    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-presentation-chart-bar';
     protected static ?int $navigationSort = 1;
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 self::getSigNameFieldSet(),
                 self::getSigHostsFieldSet(),
                 self::getSigLanguageFieldSet(),
@@ -78,16 +101,16 @@ class SigEventResource extends Resource
             ->persistSortInSession()
             ->persistFiltersInSession()
             ->filters([
-                Tables\Filters\SelectFilter::make("approval")
+                SelectFilter::make("approval")
                     ->label("Approval")
                     ->translateLabel()
                     ->options(Approval::class),
-                Tables\Filters\SelectFilter::make("tags")
+                SelectFilter::make("tags")
                     ->relationship("sigTags", "name")
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->description_localized),
-                Tables\Filters\Filter::make("Timeslots")
+                Filter::make("Timeslots")
                     ->query(fn(Builder $query) => $query->has("sigTimeslots", ">", 0)),
-                Tables\Filters\Filter::make("Text Missing")
+                Filter::make("Text Missing")
                     ->translateLabel()
                     ->query(fn(Builder $query) => $query
                         ->where("no_text", false)
@@ -97,7 +120,7 @@ class SigEventResource extends Resource
                                 ->orWhereNull(["description", "description_en"]);
                         })
                     ),
-                Tables\Filters\SelectFilter::make("proof_read")
+                SelectFilter::make("proof_read")
                     ->label("Proof-Read")
                     ->translateLabel()
                     ->options([
@@ -112,11 +135,11 @@ class SigEventResource extends Resource
                 ? SigEventResource::getUrl("edit", ['record' => $record])
                 : SigEventResource::getUrl('view', ['record' => $record])
             )
-            ->actions([
+            ->recordActions([
                 //
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            ->toolbarActions([
+                BulkActionGroup::make([
                     Approval::getBulkAction()
                         ->authorize("update"),
                     BulkAction::make("text")
@@ -124,11 +147,11 @@ class SigEventResource extends Resource
                         ->label("Text...")
                         ->icon("heroicon-o-document-text")
                         ->translateLabel()
-                        ->form([
-                            Forms\Components\Checkbox::make("text_confirmed")
+                        ->schema([
+                            Checkbox::make("text_confirmed")
                                 ->label("Proof-Read")
                                 ->translateLabel(),
-                            Forms\Components\Checkbox::make("no_text")
+                            Checkbox::make("no_text")
                                 ->label("Text not mandatory")
                                 ->translateLabel(),
                         ])
@@ -143,16 +166,16 @@ class SigEventResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListSigEvents::route('/'),
-            'create' => Pages\CreateSigEvent::route('/create'),
-            'view' => Pages\ViewSigEvent::route('/{record}'),
-            'edit' => Pages\EditSigEvent::route('/{record}/edit'),
+            'index' => ListSigEvents::route('/'),
+            'create' => CreateSigEvent::route('/create'),
+            'view' => ViewSigEvent::route('/{record}'),
+            'edit' => EditSigEvent::route('/{record}/edit'),
         ];
     }
 
     public static function getRelations(): array {
         return [
-            TimetableEntryResource\RelationManagers\TimetableEntriesRelationManager::class,
+            TimetableEntriesRelationManager::class,
             SigTimeslotsRelationManager::class,
             DepartmentInfosRelationManager::class,
             SigHostsRelationManager::class,
@@ -166,24 +189,24 @@ class SigEventResource extends Resource
                 ->translateLabel()
                 ->width(1)
                 ->action(
-                    Tables\Actions\EditAction::make()
-                        ->modalWidth(MaxWidth::SevenExtraLarge)
+                    EditAction::make()
+                        ->modalWidth(Width::SevenExtraLarge)
                     ),
-            Tables\Columns\TextColumn::make('name')
+            TextColumn::make('name')
                 ->searchable(['name', 'name_en'])
                 ->sortable(),
-            Tables\Columns\TextColumn::make('sigHosts.name')
+            TextColumn::make('sigHosts.name')
                 ->label('Hosts')
                 ->translateLabel(),
-            Tables\Columns\ImageColumn::make('languages')
+            ImageColumn::make('languages')
                 ->label('Languages')
                 ->translateLabel()
                 ->view('filament.tables.columns.sig-event.flag-icon'),
-            Tables\Columns\TextColumn::make('sigTags.description_localized')
+            TextColumn::make('sigTags.description_localized')
                 ->label('Tags')
                 ->translateLabel()
                 ->badge(),
-            Tables\Columns\TextColumn::make('timetable_entries_count')
+            TextColumn::make('timetable_entries_count')
                 ->label('In Schedule')
                 ->translateLabel()
                 ->counts('timetableEntries')
@@ -210,7 +233,7 @@ class SigEventResource extends Resource
                 ->getStateUsing(fn(Model $record) => $record->no_text ? true : $record->text_confirmed)
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make("sig_timeslots_count")
+            TextColumn::make("sig_timeslots_count")
                 ->label(__("Time Slots"))
                 ->translateLabel()
                 ->sortable()
@@ -218,7 +241,7 @@ class SigEventResource extends Resource
                 ->counts("sigTimeslots")
                 ->badge()
                 ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray),
-            Tables\Columns\TextColumn::make("department_infos_count")
+            TextColumn::make("department_infos_count")
                 ->label("Department Requirements")
                 ->translateLabel()
                 ->sortable()
@@ -227,9 +250,9 @@ class SigEventResource extends Resource
                 ->badge()
                 ->color(fn($state) => $state > 0 ? Color::Green : Color::Gray)
                 ->action(
-                    Tables\Actions\ViewAction::make()
+                    ViewAction::make()
                         ->modalHeading(fn($record) => $record->name_localized)
-                        ->infolist([
+                        ->schema([
                             TextEntry::make("additional_info")
                                 ->label("Additional Information")
                                 ->translateLabel(),
@@ -247,18 +270,19 @@ class SigEventResource extends Resource
                                         ->label(""),
                                 ])
                         ])
-                        ->modalWidth(MaxWidth::SevenExtraLarge),
+                        ->modalWidth(Width::SevenExtraLarge),
                 ),
         ];
     }
 
-    private static function getSigNameFieldSet(): Forms\Components\Component {
+    private static function getSigNameFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('name')
+            Fieldset::make('name')
             ->label('SIG Details')
             ->translateLabel()
+            ->columnSpanFull()
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Name')
                     ->translateLabel()
                     ->maxLength(255)
@@ -267,7 +291,7 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('name_en')
+                TextInput::make('name_en')
                     ->label('English')
                     ->translateLabel()
                     ->maxLength(255)
@@ -278,7 +302,7 @@ class SigEventResource extends Resource
                     ->maxLength(255)
                     ->inlineLabel()
                     ->columnSpanFull(),
-                Forms\Components\Select::make("duration")
+                Select::make("duration")
                     ->label("Duration (Hours)")
                     ->translateLabel()
                     ->inlineLabel()
@@ -290,13 +314,14 @@ class SigEventResource extends Resource
             ->columnSpan(1);
     }
 
-    private static function getSigTagsFieldSet(): Forms\Components\Component {
+    private static function getSigTagsFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('tags')
+            Fieldset::make('tags')
                 ->label('Tags')
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\Select::make('sigTags')
+                    Select::make('sigTags')
                         ->label('Tags')
                         ->options(SigTag::all()->pluck('description', 'id'))
                         ->relationship('sigTags', 'description')
@@ -309,13 +334,14 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigLanguageFieldSet(): Forms\Components\Component {
+    private static function getSigLanguageFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('languages')
+            Fieldset::make('languages')
                 ->label('Languages')
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\CheckboxList::make('languages')
+                    CheckboxList::make('languages')
                         ->columnSpanFull()
                         ->label('')
                         ->options([
@@ -327,12 +353,13 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigHostsFieldSet(): Forms\Components\Component {
+    private static function getSigHostsFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('hosts')
+            Fieldset::make('hosts')
                 ->label('SIG Hosts')
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\Select::make('sigHosts')
+                    Select::make('sigHosts')
                         ->label('')
                         ->options(SigHost::all()->pluck('name', 'id'))
                         ->relationship('sigHosts', 'name')
@@ -343,12 +370,12 @@ class SigEventResource extends Resource
                         ->columnSpanFull()
                         ->createOptionModalHeading(__('Create Host'))
                         ->createOptionForm([
-                            Forms\Components\TextInput::make('name')
+                            TextInput::make('name')
                                 ->label('Name')
                                 ->translateLabel()
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('reg_id')
+                            TextInput::make('reg_id')
                                 ->label('Reg ID')
                                 ->translateLabel()
                                 ->numeric(),
@@ -363,7 +390,7 @@ class SigEventResource extends Resource
                         })
                         ->live()
                         ->columnSpanFull(),
-                    Forms\Components\Select::make("approval")
+                    Select::make("approval")
                         ->label("Approval")
                         ->translateLabel()
                         ->required()
@@ -380,22 +407,23 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigRegistrationFieldSet(): Forms\Components\Component {
+    private static function getSigRegistrationFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('registration')
+            Fieldset::make('registration')
                 ->label('Registration')
                 ->translateLabel()
+                ->columnSpanFull()
                 ->schema([
-                    Forms\Components\Checkbox::make('reg_possible')
+                    Checkbox::make('reg_possible')
                         ->label('Allow Registrations for this Event')
                         ->translateLabel()
                         ->columnSpanFull()
-                        ->afterStateUpdated(function(Forms\Set $set, Get $get, $state) {
+                        ->afterStateUpdated(function(Set $set, Get $get, $state) {
                             if($state)
                                 $set('sigTags', array_merge($get('sigTags'), [3]));
                         })
                         ->live(),
-                    Forms\Components\TextInput::make('max_regs_per_day')
+                    TextInput::make('max_regs_per_day')
                         ->label('Registrations per day')
                         ->translateLabel()
                         ->numeric()
@@ -407,16 +435,17 @@ class SigEventResource extends Resource
                 ->columnSpan(1);
     }
 
-    private static function getSigDescriptionFieldSet(): Forms\Components\Component {
+    private static function getSigDescriptionFieldSet(): \Filament\Schemas\Components\Component {
         return
-            Forms\Components\Fieldset::make('description')
+            Fieldset::make('description')
                 ->label('Description')
                 ->translateLabel()
                 ->live()
                 ->visible(fn(Get $get) => !$get('no_text'))
+                ->columnSpanFull()
                 ->columns(2)
                 ->schema([
-                    Forms\Components\MarkdownEditor::make('description')
+                    MarkdownEditor::make('description')
                         ->label('German')
                         ->translateLabel()
                         ->maxLength(65535)
@@ -424,8 +453,8 @@ class SigEventResource extends Resource
                             fn($operation) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description')->authorize("attach", SigEvent::class) : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->afterStateUpdated(fn(Forms\Set $set) => $set('text_confirmed', false)),
-                    Forms\Components\MarkdownEditor::make('description_en')
+                        ->afterStateUpdated(fn(Set $set) => $set('text_confirmed', false)),
+                    MarkdownEditor::make('description_en')
                         ->label('English')
                         ->translateLabel()
                         ->maxLength(65535)
@@ -433,15 +462,15 @@ class SigEventResource extends Resource
                             fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en')->authorize("attach", SigEvent::class) : null
                         )
                         ->columnSpan(["2xl" => 1, "default" => 2])
-                        ->afterStateUpdated(fn(Forms\Set $set) => $set('text_confirmed', false)),
-                    Forms\Components\Checkbox::make("text_confirmed")
+                        ->afterStateUpdated(fn(Set $set) => $set('text_confirmed', false)),
+                    Checkbox::make("text_confirmed")
                         ->label("Proof-Read")
                         ->translateLabel(),
                 ]);
     }
 
-    private static function getAdditionalInfoFieldSet(): Forms\Components\Component {
-        return Forms\Components\Textarea::make('additional_info')
+    private static function getAdditionalInfoFieldSet(): \Filament\Schemas\Components\Component {
+        return Textarea::make('additional_info')
             ->label(__("Additional Information"))
             ->translateLabel()
             ->rows(6)
@@ -450,8 +479,8 @@ class SigEventResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getLastModifiedField(): Forms\Components\Placeholder {
-        return Forms\Components\Placeholder::make("updated_at")
+    private static function getLastModifiedField(): Placeholder {
+        return Placeholder::make("updated_at")
             ->label("Last Modified")
             ->translateLabel()
             ->inlineLabel()
@@ -463,25 +492,27 @@ class SigEventResource extends Resource
     }
 
     private static function getTextMandatoryFieldSet() {
-        return Forms\Components\Fieldset::make("text")
+        return Fieldset::make("text")
             ->label("Text")
             ->translateLabel()
             ->schema([
-                Forms\Components\Checkbox::make("no_text")
+                Checkbox::make("no_text")
                      ->label("Text not mandatory")
                      ->live()
                      ->translateLabel(),
             ])
+            ->columnSpanFull()
             ->columnSpan(1);
     }
 
     private static function getAttributeSection() {
-        return Forms\Components\Section::make(__("Attributes"))
+        return Section::make(__("Attributes"))
+            ->columnSpanFull()
             ->schema([
-                Forms\Components\KeyValue::make("attributes")
+                KeyValue::make("attributes")
                     ->nullable()
                     ->label(__("API Metadata")),
-                Forms\Components\Select::make("private_group_ids")
+                Select::make("private_group_ids")
                     ->options(UserRole::all()->pluck("name_localized", "id"))
                     ->multiple()
                     ->dehydrateStateUsing(function ($state) {

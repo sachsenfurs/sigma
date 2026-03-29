@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\TimetableEntryResource\Widgets\UnprocessedSigEvents;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
@@ -16,18 +18,18 @@ class ListTimetableEntries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 
     protected function getHeaderWidgets(): array {
         return [
-            TimetableEntryResource\Widgets\UnprocessedSigEvents::class,
+            UnprocessedSigEvents::class,
         ];
     }
 
     #[On('refresh')]
-    public function refresh() {
+    public function refresh(): void {
         $this->loadTable();
     }
 }

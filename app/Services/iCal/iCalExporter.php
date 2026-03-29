@@ -2,6 +2,11 @@
 
 namespace App\Services\iCal;
 
+use DateTimeImmutable;
+use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
+use Closure;
+use Eluceo\iCal\Domain\ValueObject\Alarm\DisplayAction;
+use Eluceo\iCal\Domain\ValueObject\Alarm\RelativeTrigger;
 use App\Models\Shift;
 use App\Models\SigLocation;
 use App\Models\SigTimeslot;
@@ -39,8 +44,8 @@ class iCalExporter
         $phpDateTimeZone = new PhpDateTimeZone(config("app.timezone"));
         $timezone = TimeZone::createFromPhpDateTimeZone(
             $phpDateTimeZone,
-            new \DateTimeImmutable('2020-01-01 00:00:00', $phpDateTimeZone),
-            new \DateTimeImmutable('2021-01-01 00:00:00', $phpDateTimeZone)
+            new DateTimeImmutable('2020-01-01 00:00:00', $phpDateTimeZone),
+            new DateTimeImmutable('2021-01-01 00:00:00', $phpDateTimeZone)
         );
         $this->calendar = (new Calendar($events))
             ->addTimeZone($timezone)
@@ -52,8 +57,8 @@ class iCalExporter
         $componentFactory = new CalendarFactory();
         return $componentFactory
             ->createCalendar($this->calendar)
-            ->withProperty(new Property("REFRESH-INTERVAL;VALUE=DURATION", new Property\Value\TextValue("PT1H")))
-            ->withProperty(new Property("X-WR-CALNAME", new Property\Value\TextValue(app(AppSettings::class)->event_name . " Events")));
+            ->withProperty(new Property("REFRESH-INTERVAL;VALUE=DURATION", new TextValue("PT1H")))
+            ->withProperty(new Property("X-WR-CALNAME", new TextValue(app(AppSettings::class)->event_name . " Events")));
     }
 
 
@@ -77,9 +82,9 @@ class iCalExporter
     /**
      * Loads relationships: sigEvent, sigLocation
      * @param TimetableEntry $entry
-     * @param \Closure|null $modifyUsing
+     * @param Closure|null $modifyUsing
      */
-    public function addTimetableEntry(TimetableEntry $entry, \Closure $modifyUsing = null): void {
+    public function addTimetableEntry(TimetableEntry $entry, Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($entry->id, $entry::class)
             ->setSummary($entry->sigEvent->name_localized)
             ->setDescription($entry->sigEvent->description_localized ?? "")
@@ -104,9 +109,9 @@ class iCalExporter
     /**
      * Loads relationships: type, type.userRole, sigLocation
      * @param Shift $shift
-     * @param \Closure|null $modifyUsing
+     * @param Closure|null $modifyUsing
      */
-    public function addShift(Shift $shift, \Closure $modifyUsing = null): void {
+    public function addShift(Shift $shift, Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($shift->id, $shift::class)
             ->setSummary("❗ " . $shift->type->userRole->name_localized . "-" . __("Shift") . ": " . $shift->type->name)
             ->setLocation(self::getLocation($shift->sigLocation))
@@ -122,13 +127,13 @@ class iCalExporter
             ->touch(new Timestamp($shift->created_at))
             ->addAlarm(
                 new Alarm(
-                    new Alarm\DisplayAction(
+                    new DisplayAction(
                         __(
                             'Your :department-shift ":type" starts in :min minutes!',
                             ['department' => $shift->type->userRole->name_localized, 'type' => $shift->type->name, 'min' => 15]
                         )
                     ),
-                    new Alarm\RelativeTrigger(
+                    new RelativeTrigger(
                         DateInterval::createFromDateString("15 min ago")
                     )
                 )
@@ -143,10 +148,10 @@ class iCalExporter
     /**
      * Loads relationships: timetableEntry.sigEvent, timetableEntry.sigLocation
      * @param SigTimeslot $slot
-     * @param \Closure|null $modifyUsing
+     * @param Closure|null $modifyUsing
      * @return void
      */
-    public function addTimeslot(SigTimeslot $slot, \Closure $modifyUsing = null): void {
+    public function addTimeslot(SigTimeslot $slot, Closure $modifyUsing = null): void {
         $event = self::getBaseEvent($slot->id, $slot::class)
             ->setSummary(__("Time Slot") . ": " . $slot->timetableEntry->sigEvent->name_localized)
             ->setLocation(self::getLocation($slot->timetableEntry->sigLocation))
@@ -163,13 +168,13 @@ class iCalExporter
         if($reminder = $slot->reminders->first()) {
              $event->addAlarm(
                  new Alarm(
-                     new Alarm\DisplayAction(
+                     new DisplayAction(
                          __(
                              "Timeslot :time for :event starts in :min minutes!",
                              ['time' => $slot->slot_start->translatedFormat("H:i"), 'min' => $reminder->offset_minutes]
                          )
                      ),
-                     new Alarm\RelativeTrigger(
+                     new RelativeTrigger(
                          DateInterval::createFromDateString("{$reminder->offset_minutes} min ago")
                      )
                  )

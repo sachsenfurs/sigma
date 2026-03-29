@@ -2,13 +2,27 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\PostResource\Pages\ManagePosts;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,9 +35,9 @@ class PostResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
 
-    protected static ?string $navigationGroup = "Post";
+    protected static string | \UnitEnum | null $navigationGroup = "Post";
     protected static ?int $navigationSort = 100;
 
     public static function getModelLabel(): string {
@@ -33,29 +47,29 @@ class PostResource extends Resource
         return __("posts");
     }
 
-    public static function form(Form $form): Form {
+    public static function form(Schema $schema): Schema {
         $channels = PostChannel::all();
 
-        return $form
-            ->schema([
-                Forms\Components\Textarea::make('text')
+        return $schema
+            ->components([
+                Textarea::make('text')
                     ->label("Text")
-                    ->maxLength(fn(Forms\Get $get) => $get("image") ? 1023 : 4095)
+                    ->maxLength(fn(Get $get) => $get("image") ? 1023 : 4095)
                     ->hint(__("Telegram Markdown Syntax supported"))
                     ->helperText(__("Markdown Syntax: *bold*  _italic_  `monospace`"))
                     ->required()
                     ->rows(10)
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('text_en')
+                Textarea::make('text_en')
                     ->label("Text (English)")
-                    ->maxLength(fn(Forms\Get $get) => $get("image") ? 1023 : 4095)
+                    ->maxLength(fn(Get $get) => $get("image") ? 1023 : 4095)
                     ->translateLabel()
                     ->rows(10)
                     ->hintAction(
                         fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary("text", "text_en") : null
                     )
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->label("Image")
                     ->translateLabel()
                     ->hidden(fn($operation, ?Model $record) => $operation == "edit" AND !$record?->image)
@@ -63,7 +77,7 @@ class PostResource extends Resource
                     ->preserveFilenames(false)
                     ->disk("public")
                     ->nullable(),
-                Forms\Components\CheckboxList::make("channels")
+                CheckboxList::make("channels")
                     ->label("Channels")
                     ->translateLabel()
                     ->visibleOn('create')
@@ -75,58 +89,58 @@ class PostResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\IconColumn::make("deleted_at")
+                IconColumn::make("deleted_at")
                     ->label("")
                     ->boolean()
                     ->visible(fn(Table $table) => $table->getFilters()['trashed']->getActiveCount())
                     ->getStateUsing(fn(Model $record) => $record->deleted_at == null),
-                Tables\Columns\TextColumn::make('text')
+                TextColumn::make('text')
                     ->label("Text")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
                     ->limit(100),
-                Tables\Columns\TextColumn::make('text_en')
+                TextColumn::make('text_en')
                     ->label("Text (English)")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
                     ->limit(100),
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label("Image")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label("Created")
                     ->translateLabel()
                     ->dateTime()
                     ->formatStateUsing(fn(?Carbon $state) => $state?->diffForHumans())
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label("User")
                     ->translateLabel()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ])
             ])
             ->defaultSort('created_at', 'DESC')
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ManagePosts::route('/'),
+            'index' => ManagePosts::route('/'),
         ];
     }
 }

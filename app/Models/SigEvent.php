@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Closure;
 use App\Enums\Approval;
 use App\Models\Traits\HasChats;
 use App\Models\Traits\HasTimetableEntries;
@@ -41,7 +42,7 @@ class SigEvent extends Model
      *     defining it within the models booted() method won't work in some cases (when working with eager loading). probably a laravel bug?
      */
 
-    public static function applyPrivateScope(): \Closure {
+    public static function applyPrivateScope(): Closure {
         return function($query) {
             $query
                 ->whereNull('private_group_ids')

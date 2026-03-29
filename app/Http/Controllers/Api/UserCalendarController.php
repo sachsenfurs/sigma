@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Eluceo\iCal\Domain\ValueObject\Alarm\DisplayAction;
+use Eluceo\iCal\Domain\ValueObject\Alarm\RelativeTrigger;
 use App\Enums\UserCalendarSettings;
 use App\Http\Controllers\Controller;
 use App\Models\TimetableEntry;
@@ -48,13 +50,13 @@ class UserCalendarController extends Controller
                             return $event
                                 ->addAlarm(
                                     new Alarm(
-                                        new Alarm\DisplayAction(
+                                        new DisplayAction(
                                             __(
                                                 "Your favorite event **:sig** starts in :min minutes!",
                                                 ['sig' => $favorite->timetableEntry->sigEvent->name_localized, 'min' => $reminder->offset_minutes]
                                             )
                                         ),
-                                        new Alarm\RelativeTrigger(
+                                        new RelativeTrigger(
                                             DateInterval::createFromDateString("{$reminder->offset_minutes} min ago")
                                         )
                                     )

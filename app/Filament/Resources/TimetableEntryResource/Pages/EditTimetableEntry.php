@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\TimetableEntryResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use Closure;
+use Filament\Schemas\Components\Grid;
 use App\Filament\Clusters\SigPlanning;
 use App\Filament\Resources\SigEventResource\RelationManagers\SigTimeslotsRelationManager;
 use App\Filament\Resources\TimetableEntryResource;
 use Filament\Actions;
-use Filament\Forms\Components\Grid;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 
 class EditTimetableEntry extends EditRecord
@@ -18,7 +21,7 @@ class EditTimetableEntry extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
@@ -33,7 +36,7 @@ class EditTimetableEntry extends EditRecord
         ] : [];
     }
 
-    public static function getEditAction(): \Closure {
+    public static function getEditAction(): Closure {
         return function (Model $record, array $data) {
             return self::handleUpdate($record, $data);
         };
@@ -61,11 +64,9 @@ class EditTimetableEntry extends EditRecord
         return $record;
     }
 
-    public static function getSchema() {
-        return [
-            Grid::make()
-                ->columns(2)
-                ->schema(TimetableEntryResource::getSchema())
-        ];
-    }
+//    public function getSchema(string $name = ""): ?Schema {
+//        return Schema::make()
+//                ->columns(2)
+//                ->schema(TimetableEntryResource::getSchema());
+//    }
 }

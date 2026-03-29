@@ -2,13 +2,21 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Ddas\DealerTagResource\Pages\ListDealerTags;
+use App\Filament\Resources\Ddas\DealerTagResource\Pages\CreateDealerTag;
+use App\Filament\Resources\Ddas\DealerTagResource\Pages\EditDealerTag;
 use App\Filament\Resources\Ddas\DealerTagResource\Pages;
 use App\Filament\Resources\Ddas\DealerTagResource\RelationManagers\DealerTagRelationManager;
 use App\Filament\Resources\DealerResource\RelationManagers\DealerTagResourceRelationManager;
 use App\Models\Ddas\DealerTag;
 use App\Settings\DealerSettings;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,9 +25,9 @@ class DealerTagResource extends Resource
 {
     protected static ?string $model = DealerTag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Dealer\'s Den';
+    protected static string | \UnitEnum | null $navigationGroup = 'Dealer\'s Den';
 
     protected static ?int $navigationSort = 320;
 
@@ -38,21 +46,21 @@ class DealerTagResource extends Resource
 
     public static function getSchema() {
         return [
-            Forms\Components\TextInput::make('name')
+            TextInput::make('name')
                   ->label('Tag Name')
                   ->translateLabel()
                   ->required()
                   ->maxLength(255),
-            Forms\Components\TextInput::make('name_en')
+            TextInput::make('name_en')
                   ->label('Tag Name (English)')
                   ->translateLabel()
                   ->required()
                   ->maxLength(255),
         ];
     }
-    public static function form(Form $form): Form {
-        return $form
-            ->schema(
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components(
                 self::getSchema()
             );
     }
@@ -60,22 +68,22 @@ class DealerTagResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name_en')
+                TextColumn::make('name_en')
                     ->searchable()
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -88,9 +96,9 @@ class DealerTagResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListDealerTags::route('/'),
-            'create' => Pages\CreateDealerTag::route('/create'),
-            'edit' => Pages\EditDealerTag::route('/{record}/edit'),
+            'index' => ListDealerTags::route('/'),
+            'create' => CreateDealerTag::route('/create'),
+            'edit' => EditDealerTag::route('/{record}/edit'),
         ];
     }
 }

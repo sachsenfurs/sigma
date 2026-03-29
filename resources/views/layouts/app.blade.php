@@ -181,7 +181,7 @@
                                     <span class="text-muted px-1 ps-2 small">(#{{ auth()->user()->reg_id }})</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
-                                    @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getPanel()))
+                                    @if(Auth::user()->canAccessPanel(\Filament\Facades\Filament::getDefaultPanel()))
                                         <li>
                                             <a class="dropdown-item" href="{{ \Filament\Facades\Filament::getUrl() }}">
                                                 {{ __('Administration') }}

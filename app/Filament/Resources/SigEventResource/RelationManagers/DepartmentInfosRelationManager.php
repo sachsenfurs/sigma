@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\SigEventResource\RelationManagers;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms;
 use Filament\Tables;
@@ -11,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class DepartmentInfosRelationManager extends RelationManager
 {
     protected static string $relationship = 'departmentInfos';
-    protected static ?string $icon = 'heroicon-o-user-group';
+    protected static string | \BackedEnum | null $icon = 'heroicon-o-user-group';
 
     public static function getPluralModelLabel(): ?string {
         return __("Assigned Departments");
@@ -41,13 +49,13 @@ class DepartmentInfosRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user_role_id')
             ->columns([
-                Tables\Columns\TextColumn::make('userRole')
+                TextColumn::make('userRole')
                     ->label('User Role')
                     ->formatStateUsing(fn($state) => $state->name_localized)
                     ->badge()
                     ->translateLabel()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('additional_info')
+                TextColumn::make('additional_info')
                     ->label('Requirements to Department')
                     ->translateLabel()
                     ->sortable(),
@@ -56,15 +64,15 @@ class DepartmentInfosRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Assign Department')
                     ->translateLabel()
                     ->modalHeading(__('Assign Department'))
                     ->modalSubmitActionLabel(__('Assign'))
                     ->createAnother(false)
                     ->successNotificationTitle(__('Department Assigned'))
-                    ->form([
-                        Forms\Components\Select::make('user_role_id')
+                    ->schema([
+                        Select::make('user_role_id')
                             ->label('Department')
                             ->translateLabel()
                             ->relationship('userRole', 'name')
@@ -72,21 +80,21 @@ class DepartmentInfosRelationManager extends RelationManager
                             ->preload()
                             ->searchable()
                             ->required(),
-                        Forms\Components\Textarea::make('additional_info')
+                        Textarea::make('additional_info')
                             ->label('Requirements to Department')
                             ->translateLabel()
                             ->rows(4)
                             ->required()
                     ]),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
+            ->recordActions([
+                EditAction::make()
                     ->label('Edit Requirements')
                     ->translateLabel()
                     ->modalHeading(__('Edit Requirements'))
                     ->successNotificationTitle(__('Requirements Edited'))
-                    ->form([
-                        Forms\Components\Select::make('user_role_id')
+                    ->schema([
+                        Select::make('user_role_id')
                             ->label('Department')
                             ->translateLabel()
                             ->relationship('userRole', 'name')
@@ -94,21 +102,21 @@ class DepartmentInfosRelationManager extends RelationManager
                             ->preload()
                             ->searchable()
                             ->required(),
-                        Forms\Components\Textarea::make('additional_info')
+                        Textarea::make('additional_info')
                             ->label('Requirements to Department')
                             ->translateLabel()
                             ->rows(4)
                             ->required()
                     ]),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->label('Remove Department')
                     ->translateLabel()
                     ->modalHeading(__('Remove Department'))
                     ->successNotificationTitle(__('Department Removed')),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

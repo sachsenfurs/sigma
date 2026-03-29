@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use URL;
 use App\Models\Ddas\ArtshowItem;
 use App\Models\Ddas\Dealer;
 use App\Models\Post\PostChannel;
@@ -34,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void {
         if($this->app->environment('production')) {
-            \URL::forceScheme('https');
+            URL::forceScheme('https');
         } else {
             $this->app->register(FakerServiceProvider::class);
         }

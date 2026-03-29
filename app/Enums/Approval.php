@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Filament\Actions\BulkAction;
+use Filament\Actions\Action;
 use App\Enums\Attributes\Color;
 use App\Enums\Attributes\Style;
 use App\Enums\Attributes\Icon;
@@ -12,8 +14,6 @@ use Filament\Support\Colors\Color as FilamentColor;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
 enum Approval: int implements HasLabel, HasColor, HasIcon
@@ -71,7 +71,7 @@ enum Approval: int implements HasLabel, HasColor, HasIcon
         return BulkAction::make("approval")
             ->icon("heroicon-o-question-mark-circle")
             ->translateLabel()
-            ->form(
+            ->schema(
                 array_merge(
                     [
                         Radio::make("approval")

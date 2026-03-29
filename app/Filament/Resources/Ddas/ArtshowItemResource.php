@@ -2,6 +2,29 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Radio;
+use Filament\Schemas\Components\Actions;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Checkbox;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkAction;
+use Filament\Support\Enums\TextSize;
+use App\Filament\Resources\Ddas\ArtshowItemResource\Pages\ListArtshowItems;
+use App\Filament\Resources\Ddas\ArtshowItemResource\Pages\EditArtshowItem;
 use App\Enums\Approval;
 use App\Enums\Rating;
 use App\Filament\Actions\TranslateAction;
@@ -13,10 +36,6 @@ use App\Filament\Resources\Ddas\ArtshowItemResource\RelationManagers\ArtshowBids
 use App\Models\Ddas\ArtshowItem;
 use App\Settings\ArtShowSettings;
 use Filament\Forms;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
@@ -32,7 +51,7 @@ class ArtshowItemResource extends Resource
 {
     protected static ?string $model = ArtshowItem::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cube';
 
     protected static ?int $navigationSort = 210;
 
@@ -61,22 +80,23 @@ class ArtshowItemResource extends Resource
         return Cache::remember("artshow-unapproved-badge", 10, fn() => ArtshowItem::whereApproval(Approval::PENDING)->count()) ?: null;
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make()
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Grid::make()
                     ->columns(2)
                     ->columnSpanFull()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label('Item Name')
                             ->translateLabel()
                             ->columnSpan(1)
                             ->maxLength(255),
-                        Forms\Components\Fieldset::make("")
+                        Fieldset::make("")
+                            ->columnSpanFull()
                             ->columnSpan(1)
                             ->schema([
-                                Forms\Components\Radio::make('approval')
+                                Radio::make('approval')
                                     ->label('Approval')
                                     ->translateLabel()
                                     ->default(Approval::PENDING)
@@ -90,20 +110,21 @@ class ArtshowItemResource extends Resource
                                     ->visibleOn("edit"),
                             ]),
                     ]),
-                Forms\Components\Grid::make()
+                Grid::make()
                      ->columns([
                          'lg' => 1,
                          '2xl' => 2
                      ])
+                     ->columnSpanFull()
                      ->schema([
-                            Forms\Components\MarkdownEditor::make('description')
+                            MarkdownEditor::make('description')
                                 ->label('Description')
                                 ->translateLabel()
                                 ->maxLength(65535)
                                 ->hintAction(
                                     fn($operation, $record) => $operation != "view" ? TranslateAction::translateToPrimary('description_en', 'description')->authorize("create", ArtshowItem::class) : null
                                 ),
-                            Forms\Components\MarkdownEditor::make('description_en')
+                            MarkdownEditor::make('description_en')
                                 ->label('Description (English)')
                                 ->translateLabel()
                                 ->maxLength(65535)
@@ -111,31 +132,31 @@ class ArtshowItemResource extends Resource
                                     fn($operation) => $operation != "view" ? TranslateAction::translateToSecondary('description', 'description_en')->authorize("create", ArtshowItem::class): null
                                 ),
                      ]),
-                Forms\Components\Checkbox::make("auction")
+                Checkbox::make("auction")
                     ->columnSpanFull()
                     ->label(__("Up for auction"))
                     ->reactive(),
-                Forms\Components\TextInput::make('starting_bid')
+                TextInput::make('starting_bid')
                     ->label('Starting Bid')
                     ->translateLabel()
                     ->required()
                     ->numeric()
-                    ->visible(fn(Forms\Get $get) => $get('auction'))
+                    ->visible(fn(Get $get) => $get('auction'))
                     ->default(0),
-                Forms\Components\TextInput::make('charity_percentage')
+                TextInput::make('charity_percentage')
                     ->label('Charity Percentage')
                     ->translateLabel()
                     ->required()
                     ->numeric()
-                    ->visible(fn(Forms\Get $get) => $get('auction'))
+                    ->visible(fn(Get $get) => $get('auction'))
                     ->default(0),
-                Forms\Components\Textarea::make('additional_info')
+                Textarea::make('additional_info')
                     ->label('Additional Information')
                     ->translateLabel()
                     ->maxLength(65535)
                     ->rows(5)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->label('Image')
                     ->translateLabel()
                     ->preserveFilenames(false)
@@ -145,11 +166,11 @@ class ArtshowItemResource extends Resource
                     ->imageEditor()
                     ->maxFiles(1)
                     ->maxSize(5120),
-                Forms\Components\Radio::make("rating")
+                Radio::make("rating")
                     ->options(Rating::class)
                     ->default(Rating::SFW)
                     ->required(),
-                Forms\Components\Checkbox::make('locked')
+                Checkbox::make('locked')
                     ->label('Locked')
                     ->translateLabel(),
             ]);
@@ -158,95 +179,95 @@ class ArtshowItemResource extends Resource
     public static function table(Table $table): Table {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make("id")
+                TextColumn::make("id")
                     ->label("ID")
                     ->searchable(),
-                Tables\Columns\IconColumn::make('approval')
+                IconColumn::make('approval')
                     ->label('Approval')
                     ->translateLabel()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('artist.name')
+                TextColumn::make('artist.name')
                     ->label('Artist Name')
                     ->translateLabel()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label('Image')
                     ->translateLabel()
                     ->height("4rem")
                     ->alignCenter()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('rating')
+                TextColumn::make('rating')
                     ->badge(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Item Name')
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('starting_bid')
+                TextColumn::make('starting_bid')
                     ->label('Starting Bid')
                     ->translateLabel()
                     ->formatStateUsing(fn(string $state): string => config("app.currency_symbol") . " " . (int)$state)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('charity_percentage')
+                TextColumn::make('charity_percentage')
                     ->label('Charity Percentage')
                     ->translateLabel()
                     ->formatStateUsing(fn(string $state): string => (int)$state . " %")
                     ->sortable(),
-                Tables\Columns\TextColumn::make("artshow_bids_count")
+                TextColumn::make("artshow_bids_count")
                     ->label("Bid Count")
                     ->translateLabel()
                     ->counts("artshowBids")
                     ->sortable(),
-                Tables\Columns\TextColumn::make("highestBid.value")
+                TextColumn::make("highestBid.value")
                     ->label("Current Bid")
                     ->money(config("app.currency"))
                     ->sortable()
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make("highestBid.user.name")
+                TextColumn::make("highestBid.user.name")
                     ->label("Highest Bidder")
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->translateLabel(),
-                Tables\Columns\IconColumn::make('auction')
+                IconColumn::make('auction')
                     ->label('Auction')
                     ->translateLabel()
                     ->boolean()
                     ->toggleable(),
-                Tables\Columns\IconColumn::make('sold')
+                IconColumn::make('sold')
                     ->label('Sold')
                     ->translateLabel()
                     ->boolean()
                     ->toggleable(),
-                Tables\Columns\IconColumn::make('paid')
+                IconColumn::make('paid')
                     ->label('Paid')
                     ->translateLabel()
                     ->boolean()
                     ->toggleable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make("approval")
+                SelectFilter::make("approval")
                    ->label("Approval")
                    ->translateLabel()
                    ->options(Approval::class),
-                Tables\Filters\SelectFilter::make("highestBid")
+                SelectFilter::make("highestBid")
                     ->label("Highest Bidder")
                     ->translateLabel()
                     ->relationship("highestBid.user", "name")
                     ->searchable()
                     ->getSearchResultsUsing(FormHelper::searchUserByNameAndRegId()),
-                Tables\Filters\TernaryFilter::make("paid")
+                TernaryFilter::make("paid")
                     ->label("Paid")
                     ->default(false)
                     ->translateLabel(),
             ])
-            ->filtersLayout(Tables\Enums\FiltersLayout::AboveContent)
-            ->actions([])
+            ->filtersLayout(FiltersLayout::AboveContent)
+            ->recordActions([])
             ->headerActions([])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            ->toolbarActions([
+                BulkActionGroup::make([
                     Approval::getBulkAction()
                         ->authorize("update"),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
                 ]),
-                Tables\Actions\BulkAction::make("pickup")
+                BulkAction::make("pickup")
                     ->authorize("create")
                     ->infolist(function(Collection $records) {
                         $entries = [];
@@ -259,8 +280,10 @@ class ArtshowItemResource extends Resource
                                 $differentUsers = true;
 
                             $entries[] = Grid::make(3)
+                                    ->columnSpanFull()
                                     ->schema([
                                         Fieldset::make("item_info")
+                                            ->columnSpanFull()
                                             ->columnSpan(2)
                                             ->label($record->name)
                                             ->schema([
@@ -268,7 +291,7 @@ class ArtshowItemResource extends Resource
                                                     ->label("ID")
                                                     ->state($record->id)
                                                     ->inlineLabel()
-                                                    ->size(TextEntry\TextEntrySize::Large),
+                                                    ->size(TextSize::Large),
                                                 TextEntry::make("paid")
                                                     ->label("Paid")
                                                     ->translateLabel()
@@ -310,11 +333,11 @@ class ArtshowItemResource extends Resource
                             ->label(__("Sum"))
                             ->state($records->sum("highestBid.value"))
                             ->money(config("app.currency"))
-                            ->size(TextEntry\TextEntrySize::Large)
+                            ->size(TextSize::Large)
                             ->inlineLabel();
                         return $entries;
                     })
-                    ->action(function(Tables\Actions\BulkAction $action, Collection $records) {
+                    ->action(function(BulkAction $action, Collection $records) {
                         $records->each->update([
                             'paid' => true,
                             'sold' => true,
@@ -333,9 +356,9 @@ class ArtshowItemResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListArtshowItems::route('/'),
+            'index' => ListArtshowItems::route('/'),
 //            'create' => Pages\CreateArtshowItem::route('/create'),
-            'edit' => Pages\EditArtshowItem::route('/{record}/edit'),
+            'edit' => EditArtshowItem::route('/{record}/edit'),
         ];
     }
 }

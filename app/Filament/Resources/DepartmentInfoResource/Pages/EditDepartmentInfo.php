@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\DepartmentInfoResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\DepartmentInfoResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -12,7 +13,7 @@ class EditDepartmentInfo extends EditRecord
 
     protected function getHeaderActions(): array {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
     protected function getRedirectUrl(): ?string {

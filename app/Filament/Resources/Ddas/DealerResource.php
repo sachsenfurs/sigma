@@ -2,6 +2,27 @@
 
 namespace App\Filament\Resources\Ddas;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\Radio;
+use Filament\Schemas\Components\Actions;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkAction;
+use App\Filament\Resources\Ddas\DealerResource\Pages\ListDealers;
+use App\Filament\Resources\Ddas\DealerResource\Pages\CreateDealer;
+use App\Filament\Resources\Ddas\DealerResource\Pages\ViewDealer;
+use App\Filament\Resources\Ddas\DealerResource\Pages\EditDealer;
 use App\Enums\Approval;
 use App\Filament\Actions\TranslateAction;
 use App\Filament\Helper\FormHelper;
@@ -12,8 +33,6 @@ use App\Models\Ddas\DealerTag;
 use App\Models\SigLocation;
 use App\Settings\DealerSettings;
 use Filament\Forms;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -27,9 +46,9 @@ class DealerResource extends Resource
 {
     protected static ?string $model = Dealer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $navigationGroup = "Dealer's Den";
+    protected static string | \UnitEnum | null $navigationGroup = "Dealer's Den";
 
     protected static ?int $navigationSort = 300;
 
@@ -53,24 +72,25 @@ class DealerResource extends Resource
     }
 
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
-                Forms\Components\Fieldset::make("User Details")
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Fieldset::make("User Details")
                     ->translateLabel()
                     ->columnSpanFull()
                     ->schema([
-                        Forms\Components\Select::make('user_id')
+                        Select::make('user_id')
                             ->label('User')
                             ->searchable(['id', 'name'])
                             ->getOptionLabelFromRecordUsing(FormHelper::formatUserWithRegId())
                             ->translateLabel()
                             ->relationship('user', 'name')
                             ->columnSpan(1),
-                        Forms\Components\Grid::make()
+                        Grid::make()
+                            ->columnSpanFull()
                             ->columnSpan(1)
                             ->schema([
-                                    Forms\Components\Radio::make('approval')
+                                    Radio::make('approval')
                                         ->translateLabel()
                                         ->options(Approval::class)
                                         ->required(),
@@ -82,29 +102,31 @@ class DealerResource extends Resource
                                        ->visibleOn("edit")
                             ]),
                     ]),
-                Forms\Components\Fieldset::make("Dealer Details")#
+                Fieldset::make("Dealer Details")
                     ->translateLabel()
                     ->columns(3)
+                    ->columnSpanFull()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label('Dealer Name')
                             ->translateLabel()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('gallery_link')
+                        TextInput::make('gallery_link')
                             ->label("Gallery Link, Website, ...")
                             ->translateLabel()
                             ->maxLength(255),
-                        Forms\Components\Select::make('sig_location_id')
+                        Select::make('sig_location_id')
                             ->label('Location')
                             ->translateLabel()
                             ->relationship('sigLocation')
                             ->getOptionLabelFromRecordUsing(FormHelper::formatLocationWithDescription()),
 
-                        Forms\Components\Grid::make()
+                        Grid::make()
                             ->columns(2)
+                            ->columnSpanFull()
                             ->schema([
-                                Forms\Components\Textarea::make('info')
+                                Textarea::make('info')
                                     ->label('Dealer Info')
                                     ->rows(8)
                                     ->translateLabel()
@@ -116,7 +138,7 @@ class DealerResource extends Resource
                                         'lg' => 2,
                                         '2xl' => 1
                                     ]),
-                                Forms\Components\Textarea::make('info_en')
+                                Textarea::make('info_en')
                                     ->label('Dealer Info (English)')
                                     ->rows(8)
                                     ->translateLabel()
@@ -128,12 +150,12 @@ class DealerResource extends Resource
                                         'lg' => 2,
                                         '2xl' => 1
                                     ]),
-                                Forms\Components\Textarea::make("additional_info")
+                                Textarea::make("additional_info")
                                     ->label("Additional Information")
                                     ->translateLabel()
                                     ->autosize()
                                     ->columnSpanFull(),
-                                Forms\Components\FileUpload::make('icon_file')
+                                FileUpload::make('icon_file')
                                     ->label('Logo')
                                     ->translateLabel()
                                     ->disk("public")
@@ -144,7 +166,7 @@ class DealerResource extends Resource
                                     ->downloadable()
                                     ->maxFiles(1)
                                     ->maxSize(5120),
-                                Forms\Components\Select::make("tags")
+                                Select::make("tags")
                                     ->label("Tags")
                                     ->columns(1)
                                     ->translateLabel()
@@ -163,7 +185,7 @@ class DealerResource extends Resource
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with("tags"))
             ->columns([
-                Tables\Columns\ImageColumn::make('icon_file')
+                ImageColumn::make('icon_file')
                     ->label('Dealer Logo')
                     ->square()
                     ->translateLabel()
@@ -171,64 +193,64 @@ class DealerResource extends Resource
                         'class' => "w-8"
                     ])
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Dealer Name')
                     ->translateLabel()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('Benutzername')
                     ->translateLabel()
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make("additional_info")
+                TextColumn::make("additional_info")
                     ->label("Additional Information")
                     ->translateLabel()
                     ->view("filament.resources.ddas.additional-info")
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->wrap(),
-                Tables\Columns\TextColumn::make("tags")
+                TextColumn::make("tags")
                     ->formatStateUsing(fn(Model $state) => $state->name_localized)
                     ->translateLabel()
                     ->toggleable()
                     ->badge(),
-                Tables\Columns\IconColumn::make('approval')
+                IconColumn::make('approval')
                     ->label("Approved")
                     ->translateLabel(),
-                Tables\Columns\TextColumn::make('sigLocation.name')
+                TextColumn::make('sigLocation.name')
                     ->label('Location')
                     ->translateLabel()
                     ->toggleable()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make("approval")
+                SelectFilter::make("approval")
                     ->label("Approval")
                     ->translateLabel()
                     ->options(Approval::class),
-                Tables\Filters\SelectFilter::make("tags")
+                SelectFilter::make("tags")
                     ->relationship("tags", "name")
                     ->getOptionLabelFromRecordUsing(fn(DealerTag $record) => $record->name_localized),
-                Tables\Filters\SelectFilter::make("sigLocation")
+                SelectFilter::make("sigLocation")
                     ->relationship("sigLocation", "name", fn(Builder $query) => $query->whereIn("id", Dealer::pluck("sig_location_id")))
                     ->getOptionLabelFromRecordUsing(fn(SigLocation $record) => $record->name_localized)
                     ->label("Location")
                     ->translateLabel(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()->modalWidth("7xl"),
+            ->recordActions([
+                EditAction::make()->modalWidth("7xl"),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                     Approval::getBulkAction()
                         ->authorize("updateAny", Dealer::class),
-                    Tables\Actions\BulkAction::make("sigLocation")
+                    BulkAction::make("sigLocation")
                         ->authorize("updateAny", Dealer::class)
                         ->label("Set Location")
                         ->translateLabel()
-                        ->form([
-                            Forms\Components\Select::make("sig_location_id")
+                        ->schema([
+                            Select::make("sig_location_id")
                                 ->label("Location")
                                 ->translateLabel()
                                 ->relationship("sigLocation", "name")
@@ -242,7 +264,7 @@ class DealerResource extends Resource
                 ]),
             ])
             ->defaultSort(fn(Builder $query): Builder => $query->orderBy("approval")->orderBy("name"))
-            ->recordAction(Tables\Actions\EditAction::class)
+            ->recordAction(EditAction::class)
             ->recordUrl(function(Model $record) {
                 return self::canEdit($record) ? null : self::getUrl('view', ['record' => $record]);
             });
@@ -256,10 +278,10 @@ class DealerResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListDealers::route('/'),
-            'create' => Pages\CreateDealer::route('/create'),
-            'view' => Pages\ViewDealer::route('/{record}'),
-            'edit' => Pages\EditDealer::route('/{record}/edit'),
+            'index' => ListDealers::route('/'),
+            'create' => CreateDealer::route('/create'),
+            'view' => ViewDealer::route('/{record}'),
+            'edit' => EditDealer::route('/{record}/edit'),
         ];
     }
 }

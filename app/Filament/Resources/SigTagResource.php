@@ -2,14 +2,25 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SigTagResource\Pages\ListSigTags;
+use App\Filament\Resources\SigTagResource\Pages\CreateSigTag;
+use App\Filament\Resources\SigTagResource\Pages\ViewSigTag;
+use App\Filament\Resources\SigTagResource\Pages\EditSigTag;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Schemas\Components\Component;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use App\Filament\Clusters\SigManagement;
 use App\Filament\Resources\SigHostResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\SigTagResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigTag;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,17 +30,17 @@ class SigTagResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigTag::class;
     protected static ?string $cluster = SigManagement::class;
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-tag';
+    protected static ?\Filament\Pages\Enums\SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?int $navigationSort = 100;
 
     public static function getPluralLabel(): ?string {
         return __('Tags');
     }
 
-    public static function form(Form $form): Form {
-        return $form
-            ->schema([
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
                 self::getNameField(),
                 self::getDescriptionField(),
                 self::getDescriptionENField(),
@@ -43,12 +54,12 @@ class SigTagResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -61,26 +72,26 @@ class SigTagResource extends Resource
 
     public static function getPages(): array {
         return [
-            'index' => Pages\ListSigTags::route('/'),
-            'create' => Pages\CreateSigTag::route('/create'),
-            'view' => Pages\ViewSigTag::route('/{record}'),
-            'edit' => Pages\EditSigTag::route('/{record}/edit'),
+            'index' => ListSigTags::route('/'),
+            'create' => CreateSigTag::route('/create'),
+            'view' => ViewSigTag::route('/{record}'),
+            'edit' => EditSigTag::route('/{record}/edit'),
         ];
     }
 
     private static function getTableColumns(): array {
         return [
-            Tables\Columns\TextColumn::make('name')
+            TextColumn::make('name')
                 ->label('Name')
                 ->translateLabel()
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('description')
+            TextColumn::make('description')
                 ->label('Description')
                 ->translateLabel()
                 ->searchable()
                 ->limit(50),
-            Tables\Columns\TextColumn::make('description_en')
+            TextColumn::make('description_en')
                 ->label('Description (English)')
                 ->translateLabel()
                 ->searchable()
@@ -88,8 +99,8 @@ class SigTagResource extends Resource
         ];
     }
 
-    private static function getNameField(): Forms\Components\Component {
-        return Forms\Components\TextInput::make('name')
+    private static function getNameField(): Component {
+        return TextInput::make('name')
             ->label('Name')
             ->translateLabel()
             ->required()
@@ -97,8 +108,8 @@ class SigTagResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getDescriptionField(): Forms\Components\Component {
-        return Forms\Components\Textarea::make('description')
+    private static function getDescriptionField(): Component {
+        return Textarea::make('description')
             ->label('Description')
             ->required()
             ->translateLabel()
@@ -106,8 +117,8 @@ class SigTagResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getDescriptionENField(): Forms\Components\Component {
-        return Forms\Components\Textarea::make('description_en')
+    private static function getDescriptionENField(): Component {
+        return Textarea::make('description_en')
             ->label('Description (English)')
             ->required()
             ->translateLabel()
@@ -115,8 +126,8 @@ class SigTagResource extends Resource
             ->columnSpanFull();
     }
 
-    private static function getIconField(): Forms\Components\Component {
-        return Forms\Components\TextInput::make("icon")
+    private static function getIconField(): Component {
+        return TextInput::make("icon")
             ->nullable()
             ->helperText("Bootstrap Icon Class")
             ->columnSpanFull();

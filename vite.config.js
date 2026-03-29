@@ -16,17 +16,6 @@ export default defineConfig({
             // },
         }),
     ],
-    build: {
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vue: ['vue', 'laravel-vue-i18n'],
-                    axios: ['axios'],
-                    jquery: ['jquery'],
-                }
-            }
-        }
-    },
     server: {
         cors: {
             origin: "*",
