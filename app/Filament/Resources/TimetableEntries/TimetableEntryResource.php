@@ -36,6 +36,7 @@ use App\Settings\AppSettings;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -48,7 +49,7 @@ class TimetableEntryResource extends Resource
 {
     use HasActiveIcon;
     protected static ?string $model = TimetableEntry::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static ?string $cluster = SigPlanningCluster::class;
     protected static ?int $navigationSort = 10;
 

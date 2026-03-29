@@ -21,6 +21,7 @@ use App\Filament\Resources\Shifts\Widgets\ShiftSummaryWidget;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Shift;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -29,7 +30,7 @@ class ShiftResource extends Resource
     use HasActiveIcon;
 
     protected static ?string $model = Shift::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-calendar';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendar;
     protected static ?string $cluster = ShiftPlanningCluster::class;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

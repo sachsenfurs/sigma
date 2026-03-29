@@ -23,6 +23,7 @@ use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\Post;
 use App\Models\Post\PostChannel;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -34,7 +35,7 @@ class PostResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = Post::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedChatBubbleBottomCenterText;
 
     protected static string | UnitEnum | null $navigationGroup = "Post";
     protected static ?int $navigationSort = 100;

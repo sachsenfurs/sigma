@@ -25,6 +25,7 @@ use App\Models\SigTimeslot;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -37,7 +38,7 @@ class SigTimeslotResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigTimeslot::class;
     protected static ?string $cluster = SigManagementCluster::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-clock';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedClock;
     protected static ?int $navigationSort = 10;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

@@ -16,6 +16,7 @@ use App\Filament\Resources\Ddas\DealerTags\RelationManagers\DealerTagRelationMan
 use App\Models\Ddas\DealerTag;
 use App\Settings\DealerSettings;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -23,7 +24,7 @@ class DealerTagResource extends Resource
 {
     protected static ?string $model = DealerTag::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-tag';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static string | UnitEnum | null $navigationGroup = 'Dealer\'s Den';
 

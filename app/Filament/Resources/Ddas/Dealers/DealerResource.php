@@ -34,6 +34,7 @@ use App\Models\Ddas\DealerTag;
 use App\Models\SigLocation;
 use App\Settings\DealerSettings;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -46,7 +47,7 @@ class DealerResource extends Resource
 {
     protected static ?string $model = Dealer::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedShoppingCart;
 
     protected static string | UnitEnum | null $navigationGroup = "Dealer's Den";
 

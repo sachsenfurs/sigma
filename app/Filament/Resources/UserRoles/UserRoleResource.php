@@ -25,6 +25,7 @@ use App\Filament\Resources\UserRoles\RelationManagers\UserRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\UserRole;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -38,7 +39,7 @@ class UserRoleResource extends Resource
 
     protected static ?int $navigationSort = 1200;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-identification';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedIdentification;
 
     public static function getLabel(): ?string {
         return __('User Role');

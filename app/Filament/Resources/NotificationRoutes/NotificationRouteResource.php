@@ -26,6 +26,7 @@ use App\Models\Post\PostChannel;
 use App\Models\User;
 use App\Models\UserRole;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelSettings\Settings;
@@ -38,7 +39,7 @@ class NotificationRouteResource extends Resource
     protected static ?string $cluster = SettingsCluster::class;
     protected static ?int $navigationSort = 1500;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-arrows-right-left';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedArrowsRightLeft;
 
     public static function getNavigationLabel(): string {
         return __("Notifications");

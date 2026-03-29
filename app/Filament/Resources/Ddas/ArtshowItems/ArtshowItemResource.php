@@ -38,6 +38,7 @@ use App\Settings\ArtShowSettings;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
@@ -49,7 +50,7 @@ class ArtshowItemResource extends Resource
 {
     protected static ?string $model = ArtshowItem::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cube';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCube;
 
     protected static ?int $navigationSort = 210;
 

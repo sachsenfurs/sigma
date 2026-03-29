@@ -21,6 +21,7 @@ use App\Filament\Clusters\ShiftPlanning\ShiftPlanningCluster;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\ShiftType;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ use Livewire\Component;
 class ShiftTypeResource extends Resource
 {
     use HasActiveIcon;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-calendar';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendar;
     protected static ?string $model = ShiftType::class;
     protected static ?string $cluster = ShiftPlanningCluster::class;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

@@ -23,6 +23,7 @@ use Filament\Forms\Components\Textarea;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigLocation;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
@@ -32,7 +33,7 @@ class SigLocationResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigLocation::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-building-office';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
     protected static string | UnitEnum | null $navigationGroup = 'SIG';
     protected static ?int $navigationSort = 60;

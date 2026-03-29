@@ -18,6 +18,7 @@ use App\Filament\Resources\Ddas\ArtshowItems\RelationManagers\ArtshowItemRelatio
 use App\Models\Ddas\ArtshowArtist;
 use App\Settings\ArtShowSettings;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -25,7 +26,7 @@ class ArtshowArtistResource extends Resource
 {
     protected static ?string $model = ArtshowArtist::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-paint-brush';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedPaintBrush;
 
     protected static ?int $navigationSort = 200;
 
@@ -50,6 +51,7 @@ class ArtshowArtistResource extends Resource
     public static function canAccess(): bool {
         return parent::canAccess() AND app(ArtShowSettings::class)->enabled;
     }
+
     public static function form(Schema $schema): Schema {
         return $schema
             ->components([

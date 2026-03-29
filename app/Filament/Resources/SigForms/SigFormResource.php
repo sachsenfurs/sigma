@@ -28,6 +28,7 @@ use App\Models\SigFilledForm;
 use App\Models\SigForm;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +42,7 @@ class SigFormResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigForm::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-pencil-square';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedPencilSquare;
 
     protected static string | UnitEnum | null $navigationGroup = 'SIG';
 

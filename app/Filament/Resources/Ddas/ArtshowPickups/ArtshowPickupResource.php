@@ -14,13 +14,14 @@ use App\Filament\Helper\FormHelper;
 use App\Models\Ddas\ArtshowPickup;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class ArtshowPickupResource extends Resource
 {
     protected static ?string $model = ArtshowPickup::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-gift';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedGift;
 
     protected static ?int $navigationSort = 240;
 

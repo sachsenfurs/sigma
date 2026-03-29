@@ -5,13 +5,14 @@ namespace App\Filament\Clusters\SigPlanning;
 use App\Filament\Traits\HasActiveIcon;
 use BackedEnum;
 use Filament\Clusters\Cluster;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use UnitEnum;
 
 class SigPlanningCluster extends Cluster
 {
     use HasActiveIcon;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedSquares2x2;
     protected static ?int $navigationSort = 1;
     protected static string | UnitEnum | null $navigationGroup = 'SIG';
 

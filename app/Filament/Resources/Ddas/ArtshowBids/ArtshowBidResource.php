@@ -18,6 +18,7 @@ use App\Settings\ArtShowSettings;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +26,7 @@ class ArtshowBidResource extends Resource
 {
     protected static ?string $model = ArtshowBid::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-currency-euro';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCurrencyEuro;
 
     protected static ?int $navigationSort = 220;
 

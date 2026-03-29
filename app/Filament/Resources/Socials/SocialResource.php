@@ -22,6 +22,7 @@ use App\Filament\Traits\HasActiveIcon;
 use App\Models\Info\Enums\ShowMode;
 use App\Models\Info\Social;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class SocialResource extends Resource
@@ -31,7 +32,7 @@ class SocialResource extends Resource
     protected static ?string $cluster = SettingsCluster::class;
     protected static ?int $navigationSort = 1900;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-share';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedShare;
 
     public static function form(Schema $schema): Schema
     {

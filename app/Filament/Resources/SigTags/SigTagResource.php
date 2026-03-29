@@ -21,6 +21,7 @@ use App\Filament\Resources\SigHosts\RelationManagers\SigEventsRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigTag;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class SigTagResource extends Resource
@@ -28,7 +29,7 @@ class SigTagResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = SigTag::class;
     protected static ?string $cluster = SigManagementCluster::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-tag';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTag;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?int $navigationSort = 100;
 

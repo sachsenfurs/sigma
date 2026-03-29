@@ -24,6 +24,7 @@ use App\Enums\PermissionLevel;
 use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Models\PageHook;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -31,7 +32,7 @@ class PageHookResource extends Resource
 {
     protected static ?string $model = PageHook::class;
     protected static ?string $cluster = SettingsCluster::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-code-bracket';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCodeBracket;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function getNavigationGroup(): ?string {

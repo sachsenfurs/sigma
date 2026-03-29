@@ -51,6 +51,7 @@ use App\Models\UserRole;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
@@ -66,7 +67,7 @@ class SigEventResource extends Resource
     protected static ?string $model = SigEvent::class;
     protected static ?string $label = "SIGs";
     protected static ?string $cluster = SigManagementCluster::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-presentation-chart-bar';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedPresentationChartBar;
     protected static ?int $navigationSort = 1;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

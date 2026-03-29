@@ -19,6 +19,7 @@ use App\Filament\Resources\PostChannels\Pages\ManagePostChannels;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\PostChannel;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
 use UnitEnum;
@@ -28,7 +29,7 @@ class PostChannelResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = PostChannel::class;
 //    protected static ?string $cluster = Settings::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-megaphone';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedMegaphone;
 //    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static string | UnitEnum | null $navigationGroup = "Post";
     protected static ?int $navigationSort = 110;

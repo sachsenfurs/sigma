@@ -26,6 +26,7 @@ use App\Filament\Clusters\SigManagement\SigManagementCluster;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\SigHost;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +35,7 @@ class SigHostResource extends Resource
 {
     use HasActiveIcon;
     protected static ?string $model = SigHost::class;
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUsers;
     protected static ?string $cluster = SigManagementCluster::class;
     protected static ?int $navigationSort = 20;
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

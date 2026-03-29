@@ -140,13 +140,10 @@ class CreateTimetableEntry extends CreateRecord
             })
             ->modalFooterActionsAlignment(Alignment::End)
             ->createAnother(false)
-            ->mutateDataUsing(fn($data) => self::mutateData($data))
             ->schema(self::getCreateSchemaComponents())
             ->action(function (array $data, Action $action): void {
                 $data = self::mutateData($data);
-
                 $record = TimetableEntry::create($data);
-
                 $action->record($record);
                 $action->success();
             })
@@ -183,6 +180,7 @@ class CreateTimetableEntry extends CreateRecord
         // client will be redirected to the last one
         return $data;
     }
+
     public function mutateFormDataBeforeCreate(array $data): array {
         return self::mutateData($data);
     }

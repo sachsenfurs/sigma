@@ -23,6 +23,7 @@ use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\User;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
@@ -36,7 +37,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1100;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     public static function getLabel(): ?string {
         return __('User');

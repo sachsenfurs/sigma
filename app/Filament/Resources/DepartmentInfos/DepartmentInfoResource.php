@@ -27,6 +27,7 @@ use App\Models\UserRole;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -42,7 +43,7 @@ class DepartmentInfoResource extends Resource
     use HasActiveIcon;
     protected static ?string $model = DepartmentInfo::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedArchiveBox;
 
     protected static string | UnitEnum | null $navigationGroup = 'SIG';
 

@@ -1,4 +1,5 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/saade/filament-fullcalendar/resources/css/filament-fullcalendar.css';
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../app/**/*.php';
@@ -8,7 +9,7 @@
 @source '../../../../vendor/filament/**/*.php';
 @source '../../../../vendor/guava/calendar/resources/**/*.blade.php';
 @source '../../../../vendor/guava/calendar/**/*.php';
-@source '../../../../vendor/saade/filament-fullcalendar/resources/**/*.blade.php';
+@source '../../../../vendor/saade/filament-fullcalendar/resources/views/**/*.blade.php';
 @source '../../../../vendor/saade/filament-fullcalendar/**/*.php';
 
 /* Table styling for filament panel */
