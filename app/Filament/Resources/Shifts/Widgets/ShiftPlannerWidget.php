@@ -69,8 +69,8 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
         $this->userRole         = UserRole::with("shiftTypes")->find($this->user_role_id);
     }
 
-    public function getHeading(): HtmlString|string {
-        return new HtmlString($this->form->toHtml()); // HACKERMAN! XD (the calendar widget doesn't support displaying a form by default ...)
+    public function getHeading(): HtmlString|string|null {
+        return $this->getSchema("form")?->toHtmlString(); // HACKERMAN! XD (the calendar widget doesn't support displaying a form by default ...)
     }
 
     public function form(Schema $schema): Schema {
@@ -107,7 +107,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                 ->model(Shift::class)
                 ->modelLabel(__("Shift"))
                 ->createAnother(false)
-                ->schema([$this->getSchema("")])
+                ->schema($this->getComponents())
                 ->authorize("deleteAny", Shift::class)
                 ->mountUsing(function ($arguments, $form) {
                     return $form->fill([
@@ -330,11 +330,11 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
             ]);
     }
 
-    public function getSchema(string $name): ?Schema {
-        if($name != Shift::class)
-            return Schema::make();
+    public function getComponents(): array {
+//        if($name != Shift::class)
+//            return Schema::make();
 
-        return Schema::make()->schema([
+        return [
             Grid::make()
                 ->columnSpanFull()
                 ->schema([
@@ -403,7 +403,7 @@ class ShiftPlannerWidget extends CalendarWidget implements HasForms
                                 ->label(__("Locked")),
                         ]),
                 ])
-        ]);
+        ];
     }
 
     public function getResources(): array|Collection {
