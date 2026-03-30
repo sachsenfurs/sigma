@@ -102,6 +102,8 @@ class NotificationService
         }
 
         if($notifiable instanceof PostChannel) {
+            if(!$notifiable->routeNotificationForTelegram() || !filled(app(AppSettings::class)->telegram_bot_token))
+                return [];
             return ['telegram'];
         }
 
