@@ -14,14 +14,14 @@
         "autoprefixer": "^10.5.0",
         "axios": "^1.15.2",
         "bootstrap": "^5.3.3",
-        "laravel-vite-plugin": "^3.0.1",
-        "postcss": "^8.5.10",
+        "laravel-vite-plugin": "^3.1.0",
+        "postcss": "^8.5.12",
         "postcss-nesting": "^14.0.0",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.99.0",
         "sass-loader": "^16.0.7",
         "tailwindcss": "^4.2.4",
-        "vite": "^8.0.9",
+        "vite": "^8.0.10",
         "vue-loader": "^17.4.2"
     },
     "dependencies": {
