@@ -12,7 +12,7 @@
         "@tailwindcss/typography": "^0.5.10",
         "@vitejs/plugin-vue": "^6.0.6",
         "autoprefixer": "^10.5.0",
-        "axios": "^1.15.2",
+        "axios": "^1.16.0",
         "bootstrap": "^5.3.3",
         "laravel-vite-plugin": "^3.1.0",
         "postcss": "^8.5.12",
@@ -32,12 +32,12 @@
         "@fullcalendar/resource-timeline": "^6.1.14",
         "@fullcalendar/scrollgrid": "^6.1.14",
         "@fullcalendar/vue3": "^6.1.14",
-        "alpinejs": "^3.15.11",
+        "alpinejs": "^3.15.12",
         "bootstrap-icons": "^1.9.0",
         "jquery": "^4.0.0",
         "laravel-vue-i18n": "^2.7.1",
-        "marked": "^18.0.2",
-        "vue": "^3.5.33"
+        "marked": "^18.0.3",
+        "vue": "^3.5.34"
     },
     "type": "module"
 }
