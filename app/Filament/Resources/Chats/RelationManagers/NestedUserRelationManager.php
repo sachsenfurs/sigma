@@ -26,11 +26,11 @@ class NestedUserRelationManager extends RelationManager
     }
 
     public function getRelationship(): Relation|Builder {
-        return $this->ownerRecord->user->{static::$nestedRelationship}();
+        return $this->ownerRecord->{static::$relationship}->{static::$nestedRelationship}();
     }
 
     public function getOwnerRecord(): Model {
-        return $this->ownerRecord->user;
+        return $this->ownerRecord->{static::$relationship};
     }
 
     public static function getTitle(?Model $ownerRecord, string $pageClass): string {
