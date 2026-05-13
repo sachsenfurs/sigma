@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Chats;
 
-use App\Filament\Resources\SigHosts\RelationManagers\SigEventsRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\SigEventsRelationManager;
 use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Schemas\Schema;
@@ -22,12 +22,11 @@ use Filament\Actions\Action;
 use App\Enums\ChatStatus;
 use App\Filament\Clusters\MessageCluster\MessageCluster;
 use App\Filament\Helper\FormHelper;
-use App\Filament\Resources\ChatResource\Pages;
-use App\Filament\Resources\ChatResource\RelationManagers\ArtistsRelationManager;
-use App\Filament\Resources\ChatResource\RelationManagers\ArtshowBidsRelationManager;
-use App\Filament\Resources\ChatResource\RelationManagers\DealersRelationManager;
-use App\Filament\Resources\ChatResource\RelationManagers\RoleRelationManager;
-use App\Filament\Resources\ChatResource\RelationManagers\SigHostsRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\ArtistsRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\ArtshowBidsRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\DealersRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\RoleRelationManager;
+use App\Filament\Resources\Chats\RelationManagers\SigHostsRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Chat;
 use App\Models\Ddas\ArtshowItem;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ChatResource\RelationManagers;
+namespace App\Filament\Resources\Chats\RelationManagers;
 
-use App\Filament\Resources\SigEventResource;
+use App\Filament\Resources\SigEvents\SigEventResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
