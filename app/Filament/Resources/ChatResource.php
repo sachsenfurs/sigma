@@ -10,6 +10,7 @@ use App\Filament\Resources\ChatResource\RelationManagers\ArtistsRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\ArtshowBidsRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\DealersRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\RoleRelationManager;
+use App\Filament\Resources\ChatResource\RelationManagers\SigEventsRelationManager;
 use App\Filament\Resources\ChatResource\RelationManagers\SigHostsRelationManager;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Chat;
@@ -215,6 +216,7 @@ class ChatResource extends Resource
             DealersRelationManager::class,
             SigHostsRelationManager::class,
             ArtshowBidsRelationManager::class,
+            SigEventsRelationManager::class,
         ];
     }
 

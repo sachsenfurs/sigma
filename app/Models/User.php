@@ -15,10 +15,12 @@ use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -97,6 +99,18 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasLocale
 
     public function sigHosts(): HasMany {
         return $this->hasMany(SigHost::class, "reg_id", "reg_id");
+    }
+
+    /**
+     * pseudo relationship
+     * @return Builder
+     */
+    public function sigEvents(): Builder {
+        return SigEvent::query()
+            ->whereHas('sigHosts', function (Builder $query) {
+                $query->where('reg_id', $this->reg_id);
+            })
+            ->distinct();
     }
 
     public function isSigHost(): bool {
