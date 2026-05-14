@@ -1,6 +1,21 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+
+function manualChunks(id) {
+    if (id.includes('node_modules/vue/') || id.includes('node_modules/laravel-vue-i18n/')) {
+        return 'vue';
+    }
+
+    if (id.includes('node_modules/axios/')) {
+        return 'axios';
+    }
+
+    if (id.includes('node_modules/jquery/')) {
+        return 'jquery';
+    }
+}
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -19,11 +34,7 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                manualChunks: {
-                    vue: ['vue', 'laravel-vue-i18n'],
-                    axios: ['axios'],
-                    jquery: ['jquery'],
-                }
+                manualChunks,
             }
         }
     },
