@@ -8,6 +8,25 @@
             <x-infocard>
                 {{ __("Dealers are not published yet") }}
             </x-infocard>
+            @if($dealers->count())
+                <div class="card mt-3 bg-info-subtle">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                {{ __("You already applied for the Dealers Den") }}
+                            </div>
+                            <div class="col-4 text-end">
+                                <a href="{{ route("dealers.create") }}">
+                                    <button class="btn text-center btn-primary">
+                                        <i class="bi bi-list-check"></i>
+                                        {{ __("Manage Sign-Up") }}
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @else
             <script>
                 document.addEventListener('alpine:init', () => {
@@ -18,16 +37,6 @@
             </script>
 
             <div x-data="{dealers, filter: 0}">
-        {{--        @can('create', \App\Models\Ddas\Dealer::class)--}}
-        {{--            <a href="{{ route("dealers.create") }}">--}}
-        {{--                <button class="btn text-center p-5 btn-success">--}}
-        {{--                    <div class="fs-4">--}}
-        {{--                        <i class="bi bi-list-check"></i>--}}
-        {{--                        {{ __("Register as Dealer") }}--}}
-        {{--                    </div>--}}
-        {{--                </button>--}}
-        {{--            </a>--}}
-        {{--        @endcan--}}
 
                 <h2 class="mt-3">{{ __("Dealer List") }}</h2>
 
