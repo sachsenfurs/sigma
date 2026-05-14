@@ -10,23 +10,23 @@ use Livewire\Form;
 class DealersForm extends Form
 {
     #[Validate('required|min:1|max:36')]
-    public string $name;
+    public string $name = '';
 
     public $icon_file;
 
-    public $icon_file_url;
+    public ?string $icon_file_url = null;
 
     #[Validate('string|nullable|max:1000')]
-    public ?string $additional_info;
+    public ?string $additional_info = null;
 
     #[Validate('url|nullable')]
-    public ?string $gallery_link;
+    public ?string $gallery_link = null;
 
     #[Validate('string|min:10|max:1000')]
-    public string $info;
+    public string $info = '';
 
     #[Validate('array|nullable|exists:'.DealerTag::class.",id")]
-    public array $tags;
+    public array $tags = [];
 
 //    #[Validate('string|nullable|min:10|max:1000')]
 //    public ?string $info_en;
@@ -34,7 +34,7 @@ class DealersForm extends Form
     public function rules(): array {
         return [
             'icon_file' => [
-                app(DealerSettings::class)->image_mandatory
+                app(DealerSettings::class)->image_mandatory && empty($this->icon_file_url)
                     ? 'required'
                     : 'nullable',
                 'image',

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Ddas;
 
+use App\Events\Ddas\DealerApplicationSubmitted;
 use App\Livewire\Ddas\Forms\DealersForm;
 use App\Livewire\Traits\HasModal;
 use App\Models\Ddas\Dealer;
@@ -18,6 +19,13 @@ class DealersSignup extends Component
     public DealersForm $form;
 
     public int $currentDealerId = 0;
+
+    protected function resetForm(): void {
+        $this->form->reset();
+        $this->form->icon_file = null;
+        $this->form->icon_file_url = null;
+        $this->currentDealerId = 0;
+    }
 
     public function createUpdateDealer(): void {
         $dealer = null;
@@ -45,14 +53,18 @@ class DealersSignup extends Component
             $dealer->update($validated);
             $dealer->tags()->sync($tags);
         } else {
-            auth()->user()->dealers()->create($validated)->tags()->sync($tags);
+            $dealer = auth()->user()->dealers()->create($validated);
+            $dealer->tags()->sync($tags);
+
+            DealerApplicationSubmitted::dispatch($dealer);
         }
 
         $this->hideModal();
+        $this->resetForm();
     }
 
     public function newDealer(): void {
-        $this->currentDealerId = 0;
+        $this->resetForm();
         $this->showModal();
     }
 

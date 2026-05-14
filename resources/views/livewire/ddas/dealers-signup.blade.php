@@ -60,11 +60,13 @@
 
                             <div class="card-text">{{ $dealer->info_localized }}</div>
 
-                            <div class="card m-2">
-                                <div class="card-body text-secondary">
-                                    {{ $dealer->additional_info }}
+                            @if($dealer->additional_info)
+                                <div class="card m-2">
+                                    <div class="card-body text-secondary">
+                                        {{ $dealer->additional_info }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
                             @if($dealer->gallery_link)
                                 <div class="mt-3">
@@ -82,14 +84,16 @@
             </div>
         @endforeach
     @else
-        <h2 class="mt-3">{{ __("Sign up") }}</h2>
+        @can("create", \App\Models\Ddas\Dealer::class)
+            <h2 class="mt-3">{{ __("Sign up") }}</h2>
 
-        <button class="btn card h-100 w-100 text-center justify-content-center btn-success mt-3" style="min-height: 10rem" wire:click="newDealer">
-            <div class="fs-2">
-                <i class="bi bi-plus-lg icon-link"></i>
-                {{ __("Register as Dealer") }}
-            </div>
-        </button>
+            <button class="btn card h-100 w-100 text-center justify-content-center btn-success mt-3" style="min-height: 10rem" wire:click="newDealer">
+                <div class="fs-2">
+                    <i class="bi bi-plus-lg icon-link"></i>
+                    {{ __("Register as Dealer") }}
+                </div>
+            </button>
+        @endcan
     @endif
 
     <x-modal.livewire-modal id="removeDealerConfirm" action="deleteDealer" type="confirm" :title="__('Revoke Dealer Application')">
@@ -126,8 +130,8 @@
                         <div class="row g-3 d-flex">
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <x-form.livewire-input type="text" name="form.name" :placeholder="__('Dealers Name')" required/>
-                                    <label for="form.name">{{ __('Dealers Name') }}</label>
+                                    <x-form.livewire-input type="text" name="form.name" :placeholder="__('Dealer Name')" required/>
+                                    <label for="form.name">{{ __('Dealer Name') }}</label>
                                 </div>
                             </div>
                             <div class="col-12">

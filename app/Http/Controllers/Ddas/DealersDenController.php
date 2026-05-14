@@ -11,7 +11,9 @@ class DealersDenController extends Controller
     public function index() {
 //        $this->authorize("viewAny", Dealer::class);
 
-        return view('ddas.dealers.index');
+        return view('ddas.dealers.index', [
+            'dealers' => auth()->user()->dealers,
+        ]);
     }
 
     public function create() {
