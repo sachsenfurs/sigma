@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Carbon;
 use Spatie\LaravelSettings\Migrations\SettingsBlueprint;
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
@@ -9,7 +10,15 @@ return new class extends SettingsMigration
         $this->migrator->inGroup('app', function (SettingsBlueprint $blueprint): void {
             $blueprint->add('event_name', env("EVENT_NAME", 'SIGMA'));
             $blueprint->add('event_start', env("EVENT_START", now()->setHours(0)->setMinutes(0)->setSeconds(0)));
-            $blueprint->add('event_end', env("EVENT_END", now()->addDays(3)->setHours(0)->setMinutes(0)->setSeconds(0)));
+            $blueprint->add(
+                'event_end',
+                env(
+                    "EVENT_END",
+                    Carbon::parse(
+                        env("EVENT_START", now()->setHours(0)->setMinutes(0)->setSeconds(0))
+                    )->addDays(3)
+                )
+            );
             $blueprint->add('show_schedule_date', env("SHOW_SCHEDULE_DATE", now()->subDay()->setHours(16)->setMinutes(0)->setSeconds(0)));
 
             $blueprint->add("lassie_api_key", env("LASSIE_API_KEY", "ae629a834729fd3aac6d1f827b1793b0"));

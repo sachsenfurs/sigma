@@ -18,6 +18,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\HtmlString;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 
 class CreateTimetableEntry extends CreateRecord
@@ -34,6 +35,13 @@ class CreateTimetableEntry extends CreateRecord
         return $schema->components(self::getCreateSchemaComponents());
     }
 
+    private static function defaultStartDate(): Carbon {
+        $date = app(AppSettings::class)->event_start;
+        if($date->isPast())
+            $date = now()->addHour()->setMinutes(30)->setSecond(0);
+        return $date;
+    }
+
     public static function getCreateSchemaComponents(): array {
         return [
             TimetableEntryResource::getSigEventField(),
@@ -43,6 +51,7 @@ class CreateTimetableEntry extends CreateRecord
                 ->translateLabel()
                 ->columns(2)
                 ->reorderable(false)
+                ->required()
                 ->schema([
                     DateTimePicker::make('start')
                         ->label('Beginning')
@@ -57,6 +66,15 @@ class CreateTimetableEntry extends CreateRecord
                                 $set('end', Carbon::parse($state)->addMinutes($record?->duration ?? 60)->toDateTimeLocalString());
                             }
                         })
+                        ->helperText(
+                            fn(Get $get) => Carbon::parse($get('start'))->isPast()
+                                ? new HtmlString(
+                                    '<span class="text-red-600">' .
+                                    __("This date is in the past! Is that correct?")
+                                    . '</span>'
+                                )
+                                : ""
+                        )
                         ->required(),
                     DateTimePicker::make('end')
                         ->label('End')
@@ -72,13 +90,14 @@ class CreateTimetableEntry extends CreateRecord
                     $action->label("Add Entry")
                         ->translateLabel()
                         ->after(function(Set $set, Get $get, $state) {
+                            $fallbackDate = self::defaultStartDate();
                             array_pop($state);
                             $current = end($state);
-                            $set('start', $current['start'] ?? app(AppSettings::class)->event_start);
-                            $set('end', $current['end'] ?? app(AppSettings::class)->event_start->clone()->addHour());
+                            $set('start', $current['start'] ?? $fallbackDate);
+                            $set('end', $current['end'] ?? $fallbackDate->clone()->addHour(1));
                             $state[] = [
-                                'start' => Carbon::parse($current['start'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
-                                'end' => Carbon::parse($current['end'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
+                                'start' => Carbon::parse($current['start'] ?? $fallbackDate)->addDay()->toDateTimeString('minute'),
+                                'end' => Carbon::parse($current['end'] ?? $fallbackDate)->addDay()->toDateTimeString('minute'),
                             ];
                             $set('entries', $state);
                         });
@@ -125,7 +144,7 @@ class CreateTimetableEntry extends CreateRecord
             ->visible(Gate::check("create", TimetableEntry::class)) // real authorization is done in "mutateData()"
             ->fillForm(function(Action $action, array $arguments) use ($defaults) {
                 $sourceSigEvent = static::resolveSourceSigEvent($action, $defaults);
-                $defaultStart = $arguments['start'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0);
+                $defaultStart = $arguments['start'] ?? self::defaultStartDate();
 
                 return [
                    'sig_event_id' => $sourceSigEvent?->id ?? $arguments['sig_event_id'] ?? $defaults['sig_event_id'] ?? null,

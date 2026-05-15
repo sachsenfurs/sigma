@@ -8,7 +8,6 @@ use App\Http\Controllers\Ddas\ArtshowCardsController;
 use App\Http\Controllers\Ddas\ArtshowController;
 use App\Http\Controllers\Ddas\DealersDenController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Schedule\ConbookExportController;
 use App\Http\Controllers\Schedule\TimetableEntryController;
@@ -108,7 +107,7 @@ Route::group(['middleware' => "auth"], function() {
     Route::get('/artshow-cards', ArtshowCardsController::class)->name("artshow.cards");
 
     // Lost and found
-    Route::get("/lostfound", [LostFoundItemController::class, 'index'])->name("lostfound.index");
+    Route::view("/lostfound", "lostfound.index")->name("lostfound.index");
 
     // SIG dynamic signup forms
     Route::prefix('form')->name('forms.')->group(function() {
