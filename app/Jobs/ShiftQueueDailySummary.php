@@ -25,7 +25,10 @@ class ShiftQueueDailySummary implements ShouldQueue
             $user->notify(
                 new ShiftSummaryReminder(
                     $user->userShifts->filter(function(UserShift $userShift) {
-                        return $userShift->shift->start->isToday();
+                        return $userShift->shift->start->between(
+                            now(),
+                            now()->addDay()
+                        );
                     })
                 )
             );
