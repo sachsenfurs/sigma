@@ -20,11 +20,11 @@ class LostFoundItem extends Model
     ];
 
     public function scopeFound(Builder $query): Builder {
-        return $query->where("status", "F");
+        return $query->where("status", "F")->orderBy("found_at", "desc");
     }
 
     public function scopeLost(Builder $query): Builder {
-        return $query->where("status", "L");
+        return $query->where("status", "L")->orderBy("lost_at", "desc");
     }
 
     public function scopeReturned(Builder $query): Builder {
