@@ -16,9 +16,11 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\HtmlString;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 
 class CreateTimetableEntry extends CreateRecord
@@ -46,8 +48,8 @@ class CreateTimetableEntry extends CreateRecord
                    'sig_location_id' => $arguments['resource']['id'] ?? $defaults['sig_location_id'] ?? null,
                    'entries' => [
                        [
-                           'start' => $model?->start ?? $arguments['start'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0),
-                           'end' => $model?->end ?? $arguments['end'] ?? app(AppSettings::class)->event_start->clone()->setHour(12)->setSecond(0)->addMinutes($record?->duration ?? 120),
+                           'start' => $model?->start ?? $arguments['start'] ?? self::defaultStartDate(),
+                           'end' => $model?->end ?? $arguments['end'] ?? self::defaultStartDate()->addMinutes($record?->duration ?? 120),
                        ]
                    ],
                 ];
@@ -93,6 +95,13 @@ class CreateTimetableEntry extends CreateRecord
         return self::mutateData($data);
     }
 
+    private static function defaultStartDate(): Carbon {
+        $date = app(AppSettings::class)->event_start;
+        if($date->isPast())
+            $date = now()->addHour()->setMinutes(30)->setSecond(0);
+        return $date;
+    }
+
     public static function getSchema(): array {
         return [
             TimetableEntryResource::getSigEventField(),
@@ -102,6 +111,7 @@ class CreateTimetableEntry extends CreateRecord
                 ->translateLabel()
                 ->columns(2)
                 ->reorderable(false)
+                ->required()
                 ->schema([
                     DateTimePicker::make('start')
                         ->label('Beginning')
@@ -116,6 +126,15 @@ class CreateTimetableEntry extends CreateRecord
                                 $set('end', Carbon::parse($state)->addMinutes($record?->duration ?? 60)->toDateTimeLocalString());
                             }
                         })
+                        ->helperText(
+                            fn(Get $get) => Carbon::parse($get('start'))->isPast()
+                                ? new HtmlString(
+                                    '<span class="text-red-600">' .
+                                    __("This date is in the past! Is that correct?")
+                                    . '</span>'
+                                )
+                                : ""
+                        )
                         ->required(),
                     DateTimePicker::make('end')
                         ->label('End')
@@ -131,13 +150,14 @@ class CreateTimetableEntry extends CreateRecord
                     $action->label("Add Entry")
                         ->translateLabel()
                         ->after(function(Set $set, Get $get, $state) {
+                            $fallbackDate = self::defaultStartDate();
                             array_pop($state);
                             $current = end($state);
-                            $set('start', $current['start'] ?? app(AppSettings::class)->event_start);
-                            $set('end', $current['end'] ?? app(AppSettings::class)->event_start->clone()->addHour(1));
+                            $set('start', $current['start'] ?? $fallbackDate);
+                            $set('end', $current['end'] ?? $fallbackDate->clone()->addHour(1));
                             $state[] = [
-                                'start' => Carbon::parse($current['start'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
-                                'end' => Carbon::parse($current['end'] ?? app(AppSettings::class)->event_start)->addDay()->toDateTimeString('minute'),
+                                'start' => Carbon::parse($current['start'] ?? $fallbackDate)->addDay()->toDateTimeString('minute'),
+                                'end' => Carbon::parse($current['end'] ?? $fallbackDate)->addDay()->toDateTimeString('minute'),
                             ];
                             $set('entries', $state);
                         });
