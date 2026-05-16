@@ -20,6 +20,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 
 class SendMassMail extends Page implements HasForms
@@ -28,7 +29,7 @@ class SendMassMail extends Page implements HasForms
 
     public ?array $data = [];
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-envelope';
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected string $view = 'filament.pages.send-mass-mail';
 

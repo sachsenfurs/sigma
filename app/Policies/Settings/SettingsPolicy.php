@@ -12,6 +12,10 @@ class SettingsPolicy
         return $user->hasPermission(Permission::MANAGE_SETTINGS, PermissionLevel::ADMIN);
     }
 
+    public function chatSettings(User $user): bool {
+        return $user->hasPermission(Permission::MANAGE_ADMIN, PermissionLevel::ADMIN);
+    }
+
     public function artshowSettings(User $user): bool {
         return $user->hasPermission(Permission::MANAGE_ARTSHOW, PermissionLevel::ADMIN);
     }
