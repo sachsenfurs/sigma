@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style scoped>
-.no-p >>> p {
+.no-p :deep(p) {
     padding: 0 !important;
     margin: 0 !important;
 }

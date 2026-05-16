@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Variables
 @import 'variables';
 
@@ -7,14 +9,14 @@
 
 $all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
 @each $utility in ("background-color", "color") {
-    $utilities: map-merge(
+    $utilities: map.merge(
             $utilities,
             (
-                #{$utility}: map-merge(
-                        map-get($utilities, $utility),
+                #{$utility}: map.merge(
+                        map.get($utilities, $utility),
                         (
-                            values: map-merge(
-                                    map-get(map-get($utilities, $utility), "values"),
+                            values: map.merge(
+                                    map.get(map.get($utilities, $utility), "values"),
                                     $all-colors
                             ),
                         ),

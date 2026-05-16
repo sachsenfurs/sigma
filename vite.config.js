@@ -28,11 +28,18 @@ export default defineConfig({
             origin: "*",
         }
     },
+    build: {
+        rolldownOptions: {
+            checks: {
+                pluginTimings: false,
+            },
+        },
+    },
     css: {
         preprocessorOptions: {
             scss: {
                 quietDeps: true,
-                silenceDeprecations: ['color-functions'],
+                silenceDeprecations: ['color-functions', 'import'],
             },
         },
     },
