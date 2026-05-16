@@ -1,0 +1,14 @@
+<?php
+
+use Spatie\LaravelSettings\Migrations\SettingsBlueprint;
+use Spatie\LaravelSettings\Migrations\SettingsMigration;
+
+return new class extends SettingsMigration
+{
+    public function up(): void {
+        $this->migrator->inGroup('app', function (SettingsBlueprint $blueprint): void {
+            $blueprint->add('barq_event_uuid', env('BARQ_EVENT_UUID', null));
+            $blueprint->add('barq_jwt', env('BARQ_JWT', null));
+        });
+    }
+};

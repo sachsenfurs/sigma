@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\LostFoundItem;
+use App\Integrations\Lassie\Operations\SyncLostFoundItems;
 use Illuminate\Console\Command;
 
 class LassieSync extends Command
@@ -24,8 +24,7 @@ class LassieSync extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
-        LostFoundItem::syncFromApi();
+    public function handle(SyncLostFoundItems $syncLostFoundItems): void {
+        $syncLostFoundItems->execute();
     }
 }

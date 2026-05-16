@@ -211,6 +211,11 @@ return [
         App\Providers\TelegramServiceProvider::class,
         App\Providers\NotificationServiceProvider::class,
 
+        /*
+         * Integrations
+         */
+        App\Providers\BarqServiceProvider::class,
+        App\Providers\LassieServiceProvider::class,
     ],
 
     /*
