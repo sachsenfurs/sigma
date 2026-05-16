@@ -214,16 +214,12 @@ class AppSettingsPage extends SettingsPage
                     ]),
                 Forms\Components\Section::make(__("BARQ Settings"))
                     ->collapsed()
-                    ->columns(2)
+                    ->columns(1)
                     ->schema([
                         Forms\Components\TextInput::make("barq_jwt")
                             ->label("Barq API JWT")
                             ->password()
                             ->revealable()
-                            ->nullable()
-                            ->string(),
-                        Forms\Components\TextInput::make("barq_event_uuid")
-                            ->label("Barq Event UUID")
                             ->nullable()
                             ->string(),
                     ]),

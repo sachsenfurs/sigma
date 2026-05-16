@@ -29,7 +29,6 @@ class AppSettings extends Settings
     public ?string $telegram_bot_token;
     public ?string $telegram_bot_name;
 
-    public ?string $barq_event_uuid;
     public ?string $barq_jwt;
 
     public ?string $short_domain;

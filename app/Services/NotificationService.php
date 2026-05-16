@@ -6,6 +6,7 @@ use App\Models\NotificationRoute;
 use App\Models\Post\PostChannel;
 use App\Models\User;
 use App\Notifications\Notification;
+use App\Services\PostChannels\PostChannelManager;
 use App\Settings\AppSettings;
 
 class NotificationService
@@ -102,7 +103,7 @@ class NotificationService
         }
 
         if($notifiable instanceof PostChannel) {
-            return ['telegram'];
+            return $notifiable->implementation === PostChannelManager::TELEGRAM ? ['telegram'] : [];
         }
 
         return $additional;

@@ -5,12 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostChannelResource\Pages;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\PostChannel;
+use App\Services\PostChannels\PostChannelManager;
 use Filament\Forms;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class PostChannelResource extends Resource
 {
@@ -42,15 +46,32 @@ class PostChannelResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->columnSpanFull()
                             ->required(),
+                        Forms\Components\Select::make('implementation')
+                            ->label("Implementation")
+                            ->translateLabel()
+                            ->options(PostChannelManager::options())
+                            ->default(PostChannelManager::DEFAULT)
+                            ->required()
+                            ->dehydrateStateUsing(fn(?string $state) => PostChannelManager::normalize($state))
+                            ->native(false),
                         Forms\Components\TextInput::make('channel_identifier')
                             ->label("Channel ID")
                             ->translateLabel()
                             ->required()
-                            ->numeric(),
+                            ->rules(fn(Get $get, ?Model $record) => [
+                                Rule::unique('post_channels', 'channel_identifier')
+                                    ->where('implementation', PostChannelManager::normalize($get('implementation')))
+                                    ->ignore($record?->id),
+                            ]),
                         Forms\Components\TextInput::make('test_channel_identifier')
                             ->label("Test Channel ID")
                             ->translateLabel()
-                            ->numeric(),
+                            ->dehydrateStateUsing(fn(?string $state) => blank($state) ? null : $state)
+                            ->rules(fn(Get $get, ?Model $record) => filled($get('test_channel_identifier')) ? [
+                                Rule::unique('post_channels', 'test_channel_identifier')
+                                    ->where('implementation', PostChannelManager::normalize($get('implementation')))
+                                    ->ignore($record?->id),
+                            ] : []),
                         Forms\Components\TextInput::make('language')
                             ->label("Language")
                             ->translateLabel()
@@ -82,6 +103,11 @@ class PostChannelResource extends Resource
                     ->label("Language")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => strtoupper($state)),
+                Tables\Columns\TextColumn::make('implementation')
+                    ->label("Implementation")
+                    ->translateLabel()
+                    ->badge()
+                    ->formatStateUsing(fn($state) => PostChannelManager::options()[$state] ?? $state),
                 Tables\Columns\TextColumn::make("channel_identifier")
                     ->label("Channel ID")
                     ->translateLabel(),
