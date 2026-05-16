@@ -224,6 +224,17 @@ class AppSettingsPage extends SettingsPage
                             ->nullable()
                             ->string(),
                     ]),
+                Section::make(__("BARQ Settings"))
+                    ->collapsed()
+                    ->columns(1)
+                    ->schema([
+                        TextInput::make("barq_jwt")
+                            ->label("Barq API JWT")
+                            ->password()
+                            ->revealable()
+                            ->nullable()
+                            ->string(),
+                    ]),
                 Section::make(__("DeepL Settings"))
                     ->collapsed()
                     ->columnSpanFull()

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("post_id")->constrained()->cascadeOnDelete();
             $table->foreignId("post_channel_id")->constrained()->cascadeOnDelete();
-            $table->bigInteger('message_id');
+            $table->string('message_id');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_channel_message');
+        Schema::dropIfExists('post_channel_messages');
     }
 };

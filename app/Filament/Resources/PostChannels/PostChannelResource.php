@@ -18,11 +18,17 @@ use Filament\Actions\DeleteBulkAction;
 use App\Filament\Resources\PostChannels\Pages\ManagePostChannels;
 use App\Filament\Traits\HasActiveIcon;
 use App\Models\Post\PostChannel;
+use App\Services\PostChannels\PostChannelManager;
+use Filament\Forms;
+use Filament\Forms\Get;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use UnitEnum;
+use Illuminate\Validation\Rule;
 
 class PostChannelResource extends Resource
 {
@@ -94,6 +100,11 @@ class PostChannelResource extends Resource
                     ->label("Language")
                     ->translateLabel()
                     ->formatStateUsing(fn($state) => strtoupper($state)),
+                TextColumn::make('implementation')
+                    ->label("Implementation")
+                    ->translateLabel()
+                    ->badge()
+                    ->formatStateUsing(fn($state) => PostChannelManager::options()[$state] ?? $state),
                 TextColumn::make("channel_identifier")
                     ->label("Channel ID")
                     ->translateLabel(),

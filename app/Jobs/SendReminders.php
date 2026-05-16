@@ -13,6 +13,7 @@ use App\Notifications\Sig\SigTimeslotReminder;
 use App\Notifications\TimetableEntry\TimetableEntryReminder;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class SendReminders implements ShouldQueue
 {
@@ -21,19 +22,23 @@ class SendReminders implements ShouldQueue
     public function handle(): void {
         $upcomingReminders = Reminder::where("send_at", "<=", now())->whereNull("sent_at")->limit(100)->get();
         foreach($upcomingReminders AS $reminder) {
-            $remindable = null;
+            try {
+                $remindable = null;
 
-            if($reminder->remindable instanceof TimetableEntry)
-                $remindable = new TimetableEntryReminder($reminder->remindable);
-            if($reminder->remindable instanceof SigFavorite)
-                $remindable = new SigFavoriteReminder($reminder->remindable->timetableEntry);
-            if($reminder->remindable instanceof SigTimeslot)
-                $remindable = new SigTimeslotReminder($reminder->remindable);
-            if($reminder->remindable instanceof Shift)
-                $remindable = new ShiftReminder($reminder->remindable);
+                if($reminder->remindable instanceof TimetableEntry)
+                    $remindable = new TimetableEntryReminder($reminder->remindable);
+                if($reminder->remindable instanceof SigFavorite)
+                    $remindable = new SigFavoriteReminder($reminder->remindable->timetableEntry);
+                if($reminder->remindable instanceof SigTimeslot)
+                    $remindable = new SigTimeslotReminder($reminder->remindable);
+                if($reminder->remindable instanceof Shift)
+                    $remindable = new ShiftReminder($reminder->remindable);
 
-            if($remindable)
-                $reminder->notifiable->notify($remindable);
+                if($remindable)
+                    $reminder->notifiable->notify($remindable);
+            } catch(\Exception $e) {
+                report($e);
+            }
         }
 
         // mass update

@@ -23,13 +23,13 @@ class PostChannelSeeder extends Seeder
             'channel_identifier' => -1001797974427,
             'language' => "de",
             'name' => "EAST Info DE Testkanal",
-            'implementation' => "TelegramPostChannel::class",
+            'implementation' => "telegram",
         ]);
         $channels[] = PostChannel::create([
             'channel_identifier' => -1001228930181,
             'language' => "en",
             'name' => "EAST Info EN Test Channel",
-            'implementation' => "TelegramPostChannel::class",
+            'implementation' => "telegram",
         ]);
 
         File::copy(public_path("images/logo.png"), storage_path("app/public/logo.png"));

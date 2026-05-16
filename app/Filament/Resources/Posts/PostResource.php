@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Posts;
 
+use App\Models\Post\PostChannelMessage;
 use BackedEnum;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Textarea;
@@ -25,6 +26,7 @@ use App\Models\Post\PostChannel;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
@@ -55,7 +57,7 @@ class PostResource extends Resource
                 Textarea::make('text')
                     ->label("Text")
                     ->maxLength(fn(Get $get) => $get("image") ? 1023 : 4095)
-                    ->hint(__("Telegram Markdown Syntax supported"))
+                    ->hint(__("Markdown syntax is supported where the selected channel allows it"))
                     ->helperText(__("Markdown Syntax: *bold*  _italic_  `monospace`"))
                     ->required()
                     ->rows(10)
@@ -88,6 +90,7 @@ class PostResource extends Resource
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->with("messages.postChannel"))
             ->columns([
                 IconColumn::make("deleted_at")
                     ->label("")
@@ -106,6 +109,10 @@ class PostResource extends Resource
                     ->formatStateUsing(fn($state) => new HtmlString(nl2br(htmlspecialchars($state))))
                     ->lineClamp(5)
                     ->limit(100),
+                TextColumn::make('messages')
+                    ->label(__("Channels"))
+                    ->getStateUsing(fn($record) => $record->messages->map(fn(PostChannelMessage $m) => $m->postChannel->name))
+                    ->badge(),
                 ImageColumn::make('image')
                     ->label("Image")
                     ->translateLabel(),
