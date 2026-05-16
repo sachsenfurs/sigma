@@ -64,4 +64,8 @@ class ShiftReminder extends Notification
     public static function userSetting(): bool {
         return auth()->user()->hasPermission(Permission::MANAGE_SHIFTS);
     }
+
+    public function shouldSend(): bool {
+        return $this->shift->start->isFuture();
+    }
 }

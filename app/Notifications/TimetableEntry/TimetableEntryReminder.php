@@ -48,7 +48,7 @@ class TimetableEntryReminder extends Notification
     }
 
     public function shouldSend(): bool {
-        return $this->entry->start->isFuture();
+        return $this->entry->start->isFuture() && !$this->entry->cancelled;
     }
 
 }
