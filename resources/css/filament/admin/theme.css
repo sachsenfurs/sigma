@@ -1,6 +1,10 @@
-@import '/vendor/filament/filament/resources/css/theme.css';
+@import '/vendor/filament/filament/dist/theme.css';
 
-@config 'tailwind.config.js';
+@config './tailwind.config.js';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Table styling for filament panel */
 .fi-ta-table .fi-ta-cell > div {
