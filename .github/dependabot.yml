@@ -13,6 +13,10 @@ updates:
       composer-all:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -21,3 +25,7 @@ updates:
       npm-all:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
