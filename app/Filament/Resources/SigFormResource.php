@@ -234,6 +234,7 @@ class SigFormResource extends Resource
                     ->blockNumbers(false)
                     ->blocks([
                         self::getBlockTextInput(),
+                        self::getBlockNumberInput(),
                         self::getBlockTextarea(),
                         self::getBlockFileUpload(),
                         self::getBlockCheckbox(),
@@ -242,6 +243,46 @@ class SigFormResource extends Resource
             ]);
     }
 
+    public static function withDefaultSchema(array $components = []): array {
+        return [
+            Forms\Components\TextInput::make('label')
+                ->label('Label')
+                ->translateLabel()
+                ->required()
+                ->maxLength(255)
+                ->live(onBlur: true)
+                ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                    if (($get('name') ?? '') !== Str::slug($old, '_')) {
+                        return;
+                    }
+                    $set('name', Str::slug($state, '_'));
+                }),
+            Forms\Components\TextInput::make('label_en')
+                ->label('Label (English)')
+                ->translateLabel()
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('name')
+                ->label('Name')
+                ->translateLabel()
+                ->alphaDash()
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('help_text')
+                ->label('Help text')
+                ->translateLabel()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('help_text_en')
+                ->label('Help text (English)')
+                ->translateLabel()
+                ->maxLength(255),
+            Forms\Components\Checkbox::make('required')
+                ->label('Required')
+                ->translateLabel(),
+
+            ...$components,
+        ];
+    }
     private static function getBlockTextInput(): Forms\Components\Builder\Block {
         return Forms\Components\Builder\Block::make('text')
             ->icon('heroicon-o-chat-bubble-oval-left-ellipsis')
@@ -251,42 +292,41 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('Text input');
             })
-            ->schema([
-                Forms\Components\TextInput::make('label')
-                    ->label('Label')
+            ->schema(self::withDefaultSchema([
+                Forms\Components\TextInput::make('min')
+                    ->label('Min Length')
                     ->translateLabel()
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('name') ?? '') !== Str::slug($old, '_')) {
-                            return;
-                        }
-                        $set('name', Str::slug($state, '_'));
-                    }),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
+                    ->numeric()
+                    ->nullable(),
+                Forms\Components\TextInput::make('max')
+                    ->label('Max Length')
                     ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
+                    ->numeric()
+                    ->nullable(),
+            ]));
+    }
+
+    private static function getBlockNumberInput(): Forms\Components\Builder\Block {
+        return Forms\Components\Builder\Block::make('number')
+            ->icon('heroicon-o-hashtag')
+            ->label(function (?array $state): string {
+                if ($state === null) {
+                    return __('Number input');
+                }
+                return $state['label'] ?? __('Number input');
+            })
+            ->schema(self::withDefaultSchema([
+                Forms\Components\TextInput::make('min')
+                    ->label('Min Value')
                     ->translateLabel()
-                    ->alphaDash()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
-                    ->label('Help text')
+                    ->numeric()
+                    ->nullable(),
+                Forms\Components\TextInput::make('max')
+                    ->label('Max Value')
                     ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
-                    ->label('Help text (English)')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
-                    ->label('Required')
-                    ->translateLabel(),
-            ]);
+                    ->numeric()
+                    ->nullable(),
+            ]));
     }
 
     private static function getBlockTextarea(): Forms\Components\Builder\Block {
@@ -298,42 +338,18 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('Textarea');
             })
-            ->schema([
-                Forms\Components\TextInput::make('label')
-                    ->label('Label')
+            ->schema(self::withDefaultSchema([
+                Forms\Components\TextInput::make('min')
+                    ->label('Min Length')
                     ->translateLabel()
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('name') ?? '') !== Str::slug($old, '_')) {
-                            return;
-                        }
-                        $set('name', Str::slug($state, '_'));
-                    }),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
+                    ->numeric()
+                    ->nullable(),
+                Forms\Components\TextInput::make('max')
+                    ->label('Max Length')
                     ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->translateLabel()
-                    ->alphaDash()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
-                    ->label('Help text')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
-                    ->label('Help text (English)')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
-                    ->label('Required')
-                    ->translateLabel(),
-            ]);
+                    ->numeric()
+                    ->nullable(),
+            ]));
     }
 
     private static function getBlockFileUpload(): Forms\Components\Builder\Block {
@@ -345,42 +361,7 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('File upload');
             })
-            ->schema([
-                Forms\Components\TextInput::make('label')
-                    ->label('Label')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('name') ?? '') !== Str::slug($old, '_')) {
-                            return;
-                        }
-                        $set('name', Str::slug($state, '_'));
-                    }),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->translateLabel()
-                    ->alphaDash()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
-                    ->label('Help text')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
-                    ->label('Help text (English)')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
-                    ->label('Required')
-                    ->translateLabel(),
-            ]);
+            ->schema(self::withDefaultSchema());
     }
 
     private static function getBlockCheckbox(): Forms\Components\Builder\Block {
@@ -392,42 +373,7 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('Checkbox');
             })
-            ->schema([
-                Forms\Components\TextInput::make('label')
-                    ->label('Label')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('name') ?? '') !== Str::slug($old, '_')) {
-                            return;
-                        }
-                        $set('name', Str::slug($state, '_'));
-                    }),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->translateLabel()
-                    ->alphaDash()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text')
-                    ->label('Help text')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
-                    ->label('Help text (English)')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
-                    ->label('Required')
-                    ->translateLabel(),
-            ]);
+            ->schema(self::withDefaultSchema());
     }
 
     private static function getBlockSelect(): Forms\Components\Builder\Block {
@@ -439,83 +385,51 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('Select');
             })
-            ->schema([
-                Forms\Components\TextInput::make('label')
-                    ->label('Label')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('name') ?? '') !== Str::slug($old, '_')) {
-                            return;
-                        }
-                        $set('name', Str::slug($state, '_'));
-                    }),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
-                    ->translateLabel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->translateLabel()
-                    ->alphaDash()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Checkbox::make('required')
-                    ->label('Required')
-                    ->translateLabel(),
-                Forms\Components\TextInput::make('help_text')
-                    ->label('Help text')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('help_text_en')
-                    ->label('Help text (English)')
-                    ->translateLabel()
-                    ->maxLength(255),
-                Forms\Components\Builder::make('options')
-                    ->label('Options')
-                    ->translateLabel()
-                    ->collapsible()
-                    ->columnSpanFull()
-                    ->blockNumbers(false)
-                    ->blocks([
-                        Forms\Components\Builder\Block::make('option')
-                            ->icon('heroicon-o-queue-list')
-                            ->label(function (?array $state): string {
-                                if ($state === null) {
-                                    return __('Option');
-                                }
-                                return $state['label'] ?? __('Option');
-                            })
-                            ->schema([
-                                Forms\Components\TextInput::make('label')
-                                    ->label('Label')
-                                    ->translateLabel()
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                                        if (($get('value') ?? '') !== Str::slug($old, '_')) {
-                                            return;
-                                        }
-                                        $set('value', Str::slug($state, '_'));
-                                    }),
-                                Forms\Components\TextInput::make('label_en')
-                                    ->label('Label (English)')
-                                    ->translateLabel()
-                                    ->required()
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('value')
-                                    ->label('Value')
-                                    ->translateLabel()
-                                    ->alphaDash()
-                                    ->required()
-                                    ->maxLength(255),
-                            ]),
-                    ]),
-            ]);
+            ->schema(
+                self::withDefaultSchema([
+                    Forms\Components\Builder::make('options')
+                        ->label('Options')
+                        ->translateLabel()
+                        ->collapsible()
+                        ->columnSpanFull()
+                        ->blockNumbers(false)
+                        ->blocks([
+                            Forms\Components\Builder\Block::make('option')
+                                ->icon('heroicon-o-queue-list')
+                                ->label(function (?array $state): string {
+                                    if ($state === null) {
+                                        return __('Option');
+                                    }
+                                    return $state['label'] ?? __('Option');
+                                })
+                                ->schema([
+                                    Forms\Components\TextInput::make('label')
+                                        ->label('Label')
+                                        ->translateLabel()
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->live(onBlur: true)
+                                        ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                                            if (($get('value') ?? '') !== Str::slug($old, '_')) {
+                                                return;
+                                            }
+                                            $set('value', Str::slug($state, '_'));
+                                        }),
+                                    Forms\Components\TextInput::make('label_en')
+                                        ->label('Label (English)')
+                                        ->translateLabel()
+                                        ->required()
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('value')
+                                        ->label('Value')
+                                        ->translateLabel()
+                                        ->alphaDash()
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+                        ]),
+                ])
+            );
     }
 
     public static function getRelations(): array {

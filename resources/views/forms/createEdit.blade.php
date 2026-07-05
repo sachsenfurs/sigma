@@ -33,7 +33,7 @@
                 </div>
         @endif
 
-        @if($form->sigEvents)
+        @if($form->sigEvents->count())
             <div class="row justify-content-center mb-4">
                 <div class="col-md-6">
                     <div class="card">
@@ -89,6 +89,21 @@
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
                                                 value="{{ old($formData['name'], $filledData) }}"
+                                                minlength="{{ $formData['min'] ?? 0 }}"
+                                                maxlength="{{ $formData['max'] ?? 1000 }}"
+                                                @if($formData['required'] ?? false) required @endif
+                                                @if($form->form_closed) disabled readonly @endif
+                                            />
+                                            @break
+                                        @case('number')
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="{{ $formData['name'] }}"
+                                                name="form_data[{{ $formData['name'] }}]"
+                                                value="{{ old($formData['name'], $filledData) }}"
+                                                min="{{ $formData['min'] ?? 0 }}"
+                                                max="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
                                                 @if($form->form_closed) disabled readonly @endif
                                             />
@@ -98,6 +113,8 @@
                                                 class="form-control"
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
+                                                minlength="{{ $formData['min'] ?? 0 }}"
+                                                maxlength="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
                                                 @if($form->form_closed) disabled readonly @endif
                                             >{{ old($formData['name'], $filledData) }}</textarea>
@@ -112,7 +129,7 @@
                                                 class="form-control"
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
-                                                @if($formData['required'] ?? false) required @endif
+                                                @if(($formData['required'] ?? false) && !$filledData) required @endif
                                                 @if($form->form_closed) disabled readonly @endif
                                             />
                                             @break
