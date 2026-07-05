@@ -137,14 +137,14 @@ class SigFilledFormsRelationManager extends RelationManager
                 case 'text':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
                         ->limit()
-                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, ?)) {$direction}", ['$.form_data.' . $formData['name']]))
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'number':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
                         ->numeric()
-                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) AS UNSIGNED) {$direction}"))
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(form_data, ?)) AS UNSIGNED) {$direction}", ['$.form_data.' . $formData['name']]))
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
@@ -164,14 +164,14 @@ class SigFilledFormsRelationManager extends RelationManager
                 case 'checkbox':
                     $tableColumns[] = Tables\Columns\IconColumn::make($formData['name'])
                         ->boolean()
-                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, ?)) {$direction}", ['$.form_data.' . $formData['name']]))
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'select':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
                         ->label($this->getLabel($formData))
-                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, ?)) {$direction}", ['$.form_data.' . $formData['name']]))
                         ->limit()
                         ->getStateUsing($this->getSelectState($formData));
                     break;
