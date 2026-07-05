@@ -22,7 +22,11 @@ class SigFilledFormResource extends JsonResource
             'id' => $this->id,
             'reg_id' => $this->user->reg_id,
             'nickname' => $this->user->name,
-            'accepted' => $this->approval === Approval::APPROVED,
+            'accepted' => match($this->approval) {
+                Approval::APPROVED => true,
+                Approval::REJECTED => false,
+                default => null,
+            },
             'rejection_reason' => $this->rejection_reason,
             'data' => collect(data_get($this->form_data, 'form_data', []))
                 ->map(function ($value, $key) use ($fieldTypes) {

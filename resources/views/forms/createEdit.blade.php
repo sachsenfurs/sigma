@@ -77,9 +77,10 @@
                                 <div class="form-group">
                                     <label
                                         for="{{ $formData['name'] }}"
-                                        class="form-label mt-2"
+                                        class="form-label mt-3 mb-1 fw-bold"
                                     >
-                                        {{ App::getLocale() == 'en' ? ($formData['label_en'] ?? $formData['label']) : $formData['label'] }}@if($formData['required'] ?? false)*@endif:
+                                        {{ App::getLocale() == 'en' ? ($formData['label_en'] ?? $formData['label']) : $formData['label'] }}@if($formData['required'] ?? false)
+                                        <span class="small text-danger"> *</span>@endif
                                     </label>
                                     @switch($formField['type'])
                                         @case('text')
@@ -113,6 +114,7 @@
                                                 class="form-control"
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
+                                                rows="6"
                                                 minlength="{{ $formData['min'] ?? 0 }}"
                                                 maxlength="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
@@ -140,6 +142,7 @@
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
                                                 value = "1"
+                                                class="m-1 d-block"
                                                 @if(old("form_data.".$formData['name'], $filledData) == 1) checked @endif
                                                 @if($formData['required'] ?? false) required @endif
                                                 @if($form->form_closed) disabled readonly @endif

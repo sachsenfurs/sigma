@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class SigFormResource extends Resource
@@ -373,7 +374,20 @@ class SigFormResource extends Resource
                 }
                 return $state['label'] ?? __('Checkbox');
             })
-            ->schema(self::withDefaultSchema());
+            ->schema(
+                collect(self::withDefaultSchema())->map(function(Forms\Components\Component $component) {
+                    if($component instanceof Forms\Components\Checkbox AND $component->getName() == "required") {
+                        $component->helperText(
+                            new HtmlString(
+                                '<span class="text-red-700">'.
+                                __("Making this field required means you have to check this option in order to submit the form! It's usually only for accpeting the rules or something like this as this will always be true in the results!")
+                                .'</span>'
+                            )
+                        );
+                    }
+                    return $component;
+                })->toArray()
+            );
     }
 
     private static function getBlockSelect(): Forms\Components\Builder\Block {
