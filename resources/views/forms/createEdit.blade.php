@@ -88,7 +88,7 @@
                                                 class="form-control"
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
-                                                value="{{ old($formData['name'], $filledData) }}"
+                                                value="{{ old("form_data.".$formData['name'], $filledData) }}"
                                                 minlength="{{ $formData['min'] ?? 0 }}"
                                                 maxlength="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
@@ -101,7 +101,7 @@
                                                 class="form-control"
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
-                                                value="{{ old($formData['name'], $filledData) }}"
+                                                value="{{ old("form_data.".$formData['name'], $filledData) }}"
                                                 min="{{ $formData['min'] ?? 0 }}"
                                                 max="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
@@ -117,7 +117,7 @@
                                                 maxlength="{{ $formData['max'] ?? 1000 }}"
                                                 @if($formData['required'] ?? false) required @endif
                                                 @if($form->form_closed) disabled readonly @endif
-                                            >{{ old($formData['name'], $filledData) }}</textarea>
+                                            >{{ old("form_data.".$formData['name'], $filledData) }}</textarea>
                                             @break
                                         @case('file_upload')
                                             @if ($filledData)
@@ -140,7 +140,7 @@
                                                 id="{{ $formData['name'] }}"
                                                 name="form_data[{{ $formData['name'] }}]"
                                                 value = "1"
-                                                @if(old($formData['name'], $filledData) == 1) checked @endif
+                                                @if(old("form_data.".$formData['name'], $filledData) == 1) checked @endif
                                                 @if($formData['required'] ?? false) required @endif
                                                 @if($form->form_closed) disabled readonly @endif
                                             />
@@ -164,7 +164,7 @@
                                                     @php($optionData = $option['data'])
                                                     <option
                                                         value="{{ $optionData['value'] }}"
-                                                        @if(old($formData['name'], $filledData) == $optionData['value']) selected @endif
+                                                        @if(old("form_data.".$formData['name'], $filledData) == $optionData['value']) selected @endif
                                                     >
                                                         {{ App::getLocale() == 'en' ? ($optionData['label_en'] ?? $optionData['label']) : $optionData['label'] }}
                                                     </option>

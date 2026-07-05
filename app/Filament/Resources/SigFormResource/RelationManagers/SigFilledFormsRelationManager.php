@@ -15,6 +15,7 @@ use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Get;
@@ -136,6 +137,14 @@ class SigFilledFormsRelationManager extends RelationManager
                 case 'text':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
                         ->limit()
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
+                        ->label($this->getLabel($formData))
+                        ->getStateUsing($this->getState($formData));
+                    break;
+                case 'number':
+                    $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
+                        ->numeric()
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) AS UNSIGNED) {$direction}"))
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
@@ -155,23 +164,16 @@ class SigFilledFormsRelationManager extends RelationManager
                 case 'checkbox':
                     $tableColumns[] = Tables\Columns\IconColumn::make($formData['name'])
                         ->boolean()
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
                         ->label($this->getLabel($formData))
                         ->getStateUsing($this->getState($formData));
                     break;
                 case 'select':
                     $tableColumns[] = Tables\Columns\TextColumn::make($formData['name'])
                         ->label($this->getLabel($formData))
+                        ->sortable(query: fn(Builder $query, string $direction) => $query->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.form_data.{$formData['name']}')) {$direction}"))
                         ->limit()
-                        ->getStateUsing(function ($record) use ($formData) {
-                            $options = $formData['options'];
-                            foreach ($options as $option) {
-                                $data = $option['data'] ?? [];
-                                if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
-                                    return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
-                                }
-                            }
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        });
+                        ->getStateUsing($this->getSelectState($formData));
                     break;
             }
         }
@@ -188,6 +190,22 @@ class SigFilledFormsRelationManager extends RelationManager
         };
     }
 
+    private function getSelectState($formData): \Closure {
+        return function ($record) use ($formData) {
+            $value = $record->form_data['form_data'][$formData['name']] ?? null;
+
+            foreach ($formData['options'] as $option) {
+                $data = $option['data'] ?? [];
+
+                if (($data['value'] ?? null) === $value) {
+                    return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
+                }
+            }
+
+            return $value ?? '';
+        };
+    }
+
     protected function getTableEntryActions(): array {
         $viewEntries = [];
         foreach ($this->ownerRecord->form_definition as $formDefinition) {
@@ -196,6 +214,14 @@ class SigFilledFormsRelationManager extends RelationManager
                 case 'text':
                     $viewEntries[] = TextEntry::make($formData['name'])
                         ->inlineLabel()
+                        ->label($this->getLabel($formData))
+                        ->visible(fn($state) => $state)
+                        ->getStateUsing($this->getState($formData));
+                    break;
+                case 'number':
+                    $viewEntries[] = TextEntry::make($formData['name'])
+                        ->inlineLabel()
+                        ->numeric()
                         ->label($this->getLabel($formData))
                         ->visible(fn($state) => $state)
                         ->getStateUsing($this->getState($formData));
@@ -232,16 +258,7 @@ class SigFilledFormsRelationManager extends RelationManager
                     $viewEntries[] = TextEntry::make($formData['name'])
                         ->label($this->getLabel($formData))
                         ->visible(fn($state) => $state)
-                        ->getStateUsing(function ($record) use ($formData) {
-                            $options = $formData['options'];
-                            foreach ($options as $option) {
-                                $data = $option['data'] ?? [];
-                                if (($data['value'] ?? null) === ($record->form_data['form_data'][$formData['name']] ?? null)) {
-                                    return App::getLocale() === 'en' ? $data['label_en'] : $data['label'];
-                                }
-                            }
-                            return $record->form_data['form_data'][$formData['name']] ?? '';
-                        });
+                        ->getStateUsing($this->getSelectState($formData));
                     break;
             }
         }
