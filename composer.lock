@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac8199e51921ab88aa947bb9f50374e3",
+    "content-hash": "b83ef7fe072c2eeac083fa32b3ca41c6",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2860,11 +2860,17 @@
         },
         {
             "name": "kidran/event-schedule-schema",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../event-schedule-schema",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kidran/event-schedule-schema.git",
                 "reference": "3c30917c9b6225b30c39cb53e63063dd6f5bde6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kidran/event-schedule-schema/zipball/3c30917c9b6225b30c39cb53e63063dd6f5bde6b",
+                "reference": "3c30917c9b6225b30c39cb53e63063dd6f5bde6b",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -2881,12 +2887,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "Kidran\\EventScheduleSchema\\EventScheduleSchemaServiceProvider"
-                    ],
                     "aliases": {
                         "EventScheduleSchema": "Kidran\\EventScheduleSchema\\Facades\\EventScheduleSchema"
-                    }
+                    },
+                    "providers": [
+                        "Kidran\\EventScheduleSchema\\EventScheduleSchemaServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -2894,22 +2900,7 @@
                     "Kidran\\EventScheduleSchema\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Kidran\\EventScheduleSchema\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit"
-                ],
-                "lint": [
-                    "php bin/check-style.php"
-                ],
-                "check-style": [
-                    "php bin/check-style.php"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2931,10 +2922,7 @@
                 "issues": "https://github.com/kidran/event-schedule-schema/issues",
                 "source": "https://github.com/kidran/event-schedule-schema"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-07-29T22:51:59+00:00"
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
@@ -13047,18 +13035,9 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "kidran/event-schedule-schema",
-            "version": "dev-main",
-            "alias": "1.0.0",
-            "alias_normalized": "1.0.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "kidran/event-schedule-schema": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
