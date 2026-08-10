@@ -4,13 +4,10 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-            args:
-                user: "sigma"
-                uid: "1337"
         volumes:
             - .:/app
         ports:
-            - "443:443"
+            - "8000:8000"
         depends_on:
             - database
 
