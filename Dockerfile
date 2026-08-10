@@ -1,8 +1,6 @@
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp:php8.4
 
-# Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+ENV NODE_VERSION=24
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -30,14 +28,25 @@ RUN install-php-extensions \
     gd
 
 # Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+# Install node and NPM
+ENV NVM_DIR /usr/local/nvm
+RUN mkdir $NVM_DIR \
+    && curl https://raw.githubusercontent.com/creationix/nvm/v0.40.6/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default \
+    && ln -s $NVM_DIR/versions/node/$(nvm version $NODE_VERSION) $NVM_DIR/v$NODE_VERSION
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 
 # Set working directory
 WORKDIR /app
 
-USER $user
+CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+
+
+
