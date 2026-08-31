@@ -21,19 +21,15 @@ Convention & Event Management System for the [EAST Convention](https://www.sachs
 # Installation
 
 ## System requirements
-- PHP Version: see `composer.json`
-- PHP Extensions: see [Laravel documentation](https://laravel.com/docs/deployment#server-requirements)
+- Docker
+- Docker Compose
 
 ## Local installation
 1. Clone git repository
-2. Copy file `.env.example` to `.env`
-3. Add your local database credentials
-4. Run command `composer install` and `npm run build` (or `npm run dev` to listen for any changes)
-5. Generate app key with this command `php artisan key:generate`
-6. (Optional) Test connection with `php artisan db`, when successful, exit with typing `exit`
-7. Create tables in database `php artisan migrate`
-8. (Optional) Fill with testing data `php artisan db:seed` or if you want to refresh the whole database `php artisan migrate:fresh --seed`
-9. run local webserver with `php artisan serve` [`--port=80`]
+2. Run `make init`
+3. (Optional) Test connection with `php artisan db`, when successful, exit with typing `exit`
+4. Run `make up`
+5. Open http://localhost:8000
 
 ## Production
 - Deploy the application and install dependencies

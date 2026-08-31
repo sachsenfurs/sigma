@@ -52,7 +52,9 @@ class AppSettings extends Settings
     }
 
     public function logoUrl(): string {
-        return Storage::disk("public")->exists("logo.png") ? Storage::disk("public")->url("logo.png") : config("app.url") . "/images/logo.png";
+        return Storage::disk("public")->exists("logo.png")
+            ? Storage::disk("public")->url("logo.png")
+            : config("app.url") . "/images/logo.png";
     }
 
 }
