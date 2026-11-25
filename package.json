@@ -11,7 +11,7 @@
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/typography": "^0.5.20",
         "@vitejs/plugin-vue": "^6.0.11",
-        "autoprefixer": "^10.6.2",
+        "autoprefixer": "^10.7.0",
         "axios": "^1.21.1",
         "bootstrap": "^5.3.9",
         "laravel-vite-plugin": "^3.2.1",
@@ -19,7 +19,7 @@
         "postcss-nesting": "^14.0.3",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.108.2",
-        "sass-loader": "^17.1.0",
+        "sass-loader": "^17.1.1",
         "tailwindcss": "^3.4.19",
         "vite": "^8.3.8",
         "vue-loader": "^17.4.2"
@@ -34,10 +34,10 @@
         "@fullcalendar/vue3": "^6.1.22",
         "alpinejs": "^3.17.5",
         "bootstrap-icons": "^1.13.2",
-        "jquery": "^4.0.0",
+        "jquery": "^4.1.0",
         "laravel-vue-i18n": "^2.9.0",
-        "marked": "^18.2.0",
-        "vue": "^3.5.45"
+        "marked": "^18.2.1",
+        "vue": "^3.5.46"
     },
     "type": "module"
 }
